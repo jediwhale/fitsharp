@@ -1,0 +1,14 @@
+*.suo
+*.user
+_ReSharper*/
+desktop.ini
+build/
+bin/
+obj/
+TestResult.xml
+*.cache
+Reports/
+site/
+mwiki/
+my*.*
+*.pdb
