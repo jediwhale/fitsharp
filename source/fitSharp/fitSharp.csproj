@@ -63,6 +63,25 @@
     <Compile Include="Machine\Model\Tree.cs" />
     <Compile Include="Machine\Model\TypedValue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Slim\Exception\InstructionException.cs" />
+    <Compile Include="Slim\Operators\ComposeBoolean.cs" />
+    <Compile Include="Slim\Operators\ComposeDefault.cs" />
+    <Compile Include="Slim\Operators\ComposeException.cs" />
+    <Compile Include="Slim\Operators\ComposeList.cs" />
+    <Compile Include="Slim\Operators\ExecuteBase.cs" />
+    <Compile Include="Slim\Operators\ExecuteCall.cs" />
+    <Compile Include="Slim\Operators\ExecuteCallAndAssign.cs" />
+    <Compile Include="Slim\Operators\ExecuteDefault.cs" />
+    <Compile Include="Slim\Operators\ExecuteImport.cs" />
+    <Compile Include="Slim\Operators\ExecuteMake.cs" />
+    <Compile Include="Slim\Operators\ParseList.cs" />
+    <Compile Include="Slim\Operators\ParseSymbol.cs" />
+    <Compile Include="Slim\Operators\SavedInstance.cs" />
+    <Compile Include="Slim\Operators\Symbol.cs" />
+    <Compile Include="Slim\Service\Document.cs" />
+    <Compile Include="Slim\Service\Messenger.cs" />
+    <Compile Include="Slim\Service\Runner.cs" />
+    <Compile Include="Slim\Service\Service.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
