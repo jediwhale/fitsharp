@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+        DefaultTargets="solution;unittests" >
+
+<PropertyGroup>
+    <Config>Debug</Config>
+</PropertyGroup>
+
+<Target Name="solution">
+    <MSBuild Projects="fitsharp.sln" 
+        Properties="Configuration=$(Config)" />
+</Target>
+
+<Target Name="unittests">
+    <Exec Command="&quot;C:\Program Files\NUnit 2.4.8\bin\nunit-console&quot; -nologo .\build\$(Config)\fitSharpTest.dll" />
+</Target>
+
+</Project>
