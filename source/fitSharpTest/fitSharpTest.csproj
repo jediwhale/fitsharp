@@ -38,6 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="NUnit\Machine\ApplicationUnderTestTest.cs" />
+    <Compile Include="NUnit\Machine\ConfigurationTest.cs" />
     <Compile Include="NUnit\Machine\ConverterTest.cs" />
     <Compile Include="NUnit\Machine\DefaultParseTest.cs" />
     <Compile Include="NUnit\Machine\DefaultRuntimeTest.cs" />
@@ -46,6 +47,7 @@
     <Compile Include="NUnit\Machine\ProcessorTest.cs" />
     <Compile Include="NUnit\Machine\RuntimeTypeTest.cs" />
     <Compile Include="NUnit\Machine\SampleClass.cs" />
+    <Compile Include="NUnit\Machine\ShellTest.cs" />
     <Compile Include="NUnit\Machine\TreeTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

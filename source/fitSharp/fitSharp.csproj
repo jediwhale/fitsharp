@@ -36,6 +36,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Machine\Application\Configuration.cs" />
+    <Compile Include="Machine\Application\Shell.cs" />
     <Compile Include="Machine\Engine\ApplicationUnderTest.cs" />
     <Compile Include="Machine\Engine\BasicProcessor.cs" />
     <Compile Include="Machine\Engine\Converter.cs" />
