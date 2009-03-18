@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using fitSharp.Machine.Engine;
 
 namespace fitSharp.Machine.Application {
@@ -12,18 +13,56 @@ namespace fitSharp.Machine.Application {
         int Run(string[] commandLineArguments, Configuration configuration);
     }
 
-    public class Shell {
+    public class Shell: MarshalByRefObject {
         private string runnerName;
         private readonly List<string> extraArguments = new List<string>();
         private readonly Configuration configuration = new Configuration();
 
+        public int Test(string[] test) {
+            Console.WriteLine(test[0] + " " + test[1]);
+            return 1;
+        }
+
         public int Run(string[] commandLineArguments) {
+            string appConfigName = LookForAppConfig(commandLineArguments);
+            return appConfigName.Length == 0
+                       ? RunInCurrentDomain(commandLineArguments)
+                       : RunInNewDomain(appConfigName, commandLineArguments);
+        }
+
+        private static string LookForAppConfig(string[] commandLineArguments) {
+            for (int i = 0; i < commandLineArguments.Length - 1; i++) {
+                if (commandLineArguments[i] == "-a") return commandLineArguments[i + 1];
+            }
+            return string.Empty;
+        }
+
+        private int RunInCurrentDomain(string[] commandLineArguments) {
             ParseArguments(commandLineArguments);
             if (!ValidateArguments()) {
-                Console.WriteLine("\nUsage:\n\tRunner -r runnerClass [ -c configFile ] ...");
+                Console.WriteLine("\nUsage:\n\tRunner -r runnerClass [ -a appConfigFile ][ -c runnerConfigFile ] ...");
                 return 1;
             }
             return ExecuteRunner();
+        }
+
+        private static int RunInNewDomain(string appConfigName, string[] commandLineArguments) {
+            var appDomainSetup = new AppDomainSetup {
+                ApplicationBase = AppDomain.CurrentDomain.BaseDirectory,
+                ConfigurationFile = appConfigName
+            };
+            AppDomain newDomain = AppDomain.CreateDomain("fitSharp.Machine", null, appDomainSetup);
+            int result;
+            try {
+                var remoteShell = (Shell) newDomain.CreateInstanceAndUnwrap(
+                                              Assembly.GetExecutingAssembly().GetName().Name,
+                                              typeof (Shell).FullName);
+                result = remoteShell.RunInCurrentDomain(commandLineArguments);
+            }
+            finally {
+                AppDomain.Unload(newDomain);
+            }
+            return result;
         }
 
         private void ParseArguments(string[] commandLineArguments) {
@@ -32,6 +71,8 @@ namespace fitSharp.Machine.Application {
                     switch (commandLineArguments[i]) {
                         case "-c":
                             configuration.LoadFile(commandLineArguments[i + 1]);
+                            break;
+                        case "-a":
                             break;
                         case "-r":
                             ParseRunnerArgument(commandLineArguments[i + 1]);

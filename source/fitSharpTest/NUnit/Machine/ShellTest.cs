@@ -3,8 +3,11 @@
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
+using System;
+using System.Configuration;
 using fitSharp.Machine.Application;
 using NUnit.Framework;
+using Configuration=fitSharp.Machine.Application.Configuration;
 
 namespace fitSharp.Test.NUnit.Machine {
     [TestFixture] public class ShellTest {
@@ -19,6 +22,12 @@ namespace fitSharp.Test.NUnit.Machine {
             Assert.AreEqual("more", SampleRunner.LastArguments[0]);
             Assert.AreEqual("stuff", SampleRunner.LastArguments[1]);
         }
+
+        [Test] public void CustomAppConfigIsUsed() {
+            int result = new Shell().Run(new[] {"-a", "fitSharpTest.dll.alt.config",
+                "-r", typeof (SampleRunner).FullName + "," + typeof (SampleRunner).Assembly.CodeBase} );
+            Assert.AreEqual(606, result);
+        }
     }
 
     public class SampleRunner: Runnable {
@@ -32,7 +41,12 @@ namespace fitSharp.Test.NUnit.Machine {
 
         public int Run(string[] arguments, Configuration configuration) {
             LastArguments = arguments;
-            return Result;
+            try {
+                return int.Parse(ConfigurationManager.AppSettings.Get("returnCode"));
+            }
+            catch (Exception) {
+                return Result;
+            }
         }
     }
 }
