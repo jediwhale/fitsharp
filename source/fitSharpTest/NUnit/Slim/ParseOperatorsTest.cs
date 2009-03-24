@@ -20,13 +20,13 @@ namespace fitSharp.Test.NUnit.Slim {
         }
 
         [Test] public void ParseSymbolReplacesWithValue() {
-            processor.Store(new Symbol("$symbol", "testvalue"));
+            processor.Store(new Symbol("symbol", "testvalue"));
             Assert.AreEqual("testvalue", Parse(new ParseSymbol(), typeof(object), new TreeLeaf<string>("$symbol")));
         }
 
         [Test] public void ParseSymbolReplacesEmbeddedValues() {
-            processor.Store(new Symbol("$symbol1", "test"));
-            processor.Store(new Symbol("$symbol2", "value"));
+            processor.Store(new Symbol("symbol1", "test"));
+            processor.Store(new Symbol("symbol2", "value"));
             Assert.AreEqual("-testvalue-", Parse(new ParseSymbol(), typeof(object), new TreeLeaf<string>("-$symbol1$symbol2-")));
         }
 

@@ -38,7 +38,7 @@ namespace fitSharp.Test.NUnit.Slim {
         }
 
         [Test] public void ParseSymbolIsDoneFirst() {
-            service.Store(new Symbol("$symbol", "testvalue"));
+            service.Store(new Symbol("symbol", "testvalue"));
             service.AddOperator(new ParseUpperCase());
             var value = service.Parse<string>("$symbol");
             Assert.AreEqual("TESTVALUE", value);
