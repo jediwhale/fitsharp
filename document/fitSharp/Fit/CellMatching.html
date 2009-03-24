@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- fitSharp
+Copyright © Syterra Software Inc. All rights reserved.
+The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
+to be bound by the terms of this license. You must not remove this notice, or any other, from this software. -->
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+ <link href="../fitsharp1.css" type="text/css" rel="stylesheet">
+  <link href="fit.css" type="text/css" rel="stylesheet">
+  <title>Cell Matching</title>
+</head>
+<body>
+<div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
+<div class="pagename">Cell Matching</div>
+<div class="content"><br>
+Fixtures may compare expected values provided in cells to actual values provided by the system under test.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>CellMatching</td></tr>
+<tr><td>actual type</td><td>actual value</td><td>expected value</td><td></td><td>matches</td><td></td><td></td></tr>
+<tr><td>string</td><td>aaa</td><td>aaa</td><td></td><td>True</td><td></td><td>a string is equal to expected</td></tr>
+<tr><td>string</td><td>aaa</td><td>bbb</td><td></td><td>False</td><td></td><td>a string is not equal to expected</td></tr>
+<tr><td>int</td><td>5</td><td>5</td><td></td><td>True</td><td></td><td>a number is equal to expected</td></tr>
+<tr><td>int</td><td>5</td><td>6</td><td></td><td>False</td><td></td><td>a number is not equal to expected</td></tr>
+<tr><td>int</td><td>5</td><td>xxx</td><td></td><td>Exception</td><td></td><td>a number doesn't match an invalid value</td></tr>
+</table>
+<br>
+Special symbols and keywords can be used in the expected value cells.<br>
+<br>
+Numbers can use comparison operators.<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>CellMatching</td></tr>
+<tr><td>actual type</td><td>actual value</td><td>expected value</td><td></td><td>matches</td><td></td><td></td></tr>
+<tr><td>int</td><td>5</td><td>>4</td><td></td><td>True</td><td></td><td></td></tr>
+<tr><td>int</td><td>5</td><td>>5</td><td></td><td>False</td><td></td><td></td></tr>
+<tr><td>int</td><td>5</td><td>>=4</td><td></td><td>True</td><td></td><td></td></tr>
+<tr><td>int</td><td>5</td><td>>=5</td><td></td><td>True</td><td></td><td></td></tr>
+<tr><td>int</td><td>5</td><td>>=6</td><td></td><td>False</td><td></td><td></td></tr>
+<tr><td>decimal</td><td>4.999999999999999999999</td><td><5</td><td></td><td>True</td><td></td><td>comparisons work for decimals</td></tr>
+<tr><td>decimal</td><td>5</td><td><5</td><td></td><td>False</td><td></td><td></td></tr>
+<tr><td>double</td><td>.9999999999E-18</td><td><=1E-18</td><td></td><td>True</td><td></td><td>and for doubles</td></tr>
+<tr><td>double</td><td>1E-18</td><td><=1E-18</td><td></td><td>True</td><td></td><td></td></tr>
+<tr><td>double</td><td>1.0000000000001E-18</td><td><=1E-18</td><td></td><td>False</td><td></td><td></td></tr>
+<tr><td>int</td><td>5</td><td><xxx</td><td></td><td>Exception</td><td></td><td>comparison fails with an invalid value</td></tr>
+<tr><td>string</td><td>5</td><td>>4</td><td></td><td>False</td><td></td><td>comparison operators are only for numbers</td></tr>
+<tr><td>byte</td><td>5</td><td>>4</td><td></td><td>True</td><td></td><td>here's the other valid types for comparisons</td></tr>
+<tr><td>sbyte</td><td>5</td><td>>4</td><td></td><td>True</td><td></td><td></td></tr>
+<tr><td>float</td><td>5.0</td><td>>4.0</td><td></td><td>True</td><td></td><td></td></tr>
+<tr><td>uint</td><td>5</td><td>>4</td><td></td><td>True</td><td></td><td></td></tr>
+<tr><td>long</td><td>5</td><td>>4</td><td></td><td>True</td><td></td><td></td></tr>
+<tr><td>ulong</td><td>5</td><td>>4</td><td></td><td>True</td><td></td><td></td></tr>
+<tr><td>short</td><td>5</td><td>>4</td><td></td><td>True</td><td></td><td></td></tr>
+<tr><td>ushort</td><td>5</td><td>>4</td><td></td><td>True</td><td></td><td></td></tr>
+</table>
+<br>
+Numeric comparisons can be combined with symbol recall.<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>CellMatching</td></tr>
+<tr><td>actual type</td><td>actual value</td><td>expected value</td><td></td><td>matches</td><td>expected cell</td><td></td><td></td></tr>
+<tr><td>int</td><td>3</td><td>>&lt;&lt;four</td><td></td><td>False</td><td>3>4 &lt;span class="fit_grey">&amp;lt;&amp;lt;four&lt;/span></td><td></td><td>symbol values can be recalled for comparison</td></tr>
+<tr><td>int</td><td>3</td><td>&lt; &lt;&lt;four</td><td></td><td>True</td><td>3&lt; 4 &lt;span class="fit_grey">&amp;lt;&amp;lt;four&lt;/span></td><td></td><td>use whitespace to disambiguate 'less than' and 'recall'</td></tr>
+<tr><td>int</td><td>3</td><td>'&lt;&lt;four'</td><td></td><td>False</td><td>4 &lt;span class="fit_grey">&amp;lt;&amp;lt;four&lt;/span></td><td></td><td>this is recall, not a comparison</td></tr>
+</table>
+</div>
+<div style="width:100%;text-align:right">
+<span class="footer">&copy; Copyright <a href="http://www.syterra.com">Syterra Software Inc.</a> All rights reserved.</span>
+</div>
+
+</body>
+</html>

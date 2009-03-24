@@ -1,0 +1,107 @@
+<html>
+<head>
+<link href="fit.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+<div class="setup">
+	<div style="float: right;" class="meta"><a href="javascript:expandAll();">Expand All</a> | <a href="javascript:collapseAll();">Collapse All</a></div>
+	<a href="javascript:toggleCollapsable('-7889718189827938021');">
+		<img src="/files/images/collapsableOpen.gif" class="left" id="img-7889718189827938021"/>
+	</a>
+&nbsp;<span class="meta">Set Up: <a href="../../../FitNesseAcceptanceTests/SetUp.html">Fit Nesse Acceptance Tests. Set Up</a></span>
+	<div class="collapsable" id="-7889718189827938021"><table border="1" cellspacing="0">
+<tr><td>Import</td>
+</tr>
+<tr><td>fitnesse.acceptanceTests</td>
+</tr>
+</table>
+</div>
+</div>
+<h3>You can save values in arbitary symbols and recall them later</h3><br><b>NOTE: This functionality works differently from similar functionality in java FitNesse. The plan is to add this approach to the java version in an upcoming release.</b><br><hr><br>In the first column, set the value of the field. In the second, query for the value of that field (indicated by the column header ending with "?") and store that value in the symbol "id".<br><table border="1" cellspacing="0">
+<tr><td colspan="2">string fixture</td>
+</tr>
+<tr><td>field</td>
+<td>field?</td>
+</tr>
+<tr><td>3</td>
+<td>&gt;&gt;id</td>
+</tr>
+</table>
+<br>In another table (for the purposes of demonstration - this would work fine in one table) recall the value of the symbol "id" and assign it to the field in the first column. In the second column, query for the value of field (field?) and assert that its value is what was submitted in the previous table..<br><table border="1" cellspacing="0">
+<tr><td colspan="2">string fixture</td>
+</tr>
+<tr><td>field</td>
+<td>field?</td>
+</tr>
+<tr><td>&lt;&lt;id</td>
+<td>3</td>
+</tr>
+</table>
+<br>This works for fields, properties and methods...<br><table border="1" cellspacing="0">
+<tr><td colspan="6">string fixture</td>
+</tr>
+<tr><td>field</td>
+<td>field?</td>
+<td>property</td>
+<td>property?</td>
+<td>set</td>
+<td>get?</td>
+</tr>
+<tr><td>1</td>
+<td>&gt;&gt;a</td>
+<td>2</td>
+<td>&gt;&gt;b</td>
+<td>3</td>
+<td>&gt;&gt;c</td>
+</tr>
+</table>
+<br>Retrieve the values for setting<br><table border="1" cellspacing="0">
+<tr><td colspan="6">string fixture</td>
+</tr>
+<tr><td>field</td>
+<td>field?</td>
+<td>property</td>
+<td>property?</td>
+<td>set</td>
+<td>get?</td>
+</tr>
+<tr><td>&lt;&lt;a</td>
+<td>1</td>
+<td>&lt;&lt;b</td>
+<td>2</td>
+<td>&lt;&lt;c</td>
+<td>3</td>
+</tr>
+</table>
+<br>Retrieve the values for checking<br><table border="1" cellspacing="0">
+<tr><td colspan="6">string fixture</td>
+</tr>
+<tr><td>field</td>
+<td>field?</td>
+<td>property</td>
+<td>property?</td>
+<td>set</td>
+<td>get?</td>
+</tr>
+<tr><td>1</td>
+<td>&lt;&lt;a</td>
+<td>2</td>
+<td>&lt;&lt;b</td>
+<td>3</td>
+<td>&lt;&lt;c</td>
+</tr>
+</table>
+<br><div class="teardown">
+	<div style="float: right;" class="meta"><a href="javascript:expandAll();">Expand All</a> | <a href="javascript:collapseAll();">Collapse All</a></div>
+	<a href="javascript:toggleCollapsable('1441235140812632799');">
+		<img src="/files/images/collapsableOpen.gif" class="left" id="img1441235140812632799"/>
+	</a>
+&nbsp;<span class="meta">Tear Down: <a href="../../../FitNesseAcceptanceTests/TearDown.html">Fit Nesse Acceptance Tests. Tear Down</a></span>
+	<div class="collapsable" id="1441235140812632799"><table border="1" cellspacing="0">
+<tr><td>ResetNamespacesFixture</td>
+</tr>
+</table>
+</div>
+</div>
+<hr><br>[<a href="../../../FrontPage.html">Front Page</a>] [<a href="../../../RecentChanges.html">Recent Changes</a>]
+</body></html>

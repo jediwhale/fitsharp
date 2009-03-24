@@ -39,7 +39,7 @@ namespace fitSharp.Test.NUnit.Machine {
             LastArguments = new string[] {};
         }
 
-        public int Run(string[] arguments, Configuration configuration) {
+        public int Run(string[] arguments, Configuration configuration, ProgressReporter reporter) {
             LastArguments = arguments;
             try {
                 return int.Parse(ConfigurationManager.AppSettings.Get("returnCode"));

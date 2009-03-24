@@ -1,0 +1,25 @@
+<suiteConfig>
+
+    <fitSharp.Machine.Application.Settings>
+        <inputFolder>document\fitSharp</inputFolder>
+        <outputFolder>site</outputFolder>
+    </fitSharp.Machine.Application.Settings>
+
+    <fit.FileExclusions>
+        <add>^Sample</add>
+    </fit.FileExclusions>
+    
+    <ApplicationUnderTest>
+        <addNamespace>fit.Test.Acceptance</addNamespace>
+        <addNamespace>fit.Runner</addNamespace>
+        <addNamespace>fitSharp.Fit.Model</addNamespace>
+        <addNamespace>fitlibrary</addNamespace>
+        <addAssembly>build\debug\fit.dll</addAssembly>
+        <addAssembly>build\debug\fittest.dll</addAssembly>
+    </ApplicationUnderTest>
+    
+    <fit.Engine.Service>
+        <addOperator>fit.Operators.ExecuteParse</addOperator>
+    </fit.Engine.Service>
+    
+</suiteConfig>

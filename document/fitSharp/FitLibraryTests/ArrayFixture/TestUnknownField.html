@@ -1,0 +1,46 @@
+<html>
+<head>
+<link href="fit.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+<h2>A field that is not within any of the elements is rejected.</h2><table border="1" cellspacing="0">
+<tr><td colspan="2">Specify</td>
+</tr>
+<tr><td><table border="1" cellspacing="0">
+<tr><td colspan="3">ArrayFixtureUnderTest</td></tr>
+<tr><td>+</td><td>&amp;</td><td>some</td></tr>
+<tr><td>1</td><td>one</td><td></td></tr>
+<tr><td>1</td><td>two</td><td></td></tr>
+<tr><td>2</td><td>two</td><td></td></tr>
+</table></td>
+<td><table border="1" cellspacing="0">
+<tr><td colspan="3">ArrayFixtureUnderTest</td></tr>
+<tr><td>+</td><td>&amp;</td><td class="error">some<hr><pre><div class="fit_stacktrace">Column 'some' not used.</div></pre></td></tr>
+
+<tr><td class="pass">1</td><td class="pass">one</td><td></td></tr>
+<tr><td class="pass">1</td><td class="pass">two</td><td></td></tr>
+<tr><td class="pass">2</td><td class="pass">two</td><td></td></tr>
+</table></td>
+</tr>
+</table>
+<br>(.NET: different exception text, error on column header cell, continue with row matching)<br><br>(.NET: added test.)<br><br><table border="1" cellspacing="0">
+<tr><td colspan="2">Specify</td>
+</tr>
+<tr><td><table border="1" cellspacing="0">
+<tr><td colspan="3">ArrayFixtureUnderTest</td></tr>
+<tr><td>+</td><td>some</td><td>&amp;</td></tr>
+<tr><td>1</td><td></td><td>one</td></tr>
+<tr><td>1</td><td></td><td>two</td></tr>
+<tr><td>2</td><td></td><td>two</td></tr>
+</table></td>
+<td><table border="1" cellspacing="0">
+<tr><td colspan="3">ArrayFixtureUnderTest</td></tr>
+<tr><td>+</td><td class="error">some<hr><pre><div class="fit_stacktrace">Column 'some' not used.</div></pre></td><td>&amp;</td></tr>
+<tr><td class="pass">1</td><td></td><td class="pass">one</td></tr>
+<tr><td class="pass">1</td><td></td><td class="pass">two</td></tr>
+<tr><td class="pass">2</td><td></td><td class="pass">two</td></tr>
+</table></td>
+</tr>
+</table>
+<hr><br>[<a href="../../FrontPage.html">Front Page</a>] [<a href="../../RecentChanges.html">Recent Changes</a>]
+</body></html>

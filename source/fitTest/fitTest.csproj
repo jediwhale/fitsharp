@@ -1,0 +1,184 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7B300228-38B3-49B8-BB50-54E243DA31BA}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>fit.Test</RootNamespace>
+    <AssemblyName>fitTest</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="nunit.framework, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Acceptance\AbstractNestedLists.cs" />
+    <Compile Include="Acceptance\ArithmeticColumnFixture.cs" />
+    <Compile Include="Acceptance\ArrayFixtureUnderTest.cs" />
+    <Compile Include="Acceptance\ArrayFixtureUnderTest2.cs" />
+    <Compile Include="Acceptance\ArrayFixtureUnderTest3.cs" />
+    <Compile Include="Acceptance\ArrayFixtureUnderTestd.cs" />
+    <Compile Include="Acceptance\ArrayFixtureUnderTestGraphics.cs" />
+    <Compile Include="Acceptance\ArrayFixtureUnderTestMixed.cs" />
+    <Compile Include="Acceptance\ArrayFixtureUnderTestWithMap.cs" />
+    <Compile Include="Acceptance\ArrayFixtureUnderTestWithValueObjects.cs" />
+    <Compile Include="Acceptance\BlankAndNullKeywordColumnFixture.cs" />
+    <Compile Include="Acceptance\BowlingGame.cs" />
+    <Compile Include="Acceptance\BowlingGameFixture.cs" />
+    <Compile Include="Acceptance\CalculateFixtureSetUp.cs" />
+    <Compile Include="Acceptance\CalculateFixtureSetUpWithException.cs" />
+    <Compile Include="Acceptance\CalculateFixtureTearDown.cs" />
+    <Compile Include="Acceptance\CalculateFixtureUnderTest.cs" />
+    <Compile Include="Acceptance\CalculateFixtureUnderTest2.cs" />
+    <Compile Include="Acceptance\CalculateFixtureUnderTest3.cs" />
+    <Compile Include="Acceptance\CamelRowFixtureUnderTest.cs" />
+    <Compile Include="Acceptance\CellHandlerStory.cs" />
+    <Compile Include="Acceptance\CellMaking.cs" />
+    <Compile Include="Acceptance\CellMatching.cs" />
+    <Compile Include="Acceptance\CellParsing.cs" />
+    <Compile Include="Acceptance\Coloring.cs" />
+    <Compile Include="Acceptance\ColorInspectorFixture.cs" />
+    <Compile Include="Acceptance\CountFixture.cs" />
+    <Compile Include="Acceptance\DirectCombination.cs" />
+    <Compile Include="Acceptance\DoCalculateFixtureSetUp.cs" />
+    <Compile Include="Acceptance\DoFixtureFlowUnderTest.cs" />
+    <Compile Include="Acceptance\DoFixtureFlowUnderTestWithoutSUT.cs" />
+    <Compile Include="Acceptance\DoFixtureSetUp.cs" />
+    <Compile Include="Acceptance\DoFixtureSetUpWithException.cs" />
+    <Compile Include="Acceptance\DoFixtureTearDown.cs" />
+    <Compile Include="Acceptance\DoFixtureWithExceptionInConstructor.cs" />
+    <Compile Include="Acceptance\DoTable.cs" />
+    <Compile Include="Acceptance\ExecuteExampleFixture.cs" />
+    <Compile Include="Acceptance\FailConstraint.cs" />
+    <Compile Include="Acceptance\FixtureFixture.cs" />
+    <Compile Include="Acceptance\FixtureWithNoNullaryConstructor.cs" />
+    <Compile Include="Acceptance\FolderRunnerStory.cs" />
+    <Compile Include="Acceptance\GridFixtureUnderTest.cs" />
+    <Compile Include="Acceptance\GridStory.cs" />
+    <Compile Include="Acceptance\InfoFixture.cs" />
+    <Compile Include="Acceptance\MapFixture.cs" />
+    <Compile Include="Acceptance\MixedCombination.cs" />
+    <Compile Include="Acceptance\MockCollection.cs" />
+    <Compile Include="Acceptance\NestedLists.cs" />
+    <Compile Include="Acceptance\PathParserFixture.cs" />
+    <Compile Include="Acceptance\PersonFixture.cs" />
+    <Compile Include="Acceptance\Rectangle.cs" />
+    <Compile Include="Acceptance\ResetNamespacesFixture.cs" />
+    <Compile Include="Acceptance\SampleArrayFixture.cs" />
+    <Compile Include="Acceptance\SampleDoFixture.cs" />
+    <Compile Include="Acceptance\SampleDomain.cs" />
+    <Compile Include="Acceptance\SampleDomainAdapter.cs" />
+    <Compile Include="Acceptance\SampleRowFixture.cs" />
+    <Compile Include="Acceptance\SetFixtureUnderTest.cs" />
+    <Compile Include="Acceptance\SetFixtureUnderTest2.cs" />
+    <Compile Include="Acceptance\SetFixtureUnderTest3.cs" />
+    <Compile Include="Acceptance\SetFixtureUnderTestGraphics.cs" />
+    <Compile Include="Acceptance\SetUpFixtureUnderTest.cs" />
+    <Compile Include="Acceptance\SetUpFixtureUnderTest2.cs" />
+    <Compile Include="Acceptance\SpecifyFixture.cs" />
+    <Compile Include="Acceptance\SpecifyFixtureTest.cs" />
+    <Compile Include="Acceptance\SubsetFixtureUnderTest.cs" />
+    <Compile Include="Acceptance\SucceedConstraint.cs" />
+    <Compile Include="Acceptance\SucceedConstraintSetUp.cs" />
+    <Compile Include="Acceptance\SystemUnderTest.cs" />
+    <Compile Include="Acceptance\TimesCombination.cs" />
+    <Compile Include="Acceptance\TimesCombinationSetUp.cs" />
+    <Compile Include="Acceptance\TypeName.cs" />
+    <Compile Include="Acceptance\WithinFlow.cs" />
+    <Compile Include="Acceptance\XmlFixtureUnderTest.cs" />
+    <Compile Include="FitUnit\ConfigurationTest.cs" />
+    <Compile Include="FitUnit\FixtureTest.cs" />
+    <Compile Include="FitUnit\ObjectFactoryTest.cs" />
+    <Compile Include="FitUnit\ScannerTest.cs" />
+    <Compile Include="FitUnit\SocketAdapter.cs" />
+    <Compile Include="NUnit\ActionFixtureTest.cs" />
+    <Compile Include="NUnit\BindingTest.cs" />
+    <Compile Include="NUnit\CellHandlerLoaderTest.cs" />
+    <Compile Include="NUnit\CellMatching.cs" />
+    <Compile Include="NUnit\ColumnFixtureTests.cs" />
+    <Compile Include="NUnit\CompareDefaultTest.cs" />
+    <Compile Include="NUnit\CountsTest.cs" />
+    <Compile Include="NUnit\DefaultCellHandlerTest.cs" />
+    <Compile Include="NUnit\EmptyCellHandlerTest.cs" />
+    <Compile Include="NUnit\EndsWithHandlerTest.cs" />
+    <Compile Include="NUnit\ErrorKeywordHandlerTest.cs" />
+    <Compile Include="NUnit\ExceptionKeywordHandlerTest.cs" />
+    <Compile Include="NUnit\FailKeywordHandlerTest.cs" />
+    <Compile Include="NUnit\FitServerTest.cs" />
+    <Compile Include="NUnit\FixtureNUnitTest.cs" />
+    <Compile Include="NUnit\FixtureTableTest.cs" />
+    <Compile Include="NUnit\FolderTestModel.cs" />
+    <Compile Include="NUnit\GracefulNameConverterTest.cs" />
+    <Compile Include="NUnit\HtmlParserTest.cs" />
+    <Compile Include="NUnit\IntegralRangeHandlerTest.cs" />
+    <Compile Include="NUnit\NullKeywordHandlerTest.cs" />
+    <Compile Include="NUnit\PageResultTest.cs" />
+    <Compile Include="NUnit\ParseBlankTest.cs" />
+    <Compile Include="NUnit\CellHandlerTestUtils.cs" />
+    <Compile Include="NUnit\ParseBooleanTest.cs" />
+    <Compile Include="NUnit\ParseTest.cs" />
+    <Compile Include="NUnit\PathParserTest.cs" />
+    <Compile Include="NUnit\RowFixtureTest.cs" />
+    <Compile Include="NUnit\ScientificDoubleTest.cs" />
+    <Compile Include="NUnit\StartsWithHandlerTest.cs" />
+    <Compile Include="NUnit\SubstringHandlerTest.cs" />
+    <Compile Include="NUnit\SymbolHandlerTest.cs" />
+    <Compile Include="NUnit\TableFixtureTest.cs" />
+    <Compile Include="NUnit\TestRunnerTest.cs" />
+    <Compile Include="NUnit\TestUtils.cs" />
+    <Compile Include="NUnit\TextResultWriterTest.cs" />
+    <Compile Include="NUnit\ValueArrayTest.cs" />
+    <Compile Include="NUnit\XmlResultWriterTest.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\fitSharp\fitSharp.csproj">
+      <Project>{204FF2CD-475F-4C6E-A6B5-6779364B33F8}</Project>
+      <Name>fitSharp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\fit\fit.csproj">
+      <Project>{C83FBAF8-9569-406B-A75A-56BC7D993ABC}</Project>
+      <Name>fit</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PostBuildEvent>xcopy "$(TargetPath)*" "$(SolutionDir)build\$(ConfigurationName)\" /I /Y &amp;
+ copy "$(TargetDir)nunit.framework.dll" "$(SolutionDir)build\$(ConfigurationName)\"</PostBuildEvent>
+  </PropertyGroup>
+</Project>

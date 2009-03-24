@@ -34,5 +34,15 @@ namespace fitSharp.Test.NUnit.Machine {
             parse.TryParse(processor, typeof(SampleClass), TypedValue.Void, new TreeLeaf<string>("stuff"), ref result);
             Assert.IsTrue(result.Value is SampleClass);
         }
+
+        [Test] public void ClassWithStringConstructorIsParsed() {
+            TypedValue result = TypedValue.Void;
+            parse.TryParse(processor, typeof(ClassFromString), TypedValue.Void, new TreeLeaf<string>("stuff"), ref result);
+            Assert.IsTrue(result.Value is ClassFromString);
+        }
+
+        private class ClassFromString {
+            public ClassFromString(string stuff) {}
+        }
     }
 }

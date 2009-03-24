@@ -1,0 +1,26 @@
+<html>
+<head>
+<link href="fit.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+<h2>There is an extra cell in the 3rd row</h2><table border="1" cellspacing="0">
+<tr><td colspan="2">Specify</td>
+</tr>
+<tr><td><table border="1" cellspacing="0">
+<tr><td colspan="3">ArrayFixtureUnderTest</td></tr>
+<tr><td>+</td><td colspan="2">&amp;</td></tr>
+<tr><td>1</td><td>one</td><td>extra</td></tr>
+<tr><td>1</td><td colspan="2">two</td></tr>
+<tr><td>2</td><td colspan="2">two</td></tr>
+</table></td>
+<td><table border="1" cellspacing="0">
+<tr><td colspan="3">ArrayFixtureUnderTest</td></tr>
+<tr><td>+</td><td colspan="2">&amp;</td></tr>
+<tr><td class="error">1<hr/> <span class="fit_label">This table is invalid for this fixture: Row should be 2 cells wide.</span></td><td>one</td><td>extra</td></tr>
+<tr><td>1</td><td colspan="2">two</td></tr>
+<tr><td>2</td><td colspan="2">two</td></tr>
+</table></td>
+</tr>
+</table>
+<br>(.NET: different exception text.)<hr><br>[<a href="../../FrontPage.html">Front Page</a>] [<a href="../../RecentChanges.html">Recent Changes</a>]
+</body></html>

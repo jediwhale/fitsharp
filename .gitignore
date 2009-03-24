@@ -12,3 +12,4 @@ site/
 mwiki/
 my*.*
 *.pdb
+testoutput/

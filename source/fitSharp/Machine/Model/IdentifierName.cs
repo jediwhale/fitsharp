@@ -16,7 +16,7 @@ namespace fitSharp.Machine.Model {
         }
 
         public bool Matches(string name) {
-            return string.Equals(MatchName, name, StringComparison.OrdinalIgnoreCase);
+            return string.Equals(MatchName, name.Replace("_", string.Empty), StringComparison.OrdinalIgnoreCase);
         }
 
         public bool IsStartOf(string other) {
@@ -25,8 +25,10 @@ namespace fitSharp.Machine.Model {
 
         public bool IsEmpty { get { return MatchName.Length == 0; } }
 
+        public int Length { get { return MatchName.Length; }}
+
         public override bool Equals(object other) {
-            return Equals(other as IdentifierName);
+            return other != null && Matches(other.ToString());
         }
 
         public bool Equals(IdentifierName other) {

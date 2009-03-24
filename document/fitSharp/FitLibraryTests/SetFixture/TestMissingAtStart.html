@@ -1,0 +1,28 @@
+<html>
+<head>
+<link href="fit.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+<h2><i>SetFixture</i> gives an error if a row is missing from the actual collection</h2><table border="1" cellspacing="0">
+<tr><td colspan="2">Specify</td>
+</tr>
+<tr><td><table border="1" cellspacing="0">
+<tr><td colspan="2">SetFixtureUnderTest</td></tr>
+<tr><td>+</td><td>&amp;</td></tr>
+<tr><td>3</td><td>three</td></tr>
+<tr><td>1</td><td>one</td></tr>
+<tr><td>1</td><td>two</td></tr>
+<tr><td>2</td><td>two</td></tr>
+</table></td>
+<td><table border="1" cellspacing="0">
+<tr><td colspan="2">SetFixtureUnderTest</td></tr>
+<tr><td>+</td><td>&amp;</td></tr>
+<tr class="fail"><td>3 <span class="fit_label">missing</span></td><td>three</td></tr>
+<tr><td class="pass">1</td><td class="pass">one</td></tr>
+<tr><td class="pass">1</td><td class="pass">two</td></tr>
+<tr><td class="pass">2</td><td class="pass">two</td></tr>
+</table></td>
+</tr>
+</table>
+<br>(.NET: mark row in error)<br><hr><br>[<a href="../../FrontPage.html">Front Page</a>] [<a href="../../RecentChanges.html">Recent Changes</a>]
+</body></html>

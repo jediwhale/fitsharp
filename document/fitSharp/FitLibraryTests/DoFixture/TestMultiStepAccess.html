@@ -1,0 +1,28 @@
+<html>
+<head>
+<link href="fit.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+It's possible to keep stepping into other objects, etc, down the table. So, in general, if an action in any row returns a Fixture, that fixture applies to the rest of the table.<br><br><table border="1" cellspacing="0">
+<tr><td colspan="2">Specify</td>
+</tr>
+<tr><td><table border><tr><td>DoFixtureFlowUnderTest</td></tr>
+</table>
+<table border>
+<tr><td>point holder</td></tr>
+<tr><td>point</td></tr>
+<tr><td>check</td><td>x</td><td>24</td></tr>
+<tr><td>check</td><td>y</td><td>7</td></tr>
+</table></td>
+<td><table border><tr><td>DoFixtureFlowUnderTest</td></tr>
+</table>
+<table border>
+<tr><td>point holder</td></tr>
+<tr><td>point</td></tr>
+<tr><td>check</td><td>x</td><td class="pass">24</td></tr>
+<tr><td>check</td><td>y</td><td class="pass">7</td></tr>
+</table></td>
+</tr>
+</table>
+<br>Not all objects are automatically wrapped, because some provide values which are parsed and checked, such as Dates. It's not ideal, but we consider something to be a domain object, and wrapped, if it does not have a <i>parse()</i> method.<br><hr><br>[<a href="../../FrontPage.html">Front Page</a>] [<a href="../../RecentChanges.html">Recent Changes</a>]
+</body></html>

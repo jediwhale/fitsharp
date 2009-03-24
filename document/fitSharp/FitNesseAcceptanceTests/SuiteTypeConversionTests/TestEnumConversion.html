@@ -1,0 +1,62 @@
+<html>
+<head>
+<link href="fit.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+<div class="setup">
+	<div style="float: right;" class="meta"><a href="javascript:expandAll();">Expand All</a> | <a href="javascript:collapseAll();">Collapse All</a></div>
+	<a href="javascript:toggleCollapsable('6756898560522957448');">
+		<img src="/files/images/collapsableOpen.gif" class="left" id="img6756898560522957448"/>
+	</a>
+&nbsp;<span class="meta">Set Up: <a href="../../FitNesseAcceptanceTests/SetUp.html">Fit Nesse Acceptance Tests. Set Up</a></span>
+	<div class="collapsable" id="6756898560522957448"><table border="1" cellspacing="0">
+<tr><td>Import</td>
+</tr>
+<tr><td>fitnesse.acceptanceTests</td>
+</tr>
+</table>
+</div>
+</div>
+!Row Fixtures can correctly handle the values in an enum.<br><br><table border="1" cellspacing="0">
+<tr><td>color inspector</td>
+</tr>
+<tr><td>ToString()</td>
+</tr>
+<tr><td>Red</td>
+</tr>
+<tr><td>Blue</td>
+</tr>
+</table>
+<br><pre>public enum Color
+{
+	Red,
+	Blue
+}
+
+public class ColorInspectorFixture : RowFixture
+{
+	public override object[] Query()
+	{
+		Array colorsArray = Enum.GetValues(typeof(Color));
+		ArrayList colorsList = new ArrayList(colorsArray);
+		return colorsList.ToArray();
+	}
+
+	public override Type GetTargetClass()
+	{
+		return typeof(Color);
+	}
+</pre>}<br><br><div class="teardown">
+	<div style="float: right;" class="meta"><a href="javascript:expandAll();">Expand All</a> | <a href="javascript:collapseAll();">Collapse All</a></div>
+	<a href="javascript:toggleCollapsable('825880219410382901');">
+		<img src="/files/images/collapsableOpen.gif" class="left" id="img825880219410382901"/>
+	</a>
+&nbsp;<span class="meta">Tear Down: <a href="../../FitNesseAcceptanceTests/TearDown.html">Fit Nesse Acceptance Tests. Tear Down</a></span>
+	<div class="collapsable" id="825880219410382901"><table border="1" cellspacing="0">
+<tr><td>ResetNamespacesFixture</td>
+</tr>
+</table>
+</div>
+</div>
+<hr><br>[<a href="../../FrontPage.html">Front Page</a>] [<a href="../../RecentChanges.html">Recent Changes</a>]
+</body></html>

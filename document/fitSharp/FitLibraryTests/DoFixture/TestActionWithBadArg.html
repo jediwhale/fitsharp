@@ -1,0 +1,37 @@
+<html>
+<head>
+<link href="fit.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+<h2>The result of an action can't be used if there is a problem with one of the arguments to the action</h2><table border="1" cellspacing="0">
+<tr><td>Specify</td>
+</tr>
+<tr><td><table border>
+<tr><td>DoFixtureFlowUnderTest</td></tr>
+</table>
+<table border>
+<tr><td>check</td><td>add</td><td>AA</td><td>2</td></tr>
+</table>
+<table border>
+<tr><td>check</td><td>add</td><td>1</td><td>AA</td></tr>
+</table>
+<table border>
+<tr><td>show</td><td>add</td><td>AA</td></tr>
+</table></td>
+</tr>
+<tr><td><table border>
+<tr><td>DoFixtureFlowUnderTest</td></tr>
+</table>
+<table border>
+<tr><td>check</td><td>add</td><td class="error">AA<hr><pre><div class="fit_stacktrace">Exception has been thrown by the target of an invocation. ---> System.FormatException: Input string was not in a correct format.</div></pre></td><td>2</td></tr>
+</table>
+<table border>
+<tr><td>check</td><td>add</td><td>1</td><td class="error">AA<hr><pre><div class="fit_stacktrace">Exception has been thrown by the target of an invocation. ---> System.FormatException: Input string was not in a correct format.</div></pre></td></tr>
+</table>
+<table border>
+<tr><td>show</td><td>add</td><td class="error">AA<hr><pre><div class="fit_stacktrace">Exception has been thrown by the target of an invocation. ---> System.FormatException: Input string was not in a correct format.</div></pre></td></tr>
+</table></td>
+</tr>
+</table>
+<hr><br>[<a href="../../FrontPage.html">Front Page</a>] [<a href="../../RecentChanges.html">Recent Changes</a>]
+</body></html>

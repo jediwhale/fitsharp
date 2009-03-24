@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- fitSharp
+Copyright © Syterra Software Inc. All rights reserved.
+The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
+to be bound by the terms of this license. You must not remove this notice, or any other, from this software. -->
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+ <link href="../fitsharp1.css" type="text/css" rel="stylesheet">
+  <link href="fit.css" type="text/css" rel="stylesheet">
+  <title>Symbol Handlers</title>
+</head>
+<body>
+<div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
+<div class="pagename">Symbol Handlers</div>
+<div class="content">The symbol save operator (>>) and the symbol recall operator (<<) can be used to collect a value at one place in a story test and then use it in other places.<br>
+<br>
+The symbol save operator can be used in any expected value cell. Instead of comparing the actual value to an expected value, the actual value is saved with the symbol name.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>CellHandlerStory</td></tr>
+<tr><td>string</td><td>string?</td></tr>
+<tr><td>something</td><td>>>mysymbol</td></tr>
+<tr><td>null</td><td>>>nullsymbol</td></tr>
+</table>
+<br>
+The symbol recall operator can be used in any input or expected value cell. The value used will be the last value saved with the symbol name.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>CellHandlerStory</td></tr>
+<tr><td>string</td><td>string?</td></tr>
+<tr><td>something</td><td><<mysymbol</td></tr>
+<tr><td><<mysymbol</td><td>something</td></tr>
+<tr><td>&lt;&lt;nullsymbol</td><td>null</td></tr>
+<tr><td>null</td><td>&lt;&lt;nullsymbol</td></tr>
+</table>
+<br>
+Symbols are now also used, by default, with FitLibrary fixtures.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>InfoFixture</td></tr>
+<tr><td>set</td><td>result</td><td>6</td></tr>
+<tr><td>check</td><td>result</td><td>>>six</td></tr>
+<tr><td>set</td><td>result</td><td>&lt;&lt;six</td></tr>
+<tr><td>check</td><td>result</td><td>&lt;&lt;six</td></tr>
+</table>
+<br>
+Symbols can be erased with the <a href="../Fit/ClearSymbolsFixture.html">Clear Symbols Fixture</a>.<br>
+<br>
+fitSharp/Fit/heading<br>
+<br>
+This is a seperate feature from the FitNesse wiki symbol feature.<br>
+<br>
+</div>
+<div style="width:100%;text-align:right">
+<span class="footer">&copy; Copyright <a href="http://www.syterra.com">Syterra Software Inc.</a> All rights reserved.</span>
+</div>
+
+</body>
+</html>

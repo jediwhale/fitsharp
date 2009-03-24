@@ -1,0 +1,70 @@
+<html>
+<head>
+<link href="fit.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+<h2>An <i>ArrayFixture</i> table may have nested tables (for arrays or sets) to arbitrary depth</h2><table border="1" cellspacing="0">
+<tr><td colspan="2">Specify</td>
+</tr>
+<tr><td><table border="1" cellspacing="0">
+<tr><td>NestedLists</td></tr>
+</table>
+<table border="1" cellspacing="0">
+<tr><td colspan="2"><i>nested</i></td></tr>
+<tr><td><i>name</i></td><td><i>elements</i></td></tr>
+<tr><td>apple</td><td><table border="1" cellspacing="0">
+<tr><td><i>id</i></td><td><i>count</i></td><td><i>sub elements</i></td></tr>
+<tr><td>a</td><td>1</td><td>
+<table border="1" cellspacing="0">
+<tr><td><i>a</i></td><td><i>b</i></td></tr>
+<tr><td>x</td><td>y</td></tr>
+<tr><td>x</td><td>z</td></tr>
+</table>
+</td></tr>
+<tr><td>b</td><td>2</td><td>
+<table border="1" cellspacing="0">
+<tr><td><i>a</i></td><td><i>b</i></td></tr>
+<tr><td>xx</td><td>ZZ</td></tr>
+</table>
+</td></tr>
+</table></td></tr>
+<tr><td>orange</td><td><table border="1" cellspacing="0">
+<tr><td><i>id</i></td></tr>
+<tr><td>c</td></tr>
+</table></td></tr>
+<tr><td>pear</td><td><table border="1" cellspacing="0">
+<tr><td><i>id</i></td><td><i>count</i></td></tr>
+</table></td></tr>
+</table></td>
+<td><table border="1" cellspacing="0">
+<tr><td>NestedLists</td></tr>
+</table>
+<table border="1" cellspacing="0">
+<tr><td colspan="2"><i>nested</i></td></tr>
+<tr><td><i>name</i></td><td><i>elements</i></td></tr>
+<tr><td class="pass">apple</td><td><table border="1" cellspacing="0">
+<tr><td><i>id</i></td><td><i>count</i></td><td><i>sub elements</i></td></tr>
+<tr><td class="pass">a</td><td class="pass">1</td><td>
+<table border="1" cellspacing="0">
+<tr><td><i>a</i></td><td><i>b</i></td></tr>
+<tr><td class="pass">x</td><td class="pass">y</td></tr>
+<tr><td class="pass">x</td><td class="pass">z</td></tr>
+</table></td></tr>
+<tr><td class="pass">b</td><td class="pass">2</td><td>
+<table border="1" cellspacing="0">
+<tr><td><i>a</i></td><td><i>b</i></td></tr>
+<tr><td class="pass">xx</td><td class="pass">ZZ</td></tr>
+</table></td></tr>
+</table></td></tr>
+<tr><td class="pass">orange</td><td><table border="1" cellspacing="0">
+<tr><td><i>id</i></td></tr>
+<tr><td class="pass">c</td></tr>
+</table></td></tr>
+<tr><td class="pass">pear</td><td><table border="1" cellspacing="0">
+<tr class="pass"><td><i>id</i></td><td><i>count</i></td></tr>
+</table></td></tr>
+</table></td>
+</tr>
+</table>
+<br><hr><br>[<a href="../../FrontPage.html">Front Page</a>] [<a href="../../RecentChanges.html">Recent Changes</a>]
+</body></html>

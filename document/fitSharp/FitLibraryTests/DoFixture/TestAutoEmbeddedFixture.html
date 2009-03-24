@@ -1,0 +1,57 @@
+<html>
+<head>
+<link href="fit.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+<h2>If a flow-based <i>DoFixture</i> action returns an object which is not a Fixture, an array, a Collection and is not a primitive value, <i>DoFixture</i> wraps that object in a new <i>DoFixture</i>, so it can be tested in the rest of the table:</h2><table border="1" cellspacing="0">
+<tr><td colspan="2">Specify</td>
+</tr>
+<tr><td><table border><tr><td>DoFixtureFlowUnderTest</td></tr>
+</table>
+<table border>
+<tr><td>appends</td></tr>
+<tr><td>plus</td></tr>
+<tr><td>plus</td></tr>
+
+</table>
+<table border>
+<tr><td>another object</td></tr>
+<tr><td>plus</td></tr>
+<tr><td>access other</td></tr>
+</table>
+The static methods can also be called:
+<table border>
+<tr><td>an Integer</td></tr>
+<tr><td>check</td><td>parse int</td><td>3</td><td>3</td></tr>
+<tr><td>check</td><td>double value</td><td>
+23.0</td></tr>
+</table></td>
+<td><table border><tr><td>DoFixtureFlowUnderTest</td></tr>
+</table>
+<table border>
+<tr><td>appends</td></tr>
+<tr><td>plus</td></tr>
+<tr><td>plus</td></tr>
+
+</table>
+<table border>
+<tr><td>another object</td></tr>
+<tr><td class="error">plus<hr/> <span class="fit_label">Member 'plus' with 0 parameter(s) not found for type 'fitlibrary.SequenceFixture'.
+</span></td></tr>
+<tr><td class="pass">access other</td></tr>
+</table>
+The static methods can also be called:
+<table border>
+<tr><td>an Integer</td></tr>
+<tr><td>check</td><td>parse int</td><td>3</td><td class="pass">3</td></tr>
+<tr><td>check</td><td>double value</td><td class="pass">
+23.0</td></tr>
+</table></td>
+</tr>
+</table>
+<br><ul>
+	<li>appends() returns a String, which is not auto-wrapped, and so plus() is applied to the original <i>DoFixture</i></li>
+	<li>anotherObject() returns a fixture, which is itself not auto-wrapped. So plus() is not found, as it's a method of that new fixture, whereas accessOther() is</li>
+</ul>
+<br>(.NET: different exception text.)<hr><br>[<a href="../../FrontPage.html">Front Page</a>] [<a href="../../RecentChanges.html">Recent Changes</a>]
+</body></html>

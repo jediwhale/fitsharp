@@ -1,0 +1,8 @@
+/* this is a custom stylesheet */
+.pass {background-color: #123456;}
+.fail {background-color: #234567;}
+.error {background-color: #345678;}
+.ignore {background-color: #456789;}
+.fit_stacktrace {font-size: 0.7em;}
+.fit_label {font-style: italic; color: #56789a;}
+.fit_grey {color: #6789ab;}

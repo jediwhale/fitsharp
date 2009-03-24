@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testResults>
+  <result>
+    <relativePageName>document\fitSharp\Fit\SampleInputFiles\SampleSimpleTest.html</relativePageName>
+    <content><![CDATA[<html>
+<head>
+  <link href="fit.css" type="text/css" rel="stylesheet"></head>
+<body><br>
+This is a simple test.<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>SampleDo</td></tr>
+<tr><td>check</td><td>one</td><td class="pass">1</td></tr>
+</table>
+</body>
+</html>]]></content>
+    <counts>
+      <right>1</right>
+      <wrong>0</wrong>
+      <ignores>0</ignores>
+      <exceptions>0</exceptions>
+    </counts>
+  </result>
+  <result>
+    <relativePageName>document\fitSharp\Fit\SampleInputFiles\SampleSubDecorated\SampleSimpleTest.html</relativePageName>
+    <content><![CDATA[<html>
+<head>
+  <link href="fit.css" type="text/css" rel="stylesheet"></head>
+<body>This is setup.<br>
+This is a simple test.<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>SampleDo</td></tr>
+<tr><td>check</td><td>one</td><td class="pass">1</td></tr>
+</table>
+This is teardown</body>
+</html>]]></content>
+    <counts>
+      <right>1</right>
+      <wrong>0</wrong>
+      <ignores>0</ignores>
+      <exceptions>0</exceptions>
+    </counts>
+  </result>
+  <result>
+    <relativePageName>document\fitSharp\Fit\SampleInputFiles\SampleSubDecorated\SampleSub\SampleSimpleTest.html</relativePageName>
+    <content><![CDATA[<html>
+<head>
+  <link href="fit.css" type="text/css" rel="stylesheet"></head>
+<body>This is setup.More setup<br>
+<br>
+This is a simple test.<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>SampleDo</td></tr>
+<tr><td>check</td><td>one</td><td class="pass">1</td></tr>
+</table>
+More teardown.<br>
+This is teardown</body>
+</html>]]></content>
+    <counts>
+      <right>1</right>
+      <wrong>0</wrong>
+      <ignores>0</ignores>
+      <exceptions>0</exceptions>
+    </counts>
+  </result>
+  <result>
+    <relativePageName>document\fitSharp\Fit\SampleInputFiles\SampleSubFolder\SuiteSetUp.html</relativePageName>
+    <content><![CDATA[<html>
+<head>
+  <link href="fit.css" type="text/css" rel="stylesheet"></head>
+<body><br>
+This is a suite setup test.<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>SampleDo</td></tr>
+<tr><td>check</td><td>one</td><td class="pass">1</td></tr>
+</table>
+</body>
+</html>]]></content>
+    <counts>
+      <right>1</right>
+      <wrong>0</wrong>
+      <ignores>0</ignores>
+      <exceptions>0</exceptions>
+    </counts>
+  </result>
+  <result>
+    <relativePageName>document\fitSharp\Fit\SampleInputFiles\SampleSubFolder\SampleFailingTest.html</relativePageName>
+    <content><![CDATA[<html>
+<head>
+  <link href="fit.css" type="text/css" rel="stylesheet"></head>
+<body><br>
+This is a failing test.<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>SampleDo</td></tr>
+<tr><td>check</td><td>one</td><td class="fail">2 <span class="fit_label">expected</span><hr />1 <span class="fit_label">actual</span></td></tr>
+</table>
+</body>
+</html>]]></content>
+    <counts>
+      <right>0</right>
+      <wrong>1</wrong>
+      <ignores>0</ignores>
+      <exceptions>0</exceptions>
+    </counts>
+  </result>
+  <result>
+    <relativePageName>document\fitSharp\Fit\SampleInputFiles\SampleSubWithStyle\SampleSimpleTest.html</relativePageName>
+    <content><![CDATA[<html>
+<head>
+  <link href="fit.css" type="text/css" rel="stylesheet"></head>
+<body><br>
+This is a simple test.<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>SampleDo</td></tr>
+<tr><td>check</td><td>one</td><td class="pass">1</td></tr>
+</table>
+</body>
+</html>]]></content>
+    <counts>
+      <right>1</right>
+      <wrong>0</wrong>
+      <ignores>0</ignores>
+      <exceptions>0</exceptions>
+    </counts>
+  </result>
+  <finalCounts>
+    <right>5</right>
+    <wrong>1</wrong>
+    <ignores>0</ignores>
+    <exceptions>0</exceptions>
+  </finalCounts>
+</testResults>

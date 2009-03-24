@@ -14,7 +14,7 @@ namespace fitSharp.Slim.Service {
         private Service service;
         private string assemblyPaths;
 
-        public int Run(string[] commandLineArguments, Configuration configuration) {
+        public int Run(string[] commandLineArguments, Configuration configuration, ProgressReporter reporter) {
             service = configuration.GetItem<Service>();
             service.ApplicationUnderTest = configuration.GetItem<ApplicationUnderTest>();
             ParseCommandLine(commandLineArguments);

@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- fitSharp
+Copyright © Syterra Software Inc. All rights reserved.
+The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
+to be bound by the terms of this license. You must not remove this notice, or any other, from this software. -->
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+ <link href="../fitsharp1.css" type="text/css" rel="stylesheet">
+  <link href="fit.css" type="text/css" rel="stylesheet">
+  <title>Folder Runner Basics</title>
+</head>
+<body>
+<div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
+<div class="pagename">Folder Runner Basics</div>
+<div class="content">This is a description of the basic features of <a href="../Fit/FolderRunner.html">Folder Runner</a>.<br>
+ <br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>do</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>name</td><td>file system</td><td>with</td><td>new</td><td>file system</td></tr>
+</table>
+<br>
+The test files used in the following examples are from <a href="../Fit/SampleInputFiles.html">Sample Input Files</a> and <a href="../Fit/SampleOutputFiles.html">Sample Output Files</a>.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>with</td><td>file system</td></tr>
+<tr><td>make empty folder</td><td>testoutput</td></tr>
+<tr><td>alias folder</td><td>document\fitSharp\Fit\SampleOutputFiles</td><td>as</td><td>out</td></tr>
+<tr><td>alias folder</td><td>document\fitSharp\Fit\SampleInputFiles</td><td>as</td><td>in</td></tr>
+</table>
+<br>
+<a href="../Fit/FolderRunner.html">Folder Runner</a> runs the FIT tests from the files in an input directory and writes the results to an output directory.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>with</td><td>new</td><td>folder runner story</td></tr>
+<tr><td>run</td><td>-c,document\fitSharp\Fit\SampleInputFiles\SampleConfig.xml</td></tr>
+</table>
+<br>
+Test result counts are accumulated for all files processed.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>check</td><td>results</td><td>5 right, 1 wrong, 0 ignored, 0 exceptions</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>with</td><td>file system</td></tr>
+<tr><td>ensure</td><td>file</td><td>testoutput\SampleSimpleTest.html</td><td>same as</td><td>out\SampleSimpleTest.html</td></tr>
+</table>
+<br>
+Sub-directories are traversed and copied to a matching structure in the output directory.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>ensure</td><td>file</td><td>testoutput\SampleSubFolder\SampleFailingTest.html</td><td>same as</td><td>out\SampleFailingTest.html</td></tr>
+</table>
+<br>
+If a file SuiteSetUp.html exists in a folder, it is run before all other files in that folder.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>ensure</td><td>file</td><td>testoutput\SampleSubFolder\SuiteSetUp.html</td><td>same as</td><td>out\SampleSuiteSetUp.html</td></tr>
+</table>
+<br>
+If a file does not contain any tables, the contents are copied without changes.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>ensure</td><td>file</td><td>testoutput\SampleSubNoTest\SampleNoTest.html</td><td>same as</td><td>in\SampleSubNoTest\SampleNoTest.html</td></tr>
+</table>
+<br>
+A file reportIndex.html is created in the output directory with the FIT results of each file processed and links to the output files.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>ensure</td><td>file</td><td>testoutput\reportIndex.html</td><td>same as</td><td>out\SampleReportIndex.html</td></tr>
+</table>
+<br>
+A file fit.css is created in the output directories with the styles used by FIT to highlight test results. (This is a bit inconsistent because the test files must already have a link to this stylesheet file.)<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>ensure</td><td>file</td><td>testoutput\fit.css</td><td>same as</td><td>document\fitSharp\fit.css</td></tr>
+<tr><td>ensure</td><td>file</td><td>testoutput\SampleSubFolder\fit.css</td><td>same as</td><td>document\fitSharp\fit.css</td></tr>
+</table>
+<br>
+If a file fit.css already exists in the input directory, it is copied to the output directory and not overwritten with the standard version.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>ensure</td><td>file</td><td>testoutput\SampleSubWithStyle\fit.css</td><td>same as</td><td>in\SampleSubWithStyle\fit.css</td></tr>
+</table>
+<br>
+The fit.css file is only creates in sub-directories where test results are written.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>not</td><td>file</td><td>testoutput\SampleSubNoTest\fit.css</td><td>exists</td></tr>
+</table>
+<br>
+The input can be a single file.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>with</td><td>new</td><td>folder runner story</td></tr>
+<tr><td>run</td><td>-c,document\fitSharp\Fit\SampleInputFiles\SampleConfig.xml ,-i,document\fitSharp\Fit\SampleInputFiles\SampleSimpleTest.html</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>check</td><td>results</td><td>1 right, 0 wrong, 0 ignored, 0 exceptions</td></tr>
+</table>
+<br>
+XML output can be created.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>with</td><td>new</td><td>folder runner story</td></tr>
+<tr><td>run</td><td>-c,document\fitSharp\Fit\SampleInputFiles\SampleConfigXmlOutput.xml</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>with</td><td>file system</td></tr>
+<tr><td>ensure</td><td>file</td><td>testoutput\XmlOutput.xml</td><td>same as</td><td>out\SampleXmlOutput.xml</td></tr>
+</table>
+<br>
+Files and directories can be excluded.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>with</td><td>new</td><td>folder runner story</td></tr>
+<tr><td>run</td><td>-c,document\fitSharp\Fit\SampleInputFiles\SampleConfig.xml,-x,Sample</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>check</td><td>results</td><td>0 right, 0 wrong, 0 ignored, 0 exceptions</td></tr>
+</table>
+</div>
+<div style="width:100%;text-align:right">
+<span class="footer">&copy; Copyright <a href="http://www.syterra.com">Syterra Software Inc.</a> All rights reserved.</span>
+</div>
+
+</body>
+</html>

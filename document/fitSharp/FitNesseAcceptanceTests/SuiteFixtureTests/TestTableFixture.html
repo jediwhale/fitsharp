@@ -1,0 +1,145 @@
+<html>
+<head>
+<link href="fit.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+<div class="setup">
+	<div style="float: right;" class="meta"><a href="javascript:expandAll();">Expand All</a> | <a href="javascript:collapseAll();">Collapse All</a></div>
+	<a href="javascript:toggleCollapsable('3072088484944735428');">
+		<img src="/files/images/collapsableOpen.gif" class="left" id="img3072088484944735428"/>
+	</a>
+&nbsp;<span class="meta">Set Up: <a href="../../FitNesseAcceptanceTests/SetUp.html">Fit Nesse Acceptance Tests. Set Up</a></span>
+	<div class="collapsable" id="3072088484944735428"><table border="1" cellspacing="0">
+<tr><td>Import</td>
+</tr>
+<tr><td>fitnesse.acceptanceTests</td>
+</tr>
+</table>
+</div>
+</div>
+<h3>Convenient access to table cells.</h3>Sometimes you just want a fixture that lets you access the cells in a table by row and column.  TableFixture provides some simple methods that allow just that.  <br><ul>
+	<li>The (row,column) coordinates are zero based,</li>
+	<li>with (0,0) being the upper left cell.</li>
+</ul>
+<br>The methods of TableFixture are:<br><br><table border="1" cellspacing="0">
+<tr><td colspan="2">Comment</td>
+</tr>
+<tr><td><pre>protected abstract void DoStaticTable(int rows)</pre></td>
+<td>TableFixture is an abstract class that you must derive from.  You must override <i>DoStaticTable</i> to perform the functions of the fixture.  The number of rows in the table is passed in <i>rows</i>.</td>
+</tr>
+<tr><td><pre>protected Parse GetCell(int row, int column)</pre></td>
+<td>Returns the addressed table cell as a <i>Parse</i>.</td>
+</tr>
+<tr><td><pre>protected String GetText(int row, int column)</pre></td>
+<td>Returns the text within the addressed table cell.</td>
+</tr>
+<tr><td><pre>protected int GetInt(int row, int column)</pre></td>
+<td>Converts the text within the addressed cell to an int and returns it.</td>
+</tr>
+<tr><td><pre>protected boolean Blank(int row, int column)</pre></td>
+<td>Returns <i>true</i> if the addressed table cell is blank.</td>
+</tr>
+<tr><td><pre>protected void Right(int row, int column)</pre></td>
+<td>Turns the addressed table cell green.</td>
+</tr>
+<tr><td><pre>protected void Wrong(int row, int column)</pre></td>
+<td>Turns the addressed table cell red.</td>
+</tr>
+<tr><td><pre>protected void Wrong(int row, int column, string actual)</pre></td>
+<td>Turns the addressed table cell red, and annotates it with the <i>actual</i> value.</td>
+</tr>
+<tr><td><pre>protected void Ignore(int row, int column)</pre></td>
+<td>Turns the addressed cell gray.</td>
+</tr>
+</table>
+<hr><br><table border="1" cellspacing="0">
+<tr><td colspan="22">Bowling Game Fixture</td>
+</tr>
+<tr><td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>&nbsp;</td>
+<td>0</td>
+</tr>
+<tr><td>5</td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+<td>150</td>
+</tr>
+</table>
+<br><table border="1" cellspacing="0">
+<tr><td colspan="22">Bowling Game Fixture</td>
+</tr>
+<tr><td>10</td>
+<td>10</td>
+<td>10</td>
+<td>10</td>
+<td>10</td>
+<td>10</td>
+<td>10</td>
+<td>10</td>
+<td>10</td>
+<td>10</td>
+<td>10</td>
+<td>10</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>300</td>
+</tr>
+</table>
+<br><div class="teardown">
+	<div style="float: right;" class="meta"><a href="javascript:expandAll();">Expand All</a> | <a href="javascript:collapseAll();">Collapse All</a></div>
+	<a href="javascript:toggleCollapsable('-6645378483987964586');">
+		<img src="/files/images/collapsableOpen.gif" class="left" id="img-6645378483987964586"/>
+	</a>
+&nbsp;<span class="meta">Tear Down: <a href="../../FitNesseAcceptanceTests/TearDown.html">Fit Nesse Acceptance Tests. Tear Down</a></span>
+	<div class="collapsable" id="-6645378483987964586"><table border="1" cellspacing="0">
+<tr><td>ResetNamespacesFixture</td>
+</tr>
+</table>
+</div>
+</div>
+<hr><br>[<a href="../../FrontPage.html">Front Page</a>] [<a href="../../RecentChanges.html">Recent Changes</a>]
+</body></html>

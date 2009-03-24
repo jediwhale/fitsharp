@@ -1,0 +1,47 @@
+// FitNesse.NET
+// Copyright © 2006-2008 Syterra Software Inc. This program is free software;
+// you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
+// This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+using fit;
+using System;
+using fitlibrary.exception;
+using fitSharp.Machine.Exception;
+
+namespace fitlibrary {
+
+	public class SetUpFixture: Fixture {
+	    private Parse headerCells;
+
+        public override void DoTable(Parse theTable) {
+            SetUp();
+            base.DoTable(theTable);
+            TearDown();
+        }
+
+        public override void DoRows(Parse theRows) {
+            if (theRows == null) throw new FitFailureException("No header row.");
+            headerCells = theRows.Parts;
+            base.DoRows(theRows.More);
+        }
+
+        public override void DoRow(Parse theRow) {
+            try {
+                if (theRow.Parts.Size != headerCells.Size)
+                    throw new FitFailureException(String.Format("Row should be {0} cells wide.", headerCells.Size));
+                CellOperation.Invoke(this, new CellRange(headerCells), new CellRange(theRow.Parts));
+            }
+            catch (MemberMissingException e) {
+                Exception(headerCells, e);
+                throw new IgnoredException();
+            }
+            catch (Exception e) {
+                Exception(theRow.Parts, e);
+            }
+        }
+
+        protected virtual void SetUp() {}
+        protected virtual void TearDown() {}
+	}
+}

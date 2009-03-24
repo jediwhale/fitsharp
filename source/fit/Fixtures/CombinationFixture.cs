@@ -1,0 +1,51 @@
+// FitNesse.NET
+// Copyright © 2006-2008 Syterra Software Inc. This program is free software;
+// you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
+// This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+using System;
+using fit;
+using fitlibrary.exception;
+using fitSharp.Fit.Model;
+using fitSharp.Machine.Model;
+
+namespace fitlibrary {
+
+	public class CombinationFixture: DoFixtureBase {
+        private static readonly Tree<Cell> combineMember = new StringCell("combine");
+	    private Parse firstRowCells;
+
+        public CombinationFixture(): this(null) {}
+
+        public CombinationFixture(object theSystemUnderTest): base(theSystemUnderTest) {}
+
+        public override void DoRows(Parse theRows) {
+            firstRowCells = theRows.Parts.More;
+            if (firstRowCells == null) return;
+            base.DoRows(theRows.More);
+        }
+
+	    public override void DoRow(Parse theRow) {
+	        if (theRow.Parts.More.Size != firstRowCells.Size) {
+	            Exception(theRow.Parts, new RowWidthException(firstRowCells.Size));
+	            return;
+	        }
+	        Parse headerCell = firstRowCells;
+	        foreach (Parse expectedValueCell in new CellRange(theRow.Parts.More).Cells) {
+	            try {
+	                CellOperation.Check(this, combineMember,
+	                                    new TreeList<Cell>().AddBranch(theRow.Parts).AddBranch(headerCell),
+	                                    expectedValueCell);
+	            }
+	            catch (IgnoredException) {
+	                Ignore(expectedValueCell);
+	            }
+	            catch (Exception e) {
+	                Exception(expectedValueCell, e);
+	            }
+	            headerCell = headerCell.More;
+	        }
+	    }
+    }
+}

@@ -32,4 +32,10 @@ a.siteid {
 a.siteid:visited, a.siteid:active {
 	color: blue;
 }
+a.externallink {
+	background-image: url(./external.png);
+	background-position: top right;
+	background-repeat: no-repeat;
+	padding-right: 8px;
+}
 table {background-color:white;}

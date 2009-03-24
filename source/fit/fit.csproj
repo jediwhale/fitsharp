@@ -1,0 +1,168 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C83FBAF8-9569-406B-A75A-56BC7D993ABC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>fit</RootNamespace>
+    <AssemblyName>fit</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Engine\Binding.cs" />
+    <Compile Include="Engine\CellOperation.cs" />
+    <Compile Include="Engine\ExecuteContext.cs" />
+    <Compile Include="Engine\ExecuteParameters.cs" />
+    <Compile Include="Exception\InvalidMethodException.cs" />
+    <Compile Include="Fixtures\CalculateFixture.cs" />
+    <Compile Include="Fixtures\ClearSymbolsFixture.cs" />
+    <Compile Include="Fixtures\CombinationFixture.cs" />
+    <Compile Include="Fixtures\CommentFixture.cs" />
+    <Compile Include="Fixtures\ConfigurationSetupFixture.cs" />
+    <Compile Include="Fixtures\ConstraintFixture.cs" />
+    <Compile Include="Fixtures\FileSystem.cs" />
+    <Compile Include="Fixtures\FixtureResult.cs" />
+    <Compile Include="Engine\OperationType.cs" />
+    <Compile Include="Engine\Service.cs" />
+    <Compile Include="Exception\FitFailureException.cs" />
+    <Compile Include="Exception\RowWidthException.cs" />
+    <Compile Include="Exception\TableStructureException.cs" />
+    <Compile Include="Fixtures\ActionFixture.cs" />
+    <Compile Include="Fixtures\ArrayFixture.cs" />
+    <Compile Include="Fixtures\BoundFixture.cs" />
+    <Compile Include="Fixtures\CellHandlerLoaderFixture.cs" />
+    <Compile Include="Fixtures\CollectionFixtureBase.cs" />
+    <Compile Include="Fixtures\ColumnFixture.cs" />
+    <Compile Include="Fixtures\DoFixture.cs" />
+    <Compile Include="Fixtures\DoFixtureBase.cs" />
+    <Compile Include="Fixtures\FixtureTable.cs" />
+    <Compile Include="Fixtures\FlowFixtureBase.cs" />
+    <Compile Include="Fixtures\GridFixture.cs" />
+    <Compile Include="Fixtures\ImportFixture.cs" />
+    <Compile Include="Fixtures\ListMatcher.cs" />
+    <Compile Include="Fixtures\NamedCollectionFixtureBase.cs" />
+    <Compile Include="Fixtures\RowFixture.cs" />
+    <Compile Include="Fixtures\SequenceFixture.cs" />
+    <Compile Include="Fixtures\SetFixture.cs" />
+    <Compile Include="Fixtures\SetUpFixture.cs" />
+    <Compile Include="Fixtures\SubsetFixture.cs" />
+    <Compile Include="Fixtures\SummaryFixture.cs" />
+    <Compile Include="Fixtures\TableFixture.cs" />
+    <Compile Include="Fixtures\UnnamedCollectionFixtureBase.cs" />
+    <Compile Include="Fixtures\UseFixture.cs" />
+    <Compile Include="Fixtures\WithPhrase.cs" />
+    <Compile Include="Fixtures\XmlFixture.cs" />
+    <Compile Include="IO\FileSystemModel.cs" />
+    <Compile Include="IO\FolderModel.cs" />
+    <Compile Include="IO\ISocketWrapper.cs" />
+    <Compile Include="IO\SocketUtils.cs" />
+    <Compile Include="IO\SocketWrapper.cs" />
+    <Compile Include="IO\TimeKeeper.cs" />
+    <Compile Include="Model\ParseTable.cs" />
+    <Compile Include="Model\ScientificDouble.cs" />
+    <Compile Include="Model\ValueArray.cs" />
+    <Compile Include="Operators\CompareEmpty.cs" />
+    <Compile Include="Operators\CompareFail.cs" />
+    <Compile Include="Operators\CompareNumeric.cs" />
+    <Compile Include="Operators\CompareRegEx.cs" />
+    <Compile Include="Operators\ExecuteEmpty.cs" />
+    <Compile Include="Operators\ExecuteError.cs" />
+    <Compile Include="Operators\ExecuteException.cs" />
+    <Compile Include="Operators\ExecuteList.cs" />
+    <Compile Include="Operators\ExecuteParse.cs" />
+    <Compile Include="Operators\ExecuteSymbolSave.cs" />
+    <Compile Include="Operators\ParseSymbol.cs" />
+    <Compile Include="Operators\ParseTable.cs" />
+    <Compile Include="Operators\ParseTree.cs" />
+    <Compile Include="Runner\FitServer.cs" />
+    <Compile Include="Runner\FolderRunner.cs" />
+    <Compile Include="Runner\NullResultWriter.cs" />
+    <Compile Include="Runner\PageResult.cs" />
+    <Compile Include="Runner\PathParser.cs" />
+    <Compile Include="Runner\Protocol.cs" />
+    <Compile Include="Runner\ResultWriter.cs" />
+    <Compile Include="Runner\StoryTest.cs" />
+    <Compile Include="Fixtures\UtilityFixtures.cs" />
+    <Compile Include="IO\RunTime.cs" />
+    <Compile Include="Model\ExpectedValueCell.cs" />
+    <Compile Include="Model\ListTree.cs" />
+    <Compile Include="Model\ParseNode.cs" />
+    <Compile Include="Model\ParseTree.cs" />
+    <Compile Include="Model\Table.cs" />
+    <Compile Include="Model\Tree.cs" />
+    <Compile Include="Operators\CellFactoryRepository.cs" />
+    <Compile Include="Model\CellRange.cs" />
+    <Compile Include="Operators\ComposeDefault.cs" />
+    <Compile Include="Operators\ExecuteBase.cs" />
+    <Compile Include="Operators\ExecuteDefault.cs" />
+    <Compile Include="Operators\RuntimeFlow.cs" />
+    <Compile Include="Operators\TableAdapter.cs" />
+    <Compile Include="Parser\HtmlParser.cs" />
+    <Compile Include="Runner\FixtureListener.cs" />
+    <Compile Include="Runner\NullFixtureListener.cs" />
+    <Compile Include="Exception\AbandonStoryTestException.cs" />
+    <Compile Include="Exception\IgnoredException.cs" />
+    <Compile Include="Fixtures\FitVersionFixture.cs" />
+    <Compile Include="Fixtures\Fixture.cs" />
+    <Compile Include="Engine\TestStatus.cs" />
+    <Compile Include="Model\Counts.cs" />
+    <Compile Include="Model\Parse.cs" />
+    <Compile Include="Parser\HtmlString.cs" />
+    <Compile Include="Parser\Scanner.cs" />
+    <Compile Include="Parser\Substring.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Runner\StoryTestFile.cs" />
+    <Compile Include="Runner\StoryTestFolder.cs" />
+    <Compile Include="Runner\SuiteRunner.cs" />
+    <Compile Include="Runner\TestPageDecoration.cs" />
+    <Compile Include="Runner\TestRunner.cs" />
+    <Compile Include="Runner\TestRunnerFixtureListener.cs" />
+    <Compile Include="Runner\TextResultWriter.cs" />
+    <Compile Include="Runner\XmlResultWriter.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\fitSharp\fitSharp.csproj">
+      <Project>{204FF2CD-475F-4C6E-A6B5-6779364B33F8}</Project>
+      <Name>fitSharp</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PostBuildEvent>xcopy "$(TargetPath)*" "$(SolutionDir)build\$(ConfigurationName)\" /I /Y</PostBuildEvent>
+  </PropertyGroup>
+</Project>

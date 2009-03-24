@@ -1,0 +1,41 @@
+<html>
+<head>
+<link href="fit.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+<h2>An exception is thrown if the input for a field, or the expected value of a method, is of the wrong type.</h2><table border="1" cellspacing="0">
+<tr><td>Specify</td>
+</tr>
+<tr><td><table border="1" cellspacing="0">
+<tr><td colspan="3">CalculateFixtureUnderTest</td></tr>
+<tr><td>a</td><td></td><td>plus</td></tr>
+<tr><td>one</td><td></td><td>one</td></tr>
+</table></td>
+</tr>
+<tr><td><table border="1" cellspacing="0">
+<tr><td colspan="3">CalculateFixtureUnderTest</td></tr>
+<tr><td>a</td><td></td><td>plus</td></tr>
+<tr><td class="error">one<hr><pre><div class="fit_stacktrace"></div></pre></td><td></td><td class="ignore">one</td></tr>
+</table></td>
+</tr>
+</table>
+<br>(.NET: ignore expected value if not checked.  Added tests for combinations of parse errors.)<br><br><table border="1" cellspacing="0">
+<tr><td>Specify</td>
+</tr>
+<tr><td><table border="1" cellspacing="0">
+<tr><td colspan="5">CalculateFixtureUnderTest</td></tr>
+<tr><td>a</td><td></td><td>plus</td><td>plus</td><td>double</td></tr>
+<tr><td>one</td><td></td><td>one</td><td>one</td><td>oneone</td></tr>
+<tr><td>1</td><td></td><td>1</td><td>one</td><td>11</td></tr>
+</table></td>
+</tr>
+<tr><td><table border="1" cellspacing="0">
+<tr><td colspan="5">CalculateFixtureUnderTest</td></tr>
+<tr><td>a</td><td></td><td>plus</td><td>plus</td><td>double</td></tr>
+<tr><td class="error">one<hr><pre><div class="fit_stacktrace"></div></pre></td><td></td><td class="ignore">one</td><td class="ignore">one</td><td class="pass">oneone</td></tr>
+<tr><td>1</td><td></td><td class="pass">1</td><td class="error">one<hr><pre><div class="fit_stacktrace"></div></pre></td><td class="pass">11</td></tr>
+</table></td>
+</tr>
+</table>
+<hr><br>[<a href="../../FrontPage.html">Front Page</a>] [<a href="../../RecentChanges.html">Recent Changes</a>]
+</body></html>

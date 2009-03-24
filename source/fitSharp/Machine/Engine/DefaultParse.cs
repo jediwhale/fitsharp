@@ -7,23 +7,26 @@ using System;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
-    public class DefaultParse<T>: ParseOperator<T> { //todo: also look for constructor with string argument
+    public class DefaultParse<T>: ParseOperator<T> {
         public bool TryParse(Processor<T> processor, Type type, TypedValue instance, Tree<T> parameters, ref TypedValue result) {
-            if (type.IsAssignableFrom(typeof(string)) /*&& !state.Type.Equals(typeof(DateTime))*/) {
+            if (type.IsAssignableFrom(typeof(string))) {
                 result = new TypedValue(parameters.Value.ToString(), typeof(string));
+                return true;
             }
-            else {
-                RuntimeMember parse = new RuntimeType(type).FindStatic("parse", new[] {typeof (string)});
-                if (parse != null && parse.ReturnType == type) {
-                    result = parse.Invoke(new object[] {parameters.Value.ToString()});
-                }
-                else {
-                    throw new InvalidOperationException(
-                        string.Format("Can't parse {0} because it doesn't have a static Parse method",
-                                      type.FullName));
-                }
+            RuntimeMember parse = new RuntimeType(type).FindStatic("parse", new[] {typeof (string)});
+            if (parse != null && parse.ReturnType == type) {
+                result = parse.Invoke(new object[] {parameters.Value.ToString()});
+                return true;
             }
-            return true;
+
+            RuntimeMember construct = new RuntimeType(type).FindConstructor(new[] {typeof (string)});
+            if (construct != null) {
+                result = construct.Invoke(new object[] {parameters.Value.ToString()});
+                return true;
+            }
+
+            throw new InvalidOperationException(
+                string.Format("Can't parse {0} because it doesn't have a static Parse method", type.FullName));
         }
     }
 }

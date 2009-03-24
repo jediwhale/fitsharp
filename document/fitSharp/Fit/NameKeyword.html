@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- fitSharp
+Copyright © Syterra Software Inc. All rights reserved.
+The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
+to be bound by the terms of this license. You must not remove this notice, or any other, from this software. -->
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+ <link href="../fitsharp1.css" type="text/css" rel="stylesheet">
+  <link href="fit.css" type="text/css" rel="stylesheet">
+  <title>Name Keyword</title>
+</head>
+<body>
+<div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
+<div class="pagename">Name Keyword</div>
+<div class="content">The Name keyword is one of the <a href="../Fit/FlowFixtureKeywords.html">Flow Fixture Keywords</a>. It associates an object with a name, which can be used to retrieve the object later with the <a href="../Fit/UseFixture.html">Use Fixture</a> or <a href="../Fit/WithKeyword.html">With Keyword</a>.<ul><li>name fitSharp/Fit/variable fitSharp/Fit/variable fitSharp/Fit/variable</li><li>name fitSharp/Fit/variable <a href="../Fit/WithKeyword.html">with</a> fitSharp/Fit/variable</li></ul><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>do</td></tr>
+<tr><td>with</td><td>type</td><td>story test</td></tr>
+</table>
+<br>
+A fixture can be saved and then used.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>check</td><td>test result</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample do</td></tr>
+<tr><td>name</td><td>savex</td><td>make sample do</td><td>xxx</td></tr>
+<tr><td>name</td><td>savey</td><td>make sample do</td><td>yyy</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>use</td><td>savey</td></tr>
+<tr><td>check</td><td>text</td><td>yyy</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>use</td><td>savex</td></tr>
+<tr><td>check</td><td>text</td><td>xxx</td></tr>
+</table>
+</td><td><br><table border="1" cellpadding="2" cellspacing="0"><tr><td>sample do</td></tr><tr><td>name</td><td class="pass">savex</td><td>make sample do</td><td>xxx</td></tr><tr><td>name</td><td class="pass">savey</td><td>make sample do</td><td>yyy</td></tr></table><br><table border="1" cellpadding="2" cellspacing="0"><tr><td>use</td><td>savey</td></tr><tr><td>check</td><td>text</td><td class="pass">yyy</td></tr></table><br><table border="1" cellpadding="2" cellspacing="0"><tr><td>use</td><td>savex</td></tr><tr><td>check</td><td>text</td><td class="pass">xxx</td></tr></table></td></tr>
+</table>
+<br>
+A domain object can be saved, and is wrapped in a Do fixture when used.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>check</td><td>test result</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>do</td></tr>
+<tr><td>name</td><td>savebob</td><td>with</td><td>new</td><td>sample domain</td><td>Bob</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>use</td><td>savebob</td></tr>
+<tr><td>check</td><td>name</td><td>Bob</td></tr>
+</table>
+</td><td><br><table border="1" cellpadding="2" cellspacing="0"><tr><td>do</td></tr><tr><td>name</td><td class="pass">savebob</td><td>with</td><td>new</td><td>sample domain</td><td>Bob</td></tr></table><br><table border="1" cellpadding="2" cellspacing="0"><tr><td>use</td><td>savebob</td></tr><tr><td>check</td><td>name</td><td class="pass">Bob</td></tr></table></td></tr>
+</table>
+<br>
+Errors are reported when the method is invalid or cells are missing.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>check</td><td>test result</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>do</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>name</td><td>stuff</td><td>garbage</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>name</td><td>stuff</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>name</td></tr>
+</table>
+</td><td><br><table border="1" cellpadding="2" cellspacing="0"><tr><td>do</td></tr></table><br><table border="1" cellpadding="2" cellspacing="0"><tr><td class="error">name<hr /><pre><div class="fit_stacktrace">Member 'garbage' with 0 parameter(s) not found for type 'fitlibrary.DoFixture'.
+</div></pre></td><td>stuff</td><td>garbage</td></tr></table><br><table border="1" cellpadding="2" cellspacing="0"><tr><td class="error">name<hr /><pre><div class="fit_stacktrace">fitlibrary.exception.TableStructureException: This table is invalid for this fixture: missing cells for name.</div></pre></td><td>stuff</td></tr></table><br><table border="1" cellpadding="2" cellspacing="0"><tr><td class="error">name<hr /><pre><div class="fit_stacktrace">fitlibrary.exception.TableStructureException: This table is invalid for this fixture: missing cells for name.</div></pre></td></tr></table></td></tr>
+</table>
+</div>
+<div style="width:100%;text-align:right">
+<span class="footer">&copy; Copyright <a href="http://www.syterra.com">Syterra Software Inc.</a> All rights reserved.</span>
+</div>
+
+</body>
+</html>

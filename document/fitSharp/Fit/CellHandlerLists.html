@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- fitSharp
+Copyright © Syterra Software Inc. All rights reserved.
+The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
+to be bound by the terms of this license. You must not remove this notice, or any other, from this software. -->
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+ <link href="../fitsharp1.css" type="text/css" rel="stylesheet">
+  <link href="fit.css" type="text/css" rel="stylesheet">
+  <title>Cell Handler Lists</title>
+</head>
+<body>
+<div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
+<div class="pagename">Cell Handler Lists</div>
+<div class="content">** todo: rewrite this ** The <a href="../Fit/CellHandlers.html">Cell Handlers</a> currently active are held in cell handler lists. You can add and remove cell handlers from a cell handler list to change the cell handling behavior. The core Fit fixtures and the FitLibrary fixtures have historically had different default cell handling behavior, but this distinction has been removed in the latest version.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>CellMatching</td></tr>
+<tr><td>actual type</td><td>actual value</td><td>expected value</td><td>cell handlers</td><td></td><td>matches</td><td></td><td></td></tr>
+<tr><td>string</td><td></td><td>blank</td><td>fit</td><td></td><td>True</td><td></td><td>blank is a core keyword</td></tr>
+<tr><td>string</td><td></td><td>blank</td><td>fitlibrary</td><td></td><td>True</td><td></td><td>but now also for fitlibrary</td></tr>
+</table>
+<br>
+You can add and remove cell handlers in the Suite Configuration File.<br>
+<br>
+You can add and remove handlers in the story test with the CellHandlerLoaderFixture.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>CellHandlerLoader</td></tr>
+<tr><td>load</td><td>BlankKeywordHandler</td><td>FitLibrary</td></tr>
+<tr><td>remove</td><td>BlankKeywordHandler</td><td>Fit</td></tr>
+</table>
+<br>
+You can add and remove handlers in fixture code.<br>
+<br>
+<pre>Configuration.Instance.FitLibraryCellHandlers.Add("BlankKeywordHandler");
+Configuration.Instance.FitCellHandlers.Remove("BlankKeywordHandler");</pre><br>
+</div>
+<div style="width:100%;text-align:right">
+<span class="footer">&copy; Copyright <a href="http://www.syterra.com">Syterra Software Inc.</a> All rights reserved.</span>
+</div>
+
+</body>
+</html>

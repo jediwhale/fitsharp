@@ -33,6 +33,10 @@ namespace fitSharp.Machine.Engine {
             return runtimeMember;
         }
 
+        public RuntimeMember FindConstructor(Type[] parameterTypes) {
+            return FindInstance(Type, ".ctor", parameterTypes);
+        }
+
         public static RuntimeMember FindInstance(object instance, string memberName, int parameterCount) {
             return new MemberQuery(memberName, parameterCount, BindingFlags.Instance | BindingFlags.Static, null).Find(instance);
         }

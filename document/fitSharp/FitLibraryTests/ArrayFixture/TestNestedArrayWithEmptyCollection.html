@@ -1,0 +1,128 @@
+<html>
+<head>
+<link href="fit.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+<h2>An <i>ArrayFixture</i> table may have nested tables (for arrays or sets)</h2><table border="1" cellspacing="0">
+<tr><td colspan="2">Specify</td>
+</tr>
+<tr><td><table border="1" cellspacing="0">
+<tr><td colspan="2">NestedLists</td></tr>
+</table>
+<table border="1" cellspacing="0">
+<tr><td colspan="2"><i>nested</i></td></tr>
+<tr><td><i>name</i></td><td><i>elements</i></td></tr>
+<tr><td>apple</td><td><table border="1" cellspacing="0">
+<tr><td><i>id</i></td><td><i>count</i></td></tr>
+<tr><td>a</td><td>1</td></tr>
+<tr><td>b</td><td>2</td></tr>
+</table></td></tr>
+<tr><td>orange</td><td><table border="1" cellspacing="0">
+<tr><td><i>id</i></td></tr>
+<tr><td>c</td></tr>
+</table></td></tr>
+<tr><td>pear</td><td></td></tr>
+</table></td>
+<td><table border="1" cellspacing="0">
+<tr><td colspan="2">NestedLists</td></tr>
+</table>
+<table border="1" cellspacing="0">
+<tr><td colspan="2"><i>nested</i></td></tr>
+<tr><td><i>name</i></td><td><i>elements</i></td></tr>
+<tr><td class="pass">apple</td><td><table border="1" cellspacing="0">
+<tr><td><i>id</i></td><td><i>count</i></td></tr>
+<tr><td class="pass">a</td><td class="pass">1</td></tr>
+<tr><td class="pass">b</td><td class="pass">2</td></tr>
+</table></td></tr>
+<tr><td class="pass">orange</td><td><table border="1" cellspacing="0">
+<tr><td><i>id</i></td></tr>
+<tr><td class="pass">c</td></tr>
+</table></td></tr>
+<tr class="fail"><td>pear <span class="fit_label">missing</span></td><td></td></tr>
+<tr class="fail">
+<td><span class="fit_grey">pear</span> <span class="fit_label">surplus</span></td>
+<td><span class="fit_grey">System.Collections.ArrayList</span></td></tr>
+</table></td>
+</tr>
+</table>
+<br>(.NET: empty arraylist doesn't match null, test added for empty arraylist match)<br><br><table border="1" cellspacing="0">
+<tr><td colspan="2">Specify</td>
+</tr>
+<tr><td><table border="1" cellspacing="0">
+<tr><td colspan="2">NestedLists</td></tr>
+</table>
+<table border="1" cellspacing="0">
+<tr><td colspan="2"><i>nested</i></td></tr>
+<tr><td><i>name</i></td><td><i>elements</i></td></tr>
+<tr><td>apple</td><td><table border="1" cellspacing="0">
+<tr><td><i>id</i></td><td><i>count</i></td></tr>
+<tr><td>a</td><td>1</td></tr>
+<tr><td>b</td><td>2</td></tr>
+</table></td></tr>
+<tr><td>orange</td><td><table border="1" cellspacing="0">
+<tr><td><i>id</i></td></tr>
+<tr><td>c</td></tr>
+</table></td></tr>
+<tr><td>pear</td><td><table><tr><td>x</td></tr></table></td></tr>
+</table></td>
+<td><table border="1" cellspacing="0">
+<tr><td colspan="2">NestedLists</td></tr>
+</table>
+<table border="1" cellspacing="0">
+<tr><td colspan="2"><i>nested</i></td></tr>
+<tr><td><i>name</i></td><td><i>elements</i></td></tr>
+<tr><td class="pass">apple</td><td><table border="1" cellspacing="0">
+<tr><td><i>id</i></td><td><i>count</i></td></tr>
+<tr><td class="pass">a</td><td class="pass">1</td></tr>
+<tr><td class="pass">b</td><td class="pass">2</td></tr>
+</table></td></tr>
+<tr><td class="pass">orange</td><td><table border="1" cellspacing="0">
+<tr><td><i>id</i></td></tr>
+<tr><td class="pass">c</td></tr>
+</table></td></tr>
+<tr><td class="pass">pear</td><td><table><tr class="pass"><td>x</td></tr></table></td></tr>
+</table></td>
+</tr>
+</table>
+<br>(.NET to do: better reporting for actual values of lists.)<br><br><ul>
+	<li>The report when an embedded table is missing isn't so good.</li>
+	<li>But how to decide whether to put the List into a table? And what labels?</li>
+	<li>And whether to include embedded tables to some depth?</li>
+</ul>
+<table border="1" cellspacing="0">
+<tr><td colspan="2">Specify</td>
+</tr>
+<tr><td><table border="1" cellspacing="0">
+<tr><td colspan="2">NestedLists</td></tr>
+</table>
+<table border="1" cellspacing="0">
+<tr><td colspan="2"><i>nested</i></td></tr>
+<tr><td><i>name</i></td><td><i>elements</i></td></tr>
+<tr><td>orange</td><td><table border="1" cellspacing="0">
+<tr><td><i>id</i></td></tr>
+<tr><td>c</td></tr>
+</table></td></tr>
+<tr><td>pear</td><td></td></tr>
+</table></td>
+<td><table border="1" cellspacing="0">
+<tr><td colspan="2">NestedLists</td></tr>
+</table>
+<table border="1" cellspacing="0">
+<tr><td colspan="2"><i>nested</i></td></tr>
+<tr><td><i>name</i></td><td><i>elements</i></td></tr>
+<tr><td class="pass">orange</td><td><table border="1" cellspacing="0">
+<tr><td><i>id</i></td></tr>
+<tr><td class="pass">c</td></tr>
+</table></td></tr>
+<tr class="fail"><td>pear <span class="fit_label">missing</span></td><td></td></tr>
+<tr class="fail">
+<td><span class="fit_grey">apple</span> <span class="fit_label">surplus</span></td>
+<td><span class="fit_grey">System.Collections.ArrayList</span></td></tr>
+
+<tr class="fail">
+<td><span class="fit_grey">pear</span> <span class="fit_label">surplus</span></td>
+<td><span class="fit_grey">System.Collections.ArrayList</span></td></tr></table></td>
+</tr>
+</table>
+<br><hr><br>[<a href="../../FrontPage.html">Front Page</a>] [<a href="../../RecentChanges.html">Recent Changes</a>]
+</body></html>

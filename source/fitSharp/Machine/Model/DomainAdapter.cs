@@ -7,4 +7,8 @@ namespace fitSharp.Machine.Model {
     public interface DomainAdapter {
         object SystemUnderTest { get;}
     }
+
+    public interface MutableDomainAdapter: DomainAdapter {
+        void SetSystemUnderTest(object theSystemUnderTest);
+    }
 }

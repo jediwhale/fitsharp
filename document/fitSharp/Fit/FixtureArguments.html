@@ -1,0 +1,54 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- fitSharp
+Copyright © Syterra Software Inc. All rights reserved.
+The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
+to be bound by the terms of this license. You must not remove this notice, or any other, from this software. -->
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+ <link href="../fitsharp1.css" type="text/css" rel="stylesheet">
+  <link href="fit.css" type="text/css" rel="stylesheet">
+  <title>Fixture Arguments</title>
+</head>
+<body>
+<div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
+<div class="pagename">Fixture Arguments</div>
+<div class="content">The text in cells in the first row of a table following the fixture name are available to the fixture as a string array named Args, e.g.: <pre>string anArgument = Args[i];</pre><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample do</td></tr>
+<tr><td>check</td><td>argument count</td><td>0</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample do</td><td>with</td><td>some</td><td>arguments</td></tr>
+<tr><td>check</td><td>argument count</td><td>3</td></tr>
+<tr><td>check</td><td>get argument</td><td>0</td><td>with</td></tr>
+<tr><td>check</td><td>get argument</td><td>1</td><td>some</td></tr>
+<tr><td>check</td><td>get argument</td><td>2</td><td>arguments</td></tr>
+</table>
+<br>
+The Args array returns the raw text in the argument cells. To process the argument cells like other input cells, e.g., retrieving symbol values or parsing arrays, use the GetArgumentInput method with the argument index and the desired type, e.g.: <pre>string anArgument = (string)GetArgumentInput(i, typeof(string));</pre><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>cell handler story</td></tr>
+<tr><td>string</td><td>string?</td></tr>
+<tr><td>symbol value</td><td>>>mysymbol</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>cell handler loader</td></tr>
+<tr><td>load</td><td>symbol recall handler</td><td>fitlibrary</td></tr>
+</table>
+ <br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample do</td><td>with</td><td>&lt;&lt;mysymbol</td><td>1,2,3</td></tr>
+<tr><td>check</td><td>get argument input as string</td><td>1</td><td>symbol value</td></tr>
+<tr><td>check</td><td>get argument input as array</td><td>2</td><td>1, 2, 3</td></tr>
+</table>
+</div>
+<div style="width:100%;text-align:right">
+<span class="footer">&copy; Copyright <a href="http://www.syterra.com">Syterra Software Inc.</a> All rights reserved.</span>
+</div>
+
+</body>
+</html>

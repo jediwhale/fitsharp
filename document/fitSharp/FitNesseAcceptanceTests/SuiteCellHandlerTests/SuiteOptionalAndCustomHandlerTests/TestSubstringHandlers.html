@@ -1,0 +1,142 @@
+<html>
+<head>
+<link href="fit.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+<div class="setup">
+	<div style="float: right;" class="meta"><a href="javascript:expandAll();">Expand All</a> | <a href="javascript:collapseAll();">Collapse All</a></div>
+	<a href="javascript:toggleCollapsable('8323111233203375763');">
+		<img src="/files/images/collapsableOpen.gif" class="left" id="img8323111233203375763"/>
+	</a>
+&nbsp;<span class="meta">Set Up: <a href="../../../FitNesseAcceptanceTests/SetUp.html">Fit Nesse Acceptance Tests. Set Up</a></span>
+	<div class="collapsable" id="8323111233203375763"><table border="1" cellspacing="0">
+<tr><td>Import</td>
+</tr>
+<tr><td>fitnesse.acceptanceTests</td>
+</tr>
+</table>
+</div>
+</div>
+<h3>You can assert that a returned value contains a given substring, or specifically starts or ends with that substring.</h3><br>Coincidentally, this will work for the string representation of any type (excluding arrays).<br><br>- use ..abc.. to assert that the returned value contains "abc"<br>- use abc.. to assert that the returned value starts with "abc"<br>- use ..abc to assert that the returned value ends with "abc"<br><hr><br><table border="1" cellspacing="0">
+<tr><td colspan="2">cell handler loader</td>
+</tr>
+<tr><td>load</td>
+<td>SubstringHandler</td>
+</tr>
+<tr><td>load</td>
+<td>StartsWithHandler</td>
+</tr>
+<tr><td>load</td>
+<td>EndsWithHandler</td>
+</tr>
+</table>
+<br><table border="1" cellspacing="0">
+<tr><td colspan="6">string fixture</td>
+</tr>
+<tr><td>field</td>
+<td>field?</td>
+<td>property</td>
+<td>property?</td>
+<td>set</td>
+<td>get?</td>
+</tr>
+<tr><td>abcdef</td>
+<td>..bcd..</td>
+<td>ghijk</td>
+<td>..hi..</td>
+<td>lmnop</td>
+<td>..no..</td>
+</tr>
+<tr><td>abcdef</td>
+<td>abc..</td>
+<td>ghijk</td>
+<td>gh..</td>
+<td>lmnop</td>
+<td>lm..</td>
+</tr>
+<tr><td>abcdef</td>
+<td>..def</td>
+<td>ghijk</td>
+<td>..jk</td>
+<td>lmnop</td>
+<td>..op</td>
+</tr>
+</table>
+<br><table border="1" cellspacing="0">
+<tr><td colspan="6">int fixture</td>
+</tr>
+<tr><td>field</td>
+<td>field?</td>
+<td>property</td>
+<td>property?</td>
+<td>set</td>
+<td>get?</td>
+</tr>
+<tr><td>12345</td>
+<td>..234..</td>
+<td>12345</td>
+<td>..234..</td>
+<td>12345</td>
+<td>..234..</td>
+</tr>
+<tr><td>12345</td>
+<td>123..</td>
+<td>12345</td>
+<td>123..</td>
+<td>12345</td>
+<td>123..</td>
+</tr>
+<tr><td>12345</td>
+<td>..345</td>
+<td>12345</td>
+<td>..345</td>
+<td>12345</td>
+<td>..345</td>
+</tr>
+</table>
+<br><table border="1" cellspacing="0">
+<tr><td colspan="6">person fixture</td>
+</tr>
+<tr><td>field</td>
+<td>field?</td>
+<td>property</td>
+<td>property?</td>
+<td>set</td>
+<td>get?</td>
+</tr>
+<tr><td>john doe</td>
+<td>..john..</td>
+<td>dr suess</td>
+<td>..sue..</td>
+<td>sam iam</td>
+<td>..m i..</td>
+</tr>
+<tr><td>john doe</td>
+<td>john..</td>
+<td>dr suess</td>
+<td>dr s..</td>
+<td>sam iam</td>
+<td>sam..</td>
+</tr>
+<tr><td>john doe</td>
+<td>..doe</td>
+<td>dr suess</td>
+<td>..ess</td>
+<td>sam iam</td>
+<td>..am</td>
+</tr>
+</table>
+<br><div class="teardown">
+	<div style="float: right;" class="meta"><a href="javascript:expandAll();">Expand All</a> | <a href="javascript:collapseAll();">Collapse All</a></div>
+	<a href="javascript:toggleCollapsable('-8839010197011945052');">
+		<img src="/files/images/collapsableOpen.gif" class="left" id="img-8839010197011945052"/>
+	</a>
+&nbsp;<span class="meta">Tear Down: <a href="../../../FitNesseAcceptanceTests/TearDown.html">Fit Nesse Acceptance Tests. Tear Down</a></span>
+	<div class="collapsable" id="-8839010197011945052"><table border="1" cellspacing="0">
+<tr><td>ResetNamespacesFixture</td>
+</tr>
+</table>
+</div>
+</div>
+<hr><br>[<a href="../../../FrontPage.html">Front Page</a>] [<a href="../../../RecentChanges.html">Recent Changes</a>]
+</body></html>

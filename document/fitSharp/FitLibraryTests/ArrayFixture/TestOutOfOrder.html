@@ -1,0 +1,25 @@
+<html>
+<head>
+<link href="fit.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+<h2>All elements are there, but not in the correct order</h2><table border="1" cellspacing="0">
+<tr><td colspan="2">Specify</td>
+</tr>
+<tr><td><table border="1" cellspacing="0">
+<tr><td colspan="2">ArrayFixtureUnderTest</td></tr>
+<tr><td>+</td><td>&amp;</td></tr>
+<tr><td>1</td><td>two</td></tr>
+<tr><td>2</td><td>two</td></tr>
+<tr><td>1</td><td>one</td></tr>
+</table></td>
+<td><table border="1" cellspacing="0">
+<tr><td colspan="2">ArrayFixtureUnderTest</td></tr>
+<tr><td>+</td><td>&amp;</td></tr>
+<tr class="fail"><td>1 <span class="fit_label">out of order</span></td><td>two</td></tr>
+<tr class="fail"><td>2 <span class="fit_label">out of order</span></td><td>two</td></tr>
+<tr class="fail"><td>1 <span class="fit_label">out of order</span></td><td>one</td></tr></table></td>
+</tr>
+</table>
+<br>(.NET: different matching algorithm)<hr><br>[<a href="../../FrontPage.html">Front Page</a>] [<a href="../../RecentChanges.html">Recent Changes</a>]
+</body></html>

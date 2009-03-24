@@ -1,0 +1,69 @@
+<html>
+<head>
+<link href="fit.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+<div class="setup">
+	<div style="float: right;" class="meta"><a href="javascript:expandAll();">Expand All</a> | <a href="javascript:collapseAll();">Collapse All</a></div>
+	<a href="javascript:toggleCollapsable('-3357729891618596712');">
+		<img src="/files/images/collapsableOpen.gif" class="left" id="img-3357729891618596712"/>
+	</a>
+&nbsp;<span class="meta">Set Up: <a href="../../FitNesseAcceptanceTests/SetUp.html">Fit Nesse Acceptance Tests. Set Up</a></span>
+	<div class="collapsable" id="-3357729891618596712"><table border="1" cellspacing="0">
+<tr><td>Import</td>
+</tr>
+<tr><td>fitnesse.acceptanceTests</td>
+</tr>
+</table>
+</div>
+</div>
+The PathParser is used by the .NET FitServer to parse the path passed to it from FitNesse. You can include a config file on the path, and .NET FitServer will use that config file during the test run.<br><br>Try just one path entry...<br><table border="1" cellspacing="0">
+<tr><td colspan="3">path parser fixture</td>
+</tr>
+<tr><td>path string</td>
+<td>assembly paths?</td>
+<td>config file path?</td>
+</tr>
+<tr><td>c:\path\to\assembly.dll</td>
+<td>c:\path\to\assembly.dll</td>
+<td>null</td>
+</tr>
+</table>
+<br>Now two...<br><table border="1" cellspacing="0">
+<tr><td colspan="3">path parser fixture</td>
+</tr>
+<tr><td>path string</td>
+<td>assembly paths?</td>
+<td>config file path?</td>
+</tr>
+<tr><td>c:\path\to\assembly.dll;c:\path\to\other\assembly.dll</td>
+<td>c:\path\to\assembly.dll,c:\path\to\other\assembly.dll</td>
+<td>null</td>
+</tr>
+</table>
+<br>Now one assembly and one config file<br><table border="1" cellspacing="0">
+<tr><td colspan="3">path parser fixture</td>
+</tr>
+<tr><td>path string</td>
+<td>assembly paths?</td>
+<td>config file path?</td>
+</tr>
+<tr><td>c:\path\to\assembly.dll;c:\path\to\assembly.config</td>
+<td>c:\path\to\assembly.dll</td>
+<td>c:\path\to\assembly.config</td>
+</tr>
+</table>
+<br><div class="teardown">
+	<div style="float: right;" class="meta"><a href="javascript:expandAll();">Expand All</a> | <a href="javascript:collapseAll();">Collapse All</a></div>
+	<a href="javascript:toggleCollapsable('2897115584241963896');">
+		<img src="/files/images/collapsableOpen.gif" class="left" id="img2897115584241963896"/>
+	</a>
+&nbsp;<span class="meta">Tear Down: <a href="../../FitNesseAcceptanceTests/TearDown.html">Fit Nesse Acceptance Tests. Tear Down</a></span>
+	<div class="collapsable" id="2897115584241963896"><table border="1" cellspacing="0">
+<tr><td>ResetNamespacesFixture</td>
+</tr>
+</table>
+</div>
+</div>
+<hr><br>[<a href="../../FrontPage.html">Front Page</a>] [<a href="../../RecentChanges.html">Recent Changes</a>]
+</body></html>

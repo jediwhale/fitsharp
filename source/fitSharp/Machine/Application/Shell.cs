@@ -9,19 +9,21 @@ using System.Reflection;
 using fitSharp.Machine.Engine;
 
 namespace fitSharp.Machine.Application {
+    public interface ProgressReporter {
+        void Write(string theMessage);
+    }
+
     public interface Runnable {
-        int Run(string[] commandLineArguments, Configuration configuration);
+        int Run(string[] commandLineArguments, Configuration configuration, ProgressReporter reporter);
     }
 
     public class Shell: MarshalByRefObject {
-        private string runnerName;
         private readonly List<string> extraArguments = new List<string>();
-        private readonly Configuration configuration = new Configuration();
+        private readonly ProgressReporter progressReporter;
+        public Runnable Runner { get; private set; }
 
-        public int Test(string[] test) {
-            Console.WriteLine(test[0] + " " + test[1]);
-            return 1;
-        }
+        public Shell() { progressReporter = new ConsoleReporter(); }
+        public Shell(ProgressReporter progressReporter) { this.progressReporter = progressReporter; }
 
         public int Run(string[] commandLineArguments) {
             string appConfigName = LookForAppConfig(commandLineArguments);
@@ -70,7 +72,7 @@ namespace fitSharp.Machine.Application {
                 if (i < commandLineArguments.Length - 1) {
                     switch (commandLineArguments[i]) {
                         case "-c":
-                            configuration.LoadFile(commandLineArguments[i + 1]);
+                            Context.Configuration.LoadFile(commandLineArguments[i + 1]);
                             break;
                         case "-a":
                             break;
@@ -89,14 +91,14 @@ namespace fitSharp.Machine.Application {
 
         private void ParseRunnerArgument(string argument) {
             string[] tokens = argument.Split(',');
-            runnerName = tokens[0];
+            Context.Configuration.GetItem<Settings>().Runner = tokens[0];
             if (tokens.Length > 1) {
-                configuration.GetItem<ApplicationUnderTest>().AddAssembly(tokens[1]);
+                Context.Configuration.GetItem<ApplicationUnderTest>().AddAssembly(tokens[1]);
             }
         }
 
         private bool ValidateArguments() {
-            if (string.IsNullOrEmpty(runnerName)) {
+            if (string.IsNullOrEmpty(Context.Configuration.GetItem<Settings>().Runner)) {
                 Console.WriteLine("Missing runner class");
                 return false;
             }
@@ -104,8 +106,15 @@ namespace fitSharp.Machine.Application {
         }
 
         private int ExecuteRunner() {
-            var runnable = (Runnable) new BasicProcessor().Create(runnerName).Value;
-            return runnable.Run(extraArguments.ToArray(), configuration);
+            Runner = (Runnable) new BasicProcessor().Create(Context.Configuration.GetItem<Settings>().Runner).Value;
+            return Runner.Run(extraArguments.ToArray(), Context.Configuration, progressReporter);
         }
     }
+
+    public class ConsoleReporter: ProgressReporter {
+        public void Write(string theMessage) {
+            Console.Write(theMessage);
+        }
+    }
+
 }

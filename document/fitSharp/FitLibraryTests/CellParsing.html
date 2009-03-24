@@ -1,0 +1,81 @@
+<!-- Copyright © 2007 Syterra Software Inc. -->
+<html>
+<head>
+<link href="fit.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+<table border="1" cellspacing="0">
+<tr><td>CellParsing</td>
+</tr>
+</table>
+<br>Strings are parsed as is.<br><br><table border="1" cellspacing="0">
+<tr><td>check parse string</td>
+<td>&nbsp;</td>
+<td>''</td>
+</tr>
+<tr><td>check parse string</td>
+<td>something</td>
+<td>'something'</td>
+</tr>
+</table>
+<br>Static Parse methods on elementary classes are used.<br><br><table border="1" cellspacing="0">
+<tr><td>check parse integer</td>
+<td>123456789</td>
+<td>123,456,789</td>
+</tr>
+<tr><td>check parse integer</td>
+<td>-123456789</td>
+<td>-123,456,789</td>
+</tr>
+<tr><td>check parse integer</td>
+<td>0</td>
+<td>&nbsp;</td>
+</tr>
+</table>
+<p>Enumerated types are parsed.</p>
+<table border="1" cellspacing="0"><tr><td>check</td><td>parse as type code</td><td>Byte</td><td>'Byte'</td></tr></table>
+<p>Nullable types are parsed.</p>
+<table border="1" cellspacing="0">
+<tr><td>check</td><td>parse as nullable int</td><td>123</td><td>'123'</td></tr>
+<tr><td>check</td><td>parse as nullable int</td><td>null</td><td>''</td></tr>
+</table>
+<br />
+Static Parse methods on classes under test are used if they exist.<br><br><table border="1" cellspacing="0">
+<tr><td>check parse test class</td>
+<td>special</td>
+<td>SPECIAL</td>
+</tr>
+</table>
+<br>Nested lists can be parsed as a fitlibrary.tree.Tree.<br><br><table border="1" cellspacing="0">
+<tr><td>check parse tree</td>
+<td>root<ul><li>child1</li><li>child2</li></ul></td>
+<td>root[child1[] child2[] ]</td>
+</tr>
+</table>
+<br>Nested tables can be parsed as a fitlibrary.table.Table.<br><br><table border="1" cellspacing="0">
+<tr><td>check parse table</td>
+<td><table>
+<tr><td>11</td><td>12</td></tr>
+<tr><td>21</td><td>22</td></tr>
+</table></td>
+<td>{[11 12 ][21 22 ]}</td>
+</tr>
+</table>
+<br>Nested tables can be parsed as a IList.  The table must have a <a href="../FitLibraryTests/SetUpFixture.html">Set Up Fixture</a> format.<br><br><table border="1" cellspacing="0">
+<tr><td>check parse list</td>
+<td><table>
+<tr><td>a</td><td>b</td></tr>
+<tr><td>11</td><td>12</td></tr>
+<tr><td>21</td><td>22</td></tr>
+</table></td>
+<td><table>
+<tr><td>x</td><td>y</td></tr>
+<tr><td>11</td><td>12</td></tr>
+<tr><td>21</td><td>22</td></tr>
+</table></td>
+</tr>
+</table>
+<p>Custom cell parsers can be added. To do this, create a class that implements fit.ICellHandler and call Configuration.Instance.FitLibraryCellHandlers.Add("your.CustomParser")</p>
+<table cellspacing="0" cellpadding="1" border="1">
+<tr><td>check</td><td>parse with custom parser</td><td>one</td><td>'1'</td></tr></table>
+</body></html>

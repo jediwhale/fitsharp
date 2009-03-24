@@ -36,6 +36,33 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Fit\Application\Configurable.cs" />
+    <Compile Include="Fit\Application\ConfigurationList.cs" />
+    <Compile Include="Fit\Application\FileExclusions.cs" />
+    <Compile Include="Fit\Operators\CompareString.cs" />
+    <Compile Include="Machine\Application\Settings.cs" />
+    <Compile Include="Fit\Model\Cell.cs" />
+    <Compile Include="Fit\Operators\CompareFloatingPoint.cs" />
+    <Compile Include="Fit\Operators\ParseEnum.cs" />
+    <Compile Include="Fit\Operators\ParseMemberName.cs" />
+    <Compile Include="Fit\Operators\ParseMemberNameExtended.cs" />
+    <Compile Include="Fit\Operators\ParseNullable.cs" />
+    <Compile Include="Machine\Application\Context.cs" />
+    <Compile Include="Fit\Model\GracefulName.cs" />
+    <Compile Include="Fit\Model\MemberName.cs" />
+    <Compile Include="Fit\Model\StringCell.cs" />
+    <Compile Include="Fit\Operators\CompareDefault.cs" />
+    <Compile Include="Fit\Operators\CompareEndsWith.cs" />
+    <Compile Include="Fit\Operators\CompareIntegralRange.cs" />
+    <Compile Include="Fit\Operators\CompareStartsWith.cs" />
+    <Compile Include="Fit\Operators\CompareSubstring.cs" />
+    <Compile Include="Fit\Operators\ParseArray.cs" />
+    <Compile Include="Fit\Operators\ParseBlank.cs" />
+    <Compile Include="Fit\Operators\ParseBoolean.cs" />
+    <Compile Include="Fit\Operators\ParseDefault.cs" />
+    <Compile Include="Fit\Model\Symbol.cs" />
+    <Compile Include="Fit\Operators\ParseNull.cs" />
+    <Compile Include="Fit\Operators\ParseType.cs" />
     <Compile Include="Machine\Application\Configuration.cs" />
     <Compile Include="Machine\Application\Shell.cs" />
     <Compile Include="Machine\Engine\ApplicationUnderTest.cs" />

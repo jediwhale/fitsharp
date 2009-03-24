@@ -1,0 +1,28 @@
+<html>
+<head>
+<link href="fit.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+<ul>
+	<li>tearDown() is called once the fixture object has finished running the table</li>
+	<li>To check this has happened, the fixture here throws an exception inside tearDown()</li>
+	<li>So we check that that has happened</li>
+	<li>The calculation row also throws an exception, and we check that that's also reported</li>
+</ul>
+<table border="1" cellspacing="0">
+<tr><td colspan="2">Specify</td>
+</tr>
+<tr><td><table>
+<tr><td colspan=3>CalculateFixtureTearDown</td></tr>
+<tr><td><i>a</i></td><td></td><td><i>result</i></td></tr>
+<tr><td>1</td><td></td><td>2</td></tr>
+</table></td>
+<td><table>
+<tr><td class="error" colspan=3>CalculateFixtureTearDown<hr><pre><div class="fit_stacktrace"></div></pre></td></tr>
+<tr><td><i>a</i></td><td></td><td><i>result</i></td></tr>
+<tr><td>1</td><td></td><td class="error">2<hr><pre><div class="fit_stacktrace"></div></pre></td></tr>
+</table></td>
+</tr>
+</table>
+<br><hr><br>[<a href="../../../FrontPage.html">Front Page</a>] [<a href="../../../RecentChanges.html">Recent Changes</a>]
+</body></html>

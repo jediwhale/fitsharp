@@ -1,0 +1,17 @@
+<suiteConfig>
+
+    <ApplicationUnderTest>
+        <addNamespace>fit.Test.Acceptance</addNamespace>
+    </ApplicationUnderTest>
+
+    <fitSharp.Machine.Application.Settings>
+        <inputFolder>document\fitSharp\Fit\SampleInputFiles</inputFolder>
+        <outputFolder>testoutput</outputFolder>
+        <runner>fit.Runner.FolderRunner</runner>
+    </fitSharp.Machine.Application.Settings>
+
+    <fit.FileExclusions>
+       <remove>^Sample</remove>
+    </fit.FileExclusions>
+
+</suiteConfig>

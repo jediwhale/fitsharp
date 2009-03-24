@@ -13,6 +13,11 @@
 
 <Target Name="unittests">
     <Exec Command="&quot;C:\Program Files\NUnit 2.4.8\bin\nunit-console&quot; -nologo .\build\$(Config)\fitSharpTest.dll" />
+    <Exec Command="&quot;C:\Program Files\NUnit 2.4.8\bin\nunit-console&quot; -nologo .\build\$(Config)\fitTest.dll" />
+</Target>
+
+<Target Name="storytests">
+    <Exec Command=".\build\$(Config)\runner -r fit.Runner.FolderRunner -c storytest.config.xml" />
 </Target>
 
 </Project>
