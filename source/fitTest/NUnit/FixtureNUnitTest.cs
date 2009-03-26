@@ -30,7 +30,7 @@ namespace fit.Test.NUnit {
             {
                 message = e.Message;
             }
-            Assert.IsTrue(message.IndexOf("in assemblies:\n") > 0);
+            Assert.IsTrue(message.IndexOf("in assemblies:") > 0);
             Assert.IsTrue(message.ToLower().IndexOf("fit.dll") > 0, message);
         }
     }

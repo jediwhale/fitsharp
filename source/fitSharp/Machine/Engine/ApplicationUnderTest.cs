@@ -58,7 +58,8 @@ namespace fitSharp.Machine.Engine {
 
         private static string TypeNotFoundMessage() {
             var result = new StringBuilder();
-            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies()) result.AppendFormat("    {0}\n", assembly.CodeBase);
+            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+                result.AppendFormat("    {0}{1}", assembly.CodeBase, Environment.NewLine);
             return result.ToString();
         }
 

@@ -26,10 +26,16 @@ namespace fitSharp.Machine.Application {
         public Shell(ProgressReporter progressReporter) { this.progressReporter = progressReporter; }
 
         public int Run(string[] commandLineArguments) {
-            string appConfigName = LookForAppConfig(commandLineArguments);
-            return appConfigName.Length == 0
-                       ? RunInCurrentDomain(commandLineArguments)
-                       : RunInNewDomain(appConfigName, commandLineArguments);
+            try {
+                string appConfigName = LookForAppConfig(commandLineArguments);
+                return appConfigName.Length == 0
+                           ? RunInCurrentDomain(commandLineArguments)
+                           : RunInNewDomain(appConfigName, commandLineArguments);
+            }
+            catch (System.Exception e) {
+                progressReporter.Write(string.Format("{0}\n", e));
+                return 1;
+            }
         }
 
         private static string LookForAppConfig(string[] commandLineArguments) {
@@ -42,7 +48,7 @@ namespace fitSharp.Machine.Application {
         private int RunInCurrentDomain(string[] commandLineArguments) {
             ParseArguments(commandLineArguments);
             if (!ValidateArguments()) {
-                Console.WriteLine("\nUsage:\n\tRunner -r runnerClass [ -a appConfigFile ][ -c runnerConfigFile ] ...");
+                progressReporter.Write("\nUsage:\n\tRunner -r runnerClass [ -a appConfigFile ][ -c runnerConfigFile ] ...\n");
                 return 1;
             }
             return ExecuteRunner();
@@ -89,7 +95,7 @@ namespace fitSharp.Machine.Application {
             }
         }
 
-        private void ParseRunnerArgument(string argument) {
+        private static void ParseRunnerArgument(string argument) {
             string[] tokens = argument.Split(',');
             Context.Configuration.GetItem<Settings>().Runner = tokens[0];
             if (tokens.Length > 1) {
@@ -99,7 +105,7 @@ namespace fitSharp.Machine.Application {
 
         private bool ValidateArguments() {
             if (string.IsNullOrEmpty(Context.Configuration.GetItem<Settings>().Runner)) {
-                Console.WriteLine("Missing runner class");
+                progressReporter.Write("Missing runner class\n");
                 return false;
             }
             return true;

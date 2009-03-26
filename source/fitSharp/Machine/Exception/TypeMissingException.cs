@@ -15,7 +15,7 @@ namespace fitSharp.Machine.Exception {
             : base(info, context) {}
 
         public TypeMissingException(string typeName, string message)
-            : base(string.Format("Type '{0}' not found in assemblies:\n{1}", typeName, message)) {
+            : base(string.Format("Type '{0}' not found in assemblies:{1}{2}", typeName, Environment.NewLine, message)) {
             TypeName = typeName;
         }
         
