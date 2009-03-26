@@ -1,6 +1,5 @@
-// FitNesse.NET
-// Copyright © 2006,2008 Syterra Software Inc. This program is free software;
-// you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
+// Copyright © 2009 Syterra Software Inc.
+// This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
@@ -29,16 +28,16 @@ namespace fit {
             if (typeof(XmlDocument).IsAssignableFrom(resultType)) return new XmlFixture((XmlDocument)theResult);
             if (typeof(IEnumerable).IsAssignableFrom(resultType)) return new ArrayFixture(((IEnumerable)theResult).GetEnumerator());
             if (HasStaticParseMethod(resultType)) return theResult;
-            return new DoFixture(theResult);
+                        return new DoFixture(theResult);
         }
 
         private static bool HasStaticParseMethod(Type theResultType) {
             MethodInfo parseMethod = theResultType.GetMethod(
-                    "Parse",
-                    BindingFlags.Static | BindingFlags.FlattenHierarchy | BindingFlags.IgnoreCase | BindingFlags.Public,
-                    null, new Type[] {typeof (string)}, null);
-            return (parseMethod != null && parseMethod.ReturnType == theResultType);
-        }
+                                "Parse",
+                                                    BindingFlags.Static | BindingFlags.FlattenHierarchy | BindingFlags.IgnoreCase | BindingFlags.Public,
+                                                                        null, new Type[] {typeof (string)}, null);
+                                                                                    return (parseMethod != null && parseMethod.ReturnType == theResultType);
+                                                                                            }
 
         private static bool IsObjectArray(Type theResultType) {
             return (theResultType.IsArray

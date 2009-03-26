@@ -1,14 +1,13 @@
-// Modified or written by Object Mentor, Inc. for inclusion with FitNesse.
-// Copyright (c) 2002 Cunningham & Cunningham, Inc.
-// Released under the terms of the GNU General Public License version 2 or later.
-using System;
-using System.Text.RegularExpressions;
+// Copyright © 2009 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+// This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
+// This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 namespace fit
 {
 	public abstract class BoundFixture : Fixture
 	{
-		public bool HasExecuted = false;
+		public bool HasExecuted;
 
 		public void CheckCalled()
 		{

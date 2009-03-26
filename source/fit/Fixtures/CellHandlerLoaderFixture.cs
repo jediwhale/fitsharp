@@ -1,8 +1,8 @@
-// FitNesse.NET
-// Copyright © 2008 Syterra Software Inc. Includes work by Object Mentor, Inc., (c) 2002 Cunningham & Cunningham, Inc.
+// Copyright © 2009 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
 using System.Collections.Generic;
 using fit;
 using fit.Engine;
@@ -19,7 +19,6 @@ namespace fitnesse.handlers
             {"boolhandler", typeof(ParseBoolean).FullName},
             {"emptycellhandler", typeof(ExecuteEmpty).FullName},
             {"exceptionkeywordhandler", typeof(ExecuteException).FullName},
-            //{"guidhandler", typeof(ParseGuid).FullName},
             {"nullkeywordhandler", typeof(ParseNull).FullName},
             {"blankkeywordhandler", typeof(ParseBlank).FullName},
             {"errorkeywordhandler", typeof(ExecuteError).FullName},

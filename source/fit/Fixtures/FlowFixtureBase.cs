@@ -1,6 +1,5 @@
-// FitNesse.NET
-// Copyright © 2006-2008 Syterra Software Inc. This program is free software;
-// you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
+// Copyright © 2009 Syterra Software Inc.
+// This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
@@ -29,8 +28,8 @@ namespace fitlibrary {
         }
 
         public override  bool IsInFlow(int tableCount) { return tableCount == 1; }
-
-        public virtual void DoFlowTable(Parse table) {
+        
+                public virtual void DoFlowTable(Parse table) {
             if (TestStatus.IsAbandoned) return;
             ProcessFlowRows(table.Parts);
         }
@@ -42,16 +41,16 @@ namespace fitlibrary {
         public void DoTearDown(Parse table) {
             ExecuteOptionalMethod("teardown", table.Parts.Parts);
         }
-
-	    protected void ProcessFlowRows(Parse theRows) {
+        
+        	    protected void ProcessFlowRows(Parse theRows) {
             Parse currentRow = theRows;
             IHaveFinishedTable = false;
             while (currentRow != null && !IHaveFinishedTable) {
-                Parse nextRow = currentRow.More;
-                ProcessFlowRow(currentRow);
-                currentRow = nextRow;
-            }
-        }
+                            Parse nextRow = currentRow.More;
+                                            ProcessFlowRow(currentRow);
+                                                            currentRow = nextRow;
+                                                                        }
+                                                                                }
 
         protected void ProcessFlowRow(Parse theCurrentRow) {
             try {
@@ -177,11 +176,11 @@ namespace fitlibrary {
         }
 
         public override object GetTargetObject() {
-            return this;
-		}
-
-	    private static readonly IdentifierName ourWithIdentifier = new IdentifierName("with");
-
+                    return this;
+                    		}
+                    		
+                    			    private static readonly IdentifierName ourWithIdentifier = new IdentifierName("with");
+                    			    
 	    protected bool IHaveFinishedTable;
         protected Hashtable myNamedFixtures;
 
