@@ -5,9 +5,9 @@
         <outputFolder>site</outputFolder>
     </fitSharp.Machine.Application.Settings>
 
-    <fit.FileExclusions>
+    <fitSharp.Fit.Application.FileExclusions>
         <add>^Sample</add>
-    </fit.FileExclusions>
+    </fitSharp.Fit.Application.FileExclusions>
     
     <ApplicationUnderTest>
         <addNamespace>fit.Test.Acceptance</addNamespace>

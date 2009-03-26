@@ -10,8 +10,8 @@
         <runner>fit.Runner.FolderRunner</runner>
     </fitSharp.Machine.Application.Settings>
 
-    <fit.FileExclusions>
+    <fitSharp.Fit.Application.FileExclusions>
        <remove>^Sample</remove>
-    </fit.FileExclusions>
+    </fitSharp.Fit.Application.FileExclusions>
 
 </suiteConfig>
