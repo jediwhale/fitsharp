@@ -1,9 +1,8 @@
-﻿// Copyright © Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2009 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
-using fitnesse.unitTest.slim;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using fitSharp.Slim.Operators;
@@ -41,12 +40,12 @@ namespace fitSharp.Test.NUnit.Slim {
             var executeCall = new ExecuteCall();
             var input = new TreeList<string>().AddBranchValue("step").AddBranchValue("call").AddBranchValue("variable").AddBranchValue("garbage");
             ExecuteOperation(executeCall, input, 2);
-            CheckForException("message<<NO_METHOD_IN_CLASS garbage fitnesse.unitTest.slim.SampleClass>>");
+            CheckForException("message<<NO_METHOD_IN_CLASS garbage fitSharp.Test.NUnit.Slim.SampleClass>>");
         }
 
         [Test] public void ExecuteImportAddsNamespace() {
             var executeImport = new ExecuteImport();
-            var input = new TreeList<string>().AddBranchValue("step").AddBranchValue("import").AddBranchValue("fitnesse.unitTest.slim");
+            var input = new TreeList<string>().AddBranchValue("step").AddBranchValue("import").AddBranchValue("fitSharp.Test.NUnit.Slim");
             ExecuteOperation(executeImport, input, 2);
             Assert.IsTrue(processor.Create("SampleClass").Value is SampleClass);
         }
