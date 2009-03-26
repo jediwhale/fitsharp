@@ -18,6 +18,12 @@ namespace fitSharp.RunnerW {
 
         private void MainForm_Load(object sender, EventArgs e) {
             hasRun = false;
+            textReporter = new TextReporter(progressText);
+            foreach (string argument in arguments) {
+                textReporter.Write(string.Format("{0} ", argument));
+            }
+            textReporter.Write(Environment.NewLine);
+
         }
 
         private class TextReporter: ProgressReporter {
@@ -31,12 +37,16 @@ namespace fitSharp.RunnerW {
             }
         }
 
-        private void MainForm_Activated(object sender, EventArgs e) {
-            if (hasRun) return;
-            textReporter = new TextReporter(progressText);
-            int result = new Shell(textReporter).Run(arguments);
-            textReporter.Write(string.Format("\r\nResult: {0}", result));
-            hasRun = true;
+        private void goButton_Click(object sender, EventArgs e) {
+            if (hasRun) {
+                Close();
+            }
+            else {
+                int result = new Shell(textReporter).Run(arguments);
+                textReporter.Write(string.Format("{0}Result: {1}", Environment.NewLine, result));
+                hasRun = true;
+            }
         }
+
     }
 }
