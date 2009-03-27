@@ -1,6 +1,7 @@
-// Copyright (c) 2004 Rick Mugridge, University of Auckland, NZ
-// Released under the terms of the GNU General Public License version 2 or later.
-// Modified for C# by Mike Stockdale.
+// Copyright © 2009 Syterra Software Inc. Includes work © 2003-2006 Rick Mugridge, University of Auckland, New Zealand.
+// This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
+// This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using fitlibrary;
 using fitlibrary.tree;
