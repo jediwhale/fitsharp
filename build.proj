@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
-        DefaultTargets="solution;unittests" >
+        DefaultTargets="solution;unittests;storytests" >
 
 <PropertyGroup>
     <Config>Debug</Config>
@@ -17,7 +17,7 @@
 </Target>
 
 <Target Name="storytests">
-    <Exec Command=".\build\$(Config)\runner -r fit.Runner.FolderRunner -c storytest.config.xml" />
+    <Exec Command=".\build\debug\runner -r fit.Runner.FolderRunner -c storytest.config.xml" />
 </Target>
 
 </Project>
