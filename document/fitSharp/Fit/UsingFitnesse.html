@@ -9,12 +9,18 @@ to be bound by the terms of this license. You must not remove this notice, or an
   <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
  <link href="../fitsharp1.css" type="text/css" rel="stylesheet">
   <link href="fit.css" type="text/css" rel="stylesheet">
-  <title>Release Information</title>
+  <title>Using Fitnesse</title>
 </head>
 <body>
 <div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
-<div class="pagename">Release Information</div>
-<div class="content">These are the new features and bug fixes implemented in each release.<ul><li><a href="../FitSharp/Release11.html">Release 1.1</a></li><li><a href="../FitSharp/Release10.html">Release 1.0</a></li></ul></div>
+<div class="pagename">Using Fitnesse</div>
+<div class="content">To run tests from the <a class="externallink" href="http://www.fitnesse.org">FitNesse</a> wiki, add the following to the root page of your Fit tests. This could be the root of your FitNesse wiki (e.g., localhost:8080/root) or on the Fit test page or suite page.<br>
+<pre>!path c:\myfolder\mytest.dll
+!define COMMAND_PATTERN {%m -r fitnesse.fitserver.FitServer,c:\program files\fitsharp\fit.dll %p}
+!define TEST_RUNNER {c:\program files\fitsharp\Runner.exe}</pre><br>
+To run FitNesse tests from the command line, you can use the following.<br>
+<pre>c:\program files\fitsharp\runner -r fitnesse.fitserver.TestRunner,c:\program files\fitsharp\fit.dll
+    host port TestPage c:\myfolder\mytest.dll</pre></div>
 <div style="width:100%;text-align:right">
 <span class="footer">&copy; Copyright <a href="http://www.syterra.com">Syterra Software Inc.</a> All rights reserved.</span>
 </div>

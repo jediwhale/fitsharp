@@ -15,7 +15,7 @@ using fitSharp.Machine.Model;
 
 namespace fitnesse.fitserver
 {
-	public class FitServer
+	public class FitServer: Runnable
 	{
 		private Socket clientSocket;
 		private bool verbose = false;
@@ -52,6 +52,11 @@ namespace fitnesse.fitserver
 		    IMaybeProcessingSuiteSetup = false;
 		}
 
+	    public int Run(string[] commandLineArguments, Configuration configuration, ProgressReporter reporter) {
+	        Run(commandLineArguments);
+	        return ExitCode();
+	    }
+
 		private void ParseCommandLineArguments(string[] args)
 		{
 			int argumentPosition = 0;
@@ -62,6 +67,7 @@ namespace fitnesse.fitserver
 				{
 					if ("-v".Equals(args[i]))
 						verbose = true;
+                        //todo: don't load config, already done??
 					else if (args[i] == "-c") {
 					    i++;
                         Context.Configuration.LoadFile(args[i]);
@@ -105,6 +111,7 @@ namespace fitnesse.fitserver
 		{
 			PathParser parser = new PathParser(path);
 			foreach (string assemblyPath in parser.AssemblyPaths) {
+                if (assemblyPath == "defaultPath") continue;
                 Context.Configuration.GetItem<ApplicationUnderTest>().AddAssembly(assemblyPath.Replace("\"", string.Empty));
 			}
 		    if (parser.HasConfigFilePath())

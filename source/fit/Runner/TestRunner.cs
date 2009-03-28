@@ -11,7 +11,7 @@ using fitSharp.Machine.Application;
 
 namespace fitnesse.fitserver
 {
-	public class TestRunner
+	public class TestRunner: Runnable
 	{
 		public string pageName;
 		public bool usingDownloadedPaths = true;
@@ -27,6 +27,11 @@ namespace fitnesse.fitserver
 		public TextWriter output = Console.Out;
 		public string assemblyPath;
 	    public string suiteFilter = null;
+
+	    public int Run(string[] commandLineArguments, Configuration configuration, ProgressReporter reporter) {
+	        Run(commandLineArguments);
+	        return ExitCode();
+	    }
 
 		public void Run(string[] args)
 		{
@@ -85,6 +90,7 @@ namespace fitnesse.fitserver
                     else if (option == "-suiteFilter")
                         suiteFilter = args[index++];
                     else if (option == "-c") {
+                        //todo: don't?
                         Context.Configuration.LoadFile(args[index++]);
                     }
                     else if ("-format".Equals(option))
