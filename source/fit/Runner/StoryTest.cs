@@ -89,6 +89,7 @@ namespace fit {
                 return;
             }
             myFirstFixture.TestStatus = TestStatus;
+            myFirstFixture.Service = Context.Configuration.GetItem<Service>();
             DoTables(myFirstFixture, Tables);
         }
 

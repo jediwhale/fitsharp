@@ -10,7 +10,7 @@ using NUnit.Framework;
 
 namespace fit.Test.NUnit {
     [TestFixture]
-    public class ParseBlankTest
+    public class ParseBlankTest: CellOperatorTest
     {
         private Parse cell;
 
@@ -23,85 +23,85 @@ namespace fit.Test.NUnit {
         [Test]
         public void MatchesBlankString()
         {
-            Assert.IsTrue(CellHandlerTestUtils.IsMatch(new ParseBlank(), "blank"));
-            Assert.IsFalse(CellHandlerTestUtils.IsMatch(new ParseBlank(), "is blank"));
+            Assert.IsTrue(IsMatch(new ParseBlank(), "blank"));
+            Assert.IsFalse(IsMatch(new ParseBlank(), "is blank"));
         }
 
         [Test]
         public void TestDoInputBlank()
         {
-            StringFixture fixture = new StringFixture();
-            fixture.CellOperation.Input(fixture, TestUtils.CreateCellRange("Field"), cell);
-            Assert.AreEqual("", fixture.Field);
-            CellHandlerTestUtils.VerifyCounts(fixture, 0, 0, 0, 0);
+            MakeStringFixture();
+            stringFixture.CellOperation.Input(stringFixture, TestUtils.CreateCellRange("Field"), cell);
+            Assert.AreEqual("", stringFixture.Field);
+            VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
 
         [Test]
         public void TestDoCheckBlankRight() {
-            StringFixture fixture = new StringFixture();
-            fixture.Field = "";
-            fixture.CellOperation.Check(fixture, TestUtils.CreateCellRange("Field"), cell);
-            Assert.AreEqual("", fixture.Field);
-            CellHandlerTestUtils.AssertCellPasses(cell);
-            CellHandlerTestUtils.AssertValueInBody(cell, "blank");
-            CellHandlerTestUtils.VerifyCounts(fixture, 1, 0, 0, 0);
+            MakeStringFixture();
+            stringFixture.Field = "";
+            stringFixture.CellOperation.Check(stringFixture, TestUtils.CreateCellRange("Field"), cell);
+            Assert.AreEqual("", stringFixture.Field);
+            AssertCellPasses(cell);
+            AssertValueInBody(cell, "blank");
+            VerifyCounts(stringFixture, 1, 0, 0, 0);
         }
 
         [Test]
         public void TestDoEvaluateBlankRight() {
-            StringFixture fixture = new StringFixture();
-            fixture.Field = "";
-            Assert.IsTrue(fixture.CellOperation.Compare(new TypedValue(string.Empty), cell));
-            Assert.AreEqual("", fixture.Field);
-            CellHandlerTestUtils.AssertValueInBody(cell, "blank");
-            CellHandlerTestUtils.VerifyCounts(fixture, 0, 0, 0, 0);
+            MakeStringFixture();
+            stringFixture.Field = "";
+            Assert.IsTrue(stringFixture.CellOperation.Compare(new TypedValue(string.Empty), cell));
+            Assert.AreEqual("", stringFixture.Field);
+            AssertValueInBody(cell, "blank");
+            VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
 
         [Test]
         public void TestDoCheckBlankWrongValue()
         {
-            StringFixture fixture = new StringFixture();
-            fixture.Field = "some value";
-            fixture.CellOperation.Check(fixture, TestUtils.CreateCellRange("Field"), cell);
-            Assert.AreEqual("some value", fixture.Field);
-            CellHandlerTestUtils.AssertCellFails(cell);
-            CellHandlerTestUtils.AssertValuesInBody(cell, new string[] {"blank", "some value"});
-            CellHandlerTestUtils.VerifyCounts(fixture, 0, 1, 0, 0);
+            MakeStringFixture();
+            stringFixture.Field = "some value";
+            stringFixture.CellOperation.Check(stringFixture, TestUtils.CreateCellRange("Field"), cell);
+            Assert.AreEqual("some value", stringFixture.Field);
+            AssertCellFails(cell);
+            AssertValuesInBody(cell, new string[] {"blank", "some value"});
+            VerifyCounts(stringFixture, 0, 1, 0, 0);
         }
 
         [Test]
         public void TestDoCheckBlankNullValue()
         {
-            StringFixture fixture = new StringFixture();
-            fixture.Field = null;
-            fixture.CellOperation.Check(fixture, TestUtils.CreateCellRange("Field"), cell);
-            Assert.AreEqual(null, fixture.Field);
-            CellHandlerTestUtils.AssertCellFails(cell);
-            CellHandlerTestUtils.AssertValuesInBody(cell, new string[] {"blank", "null"});
-            CellHandlerTestUtils.VerifyCounts(fixture, 0, 1, 0, 0);
+            MakeStringFixture();
+            stringFixture.Field = null;
+            stringFixture.CellOperation.Check(stringFixture, TestUtils.CreateCellRange("Field"), cell);
+            Assert.AreEqual(null, stringFixture.Field);
+            AssertCellFails(cell);
+            AssertValuesInBody(cell, new string[] {"blank", "null"});
+            VerifyCounts(stringFixture, 0, 1, 0, 0);
         }
 
         [Test]
         public void TestDoCheckBlankWrongTypeRightValue()
         {
-            PersonFixture fixture = new PersonFixture();
-            fixture.Field = new Person("", "");
-            fixture.CellOperation.Check(fixture, TestUtils.CreateCellRange("Field"), cell);
-            Assert.AreEqual("", fixture.Field.ToString());
-            CellHandlerTestUtils.AssertCellPasses(cell);
-            CellHandlerTestUtils.AssertValuesInBody(cell, new string[] {"blank"});
-            CellHandlerTestUtils.VerifyCounts(fixture, 1, 0, 0, 0);
+            MakePersonFixture();
+            personFixture.Field = new Person("", "");
+            personFixture.CellOperation.Check(personFixture, TestUtils.CreateCellRange("Field"), cell);
+            Assert.AreEqual("", personFixture.Field.ToString());
+            AssertCellPasses(cell);
+            AssertValuesInBody(cell, new string[] {"blank"});
+            VerifyCounts(personFixture, 1, 0, 0, 0);
         }
 
         [Test]
         public void TestDoCheckBlankWrongTypeWrongValue() {
-            PersonFixture fixture = new PersonFixture();
-            fixture.Field = new Person("john", "doe");
-            fixture.CellOperation.Check(fixture, TestUtils.CreateCellRange("Field"), cell);
-            Assert.AreEqual("john doe", fixture.Field.ToString());
-            CellHandlerTestUtils.AssertCellFails(cell);
-            CellHandlerTestUtils.AssertValuesInBody(cell, new string[] {"blank", "john doe"});
-            CellHandlerTestUtils.VerifyCounts(fixture, 0, 1, 0, 0);
+            MakePersonFixture();
+            personFixture.Field = new Person("john", "doe");
+            personFixture.CellOperation.Check(personFixture, TestUtils.CreateCellRange("Field"), cell);
+            Assert.AreEqual("john doe", personFixture.Field.ToString());
+            AssertCellFails(cell);
+            AssertValuesInBody(cell, new string[] {"blank", "john doe"});
+            VerifyCounts(personFixture, 0, 1, 0, 0);
         }
     }
 }

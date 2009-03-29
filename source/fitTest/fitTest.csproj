@@ -123,6 +123,7 @@
     <Compile Include="NUnit\BindingTest.cs" />
     <Compile Include="NUnit\CellHandlerLoaderTest.cs" />
     <Compile Include="NUnit\CellMatching.cs" />
+    <Compile Include="NUnit\CellOperatorTest.cs" />
     <Compile Include="NUnit\ColumnFixtureTests.cs" />
     <Compile Include="NUnit\CompareDefaultTest.cs" />
     <Compile Include="NUnit\CountsTest.cs" />
@@ -142,7 +143,6 @@
     <Compile Include="NUnit\NullKeywordHandlerTest.cs" />
     <Compile Include="NUnit\PageResultTest.cs" />
     <Compile Include="NUnit\ParseBlankTest.cs" />
-    <Compile Include="NUnit\CellHandlerTestUtils.cs" />
     <Compile Include="NUnit\ParseBooleanTest.cs" />
     <Compile Include="NUnit\ParseTest.cs" />
     <Compile Include="NUnit\PathParserTest.cs" />

@@ -9,14 +9,16 @@ using NUnit.Framework;
 
 namespace fit.Test.NUnit {
     [TestFixture]
-    public class ExceptionKeywordHandlerTest
+    public class ExceptionKeywordHandlerTest: CellOperatorTest
     {
+        private ExceptionThrowingFixture exceptionFixture;
+
         [Test]
         public void TestMatch()
         {
-            Assert.IsTrue(TestUtils.IsMatch(new ExecuteException(), ExecuteParameters.MakeCheck(TestUtils.CreateCell("exception[]"))));
-            Assert.IsTrue(TestUtils.IsMatch(new ExecuteException(), ExecuteParameters.MakeCheck(TestUtils.CreateCell("exception[NullPointerException]"))));
-            Assert.IsFalse(TestUtils.IsMatch(new ExecuteException(), ExecuteParameters.MakeInput(TestUtils.CreateCell("stuff"), TestUtils.CreateCell("exception[]"))));
+            Assert.IsTrue(IsMatch(new ExecuteException(), ExecuteParameters.MakeCheck(TestUtils.CreateCell("exception[]"))));
+            Assert.IsTrue(IsMatch(new ExecuteException(), ExecuteParameters.MakeCheck(TestUtils.CreateCell("exception[NullPointerException]"))));
+            Assert.IsFalse(IsMatch(new ExecuteException(), ExecuteParameters.MakeInput(TestUtils.CreateCell("stuff"), TestUtils.CreateCell("exception[]"))));
         }
 
 
@@ -25,10 +27,10 @@ namespace fit.Test.NUnit {
         {
             //???ObjectFactory.AddNamespace("System");
             Parse cell = TestUtils.CreateCell("exception[NullReferenceException]");
-            ExceptionThrowingFixture fixture = new ExceptionThrowingFixture();
-            fixture.CellOperation.Check(fixture, TestUtils.CreateCellRange("ThrowNullReferenceException"), cell);
+            MakeExceptionFixture();
+            exceptionFixture.CellOperation.Check(exceptionFixture, TestUtils.CreateCellRange("ThrowNullReferenceException"), cell);
             Assert.IsTrue(cell.Tag.IndexOf("pass") > -1);
-            CellHandlerTestUtils.VerifyCounts(fixture, 1, 0, 0, 0);
+            VerifyCounts(exceptionFixture, 1, 0, 0, 0);
         }
 
         [Test]
@@ -36,10 +38,10 @@ namespace fit.Test.NUnit {
         {
             //???ObjectFactory.AddNamespace("System");
             Parse cell = TestUtils.CreateCell("exception[NullReferenceException]");
-            ExceptionThrowingFixture fixture = new ExceptionThrowingFixture();
-            fixture.CellOperation.Check(fixture, TestUtils.CreateCellRange("ThrowApplicationException"), cell);
+            MakeExceptionFixture();
+            exceptionFixture.CellOperation.Check(exceptionFixture, TestUtils.CreateCellRange("ThrowApplicationException"), cell);
             Assert.IsTrue(cell.Tag.IndexOf("fail") > -1);
-            CellHandlerTestUtils.VerifyCounts(fixture, 0, 1, 0, 0);
+            VerifyCounts(exceptionFixture, 0, 1, 0, 0);
         }
 
         [Test]
@@ -47,11 +49,11 @@ namespace fit.Test.NUnit {
         {
             //???ObjectFactory.AddNamespace("System");
             Parse cell = TestUtils.CreateCell("exception[\"an exception\"]");
-            ExceptionThrowingFixture fixture = new ExceptionThrowingFixture();
-            fixture.Message = "an exception";
-            fixture.CellOperation.Check(fixture, TestUtils.CreateCellRange("ThrowApplicationException"), cell);
+            MakeExceptionFixture();
+            exceptionFixture.Message = "an exception";
+            exceptionFixture.CellOperation.Check(exceptionFixture, TestUtils.CreateCellRange("ThrowApplicationException"), cell);
             Assert.IsTrue(cell.Tag.IndexOf("pass") > -1);
-            CellHandlerTestUtils.VerifyCounts(fixture, 1, 0, 0, 0);
+            VerifyCounts(exceptionFixture, 1, 0, 0, 0);
         }
 
         [Test]
@@ -59,11 +61,16 @@ namespace fit.Test.NUnit {
         {
             //???ObjectFactory.AddNamespace("System");
             Parse cell = TestUtils.CreateCell("exception[ApplicationException: \"an exception\"]");
-            ExceptionThrowingFixture fixture = new ExceptionThrowingFixture();
-            fixture.Message = "an exception";
-            fixture.CellOperation.Check(fixture, TestUtils.CreateCellRange("ThrowApplicationException"), cell);
+            MakeExceptionFixture();
+            exceptionFixture.Message = "an exception";
+            exceptionFixture.CellOperation.Check(exceptionFixture, TestUtils.CreateCellRange("ThrowApplicationException"), cell);
             Assert.IsTrue(cell.Tag.IndexOf("pass") > -1);
-            CellHandlerTestUtils.VerifyCounts(fixture, 1, 0, 0, 0);
+            VerifyCounts(exceptionFixture, 1, 0, 0, 0);
+        }
+
+        private void MakeExceptionFixture() {
+            service = new Service();
+            exceptionFixture = new ExceptionThrowingFixture { Service = service };
         }
     }
 }

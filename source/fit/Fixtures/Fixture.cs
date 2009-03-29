@@ -18,9 +18,13 @@ namespace fit
 	{
 		private string[] args;
 
+        //todo: fixtures need Service, -> cellop
+        public Service Service { get; set; }
+
 	    public TestStatus TestStatus = new TestStatus();
+
 		public Counts Counts {get { return TestStatus.Counts; }}
-        public CellOperation CellOperation { get { return TestStatus.CellOperation; }}
+        public CellOperation CellOperation { get { return new CellOperation(Service); }}
 
         public Fixture() {}
         public Fixture(object systemUnderTest) { mySystemUnderTest = systemUnderTest; }
@@ -30,6 +34,7 @@ namespace fit
 
 
 	    public void Prepare(Fixture theParentFixture, Parse table) {
+	        Service = theParentFixture.Service;
 	        myParentFixture = theParentFixture;
 	        TestStatus = theParentFixture.TestStatus;
 	        GetArgsForTable(table);

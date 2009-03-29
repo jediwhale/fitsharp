@@ -3,58 +3,59 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
+using fit.Engine;
 using fitlibrary;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
 
 namespace fit.Test.NUnit {
     [TestFixture]
-    public class DefaultCellHandlerTest
+    public class DefaultCellHandlerTest: CellOperatorTest
     {
 
         [Test]
         public void TestDoInput()
         {
             Parse cell = TestUtils.CreateCell("xyz");
-            StringFixture fixture = new StringFixture();
-            fixture.CellOperation.Input(fixture, TestUtils.CreateCellRange("Field"), cell);
-            Assert.AreEqual("xyz", fixture.Field);
-            CellHandlerTestUtils.VerifyCounts(fixture, 0, 0, 0, 0);
+            MakeStringFixture();
+            stringFixture.CellOperation.Input(stringFixture, TestUtils.CreateCellRange("Field"), cell);
+            Assert.AreEqual("xyz", stringFixture.Field);
+            VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
 
         [Test]
         public void TestDoCheckCellRight()
         {
             Parse cell = TestUtils.CreateCell("xyz");
-            StringFixture fixture = new StringFixture();
-            fixture.Field = "xyz";
-            fixture.CellOperation.Check(fixture, TestUtils.CreateCellRange("Field"), cell);
+            MakeStringFixture();
+            stringFixture.Field = "xyz";
+            stringFixture.CellOperation.Check(stringFixture, TestUtils.CreateCellRange("Field"), cell);
             Assert.IsTrue(cell.Tag.IndexOf("pass") > -1);
-            CellHandlerTestUtils.VerifyCounts(fixture, 1, 0, 0, 0);
+            VerifyCounts(stringFixture, 1, 0, 0, 0);
         }
 
         [Test]
         public void TestDoCheckCellWrong() {
             Parse cell = TestUtils.CreateCell("xyz");
-            StringFixture fixture = new StringFixture();
-            fixture.Field = "abc";
-            fixture.CellOperation.Check(fixture, TestUtils.CreateCellRange("Field"), cell);
+            MakeStringFixture();
+            stringFixture.Field = "abc";
+            stringFixture.CellOperation.Check(stringFixture, TestUtils.CreateCellRange("Field"), cell);
             Assert.IsTrue(cell.Tag.IndexOf("fail") > -1);
             Assert.IsTrue(cell.Body.IndexOf("abc") > -1);
             Assert.IsTrue(cell.Body.IndexOf("xyz") > -1);
-            CellHandlerTestUtils.VerifyCounts(fixture, 0, 1, 0, 0);
+            VerifyCounts(stringFixture, 0, 1, 0, 0);
         }
 
         [Test]
         public void TestDoCheckCellWrongNull() {
             Parse cell = TestUtils.CreateCell("xyz");
-            StringFixture fixture = new StringFixture();
-            fixture.Field = null;
-            fixture.CellOperation.Check(fixture, TestUtils.CreateCellRange("Field"), cell);
+            MakeStringFixture();
+            stringFixture.Field = null;
+            stringFixture.CellOperation.Check(stringFixture, TestUtils.CreateCellRange("Field"), cell);
             Assert.IsTrue(cell.Tag.IndexOf("fail") > -1);
             Assert.IsTrue(cell.Body.IndexOf("null") > -1);
             Assert.IsTrue(cell.Body.IndexOf("xyz") > -1);
-            CellHandlerTestUtils.VerifyCounts(fixture, 0, 1, 0, 0);
+            VerifyCounts(stringFixture, 0, 1, 0, 0);
         }
 
 
@@ -63,7 +64,8 @@ namespace fit.Test.NUnit {
         {
             FixtureWithExecutableMethod.Calls = 0;
             Parse cell = TestUtils.CreateCell("do");
-            FixtureWithExecutableMethod fixture = new FixtureWithExecutableMethod();
+            service = new Service();
+            var fixture = new FixtureWithExecutableMethod {Service = service};
             fixture.CellOperation.TryInvoke(fixture, new CellRange(cell, 1));
             Assert.AreEqual(1, FixtureWithExecutableMethod.Calls);
         }
@@ -71,24 +73,24 @@ namespace fit.Test.NUnit {
         [Test]
         public void TestEvaluateWrong() {
             Parse cell = TestUtils.CreateCell("xyz");
-            StringFixture fixture = new StringFixture();
-            fixture.Field = "abc";
-            Assert.IsFalse(fixture.CellOperation.Compare(new TypedValue("abc"), cell));
+            MakeStringFixture();
+            stringFixture.Field = "abc";
+            Assert.IsFalse(stringFixture.CellOperation.Compare(new TypedValue("abc"), cell));
             Assert.IsFalse(cell.Tag.IndexOf("fail") > -1);
             Assert.IsFalse(cell.Body.IndexOf("abc") > -1);
             Assert.IsTrue(cell.Body.IndexOf("xyz") > -1);
-            CellHandlerTestUtils.VerifyCounts(fixture, 0, 0, 0, 0);
+            VerifyCounts(stringFixture, 0, 0, 0, 0);
 			
         }
 
         [Test]
         public void TestEvaluateRight() {
             Parse cell = TestUtils.CreateCell("xyz");
-            StringFixture fixture = new StringFixture();
-            fixture.Field = "xyz";
-            Assert.IsTrue(fixture.CellOperation.Compare(new TypedValue("xyz"), cell));
+            MakeStringFixture();
+            stringFixture.Field = "xyz";
+            Assert.IsTrue(stringFixture.CellOperation.Compare(new TypedValue("xyz"), cell));
             Assert.IsFalse(cell.Tag.IndexOf("pass") > -1);
-            CellHandlerTestUtils.VerifyCounts(fixture, 0, 0, 0, 0);
+            VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
 
         class FixtureWithExecutableMethod : Fixture

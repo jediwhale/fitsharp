@@ -8,48 +8,48 @@ using NUnit.Framework;
 
 namespace fit.Test.NUnit {
     [TestFixture]
-    public class NullKeywordHandlerTest
+    public class NullKeywordHandlerTest: CellOperatorTest
     {	
         [Test]
         public void MatchesNullString() {
-            Assert.IsTrue(CellHandlerTestUtils.IsMatch(new ParseNull(), "null"));
+            Assert.IsTrue(IsMatch(new ParseNull(), "null"));
         }
 
         [Test]
         public void TestDoInputNull()
         {
             Parse cell = TestUtils.CreateCell("null");
-            StringFixture fixture = new StringFixture();
-            fixture.CellOperation.Input(fixture, TestUtils.CreateCellRange("Field"), cell);
-            Assert.AreEqual(null, fixture.Field);
-            CellHandlerTestUtils.VerifyCounts(fixture, 0, 0, 0, 0);
+            MakeStringFixture();
+            stringFixture.CellOperation.Input(stringFixture, TestUtils.CreateCellRange("Field"), cell);
+            Assert.AreEqual(null, stringFixture.Field);
+            VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
 
         [Test]
         public void TestDoCheckNullRight()
         {
             Parse cell = TestUtils.CreateCell("null");
-            StringFixture fixture = new StringFixture();
-            fixture.Field = null;
-            fixture.CellOperation.Check(fixture, TestUtils.CreateCellRange("field"), cell);
-            Assert.AreEqual(null, fixture.Field);
+            MakeStringFixture();
+            stringFixture.Field = null;
+            stringFixture.CellOperation.Check(stringFixture, TestUtils.CreateCellRange("field"), cell);
+            Assert.AreEqual(null, stringFixture.Field);
             Assert.IsTrue(cell.Tag.IndexOf("pass") > -1);
             Assert.IsTrue(cell.Body.IndexOf("null") > -1);
-            CellHandlerTestUtils.VerifyCounts(fixture, 1, 0, 0, 0);
+            VerifyCounts(stringFixture, 1, 0, 0, 0);
         }
 
         [Test]
         public void TestDoCheckNullWrong()
         {
             Parse cell = TestUtils.CreateCell("null");
-            StringFixture fixture = new StringFixture();
-            fixture.Field = "some value";
-            fixture.CellOperation.Check(fixture, TestUtils.CreateCellRange("field"), cell);
-            Assert.AreEqual("some value", fixture.Field);
+            MakeStringFixture();
+            stringFixture.Field = "some value";
+            stringFixture.CellOperation.Check(stringFixture, TestUtils.CreateCellRange("field"), cell);
+            Assert.AreEqual("some value", stringFixture.Field);
             Assert.IsTrue(cell.Tag.IndexOf("fail") > -1);
             Assert.IsTrue(cell.Body.IndexOf("null") > -1);
             Assert.IsTrue(cell.Body.IndexOf("some value") > -1);
-            CellHandlerTestUtils.VerifyCounts(fixture, 0, 1, 0, 0);
+            VerifyCounts(stringFixture, 0, 1, 0, 0);
         }
     }
 }

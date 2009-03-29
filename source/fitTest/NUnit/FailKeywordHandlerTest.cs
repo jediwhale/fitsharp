@@ -4,12 +4,11 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using fit.Operators;
-using fit.Test.Acceptance;
 using NUnit.Framework;
 
 namespace fit.Test.NUnit {
     [TestFixture]
-    public class FailKeywordHandlerTest
+    public class FailKeywordHandlerTest: CellOperatorTest
     {
         [Test]
         public void TestMatch()
@@ -19,51 +18,51 @@ namespace fit.Test.NUnit {
         }
 
         private static bool IsMatch(string input) {
-            return TestUtils.IsMatch(new CompareFail(), "stuff", typeof (object), input);
+            return IsMatch(new CompareFail(), "stuff", typeof (object), input);
         }
 
         [Test]
         public void TestFailInt()
         {
             Parse cell = TestUtils.CreateCell("fail[1]");
-            IntFixture fixture = new IntFixture();
-            fixture.Field = 2;
-            fixture.CellOperation.Check(fixture, TestUtils.CreateCellRange("field"), cell);
+            MakeIntFixture();
+            intFixture.Field = 2;
+            intFixture.CellOperation.Check(intFixture, TestUtils.CreateCellRange("field"), cell);
             Assert.IsTrue(cell.Tag.IndexOf("pass") > -1);
-            CellHandlerTestUtils.VerifyCounts(fixture, 1, 0, 0, 0);
+            VerifyCounts(intFixture, 1, 0, 0, 0);
         }
 
         [Test]
         public void TestFailOnCorrectInt()
         {
             Parse cell = TestUtils.CreateCell("fail[2]");
-            IntFixture fixture = new IntFixture();
-            fixture.Field = 2;
-            fixture.CellOperation.Check(fixture, TestUtils.CreateCellRange("field"), cell);
+            MakeIntFixture();
+            intFixture.Field = 2;
+            intFixture.CellOperation.Check(intFixture, TestUtils.CreateCellRange("field"), cell);
             Assert.IsTrue(cell.Tag.IndexOf("fail") > -1);
-            CellHandlerTestUtils.VerifyCounts(fixture, 0, 1, 0, 0);
+            VerifyCounts(intFixture, 0, 1, 0, 0);
         }
 
         [Test]
         public void TestFailString()
         {
             Parse cell = TestUtils.CreateCell("fail[some string]");
-            StringFixture fixture = new StringFixture();
-            fixture.Field = "some other string";
-            fixture.CellOperation.Check(fixture, TestUtils.CreateCellRange("field"), cell);
+            MakeStringFixture();
+            stringFixture.Field = "some other string";
+            stringFixture.CellOperation.Check(stringFixture, TestUtils.CreateCellRange("field"), cell);
             Assert.IsTrue(cell.Tag.IndexOf("pass") > -1);
-            CellHandlerTestUtils.VerifyCounts(fixture, 1, 0, 0, 0);
+            VerifyCounts(stringFixture, 1, 0, 0, 0);
         }
 
         [Test]
         public void TestFailPerson()
         {
             Parse cell = TestUtils.CreateCell("fail[Doctor Jeckyll]");
-            PersonFixture fixture = new PersonFixture();
-            fixture.Field = new Person("Mister", "Hyde");
-            fixture.CellOperation.Check(fixture, TestUtils.CreateCellRange("field"), cell);
+            MakePersonFixture();
+            personFixture.Field = new Person("Mister", "Hyde");
+            personFixture.CellOperation.Check(personFixture, TestUtils.CreateCellRange("field"), cell);
             Assert.IsTrue(cell.Tag.IndexOf("pass") > -1);
-            CellHandlerTestUtils.VerifyCounts(fixture, 1, 0, 0, 0);
+            VerifyCounts(personFixture, 1, 0, 0, 0);
         }
     }
 }

@@ -3,24 +3,14 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-using fit.Engine;
 using fitSharp.Fit.Operators;
-using fitSharp.Machine.Application;
 using NUnit.Framework;
 
 namespace fit.Test.NUnit {
     [TestFixture]
-    public class StartsWithHandlerTest
+    public class StartsWithHandlerTest: CellOperatorTest
     {
         private Parse cell;
-
-        [SetUp]
-        public void SetUp()
-        {
-            cell = TestUtils.CreateCell("abc..");
-            Context.Configuration.GetItem<Service>().AddOperator(new CompareSubstring());
-            Context.Configuration.GetItem<Service>().AddOperator(new CompareStartsWith());
-        }
 
         [Test]
         public void TestMatches()
@@ -31,39 +21,47 @@ namespace fit.Test.NUnit {
         }
 
         private static bool IsMatch(string input) {
-            return TestUtils.IsMatch(new CompareStartsWith(), null, typeof (object), input);
+            return IsMatch(new CompareStartsWith(), null, typeof (object), input);
         }
 
         [Test]
         public void TestPass()
         {
-            StringFixture fixture = new StringFixture();
-            fixture.Field = "abcde";
+            MakeFixture();
+            stringFixture.Field = "abcde";
             cell = TestUtils.CreateCell("abc..");
-            fixture.CellOperation.Check(fixture, TestUtils.CreateCellRange("Field"), cell);
-            CellHandlerTestUtils.AssertCellPasses(cell);
-            CellHandlerTestUtils.VerifyCounts(fixture, 1, 0, 0, 0);
+            stringFixture.CellOperation.Check(stringFixture, TestUtils.CreateCellRange("Field"), cell);
+            AssertCellPasses(cell);
+            VerifyCounts(stringFixture, 1, 0, 0, 0);
         }
 
         [Test]
         public void TestFailWhereSubstringExists() {
-            StringFixture fixture = new StringFixture();
-            fixture.Field = "abcde";
+            MakeFixture();
+            stringFixture.Field = "abcde";
             cell = TestUtils.CreateCell("bcd..");
-            fixture.CellOperation.Check(fixture, TestUtils.CreateCellRange("Field"), cell);
-            CellHandlerTestUtils.AssertCellFails(cell);
-            CellHandlerTestUtils.VerifyCounts(fixture, 0, 1, 0, 0);
+            stringFixture.CellOperation.Check(stringFixture, TestUtils.CreateCellRange("Field"), cell);
+            AssertCellFails(cell);
+            VerifyCounts(stringFixture, 0, 1, 0, 0);
         }
 
         [Test]
         public void TestFailNull() {
-            StringFixture fixture = new StringFixture();
-            fixture.Field = null;
+            MakeFixture();
+            stringFixture.Field = null;
             cell = TestUtils.CreateCell("bcd..");
-            fixture.CellOperation.Check(fixture, TestUtils.CreateCellRange("Field"), cell);
-            CellHandlerTestUtils.AssertValueInBody(cell, "null");
-            CellHandlerTestUtils.AssertCellFails(cell);
-            CellHandlerTestUtils.VerifyCounts(fixture, 0, 1, 0, 0);
+            stringFixture.CellOperation.Check(stringFixture, TestUtils.CreateCellRange("Field"), cell);
+            AssertValueInBody(cell, "null");
+            AssertCellFails(cell);
+            VerifyCounts(stringFixture, 0, 1, 0, 0);
+        }
+
+        private void MakeFixture()
+        {
+            MakeStringFixture();
+            cell = TestUtils.CreateCell("abc..");
+            service.AddOperator(new CompareSubstring());
+            service.AddOperator(new CompareStartsWith());
         }
     }
 }

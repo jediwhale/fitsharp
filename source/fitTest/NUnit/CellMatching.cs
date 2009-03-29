@@ -4,6 +4,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System.Collections;
+using fit.Engine;
 using fitlibrary;
 using fitlibrary.tree;
 using fitSharp.Machine.Model;
@@ -39,14 +40,14 @@ namespace fit.Test.NUnit {
         [Test] public void MarksSameStringCellAsRight() {
             Parse cell = new Parse("td", "something", null, null);
             ExpectedValueCell expected = new ExpectedValueCell(cell);
-            expected.MarkCell(new Fixture(), new TypedValue("something"));
+            expected.MarkCell(new Fixture{ Service = new Service()}, new TypedValue("something"));
             Assert.AreEqual("\n<td class=\"pass\">something</td>", cell.ToString());
         }
     
         [Test] public void MarksSameArrayCellAsRight() {
             Parse cell = new Parse("td", "something,more", null, null);
             ExpectedValueCell expected = new ExpectedValueCell(cell);
-            expected.MarkCell(new Fixture(), new TypedValue(new string[] {"something", "more"}));
+            expected.MarkCell(new Fixture{ Service = new Service()}, new TypedValue(new string[] {"something", "more"}));
             Assert.AreEqual("\n<td class=\"pass\">something,more</td>", cell.ToString());
         }
     
@@ -58,7 +59,7 @@ namespace fit.Test.NUnit {
         [Test] public void MarksDifferentStringCellAsWrong() {
             Parse cell = new Parse("td", "something else", null, null);
             ExpectedValueCell expected = new ExpectedValueCell(cell);
-            expected.MarkCell(new Fixture(), new TypedValue("something"));
+            expected.MarkCell(new Fixture{ Service = new Service()}, new TypedValue("something"));
             Assert.AreEqual("\n<td class=\"fail\">something else <span class=\"fit_label\">expected</span><hr />something <span class=\"fit_label\">actual</span></td>", cell.ToString());
         }
     
@@ -82,7 +83,7 @@ namespace fit.Test.NUnit {
             actual.Add(new Name("joe", "smith"));
             Parse table = HtmlParser.Instance.Parse("<table><tr><td><table><tr><td>first</td><td>last</td></tr><tr><td>joe</td><td>smith</td></tr></table></td></tr></table>");
             ExpectedValueCell expected = new ExpectedValueCell(table.Parts.Parts);
-            expected.MarkCell(new Fixture(), new TypedValue(actual));
+            expected.MarkCell(new Fixture{ Service = new Service()}, new TypedValue(actual));
             Assert.AreEqual("<td><table><tr><td>first</td><td>last</td></tr><tr><td class=\"pass\">joe</td><td class=\"pass\">smith</td></tr></table></td>", table.Parts.Parts.ToString());
         }
 
@@ -91,7 +92,7 @@ namespace fit.Test.NUnit {
             actual.Add(new Name("joe", "smith"));
             Parse table = HtmlParser.Instance.Parse("<table><tr><td><table><tr><td>first</td><td>last</td><td>address</td></tr><tr><td>joe</td><td>smith</td><td></td></tr></table></td></tr></table>");
             ExpectedValueCell expected = new ExpectedValueCell(table.Parts.Parts);
-            expected.MarkCell(new Fixture(), new TypedValue(actual));
+            expected.MarkCell(new Fixture{ Service = new Service()}, new TypedValue(actual));
             Assert.AreEqual("<td><table><tr><td>first</td><td>last</td><td class=\"error\">address<hr /><pre><div class=\"fit_stacktrace\">fitlibrary.exception.FitFailureException: Column 'address' not used.</div></pre></td></tr><tr><td class=\"pass\">joe</td><td class=\"pass\">smith</td><td></td></tr></table></td>", table.Parts.Parts.ToString());
         }
 

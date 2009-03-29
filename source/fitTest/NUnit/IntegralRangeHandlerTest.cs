@@ -3,21 +3,18 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-using fit.Engine;
 using fitSharp.Fit.Operators;
-using fitSharp.Machine.Application;
 using NUnit.Framework;
 
 namespace fit.Test.NUnit {
     [TestFixture]
-    public class IntegralRangeHandlerTest
+    public class IntegralRangeHandlerTest: CellOperatorTest
     {
         private Parse cell;
 
         [SetUp]
         public void SetUp() {
             cell = TestUtils.CreateCell("0..2");
-            Context.Configuration.GetItem<Service>().AddOperator(typeof(CompareIntegralRange).FullName);
         }
 
         [Test]
@@ -32,60 +29,65 @@ namespace fit.Test.NUnit {
         }
 
         private static bool IsMatch(string input) {
-            return TestUtils.IsMatch(new CompareIntegralRange(), 777, typeof (int), input);
+            return IsMatch(new CompareIntegralRange(), 777, typeof (int), input);
         }
 
         [Test]
         public void TestInRange() {
-            IntFixture fixture = new IntFixture();
-            fixture.Field = 1;
-            fixture.CellOperation.Check(fixture, TestUtils.CreateCellRange("Field"), cell);
-            CellHandlerTestUtils.VerifyCounts(fixture, 1, 0, 0, 0);
+            MakeFixture();
+            intFixture.Field = 1;
+            intFixture.CellOperation.Check(intFixture, TestUtils.CreateCellRange("Field"), cell);
+            VerifyCounts(intFixture, 1, 0, 0, 0);
         }
 
         [Test]
         public void TestStartOfRange() {
-            IntFixture fixture = new IntFixture();
-            fixture.Field = 0;
-            fixture.CellOperation.Check(fixture, TestUtils.CreateCellRange("Field"), cell);
-            CellHandlerTestUtils.VerifyCounts(fixture, 1, 0, 0, 0);
+            MakeFixture();
+            intFixture.Field = 0;
+            intFixture.CellOperation.Check(intFixture, TestUtils.CreateCellRange("Field"), cell);
+            VerifyCounts(intFixture, 1, 0, 0, 0);
         }
 
         [Test]
         public void TestEndOfRange() {
-            IntFixture fixture = new IntFixture();
-            fixture.Field = 2;
-            fixture.CellOperation.Check(fixture, TestUtils.CreateCellRange("Field"), cell);
-            CellHandlerTestUtils.VerifyCounts(fixture, 1, 0, 0, 0);
+            MakeFixture();
+            intFixture.Field = 2;
+            intFixture.CellOperation.Check(intFixture, TestUtils.CreateCellRange("Field"), cell);
+            VerifyCounts(intFixture, 1, 0, 0, 0);
         }
 
         [Test]
         public void TestNotInRange() {
-            IntFixture fixture = new IntFixture();
-            fixture.Field = 5;
-            fixture.CellOperation.Check(fixture, TestUtils.CreateCellRange("Field"), cell);
-            CellHandlerTestUtils.AssertCellFails(cell);
-            CellHandlerTestUtils.VerifyCounts(fixture, 0, 1, 0, 0);
+            MakeFixture();
+            intFixture.Field = 5;
+            intFixture.CellOperation.Check(intFixture, TestUtils.CreateCellRange("Field"), cell);
+            AssertCellFails(cell);
+            VerifyCounts(intFixture, 0, 1, 0, 0);
         }
 
         [Test]
         public void TestNegativeNumbers() {
             cell = TestUtils.CreateCell("-457..-372");
-            IntFixture fixture = new IntFixture();
-            fixture.Field = -400;
-            fixture.CellOperation.Check(fixture, TestUtils.CreateCellRange("Field"), cell);
-            CellHandlerTestUtils.AssertCellPasses(cell);
-            CellHandlerTestUtils.VerifyCounts(fixture, 1, 0, 0, 0);
+            MakeFixture();
+            intFixture.Field = -400;
+            intFixture.CellOperation.Check(intFixture, TestUtils.CreateCellRange("Field"), cell);
+            AssertCellPasses(cell);
+            VerifyCounts(intFixture, 1, 0, 0, 0);
         }
 
         [Test]
         public void TestNegativeLowPositiveHigh() {
             cell = TestUtils.CreateCell("-457..372");
-            IntFixture fixture = new IntFixture();
-            fixture.Field = 0;
-            fixture.CellOperation.Check(fixture, TestUtils.CreateCellRange("Field"), cell);
-            CellHandlerTestUtils.AssertCellPasses(cell);
-            CellHandlerTestUtils.VerifyCounts(fixture, 1, 0, 0, 0);
+            MakeFixture();
+            intFixture.Field = 0;
+            intFixture.CellOperation.Check(intFixture, TestUtils.CreateCellRange("Field"), cell);
+            AssertCellPasses(cell);
+            VerifyCounts(intFixture, 1, 0, 0, 0);
+        }
+
+        private void MakeFixture() {
+            MakeIntFixture();
+            service.AddOperator(typeof(CompareIntegralRange).FullName);
         }
     }
 }

@@ -5,13 +5,13 @@
 
 using fit.Engine;
 using fit.Operators;
-using fit.Test.Acceptance;
+using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
 
 namespace fit.Test.NUnit {
     [TestFixture]
-    public class SymbolHandlerTest
+    public class SymbolHandlerTest: CellOperatorTest
     {
         [Test]
         public void TestRegisterAndGet()
@@ -28,162 +28,171 @@ namespace fit.Test.NUnit {
         }
 
         private static bool IsMatch(string input) {
-            return CellHandlerTestUtils.IsMatch(new ParseSymbol(), input);
+            return IsMatch(new ParseSymbol(), input);
         }
 
         [Test]
         public void TestSaveString() {
             Parse cell = TestUtils.CreateCell(">>xyz");
-            StringFixture fixture = new StringFixture();
-            fixture.Field = "abc";
-            fixture.CellOperation.Check(fixture, TestUtils.CreateCellRange("Field"), cell);
-            Assert.AreEqual("abc", Fixture.Recall("xyz"));
-            CellHandlerTestUtils.VerifyCounts(fixture, 0, 0, 0, 0);
+            MakeStringFixture();
+            stringFixture.Field = "abc";
+            stringFixture.CellOperation.Check(stringFixture, TestUtils.CreateCellRange("Field"), cell);
+            Assert.AreEqual("abc", LoadSymbol("xyz"));
+            VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
 
         [Test]
         public void CellContentWhenSaving()
         {
             Parse cell = TestUtils.CreateCell(">>xyz");
-            StringFixture fixture = new StringFixture();
-            fixture.Field = "abc";
-            fixture.CellOperation.Check(fixture, TestUtils.CreateCellRange("Field"), cell);
+            MakeStringFixture();
+            stringFixture.Field = "abc";
+            stringFixture.CellOperation.Check(stringFixture, TestUtils.CreateCellRange("Field"), cell);
             Assert.AreEqual(" <span class=\"fit_grey\">abc &gt;&gt;xyz</span>", cell.Body);
         }
 
         [Test]
         public void TestRecallString() {
             Parse cell = TestUtils.CreateCell("<<def");
-            StringFixture fixture = new StringFixture();
-            Fixture.Save("def","ghi");
-            fixture.CellOperation.Input(fixture, TestUtils.CreateCellRange("Field"), cell);
-            Assert.AreEqual("ghi", fixture.Field);
-            CellHandlerTestUtils.VerifyCounts(fixture, 0, 0, 0, 0);
+            MakeStringFixture();
+            StoreSymbol("def", "ghi");
+            stringFixture.CellOperation.Input(stringFixture, TestUtils.CreateCellRange("Field"), cell);
+            Assert.AreEqual("ghi", stringFixture.Field);
+            VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
 
         [Test]
         public void CellContentWhenRecalling_Right()
         {
             Parse cell = TestUtils.CreateCell("<<def");
-            StringFixture fixture = new StringFixture();
-            Fixture.Save("def","ghi");
-            fixture.Field = "ghi";
-            fixture.CellOperation.Check(fixture, TestUtils.CreateCellRange("Field"), cell);
+            MakeStringFixture();
+            StoreSymbol("def", "ghi");
+            stringFixture.Field = "ghi";
+            stringFixture.CellOperation.Check(stringFixture, TestUtils.CreateCellRange("Field"), cell);
             Assert.AreEqual("ghi <span class=\"fit_grey\">&lt;&lt;def</span>", cell.Body);
-            CellHandlerTestUtils.VerifyCounts(fixture, 1, 0, 0, 0);
-        }		
+            VerifyCounts(stringFixture, 1, 0, 0, 0);
+        }
 
         [Test]
         public void CellContentWhenRecalling_Wrong()
         {
             Parse cell = TestUtils.CreateCell("<<def");
-            StringFixture fixture = new StringFixture();
-            Fixture.Save("def","ghi");
-            fixture.Field = "xyz";
-            fixture.CellOperation.Check(fixture, TestUtils.CreateCellRange("Field"), cell);
+            MakeStringFixture();
+            StoreSymbol("def", "ghi");
+            stringFixture.Field = "xyz";
+            stringFixture.CellOperation.Check(stringFixture, TestUtils.CreateCellRange("Field"), cell);
             Assert.AreEqual("ghi <span class=\"fit_grey\">&lt;&lt;def</span> <span class=\"fit_label\">expected</span><hr />xyz <span class=\"fit_label\">actual</span>", cell.Body);
-            CellHandlerTestUtils.VerifyCounts(fixture, 0, 1, 0, 0);
+            VerifyCounts(stringFixture, 0, 1, 0, 0);
         }	
 
         [Test]
         public void CellContentWhenRecalling_Input()
         {
             Parse cell = TestUtils.CreateCell("<<def");
-            StringFixture fixture = new StringFixture();
-            Fixture.Save("def","ghi");
-            fixture.Field = "xyz";
-            fixture.CellOperation.Input(fixture, TestUtils.CreateCellRange("Field"), cell);
+            MakeStringFixture();
+            StoreSymbol("def", "ghi");
+            stringFixture.Field = "xyz";
+            stringFixture.CellOperation.Input(stringFixture, TestUtils.CreateCellRange("Field"), cell);
             Assert.AreEqual("ghi <span class=\"fit_grey\">&lt;&lt;def</span>", cell.Body);
-            CellHandlerTestUtils.VerifyCounts(fixture, 0, 0, 0, 0);
+            VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
 
         [Test]
         public void CellContentWhenRecalling_Evaluate()
         {
             Parse cell = TestUtils.CreateCell("<<def");
-            StringFixture fixture = new StringFixture();
-            Fixture.Save("def","ghi");
-            fixture.Field = "xyz";
-            fixture.CellOperation.Compare(new TypedValue("xyz"), cell);
+            MakeStringFixture();
+            StoreSymbol("def", "ghi");
+            stringFixture.Field = "xyz";
+            stringFixture.CellOperation.Compare(new TypedValue("xyz"), cell);
             Assert.AreEqual("ghi <span class=\"fit_grey\">&lt;&lt;def</span>", cell.Body);
-            CellHandlerTestUtils.VerifyCounts(fixture, 0, 0, 0, 0);
+            VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
 
         [Test]
         public void TestEvaluateRecallStringPass() {
             Parse cell = TestUtils.CreateCell("<<def");
-            StringFixture fixture = new StringFixture();
-            Fixture.Save("def","ghi");
-            fixture.Field = "ghi";
-            Assert.IsTrue(fixture.CellOperation.Compare(new TypedValue("ghi"), cell));
-            CellHandlerTestUtils.VerifyCounts(fixture, 0, 0, 0, 0);
+            MakeStringFixture();
+            StoreSymbol("def", "ghi");
+            stringFixture.Field = "ghi";
+            Assert.IsTrue(stringFixture.CellOperation.Compare(new TypedValue("ghi"), cell));
+            VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
 
         [Test]
         public void TestEvaluateRecallStringFail() {
             Parse cell = TestUtils.CreateCell("<<def");
-            StringFixture fixture = new StringFixture();
-            Fixture.Save("def","ghi");
-            fixture.Field = "not ghi";
-            Assert.IsFalse(fixture.CellOperation.Compare(new TypedValue("not ghi"), cell));
-            CellHandlerTestUtils.VerifyCounts(fixture, 0, 0, 0, 0);
+            MakeStringFixture();
+            StoreSymbol("def", "ghi");
+            stringFixture.Field = "not ghi";
+            Assert.IsFalse(stringFixture.CellOperation.Compare(new TypedValue("not ghi"), cell));
+            VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
 
         [Test]
         public void TestEvaluateRecallStringFailNull() {
             Parse cell = TestUtils.CreateCell("<<def");
-            StringFixture fixture = new StringFixture();
-            Fixture.Save("def","ghi");
-            fixture.Field = null;
-            Assert.IsFalse(fixture.CellOperation.Compare(new TypedValue(null, typeof(string)), cell));
-            CellHandlerTestUtils.VerifyCounts(fixture, 0, 0, 0, 0);
+            MakeStringFixture();
+            StoreSymbol("def", "ghi");
+            stringFixture.Field = null;
+            Assert.IsFalse(stringFixture.CellOperation.Compare(new TypedValue(null, typeof(string)), cell));
+            VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
 
         [Test]
         public void TestCheckRecallValuePass()
         {
             Parse cell = TestUtils.CreateCell("<<theKey");
-            StringFixture fixture = new StringFixture();
-            Fixture.Save("theKey","theValue");
-            fixture.Field = "theValue";
-            fixture.CellOperation.Check(fixture, TestUtils.CreateCellRange("Field"), cell);
-            CellHandlerTestUtils.VerifyCounts(fixture, 1, 0, 0, 0);
+            MakeStringFixture();
+            StoreSymbol("theKey", "theValue");
+            stringFixture.Field = "theValue";
+            stringFixture.CellOperation.Check(stringFixture, TestUtils.CreateCellRange("Field"), cell);
+            VerifyCounts(stringFixture, 1, 0, 0, 0);
         }
 
         [Test]
         public void TestCheckRecallValuePassPerson()
         {
             Parse cell = TestUtils.CreateCell("<<thePerson");
-            PersonFixture fixture = new PersonFixture();
+            MakePersonFixture();
             Person person = new Person("Eeek", "Gadd");
-            Fixture.Save("thePerson", person);
-            fixture.Field = person;
-            fixture.CellOperation.Check(fixture, TestUtils.CreateCellRange("Field"), cell);
-            CellHandlerTestUtils.VerifyCounts(fixture, 1, 0, 0, 0);
+            StoreSymbol("thePerson", person);
+            personFixture.Field = person;
+            personFixture.CellOperation.Check(personFixture, TestUtils.CreateCellRange("Field"), cell);
+            VerifyCounts(personFixture, 1, 0, 0, 0);
         }
 
         [Test]
         public void TestCheckRecallValueFail()
         {
             Parse cell = TestUtils.CreateCell("<<theKey");
-            StringFixture fixture = new StringFixture();
-            Fixture.Save("theKey","theValue");
-            fixture.Field = "anotherValue";
-            fixture.CellOperation.Check(fixture, TestUtils.CreateCellRange("Field"), cell);
-            CellHandlerTestUtils.VerifyCounts(fixture, 0, 1, 0, 0);
+            MakeStringFixture();
+            StoreSymbol("theKey","theValue");
+            stringFixture.Field = "anotherValue";
+            stringFixture.CellOperation.Check(stringFixture, TestUtils.CreateCellRange("Field"), cell);
+            VerifyCounts(stringFixture, 0, 1, 0, 0);
         }
 
         [Test]
         public void TestCheckRecallValueFailPerson()
         {
             Parse cell = TestUtils.CreateCell("<<thePerson");
-            PersonFixture fixture = new PersonFixture();
+            MakePersonFixture();
             Person person = new Person("Eeek", "Gadd");
             Person person2 = new Person("Eeek", "Gadds");
-            Fixture.Save("thePerson", person);
-            fixture.Field = person2;
-            fixture.CellOperation.Check(fixture, TestUtils.CreateCellRange("Field"), cell);
-            CellHandlerTestUtils.VerifyCounts(fixture, 0, 1, 0, 0);
+            StoreSymbol("thePerson", person);
+            personFixture.Field = person2;
+            personFixture.CellOperation.Check(personFixture, TestUtils.CreateCellRange("Field"), cell);
+            VerifyCounts(personFixture, 0, 1, 0, 0);
         }
+
+        private object LoadSymbol(string symbolName) {
+            return service.Load(new Symbol(symbolName)).Instance;
+        }
+
+        private void StoreSymbol(string symbolName, object symbolValue) {
+            service.Store(new Symbol(symbolName, symbolValue));
+        }
+
     }
 }

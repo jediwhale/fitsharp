@@ -4,6 +4,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System;
+using fit.Engine;
 using NUnit.Framework;
 
 namespace fit.Test.NUnit {
@@ -25,7 +26,7 @@ namespace fit.Test.NUnit {
         [Test]
         public void TestSetterBinding()
         {
-            TestFixture f = new TestFixture ();
+            TestFixture f = new TestFixture { Service = new Service()};
 			
             Parse p;
             Binding binding;

@@ -9,37 +9,44 @@ using NUnit.Framework;
 
 namespace fit.Test.NUnit {
     [TestFixture]
-    public class ErrorKeywordHandlerTest
+    public class ErrorKeywordHandlerTest: CellOperatorTest
     {
+        private ErrorThrowingFixture fixture;
+
         [Test]
         public void MatchesErrorKeyword()
         {
-            Assert.IsTrue(TestUtils.IsMatch(new ExecuteError(), ExecuteParameters.MakeCheck(TestUtils.CreateCell("error"))));
-            Assert.IsFalse(TestUtils.IsMatch(new ExecuteError(), ExecuteParameters.MakeInput(TestUtils.CreateCell("stuff"), TestUtils.CreateCell("error"))));
+            Assert.IsTrue(IsMatch(new ExecuteError(), ExecuteParameters.MakeCheck(TestUtils.CreateCell("error"))));
+            Assert.IsFalse(IsMatch(new ExecuteError(), ExecuteParameters.MakeInput(TestUtils.CreateCell("stuff"), TestUtils.CreateCell("error"))));
         }
 
         [Test]
         public void TestDoCheckErrorRight()
         {
             Parse cell = TestUtils.CreateCell("error");
-            ErrorThrowingFixture fixture = new ErrorThrowingFixture();
+            MakeErrorFixture();
             fixture.CellOperation.Check(fixture, TestUtils.CreateCellRange("ErrorThrowingMethod"), cell);
             Assert.IsTrue(cell.Tag.IndexOf("pass") > -1);
             Assert.IsTrue(cell.Body.IndexOf("error") > -1);
-            CellHandlerTestUtils.VerifyCounts(fixture, 1, 0, 0, 0);
+            VerifyCounts(fixture, 1, 0, 0, 0);
         }
 
         [Test]
         public void TestDoCheckErrorWrong()
         {
             Parse cell = TestUtils.CreateCell("error");
-            StringFixture fixture = new StringFixture();
-            fixture.Field = "some value";
-            fixture.CellOperation.Check(fixture, TestUtils.CreateCellRange("field"), cell);
+            MakeStringFixture();
+            stringFixture.Field = "some value";
+            fixture.CellOperation.Check(stringFixture, TestUtils.CreateCellRange("field"), cell);
             Assert.IsTrue(cell.Tag.IndexOf("fail") > -1);
             Assert.IsTrue(cell.Body.IndexOf("error") > -1);
             Assert.IsTrue(cell.Body.IndexOf("some value") > -1);
-            CellHandlerTestUtils.VerifyCounts(fixture, 0, 1, 0, 0);
+            VerifyCounts(stringFixture, 0, 1, 0, 0);
+        }
+
+        private void MakeErrorFixture() {
+            service = new Service();
+            fixture = new ErrorThrowingFixture { Service = service };
         }
     }
 }
