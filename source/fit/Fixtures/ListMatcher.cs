@@ -7,6 +7,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using fit;
+using fit.Engine;
+using fitSharp.Fit.Model;
+using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitlibrary {
@@ -20,17 +23,20 @@ namespace fitlibrary {
     }
 
     public class ListMatcher {
+        private readonly Processor<Cell> processor;
+        private readonly ListMatchStrategy strategy;
 
-        public ListMatcher(ListMatchStrategy theStrategy) {
-            myStrategy = theStrategy;
+        public ListMatcher(Processor<Cell> processor, ListMatchStrategy strategy) {
+            this.strategy = strategy;
+            this.processor = processor;
         }
 
 	    public bool IsEqual(object theActualValue, Parse theExpectedValueCell) {
-            Actuals actuals = new Actuals((IList)theActualValue, myStrategy);
+            Actuals actuals = new Actuals((IList)theActualValue, strategy);
 	        int expectedRow = 0;
             foreach (Parse currentRow in new CellRange(theExpectedValueCell.Parts.Parts.More).Cells) {
                 int match = actuals.FindMatch(RowMatches, expectedRow, currentRow.Parts);
-                if (match < 0 || (match != expectedRow && myStrategy.IsOrdered)) return false;
+                if (match < 0 || (match != expectedRow && strategy.IsOrdered)) return false;
                 expectedRow++;
             }
             return (actuals.UnmatchedCount == 0);
@@ -41,7 +47,7 @@ namespace fitlibrary {
         }
 
         public bool MarkCell(Fixture theFixture, object theActualValue, Parse theTableRows, Parse theRowsToCompare) {
-            Actuals actuals = new Actuals((IList)theActualValue, myStrategy);
+            Actuals actuals = new Actuals((IList)theActualValue, strategy);
             if (theRowsToCompare == null && actuals.UnmatchedCount == 0) {
                 theFixture.Right(theTableRows);
             }
@@ -61,24 +67,24 @@ namespace fitlibrary {
                     return false;
                 }
             }
-            if (actuals.UnmatchedCount > 0 && !myStrategy.SurplusAllowed) {
+            if (actuals.UnmatchedCount > 0 && !strategy.SurplusAllowed) {
                 actuals.ShowSurplus(theFixture, theTableRows.Last);
                 result = false;
             }
 
             Parse markRow = theRowsToCompare;
             for (int row = 0; row < expectedRow; row++) {
-                if (myStrategy.IsOrdered && actuals.IsOutOfOrder(row)) {
+                if (strategy.IsOrdered && actuals.IsOutOfOrder(row)) {
                     MarkAsIncorrect(theFixture, markRow, "out of order");
                     result = false;
                 }
                 else if (actuals.Match(row) != null) {
-                    TypedValue[] actualValues = myStrategy.ActualValues(actuals.Match(row));
+                    TypedValue[] actualValues = strategy.ActualValues(actuals.Match(row));
                     int i = 0;
                     foreach (Parse cell in new CellRange(markRow.Parts).Cells) {
                         if (actualValues[i].Type != typeof(void) || cell.Text.Length > 0) {
-                            ExpectedValueCell expected = new ExpectedValueCell(cell);
-                            expected.MarkCell(theFixture, actualValues[i]);
+                            theFixture.CellOperation.Check(theFixture, actualValues[i], cell);
+
                         }
                         i++;
                     }
@@ -86,7 +92,7 @@ namespace fitlibrary {
                 markRow = markRow.More;
             }
 
-            if (!myStrategy.FinalCheck(theFixture)) return false;
+            if (!strategy.FinalCheck(theFixture)) return false;
             return result;
 	    }
 
@@ -97,20 +103,18 @@ namespace fitlibrary {
         }
 
         private bool RowMatches(Parse theExpectedCells, object theActualRow) {
-            if (!myStrategy.IsExpectedSize(theExpectedCells, theActualRow)) return false;
+            if (!strategy.IsExpectedSize(theExpectedCells, theActualRow)) return false;
             Parse expectedCell = theExpectedCells;
             int column = 0;
-            foreach (TypedValue actualValue in myStrategy.ActualValues(theActualRow)) {
+            foreach (TypedValue actualValue in strategy.ActualValues(theActualRow)) {
                 if (actualValue.Type != typeof(void) || expectedCell.Text.Length > 0) {
-                    if (!(new ExpectedValueCell(expectedCell)).IsEqual(actualValue)) return false;
+                    if (!new CellOperation(processor).Compare(actualValue, expectedCell)) return false;
                 }
                 expectedCell = expectedCell.More;
                 column++;
             }
             return true;
         }
-
-        private ListMatchStrategy myStrategy;
 
         private class Actuals {
             public delegate bool Matches(Parse theExpectedCells, object theActual);

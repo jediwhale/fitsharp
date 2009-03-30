@@ -6,33 +6,34 @@
 using fitlibrary;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Application;
+using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fit.Engine {
     public class CellOperation {
-        private readonly Service service;
+        private readonly Processor<Cell> processor;
 
         public CellOperation() {
-            service = Context.Configuration.GetItem<Service>();
+            processor = Context.Configuration.GetItem<Service>();
         }
 
-        public CellOperation(Service service) {
-            this.service = service;
+        public CellOperation(Processor<Cell> processor) {
+            this.processor = processor;
         }
 
         public void Create(Fixture fixture, string className, Parse parameterCell) {
-            TypedValue instance = service.Create(className, new CellRange(parameterCell, 1));
+            TypedValue instance = processor.Create(className, new CellRange(parameterCell, 1));
             fixture.SetSystemUnderTest(instance.Value);
         }
 
         public void Input(Fixture fixture, Tree<Cell> memberName, Parse cell) {
-            service.Execute(
+            processor.Execute(
                 ExecuteContext.Make(fixture), 
                 ExecuteParameters.MakeInput(memberName, cell));
         }
 
         public void Check(Fixture fixture, Tree<Cell> memberName, Tree<Cell> parameters, Parse expectedCell) {
-            service.Execute(
+            processor.Execute(
                 ExecuteContext.Make(fixture), 
                 ExecuteParameters.MakeCheck(memberName, parameters, expectedCell));
         }
@@ -42,7 +43,7 @@ namespace fit.Engine {
         }
 
         public void Check(Fixture fixture, TypedValue actualValue, Parse expectedCell) {
-            service.Execute(
+            processor.Execute(
                 ExecuteContext.Make(fixture, actualValue),
                 ExecuteParameters.MakeCheck(expectedCell));
         }
@@ -52,7 +53,7 @@ namespace fit.Engine {
         }
 
         public TypedValue TryInvoke(object target, Tree<Cell> memberName, Tree<Cell> parameters) {
-            return service.Execute(
+            return processor.Execute(
                 ExecuteContext.Make(new TypedValue(target)), 
                 ExecuteParameters.MakeInvoke(memberName, parameters));
         }
@@ -68,7 +69,7 @@ namespace fit.Engine {
         }
 
         public bool Compare(TypedValue actual, Parse expectedCell) {
-            return (bool)service.Execute(
+            return (bool)processor.Execute(
                              ExecuteContext.Make(actual), 
                              ExecuteParameters.MakeCompare(expectedCell)).Value;
         }

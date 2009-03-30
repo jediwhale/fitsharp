@@ -18,7 +18,6 @@ namespace fit
 	{
 		private string[] args;
 
-        //todo: fixtures need Service, -> cellop
         public Service Service { get; set; }
 
 	    public TestStatus TestStatus = new TestStatus();

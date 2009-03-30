@@ -115,7 +115,8 @@ namespace fit
 		private bool IsMatch(Parse row, int col)
 		{
 		    TypedValue actual = CellOperation.Invoke(this, headerCells.At(col));
-		    return new ExpectedValueCell(GetCellForColumn(row, col)).IsEqual(actual);
+		    return CellOperation.Compare(actual, GetCellForColumn(row, col));
+		    //return new ExpectedValueCell(GetCellForColumn(row, col)).IsEqual(actual);
 		}
 
 		private Parse GetCellForColumn(Parse row, int col)

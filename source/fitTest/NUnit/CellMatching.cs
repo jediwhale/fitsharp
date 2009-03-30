@@ -14,76 +14,69 @@ namespace fit.Test.NUnit {
     [TestFixture] public class CellMatching: Fixture {
 
         [Test] public void NullEqualsNullCell() {
-            ExpectedValueCell expected = new ExpectedValueCell(new Parse("td", null, null, null));
-            Assert.IsTrue(IsEqual(expected, null));
+            Assert.IsTrue(IsEqual(new Parse("td", null, null, null), null));
         }
 
-        private bool IsEqual(ExpectedValueCell cell, object value) {
-            return cell.IsEqual(new TypedValue(value));
+        private static bool IsEqual(Parse cell, object value) {
+            return new CellOperation().Compare(new TypedValue(value), cell);
         }
-    
+
         [Test] public void NullEqualsEmptyCell() {
-            ExpectedValueCell expected = new ExpectedValueCell(new Parse("td", string.Empty, null, null));
-            Assert.IsTrue(IsEqual(expected, null));
+            Assert.IsTrue(IsEqual(new Parse("td", string.Empty, null, null), null));
         }
     
         [Test] public void NullDoesntEqualFullCell() {
-            ExpectedValueCell expected = new ExpectedValueCell(new Parse("td", "something", null, null));
-            Assert.IsFalse(IsEqual(expected, null));
+            Assert.IsFalse(IsEqual(new Parse("td", "something", null, null), null));
         }
 
         [Test] public void StringEqualsSameStringCell() {
-            ExpectedValueCell expected = new ExpectedValueCell(new Parse("td", "something", null, null));
-            Assert.IsTrue(IsEqual(expected, "something"));
+            Assert.IsTrue(IsEqual(new Parse("td", "something", null, null), "something"));
         }
     
         [Test] public void MarksSameStringCellAsRight() {
             Parse cell = new Parse("td", "something", null, null);
-            ExpectedValueCell expected = new ExpectedValueCell(cell);
-            expected.MarkCell(new Fixture{ Service = new Service()}, new TypedValue("something"));
+            var fixture = new Fixture {Service = new Service()};
+            fixture.CellOperation.Check(fixture, new TypedValue("something"), cell);
             Assert.AreEqual("\n<td class=\"pass\">something</td>", cell.ToString());
         }
     
         [Test] public void MarksSameArrayCellAsRight() {
             Parse cell = new Parse("td", "something,more", null, null);
-            ExpectedValueCell expected = new ExpectedValueCell(cell);
-            expected.MarkCell(new Fixture{ Service = new Service()}, new TypedValue(new string[] {"something", "more"}));
+            var fixture = new Fixture {Service = new Service()};
+            fixture.CellOperation.Check(fixture, new TypedValue(new string[] {"something", "more"}), cell);
             Assert.AreEqual("\n<td class=\"pass\">something,more</td>", cell.ToString());
         }
     
         [Test] public void StringDoesntEqualDifferentStringCell() {
-            ExpectedValueCell expected = new ExpectedValueCell(new Parse("td", "something else", null, null));
-            Assert.IsFalse(IsEqual(expected, "something"));
+            Assert.IsFalse(IsEqual(new Parse("td", "something else", null, null), "something"));
         }
     
         [Test] public void MarksDifferentStringCellAsWrong() {
             Parse cell = new Parse("td", "something else", null, null);
-            ExpectedValueCell expected = new ExpectedValueCell(cell);
-            expected.MarkCell(new Fixture{ Service = new Service()}, new TypedValue("something"));
+            var fixture = new Fixture {Service = new Service()};
+            fixture.CellOperation.Check(fixture, new TypedValue("something"), cell);
             Assert.AreEqual("\n<td class=\"fail\">something else <span class=\"fit_label\">expected</span><hr />something <span class=\"fit_label\">actual</span></td>", cell.ToString());
         }
     
         [Test] public void TreeEqualsSameTreeCell() {
             object actual = new ListTree(string.Empty, new ListTree[]{new ListTree("a")});
             Parse table = HtmlParser.Instance.Parse("<table><tr><td><ul><li>a</li></ul></td></tr></table>");
-            ExpectedValueCell expected = new ExpectedValueCell(table.Parts.Parts);
-            Assert.IsTrue(IsEqual(expected, actual));
+            Assert.IsTrue(IsEqual(table.Parts.Parts, actual));
         }
     
         [Test] public void ListEqualsSameTableCell() {
             ArrayList actual = new ArrayList();
             actual.Add(new Name("joe", "smith"));
             Parse table = HtmlParser.Instance.Parse("<table><tr><td><table><tr><td>first</td><td>last</td></tr><tr><td>joe</td><td>smith</td></tr></table></td></tr></table>");
-            ExpectedValueCell expected = new ExpectedValueCell(table.Parts.Parts);
-            Assert.IsTrue(IsEqual(expected, actual));
+            Assert.IsTrue(IsEqual(table.Parts.Parts, actual));
         }
 
         [Test] public void MarksSameTableCellAsRight() {
             ArrayList actual = new ArrayList();
             actual.Add(new Name("joe", "smith"));
             Parse table = HtmlParser.Instance.Parse("<table><tr><td><table><tr><td>first</td><td>last</td></tr><tr><td>joe</td><td>smith</td></tr></table></td></tr></table>");
-            ExpectedValueCell expected = new ExpectedValueCell(table.Parts.Parts);
-            expected.MarkCell(new Fixture{ Service = new Service()}, new TypedValue(actual));
+            var fixture = new Fixture {Service = new Service()};
+            fixture.CellOperation.Check(fixture, new TypedValue(actual), table.Parts.Parts);
             Assert.AreEqual("<td><table><tr><td>first</td><td>last</td></tr><tr><td class=\"pass\">joe</td><td class=\"pass\">smith</td></tr></table></td>", table.Parts.Parts.ToString());
         }
 
@@ -91,8 +84,8 @@ namespace fit.Test.NUnit {
             ArrayList actual = new ArrayList();
             actual.Add(new Name("joe", "smith"));
             Parse table = HtmlParser.Instance.Parse("<table><tr><td><table><tr><td>first</td><td>last</td><td>address</td></tr><tr><td>joe</td><td>smith</td><td></td></tr></table></td></tr></table>");
-            ExpectedValueCell expected = new ExpectedValueCell(table.Parts.Parts);
-            expected.MarkCell(new Fixture{ Service = new Service()}, new TypedValue(actual));
+            var fixture = new Fixture {Service = new Service()};
+            fixture.CellOperation.Check(fixture, new TypedValue(actual), table.Parts.Parts);
             Assert.AreEqual("<td><table><tr><td>first</td><td>last</td><td class=\"error\">address<hr /><pre><div class=\"fit_stacktrace\">fitlibrary.exception.FitFailureException: Column 'address' not used.</div></pre></td></tr><tr><td class=\"pass\">joe</td><td class=\"pass\">smith</td><td></td></tr></table></td>", table.Parts.Parts.ToString());
         }
 

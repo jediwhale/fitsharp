@@ -41,30 +41,26 @@ namespace fit.Test.Acceptance {
 
         public bool CheckParseString(Parse theCells) {
             string result = (string)InputValue(theCells.More, typeof(string));
-            ExpectedValueCell expected = new ExpectedValueCell(theCells.Last);
-            return IsEqual(expected, string.Format("'{0}'", result));
+            return IsEqual(theCells.Last, string.Format("'{0}'", result));
         }
 
-        private bool IsEqual(ExpectedValueCell cell, object value) {
-            return cell.IsEqual(new TypedValue(value));
+        private bool IsEqual(Parse cell, object value) {
+            return new CellOperation().Compare(new TypedValue(value), cell);
         }
 
         public bool CheckParseInteger(Parse theCells) {
             int result = (int)InputValue(theCells.More, typeof(int));
-            ExpectedValueCell expected = new ExpectedValueCell(theCells.Last);
-            return IsEqual(expected, result.ToString("###,###,###"));
+            return IsEqual(theCells.Last, result.ToString("###,###,###"));
         }
 
         public bool CheckParseTestClass(Parse theCells) {
             CellParsingTestClass result = (CellParsingTestClass)InputValue(theCells.More, typeof(CellParsingTestClass));
-            ExpectedValueCell expected = new ExpectedValueCell(theCells.Last);
-            return IsEqual(expected, result.Content);
+            return IsEqual(theCells.Last, result.Content);
         }
 
         public bool CheckParseTree(Parse theCells) {
             Tree result = (Tree)InputValue(theCells.More, typeof(Tree));
-            ExpectedValueCell expected = new ExpectedValueCell(theCells.Last);
-            return IsEqual(expected, TreeString(result));
+            return IsEqual(theCells.Last, TreeString(result));
         }
 
         private object InputValue(Parse cell, Type theType) {
@@ -87,8 +83,7 @@ namespace fit.Test.Acceptance {
 
         public bool CheckParseTable(Parse theCells) {
             Table result = (Table)InputValue(theCells.More, typeof(Table));
-            ExpectedValueCell expected = new ExpectedValueCell(theCells.Last);
-            return IsEqual(expected, TableString(result));
+            return IsEqual(theCells.Last, TableString(result));
         }
 
         private static string TableString(Table theTable) {
@@ -107,8 +102,7 @@ namespace fit.Test.Acceptance {
 
         public bool CheckParseList(Parse theCells) {
             IList result = (IList)InputValue(theCells.More, typeof(IList));
-            ExpectedValueCell expected = new ExpectedValueCell(theCells.Last);
-            return IsEqual(expected, result);
+            return IsEqual(theCells.Last, result);
         }
 
         public object AB(int theX, int theY) {

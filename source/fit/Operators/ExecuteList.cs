@@ -22,19 +22,19 @@ namespace fit.Operators {
                     return ExecuteCheck(processor, parameters);
 
                 case ExecuteParameters.Compare:
-                    return ExecuteEvaluate(parameters, ref result);
+                    return ExecuteEvaluate(processor, parameters, ref result);
 
                 default:
                     return false;
             }
         }
 
-        private static bool ExecuteEvaluate(ExecuteParameters parameters, ref TypedValue result) {
+        private static bool ExecuteEvaluate(Processor<Cell> processor, ExecuteParameters parameters, ref TypedValue result) {
             var cell = parameters.ParseCell;
             if (!typeof(IList).IsAssignableFrom(parameters.Target.Type)) return false;
             if (cell.Parts == null) return false;
 
-            var matcher = new ListMatcher(new ArrayMatchStrategy(cell.Parts.Parts));
+            var matcher = new ListMatcher(processor, new ArrayMatchStrategy(cell.Parts.Parts));
             result = new TypedValue(matcher.IsEqual(parameters.Target.Value, cell));
             return true;
         }
@@ -44,7 +44,7 @@ namespace fit.Operators {
             if (cell.Parts == null) return false;
             if (!typeof(IList).IsAssignableFrom(parameters.GetTypedActual(processor).Type)) return false;
 
-            var matcher = new ListMatcher(new ArrayMatchStrategy(cell.Parts.Parts));
+            var matcher = new ListMatcher(processor, new ArrayMatchStrategy(cell.Parts.Parts));
             matcher.MarkCell(parameters.Fixture, parameters.GetActual(processor), cell);
             return true;
         }

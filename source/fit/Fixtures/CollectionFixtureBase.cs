@@ -37,7 +37,7 @@ namespace fitlibrary {
         protected abstract ListMatchStrategy MatchStrategy {get;}
 
         protected void CompareRows(Parse theTableRows, Parse theRowsToCompare) {
-            ListMatcher matcher = new ListMatcher(MatchStrategy);
+            ListMatcher matcher = new ListMatcher(Service, MatchStrategy);
             matcher.MarkCell(this, myArray, theTableRows, theRowsToCompare);
         }
 

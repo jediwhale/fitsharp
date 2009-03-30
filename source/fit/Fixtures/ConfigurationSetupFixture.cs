@@ -18,6 +18,7 @@ namespace fit {
 
         public DoFixture ApplicationUnderTest() { return new DoFixture(Context.Configuration.GetItem<ApplicationUnderTest>()); }
 
+        //look at
         public DoFixture Service() { return new DoFixture(Context.Configuration.GetItem<Service>()); }
 
         public DoFixture GetItem(string type) { return new DoFixture(Context.Configuration.GetItem(type));}
