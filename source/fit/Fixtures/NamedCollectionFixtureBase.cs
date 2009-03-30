@@ -9,6 +9,7 @@ using System.Collections;
 using fit.Engine;
 using fitlibrary.exception;
 using fitSharp.Fit.Model;
+using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitlibrary {
@@ -40,20 +41,19 @@ namespace fitlibrary {
 
         public abstract bool IsOrdered { get;}
 
-        public TypedValue[] ActualValues(object theActualRow) {
+        public TypedValue[] ActualValues(Processor<Cell> processor, object theActualRow) {
             if (myColumnsUsed == null) myColumnsUsed = new bool[myHeaderRow.Parts.Size];
             var result = new TypedValue[myHeaderRow.Parts.Size];
             int column = 0;
             foreach (Parse headerCell in new CellRange(myHeaderRow.Parts).Cells) {
-                //todo: get cellop ref
-                TypedValue memberResult = new CellOperation().TryInvoke(theActualRow, headerCell);
+                TypedValue memberResult = new CellOperation(processor).TryInvoke(theActualRow, headerCell);
                 if (memberResult.IsValid) {
                     result[column] = memberResult;
                     myColumnsUsed[column] = true;
                 }
                 else {
-                //todo: get cellop ref
-                    TypedValue itemResult = new CellOperation().TryInvoke(new Fixture(theActualRow),
+                //todo: pass actual row in domain adapter?
+                    TypedValue itemResult = new CellOperation(processor).TryInvoke(new Fixture(theActualRow),
                                                                  new StringCell("getitem"),
                                                                  new CellRange(headerCell, 1));
                     if (itemResult.IsValid) {

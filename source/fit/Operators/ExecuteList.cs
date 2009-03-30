@@ -57,9 +57,8 @@ namespace fit.Operators {
             Parse headerCells = cell.Parts.Parts.Parts;
             var list = new ArrayList();
             foreach (Parse row in new CellRange(cell.Parts.Parts.More).Cells) {
-                //todo: get cellop ref
                 list.Add(
-                    new CellOperation().Invoke(instance.Value, new CellRange(headerCells), new CellRange(row.Parts)).Value);
+                    new CellOperation(processor).Invoke(instance.Value, new CellRange(headerCells), new CellRange(row.Parts)).Value);
             }
             result = new TypedValue(list);
             return true;

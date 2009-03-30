@@ -16,7 +16,7 @@ namespace fitlibrary {
 
     public interface ListMatchStrategy {
         bool IsOrdered { get; }
-        TypedValue[] ActualValues(object theActualRow);
+        TypedValue[] ActualValues(Processor<Cell> processor, object theActualRow);
         bool IsExpectedSize(Parse theExpectedCells, object theActualRow);
         bool FinalCheck(Fixture fixture);
         bool SurplusAllowed {get;}
@@ -79,7 +79,7 @@ namespace fitlibrary {
                     result = false;
                 }
                 else if (actuals.Match(row) != null) {
-                    TypedValue[] actualValues = strategy.ActualValues(actuals.Match(row));
+                    TypedValue[] actualValues = strategy.ActualValues(processor, actuals.Match(row));
                     int i = 0;
                     foreach (Parse cell in new CellRange(markRow.Parts).Cells) {
                         if (actualValues[i].Type != typeof(void) || cell.Text.Length > 0) {
@@ -106,7 +106,7 @@ namespace fitlibrary {
             if (!strategy.IsExpectedSize(theExpectedCells, theActualRow)) return false;
             Parse expectedCell = theExpectedCells;
             int column = 0;
-            foreach (TypedValue actualValue in strategy.ActualValues(theActualRow)) {
+            foreach (TypedValue actualValue in strategy.ActualValues(processor, theActualRow)) {
                 if (actualValue.Type != typeof(void) || expectedCell.Text.Length > 0) {
                     if (!new CellOperation(processor).Compare(actualValue, expectedCell)) return false;
                 }
@@ -180,7 +180,7 @@ namespace fitlibrary {
 
             private Parse MakeSurplusRow(Fixture theFixture, object theSurplusRow) {
                 Parse cells = null;
-                foreach (TypedValue actualValue in myStrategy.ActualValues(theSurplusRow)) {
+                foreach (TypedValue actualValue in myStrategy.ActualValues(theFixture.Service, theSurplusRow)) {
                     Parse cell = CellFactoryRepository.Instance.Make(actualValue.Value, CellFactoryRepository.Grey);
                     if (cells == null) {
                         cell.AddToBody(Fixture.Label("surplus"));
