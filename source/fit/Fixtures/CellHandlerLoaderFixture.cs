@@ -54,20 +54,20 @@ namespace fitnesse.handlers
 			}
 		}
 
-	    private static void Load(Parse row) {
+	    private void Load(Parse row) {
 	        string handler = new GracefulName(row.Parts.More.Text).IdentifierName.ToString();
 	        if (renames.ContainsKey(handler)) {
-	            Context.Configuration.GetItem<Service>().AddOperator(renames[handler]);
+	            Service.AddOperator(renames[handler]);
 	        }
 	        //else {
 	        //    Configuration.Instance.Add(GetKey(row.Parts.More.More), handler);
             //}
 	    }
 
-	    private static void Remove(Parse row) {
+	    private void Remove(Parse row) {
 	        string handler = new GracefulName(row.Parts.More.Text).IdentifierName.ToString();
 	        if (renames.ContainsKey(handler)) {
-	            Context.Configuration.GetItem<Service>().RemoveOperator(renames[handler]);
+	            Service.RemoveOperator(renames[handler]);
 	        }
 	        //else {
 	        //    Configuration.Instance.Remove(GetKey(row.Parts.More.More), handler);

@@ -4,8 +4,6 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System;
-using fit.Engine;
-using fitSharp.Machine.Application;
 
 namespace fit
 {
@@ -14,7 +12,7 @@ namespace fit
 	{
 		public override void DoCell(Parse cell, int columnNumber)
 		{
-            Context.Configuration.GetItem<Service>().AddNamespace(cell.Text);
+            Service.AddNamespace(cell.Text);
 		}
 	}
 }

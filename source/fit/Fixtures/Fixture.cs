@@ -219,7 +219,7 @@ namespace fit
 		}
 
         public object GetArgumentInput(int theIndex, Type theType) {
-            return Context.Configuration.GetItem<Service>().Parse(theType, new TypedValue(this), new StringCell(Args[theIndex])).Value;
+            return Service.Parse(theType, new TypedValue(this), new StringCell(Args[theIndex])).Value;
         }
 
 	    public object SystemUnderTest {

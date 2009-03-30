@@ -54,11 +54,11 @@ namespace fitlibrary {
 
         protected void ProcessFlowRow(Parse theCurrentRow) {
             try {
-                string specialActionName = Context.Configuration.GetItem<Service>().ParseTree<MemberName>(new CellRange(theCurrentRow.Parts, 1)).ToString();
-                TypedValue result = Context.Configuration.GetItem<Service>().TryInvoke(new TypedValue(new Keywords(this)),
+                string specialActionName = Service.ParseTree<MemberName>(new CellRange(theCurrentRow.Parts, 1)).ToString();
+                TypedValue result = Service.TryInvoke(new TypedValue(new Keywords(this)),
                                                                                   specialActionName, theCurrentRow.Parts);
                 if (!result.IsValid) {
-                    result = Context.Configuration.GetItem<Service>().TryInvoke(new TypedValue(this),
+                    result = Service.TryInvoke(new TypedValue(this),
                                                                                  specialActionName, theCurrentRow.Parts);
                 }
                 if (!result.IsValid) {
@@ -111,7 +111,7 @@ namespace fitlibrary {
 
         private void ExecuteOptionalMethod(string theMethodName, Parse theCell) {
             try {
-                Context.Configuration.GetItem<Service>().TryInvoke(new TypedValue(this), theMethodName, new TreeLeaf<Cell>(null)); //todo: non-intuitive! use method name?
+                Service.TryInvoke(new TypedValue(this), theMethodName, new TreeLeaf<Cell>(null)); //todo: non-intuitive! use method name?
             }
             catch (Exception e) {
                 Exception(theCell, e);

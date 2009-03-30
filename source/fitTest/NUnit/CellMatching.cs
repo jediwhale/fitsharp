@@ -18,7 +18,7 @@ namespace fit.Test.NUnit {
         }
 
         private static bool IsEqual(Parse cell, object value) {
-            return new CellOperation().Compare(new TypedValue(value), cell);
+            return new CellOperation(new Service()).Compare(new TypedValue(value), cell);
         }
 
         [Test] public void NullEqualsEmptyCell() {

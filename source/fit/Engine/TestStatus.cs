@@ -6,15 +6,13 @@
 using System.Collections;
 
 namespace fit.Engine {
-    public class TestStatus { //todo: name??
+    public class TestStatus {
         public Counts Counts { get; private set; }
         public bool IsAbandoned { get; set; }
-        public CellOperation CellOperation { get; private set; }
         public Hashtable Summary { get; private set; }
         
         public TestStatus() {
             Counts = new Counts();
-            CellOperation = new CellOperation();
             Summary = new Hashtable();
         }
     }

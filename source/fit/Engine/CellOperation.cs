@@ -13,10 +13,6 @@ namespace fit.Engine {
     public class CellOperation {
         private readonly Processor<Cell> processor;
 
-        public CellOperation() {
-            processor = Context.Configuration.GetItem<Service>();
-        }
-
         public CellOperation(Processor<Cell> processor) {
             this.processor = processor;
         }

@@ -4,10 +4,8 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System;
-using fit.Engine;
 using fitlibrary;
 using fitlibrary.exception;
-using fitSharp.Machine.Application;
 using fitSharp.Machine.Model;
 
 
@@ -26,7 +24,7 @@ namespace fit.Fixtures {
             else if (ourTypeIdentifier.Equals(restOfCells.Text)) {
                 if (restOfCells.More == null) throw new TableStructureException("missing cells for with.");
                 //return new TypeName(restOfCells.More.Text).Type;
-                return Context.Configuration.GetItem<Service>().ParseTree<Type>(restOfCells.More);
+                return theFixture.Service.ParseTree<Type>(restOfCells.More);
             }
             else if (ourCurrentIdentifier.Equals(restOfCells.Text)) {
                 return theFixture.SystemUnderTest;
@@ -43,10 +41,7 @@ namespace fit.Fixtures {
         public object EvaluateNew(Fixture theFixture) {
             Parse restOfCells = myCells.More;
             if (restOfCells == null) throw new TableStructureException("missing cells for with.");
-            return Context.Configuration.GetItem<Service>().Create(restOfCells.Text, new CellRange(restOfCells.More)).Value;
-            //Type newType = new TypeName(restOfCells.Text).Type;
-            //Method method = Method.FindFirst(newType, new IdentifierName(".ctor"), restOfCells.Size - 1);
-            //return method.Invoke(theFixture, restOfCells.More);
+            return theFixture.Service.Create(restOfCells.Text, new CellRange(restOfCells.More)).Value;
         }
 
         private static readonly IdentifierName ourNewIdentifier = new IdentifierName("new"); 
