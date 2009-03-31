@@ -4,24 +4,16 @@ using System.Collections.Generic;
 namespace fitnesse.slim.test {
 
     public class ShouldIBuyMilk {
-        private int dollars;
-        private int pints;
+        public int CashInWallet;
+        public int PintsOfMilkRemaining { get; set;}
         private bool creditCard;
-
-        public void setCashInWallet(int dollars) {
-            this.dollars = dollars;
-        }
-
-        public void setPintsOfMilkRemaining(int pints) {
-            this.pints = pints;
-        }
 
         public void setCreditCard(string valid) {
             creditCard = "yes".Equals(valid);
         }
 
         public string goToStore() {
-            return (pints == 0 && (dollars > 2 || creditCard)) ? "yes" : "no";
+            return (PintsOfMilkRemaining == 0 && (CashInWallet > 2 || creditCard)) ? "yes" : "no";
         }
     }
 

@@ -25,6 +25,8 @@ namespace fitSharp.Test.NUnit.Machine {
 
         public string Property { get; set; }
 
+        public string Field;
+
         public string this[string input] {
             get { return "index" + input; }
         }

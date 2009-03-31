@@ -90,11 +90,17 @@ namespace fitSharp.Machine.Engine {
 
             private RuntimeMember FindMemberByName(object instance, Type targetType) {
                 foreach (MemberInfo memberInfo in targetType.GetMembers(flags | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.FlattenHierarchy)) {
-                    if (!memberName.Matches(memberInfo.Name.Replace("_", string.Empty))) continue;
+                    if (!MatchesName(memberInfo.Name)) continue;
                     RuntimeMember runtimeMember = MakeMember(memberInfo, instance);
                     if (Matches(runtimeMember)) return runtimeMember;
                 }
                 return null;
+            }
+
+            private bool MatchesName(string name) {
+                if (memberName.Matches(name)) return true;
+                if (!memberName.MatchName.StartsWith("set") && !memberName.MatchName.StartsWith("get")) return false;
+                return new IdentifierName(memberName.MatchName.Substring(3)).Matches(name);
             }
 
             private static RuntimeMember MakeMember(MemberInfo memberInfo, object instance) {

@@ -81,5 +81,19 @@ namespace fitSharp.Test.NUnit.Machine {
             Assert.AreEqual(typeof(string), result.Type);
         }
 
+        [Test] public void FieldIsInvokedWithGetAndSet() {
+            RuntimeMember method = RuntimeType.GetInstance(new TypedValue(instance), "setfield", 1);
+            Assert.IsNotNull(method);
+            TypedValue result = method.Invoke(new object[] {"stuff"});
+            Assert.AreEqual(null, result.Value);
+            Assert.AreEqual(typeof(void), result.Type);
+
+            method = RuntimeType.GetInstance(new TypedValue(instance), "getfield", 0);
+            Assert.IsNotNull(method);
+            result = method.Invoke(new object[] {});
+            Assert.AreEqual("stuff", result.Value.ToString());
+            Assert.AreEqual(typeof(string), result.Type);
+        }
+
     }
 }
