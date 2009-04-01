@@ -25,14 +25,14 @@ namespace fitSharp.Test.NUnit.Slim {
             var executeDefault = new ExecuteDefault();
             var input = new TreeList<string>().AddBranchValue("step").AddBranchValue("garbage");
             ExecuteOperation(executeDefault, input, 2);
-            CheckForException("message<<MALFORMED_INSTRUCTION step,garbage>>");
+            CheckForException("message:<<MALFORMED_INSTRUCTION step,garbage>>");
         }
 
         [Test] public void ExecuteMakeBadClassReturnsException() {
             var executeMake = new ExecuteMake();
             var input = new TreeList<string>().AddBranchValue("step").AddBranchValue("make").AddBranchValue("variable").AddBranchValue("garbage");
             ExecuteOperation(executeMake, input, 2);
-            CheckForException("message<<NO_CLASS garbage>>");
+            CheckForException("message:<<NO_CLASS garbage>>");
         }
 
         [Test] public void ExecuteCallBadMethodReturnsException() {
@@ -40,7 +40,7 @@ namespace fitSharp.Test.NUnit.Slim {
             var executeCall = new ExecuteCall();
             var input = new TreeList<string>().AddBranchValue("step").AddBranchValue("call").AddBranchValue("variable").AddBranchValue("garbage");
             ExecuteOperation(executeCall, input, 2);
-            CheckForException("message<<NO_METHOD_IN_CLASS garbage fitSharp.Test.NUnit.Slim.SampleClass>>");
+            CheckForException("message:<<NO_METHOD_IN_CLASS garbage fitSharp.Test.NUnit.Slim.SampleClass>>");
         }
 
         [Test] public void ExecuteImportAddsNamespace() {

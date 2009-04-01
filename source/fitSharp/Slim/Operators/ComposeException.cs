@@ -55,7 +55,7 @@ namespace fitSharp.Slim.Operators {
         private static bool TryResult<T>(TypedValue exception, Format<T> formatter, ref Tree<string> result) where T: class {
             var candidateException = exception.Value as T;
             if (candidateException == null) return false;
-            result = MakeResult(string.Format("message<<{0}>> {1}", formatter(candidateException), candidateException));
+            result = MakeResult(string.Format("message:<<{0}>> {1}", formatter(candidateException), candidateException));
             return true;
         }
 
