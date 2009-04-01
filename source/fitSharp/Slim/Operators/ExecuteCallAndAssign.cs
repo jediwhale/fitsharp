@@ -12,7 +12,7 @@ namespace fitSharp.Slim.Operators {
 
         protected override Tree<string> ExecuteOperation(Processor<string> processor, Tree<string> parameters) {
             TypedValue result = InvokeMember(processor, parameters, 3);
-            processor.Store(new Symbol(parameters.Branches[2].Value, result.Value)); //todo: should we store the composed result?
+            processor.Store(new Symbol(parameters.Branches[2].Value, result.Value));
             return Result(parameters, processor.Compose(result));
         }
     }

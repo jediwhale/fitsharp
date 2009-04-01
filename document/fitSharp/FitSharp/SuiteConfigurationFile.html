@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- fitSharp
+Copyright © Syterra Software Inc. All rights reserved.
+The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
+to be bound by the terms of this license. You must not remove this notice, or any other, from this software. -->
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+ <link href="../fitsharp1.css" type="text/css" rel="stylesheet">
+  <link href="fit.css" type="text/css" rel="stylesheet">
+  <title>Suite Configuration File</title>
+</head>
+<body>
+<div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
+<div class="pagename">Suite Configuration File</div>
+<div class="content">The execution environment for a suite of tests can be controlled by a suite configuration file. This is a way to consolidate configuration information into one place and to remove it from business-facing story tests. The file is specified in the command line for the <span style="font-family:verdana,sans-serif"><i>fit</i>Sharp</span> Runner with a -c switch:<br>
+<pre>c:\program files\fitsharp\runner -c c:\myfolder\mysuite.config.xml -r ...</pre>To specify the file from FitNesse, include it in the COMMAND_PATTERN definition:<br>
+<pre>!define COMMAND_PATTERN {%m -c c:\myfolder\mysuite.config.xml -r ...}</pre>The execution environment is re-initialized at the beginning of each test, to preserve test independence. This means any changes made to configurable items during test execution will not be visible to other tests.<br>
+<br>
+The file format is XML. Here is a sample showing the configurable items:<br>
+<pre>&lt;suiteConfig>
+    &lt;ApplicationUnderTest>
+        &lt;AddAssembly>myTests.dll&lt;/AddAssembly>
+        &lt;AddNamespace>myTests&lt;/AddNamespace>
+    &lt;/ApplicationUnderTest>
+    &lt;fitSharp.Machine.Application.Settings>
+        &lt;ApartmentState>STA&lt;/ApartmentState>
+        &lt;CodePage>1200&lt;/CodePage>
+        &lt;InputFolder>myInput&lt;/InputFolder>
+        &lt;OutputFolder>myOutput&lt;/OutputFolder>
+        &lt;Runner>fitSharp.Slim.Service.Runner&lt;/Runner>
+        &lt;XmlOutput>myResult.xml&lt;/XmlOutput>
+    &lt;/fitSharp.Machine.Application.Settings>
+    &lt;fitSharp.Fit.Application.FileExclusions>
+        &lt;Add>^\.svn$&lt;/Add>
+    &lt;/fitSharp.Fit.Application.FileExclusions>
+    &lt;fitSharp.Slim.Service.Service>
+        &lt;AddOperator>my.Custom.Operator&lt;/AddOperator>
+    &lt;/fitSharp.Slim.Service.Service>
+    &lt;fit.Engine.Service>
+        &lt;AddOperator>my.Custom.Handler&lt;/AddOperator>
+        &lt;RemoveOperator>fit.Operators.ExecuteError&lt;/RemoveOperator>
+    &lt;/fit.Engine.Service>
+&lt;/suiteConfig></pre><span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">Apartment State</span><br>
+The default COM apartment state is MTA. It can be set to STA when testing with software that requires this.<br>
+<br>
+<span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">Application Under Test</span><br>
+Assemblies and namespaces can be loaded to be used when looking for fixture classes. <br>
+<br>
+<span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">Code Page</span><br>
+The default code page for file I/O is 1252 (Windows encoding). It can be set to other values to process Unicode, UTF-8 and other encodings. See the MSDN documentation for code page values.<br>
+<br>
+<span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">File Exclusions</span><br>
+Regular expression patterns can be added to exclude files from Folder Runner processing.<br>
+<br>
+<span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">Input Folder</span><br>
+The input folder for Folder Runner.<br>
+ <br>
+<span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">Operators</span><br>
+Operators can be added or removed from the Operator List used by Fit and Slim.<br>
+<br>
+<span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">Output Folder</span><br>
+The output folder for Folder Runner.<br>
+<br>
+<span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">Runner</span><br>
+The class that executes the tests.<br>
+<br>
+<span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">XML Output</span><br>
+The file name for recording test results in XML format. <br>
+</div>
+<div style="width:100%;text-align:right">
+<span class="footer">&copy; Copyright <a href="http://www.syterra.com">Syterra Software Inc.</a> All rights reserved.</span>
+</div>
+
+</body>
+</html>
+<br>
