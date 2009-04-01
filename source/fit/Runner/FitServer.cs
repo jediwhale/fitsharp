@@ -25,6 +25,7 @@ namespace fitnesse.fitserver
 		public FixtureListener fixtureListener;
 		private Counts totalCounts = new Counts();
 	    private bool IMaybeProcessingSuiteSetup = true;
+	    private Configuration configuration;
 
 		private const int ASSEMBLYLIST = 0;
 		private const int HOST = 1;
@@ -44,8 +45,9 @@ namespace fitnesse.fitserver
 			fixtureListener = new TablePrintingFixtureListener(this);
 		}
 
-		public FitServer(string host, int port, bool verbose) : this()
+		public FitServer(Configuration configuration, string host, int port, bool verbose) : this()
 		{
+		    this.configuration = configuration;
 			this.host = host;
 			this.port = port;
 			this.verbose = verbose;
@@ -53,6 +55,7 @@ namespace fitnesse.fitserver
 		}
 
 	    public int Run(string[] commandLineArguments, Configuration configuration, ProgressReporter reporter) {
+	        this.configuration = configuration;
 	        Run(commandLineArguments);
 	        return ExitCode();
 	    }
@@ -67,11 +70,6 @@ namespace fitnesse.fitserver
 				{
 					if ("-v".Equals(args[i]))
 						verbose = true;
-                        //todo: don't load config, already done??
-					else if (args[i] == "-c") {
-					    i++;
-                        Context.Configuration.LoadFile(args[i]);
-					}
                     else
 						PrintUsageAndExit();
 				}
@@ -112,7 +110,7 @@ namespace fitnesse.fitserver
 			PathParser parser = new PathParser(path);
 			foreach (string assemblyPath in parser.AssemblyPaths) {
                 if (assemblyPath == "defaultPath") continue;
-                Context.Configuration.GetItem<ApplicationUnderTest>().AddAssembly(assemblyPath.Replace("\"", string.Empty));
+                configuration.GetItem<ApplicationUnderTest>().AddAssembly(assemblyPath.Replace("\"", string.Empty));
 			}
 		    if (parser.HasConfigFilePath())
 				AppDomain.CurrentDomain.SetData("APP_CONFIG_FILE",parser.ConfigFilePath);

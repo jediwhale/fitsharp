@@ -6,6 +6,7 @@
 using System;
 using System.IO;
 using fitnesse.fitserver;
+using fitSharp.Machine.Application;
 using NUnit.Framework;
 
 namespace fit.Test.NUnit {
@@ -14,11 +15,13 @@ namespace fit.Test.NUnit {
     {
         private TestRunner runner;
         private const string TEST_FILE_NAME = "TestFile.xml";
+        private Configuration configuration;
 
         [SetUp]
         public void SetUp()
         {
             runner = new TestRunner();
+            configuration = new Configuration();
         }
 
         [TearDown]
@@ -51,10 +54,10 @@ namespace fit.Test.NUnit {
         [Test]
         public void TestParseArgs()
         {
-            bool result = runner.ParseArgs(new string[] {});
+            bool result = runner.ParseArgs(configuration, new string[] {});
             Assert.IsFalse(result);
 
-            result = runner.ParseArgs(new string[] {"localhost", "8081", "SomeTestPage"});
+            result = runner.ParseArgs(configuration, new string[] {"localhost", "8081", "SomeTestPage"});
             Assert.IsTrue(result);
             Assert.AreEqual("localhost", runner.host);
             Assert.AreEqual(8081, runner.port);
@@ -65,7 +68,7 @@ namespace fit.Test.NUnit {
         [Test]
         public void ExtraAssemblyArgs()
         {
-            bool result = runner.ParseArgs(new string[] {"host", "80", "SomePage", "fit.dll", "fit.config", "testTarget.dll"});
+            bool result = runner.ParseArgs(configuration, new string[] {"host", "80", "SomePage", "fit.dll", "fit.config", "testTarget.dll"});
             Assert.IsTrue(result);
             Assert.AreEqual("host", runner.host);
             Assert.AreEqual(80, runner.port);
@@ -80,7 +83,7 @@ namespace fit.Test.NUnit {
         [Test]
         public void TestParseArgsWithOptions()
         {
-            bool result = runner.ParseArgs(new string[] {"-v", "-debug", "-nopaths", "-suiteFilter", "myfilter", 
+            bool result = runner.ParseArgs(configuration, new string[] {"-v", "-debug", "-nopaths", "-suiteFilter", "myfilter", 
                 "-results", "stdout", "-format", "text", "localhost", "8081", "SomeTestPage"});
             Assert.IsTrue(runner.verbose);
             Assert.IsTrue(runner.debug);
@@ -97,7 +100,7 @@ namespace fit.Test.NUnit {
         [Test]
         public void TestParseArgsWithResultOption_StandardOut()
         {
-            bool result = runner.ParseArgs(new string[] {"-results", "stdout", "-format", "text", "localhost", "8081", "SomeTestPage"});
+            bool result = runner.ParseArgs(configuration, new string[] {"-results", "stdout", "-format", "text", "localhost", "8081", "SomeTestPage"});
             Assert.IsFalse(runner.verbose);
             Assert.IsFalse(runner.debug);
             Assert.IsTrue(runner.usingDownloadedPaths);
@@ -111,7 +114,7 @@ namespace fit.Test.NUnit {
         [Test]
         public void TestParseArgsWithResultOption_Filename()
         {
-            bool result = runner.ParseArgs(new string[] { "-results", TEST_FILE_NAME, "-format", "xml", "localhost", "8081", "SomeTestPage" });
+            bool result = runner.ParseArgs(configuration, new string[] { "-results", TEST_FILE_NAME, "-format", "xml", "localhost", "8081", "SomeTestPage" });
             Assert.IsFalse(runner.verbose);
             Assert.IsFalse(runner.debug);
             Assert.IsTrue(runner.usingDownloadedPaths);

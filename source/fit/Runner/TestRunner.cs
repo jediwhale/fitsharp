@@ -29,16 +29,10 @@ namespace fitnesse.fitserver
 	    public string suiteFilter = null;
 
 	    public int Run(string[] commandLineArguments, Configuration configuration, ProgressReporter reporter) {
-	        Run(commandLineArguments);
-	        return ExitCode();
-	    }
-
-		public void Run(string[] args)
-		{
-			if(!ParseArgs(args))
+			if(!ParseArgs(configuration, commandLineArguments))
 			{
 				PrintUsage();
-				return;
+				return ExitCode();
 			}
 			fixtureListener = new TestRunnerFixtureListener(this);
 			fitServer.fixtureListener = fixtureListener;
@@ -50,7 +44,8 @@ namespace fitnesse.fitserver
 			fitServer.CloseConnection();
 			fitServer.Exit();
 			resultWriter.Close();
-		}
+	        return ExitCode();
+	    }
 
 		public void AddAssemblies()
 		{
@@ -69,7 +64,7 @@ namespace fitnesse.fitserver
 			return fitServer == null ? -1 : fitServer.ExitCode();
 		}
 
-		public bool ParseArgs(string[] args)
+		public bool ParseArgs(Configuration configuration, string[] args)
 		{
 		    string resultsFile = null;
 		    string outputType = "text";
@@ -89,10 +84,6 @@ namespace fitnesse.fitserver
 						usingDownloadedPaths = false;
                     else if (option == "-suiteFilter")
                         suiteFilter = args[index++];
-                    else if (option == "-c") {
-                        //todo: don't?
-                        Context.Configuration.LoadFile(args[index++]);
-                    }
                     else if ("-format".Equals(option))
                         outputType = args[index++];
 					else
@@ -102,7 +93,7 @@ namespace fitnesse.fitserver
 				host = args[index++];
 				port = Int32.Parse(args[index++]);
 				pageName = args[index++];
-			    fitServer = new FitServer(host, port, debug);
+			    fitServer = new FitServer(configuration, host, port, debug);
 			    string assemblies = null;
 				while(args.Length > index)
 					assemblies = assemblies == null ? args[index++] : (assemblies + ";" + args[index++]);
