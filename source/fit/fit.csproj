@@ -86,7 +86,6 @@
     <Compile Include="IO\SocketUtils.cs" />
     <Compile Include="IO\SocketWrapper.cs" />
     <Compile Include="IO\TimeKeeper.cs" />
-    <Compile Include="Model\CellSubstring.cs" />
     <Compile Include="Model\ParseTable.cs" />
     <Compile Include="Model\ScientificDouble.cs" />
     <Compile Include="Model\ValueArray.cs" />

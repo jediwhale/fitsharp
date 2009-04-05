@@ -6,8 +6,9 @@
 
 using System;
 using fit;
+using fitlibrary.table;
 
-namespace fitlibrary.table {
+namespace fitlibrary {
 
     public class TableAdapter: CellFactory {
 

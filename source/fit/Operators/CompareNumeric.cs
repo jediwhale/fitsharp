@@ -5,8 +5,6 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System;
-using System.Web;
-using fit.Model;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
@@ -29,10 +27,10 @@ namespace fit.Operators {
                 || Array.IndexOf(numericTypes, instance.Type) < 0) return false;
 
             object actual = instance.Value;
-            Comparison comparison = FindComparison(parameters.Value.Text);
+            Cell cell = parameters.Value;
+            Comparison comparison = FindComparison(cell.Text);
 
-            Parse cell = (Parse)parameters.Value;
-            var rest = new CellSubstring(cell, comparison.Operator);
+            var rest = new CellSubstring(cell, cell.Text.Substring(comparison.Operator.Length));
             object expected = processor.Parse(instance.Type, rest).Value;
             parameters.Value.AddToAttribute(CellAttributes.InformationPrefixKey, actual.ToString(), CellAttributes.PrefixFormat);
 

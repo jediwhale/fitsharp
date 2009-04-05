@@ -9,9 +9,7 @@ using fitSharp.Machine.Model;
 namespace fitSharp.Fit.Model {
     public class StringCell: Tree<Cell>, Cell {
         public StringCell(string text) { Text = text; }
-        public string Body { get { return Text; } }
         public string Text { get; private set; }
-        //todo: refine interface?
         public string GetAttribute(string key) { return string.Empty; }
         public void SetAttribute(string key, string value) {}
         public void AddToAttribute(string key, string value, string format) {}

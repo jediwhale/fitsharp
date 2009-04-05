@@ -5,7 +5,6 @@
 
 namespace fitSharp.Fit.Model {
     public interface Cell {
-        string Body { get; }
         string Text { get; }
         string GetAttribute(string key);
         void SetAttribute(string key, string value);
