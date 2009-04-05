@@ -4,6 +4,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using fit;
+using fitSharp.Fit.Model;
 
 namespace fitlibrary {
 
@@ -103,11 +104,11 @@ namespace fitlibrary {
                 originalNode = node;
                 Node = node.Copy();
                 if (HasKeyword("right")) {
-                    Node.SetClass("pass");
+                    Node.SetAttribute(CellAttributes.StatusKey, CellAttributes.PassStatus);
                     if (BodyStartsWith("right")) Node.SetBody(Node.Body.Substring(7));
                 }
                 else if (HasKeyword("wrong")) {
-                    Node.SetClass("fail");
+                    Node.SetAttribute(CellAttributes.StatusKey, CellAttributes.FailStatus);
                     if (BodyStartsWith("wrong")) Node.SetBody(Node.Body.Substring(7));
                     else Node.SetBody("IGNORE");
                 }

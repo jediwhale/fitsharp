@@ -6,7 +6,9 @@
 namespace fitSharp.Fit.Model {
     public interface Cell {
         string Body { get; }
-        void SetBody(string body);
         string Text { get; }
+        string GetAttribute(string key);
+        void SetAttribute(string key, string value);
+        void AddToAttribute(string key, string value, string format);
     }
 }

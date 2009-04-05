@@ -5,6 +5,7 @@
 
 using System.Text;
 using fitnesse.fixtures;
+using fitSharp.Fit.Model;
 using NUnit.Framework;
 
 namespace fit.Test.NUnit
@@ -94,15 +95,15 @@ namespace fit.Test.NUnit
 		public void TestRight()
 		{
 			Assert.AreEqual(1, myStoryTest.Counts.Right);
-			Assert.IsTrue(getFinishedTable().At(0,1,0).Tag.IndexOf("class=\"pass\"") > 0);
+            Assert.AreEqual(CellAttributes.PassStatus, getFinishedTable().At(0,1,0).GetAttribute(CellAttributes.StatusKey));
 		}
 
 		[Test]
 		public void TestWrong()
 		{
 			Assert.AreEqual(2, myStoryTest.Counts.Wrong);
-			Assert.IsTrue(getFinishedTable().At(0,1,1).Tag.IndexOf("class=\"fail\"") > 0);
-			Assert.IsTrue(getFinishedTable().At(0,1,2).Tag.IndexOf("class=\"fail\"") > 0);
+            Assert.AreEqual(CellAttributes.FailStatus, getFinishedTable().At(0,1,1).GetAttribute(CellAttributes.StatusKey));
+            Assert.AreEqual(CellAttributes.FailStatus, getFinishedTable().At(0,1,2).GetAttribute(CellAttributes.StatusKey));
 			Assert.IsTrue(getFinishedTable().At(0,1,2).Body.IndexOf("actual") > 0);
 		}
 
@@ -110,7 +111,7 @@ namespace fit.Test.NUnit
 		public void TestIgnore()
 		{
 			Assert.AreEqual(1, myStoryTest.Counts.Ignores);
-			Assert.IsTrue(getFinishedTable().At(0,1,3).Tag.IndexOf("class=\"ignore\"") > 0);
+            Assert.AreEqual(CellAttributes.IgnoreStatus, getFinishedTable().At(0,1,3).GetAttribute(CellAttributes.StatusKey));
 		}
 
 		[Test]

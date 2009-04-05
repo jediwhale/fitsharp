@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Web;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
 
@@ -15,16 +16,19 @@ namespace fit
 {
 	public class Parse: Tree<Cell>, Cell
 	{
+
 		private string leader;
 		private string tag;
 		private string body;
 		private string end;
 		private string trailer;
 
-		private Parse more;
+	    private Parse more;
 		private Parse parts;
 
 	    private string originalBody;
+
+        private CellAttributes Attributes { get; set; }
 
 		public string Leader
 		{
@@ -32,7 +36,11 @@ namespace fit
 		}
 
         public string Tag {
-            get { return tag; }
+            get {
+	            int space = tag.IndexOf(' ');
+	            if (space < 0) space = tag.Length - 1;
+	            return !Attributes.HasAttribute(CellAttributes.StatusKey) ? tag : string.Format("{0} class=\"{1}\"{2}", tag.Substring(0, space), GetAttribute(CellAttributes.StatusKey), tag.Substring(space));
+            }
         }
 
         // added
@@ -40,14 +48,36 @@ namespace fit
             get { return end; }
         }
 
-        public string Body
-		{
-            get { return body; }
+        public string Body {
+            get {
+                string result = body;
+                if (Attributes.HasAttribute(CellAttributes.InformationPrefixKey)) {
+                    result = string.Format("<span class=\"fit_grey\">{0}</span>{1}", GetAttribute(CellAttributes.InformationPrefixKey), result);
+                }
+                if (Attributes.HasAttribute(CellAttributes.InformationSuffixKey)) {
+                    result = string.Format("{0}<span class=\"fit_grey\">{1}</span>", result, GetAttribute(CellAttributes.InformationSuffixKey));
+                }
+                if (Attributes.HasAttribute(CellAttributes.ActualKey)) {
+                    result += Label("expected") + "<hr />" + HttpUtility.HtmlEncode(GetAttribute(CellAttributes.ActualKey)) + Label("actual");
+                }
+                if (Attributes.HasAttribute(CellAttributes.ExceptionKey)) {
+                    result += "<hr /><pre><div class=\"fit_stacktrace\">" + GetAttribute(CellAttributes.ExceptionKey) + "</div></pre>";
+                }
+                if (Attributes.HasAttribute(CellAttributes.LabelKey)) {
+                    result += Label(GetAttribute(CellAttributes.LabelKey));
+                }
+                return result;
+            }
         }
 
 		public void SetBody(string val)
 		{
 			body = val;
+		}
+
+		public virtual void AddToBody(string text)
+		{
+		    AddToAttribute(CellAttributes.InformationSuffixKey, text, CellAttributes.SuffixFormat);
 		}
 
 		public string Trailer
@@ -69,8 +99,10 @@ namespace fit
             set { parts = value;}
 		}
 
+        private Parse() { Attributes = new CellAttributes(); }
+
         //added
-        public Parse(string theTag, string theEnd, string theLeader, string theBody, Parse theParts) {
+        public Parse(string theTag, string theEnd, string theLeader, string theBody, Parse theParts): this() {
             tag = theTag;
             end = theEnd;
             leader = theLeader;
@@ -79,7 +111,7 @@ namespace fit
             parts = theParts;
         }
 
-		public Parse(string tag, string body, Parse parts, Parse more)
+		public Parse(string tag, string body, Parse parts, Parse more): this()
 		{
 			this.leader = "\n";
 			this.tag = "<" + tag + ">";
@@ -99,6 +131,22 @@ namespace fit
 		public Parse(string text, string[] tags) : this(text, tags, 0, 0)
 		{}
 
+	    public void SetAttribute(string key, string value) {
+            Attributes.SetAttribute(key, value);
+        }
+
+	    public void AddToAttribute(string key, string value, string format) {
+	        Attributes.AddToAttribute(key, value, format);
+	    }
+
+	    public string GetAttribute(string key) {
+            return Attributes.GetAttribute(key);
+        }
+
+	    private static string Label(string text) {
+			return " <span class=\"fit_label\">" + text + "</span>";
+		}
+
 		private static string Substring(string text, int startIndexInclusive, int endIndexExclusive)
 		{
 			return text.Substring(startIndexInclusive, endIndexExclusive - startIndexInclusive);
@@ -113,7 +161,7 @@ namespace fit
 				return result;
 		}
 
-		public Parse(string text, string[] tags, int level, int offset)
+		public Parse(string text, string[] tags, int level, int offset): this()
 		{
 			string lc = text.ToLower();
 			string target = tags[level].ToLower();
@@ -235,23 +283,6 @@ namespace fit
 				return null;
 		}
 
-		public virtual void AddToTag(string text)
-		{
-			int last = tag.Length - 1;
-			tag = Substring(tag, 0, last) + text + ">";
-		}
-	    
-	    public void SetClass(string theClassName) {
-	        int space = tag.IndexOf(' ');
-	        if (space < 0) space = tag.Length - 1;
-	        tag = string.Format("{0} class=\"{1}\"{2}", tag.Substring(0, space), theClassName, tag.Substring(space));
-	    }
-
-		public virtual void AddToBody(string text)
-		{
-			body = body + text;
-		}
-
 		public virtual void Print(TextWriter output)
 		{
 			output.Write(ToString());
@@ -266,10 +297,10 @@ namespace fit
 		private StringBuilder BuildString(StringBuilder builder)
 		{
 			builder.Append(leader);
-			builder.Append(tag);
+			builder.Append(Tag);
             // change
 			if (parts != null) builder.Append(parts.BuildString(new StringBuilder()));
-            if (body != null) builder.Append(body);
+            builder.Append(Body);
             // end change
 			builder.Append(end);
 			if (more != null)
@@ -321,13 +352,14 @@ namespace fit
 
         public Parse DeepCopy() {
             return new Parse(tag, end, leader, body, (parts == null ? null : parts.DeepCopy())) {
+                Attributes = Attributes,
                 trailer = trailer,
                 more = (more == null ? null : more.DeepCopy())
             };
         }
 
         public Parse Copy() {
-            return new Parse(tag, end, leader, body, parts) {trailer = trailer};
+            return new Parse(tag, end, leader, body, parts) {trailer = trailer, Attributes = Attributes};
         }
 
 	    public override Cell Value { get { return this; } }

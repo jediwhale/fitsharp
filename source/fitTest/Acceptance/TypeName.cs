@@ -4,7 +4,6 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System;
-using fit.Engine;
 using fitSharp.Machine.Application;
 
 namespace fit.Test.Acceptance {
@@ -13,7 +12,7 @@ namespace fit.Test.Acceptance {
 
         public TypeName(string name) {
             try {
-                type = Context.Configuration.GetItem<Service>().Create(name).Type;
+                type = Context.Configuration.GetItem<Service.Service>().Create(name).Type;
             }
             catch (Exception) {}
         }

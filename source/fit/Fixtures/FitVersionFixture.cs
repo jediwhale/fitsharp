@@ -4,7 +4,6 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System.Configuration;
-using fit.Engine;
 using fitSharp.Fit.Operators;
 using fitSharp.Machine.Application;
 
@@ -23,8 +22,8 @@ namespace fit {
                 myVersion = Args[0].Trim().ToLower();
                 //todo: clean up
                 if (myVersion.ToLower().IndexOf("fitlibrary1") >= 0) {
-                    Context.Configuration.GetItem<Service>().RemoveOperator(typeof (ParseMemberName).FullName);
-                    Context.Configuration.GetItem<Service>().AddOperator(new ParseMemberNameExtended());
+                    Context.Configuration.GetItem<Service.Service>().RemoveOperator(typeof (ParseMemberName).FullName);
+                    Context.Configuration.GetItem<Service.Service>().AddOperator(new ParseMemberNameExtended());
                 }
             }
         }

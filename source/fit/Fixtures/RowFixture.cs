@@ -6,6 +6,7 @@
 using System;
 using System.Collections;
 using fitlibrary;
+using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
 
 namespace fit
@@ -145,14 +146,14 @@ namespace fit
 		private void MarkRowAsMissing(Parse row)
 		{
 			Parse cell = row.Parts;
-			cell.AddToBody(Label("missing"));
+			cell.SetAttribute(CellAttributes.LabelKey, "missing");
 			Wrong(cell);
 		}
 
 		private void MarkRowAsSurplus(Parse row)
 		{
 			Wrong(row.Parts);
-			row.Parts.AddToBody(Label("surplus"));
+			row.Parts.SetAttribute(CellAttributes.LabelKey, "surplus");
 		}
 
 		public override object GetTargetObject()

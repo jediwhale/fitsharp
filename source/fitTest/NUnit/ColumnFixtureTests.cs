@@ -5,7 +5,6 @@
 
 using System.Collections;
 using System.Text;
-using fit.Engine;
 using NUnit.Framework;
 
 namespace fit.Test.NUnit {
@@ -70,7 +69,7 @@ namespace fit.Test.NUnit {
             builder.Append("<tr><td>first call</td><td>second call</td></tr>");
             builder.Append("</table>");
             Parse table = new Parse(builder.ToString());
-            ExecuteTestFixture testFixture = new ExecuteTestFixture { Service = new Service()};
+            ExecuteTestFixture testFixture = new ExecuteTestFixture { Service = new Service.Service()};
             testFixture.DoTable(table);
             Assert.AreEqual(3, testFixture.Values.Count);
             Assert.AreEqual("first call", testFixture.Values[0]);
@@ -89,7 +88,7 @@ namespace fit.Test.NUnit {
             builder.Append("<tr><td>first call</td><td>null</td><td>second call</td></tr>");
             builder.Append("</table>");
             Parse table = new Parse(builder.ToString());
-            ExecuteTestFixture testFixture = new ExecuteTestFixture { Service = new Service()};
+            ExecuteTestFixture testFixture = new ExecuteTestFixture { Service = new Service.Service()};
             testFixture.DoTable(table);
             Assert.AreEqual(3, testFixture.Values.Count);
             Assert.AreEqual("first call", testFixture.Values[0]);
@@ -108,7 +107,7 @@ namespace fit.Test.NUnit {
             builder.Append("<tr><td>first call</td><td>true</td></tr>");
             builder.Append("</table>");
             Parse table = new Parse(builder.ToString());
-            ExecuteTestFixture testFixture = new ExecuteTestFixture { Service = new Service()};
+            ExecuteTestFixture testFixture = new ExecuteTestFixture { Service = new Service.Service()};
             testFixture.DoTable(table);
             Assert.AreEqual(3, testFixture.Values.Count);
             Assert.AreEqual("first call", testFixture.Values[0]);
@@ -153,7 +152,7 @@ namespace fit.Test.NUnit {
             builder.Append("<tr><td>2</td></tr>");
             builder.Append("</table>");
             Parse table = new Parse(builder.ToString());
-            ExecuteTestFixture testFixture = new ExecuteTestFixture { Service = new Service()};
+            ExecuteTestFixture testFixture = new ExecuteTestFixture { Service = new Service.Service()};
             testFixture.DoTable(table);
             Assert.AreEqual(4, testFixture.Values.Count);
             Assert.AreEqual("Execute()", testFixture.Values[0]);

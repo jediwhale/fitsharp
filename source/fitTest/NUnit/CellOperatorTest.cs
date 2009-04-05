@@ -15,7 +15,7 @@ using NUnit.Framework;
 namespace fit.Test.NUnit {
 
     public class CellOperatorTest {
-        protected Service service;
+        protected Service.Service service;
         protected StringFixture stringFixture;
         protected IntFixture intFixture;
         protected PersonFixture personFixture;
@@ -43,28 +43,28 @@ namespace fit.Test.NUnit {
         }
 
         public void MakeStringFixture() {
-            service = new Service();
+            service = new Service.Service();
             stringFixture = new StringFixture { Service = service };
         }
 
         public void MakePersonFixture() {
-            service = new Service();
+            service = new Service.Service();
             personFixture = new PersonFixture { Service = service };
         }
 
         public void MakeIntFixture() {
-            service = new Service();
+            service = new Service.Service();
             intFixture = new IntFixture { Service = service };
         }
 
         public static void AssertCellPasses(Parse cell)
         {
-            Assert.IsTrue(cell.Tag.IndexOf("pass") > -1);
+            Assert.AreEqual(CellAttributes.PassStatus, cell.GetAttribute(CellAttributes.StatusKey));
         }
 
         public static void AssertCellFails(Parse cell)
         {
-            Assert.IsTrue(cell.Tag.IndexOf("fail") > -1);
+            Assert.AreEqual(CellAttributes.FailStatus, cell.GetAttribute(CellAttributes.StatusKey));
         }
 
         public static void AssertValueInBody(Parse cell, string value)

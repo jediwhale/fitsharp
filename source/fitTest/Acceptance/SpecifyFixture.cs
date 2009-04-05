@@ -5,6 +5,7 @@
 
 using fitlibrary;
 using fitlibrary.exception;
+using fitSharp.Fit.Model;
 
 namespace fit.Test.Acceptance {
     public class SpecifyFixture: Fixture {
@@ -28,7 +29,8 @@ namespace fit.Test.Acceptance {
                 }
                 else {
                     Wrong(expectedCell);
-                    expectedCell.More = ParseNode.Fail(ParseNode.MakeCells(Escape(differences)));
+                    expectedCell.More = ParseNode.MakeCells(Escape(differences));
+                    expectedCell.More.SetAttribute(CellAttributes.StatusKey, CellAttributes.FailStatus);
                 }
             }
         }
@@ -66,7 +68,7 @@ namespace fit.Test.Acceptance {
             public void TablesFinished(Parse theTables, Counts counts) {}
 
             public void TableFinished(Parse finishedTable) {
-                Parse newTable = ParseNode.Clone(finishedTable);
+                Parse newTable = finishedTable.Copy();
                 if (myTables == null) {
                     myTables = newTable;
                 }

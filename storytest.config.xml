@@ -18,8 +18,8 @@
         <addAssembly>build\debug\fittest.dll</addAssembly>
     </ApplicationUnderTest>
     
-    <fit.Engine.Service>
+    <fit.Service.Service>
         <addOperator>fit.Operators.ExecuteParse</addOperator>
-    </fit.Engine.Service>
+    </fit.Service.Service>
     
 </suiteConfig>

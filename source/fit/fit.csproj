@@ -51,7 +51,7 @@
     <Compile Include="Fixtures\FileSystem.cs" />
     <Compile Include="Fixtures\FixtureResult.cs" />
     <Compile Include="Engine\OperationType.cs" />
-    <Compile Include="Engine\Service.cs" />
+    <Compile Include="Service\Service.cs" />
     <Compile Include="Exception\FitFailureException.cs" />
     <Compile Include="Exception\RowWidthException.cs" />
     <Compile Include="Exception\TableStructureException.cs" />
@@ -86,6 +86,7 @@
     <Compile Include="IO\SocketUtils.cs" />
     <Compile Include="IO\SocketWrapper.cs" />
     <Compile Include="IO\TimeKeeper.cs" />
+    <Compile Include="Model\CellSubstring.cs" />
     <Compile Include="Model\ParseTable.cs" />
     <Compile Include="Model\ScientificDouble.cs" />
     <Compile Include="Model\ValueArray.cs" />

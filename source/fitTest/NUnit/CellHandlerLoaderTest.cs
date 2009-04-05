@@ -4,7 +4,6 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System.Text;
-using fit.Engine;
 using fitSharp.Fit.Operators;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Model;
@@ -17,7 +16,7 @@ namespace fit.Test.NUnit {
         [SetUp]
         public void SetUp()
         {
-            Context.Configuration.GetItem<Service>().RemoveOperator(typeof (CompareSubstring).FullName);
+            Context.Configuration.GetItem<Service.Service>().RemoveOperator(typeof (CompareSubstring).FullName);
         }
 
         [Test]
@@ -29,26 +28,26 @@ namespace fit.Test.NUnit {
             builder.Append("<tr><td colspan=\"2\">cell handler loader</td></tr>");
             builder.Append("<tr><td>load</td><td>substring handler</td></tr>");
             builder.Append("</table>");
-            Assert.IsFalse(Context.Configuration.GetItem<Service>().Compare(new TypedValue("abc"), TestUtils.CreateCell("..b..")));
+            Assert.IsFalse(Context.Configuration.GetItem<Service.Service>().Compare(new TypedValue("abc"), TestUtils.CreateCell("..b..")));
             StoryTest test = new StoryTest(new Parse(builder.ToString()));
             test.ExecuteOnConfiguration();
-            Assert.IsTrue(Context.Configuration.GetItem<Service>().Compare(new TypedValue("abc"), TestUtils.CreateCell("..b..")));
+            Assert.IsTrue(Context.Configuration.GetItem<Service.Service>().Compare(new TypedValue("abc"), TestUtils.CreateCell("..b..")));
         }
 
         [Test]
         public void TestRemoveHandler()
         {
             TestUtils.InitAssembliesAndNamespaces();
-            Context.Configuration.GetItem<Service>().AddOperator(new CompareSubstring());
+            Context.Configuration.GetItem<Service.Service>().AddOperator(new CompareSubstring());
             StringBuilder builder = new StringBuilder();
             builder.Append("<table>");
             builder.Append("<tr><td colspan=\"2\">CellHandlerLoader</td></tr>");
             builder.Append("<tr><td>remove</td><td>SubstringHandler</td></tr>");
             builder.Append("</table>");
-            Assert.IsTrue(Context.Configuration.GetItem<Service>().Compare(new TypedValue("abc"), TestUtils.CreateCell("..b..")));
+            Assert.IsTrue(Context.Configuration.GetItem<Service.Service>().Compare(new TypedValue("abc"), TestUtils.CreateCell("..b..")));
             StoryTest test = new StoryTest(new Parse(builder.ToString()));
             test.ExecuteOnConfiguration();
-            Assert.IsFalse(Context.Configuration.GetItem<Service>().Compare(new TypedValue("abc"), TestUtils.CreateCell("..b..")));
+            Assert.IsFalse(Context.Configuration.GetItem<Service.Service>().Compare(new TypedValue("abc"), TestUtils.CreateCell("..b..")));
         }
     }
 }

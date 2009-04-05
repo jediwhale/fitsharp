@@ -59,9 +59,9 @@ Numeric comparisons can be combined with symbol recall.<br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>CellMatching</td></tr>
 <tr><td>actual type</td><td>actual value</td><td>expected value</td><td></td><td>matches</td><td>expected cell</td><td></td><td></td></tr>
-<tr><td>int</td><td>3</td><td>>&lt;&lt;four</td><td></td><td>False</td><td>3>4 &lt;span class="fit_grey">&amp;lt;&amp;lt;four&lt;/span></td><td></td><td>symbol values can be recalled for comparison</td></tr>
-<tr><td>int</td><td>3</td><td>&lt; &lt;&lt;four</td><td></td><td>True</td><td>3&lt; 4 &lt;span class="fit_grey">&amp;lt;&amp;lt;four&lt;/span></td><td></td><td>use whitespace to disambiguate 'less than' and 'recall'</td></tr>
-<tr><td>int</td><td>3</td><td>'&lt;&lt;four'</td><td></td><td>False</td><td>4 &lt;span class="fit_grey">&amp;lt;&amp;lt;four&lt;/span></td><td></td><td>this is recall, not a comparison</td></tr>
+<tr><td>int</td><td>3</td><td>>&lt;&lt;four</td><td></td><td>False</td><td>&lt;span class="fit_grey">3 &lt;/span>&amp;gt;&amp;lt;&amp;lt;four&lt;span class="fit_grey"> 4&lt;/span></td><td></td><td>symbol values can be recalled for comparison</td></tr>
+<tr><td>int</td><td>3</td><td>&lt; &lt;&lt;four</td><td></td><td>True</td><td>&lt;span class="fit_grey">3 &lt;/span>&amp;lt; &amp;lt;&amp;lt;four&lt;span class="fit_grey"> 4&lt;/span></td><td></td><td>use whitespace to disambiguate 'less than' and 'recall'</td></tr>
+<tr><td>int</td><td>3</td><td>'&lt;&lt;four'</td><td></td><td>False</td><td>&amp;lt;&amp;lt;four&lt;span class="fit_grey"> 4&lt;/span></td><td></td><td>this is recall, not a comparison</td></tr>
 </table>
 </div>
 <div style="width:100%;text-align:right">

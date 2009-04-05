@@ -49,7 +49,7 @@ namespace fit {
 
         public void Execute() {
 		    var saveConfig = new Configuration(Context.Configuration);
-            saveConfig.GetItem<Service>().ApplicationUnderTest = saveConfig.GetItem<ApplicationUnderTest>();
+            saveConfig.GetItem<Service.Service>().ApplicationUnderTest = saveConfig.GetItem<ApplicationUnderTest>();
             ExecuteOnConfiguration();
 		    Context.Configuration = saveConfig;
         }
@@ -89,7 +89,7 @@ namespace fit {
                 return;
             }
             myFirstFixture.TestStatus = TestStatus;
-            myFirstFixture.Service = Context.Configuration.GetItem<Service>();
+            myFirstFixture.Service = Context.Configuration.GetItem<Service.Service>();
             DoTables(myFirstFixture, Tables);
         }
 
@@ -146,7 +146,7 @@ namespace fit {
             public void TablesFinished(Parse theTables, Counts counts) {}
 
             public void TableFinished(Parse finishedTable) {
-                Parse newTable = ParseNode.Clone(finishedTable);
+                Parse newTable = finishedTable.Copy();
                 if (myTables == null) {
                     myTables = newTable;
                 }

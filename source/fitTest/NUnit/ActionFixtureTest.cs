@@ -4,7 +4,6 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System.Text;
-using fit.Engine;
 using fit.Test.Acceptance;
 using NUnit.Framework;
 
@@ -44,7 +43,7 @@ namespace fit.Test.NUnit {
         public void TestStart()
         {
             table = new Parse(BuildTable("ActionFixture"));
-            ActionFixture fixture = new ActionFixture { Service = new Service() };
+            ActionFixture fixture = new ActionFixture { Service = new Service.Service() };
             fixture.DoTable(table);
             Assert.AreEqual(0, fixture.Counts.Exceptions, table.ToString());
             Assert.IsNotNull((CountFixture) fixture.GetTargetObject());
@@ -54,7 +53,7 @@ namespace fit.Test.NUnit {
         public void TestCheck()
         {
             table = new Parse(BuildTable("ActionFixture"));
-            ActionFixture fixture = new ActionFixture{ Service = new Service() };
+            ActionFixture fixture = new ActionFixture{ Service = new Service.Service() };
             fixture.DoTable(table);
             Assert.AreEqual(0, fixture.Counts.Exceptions, table.ToString());
             CountFixture countFixture = (CountFixture)fixture.GetTargetObject();
@@ -67,7 +66,7 @@ namespace fit.Test.NUnit {
         public void TestCheckOnTimedActionFixture()
         {
             table = new Parse(BuildTable("TimedActionFixture"));
-            ActionFixture fixture = new ActionFixture{ Service = new Service() };
+            ActionFixture fixture = new ActionFixture{ Service = new Service.Service() };
             fixture.DoTable(table);
             Assert.AreEqual(0, fixture.Counts.Exceptions, table.ToString());
             CountFixture countFixture = (CountFixture)fixture.GetTargetObject();

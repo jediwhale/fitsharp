@@ -30,10 +30,16 @@ namespace fit.Operators {
 	    }
 
 	    private static void ShowActual(ExecuteParameters parameters, object actual) {
-	        parameters.Cell.SetBody(parameters.Cell.Body + Fixture.Gray(
-	            actual == null ? "null"
+            parameters.Cell.AddToAttribute(
+                CellAttributes.InformationSuffixKey,
+                actual == null ? "null"
 	            : actual.ToString().Length == 0 ? "blank"
-	            : actual.ToString()));
+	            : actual.ToString(),
+                CellAttributes.SuffixFormat);
+	        //parameters.Cell.SetBody(parameters.Cell.Body + Fixture.Gray(
+	        //    actual == null ? "null"
+	        //    : actual.ToString().Length == 0 ? "blank"
+	        //    : actual.ToString()));
 	    }
 	}
 }

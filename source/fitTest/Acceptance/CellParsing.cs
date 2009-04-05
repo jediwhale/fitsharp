@@ -19,7 +19,7 @@ namespace fit.Test.Acceptance {
     public class CellParsing: SequenceFixture {
 
         public string ParseWithCustomParser(string theSource) {
-            Context.Configuration.GetItem<Service>().AddOperator(new SampleCustomParser());
+            Context.Configuration.GetItem<Service.Service>().AddOperator(new SampleCustomParser());
             CellParsingTestClass testClass = (CellParsingTestClass)
                                              InputValue(new Parse("td", theSource, null, null), typeof(CellParsingTestClass));
             string result =  QuotedString(testClass.ToString());
@@ -45,7 +45,7 @@ namespace fit.Test.Acceptance {
         }
 
         private bool IsEqual(Parse cell, object value) {
-            return new CellOperation(new Service()).Compare(new TypedValue(value), cell);
+            return new CellOperation(new Service.Service()).Compare(new TypedValue(value), cell);
         }
 
         public bool CheckParseInteger(Parse theCells) {
@@ -64,7 +64,7 @@ namespace fit.Test.Acceptance {
         }
 
         private object InputValue(Parse cell, Type theType) {
-            return Context.Configuration.GetItem<Service>().Parse(theType, new TypedValue(this), cell).Value;
+            return Context.Configuration.GetItem<Service.Service>().Parse(theType, new TypedValue(this), cell).Value;
         }
 
         private static string QuotedString(string theSourceString) {

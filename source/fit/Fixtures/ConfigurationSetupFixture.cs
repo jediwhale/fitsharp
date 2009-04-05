@@ -4,7 +4,6 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using fitlibrary;
-using fit.Engine;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
 
@@ -19,7 +18,7 @@ namespace fit {
         public DoFixture ApplicationUnderTest() { return new DoFixture(Context.Configuration.GetItem<ApplicationUnderTest>()); }
 
         //look at
-        public DoFixture Service() { return new DoFixture(Context.Configuration.GetItem<Service>()); }
+        public DoFixture Service() { return new DoFixture(Context.Configuration.GetItem<Service.Service>()); }
 
         public DoFixture GetItem(string type) { return new DoFixture(Context.Configuration.GetItem(type));}
     }

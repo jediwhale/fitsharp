@@ -25,51 +25,47 @@ namespace fit.Test.NUnit {
         [Test]
         public void TestDoCheckExceptionClassRight()
         {
-            //???ObjectFactory.AddNamespace("System");
             Parse cell = TestUtils.CreateCell("exception[NullReferenceException]");
             MakeExceptionFixture();
             exceptionFixture.CellOperation.Check(exceptionFixture, TestUtils.CreateCellRange("ThrowNullReferenceException"), cell);
-            Assert.IsTrue(cell.Tag.IndexOf("pass") > -1);
+            AssertCellPasses(cell);
             VerifyCounts(exceptionFixture, 1, 0, 0, 0);
         }
 
         [Test]
         public void TestDoCheckErrorClassWrong()
         {
-            //???ObjectFactory.AddNamespace("System");
             Parse cell = TestUtils.CreateCell("exception[NullReferenceException]");
             MakeExceptionFixture();
             exceptionFixture.CellOperation.Check(exceptionFixture, TestUtils.CreateCellRange("ThrowApplicationException"), cell);
-            Assert.IsTrue(cell.Tag.IndexOf("fail") > -1);
+            AssertCellFails(cell);
             VerifyCounts(exceptionFixture, 0, 1, 0, 0);
         }
 
         [Test]
         public void TestDoCheckExceptionMessageRight()
         {
-            //???ObjectFactory.AddNamespace("System");
             Parse cell = TestUtils.CreateCell("exception[\"an exception\"]");
             MakeExceptionFixture();
             exceptionFixture.Message = "an exception";
             exceptionFixture.CellOperation.Check(exceptionFixture, TestUtils.CreateCellRange("ThrowApplicationException"), cell);
-            Assert.IsTrue(cell.Tag.IndexOf("pass") > -1);
+            AssertCellPasses(cell);
             VerifyCounts(exceptionFixture, 1, 0, 0, 0);
         }
 
         [Test]
         public void TestDoCheckExceptionMessageAndClassRight()
         {
-            //???ObjectFactory.AddNamespace("System");
             Parse cell = TestUtils.CreateCell("exception[ApplicationException: \"an exception\"]");
             MakeExceptionFixture();
             exceptionFixture.Message = "an exception";
             exceptionFixture.CellOperation.Check(exceptionFixture, TestUtils.CreateCellRange("ThrowApplicationException"), cell);
-            Assert.IsTrue(cell.Tag.IndexOf("pass") > -1);
+            AssertCellPasses(cell);
             VerifyCounts(exceptionFixture, 1, 0, 0, 0);
         }
 
         private void MakeExceptionFixture() {
-            service = new Service();
+            service = new Service.Service();
             exceptionFixture = new ExceptionThrowingFixture { Service = service };
         }
     }

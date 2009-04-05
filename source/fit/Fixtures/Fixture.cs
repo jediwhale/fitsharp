@@ -18,7 +18,7 @@ namespace fit
 	{
 		private string[] args;
 
-        public Service Service { get; set; }
+        public Service.Service Service { get; set; }
 
 	    public TestStatus TestStatus = new TestStatus();
 
@@ -84,41 +84,41 @@ namespace fit
 
 		public virtual void Right(Parse cell)
 		{
-			cell.SetClass("pass");
+			cell.SetAttribute(CellAttributes.StatusKey, CellAttributes.PassStatus);
 			Counts.Right++;
 		}
 
 		public virtual void Wrong(Parse cell)
 		{
-            cell.SetClass("fail");
+			cell.SetAttribute(CellAttributes.StatusKey, CellAttributes.FailStatus);
 			Counts.Wrong++;
 		}
 
 		public virtual void Wrong(Parse cell, string actual)
 		{
-			Wrong(cell);
-			cell.AddToBody(Label("expected") + "<hr />" + Escape(actual) + Label("actual"));
+		    cell.SetAttribute(CellAttributes.ActualKey, actual);
+		    Wrong(cell);
 		}
 
 		public virtual void Ignore(Parse cell)
 		{
-            cell.SetClass("ignore");
+			cell.SetAttribute(CellAttributes.StatusKey, CellAttributes.IgnoreStatus);
 			Counts.Ignores++;
 		}
 
-		public virtual void Exception(Parse cell, Exception Exception)
+		public virtual void Exception(Parse cell, Exception exception)
 		{
-            if (Exception is IgnoredException) return;
+            if (exception is IgnoredException) return;
 
-            if (ContainsAbandonStoryTestException(Exception) && TestStatus.IsAbandoned) throw new AbandonStoryTestException();
+            if (ContainsAbandonStoryTestException(exception) && TestStatus.IsAbandoned) throw new AbandonStoryTestException();
 
-            if (cell.Body.IndexOf("class=\"fit_stacktrace\"") < 0) {
-                cell.AddToBody("<hr /><pre><div class=\"fit_stacktrace\">" + Exception + "</div></pre>");
-                cell.SetClass("error");
+            if (cell.GetAttribute(CellAttributes.StatusKey) != CellAttributes.ErrorStatus) {
+                cell.SetAttribute(CellAttributes.ExceptionKey, exception.ToString());
+                cell.SetAttribute(CellAttributes.StatusKey, CellAttributes.ErrorStatus);
                 Counts.Exceptions++;
             }
 
-		    if (ContainsAbandonStoryTestException(Exception)) {
+		    if (ContainsAbandonStoryTestException(exception)) {
 	            TestStatus.IsAbandoned = true;
 	            throw new AbandonStoryTestException();
             }
@@ -164,7 +164,7 @@ namespace fit
 		}
 
         public static object LoadClass(string theClassName) {
-            return Context.Configuration.GetItem<Service>().Create(theClassName.Trim()).Value;
+            return Context.Configuration.GetItem<Service.Service>().Create(theClassName.Trim()).Value;
         }
 
 		public static Fixture LoadFixture(string theClassName)
@@ -181,19 +181,19 @@ namespace fit
 
 		public static object Recall(string key)
 		{
-		    return Context.Configuration.GetItem<Service>().Contains(new Symbol(key))
-		               ? Context.Configuration.GetItem<Service>().Load(new Symbol(key)).Instance
+		    return Context.Configuration.GetItem<Service.Service>().Contains(new Symbol(key))
+		               ? Context.Configuration.GetItem<Service.Service>().Load(new Symbol(key)).Instance
 		               : null;
 		}
 
 		public static void Save(string key, object value)
 		{
-			Context.Configuration.GetItem<Service>().Store(new Symbol(key, value));
+			Context.Configuration.GetItem<Service.Service>().Store(new Symbol(key, value));
 		}
 
 		public static void ClearSaved()
 		{
-		    Context.Configuration.GetItem<Service>().Clear<Symbol>();
+		    Context.Configuration.GetItem<Service.Service>().Clear<Symbol>();
 		}
 
 		public virtual object GetTargetObject()

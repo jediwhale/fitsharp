@@ -6,6 +6,7 @@
 
 using System;
 using System.Web;
+using fit.Model;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
@@ -33,7 +34,7 @@ namespace fit.Operators {
             Parse cell = (Parse)parameters.Value;
             var rest = new CellSubstring(cell, comparison.Operator);
             object expected = processor.Parse(instance.Type, rest).Value;
-            parameters.Value.SetBody(actual + comparison.Operator + rest.Body);
+            parameters.Value.AddToAttribute(CellAttributes.InformationPrefixKey, actual.ToString(), CellAttributes.PrefixFormat);
 
             int compare = actual is float || actual is double
                               ? (Convert.ToDouble(actual) < Convert.ToDouble(expected)
@@ -64,20 +65,4 @@ namespace fit.Operators {
         }
     }
 
-    public class CellSubstring: Cell {
-        private readonly Parse baseCell;
-        private readonly int bodyStart;
-        private readonly int textStart;
-
-        public CellSubstring(Parse baseCell, string prefix) {
-            this.baseCell = baseCell;
-            textStart = prefix.Length;
-            bodyStart = baseCell.Body.StartsWith(prefix) ? prefix.Length : HttpUtility.HtmlEncode(prefix).Length;
-        }
-
-        public void SetBody(string body) { baseCell.SetBody(baseCell.Body.Substring(0, bodyStart) + body); }
-        public string Body { get { return baseCell.Body.Substring(bodyStart); } }
-        public string Text { get { return baseCell.Text.Substring(textStart); } }
-        public Parse ParseCell { get { return baseCell; } }
-    }
 }

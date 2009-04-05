@@ -6,8 +6,8 @@
 using System;
 using System.Collections;
 using System.Text;
-using fit.Engine;
 using fit.Test.Acceptance;
+using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
 using fitSharp.Machine.Application;
 using NUnit.Framework;
@@ -145,7 +145,7 @@ namespace fit.Test.NUnit {
             TestUtils.InitAssembliesAndNamespaces();
             //???ObjectFactory.AddNamespace("fitnesse.Handlers");
            
-            Context.Configuration.GetItem<Service>().AddOperator(typeof(CompareStartsWith).FullName);
+            Context.Configuration.GetItem<Service.Service>().AddOperator(typeof(CompareStartsWith).FullName);
             StringBuilder builder = new StringBuilder();
             builder.Append("<table>");
             builder.Append("<tr><td>people row fixture</td></tr>");
@@ -194,7 +194,7 @@ namespace fit.Test.NUnit {
             myStoryTest = new StoryTest(table);
             myStoryTest.Execute();
             VerifyCounts(1, 0, 0, 0);
-            AssertTextInTag(table.At(0, 2, 0), "pass");
+            AssertTextInTag(table.At(0, 2, 0), CellAttributes.PassStatus);
         }
 
         [Test]
@@ -208,8 +208,8 @@ namespace fit.Test.NUnit {
             myStoryTest = new StoryTest(table);
             myStoryTest.Execute();
             VerifyCounts(2, 0, 0, 0);
-            AssertTextInTag(table.At(0, 2, 0), "pass");
-            AssertTextInTag(table.At(0, 2, 1), "pass");
+            AssertTextInTag(table.At(0, 2, 0), CellAttributes.PassStatus);
+            AssertTextInTag(table.At(0, 2, 1), CellAttributes.PassStatus);
         }
 
         [Test]
@@ -250,8 +250,8 @@ namespace fit.Test.NUnit {
             myStoryTest = new StoryTest(table);
             myStoryTest.Execute();
             VerifyCounts(1, 1, 0, 0);
-            AssertTextInTag(table.At(0, 2, 0), "pass");
-            AssertTextInTag(table.At(0, 2, 1), "fail");
+            AssertTextInTag(table.At(0, 2, 0), CellAttributes.PassStatus);
+            AssertTextInTag(table.At(0, 2, 1), CellAttributes.FailStatus);
         }
 
         [Test]
@@ -262,9 +262,9 @@ namespace fit.Test.NUnit {
             myStoryTest = new StoryTest(table);
             myStoryTest.Execute();
             VerifyCounts(0, 2, 0, 0);
-            AssertTextInTag(table.At(0, 2, 0), "fail");
+            AssertTextInTag(table.At(0, 2, 0), CellAttributes.FailStatus);
             AssertTextInBody(table.At(0, 2, 0), "missing");
-            AssertTextInTag(table.At(0, 3, 0), "fail");
+            AssertTextInTag(table.At(0, 3, 0), CellAttributes.FailStatus);
             AssertTextInBody(table.At(0, 3, 0), "surplus");
         }
 
@@ -350,7 +350,7 @@ namespace fit.Test.NUnit {
             myStoryTest = new StoryTest(table);
             myStoryTest.Execute();
             VerifyCounts(0, 1, 0, 0);
-            AssertTextInTag(table.At(0, 2, 0), "fail");
+            AssertTextInTag(table.At(0, 2, 0), CellAttributes.FailStatus);
             AssertTextInBody(table.At(0, 2, 0), "missing");
         }
 
@@ -362,7 +362,7 @@ namespace fit.Test.NUnit {
             myStoryTest = new StoryTest(table);
             myStoryTest.Execute();
             VerifyCounts(0, 1, 0, 0);
-            AssertTextInTag(table.At(0, 2, 0), "fail");
+            AssertTextInTag(table.At(0, 2, 0), CellAttributes.FailStatus);
             AssertTextInBody(table.At(0, 2, 0), "missing");
         }
 
@@ -376,10 +376,10 @@ namespace fit.Test.NUnit {
             myStoryTest = new StoryTest(table);
             myStoryTest.Execute();
             VerifyCounts(2, 1, 0, 0);
-            AssertTextInTag(table.At(0, 2, 0), "pass");
-            AssertTextInTag(table.At(0, 2, 1), "pass");
+            AssertTextInTag(table.At(0, 2, 0), CellAttributes.PassStatus);
+            AssertTextInTag(table.At(0, 2, 1), CellAttributes.PassStatus);
             AssertTextNotInBody(table.At(0, 2, 0), "missing");
-            AssertTextInTag(table.At(0, 3, 0), "fail");
+            AssertTextInTag(table.At(0, 3, 0), CellAttributes.FailStatus);
             AssertTextInBody(table.At(0, 3, 0), "missing");
         }
 
@@ -393,11 +393,11 @@ namespace fit.Test.NUnit {
             myStoryTest = new StoryTest(table);
             myStoryTest.Execute();
             VerifyCounts(2, 1, 0, 0);
-            AssertTextInTag(table.At(0, 2, 0), "fail");
+            AssertTextInTag(table.At(0, 2, 0), CellAttributes.FailStatus);
             AssertTextInBody(table.At(0, 2, 0), "missing");
             AssertTextNotInBody(table.At(0, 2, 1), "missing");
-            AssertTextInTag(table.At(0, 3, 0), "pass");
-            AssertTextInTag(table.At(0, 3, 1), "pass");
+            AssertTextInTag(table.At(0, 3, 0), CellAttributes.PassStatus);
+            AssertTextInTag(table.At(0, 3, 1), CellAttributes.PassStatus);
             AssertTextNotInBody(table.At(0, 3, 0), "missing");
             AssertTextNotInBody(table.At(0, 3, 1), "missing");
         }
@@ -455,7 +455,7 @@ namespace fit.Test.NUnit {
                 "<table>" +
                 "<tr><td colspan=\"3\">ArrayOfStringsFixture</td></tr>" +
                 "<tr><td>field</td><td>save!</td></tr>" +
-                "<tr><td>a,b,c</td><td> <span class=\"fit_grey\">null</span></td></tr>" +
+                "<tr><td>a,b,c</td><td><span class=\"fit_grey\"> null</span></td></tr>" +
                 "</table>";
             string tableHtml = "<table>" +
                                "<tr><td colspan=\"3\">ArrayOfStringsRowFixture</td></tr>" +
@@ -512,7 +512,7 @@ namespace fit.Test.NUnit {
 
         private void AssertTextInTag(Parse cell, string text)
         {
-            Assert.IsTrue(cell.Tag.IndexOf(text) > -1);
+            Assert.AreEqual(text, cell.GetAttribute(CellAttributes.StatusKey));
         }
 
         private void AssertTextInBody(Parse cell, string text)

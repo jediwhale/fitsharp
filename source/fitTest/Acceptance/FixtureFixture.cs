@@ -5,6 +5,7 @@
 
 using fitlibrary.exception;
 using System;
+using fitSharp.Fit.Model;
 
 namespace fit.Test.Acceptance {
     public class FixtureFixture: Fixture {
@@ -164,7 +165,7 @@ namespace fit.Test.Acceptance {
 
         public void Failure(Parse theCell, string theMessage) {
             Wrong(theCell);
-            theCell.AddToBody(Label(theMessage));
+            theCell.SetAttribute(CellAttributes.LabelKey, theMessage);
         }
 
         protected void CheckRowMarkings(Parse theRows) {

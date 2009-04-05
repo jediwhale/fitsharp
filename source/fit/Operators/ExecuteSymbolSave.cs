@@ -18,8 +18,8 @@ namespace fit.Operators {
 			object value = parameters.GetActual(processor);
             var symbol = new Symbol(parameters.Cell.Text.Substring(2), value);
             processor.Store(symbol);
-			parameters.Cell.SetBody(Fixture.Gray((value == null ? "null" : value.ToString())
-                + " &gt;&gt;" + symbol.Id));
+
+	        parameters.Cell.AddToAttribute(CellAttributes.InformationSuffixKey, value == null ? "null" : value.ToString(), CellAttributes.SuffixFormat);
 	        return true;
 	    }
 	}

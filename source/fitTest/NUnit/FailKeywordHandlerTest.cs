@@ -28,7 +28,7 @@ namespace fit.Test.NUnit {
             MakeIntFixture();
             intFixture.Field = 2;
             intFixture.CellOperation.Check(intFixture, TestUtils.CreateCellRange("field"), cell);
-            Assert.IsTrue(cell.Tag.IndexOf("pass") > -1);
+            AssertCellPasses(cell);
             VerifyCounts(intFixture, 1, 0, 0, 0);
         }
 
@@ -39,7 +39,7 @@ namespace fit.Test.NUnit {
             MakeIntFixture();
             intFixture.Field = 2;
             intFixture.CellOperation.Check(intFixture, TestUtils.CreateCellRange("field"), cell);
-            Assert.IsTrue(cell.Tag.IndexOf("fail") > -1);
+            AssertCellFails(cell);
             VerifyCounts(intFixture, 0, 1, 0, 0);
         }
 
@@ -50,7 +50,7 @@ namespace fit.Test.NUnit {
             MakeStringFixture();
             stringFixture.Field = "some other string";
             stringFixture.CellOperation.Check(stringFixture, TestUtils.CreateCellRange("field"), cell);
-            Assert.IsTrue(cell.Tag.IndexOf("pass") > -1);
+            AssertCellPasses(cell);
             VerifyCounts(stringFixture, 1, 0, 0, 0);
         }
 
@@ -61,7 +61,7 @@ namespace fit.Test.NUnit {
             MakePersonFixture();
             personFixture.Field = new Person("Mister", "Hyde");
             personFixture.CellOperation.Check(personFixture, TestUtils.CreateCellRange("field"), cell);
-            Assert.IsTrue(cell.Tag.IndexOf("pass") > -1);
+            AssertCellPasses(cell);
             VerifyCounts(personFixture, 1, 0, 0, 0);
         }
     }

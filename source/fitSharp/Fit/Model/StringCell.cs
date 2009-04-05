@@ -10,8 +10,12 @@ namespace fitSharp.Fit.Model {
     public class StringCell: Tree<Cell>, Cell {
         public StringCell(string text) { Text = text; }
         public string Body { get { return Text; } }
-        public void SetBody(string body) { Text = body; }
         public string Text { get; private set; }
+        //todo: refine interface?
+        public string GetAttribute(string key) { return string.Empty; }
+        public void SetAttribute(string key, string value) {}
+        public void AddToAttribute(string key, string value, string format) {}
+
         public override Cell Value { get { return this; } }
         public override bool IsLeaf { get { return true; } }
         public override ReadList<Tree<Cell>> Branches { get { throw new InvalidOperationException(); } }

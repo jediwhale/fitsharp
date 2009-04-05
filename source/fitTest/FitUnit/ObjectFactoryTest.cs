@@ -4,7 +4,6 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System.IO;
-using fit.Engine;
 using fitlibrary;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
@@ -20,7 +19,7 @@ namespace fit.Test.FitUnit {
         }
 
         public string CreateInstance(string theFixture) {
-            return Context.Configuration.GetItem<Service>().Create(theFixture).Type.FullName;
+            return Context.Configuration.GetItem<Service.Service>().Create(theFixture).Type.FullName;
         }
     }
 }

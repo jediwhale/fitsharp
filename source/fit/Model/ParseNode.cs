@@ -39,19 +39,6 @@ namespace fitlibrary {
             return tables;
         }
 
-        public static Parse Clone(Parse theNode) {
-            return new Parse(theNode.Tag, theNode.End, theNode.Leader, theNode.Body, theNode.Parts);
-        }
-
-        public static Parse Fail(Parse theNode) {
-            theNode.AddToTag(" class=\"fail\"");
-            return theNode;
-        }
-
-        public static bool IsError(Parse theNode) {
-            return (theNode.Tag.IndexOf("error") >= 0);
-        }
-
 	    private static readonly IdentifierName ourTableIdentifier = new IdentifierName("<table");
     }
 }

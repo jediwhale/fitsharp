@@ -32,8 +32,7 @@ namespace fit.Operators {
 				parameters.Fixture.Right(parameters.ParseCell);
             }
             else {
-                parameters.Fixture.Wrong(parameters.ParseCell);
-                parameters.ParseCell.AddToBody("<hr />" + Fixture.Escape(differences));
+                parameters.Fixture.Wrong(parameters.ParseCell, differences);
                 parameters.ParseCell.More = new Parse("td", string.Empty, tables, null);
             }
             return true;

@@ -33,7 +33,7 @@ namespace fit.Test.NUnit {
             stringFixture.Field = null;
             stringFixture.CellOperation.Check(stringFixture, TestUtils.CreateCellRange("field"), cell);
             Assert.AreEqual(null, stringFixture.Field);
-            Assert.IsTrue(cell.Tag.IndexOf("pass") > -1);
+            AssertCellPasses(cell);
             Assert.IsTrue(cell.Body.IndexOf("null") > -1);
             VerifyCounts(stringFixture, 1, 0, 0, 0);
         }
@@ -46,7 +46,7 @@ namespace fit.Test.NUnit {
             stringFixture.Field = "some value";
             stringFixture.CellOperation.Check(stringFixture, TestUtils.CreateCellRange("field"), cell);
             Assert.AreEqual("some value", stringFixture.Field);
-            Assert.IsTrue(cell.Tag.IndexOf("fail") > -1);
+            AssertCellFails(cell);
             Assert.IsTrue(cell.Body.IndexOf("null") > -1);
             Assert.IsTrue(cell.Body.IndexOf("some value") > -1);
             VerifyCounts(stringFixture, 0, 1, 0, 0);

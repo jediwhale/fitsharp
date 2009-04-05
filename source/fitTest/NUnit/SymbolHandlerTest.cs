@@ -48,7 +48,7 @@ namespace fit.Test.NUnit {
             MakeStringFixture();
             stringFixture.Field = "abc";
             stringFixture.CellOperation.Check(stringFixture, TestUtils.CreateCellRange("Field"), cell);
-            Assert.AreEqual(" <span class=\"fit_grey\">abc &gt;&gt;xyz</span>", cell.Body);
+            Assert.AreEqual(">>xyz<span class=\"fit_grey\"> abc</span>", cell.Body);
         }
 
         [Test]
@@ -69,7 +69,7 @@ namespace fit.Test.NUnit {
             StoreSymbol("def", "ghi");
             stringFixture.Field = "ghi";
             stringFixture.CellOperation.Check(stringFixture, TestUtils.CreateCellRange("Field"), cell);
-            Assert.AreEqual("ghi <span class=\"fit_grey\">&lt;&lt;def</span>", cell.Body);
+            Assert.AreEqual("<<def<span class=\"fit_grey\"> ghi</span>", cell.Body);
             VerifyCounts(stringFixture, 1, 0, 0, 0);
         }
 
@@ -81,7 +81,7 @@ namespace fit.Test.NUnit {
             StoreSymbol("def", "ghi");
             stringFixture.Field = "xyz";
             stringFixture.CellOperation.Check(stringFixture, TestUtils.CreateCellRange("Field"), cell);
-            Assert.AreEqual("ghi <span class=\"fit_grey\">&lt;&lt;def</span> <span class=\"fit_label\">expected</span><hr />xyz <span class=\"fit_label\">actual</span>", cell.Body);
+            Assert.AreEqual("<<def<span class=\"fit_grey\"> ghi</span> <span class=\"fit_label\">expected</span><hr />xyz <span class=\"fit_label\">actual</span>", cell.Body);
             VerifyCounts(stringFixture, 0, 1, 0, 0);
         }	
 
@@ -93,7 +93,7 @@ namespace fit.Test.NUnit {
             StoreSymbol("def", "ghi");
             stringFixture.Field = "xyz";
             stringFixture.CellOperation.Input(stringFixture, TestUtils.CreateCellRange("Field"), cell);
-            Assert.AreEqual("ghi <span class=\"fit_grey\">&lt;&lt;def</span>", cell.Body);
+            Assert.AreEqual("<<def<span class=\"fit_grey\"> ghi</span>", cell.Body);
             VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
 
@@ -105,7 +105,7 @@ namespace fit.Test.NUnit {
             StoreSymbol("def", "ghi");
             stringFixture.Field = "xyz";
             stringFixture.CellOperation.Compare(new TypedValue("xyz"), cell);
-            Assert.AreEqual("ghi <span class=\"fit_grey\">&lt;&lt;def</span>", cell.Body);
+            Assert.AreEqual("<<def<span class=\"fit_grey\"> ghi</span>", cell.Body);
             VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
 

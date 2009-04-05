@@ -3,8 +3,8 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-using fit.Engine;
 using fitlibrary;
+using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
 
@@ -30,7 +30,7 @@ namespace fit.Test.NUnit {
             MakeStringFixture();
             stringFixture.Field = "xyz";
             stringFixture.CellOperation.Check(stringFixture, TestUtils.CreateCellRange("Field"), cell);
-            Assert.IsTrue(cell.Tag.IndexOf("pass") > -1);
+            AssertCellPasses(cell);
             VerifyCounts(stringFixture, 1, 0, 0, 0);
         }
 
@@ -40,7 +40,7 @@ namespace fit.Test.NUnit {
             MakeStringFixture();
             stringFixture.Field = "abc";
             stringFixture.CellOperation.Check(stringFixture, TestUtils.CreateCellRange("Field"), cell);
-            Assert.IsTrue(cell.Tag.IndexOf("fail") > -1);
+            AssertCellFails(cell);
             Assert.IsTrue(cell.Body.IndexOf("abc") > -1);
             Assert.IsTrue(cell.Body.IndexOf("xyz") > -1);
             VerifyCounts(stringFixture, 0, 1, 0, 0);
@@ -52,7 +52,7 @@ namespace fit.Test.NUnit {
             MakeStringFixture();
             stringFixture.Field = null;
             stringFixture.CellOperation.Check(stringFixture, TestUtils.CreateCellRange("Field"), cell);
-            Assert.IsTrue(cell.Tag.IndexOf("fail") > -1);
+            AssertCellFails(cell);
             Assert.IsTrue(cell.Body.IndexOf("null") > -1);
             Assert.IsTrue(cell.Body.IndexOf("xyz") > -1);
             VerifyCounts(stringFixture, 0, 1, 0, 0);
@@ -64,7 +64,7 @@ namespace fit.Test.NUnit {
         {
             FixtureWithExecutableMethod.Calls = 0;
             Parse cell = TestUtils.CreateCell("do");
-            service = new Service();
+            service = new Service.Service();
             var fixture = new FixtureWithExecutableMethod {Service = service};
             fixture.CellOperation.TryInvoke(fixture, new CellRange(cell, 1));
             Assert.AreEqual(1, FixtureWithExecutableMethod.Calls);
@@ -76,7 +76,7 @@ namespace fit.Test.NUnit {
             MakeStringFixture();
             stringFixture.Field = "abc";
             Assert.IsFalse(stringFixture.CellOperation.Compare(new TypedValue("abc"), cell));
-            Assert.IsFalse(cell.Tag.IndexOf("fail") > -1);
+            Assert.AreNotEqual(CellAttributes.FailStatus, cell.GetAttribute(CellAttributes.StatusKey));
             Assert.IsFalse(cell.Body.IndexOf("abc") > -1);
             Assert.IsTrue(cell.Body.IndexOf("xyz") > -1);
             VerifyCounts(stringFixture, 0, 0, 0, 0);
@@ -89,7 +89,7 @@ namespace fit.Test.NUnit {
             MakeStringFixture();
             stringFixture.Field = "xyz";
             Assert.IsTrue(stringFixture.CellOperation.Compare(new TypedValue("xyz"), cell));
-            Assert.IsFalse(cell.Tag.IndexOf("pass") > -1);
+            Assert.AreNotEqual(CellAttributes.PassStatus, cell.GetAttribute(CellAttributes.StatusKey));
             VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
 

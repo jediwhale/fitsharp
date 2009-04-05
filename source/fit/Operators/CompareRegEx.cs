@@ -19,7 +19,7 @@ namespace fit.Operators {
             if (actualValue == null) return false;
 
             var cell = (Parse)parameters.Value;
-            cell.AddToBody(Fixture.Gray(actualValue.ToString()));
+            cell.AddToAttribute(CellAttributes.InformationSuffixKey, actualValue.ToString(), CellAttributes.SuffixFormat);
 
             var expected = new Regex(compareValue.Substring(1, compareValue.Length-2));
             result = expected.IsMatch(actualValue.ToString());

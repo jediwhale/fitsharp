@@ -98,7 +98,7 @@ namespace fitlibrary {
 
         private void MarkAsIncorrect(Fixture theFixture, Parse theRow, string theReason) {
             Parse firstCell = theRow.Parts;
-            firstCell.AddToBody(Fixture.Label(theReason));
+            firstCell.SetAttribute(CellAttributes.LabelKey, theReason);
             theFixture.Wrong(theRow);
         }
 
@@ -183,7 +183,7 @@ namespace fitlibrary {
                 foreach (TypedValue actualValue in myStrategy.ActualValues(theFixture.Service, theSurplusRow)) {
                     Parse cell = CellFactoryRepository.Instance.Make(actualValue.Value, CellFactoryRepository.Grey);
                     if (cells == null) {
-                        cell.AddToBody(Fixture.Label("surplus"));
+                        cell.SetAttribute(CellAttributes.LabelKey, "surplus");
                         cells = cell;
                     }
                     else
