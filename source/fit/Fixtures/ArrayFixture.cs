@@ -5,7 +5,7 @@
 
 using System.Collections;
 using System.Data;
-using fit;
+using fit.Operators;
 
 namespace fitlibrary {
 
@@ -26,9 +26,4 @@ namespace fitlibrary {
         }
     }
 
-    public class ArrayMatchStrategy: NamedMatchStrategy {
-        public ArrayMatchStrategy(Parse theHeaderRow): base(theHeaderRow) {}
-        public override bool IsOrdered {get { return true; }}
-        public override bool SurplusAllowed {get {return false;}}
-    }
 }

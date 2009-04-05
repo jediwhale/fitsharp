@@ -5,11 +5,9 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System;
-using fit;
 using fitlibrary.table;
 
-namespace fitlibrary {
-
+namespace fit.Operators {
     public class TableAdapter: CellFactory {
 
         public bool CanMake(object theValue) {

@@ -3,11 +3,9 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-using fit;
 using fitSharp.Fit.Model;
 
-namespace fitlibrary {
-
+namespace fit.Operators {
     public class FixtureTable {
 
         private readonly Parse myTable;
@@ -131,5 +129,5 @@ namespace fitlibrary {
                 return string.Format("[{0}]", keyword);
             }
         }
-	}
+    }
 }

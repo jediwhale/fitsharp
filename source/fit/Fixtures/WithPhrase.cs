@@ -4,6 +4,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System;
+using fit.Model;
 using fitlibrary;
 using fitlibrary.exception;
 using fitSharp.Machine.Model;
@@ -24,7 +25,7 @@ namespace fit.Fixtures {
             else if (ourTypeIdentifier.Equals(restOfCells.Text)) {
                 if (restOfCells.More == null) throw new TableStructureException("missing cells for with.");
                 //return new TypeName(restOfCells.More.Text).Type;
-                return theFixture.Service.ParseTree<Type>(restOfCells.More);
+                return theFixture.Processor.ParseTree<Type>(restOfCells.More);
             }
             else if (ourCurrentIdentifier.Equals(restOfCells.Text)) {
                 return theFixture.SystemUnderTest;
@@ -41,7 +42,7 @@ namespace fit.Fixtures {
         public object EvaluateNew(Fixture theFixture) {
             Parse restOfCells = myCells.More;
             if (restOfCells == null) throw new TableStructureException("missing cells for with.");
-            return theFixture.Service.Create(restOfCells.Text, new CellRange(restOfCells.More)).Value;
+            return theFixture.Processor.Create(restOfCells.Text, new CellRange(restOfCells.More)).Value;
         }
 
         private static readonly IdentifierName ourNewIdentifier = new IdentifierName("new"); 

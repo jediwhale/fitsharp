@@ -6,14 +6,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using fit;
 using fit.Engine;
+using fit.Model;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
-namespace fitlibrary {
-
+namespace fit.Operators {
     public interface ListMatchStrategy {
         bool IsOrdered { get; }
         TypedValue[] ActualValues(Processor<Cell> processor, object theActualRow);
@@ -31,9 +30,9 @@ namespace fitlibrary {
             this.processor = processor;
         }
 
-	    public bool IsEqual(object theActualValue, Parse theExpectedValueCell) {
+        public bool IsEqual(object theActualValue, Parse theExpectedValueCell) {
             Actuals actuals = new Actuals((IList)theActualValue, strategy);
-	        int expectedRow = 0;
+            int expectedRow = 0;
             foreach (Parse currentRow in new CellRange(theExpectedValueCell.Parts.Parts.More).Cells) {
                 int match = actuals.FindMatch(RowMatches, expectedRow, currentRow.Parts);
                 if (match < 0 || (match != expectedRow && strategy.IsOrdered)) return false;
@@ -94,7 +93,7 @@ namespace fitlibrary {
 
             if (!strategy.FinalCheck(theFixture)) return false;
             return result;
-	    }
+        }
 
         private void MarkAsIncorrect(Fixture theFixture, Parse theRow, string theReason) {
             Parse firstCell = theRow.Parts;
@@ -130,8 +129,8 @@ namespace fitlibrary {
             public int UnmatchedCount { get { return myUnmatchedCount; }}
             public object Match(int theIndex) {
                 foreach (ActualItem item in myActuals) {
-                     if (item.MatchRow == theIndex) return item.Value;
-                 }
+                    if (item.MatchRow == theIndex) return item.Value;
+                }
                 return null;
             }
 
@@ -180,7 +179,7 @@ namespace fitlibrary {
 
             private Parse MakeSurplusRow(Fixture theFixture, object theSurplusRow) {
                 Parse cells = null;
-                foreach (TypedValue actualValue in myStrategy.ActualValues(theFixture.Service, theSurplusRow)) {
+                foreach (TypedValue actualValue in myStrategy.ActualValues(theFixture.Processor, theSurplusRow)) {
                     Parse cell = CellFactoryRepository.Instance.Make(actualValue.Value, CellFactoryRepository.Grey);
                     if (cells == null) {
                         cell.SetAttribute(CellAttributes.LabelKey, "surplus");

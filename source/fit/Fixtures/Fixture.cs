@@ -10,6 +10,7 @@ using fit.exception;
 using fitlibrary.exception;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Application;
+using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fit
@@ -18,12 +19,12 @@ namespace fit
 	{
 		private string[] args;
 
-        public Service.Service Service { get; set; }
+        public Processor<Cell> Processor { get; set; }
 
 	    public TestStatus TestStatus = new TestStatus();
 
 		public Counts Counts {get { return TestStatus.Counts; }}
-        public CellOperation CellOperation { get { return new CellOperation(Service); }}
+        public CellOperation CellOperation { get { return new CellOperation(Processor); }}
 
         public Fixture() {}
         public Fixture(object systemUnderTest) { mySystemUnderTest = systemUnderTest; }
@@ -33,7 +34,7 @@ namespace fit
 
 
 	    public void Prepare(Fixture theParentFixture, Parse table) {
-	        Service = theParentFixture.Service;
+	        Processor = theParentFixture.Processor;
 	        myParentFixture = theParentFixture;
 	        TestStatus = theParentFixture.TestStatus;
 	        GetArgsForTable(table);
@@ -219,7 +220,7 @@ namespace fit
 		}
 
         public object GetArgumentInput(int theIndex, Type theType) {
-            return Service.Parse(theType, new TypedValue(this), new StringCell(Args[theIndex])).Value;
+            return Processor.Parse(theType, new TypedValue(this), new StringCell(Args[theIndex])).Value;
         }
 
 	    public object SystemUnderTest {

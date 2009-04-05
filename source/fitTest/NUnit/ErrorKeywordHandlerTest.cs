@@ -46,7 +46,7 @@ namespace fit.Test.NUnit {
 
         private void MakeErrorFixture() {
             service = new Service.Service();
-            fixture = new ErrorThrowingFixture { Service = service };
+            fixture = new ErrorThrowingFixture { Processor = service };
         }
     }
 }

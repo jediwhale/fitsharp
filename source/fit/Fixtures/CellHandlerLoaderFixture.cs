@@ -57,7 +57,7 @@ namespace fitnesse.handlers
 	    private void Load(Parse row) {
 	        string handler = new GracefulName(row.Parts.More.Text).IdentifierName.ToString();
 	        if (renames.ContainsKey(handler)) {
-	            Service.AddOperator(renames[handler]);
+	            Processor.AddOperator(renames[handler]);
 	        }
 	        //else {
 	        //    Configuration.Instance.Add(GetKey(row.Parts.More.More), handler);
@@ -67,7 +67,7 @@ namespace fitnesse.handlers
 	    private void Remove(Parse row) {
 	        string handler = new GracefulName(row.Parts.More.Text).IdentifierName.ToString();
 	        if (renames.ContainsKey(handler)) {
-	            Service.RemoveOperator(renames[handler]);
+	            Processor.RemoveOperator(renames[handler]);
 	        }
 	        //else {
 	        //    Configuration.Instance.Remove(GetKey(row.Parts.More.More), handler);

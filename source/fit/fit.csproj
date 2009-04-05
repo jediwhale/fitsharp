@@ -51,6 +51,8 @@
     <Compile Include="Fixtures\FileSystem.cs" />
     <Compile Include="Fixtures\FixtureResult.cs" />
     <Compile Include="Engine\OperationType.cs" />
+    <Compile Include="Operators\ArrayMatchStrategy.cs" />
+    <Compile Include="Operators\NamedMatchStrategy.cs" />
     <Compile Include="Service\Service.cs" />
     <Compile Include="Exception\FitFailureException.cs" />
     <Compile Include="Exception\RowWidthException.cs" />
@@ -63,11 +65,11 @@
     <Compile Include="Fixtures\ColumnFixture.cs" />
     <Compile Include="Fixtures\DoFixture.cs" />
     <Compile Include="Fixtures\DoFixtureBase.cs" />
-    <Compile Include="Fixtures\FixtureTable.cs" />
+    <Compile Include="Operators\FixtureTable.cs" />
     <Compile Include="Fixtures\FlowFixtureBase.cs" />
     <Compile Include="Fixtures\GridFixture.cs" />
     <Compile Include="Fixtures\ImportFixture.cs" />
-    <Compile Include="Fixtures\ListMatcher.cs" />
+    <Compile Include="Operators\ListMatcher.cs" />
     <Compile Include="Fixtures\NamedCollectionFixtureBase.cs" />
     <Compile Include="Fixtures\RowFixture.cs" />
     <Compile Include="Fixtures\SequenceFixture.cs" />

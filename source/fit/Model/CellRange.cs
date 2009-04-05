@@ -5,14 +5,12 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System.Collections.Generic;
-using fit;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
 
-namespace fitlibrary {
-
-	public class CellRange: Tree<Cell> {
-	    private readonly IEnumerable<Parse> cells;
+namespace fit.Model {
+    public class CellRange: Tree<Cell> {
+        private readonly IEnumerable<Parse> cells;
 
         public CellRange(IEnumerable<Parse> cells) {
             this.cells = cells;
@@ -31,24 +29,24 @@ namespace fitlibrary {
             }
         }
 
-	    public IEnumerable<Parse> Cells {
-	        get {
-	            foreach (Parse cell in cells) yield return cell;
-	        }
-	    }
+        public IEnumerable<Parse> Cells {
+            get {
+                foreach (Parse cell in cells) yield return cell;
+            }
+        }
 
-	    public override Cell Value { get { return null; } }
+        public override Cell Value { get { return null; } }
 
-	    public override bool IsLeaf { get { return false; } }
+        public override bool IsLeaf { get { return false; } }
 
-	    public override ReadList<Tree<Cell>> Branches {
-	        get {
-	            var result = new BranchList<Cell>();
-	            foreach (Parse currentCell in cells) {
+        public override ReadList<Tree<Cell>> Branches {
+            get {
+                var result = new BranchList<Cell>();
+                foreach (Parse currentCell in cells) {
                     result.Add(currentCell);
                 }
-	            return result;
-	        }
-	    }
-	}
+                return result;
+            }
+        }
+    }
 }

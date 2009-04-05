@@ -63,7 +63,7 @@ namespace fitnesse.fixtures
 
 		protected int GetInt(int row, int column)
 		{
-            return (int)Service.Parse(typeof(int), new TypedValue(this), GetCell(row, column)).Value;
+            return (int)Processor.Parse(typeof(int), new TypedValue(this), GetCell(row, column)).Value;
 		}
 
 		protected bool Blank(int row, int column)

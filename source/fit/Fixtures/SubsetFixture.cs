@@ -6,6 +6,7 @@
 using System.Collections;
 using System.Data;
 using fit;
+using fit.Operators;
 
 namespace fitlibrary {
 

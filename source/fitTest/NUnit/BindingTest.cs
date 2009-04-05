@@ -25,7 +25,7 @@ namespace fit.Test.NUnit {
         [Test]
         public void TestSetterBinding()
         {
-            TestFixture f = new TestFixture { Service = new Service.Service()};
+            TestFixture f = new TestFixture { Processor = new Service.Service()};
 			
             Parse p;
             Binding binding;

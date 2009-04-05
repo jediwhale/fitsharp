@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using fit.Engine;
 using fit.exception;
 using fit.Fixtures;
+using fit.Model;
+using fit.Operators;
 using fitlibrary.exception;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Application;
@@ -54,11 +56,11 @@ namespace fitlibrary {
 
         protected void ProcessFlowRow(Parse theCurrentRow) {
             try {
-                string specialActionName = Service.ParseTree<MemberName>(new CellRange(theCurrentRow.Parts, 1)).ToString();
-                TypedValue result = Service.TryInvoke(new TypedValue(new Keywords(this)),
+                string specialActionName = Processor.ParseTree<MemberName>(new CellRange(theCurrentRow.Parts, 1)).ToString();
+                TypedValue result = Processor.TryInvoke(new TypedValue(new Keywords(this)),
                                                                                   specialActionName, theCurrentRow.Parts);
                 if (!result.IsValid) {
-                    result = Service.TryInvoke(new TypedValue(this),
+                    result = Processor.TryInvoke(new TypedValue(this),
                                                                                  specialActionName, theCurrentRow.Parts);
                 }
                 if (!result.IsValid) {
@@ -111,7 +113,7 @@ namespace fitlibrary {
 
         private void ExecuteOptionalMethod(string theMethodName, Parse theCell) {
             try {
-                Service.TryInvoke(new TypedValue(this), theMethodName, new TreeLeaf<Cell>(null)); //todo: non-intuitive! use method name?
+                Processor.TryInvoke(new TypedValue(this), theMethodName, new TreeLeaf<Cell>(null)); //todo: non-intuitive! use method name?
             }
             catch (Exception e) {
                 Exception(theCell, e);

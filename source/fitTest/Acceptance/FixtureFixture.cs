@@ -158,7 +158,7 @@ namespace fit.Test.Acceptance {
         }
 
         private void RunFixture(Parse theTables, Fixture theFixture) {
-            theFixture.Service = Service;
+            theFixture.Processor = Processor;
             theFixture.TestStatus = ourEmbeddedStoryTest.TestStatus;
             theFixture.DoTable(theTables);
         }

@@ -7,7 +7,7 @@ using System;
 using System.Reflection;
 using System.Text;
 using fit.Engine;
-using fitlibrary;
+using fit.Model;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
 using fitSharp.Machine.Application;

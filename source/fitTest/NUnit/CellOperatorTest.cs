@@ -44,17 +44,17 @@ namespace fit.Test.NUnit {
 
         public void MakeStringFixture() {
             service = new Service.Service();
-            stringFixture = new StringFixture { Service = service };
+            stringFixture = new StringFixture { Processor = service };
         }
 
         public void MakePersonFixture() {
             service = new Service.Service();
-            personFixture = new PersonFixture { Service = service };
+            personFixture = new PersonFixture { Processor = service };
         }
 
         public void MakeIntFixture() {
             service = new Service.Service();
-            intFixture = new IntFixture { Service = service };
+            intFixture = new IntFixture { Processor = service };
         }
 
         public static void AssertCellPasses(Parse cell)

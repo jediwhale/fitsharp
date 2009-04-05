@@ -66,7 +66,7 @@ namespace fit.Test.NUnit {
 
         private void MakeExceptionFixture() {
             service = new Service.Service();
-            exceptionFixture = new ExceptionThrowingFixture { Service = service };
+            exceptionFixture = new ExceptionThrowingFixture { Processor = service };
         }
     }
 }

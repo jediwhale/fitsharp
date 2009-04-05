@@ -3,7 +3,7 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-using fitlibrary;
+using fit.Model;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
@@ -65,7 +65,7 @@ namespace fit.Test.NUnit {
             FixtureWithExecutableMethod.Calls = 0;
             Parse cell = TestUtils.CreateCell("do");
             service = new Service.Service();
-            var fixture = new FixtureWithExecutableMethod {Service = service};
+            var fixture = new FixtureWithExecutableMethod {Processor = service};
             fixture.CellOperation.TryInvoke(fixture, new CellRange(cell, 1));
             Assert.AreEqual(1, FixtureWithExecutableMethod.Calls);
         }

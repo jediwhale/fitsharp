@@ -3,7 +3,7 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-using fitlibrary;
+using fit.Model;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;

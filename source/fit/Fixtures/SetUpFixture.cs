@@ -5,6 +5,7 @@
 
 using fit;
 using System;
+using fit.Model;
 using fitlibrary.exception;
 using fitSharp.Machine.Exception;
 

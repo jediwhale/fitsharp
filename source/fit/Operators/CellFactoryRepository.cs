@@ -8,17 +8,13 @@ using System;
 using System.Collections;
 using System.Web;
 using System.Text;
-using fit;
-using fitlibrary.table;
 
-namespace fitlibrary {
-
+namespace fit.Operators {
     public interface CellFactory {
         bool CanMake(object theValue);
         Parse Make(object theValue, string theFormat);
     }
 
-	//todo: make into compose operators?
     public class CellFactoryRepository {
         public const string Grey = "<span class=\"fit_grey\">{0}</span>";
 

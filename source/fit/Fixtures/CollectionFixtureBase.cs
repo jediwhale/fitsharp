@@ -5,6 +5,7 @@
 
 using System.Collections;
 using fit;
+using fit.Operators;
 
 namespace fitlibrary {
 
@@ -37,7 +38,7 @@ namespace fitlibrary {
         protected abstract ListMatchStrategy MatchStrategy {get;}
 
         protected void CompareRows(Parse theTableRows, Parse theRowsToCompare) {
-            ListMatcher matcher = new ListMatcher(Service, MatchStrategy);
+            ListMatcher matcher = new ListMatcher(Processor, MatchStrategy);
             matcher.MarkCell(this, myArray, theTableRows, theRowsToCompare);
         }
 
