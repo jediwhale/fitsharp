@@ -118,7 +118,6 @@
     <Compile Include="FitUnit\FixtureTest.cs" />
     <Compile Include="FitUnit\ObjectFactoryTest.cs" />
     <Compile Include="FitUnit\ScannerTest.cs" />
-    <Compile Include="FitUnit\SocketAdapter.cs" />
     <Compile Include="NUnit\ActionFixtureTest.cs" />
     <Compile Include="NUnit\BindingTest.cs" />
     <Compile Include="NUnit\CellHandlerLoaderTest.cs" />

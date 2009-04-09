@@ -9,6 +9,7 @@ using System.IO;
 using System.Net.Sockets;
 using System.Text;
 using fit;
+using fitSharp.IO;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
@@ -18,6 +19,7 @@ namespace fitnesse.fitserver
 	public class FitServer: Runnable
 	{
 		private Socket clientSocket;
+	    private SocketStream socketStream;
 		private bool verbose = false;
 		private string host;
 		private int port;
@@ -153,6 +155,7 @@ namespace fitnesse.fitserver
 			WriteLogMessage("\tHTTP request: " + request);
 
 			clientSocket = SocketConnectionTo(host, port);
+            socketStream = new SocketStream(new SocketModelImpl(clientSocket));
 			Transmit(request);
 		}
 
@@ -164,7 +167,7 @@ namespace fitnesse.fitserver
 				WriteLogMessage("\t...ok\n");
 			else
 			{
-				String errorMessage = SocketUtils.ReceiveStringOfLength(new SocketWrapper(clientSocket), StatusSize);
+				String errorMessage = socketStream.ReadBytes(StatusSize);
 				WriteLogMessage("\t...failed because: " + errorMessage);
 				Console.WriteLine("An error occured while connecting to client.");
 				Console.WriteLine(errorMessage);
@@ -252,18 +255,17 @@ namespace fitnesse.fitserver
 			int documentLength = ReceiveInteger();
 			if (documentLength == 0)
 				return "";
-			return SocketUtils.ReceiveStringOfLength(new SocketWrapper(clientSocket), documentLength);
+		    return socketStream.ReadBytes(documentLength);
 		}
 
 		public int ReceiveInteger()
 		{
-			return DecodeInteger(SocketUtils.ReceiveStringOfLength(new SocketWrapper(clientSocket), 10));
+			return DecodeInteger(socketStream.ReadBytes(10));
 		}
 
 		public void Transmit(string message)
 		{
-			byte[] messageBytes = Encoding.UTF8.GetBytes(message);
-			clientSocket.Send(messageBytes);
+            socketStream.Write(message);
 		}
 
 		public int DecodeInteger(string encodedInteger)
