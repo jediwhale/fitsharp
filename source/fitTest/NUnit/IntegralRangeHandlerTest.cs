@@ -36,7 +36,7 @@ namespace fit.Test.NUnit {
         public void TestInRange() {
             MakeFixture();
             intFixture.Field = 1;
-            intFixture.CellOperation.Check(intFixture, TestUtils.CreateCellRange("Field"), cell);
+            TestUtils.DoCheck(intFixture, TestUtils.CreateCellRange("Field"), cell);
             VerifyCounts(intFixture, 1, 0, 0, 0);
         }
 
@@ -44,7 +44,7 @@ namespace fit.Test.NUnit {
         public void TestStartOfRange() {
             MakeFixture();
             intFixture.Field = 0;
-            intFixture.CellOperation.Check(intFixture, TestUtils.CreateCellRange("Field"), cell);
+            TestUtils.DoCheck(intFixture, TestUtils.CreateCellRange("Field"), cell);
             VerifyCounts(intFixture, 1, 0, 0, 0);
         }
 
@@ -52,7 +52,7 @@ namespace fit.Test.NUnit {
         public void TestEndOfRange() {
             MakeFixture();
             intFixture.Field = 2;
-            intFixture.CellOperation.Check(intFixture, TestUtils.CreateCellRange("Field"), cell);
+            TestUtils.DoCheck(intFixture, TestUtils.CreateCellRange("Field"), cell);
             VerifyCounts(intFixture, 1, 0, 0, 0);
         }
 
@@ -60,7 +60,7 @@ namespace fit.Test.NUnit {
         public void TestNotInRange() {
             MakeFixture();
             intFixture.Field = 5;
-            intFixture.CellOperation.Check(intFixture, TestUtils.CreateCellRange("Field"), cell);
+            TestUtils.DoCheck(intFixture, TestUtils.CreateCellRange("Field"), cell);
             AssertCellFails(cell);
             VerifyCounts(intFixture, 0, 1, 0, 0);
         }
@@ -70,7 +70,7 @@ namespace fit.Test.NUnit {
             cell = TestUtils.CreateCell("-457..-372");
             MakeFixture();
             intFixture.Field = -400;
-            intFixture.CellOperation.Check(intFixture, TestUtils.CreateCellRange("Field"), cell);
+            TestUtils.DoCheck(intFixture, TestUtils.CreateCellRange("Field"), cell);
             AssertCellPasses(cell);
             VerifyCounts(intFixture, 1, 0, 0, 0);
         }
@@ -80,7 +80,7 @@ namespace fit.Test.NUnit {
             cell = TestUtils.CreateCell("-457..372");
             MakeFixture();
             intFixture.Field = 0;
-            intFixture.CellOperation.Check(intFixture, TestUtils.CreateCellRange("Field"), cell);
+            TestUtils.DoCheck(intFixture, TestUtils.CreateCellRange("Field"), cell);
             AssertCellPasses(cell);
             VerifyCounts(intFixture, 1, 0, 0, 0);
         }

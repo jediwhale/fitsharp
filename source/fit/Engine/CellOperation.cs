@@ -5,7 +5,6 @@
 
 using fit.Model;
 using fitSharp.Fit.Model;
-using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
@@ -17,30 +16,30 @@ namespace fit.Engine {
             this.processor = processor;
         }
 
-        public void Create(Fixture fixture, string className, Parse parameterCell) {
+        public void Create(MutableDomainAdapter adapter, string className, Parse parameterCell) {
             TypedValue instance = processor.Create(className, new CellRange(parameterCell, 1));
-            fixture.SetSystemUnderTest(instance.Value);
+            adapter.SetSystemUnderTest(instance.Value);
         }
 
-        public void Input(Fixture fixture, Tree<Cell> memberName, Parse cell) {
+        public void Input(TestStatus testStatus, object systemUnderTest, Tree<Cell> memberName, Parse cell) {
             processor.Execute(
-                ExecuteContext.Make(fixture), 
+                ExecuteContext.Make(testStatus, systemUnderTest), 
                 ExecuteParameters.MakeInput(memberName, cell));
         }
 
-        public void Check(Fixture fixture, Tree<Cell> memberName, Tree<Cell> parameters, Parse expectedCell) {
+        public void Check(TestStatus testStatus, object systemUnderTest, Tree<Cell> memberName, Tree<Cell> parameters, Parse expectedCell) {
             processor.Execute(
-                ExecuteContext.Make(fixture), 
+                ExecuteContext.Make(testStatus, systemUnderTest), 
                 ExecuteParameters.MakeCheck(memberName, parameters, expectedCell));
         }
 
-        public void Check(Fixture fixture, Tree<Cell> memberName, Parse expectedCell) {
-            Check(fixture, memberName, new TreeList<Cell>(), expectedCell);
+        public void Check(TestStatus testStatus, object systemUnderTest, Tree<Cell> memberName, Parse expectedCell) {
+            Check(testStatus, systemUnderTest, memberName, new TreeList<Cell>(), expectedCell);
         }
 
-        public void Check(Fixture fixture, TypedValue actualValue, Parse expectedCell) {
+        public void Check(TestStatus testStatus, object systemUnderTest, TypedValue actualValue, Parse expectedCell) {
             processor.Execute(
-                ExecuteContext.Make(fixture, actualValue),
+                ExecuteContext.Make(testStatus, systemUnderTest, actualValue),
                 ExecuteParameters.MakeCheck(expectedCell));
         }
 

@@ -37,7 +37,7 @@ namespace fitlibrary {
 
 	    public override void DoRow(Parse row) {
 	        if (row.Parts.Size != rowWidth) {
-	            Exception(row.Parts, new RowWidthException(rowWidth));
+	            TestStatus.MarkException(row.Parts, new RowWidthException(rowWidth));
 	        }
 	        else {
 	            try {
@@ -47,14 +47,14 @@ namespace fitlibrary {
 	                    throw new InvalidMethodException(string.Format("Method does not return boolean."));
 	                }
 	                if ((bool) result.Value == expectedCondition) {
-	                    Right(row);
+	                    TestStatus.MarkRight(row);
 	                }
 	                else {
-	                    Wrong(row);
+	                    TestStatus.MarkWrong(row);
 	                }
 	            }
 	            catch (ParseException<Cell> e) {
-	                Exception((Parse)e.Subject, e.InnerException);
+	                TestStatus.MarkException((Parse)e.Subject, e.InnerException);
 	            }
 	        }
 	    }

@@ -25,7 +25,7 @@ namespace fit.Test.NUnit {
         {
             Parse cell = TestUtils.CreateCell("error");
             MakeErrorFixture();
-            fixture.CellOperation.Check(fixture, TestUtils.CreateCellRange("ErrorThrowingMethod"), cell);
+            TestUtils.DoCheck(fixture, TestUtils.CreateCellRange("ErrorThrowingMethod"), cell);
             AssertCellPasses(cell);
             Assert.IsTrue(cell.Body.IndexOf("error") > -1);
             VerifyCounts(fixture, 1, 0, 0, 0);
@@ -37,7 +37,7 @@ namespace fit.Test.NUnit {
             Parse cell = TestUtils.CreateCell("error");
             MakeStringFixture();
             stringFixture.Field = "some value";
-            fixture.CellOperation.Check(stringFixture, TestUtils.CreateCellRange("field"), cell);
+            TestUtils.DoCheck(stringFixture, TestUtils.CreateCellRange("field"), cell);
             AssertCellFails(cell);
             Assert.IsTrue(cell.Body.IndexOf("error") > -1);
             Assert.IsTrue(cell.Body.IndexOf("some value") > -1);

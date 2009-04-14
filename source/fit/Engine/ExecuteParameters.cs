@@ -20,7 +20,8 @@ namespace fit.Engine {
         private readonly Tree<Cell> tree;
         private readonly ExecuteContext context;
 
-        public Fixture Fixture { get { return context.Fixture; } }
+        public TypedValue SystemUnderTest { get { return context.SystemUnderTest; } }
+        public TestStatus TestStatus { get { return context.TestStatus; } }
         public TypedValue Target { get { return context.Target.Value; } }
 
         public string Verb { get { return tree.Branches[0].Value.Text; } }
@@ -78,12 +79,11 @@ namespace fit.Engine {
         public TypedValue GetTypedActual(Processor<Cell> processor) {
             if (!context.Target.HasValue) {
                 try {
-                    TypedValue actualResult = processor.Invoke(new TypedValue(Fixture.GetTargetObject()),
-                                                      GetMemberName(processor), Parameters);
+                    TypedValue actualResult = processor.Invoke(SystemUnderTest, GetMemberName(processor), Parameters);
                     context.Target = actualResult;
                 }
                 catch (ParseException<Cell> e) {
-                    Fixture.Exception((Parse)e.Subject, e);
+                    TestStatus.MarkException((Parse)e.Subject, e);
                     throw new IgnoredException();
                 }
             }

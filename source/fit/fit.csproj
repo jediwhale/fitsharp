@@ -90,7 +90,6 @@
     <Compile Include="Model\ValueArray.cs" />
     <Compile Include="Operators\CompareEmpty.cs" />
     <Compile Include="Operators\CompareFail.cs" />
-    <Compile Include="Operators\CompareNumeric.cs" />
     <Compile Include="Operators\CompareRegEx.cs" />
     <Compile Include="Operators\ExecuteEmpty.cs" />
     <Compile Include="Operators\ExecuteError.cs" />
@@ -98,7 +97,6 @@
     <Compile Include="Operators\ExecuteList.cs" />
     <Compile Include="Operators\ExecuteParse.cs" />
     <Compile Include="Operators\ExecuteSymbolSave.cs" />
-    <Compile Include="Operators\ParseSymbol.cs" />
     <Compile Include="Operators\ParseTable.cs" />
     <Compile Include="Operators\ParseTree.cs" />
     <Compile Include="Runner\FitServer.cs" />

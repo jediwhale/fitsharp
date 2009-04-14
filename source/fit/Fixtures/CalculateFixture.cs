@@ -49,24 +49,24 @@ namespace fitlibrary {
                     Parse expectedCell = theRow.Parts.At(myParameterCount + j + 1);
 
                     try {
-                        CellOperation.Check(this, new CellRange(memberCells),
+                        CellOperation.Check(TestStatus, GetTargetObject(), new CellRange(memberCells),
                                             myValues.GetCells(new CellRange(theRow.Parts, myParameterCount).Cells),
                                             expectedCell);
                     }
                     catch (MemberMissingException e) {
-                        Exception(headerCells.At(j), e);
-                        Ignore(expectedCell);
+                        TestStatus.MarkException(headerCells.At(j), e);
+                        TestStatus.MarkIgnore(expectedCell);
                     }
                     catch (IgnoredException) {
-                        Ignore(expectedCell);
+                        TestStatus.MarkIgnore(expectedCell);
                     }
                     catch (Exception e) {
-                        Exception(expectedCell, e);
+                        TestStatus.MarkException(expectedCell, e);
                     }
                 }
             }
             catch (Exception e) {
-                Exception(theRow.Parts, e);
+                TestStatus.MarkException(theRow.Parts, e);
             }
         }
 
@@ -110,7 +110,7 @@ namespace fitlibrary {
                 }
             }
             catch (Exception e) {
-                Exception(theHeaderCells, e);
+                TestStatus.MarkException(theHeaderCells, e);
             }
         }
     }

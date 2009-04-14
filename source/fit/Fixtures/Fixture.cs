@@ -6,8 +6,6 @@
 using System;
 using System.Collections;
 using fit.Engine;
-using fit.exception;
-using fitlibrary.exception;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
@@ -15,7 +13,7 @@ using fitSharp.Machine.Model;
 
 namespace fit
 {
-	public class Fixture: MutableDomainAdapter
+	public class Fixture: MutableDomainAdapter, TargetObjectProvider
 	{
 		private string[] args;
 
@@ -70,7 +68,7 @@ namespace fit
 				}
 				catch (Exception e)
 				{
-					Exception(cells, e);
+					TestStatus.MarkException(cells, e);
 				}
 				cells = cells.More;
 			}
@@ -78,59 +76,16 @@ namespace fit
 
 		public virtual void DoCell(Parse cell, int columnNumber)
 		{
-			Ignore(cell);
+			TestStatus.MarkIgnore(cell);
 		}
 
 		// Annotation ///////////////////////////////
 
-		public virtual void Right(Parse cell)
-		{
-			cell.SetAttribute(CellAttributes.StatusKey, CellAttributes.PassStatus);
-			Counts.Right++;
-		}
-
-		public virtual void Wrong(Parse cell)
-		{
-			cell.SetAttribute(CellAttributes.StatusKey, CellAttributes.FailStatus);
-			Counts.Wrong++;
-		}
-
-		public virtual void Wrong(Parse cell, string actual)
-		{
-		    cell.SetAttribute(CellAttributes.ActualKey, actual);
-		    Wrong(cell);
-		}
-
-		public virtual void Ignore(Parse cell)
-		{
-			cell.SetAttribute(CellAttributes.StatusKey, CellAttributes.IgnoreStatus);
-			Counts.Ignores++;
-		}
-
-		public virtual void Exception(Parse cell, Exception exception)
-		{
-            if (exception is IgnoredException) return;
-
-            if (ContainsAbandonStoryTestException(exception) && TestStatus.IsAbandoned) throw new AbandonStoryTestException();
-
-            if (cell.GetAttribute(CellAttributes.StatusKey) != CellAttributes.ErrorStatus) {
-                cell.SetAttribute(CellAttributes.ExceptionKey, exception.ToString());
-                cell.SetAttribute(CellAttributes.StatusKey, CellAttributes.ErrorStatus);
-                Counts.Exceptions++;
-            }
-
-		    if (ContainsAbandonStoryTestException(exception)) {
-	            TestStatus.IsAbandoned = true;
-	            throw new AbandonStoryTestException();
-            }
-		}
-
-        private bool ContainsAbandonStoryTestException(Exception exception) {
-		    for (Exception e = exception; e != null; e = e.InnerException) {
-		        if (e is AbandonStoryTestException) return true;
-		    }
-            return false;
-        }
+		public virtual void Right(Parse cell) { TestStatus.MarkRight(cell); }
+		public virtual void Wrong(Parse cell) { TestStatus.MarkWrong(cell); }
+		public virtual void Wrong(Parse cell, string actual) { TestStatus.MarkWrong(cell, actual); }
+		public virtual void Ignore(Parse cell) { TestStatus.MarkIgnore(cell); }
+		public virtual void Exception(Parse cell, Exception exception) { TestStatus.MarkException(cell, exception); }
 
 		// Utility //////////////////////////////////
 

@@ -28,21 +28,21 @@ namespace fitlibrary {
 
 	    public override void DoRow(Parse theRow) {
 	        if (theRow.Parts.More.Size != firstRowCells.Size) {
-	            Exception(theRow.Parts, new RowWidthException(firstRowCells.Size));
+	            TestStatus.MarkException(theRow.Parts, new RowWidthException(firstRowCells.Size));
 	            return;
 	        }
 	        Parse headerCell = firstRowCells;
 	        foreach (Parse expectedValueCell in new CellRange(theRow.Parts.More).Cells) {
 	            try {
-	                CellOperation.Check(this, combineMember,
+	                CellOperation.Check(TestStatus, GetTargetObject(), combineMember,
 	                                    new TreeList<Cell>().AddBranch(theRow.Parts).AddBranch(headerCell),
 	                                    expectedValueCell);
 	            }
 	            catch (IgnoredException) {
-	                Ignore(expectedValueCell);
+	                TestStatus.MarkIgnore(expectedValueCell);
 	            }
 	            catch (Exception e) {
-	                Exception(expectedValueCell, e);
+	                TestStatus.MarkException(expectedValueCell, e);
 	            }
 	            headerCell = headerCell.More;
 	        }

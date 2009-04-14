@@ -5,6 +5,7 @@
 
 using System.Collections;
 using fit;
+using fit.Engine;
 using fit.Operators;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Engine;
@@ -38,7 +39,7 @@ namespace fitlibrary {
             public bool IsExpectedSize(Parse theExpectedCells, object theActualRow) {
                 return (theExpectedCells.Size == ((object[])theActualRow).Length);
             }
-            public bool FinalCheck(Fixture fixture) {return true;}
+            public bool FinalCheck(TestStatus testStatus) {return true;}
         }
     }
 }

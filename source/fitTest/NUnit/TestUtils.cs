@@ -47,7 +47,15 @@ namespace fit.Test.NUnit {
             processor.AddMemory<Symbol>();
             processor.AddOperator(new ParseMemberName());
             TypedValue result = TypedValue.Void;
-            return executor.TryExecute(processor, new TypedValue(new ExecuteContext(new Fixture(), new TypedValue("stuff"))), parameters, ref result);
+            return executor.TryExecute(processor, new TypedValue(new ExecuteContext(new TestStatus(), null, new TypedValue("stuff"))), parameters, ref result);
+        }
+
+        public static void DoInput(Fixture fixture, Tree<Cell> range, Parse cell) {
+            fixture.CellOperation.Input(fixture.TestStatus, fixture.GetTargetObject(), range, cell);
+        }
+
+        public static void DoCheck(Fixture fixture, Tree<Cell> range, Parse cell) {
+            fixture.CellOperation.Check(fixture.TestStatus, fixture.GetTargetObject(), range, cell);
         }
     }
 

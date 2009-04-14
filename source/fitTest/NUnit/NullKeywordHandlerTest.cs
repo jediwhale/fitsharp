@@ -20,7 +20,7 @@ namespace fit.Test.NUnit {
         {
             Parse cell = TestUtils.CreateCell("null");
             MakeStringFixture();
-            stringFixture.CellOperation.Input(stringFixture, TestUtils.CreateCellRange("Field"), cell);
+            TestUtils.DoInput(stringFixture, TestUtils.CreateCellRange("Field"), cell);
             Assert.AreEqual(null, stringFixture.Field);
             VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
@@ -31,7 +31,7 @@ namespace fit.Test.NUnit {
             Parse cell = TestUtils.CreateCell("null");
             MakeStringFixture();
             stringFixture.Field = null;
-            stringFixture.CellOperation.Check(stringFixture, TestUtils.CreateCellRange("field"), cell);
+            TestUtils.DoCheck(stringFixture, TestUtils.CreateCellRange("field"), cell);
             Assert.AreEqual(null, stringFixture.Field);
             AssertCellPasses(cell);
             Assert.IsTrue(cell.Body.IndexOf("null") > -1);
@@ -44,7 +44,7 @@ namespace fit.Test.NUnit {
             Parse cell = TestUtils.CreateCell("null");
             MakeStringFixture();
             stringFixture.Field = "some value";
-            stringFixture.CellOperation.Check(stringFixture, TestUtils.CreateCellRange("field"), cell);
+            TestUtils.DoCheck(stringFixture, TestUtils.CreateCellRange("field"), cell);
             Assert.AreEqual("some value", stringFixture.Field);
             AssertCellFails(cell);
             Assert.IsTrue(cell.Body.IndexOf("null") > -1);

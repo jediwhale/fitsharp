@@ -31,7 +31,7 @@ namespace fit.Test.NUnit {
         public void TestDoInputBlank()
         {
             MakeStringFixture();
-            stringFixture.CellOperation.Input(stringFixture, TestUtils.CreateCellRange("Field"), cell);
+            TestUtils.DoInput(stringFixture, TestUtils.CreateCellRange("Field"), cell);
             Assert.AreEqual("", stringFixture.Field);
             VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
@@ -40,7 +40,7 @@ namespace fit.Test.NUnit {
         public void TestDoCheckBlankRight() {
             MakeStringFixture();
             stringFixture.Field = "";
-            stringFixture.CellOperation.Check(stringFixture, TestUtils.CreateCellRange("Field"), cell);
+            TestUtils.DoCheck(stringFixture, TestUtils.CreateCellRange("Field"), cell);
             Assert.AreEqual("", stringFixture.Field);
             AssertCellPasses(cell);
             AssertValueInBody(cell, "blank");
@@ -62,7 +62,7 @@ namespace fit.Test.NUnit {
         {
             MakeStringFixture();
             stringFixture.Field = "some value";
-            stringFixture.CellOperation.Check(stringFixture, TestUtils.CreateCellRange("Field"), cell);
+            TestUtils.DoCheck(stringFixture, TestUtils.CreateCellRange("Field"), cell);
             Assert.AreEqual("some value", stringFixture.Field);
             AssertCellFails(cell);
             AssertValuesInBody(cell, new string[] {"blank", "some value"});
@@ -74,7 +74,7 @@ namespace fit.Test.NUnit {
         {
             MakeStringFixture();
             stringFixture.Field = null;
-            stringFixture.CellOperation.Check(stringFixture, TestUtils.CreateCellRange("Field"), cell);
+            TestUtils.DoCheck(stringFixture, TestUtils.CreateCellRange("Field"), cell);
             Assert.AreEqual(null, stringFixture.Field);
             AssertCellFails(cell);
             AssertValuesInBody(cell, new string[] {"blank", "null"});
@@ -86,7 +86,7 @@ namespace fit.Test.NUnit {
         {
             MakePersonFixture();
             personFixture.Field = new Person("", "");
-            personFixture.CellOperation.Check(personFixture, TestUtils.CreateCellRange("Field"), cell);
+            TestUtils.DoCheck(personFixture, TestUtils.CreateCellRange("Field"), cell);
             Assert.AreEqual("", personFixture.Field.ToString());
             AssertCellPasses(cell);
             AssertValuesInBody(cell, new string[] {"blank"});
@@ -97,7 +97,7 @@ namespace fit.Test.NUnit {
         public void TestDoCheckBlankWrongTypeWrongValue() {
             MakePersonFixture();
             personFixture.Field = new Person("john", "doe");
-            personFixture.CellOperation.Check(personFixture, TestUtils.CreateCellRange("Field"), cell);
+            TestUtils.DoCheck(personFixture, TestUtils.CreateCellRange("Field"), cell);
             Assert.AreEqual("john doe", personFixture.Field.ToString());
             AssertCellFails(cell);
             AssertValuesInBody(cell, new string[] {"blank", "john doe"});

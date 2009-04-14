@@ -39,7 +39,7 @@ namespace fit.Test.NUnit {
             processor.AddMemory<Symbol>();
             processor.AddOperator(new ParseMemberName());
             TypedValue result = TypedValue.Void;
-            return executor.TryExecute(processor, new TypedValue(new ExecuteContext(new Fixture(), new TypedValue("stuff"))), parameters, ref result);
+            return executor.TryExecute(processor, new TypedValue(new ExecuteContext(new TestStatus(), null, new TypedValue("stuff"))), parameters, ref result);
         }
 
         public void MakeStringFixture() {

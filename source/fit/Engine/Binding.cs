@@ -25,11 +25,11 @@ namespace fit
 		{
 			switch (operationType) {
 				case OperationType.Input:
-					fixture.CellOperation.Input(fixture, MemberCell, cell);
+					fixture.CellOperation.Input(fixture.TestStatus, fixture.GetTargetObject(), MemberCell, cell);
 					break;
 				case OperationType.Check:
 					fixture.CheckCalled();
-					fixture.CellOperation.Check(fixture, MemberCell, cell);
+					fixture.CellOperation.Check(fixture.TestStatus, fixture.GetTargetObject(), MemberCell, cell);
 					break;
                 case OperationType.Create:
 			        fixture.CellOperation.Create(fixture, MemberName, cell);

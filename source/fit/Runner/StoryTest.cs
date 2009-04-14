@@ -83,7 +83,7 @@ namespace fit {
             catch (Exception e) {
                 myFirstFixture = new Fixture();
                 myFirstFixture.TestStatus = TestStatus;
-                myFirstFixture.Exception(heading, e);
+                TestStatus.MarkException(heading, e);
                 Listener.TableFinished(Tables);
                 Listener.TablesFinished(Tables, Counts);
                 return;
@@ -116,7 +116,7 @@ namespace fit {
                             }
                         }
                         catch (Exception e) {
-                            firstFixture.Exception(table.At(0, 0, 0), e);
+                            TestStatus.MarkException(table.At(0, 0, 0), e);
                         }
                     }
                     catch (AbandonStoryTestException) {}
@@ -126,7 +126,7 @@ namespace fit {
                 if (flowFixture != null) flowFixture.DoTearDown(theTables);
             }
             catch (Exception e) {
-                firstFixture.Exception(theTables.Parts.Parts, e);
+                TestStatus.MarkException(theTables.Parts.Parts, e);
                 Listener.TableFinished(theTables);
             }
 			Listener.TablesFinished(theTables, Counts);

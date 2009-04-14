@@ -42,7 +42,10 @@
     <Compile Include="Fit\Application\FileExclusions.cs" />
     <Compile Include="Fit\Model\CellAttributes.cs" />
     <Compile Include="Fit\Model\CellSubstring.cs" />
+    <Compile Include="Fit\Model\TargetObjectProvider.cs" />
+    <Compile Include="Fit\Operators\CompareNumeric.cs" />
     <Compile Include="Fit\Operators\CompareString.cs" />
+    <Compile Include="Fit\Operators\ParseSymbol.cs" />
     <Compile Include="IO\SocketModel.cs" />
     <Compile Include="IO\SocketStream.cs" />
     <Compile Include="Machine\Application\Settings.cs" />

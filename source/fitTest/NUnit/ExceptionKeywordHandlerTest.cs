@@ -27,7 +27,7 @@ namespace fit.Test.NUnit {
         {
             Parse cell = TestUtils.CreateCell("exception[NullReferenceException]");
             MakeExceptionFixture();
-            exceptionFixture.CellOperation.Check(exceptionFixture, TestUtils.CreateCellRange("ThrowNullReferenceException"), cell);
+            TestUtils.DoCheck(exceptionFixture, TestUtils.CreateCellRange("ThrowNullReferenceException"), cell);
             AssertCellPasses(cell);
             VerifyCounts(exceptionFixture, 1, 0, 0, 0);
         }
@@ -37,7 +37,7 @@ namespace fit.Test.NUnit {
         {
             Parse cell = TestUtils.CreateCell("exception[NullReferenceException]");
             MakeExceptionFixture();
-            exceptionFixture.CellOperation.Check(exceptionFixture, TestUtils.CreateCellRange("ThrowApplicationException"), cell);
+            TestUtils.DoCheck(exceptionFixture, TestUtils.CreateCellRange("ThrowApplicationException"), cell);
             AssertCellFails(cell);
             VerifyCounts(exceptionFixture, 0, 1, 0, 0);
         }
@@ -48,7 +48,7 @@ namespace fit.Test.NUnit {
             Parse cell = TestUtils.CreateCell("exception[\"an exception\"]");
             MakeExceptionFixture();
             exceptionFixture.Message = "an exception";
-            exceptionFixture.CellOperation.Check(exceptionFixture, TestUtils.CreateCellRange("ThrowApplicationException"), cell);
+            TestUtils.DoCheck(exceptionFixture, TestUtils.CreateCellRange("ThrowApplicationException"), cell);
             AssertCellPasses(cell);
             VerifyCounts(exceptionFixture, 1, 0, 0, 0);
         }
@@ -59,7 +59,7 @@ namespace fit.Test.NUnit {
             Parse cell = TestUtils.CreateCell("exception[ApplicationException: \"an exception\"]");
             MakeExceptionFixture();
             exceptionFixture.Message = "an exception";
-            exceptionFixture.CellOperation.Check(exceptionFixture, TestUtils.CreateCellRange("ThrowApplicationException"), cell);
+            TestUtils.DoCheck(exceptionFixture, TestUtils.CreateCellRange("ThrowApplicationException"), cell);
             AssertCellPasses(cell);
             VerifyCounts(exceptionFixture, 1, 0, 0, 0);
         }

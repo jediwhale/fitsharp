@@ -18,7 +18,7 @@ namespace fit.Operators {
 
 	        switch (parameters.Verb) {
 	            case ExecuteParameters.Input:
-                    TypedValue actual = processor.TryInvoke(new TypedValue(parameters.Fixture.GetTargetObject()), parameters.GetMemberName(processor),
+                    TypedValue actual = processor.TryInvoke(parameters.SystemUnderTest, parameters.GetMemberName(processor),
                              new TreeList<Cell>());
                     if (actual.IsValid) ShowActual(parameters, actual.Value);
 	                break;
@@ -36,10 +36,6 @@ namespace fit.Operators {
 	            : actual.ToString().Length == 0 ? "blank"
 	            : actual.ToString(),
                 CellAttributes.SuffixFormat);
-	        //parameters.Cell.SetBody(parameters.Cell.Body + Fixture.Gray(
-	        //    actual == null ? "null"
-	        //    : actual.ToString().Length == 0 ? "blank"
-	        //    : actual.ToString()));
 	    }
 	}
 }

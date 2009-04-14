@@ -31,7 +31,7 @@ namespace fit
 					Execute();
 			} 
 			catch (Exception e) {
-				Exception(row.Leaf, e);
+				TestStatus.MarkException(row.Leaf, e);
 			}
 		}
 
@@ -45,7 +45,7 @@ namespace fit
 				binding.HandleCell(this, cell);
 			} 
 			catch(Exception e) {
-				Exception(cell, e);
+				TestStatus.MarkException(cell, e);
 			}
 		}
 

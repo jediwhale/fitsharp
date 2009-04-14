@@ -32,8 +32,7 @@ namespace fit.Operators {
                     myColumnsUsed[column] = true;
                 }
                 else {
-                //todo: pass actual row in domain adapter?
-                    TypedValue itemResult = new CellOperation(processor).TryInvoke(new Fixture(theActualRow),
+                    TypedValue itemResult = new CellOperation(processor).TryInvoke(theActualRow,
                                                                  new StringCell("getitem"),
                                                                  new CellRange(headerCell, 1));
                     if (itemResult.IsValid) {
@@ -54,11 +53,11 @@ namespace fit.Operators {
             return true;
         }
 
-        public bool FinalCheck(Fixture fixture) {
+        public bool FinalCheck(TestStatus testStatus) {
             if (myColumnsUsed == null) return true;
             for (int column = 0; column < myHeaderRow.Parts.Size; column++) {
                 if (!myColumnsUsed[column]) {
-                    fixture.Exception(myHeaderRow.Parts.At(column),
+                    testStatus.MarkException(myHeaderRow.Parts.At(column),
                         new FitFailureException(String.Format("Column '{0}' not used.", myHeaderRow.Parts.At(column).Text)));
                     return false;
                 }

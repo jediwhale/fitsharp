@@ -24,7 +24,7 @@ namespace fit.Operators {
 			string exceptionContent = parameters.Cell.Text.Substring("exception[".Length, parameters.Cell.Text.Length - ("exception[".Length + 1));
 			try {
 				parameters.GetActual(processor);
-			    parameters.Fixture.Wrong(parameters.ParseCell, "no exception");
+			    parameters.TestStatus.MarkWrong(parameters.ParseCell, "no exception");
 			}
 			catch (TargetInvocationException e) {
 				if (isMessageOnly(exceptionContent)) {
@@ -51,10 +51,10 @@ namespace fit.Operators {
 
 		private static void evaluateException(bool expression, ExecuteParameters parameters, TargetInvocationException e) {
 			if (expression) {
-				parameters.Fixture.Right(parameters.ParseCell);
+				parameters.TestStatus.MarkRight(parameters.ParseCell);
 			}
 			else {
-				parameters.Fixture.Wrong(parameters.ParseCell, "exception[" + e.InnerException.GetType().Name + ": \"" + e.InnerException.Message + "\"]");
+				parameters.TestStatus.MarkWrong(parameters.ParseCell, "exception[" + e.InnerException.GetType().Name + ": \"" + e.InnerException.Message + "\"]");
 			}
 		}
 	}

@@ -7,23 +7,26 @@ using fitSharp.Machine.Model;
 
 namespace fit.Engine {
     public class ExecuteContext {
-        public Fixture Fixture { get; private set; }
+        public TypedValue SystemUnderTest { get; private set; }
+        public TestStatus TestStatus { get; private set; }
         public TypedValue? Target { get; set; }
 
         public static TypedValue Make(TypedValue target) { return new TypedValue(new ExecuteContext(target)); }
-        public static TypedValue Make(Fixture fixture) { return new TypedValue(new ExecuteContext(fixture)); }
-        public static TypedValue Make(Fixture fixture, TypedValue target) { return new TypedValue(new ExecuteContext(fixture, target)); }
+        public static TypedValue Make(TestStatus testStatus, object systemUnderTest) { return new TypedValue(new ExecuteContext(testStatus, systemUnderTest)); }
+        public static TypedValue Make(TestStatus testStatus, object systemUnderTest, TypedValue target) { return new TypedValue(new ExecuteContext(testStatus, systemUnderTest, target)); }
 
-        public ExecuteContext(Fixture fixture) {
-            Fixture = fixture;
+        public ExecuteContext(TestStatus testStatus, object systemUnderTest) {
+            TestStatus = testStatus;
+            SystemUnderTest = new TypedValue(systemUnderTest);
         }
 
         public ExecuteContext(TypedValue target) {
             Target = target;
         }
 
-        public ExecuteContext(Fixture fixture, TypedValue target) {
-            Fixture = fixture;
+        public ExecuteContext(TestStatus testStatus, object systemUnderTest, TypedValue target) {
+            TestStatus = testStatus;
+            SystemUnderTest = new TypedValue(systemUnderTest);
             Target = target;
         }
     }

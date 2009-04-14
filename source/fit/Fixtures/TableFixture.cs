@@ -40,25 +40,25 @@ namespace fitnesse.fixtures
 		protected void Right(int row, int column)
 		{
 			Parse cell = rows.At(row, column);
-			Right(cell);
+			TestStatus.MarkRight(cell);
 		}
 
 		protected void Wrong(int row, int column)
 		{
 			Parse cell = rows.At(row, column);
-			Wrong(cell);
+			TestStatus.MarkWrong(cell);
 		}
 
 		protected void Wrong(int row, int column, string actual)
 		{
 			Parse cell = rows.At(row, column);
-			Wrong(cell, actual);
+			TestStatus.MarkWrong(cell, actual);
 		}
 
 		protected void Ignore(int row, int column)
 		{
 			Parse cell = rows.At(row, column);
-			Ignore(cell);
+			TestStatus.MarkIgnore(cell);
 		}
 
 		protected int GetInt(int row, int column)

@@ -14,7 +14,6 @@ using fit.Model;
 using fit.Operators;
 using fitlibrary.exception;
 using fitSharp.Fit.Model;
-using fitSharp.Machine.Application;
 using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
 
@@ -57,7 +56,7 @@ namespace fitlibrary {
         protected void ProcessFlowRow(Parse theCurrentRow) {
             try {
                 string specialActionName = Processor.ParseTree<MemberName>(new CellRange(theCurrentRow.Parts, 1)).ToString();
-                TypedValue result = Processor.TryInvoke(new TypedValue(new Keywords(this)),
+                TypedValue result = Processor.TryInvoke(new TypedValue(new Keywords(this, TestStatus)),
                                                                                   specialActionName, theCurrentRow.Parts);
                 if (!result.IsValid) {
                     result = Processor.TryInvoke(new TypedValue(this),
@@ -88,7 +87,7 @@ namespace fitlibrary {
                 else {
 
                     if (TestStatus.IsAbandoned) {
-                        Ignore(theCurrentRow);
+                        TestStatus.MarkIgnore(theCurrentRow);
                         return;
                     }
                     object wrapResult = FixtureResult.Wrap(result.Value);
@@ -104,10 +103,10 @@ namespace fitlibrary {
             }
             catch (IgnoredException) {}
 	        catch (ParseException<Cell> e) {
-	            Exception((Parse)e.Subject, e);
+	            TestStatus.MarkException((Parse)e.Subject, e);
 	        }
             catch (Exception e) {
-                Exception(theCurrentRow.Parts, e);
+                TestStatus.MarkException(theCurrentRow.Parts, e);
             }
         }
 
@@ -116,7 +115,7 @@ namespace fitlibrary {
                 Processor.TryInvoke(new TypedValue(this), theMethodName, new TreeLeaf<Cell>(null)); //todo: non-intuitive! use method name?
             }
             catch (Exception e) {
-                Exception(theCell, e);
+                TestStatus.MarkException(theCell, e);
             }
         }
 
@@ -133,15 +132,8 @@ namespace fitlibrary {
 
         private void ColorMethodName(Parse theCells, bool thisIsRight) {
             foreach (Parse nameCell in MethodCells(new CellRange(theCells))) {
-                ColorCell(nameCell, thisIsRight);
+                TestStatus.ColorCell(nameCell, thisIsRight);
             }
-        }
-
-        private void ColorCell(Parse theCell, bool thisIsRight) {
-            if (thisIsRight)
-                Right(theCell);
-            else
-                Wrong(theCell);
         }
 
         public object ExecuteEmbeddedMethod(Parse theCells, int theExcludedCellCount) {
@@ -152,7 +144,7 @@ namespace fitlibrary {
                         Value;
             }
             catch (ParseException<Cell> e) {
-                Exception((Parse)e.Subject, e.InnerException);
+                TestStatus.MarkException((Parse)e.Subject, e.InnerException);
                 throw new IgnoredException();
             }
 
@@ -173,29 +165,31 @@ namespace fitlibrary {
                 StoryTest.DoTable(restOfTable, theFixture, false);
             }
             catch (Exception e) {
-                Exception(theRestOfTheRows.Parts, e);
+                TestStatus.MarkException(theRestOfTheRows.Parts, e);
             }
         }
 
         public override object GetTargetObject() {
-                    return this;
-                    		}
-                    		
-                    			    private static readonly IdentifierName ourWithIdentifier = new IdentifierName("with");
+            return this;
+        }
+
+	    private static readonly IdentifierName ourWithIdentifier = new IdentifierName("with");
                     			    
 	    protected bool IHaveFinishedTable;
         protected Hashtable myNamedFixtures;
 
         private class Keywords {
             private readonly FlowFixtureBase fixture;
+            private readonly TestStatus testStatus;
 
-            public Keywords(FlowFixtureBase fixture) {
+            public Keywords(FlowFixtureBase fixture, TestStatus testStatus) {
                 this.fixture = fixture;
+                this.testStatus = testStatus;
             }
             
 	        public void AbandonStoryTest(Parse theCells) {
-                fixture.Ignore(theCells);
-                fixture.TestStatus.IsAbandoned = true;
+                testStatus.MarkIgnore(theCells);
+                testStatus.IsAbandoned = true;
                 throw new AbandonStoryTestException();
             }
 
@@ -207,16 +201,16 @@ namespace fitlibrary {
                 try {
                     CellRange cells = GetMethodCellRange(theCells, 1);
                     try {
-                        fixture.CellOperation.Check(fixture,
+                        fixture.CellOperation.Check(testStatus, fixture.GetTargetObject(),
                             new CellRange(fixture.MethodCells(cells)), 
                             new CellRange(fixture.ParameterCells(cells)),
                             theCells.Last);
                     }
                     catch (MemberMissingException e) {
-                        fixture.Exception(theCells.More, e);
+                        testStatus.MarkException(theCells.More, e);
                     }
                     catch (Exception e) {
-                        fixture.Exception(theCells.Last, e);
+                        testStatus.MarkException(theCells.Last, e);
                     }
                 }
                 catch (IgnoredException) {}
@@ -236,21 +230,21 @@ namespace fitlibrary {
 
             public void Ensure(Parse theCells) {
                 try {
-                    fixture.ColorCell(theCells, (bool)fixture.ExecuteEmbeddedMethod(theCells, 0));
+                    testStatus.ColorCell(theCells, (bool)fixture.ExecuteEmbeddedMethod(theCells, 0));
                 }
                 catch (IgnoredException) {}
                 catch (Exception e) {
-                    fixture.Exception(theCells, e);
+                    testStatus.MarkException(theCells, e);
                 }
             }
 
             public void Not(Parse theCells) {
                 try {
-                    fixture.ColorCell(theCells, !(bool)fixture.ExecuteEmbeddedMethod(theCells, 0));
+                    testStatus.ColorCell(theCells, !(bool)fixture.ExecuteEmbeddedMethod(theCells, 0));
                 }
                 catch (IgnoredException) {}
                 catch (Exception) {
-                    fixture.Right(theCells);
+                    testStatus.MarkRight(theCells);
                 }
             }
 
@@ -264,7 +258,7 @@ namespace fitlibrary {
 	                    ? new WithPhrase(restOfTheCells.More).Evaluate(fixture)
 	                    : fixture.ExecuteEmbeddedMethod(restOfTheCells, 0));
 
-	            fixture.Right(restOfTheCells);
+	            testStatus.MarkRight(restOfTheCells);
 	        }
 
             public void Note(Parse theCells) {}
@@ -285,7 +279,7 @@ namespace fitlibrary {
                     fixture.SetSystemUnderTest(new WithPhrase(theCells).EvaluateNew(fixture));
                 }
                 catch (Exception e) {
-                    fixture.Exception(theCells, e);
+                    testStatus.MarkException(theCells, e);
                 }
             }
 

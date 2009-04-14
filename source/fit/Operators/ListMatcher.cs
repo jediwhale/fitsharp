@@ -17,7 +17,7 @@ namespace fit.Operators {
         bool IsOrdered { get; }
         TypedValue[] ActualValues(Processor<Cell> processor, object theActualRow);
         bool IsExpectedSize(Parse theExpectedCells, object theActualRow);
-        bool FinalCheck(Fixture fixture);
+        bool FinalCheck(TestStatus testStatus);
         bool SurplusAllowed {get;}
     }
 
@@ -41,14 +41,10 @@ namespace fit.Operators {
             return (actuals.UnmatchedCount == 0);
         }
 
-        public bool MarkCell(Fixture theFixture, object theActualValue, Parse theExpectedValueCell) {
-            return MarkCell(theFixture, theActualValue, theExpectedValueCell.Parts.Parts,  theExpectedValueCell.Parts.Parts.More);
-        }
-
-        public bool MarkCell(Fixture theFixture, object theActualValue, Parse theTableRows, Parse theRowsToCompare) {
+        public bool MarkCell(Processor<Cell> processor, TestStatus testStatus, object systemUnderTest, object theActualValue, Parse theTableRows, Parse theRowsToCompare) {
             Actuals actuals = new Actuals((IList)theActualValue, strategy);
             if (theRowsToCompare == null && actuals.UnmatchedCount == 0) {
-                theFixture.Right(theTableRows);
+                testStatus.MarkRight(theTableRows);
             }
             bool result = true;
             int expectedRow = 0;
@@ -56,25 +52,25 @@ namespace fit.Operators {
                 try {
                     int match = actuals.FindMatch(RowMatches, expectedRow, currentRow.Parts);
                     if (match < 0) {
-                        MarkAsIncorrect(theFixture, currentRow, "missing");
+                        MarkAsIncorrect(testStatus, currentRow, "missing");
                         result = false;
                     }
                     expectedRow++;
                 }
                 catch (Exception e) {
-                    theFixture.Exception(currentRow.Parts, e);
+                    testStatus.MarkException(currentRow.Parts, e);
                     return false;
                 }
             }
             if (actuals.UnmatchedCount > 0 && !strategy.SurplusAllowed) {
-                actuals.ShowSurplus(theFixture, theTableRows.Last);
+                actuals.ShowSurplus(processor, testStatus, theTableRows.Last);
                 result = false;
             }
 
             Parse markRow = theRowsToCompare;
             for (int row = 0; row < expectedRow; row++) {
                 if (strategy.IsOrdered && actuals.IsOutOfOrder(row)) {
-                    MarkAsIncorrect(theFixture, markRow, "out of order");
+                    MarkAsIncorrect(testStatus, markRow, "out of order");
                     result = false;
                 }
                 else if (actuals.Match(row) != null) {
@@ -82,7 +78,7 @@ namespace fit.Operators {
                     int i = 0;
                     foreach (Parse cell in new CellRange(markRow.Parts).Cells) {
                         if (actualValues[i].Type != typeof(void) || cell.Text.Length > 0) {
-                            theFixture.CellOperation.Check(theFixture, actualValues[i], cell);
+                             new CellOperation(processor).Check(testStatus, systemUnderTest, actualValues[i], cell);
 
                         }
                         i++;
@@ -91,14 +87,14 @@ namespace fit.Operators {
                 markRow = markRow.More;
             }
 
-            if (!strategy.FinalCheck(theFixture)) return false;
+            if (!strategy.FinalCheck(testStatus)) return false;
             return result;
         }
 
-        private void MarkAsIncorrect(Fixture theFixture, Parse theRow, string theReason) {
+        private static void MarkAsIncorrect(TestStatus testStatus, Parse theRow, string theReason) {
             Parse firstCell = theRow.Parts;
             firstCell.SetAttribute(CellAttributes.LabelKey, theReason);
-            theFixture.Wrong(theRow);
+            testStatus.MarkWrong(theRow);
         }
 
         private bool RowMatches(Parse theExpectedCells, object theActualRow) {
@@ -156,7 +152,7 @@ namespace fit.Operators {
                 return result;
             }
 
-            public void ShowSurplus(Fixture theFixture, Parse theLastRow) {
+            public void ShowSurplus(Processor<Cell> processor, TestStatus testStatus, Parse theLastRow) {
                 Parse lastRow = theLastRow;
                 for (int i = 0; i < myActuals.Count;) {
                     ActualItem surplus = myActuals[i];
@@ -164,7 +160,7 @@ namespace fit.Operators {
                         i++;
                         continue;
                     }
-                    Parse surplusRow = MakeSurplusRow(theFixture, surplus.Value);
+                    Parse surplusRow = MakeSurplusRow(processor, testStatus, surplus.Value);
                     lastRow.More = surplusRow;
                     lastRow = surplusRow;
                     myActuals.RemoveAt(i);
@@ -177,9 +173,9 @@ namespace fit.Operators {
                      myActuals[theExpectedRow].MatchRow != -1);
             }
 
-            private Parse MakeSurplusRow(Fixture theFixture, object theSurplusRow) {
+            private Parse MakeSurplusRow(Processor<Cell> processor, TestStatus testStatus, object theSurplusRow) {
                 Parse cells = null;
-                foreach (TypedValue actualValue in myStrategy.ActualValues(theFixture.Processor, theSurplusRow)) {
+                foreach (TypedValue actualValue in myStrategy.ActualValues(processor, theSurplusRow)) {
                     Parse cell = CellFactoryRepository.Instance.Make(actualValue.Value, CellFactoryRepository.Grey);
                     if (cells == null) {
                         cell.SetAttribute(CellAttributes.LabelKey, "surplus");
@@ -189,7 +185,7 @@ namespace fit.Operators {
                         cells.Last.More = cell;
                 }
                 Parse row = new Parse("tr", null, cells, null);
-                theFixture.Wrong(row);
+                testStatus.MarkWrong(row);
                 return row;
             }
 

@@ -38,7 +38,7 @@ namespace fit.Operators {
         }
 
         private static void Input(Processor<Cell> processor, ExecuteParameters parameters) {
-            processor.Invoke(new TypedValue(parameters.Fixture.GetTargetObject()), parameters.GetMemberName(processor),
+            processor.Invoke(parameters.SystemUnderTest, parameters.GetMemberName(processor),
                              new TreeList<Cell>().AddBranch(parameters.Cells));
         }
 
@@ -46,10 +46,10 @@ namespace fit.Operators {
             try {
                 TypedValue actual = parameters.GetTypedActual(processor);
                 if (processor.Compare(actual, parameters.Cells)) {
-                    parameters.Fixture.Right(parameters.ParseCell);
+                    parameters.TestStatus.MarkRight(parameters.ParseCell);
                 }
                 else {
-                    parameters.Fixture.Wrong(parameters.ParseCell, actual.ValueString);
+                    parameters.TestStatus.MarkWrong(parameters.ParseCell, actual.ValueString);
                 }
             }
             catch (IgnoredException) {}
@@ -57,9 +57,9 @@ namespace fit.Operators {
 
         private static TypedValue Invoke(Processor<Cell> processor, ExecuteParameters parameters) {
             TypedValue target = parameters.Target;
-            var fixture = target.Value as Fixture;
+            var targetObjectProvider = target.Value as TargetObjectProvider;
             var name = processor.ParseTree<MemberName>(parameters.Members);
-            return processor.TryInvoke(fixture != null ? new TypedValue(fixture.GetTargetObject()) : target, name.ToString(), parameters.Parameters);
+            return processor.TryInvoke(targetObjectProvider != null ? new TypedValue(targetObjectProvider.GetTargetObject()) : target, name.ToString(), parameters.Parameters);
         }
     }
 }

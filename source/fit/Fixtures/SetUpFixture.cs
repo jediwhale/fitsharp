@@ -33,11 +33,11 @@ namespace fitlibrary {
                 CellOperation.Invoke(this, new CellRange(headerCells), new CellRange(theRow.Parts));
             }
             catch (MemberMissingException e) {
-                Exception(headerCells, e);
+                TestStatus.MarkException(headerCells, e);
                 throw new IgnoredException();
             }
             catch (Exception e) {
-                Exception(theRow.Parts, e);
+                TestStatus.MarkException(theRow.Parts, e);
             }
         }
 

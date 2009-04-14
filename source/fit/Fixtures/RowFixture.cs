@@ -17,7 +17,7 @@ namespace fit
 	    private Parse headerCells;
 
 	    public override void DoTable(Parse theTable) {
-            if (theTable.Parts.More == null) Exception(theTable.Parts.Parts, new ApplicationException("Header row missing."));
+            if (theTable.Parts.More == null) TestStatus.MarkException(theTable.Parts.Parts, new ApplicationException("Header row missing."));
 			else DoRows(theTable.Parts.More);
 		}
 
@@ -50,12 +50,12 @@ namespace fit
 			{
                 if (cell == null) {
                     cell = new Parse("td", Label("missing"), null, null);
-                    Wrong(cell);
+                    TestStatus.MarkWrong(cell);
                     row.Parts.Last.More = cell;
                 }
                 else {
                     CheckCalled();
-                    CellOperation.Check(this, headerCell, cell);
+                    CellOperation.Check(TestStatus, GetTargetObject(), headerCell, cell);
 
                 }
 				cell = cell.More;
@@ -148,12 +148,12 @@ namespace fit
 		{
 			Parse cell = row.Parts;
 			cell.SetAttribute(CellAttributes.LabelKey, "missing");
-			Wrong(cell);
+			TestStatus.MarkWrong(cell);
 		}
 
 		private void MarkRowAsSurplus(Parse row)
 		{
-			Wrong(row.Parts);
+			TestStatus.MarkWrong(row.Parts);
 			row.Parts.SetAttribute(CellAttributes.LabelKey, "surplus");
 		}
 

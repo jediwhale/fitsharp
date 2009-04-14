@@ -27,7 +27,7 @@ namespace fit.Test.NUnit {
         [Test]
         public void TestInputWhereNullValueExists() {
             MakeStringFixture();
-            stringFixture.CellOperation.Input(stringFixture, TestUtils.CreateCellRange("Field"), cell);
+            TestUtils.DoInput(stringFixture, TestUtils.CreateCellRange("Field"), cell);
             Assert.AreEqual(null, stringFixture.Field);
             AssertValuesInBody(cell, new string[] {"fit_grey", "null"});
             VerifyCounts(stringFixture, 0, 0, 0, 0);
@@ -37,7 +37,7 @@ namespace fit.Test.NUnit {
         public void TestInputWhereBlankValueExists() {
             MakeStringFixture();
             stringFixture.Field = "";
-            stringFixture.CellOperation.Input(stringFixture, TestUtils.CreateCellRange("Field"), cell);
+            TestUtils.DoInput(stringFixture, TestUtils.CreateCellRange("Field"), cell);
             Assert.AreEqual("", stringFixture.Field);
             AssertValuesInBody(cell, new string[] {"fit_grey", "blank"});
             VerifyCounts(stringFixture, 0, 0, 0, 0);
@@ -47,7 +47,7 @@ namespace fit.Test.NUnit {
         public void TestInputWhereValueExists() {
             MakeIntFixture();
             intFixture.Field = 37;
-            intFixture.CellOperation.Input(intFixture, TestUtils.CreateCellRange("Field"), cell);
+            TestUtils.DoInput(intFixture, TestUtils.CreateCellRange("Field"), cell);
             Assert.AreEqual(37, intFixture.Field);
             AssertValuesInBody(cell, new string[] {"fit_grey", "37"});
             VerifyCounts(intFixture, 0, 0, 0, 0);
@@ -56,7 +56,7 @@ namespace fit.Test.NUnit {
         [Test]
         public void TestInputNullValueWithMethod() {
             MakeStringFixture();
-            stringFixture.CellOperation.Input(stringFixture, TestUtils.CreateCellRange("Set"), cell);
+            TestUtils.DoInput(stringFixture, TestUtils.CreateCellRange("Set"), cell);
             Assert.AreEqual(null, stringFixture.Field);
             VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
@@ -64,7 +64,7 @@ namespace fit.Test.NUnit {
         [Test]
         public void TestCheckNullValue() {
             MakeStringFixture();
-            stringFixture.CellOperation.Check(stringFixture, TestUtils.CreateCellRange("Field"), cell);
+            TestUtils.DoCheck(stringFixture, TestUtils.CreateCellRange("Field"), cell);
             AssertValuesInBody(cell, new string[] {"fit_grey", "null"});
             VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
@@ -73,7 +73,7 @@ namespace fit.Test.NUnit {
         public void TestCheckBlankValue() {
             MakeStringFixture();
             stringFixture.Field = "";
-            stringFixture.CellOperation.Check(stringFixture, TestUtils.CreateCellRange("Field"), cell);
+            TestUtils.DoCheck(stringFixture, TestUtils.CreateCellRange("Field"), cell);
             AssertValuesInBody(cell, new string[] {"fit_grey", "blank"});
             VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
@@ -82,7 +82,7 @@ namespace fit.Test.NUnit {
         public void TestCheckNonNullNonBlankValue() {
             MakeStringFixture();
             stringFixture.Field = "a value";
-            stringFixture.CellOperation.Check(stringFixture, TestUtils.CreateCellRange("Field"), cell);
+            TestUtils.DoCheck(stringFixture, TestUtils.CreateCellRange("Field"), cell);
             AssertValuesInBody(cell, new string[] {"fit_grey", "a value"});
             VerifyCounts(stringFixture, 0, 0, 0, 0);
         }

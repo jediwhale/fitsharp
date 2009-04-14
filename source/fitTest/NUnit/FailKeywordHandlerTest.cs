@@ -27,7 +27,7 @@ namespace fit.Test.NUnit {
             Parse cell = TestUtils.CreateCell("fail[1]");
             MakeIntFixture();
             intFixture.Field = 2;
-            intFixture.CellOperation.Check(intFixture, TestUtils.CreateCellRange("field"), cell);
+            TestUtils.DoCheck(intFixture, TestUtils.CreateCellRange("field"), cell);
             AssertCellPasses(cell);
             VerifyCounts(intFixture, 1, 0, 0, 0);
         }
@@ -38,7 +38,7 @@ namespace fit.Test.NUnit {
             Parse cell = TestUtils.CreateCell("fail[2]");
             MakeIntFixture();
             intFixture.Field = 2;
-            intFixture.CellOperation.Check(intFixture, TestUtils.CreateCellRange("field"), cell);
+            TestUtils.DoCheck(intFixture, TestUtils.CreateCellRange("field"), cell);
             AssertCellFails(cell);
             VerifyCounts(intFixture, 0, 1, 0, 0);
         }
@@ -49,7 +49,7 @@ namespace fit.Test.NUnit {
             Parse cell = TestUtils.CreateCell("fail[some string]");
             MakeStringFixture();
             stringFixture.Field = "some other string";
-            stringFixture.CellOperation.Check(stringFixture, TestUtils.CreateCellRange("field"), cell);
+            TestUtils.DoCheck(stringFixture, TestUtils.CreateCellRange("field"), cell);
             AssertCellPasses(cell);
             VerifyCounts(stringFixture, 1, 0, 0, 0);
         }
@@ -60,7 +60,7 @@ namespace fit.Test.NUnit {
             Parse cell = TestUtils.CreateCell("fail[Doctor Jeckyll]");
             MakePersonFixture();
             personFixture.Field = new Person("Mister", "Hyde");
-            personFixture.CellOperation.Check(personFixture, TestUtils.CreateCellRange("field"), cell);
+            TestUtils.DoCheck(personFixture, TestUtils.CreateCellRange("field"), cell);
             AssertCellPasses(cell);
             VerifyCounts(personFixture, 1, 0, 0, 0);
         }

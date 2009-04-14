@@ -26,7 +26,7 @@ namespace fit
 			}
 			catch (Exception e)
 			{
-				Exception(cells, e);
+				TestStatus.MarkException(cells, e);
 			}
 		}
 
@@ -40,7 +40,7 @@ namespace fit
 
 		public virtual void Enter()
 		{
-			CellOperation.Input(actor, cells.More, cells.More.More);
+			CellOperation.Input(actor.TestStatus, actor.GetTargetObject(), cells.More, cells.More.More);
 		}
 
 		public virtual void Press()
@@ -50,7 +50,7 @@ namespace fit
 
 		public virtual void Check()
 		{
-			CellOperation.Check(actor, cells.More, cells.More.More);
+			CellOperation.Check(actor.TestStatus, actor.GetTargetObject(), cells.More, cells.More.More);
 		}
 
 		public override object GetTargetObject() {
