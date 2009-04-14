@@ -15,8 +15,8 @@ to be bound by the terms of this license. You must not remove this notice, or an
 <div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
 <div class="pagename">Loading Assemblies</div>
 <div class="content">To execute your tests, <a href="../Slim.html">Slim</a> needs to find the assemblies that contain your code. There's two ways to do this.<br>
-<ul><li>You can list the assemblies in PATH definitions.</li></ul><pre>!path c:\myfolder\mytest.dll
-!path c:\myfolder\myother.dll</pre><ul><li>You can list the assemblies in a <a href="../FitSharp/SuiteConfigurationFile.html">Suite Configuration File</a>. You can also specify namespaces here, or in a Slim <a class="externallink" href="http://www.fitnesse.org/FitNesse.SliM.ImportTable">Import</a> table.</li></ul><pre>&lt;?xml version="1.0" encoding="utf-8" ?>
+<ul><li>You can list the assemblies in PATH definitions.</li></ul><pre class="code">!path c:\myfolder\mytest.dll
+!path c:\myfolder\myother.dll</pre><ul><li>You can list the assemblies in a <a href="../FitSharp/SuiteConfigurationFile.html">Suite Configuration File</a>. You can also specify namespaces here, or in a Slim <a class="externallink" href="http://www.fitnesse.org/FitNesse.SliM.ImportTable">Import</a> table.</li></ul><pre class="code">&lt;?xml version="1.0" encoding="utf-8" ?>
 &lt;config>
   &lt;ApplicationUnderTest>
     &lt;addAssembly>c:\myfolder\mytest.dll&lt;/addAssembly>
@@ -24,7 +24,7 @@ to be bound by the terms of this license. You must not remove this notice, or an
     &lt;addNamespace>My.Namespace&lt;/addNamespace>
   &lt;/ApplicationUnderTest>
 &lt;/config></pre>This file is then specified in the COMMAND_PATTERN definition and the %p path token is removed.<br>
-<pre>!define COMMAND_PATTERN {%m -c c:\myfolder\mysuite.config.xml
+<pre class="code">!define COMMAND_PATTERN {%m -c c:\myfolder\mysuite.config.xml
  -r fitSharp.Slim.Service.Runner,c:\program files\fitsharp\fitsharp.dll}
 </pre><br>
 </div>

@@ -15,11 +15,11 @@ to be bound by the terms of this license. You must not remove this notice, or an
 <div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
 <div class="pagename">Suite Configuration File</div>
 <div class="content">The execution environment for a suite of tests can be controlled by a suite configuration file. This is a way to consolidate configuration information into one place and to remove it from business-facing story tests. The file is specified in the command line for the <span style="font-family:verdana,sans-serif"><i>fit</i>Sharp</span> Runner with a -c switch:<br>
-<pre>c:\program files\fitsharp\runner -c c:\myfolder\mysuite.config.xml -r ...</pre>To specify the file from FitNesse, include it in the COMMAND_PATTERN definition:<br>
-<pre>!define COMMAND_PATTERN {%m -c c:\myfolder\mysuite.config.xml -r ...}</pre>The execution environment is re-initialized at the beginning of each test, to preserve test independence. This means any changes made to configurable items during test execution will not be visible to other tests.<br>
+<pre class="code">c:\program files\fitsharp\runner -c c:\myfolder\mysuite.config.xml -r ...</pre>To specify the file from FitNesse, include it in the COMMAND_PATTERN definition:<br>
+<pre class="code">!define COMMAND_PATTERN {%m -c c:\myfolder\mysuite.config.xml -r ...}</pre>The execution environment is re-initialized at the beginning of each test, to preserve test independence. This means any changes made to configurable items during test execution will not be visible to other tests.<br>
 <br>
 The file format is XML. Here is a sample showing the configurable items:<br>
-<pre>&lt;suiteConfig>
+<pre class="code">&lt;suiteConfig>
     &lt;ApplicationUnderTest>
         &lt;AddAssembly>myTests.dll&lt;/AddAssembly>
         &lt;AddNamespace>myTests&lt;/AddNamespace>

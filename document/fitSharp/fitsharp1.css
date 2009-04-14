@@ -39,3 +39,5 @@ a.externallink {
 	padding-right: 8px;
 }
 table {background-color:white;}
+pre.code {}
+pre.test { margin-left: 10%; }

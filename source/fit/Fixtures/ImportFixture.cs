@@ -10,6 +10,10 @@ namespace fit
 	[Obsolete("Use suite configuration file")]
     public class ImportFixture : Fixture
 	{
+        public override bool IsVisible {
+            get { return false; }
+        }
+
 		public override void DoCell(Parse cell, int columnNumber)
 		{
             Processor.AddNamespace(cell.Text);

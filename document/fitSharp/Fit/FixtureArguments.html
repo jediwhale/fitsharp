@@ -14,7 +14,7 @@ to be bound by the terms of this license. You must not remove this notice, or an
 <body>
 <div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
 <div class="pagename">Fixture Arguments</div>
-<div class="content">The text in cells in the first row of a table following the fixture name are available to the fixture as a string array named Args, e.g.: <pre>string anArgument = Args[i];</pre><br>
+<div class="content">The text in cells in the first row of a table following the fixture name are available to the fixture as a string array named Args, e.g.: <pre class="code">string anArgument = Args[i];</pre><br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>sample do</td></tr>
 <tr><td>check</td><td>argument count</td><td>0</td></tr>
@@ -28,7 +28,7 @@ to be bound by the terms of this license. You must not remove this notice, or an
 <tr><td>check</td><td>get argument</td><td>2</td><td>arguments</td></tr>
 </table>
 <br>
-The Args array returns the raw text in the argument cells. To process the argument cells like other input cells, e.g., retrieving symbol values or parsing arrays, use the GetArgumentInput method with the argument index and the desired type, e.g.: <pre>string anArgument = (string)GetArgumentInput(i, typeof(string));</pre><br>
+The Args array returns the raw text in the argument cells. To process the argument cells like other input cells, e.g., retrieving symbol values or parsing arrays, use the GetArgumentInput method with the argument index and the desired type, e.g.: <pre class="code">string anArgument = (string)GetArgumentInput(i, typeof(string));</pre><br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>cell handler story</td></tr>
 <tr><td>string</td><td>string?</td></tr>

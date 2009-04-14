@@ -21,7 +21,7 @@ Most of the fixture classes that are derived from the standard fixtures are, in 
 Separate domain adapters can be written and used by the standard fixtures, without writing any fixture code. Methods of the domain adapter and methods of the domain class can both be used in story test tables. The domain adapter can be reused in a variety of tests.<br>
 <br>
 A domain adapter class implements the <a href="../Fit/DomainAdapter.html">Domain Adapter</a> interface:<br>
-<pre>public interface DomainAdapter {
+<pre class="code">public interface DomainAdapter {
     object SystemUnderTest { get; }
 }
 public class SampleDomainAdapter: DomainAdapter {
