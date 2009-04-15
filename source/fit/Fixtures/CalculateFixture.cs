@@ -8,6 +8,7 @@ using fit;
 using fit.Model;
 using fitlibrary.exception;
 using System;
+using fitSharp.Fit.Exception;
 using fitSharp.Machine.Exception;
 
 namespace fitlibrary {

@@ -4,7 +4,7 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-using fit;
+using fitSharp.Fit.Model;
 
 namespace fitnesse.fitserver
 {
@@ -12,6 +12,6 @@ namespace fitnesse.fitserver
     {
         void Close();
         void WritePageResult(PageResult results);
-        void WriteFinalCount(Counts counts);
+        void WriteFinalCount(TestStatus summary);
     }
 }

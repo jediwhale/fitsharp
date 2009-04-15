@@ -9,6 +9,7 @@ using System.IO;
 using System.Net.Sockets;
 using System.Text;
 using fit;
+using fitSharp.Fit.Model;
 using fitSharp.IO;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
@@ -18,6 +19,8 @@ namespace fitnesse.fitserver
 {
 	public class FitServer: Runnable
 	{
+	    public TestStatus Status { get; private set; }
+
 		private Socket clientSocket;
 	    private SocketStream socketStream;
 		private bool verbose = false;
@@ -25,7 +28,6 @@ namespace fitnesse.fitserver
 		private int port;
 		private string socketToken;
 		public FixtureListener fixtureListener;
-		private Counts totalCounts = new Counts();
 	    private bool IMaybeProcessingSuiteSetup = true;
 	    private Configuration configuration;
 
@@ -42,12 +44,12 @@ namespace fitnesse.fitserver
 			return fitServer.ExitCode();
 		}
 
-		public FitServer()
-		{
-			fixtureListener = new TablePrintingFixtureListener(this);
+		public FitServer() {
+		    Status = new TestStatus();
+		    fixtureListener = new TablePrintingFixtureListener(this);
 		}
 
-		public FitServer(Configuration configuration, string host, int port, bool verbose) : this()
+	    public FitServer(Configuration configuration, string host, int port, bool verbose) : this()
 		{
 		    this.configuration = configuration;
 			this.host = host;
@@ -139,7 +141,7 @@ namespace fitnesse.fitserver
 		public void Exit()
 		{
 			WriteLogMessage("exiting...");
-			WriteLogMessage("End results: " + totalCounts);
+			WriteLogMessage("End results: " + Status.CountDescription);
 		}
 
 		private void EstablishConnection()
@@ -182,9 +184,9 @@ namespace fitnesse.fitserver
             while ((document = ReceiveDocument()).Length > 0)
 			{
 				WriteLogMessage("processing document of size: " + document.Length);
-				Counts currentCounts = ProcessTestDocument(document);
-				totalCounts.Tally(currentCounts);
-				WriteLogMessage("\tresults: " + currentCounts);
+				TestStatus currentStatus = ProcessTestDocument(document);
+				Status.TallyCounts(currentStatus);
+				WriteLogMessage("\tresults: " + currentStatus.CountDescription);
 		        IMaybeProcessingSuiteSetup = false;
 			}
 			WriteLogMessage("\ncompletion signal recieved");
@@ -194,15 +196,15 @@ namespace fitnesse.fitserver
 
 		public int ExitCode()
 		{
-			return totalCounts.Wrong + totalCounts.Exceptions;
+			return Status.FailCount;
 		}
 
-		private Counts ProcessTestDocument(string document)
+		private TestStatus ProcessTestDocument(string document)
 		{
 			return RunTest(document);
 		}
 
-		private Counts RunTest(string document)
+		private TestStatus RunTest(string document)
 		{
 			try
 			{
@@ -214,7 +216,7 @@ namespace fitnesse.fitserver
                     storyTest.ExecuteOnConfiguration();
                 else
 				    storyTest.Execute();
-				return storyTest.Counts;
+				return storyTest.TestStatus;
 			}
 			catch (Exception e)
 			{
@@ -222,7 +224,7 @@ namespace fitnesse.fitserver
 				Parse parse = new Parse("body", "Unable to parse input. Input ignored.", null, null);
 				fixture.Exception(parse, e);
 				fixtureListener.TableFinished(parse);
-				return fixture.Counts;
+				return fixture.TestStatus;
 			}
 		}
 
@@ -298,14 +300,6 @@ namespace fitnesse.fitserver
 			return ReadFixedLengthString(reader, contentLength);
 		}
 
-		public Counts Counts
-		{
-			get
-			{
-				return totalCounts;
-			}
-		}
-
 	    private static readonly IdentifierName ourSuiteSetupIdentifier = new IdentifierName("suitesetup");
 	}
 
@@ -325,10 +319,10 @@ namespace fitnesse.fitserver
 			fitServer.Transmit(Protocol.FormatDocument(testResultDocument));
 		}
 
-		public void TablesFinished(Parse theTables, Counts counts)
+		public void TablesFinished(Parse theTables, TestStatus status)
 		{
 			fitServer.WriteLogMessage("\tTest Document finished");
-			fitServer.Transmit(Protocol.FormatCounts(counts));
+			fitServer.Transmit(Protocol.FormatCounts(status));
 		}
 		
 	}

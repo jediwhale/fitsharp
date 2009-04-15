@@ -132,11 +132,11 @@ namespace fit.Test.NUnit {
             runner.verbose = false;
             runner.output = output;
 
-            runner.HandleFinalCount(new Counts(1, 2, 3, 4));
+            runner.HandleFinalCount(TestUtils.MakeTestStatus());
             Assert.AreEqual("", output.ToString());
 			
             runner.verbose = true;
-            runner.HandleFinalCount(new Counts(1, 2, 3, 4));
+            runner.HandleFinalCount(TestUtils.MakeTestStatus());
             string expected = "\r\n" +
                               "Test Pages: 0 right, 0 wrong, 0 ignored, 0 exceptions\r\n" +
                               "Assertions: 1 right, 2 wrong, 3 ignored, 4 exceptions\r\n";

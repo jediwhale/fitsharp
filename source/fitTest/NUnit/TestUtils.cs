@@ -6,7 +6,6 @@
 using System;
 using System.Reflection;
 using System.Text;
-using fit.Engine;
 using fit.Model;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
@@ -56,6 +55,35 @@ namespace fit.Test.NUnit {
 
         public static void DoCheck(Fixture fixture, Tree<Cell> range, Parse cell) {
             fixture.CellOperation.Check(fixture.TestStatus, fixture.GetTargetObject(), range, cell);
+        }
+
+        public static TestStatus MakeTestStatus() {
+            var status = new TestStatus();
+            status.AddCount(CellAttributes.RightStatus);
+            status.AddCount(CellAttributes.WrongStatus);
+            status.AddCount(CellAttributes.WrongStatus);
+            status.AddCount(CellAttributes.IgnoreStatus);
+            status.AddCount(CellAttributes.IgnoreStatus);
+            status.AddCount(CellAttributes.IgnoreStatus);
+            status.AddCount(CellAttributes.ExceptionStatus);
+            status.AddCount(CellAttributes.ExceptionStatus);
+            status.AddCount(CellAttributes.ExceptionStatus);
+            status.AddCount(CellAttributes.ExceptionStatus);
+            return status;
+        }
+
+        public static void CheckCounts(StoryTest test, int right, int wrong, int ignore, int exception) {
+            Assert.AreEqual(right, test.TestStatus.GetCount(CellAttributes.RightStatus));
+            Assert.AreEqual(wrong, test.TestStatus.GetCount(CellAttributes.WrongStatus));
+            Assert.AreEqual(ignore, test.TestStatus.GetCount(CellAttributes.IgnoreStatus));
+            Assert.AreEqual(exception, test.TestStatus.GetCount(CellAttributes.ExceptionStatus));
+        }
+
+        public static void VerifyCounts(Fixture fixture, int right, int wrong, int ignores, int exceptions) {
+            Assert.AreEqual(right, fixture.TestStatus.GetCount(CellAttributes.RightStatus));
+            Assert.AreEqual(wrong, fixture.TestStatus.GetCount(CellAttributes.WrongStatus));
+            Assert.AreEqual(ignores, fixture.TestStatus.GetCount(CellAttributes.IgnoreStatus));
+            Assert.AreEqual(exceptions, fixture.TestStatus.GetCount(CellAttributes.ExceptionStatus));
         }
     }
 

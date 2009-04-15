@@ -40,7 +40,7 @@ namespace fit.Test.NUnit {
             cell = TestUtils.CreateCell("..cde");
             TestUtils.DoCheck(stringFixture, TestUtils.CreateCellRange("Field"), cell);
             AssertCellPasses(cell);
-            VerifyCounts(stringFixture, 1, 0, 0, 0);
+            TestUtils.VerifyCounts(stringFixture, 1, 0, 0, 0);
         }
 
         [Test]
@@ -50,7 +50,7 @@ namespace fit.Test.NUnit {
             cell = TestUtils.CreateCell("..abc");
             TestUtils.DoCheck(stringFixture, TestUtils.CreateCellRange("Field"), cell);
             AssertCellFails(cell);
-            VerifyCounts(stringFixture, 0, 1, 0, 0);
+            TestUtils.VerifyCounts(stringFixture, 0, 1, 0, 0);
         }
 
         [Test]
@@ -60,7 +60,7 @@ namespace fit.Test.NUnit {
             cell = TestUtils.CreateCell("..abc");
             TestUtils.DoCheck(stringFixture, TestUtils.CreateCellRange("Field"), cell);
             AssertCellFails(cell);
-            VerifyCounts(stringFixture, 0, 1, 0, 0);
+            TestUtils.VerifyCounts(stringFixture, 0, 1, 0, 0);
         }
 
         private void MakeFixture() {

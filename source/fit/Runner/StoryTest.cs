@@ -5,9 +5,8 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System;
-using System.Collections;
 using System.Threading;
-using fit.Engine;
+using fitSharp.Fit.Model;
 using fit.exception;
 using fitlibrary;
 using fitSharp.Machine.Application;
@@ -16,7 +15,7 @@ using fitSharp.Machine.Engine;
 namespace fit {
     public interface StoryCommand {
         void Execute();
-        Counts Counts { get; }
+        TestStatus TestStatus { get; }
     }
 
     public class StoryTest: StoryCommand {
@@ -44,8 +43,6 @@ namespace fit {
         public StoryTest(Parse theTables, FixtureListener theListener): this(theTables) {
             Listener = theListener;
         }
-
-        public Counts Counts { get { return TestStatus.Counts; } }
 
         public void Execute() {
 		    var saveConfig = new Configuration(Context.Configuration);
@@ -85,7 +82,7 @@ namespace fit {
                 myFirstFixture.TestStatus = TestStatus;
                 TestStatus.MarkException(heading, e);
                 Listener.TableFinished(Tables);
-                Listener.TablesFinished(Tables, Counts);
+                Listener.TablesFinished(Tables, TestStatus);
                 return;
             }
             myFirstFixture.TestStatus = TestStatus;
@@ -129,7 +126,7 @@ namespace fit {
                 TestStatus.MarkException(theTables.Parts.Parts, e);
                 Listener.TableFinished(theTables);
             }
-			Listener.TablesFinished(theTables, Counts);
+			Listener.TablesFinished(theTables, TestStatus);
 		}
 
         public static void DoTable(Parse table, Fixture activeFixture, bool inFlow) {
@@ -143,7 +140,7 @@ namespace fit {
 
         private class SpecifyListener: FixtureListener {
 
-            public void TablesFinished(Parse theTables, Counts counts) {}
+            public void TablesFinished(Parse theTables, TestStatus status) {}
 
             public void TableFinished(Parse finishedTable) {
                 Parse newTable = finishedTable.Copy();

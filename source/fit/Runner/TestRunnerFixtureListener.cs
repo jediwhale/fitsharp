@@ -3,12 +3,13 @@
 // Released under the terms of the GNU General Public License version 2 or later.
 using System;
 using fit;
+using fitSharp.Fit.Model;
 
 namespace fitnesse.fitserver
 {
 	public class TestRunnerFixtureListener : FixtureListener
 	{
-		public Counts counts = new Counts();
+		public TestStatus TestStatus = new TestStatus();
 		private bool atStartOfResult = true;
 		private PageResult currentPageResult;
 		private TestRunner runner;
@@ -32,12 +33,12 @@ namespace fitnesse.fitserver
 			currentPageResult.Append(data);
 		}
 
-		public void TablesFinished(Parse theTables, Counts count)
+		public void TablesFinished(Parse theTables, TestStatus status)
 		{
-			currentPageResult.Counts = count;
+			currentPageResult.TestStatus = status;
 			runner.AcceptResults(currentPageResult);
 			atStartOfResult = true;
-			counts.Tally(count);
+			TestStatus.TallyCounts(status);
 		}
 	}
 }

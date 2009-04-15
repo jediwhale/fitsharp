@@ -3,9 +3,10 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
+using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
 
-namespace fit.Engine {
+namespace fitSharp.Fit.Operators {
     public class ExecuteContext {
         public TypedValue SystemUnderTest { get; private set; }
         public TestStatus TestStatus { get; private set; }

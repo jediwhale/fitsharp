@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using fitSharp.Fit.Model;
 using fitSharp.Fit.Application;
 using fitSharp.Machine.Application;
 
@@ -73,13 +74,13 @@ namespace fit.Runner {
             }
         }
 
-        public void ListFile(string theFileName, Counts theCounts, TimeSpan theElapsedTime) {
+        public void ListFile(string theFileName, TestStatus status, TimeSpan theElapsedTime) {
             IHaveFiles = true;
             if (myReport != null) {
-                myReport.ListFile(theFileName, theCounts, theElapsedTime);
+                myReport.ListFile(theFileName, status, theElapsedTime);
             }
             else {
-                myParent.ListFile(theFileName, theCounts, theElapsedTime);
+                myParent.ListFile(theFileName, status, theElapsedTime);
             }
         }
 
@@ -155,11 +156,11 @@ namespace fit.Runner {
 	        
             public string Content {get { return myReport.ToString(); }}
 	        
-            public void ListFile(string thePath, Counts theCounts, TimeSpan theElapsedTime) {
+            public void ListFile(string thePath, TestStatus status, TimeSpan theElapsedTime) {
                 myReport.WriteLine("<br /><a href=\"{0}\">{0}</a> <span class=\"{2}\">{1}</span> in {3}",
                                    thePath.Substring(myReportPath.Length + 1).Replace('\\', '/'),
-                                   theCounts,
-                                   theCounts.Style,
+                                   status.CountDescription,
+                                   status.Style,
                                    theElapsedTime);
             }
 	        

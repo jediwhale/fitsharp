@@ -21,7 +21,6 @@ namespace fit
 
 	    public TestStatus TestStatus = new TestStatus();
 
-		public Counts Counts {get { return TestStatus.Counts; }}
         public CellOperation CellOperation { get { return new CellOperation(Processor); }}
 
         public Fixture() {}

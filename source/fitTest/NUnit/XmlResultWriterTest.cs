@@ -43,14 +43,13 @@ namespace fit.Test.NUnit {
         {
             string pageName = "Test Page";
             PageResult pageResult = new PageResult(pageName);
-            pageResult.Counts = new Counts(1, 2, 3, 4);
+            pageResult.TestStatus = TestUtils.MakeTestStatus();
             pageResult.Append("<table border=\"1\" cellspacing=\"0\">\r\n<tr><td>Text</td>\r\n</tr>\r\n</table>");
             _strategy = new XmlResultWriter(TEST_RESULT_FILE_NAME, _folderModel);
             _strategy.WritePageResult(pageResult);
             _strategy.Close();
             Assert.AreEqual(
-                BuildPageResultString(pageName, "<![CDATA[<table border=\"1\" cellspacing=\"0\">\r\n<tr><td>Text</td>\r\n</tr>\r\n</table>]]>", pageResult.Counts.Right,
-                                      pageResult.Counts.Wrong, pageResult.Counts.Ignores, pageResult.Counts.Exceptions),
+                BuildPageResultString(pageName, "<![CDATA[<table border=\"1\" cellspacing=\"0\">\r\n<tr><td>Text</td>\r\n</tr>\r\n</table>]]>", 1, 2, 3, 4),
                 _folderModel.FileContent(TEST_RESULT_FILE_NAME));
         }
 
@@ -58,10 +57,9 @@ namespace fit.Test.NUnit {
         public void TestWriteFinalCounts()
         {
             _strategy = new XmlResultWriter(TEST_RESULT_FILE_NAME, _folderModel);
-            Counts counts = new Counts(1, 2, 3, 4);
-            _strategy.WriteFinalCount(counts);
+            _strategy.WriteFinalCount(TestUtils.MakeTestStatus());
             _strategy.Close();
-            Assert.AreEqual(BuildFinalCountsString(counts.Right, counts.Wrong, counts.Ignores, counts.Exceptions),
+            Assert.AreEqual(BuildFinalCountsString(1, 2, 3, 4),
                             _folderModel.FileContent(TEST_RESULT_FILE_NAME));
         }
 

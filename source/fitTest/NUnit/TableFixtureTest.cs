@@ -4,6 +4,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System.Text;
+using fit.Engine;
 using fitnesse.fixtures;
 using fitSharp.Fit.Model;
 using NUnit.Framework;
@@ -51,7 +52,7 @@ namespace fit.Test.NUnit
 				this.finishedTable = finishedTable;
 			}
 
-			public void TablesFinished(Parse theTables, Counts counts)
+			public void TablesFinished(Parse theTables, TestStatus status)
 			{
 			}
 		}
@@ -94,23 +95,23 @@ namespace fit.Test.NUnit
 		[Test]
 		public void TestRight()
 		{
-			Assert.AreEqual(1, myStoryTest.Counts.Right);
-            Assert.AreEqual(CellAttributes.PassStatus, getFinishedTable().At(0,1,0).GetAttribute(CellAttributes.StatusKey));
+			Assert.AreEqual(1, myStoryTest.TestStatus.GetCount(CellAttributes.RightStatus));
+            Assert.AreEqual(CellAttributes.RightStatus, getFinishedTable().At(0,1,0).GetAttribute(CellAttributes.StatusKey));
 		}
 
 		[Test]
 		public void TestWrong()
 		{
-			Assert.AreEqual(2, myStoryTest.Counts.Wrong);
-            Assert.AreEqual(CellAttributes.FailStatus, getFinishedTable().At(0,1,1).GetAttribute(CellAttributes.StatusKey));
-            Assert.AreEqual(CellAttributes.FailStatus, getFinishedTable().At(0,1,2).GetAttribute(CellAttributes.StatusKey));
+			Assert.AreEqual(2, myStoryTest.TestStatus.GetCount(CellAttributes.WrongStatus));
+            Assert.AreEqual(CellAttributes.WrongStatus, getFinishedTable().At(0,1,1).GetAttribute(CellAttributes.StatusKey));
+            Assert.AreEqual(CellAttributes.WrongStatus, getFinishedTable().At(0,1,2).GetAttribute(CellAttributes.StatusKey));
 			Assert.IsTrue(getFinishedTable().At(0,1,2).Body.IndexOf("actual") > 0);
 		}
 
 		[Test]
 		public void TestIgnore()
 		{
-			Assert.AreEqual(1, myStoryTest.Counts.Ignores);
+			Assert.AreEqual(1, myStoryTest.TestStatus.GetCount(CellAttributes.IgnoreStatus));
             Assert.AreEqual(CellAttributes.IgnoreStatus, getFinishedTable().At(0,1,3).GetAttribute(CellAttributes.StatusKey));
 		}
 

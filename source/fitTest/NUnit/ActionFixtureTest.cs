@@ -5,6 +5,7 @@
 
 using System.Text;
 using fit.Test.Acceptance;
+using fitSharp.Fit.Model;
 using NUnit.Framework;
 
 namespace fit.Test.NUnit {
@@ -45,7 +46,7 @@ namespace fit.Test.NUnit {
             table = new Parse(BuildTable("ActionFixture"));
             ActionFixture fixture = new ActionFixture { Processor = new Service.Service() };
             fixture.DoTable(table);
-            Assert.AreEqual(0, fixture.Counts.Exceptions, table.ToString());
+            Assert.AreEqual(0, fixture.TestStatus.GetCount(CellAttributes.ExceptionStatus), table.ToString());
             Assert.IsNotNull((CountFixture) fixture.GetTargetObject());
         }
 
@@ -55,11 +56,11 @@ namespace fit.Test.NUnit {
             table = new Parse(BuildTable("ActionFixture"));
             ActionFixture fixture = new ActionFixture{ Processor = new Service.Service() };
             fixture.DoTable(table);
-            Assert.AreEqual(0, fixture.Counts.Exceptions, table.ToString());
+            Assert.AreEqual(0, fixture.TestStatus.GetCount(CellAttributes.ExceptionStatus), table.ToString());
             CountFixture countFixture = (CountFixture)fixture.GetTargetObject();
             int actualCount = ((CountFixture)countFixture).Counter;
             Assert.AreEqual(6, actualCount);
-            Assert.AreEqual(4, fixture.Counts.Right);
+            Assert.AreEqual(4, fixture.TestStatus.GetCount(CellAttributes.RightStatus));
         }
 
         [Test]
@@ -68,11 +69,11 @@ namespace fit.Test.NUnit {
             table = new Parse(BuildTable("TimedActionFixture"));
             ActionFixture fixture = new ActionFixture{ Processor = new Service.Service() };
             fixture.DoTable(table);
-            Assert.AreEqual(0, fixture.Counts.Exceptions, table.ToString());
+            Assert.AreEqual(0, fixture.TestStatus.GetCount(CellAttributes.ExceptionStatus), table.ToString());
             CountFixture countFixture = (CountFixture)fixture.GetTargetObject();
             int actualCount = ((CountFixture)countFixture).Counter;
             Assert.AreEqual(6, actualCount);
-            Assert.AreEqual(4, countFixture.Counts.Right);
+            Assert.AreEqual(4, countFixture.TestStatus.GetCount(CellAttributes.RightStatus));
         }
     }
 }

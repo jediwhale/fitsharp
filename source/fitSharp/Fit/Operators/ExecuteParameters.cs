@@ -3,13 +3,13 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-using fitlibrary.exception;
+using fitSharp.Fit.Exception;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
 
-namespace fit.Engine {
+namespace fitSharp.Fit.Operators {
     public class ExecuteParameters {
 
         public const string Check = "check";

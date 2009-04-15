@@ -4,6 +4,8 @@
 using System;
 using System.Text;
 using fit;
+using fit.Engine;
+using fitSharp.Fit.Model;
 
 namespace fitnesse.fitserver
 {
@@ -20,14 +22,14 @@ namespace fitnesse.fitserver
 			return Protocol.FormatInteger(Encoding.UTF8.GetBytes(document).Length) + document;
 		}
 
-		public static String FormatCounts(Counts counts)
+		public static String FormatCounts(TestStatus status)
 		{
 			StringBuilder builder = new StringBuilder();
 			builder.Append(FormatInteger(0));
-			builder.Append(FormatInteger(counts.Right));
-			builder.Append(FormatInteger(counts.Wrong));
-			builder.Append(FormatInteger(counts.Ignores));
-			builder.Append(FormatInteger(counts.Exceptions));
+			builder.Append(FormatInteger(status.GetCount(CellAttributes.RightStatus)));
+			builder.Append(FormatInteger(status.GetCount(CellAttributes.WrongStatus)));
+			builder.Append(FormatInteger(status.GetCount(CellAttributes.IgnoreStatus)));
+			builder.Append(FormatInteger(status.GetCount(CellAttributes.ExceptionStatus)));
 			return builder.ToString();
 		}
 	}

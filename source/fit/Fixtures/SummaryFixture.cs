@@ -15,7 +15,7 @@ namespace fit
 
 		public override void DoTable(Parse table)
 		{
-			TestStatus.Summary[countsKey] = Counts.ToString();
+			TestStatus.Summary[countsKey] = TestStatus.CountDescription;
 			SortedList entries = new SortedList(TestStatus.Summary);
 			table.Parts.More = Rows(entries.Keys.GetEnumerator());
 		}
@@ -49,13 +49,13 @@ namespace fit
 		{
 			// mark summary good/bad without counting beyond here
 			Parse cell = row.Parts.More;
-			if (Counts.Wrong + Counts.Exceptions > 0)
+			if (TestStatus.FailCount > 0)
 			{
-			    cell.SetAttribute(CellAttributes.StatusKey, CellAttributes.FailStatus);
+			    cell.SetAttribute(CellAttributes.StatusKey, CellAttributes.WrongStatus);
 			}
 			else
 			{
-			    cell.SetAttribute(CellAttributes.StatusKey, CellAttributes.PassStatus);
+			    cell.SetAttribute(CellAttributes.StatusKey, CellAttributes.RightStatus);
 			}
 		}
 	}

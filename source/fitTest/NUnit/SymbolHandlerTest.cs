@@ -3,8 +3,6 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-using fit.Engine;
-using fit.Operators;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
 using fitSharp.Machine.Model;
@@ -39,7 +37,7 @@ namespace fit.Test.NUnit {
             stringFixture.Field = "abc";
             TestUtils.DoCheck(stringFixture, TestUtils.CreateCellRange("Field"), cell);
             Assert.AreEqual("abc", LoadSymbol("xyz"));
-            VerifyCounts(stringFixture, 0, 0, 0, 0);
+            TestUtils.VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
 
         [Test]
@@ -59,7 +57,7 @@ namespace fit.Test.NUnit {
             StoreSymbol("def", "ghi");
             TestUtils.DoInput(stringFixture, TestUtils.CreateCellRange("Field"), cell);
             Assert.AreEqual("ghi", stringFixture.Field);
-            VerifyCounts(stringFixture, 0, 0, 0, 0);
+            TestUtils.VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
 
         [Test]
@@ -71,7 +69,7 @@ namespace fit.Test.NUnit {
             stringFixture.Field = "ghi";
             TestUtils.DoCheck(stringFixture, TestUtils.CreateCellRange("Field"), cell);
             Assert.AreEqual("<<def<span class=\"fit_grey\"> ghi</span>", cell.Body);
-            VerifyCounts(stringFixture, 1, 0, 0, 0);
+            TestUtils.VerifyCounts(stringFixture, 1, 0, 0, 0);
         }
 
         [Test]
@@ -83,7 +81,7 @@ namespace fit.Test.NUnit {
             stringFixture.Field = "xyz";
             TestUtils.DoCheck(stringFixture, TestUtils.CreateCellRange("Field"), cell);
             Assert.AreEqual("<<def<span class=\"fit_grey\"> ghi</span> <span class=\"fit_label\">expected</span><hr />xyz <span class=\"fit_label\">actual</span>", cell.Body);
-            VerifyCounts(stringFixture, 0, 1, 0, 0);
+            TestUtils.VerifyCounts(stringFixture, 0, 1, 0, 0);
         }	
 
         [Test]
@@ -95,7 +93,7 @@ namespace fit.Test.NUnit {
             stringFixture.Field = "xyz";
             TestUtils.DoInput(stringFixture, TestUtils.CreateCellRange("Field"), cell);
             Assert.AreEqual("<<def<span class=\"fit_grey\"> ghi</span>", cell.Body);
-            VerifyCounts(stringFixture, 0, 0, 0, 0);
+            TestUtils.VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
 
         [Test]
@@ -107,7 +105,7 @@ namespace fit.Test.NUnit {
             stringFixture.Field = "xyz";
             stringFixture.CellOperation.Compare(new TypedValue("xyz"), cell);
             Assert.AreEqual("<<def<span class=\"fit_grey\"> ghi</span>", cell.Body);
-            VerifyCounts(stringFixture, 0, 0, 0, 0);
+            TestUtils.VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
 
         [Test]
@@ -117,7 +115,7 @@ namespace fit.Test.NUnit {
             StoreSymbol("def", "ghi");
             stringFixture.Field = "ghi";
             Assert.IsTrue(stringFixture.CellOperation.Compare(new TypedValue("ghi"), cell));
-            VerifyCounts(stringFixture, 0, 0, 0, 0);
+            TestUtils.VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
 
         [Test]
@@ -127,7 +125,7 @@ namespace fit.Test.NUnit {
             StoreSymbol("def", "ghi");
             stringFixture.Field = "not ghi";
             Assert.IsFalse(stringFixture.CellOperation.Compare(new TypedValue("not ghi"), cell));
-            VerifyCounts(stringFixture, 0, 0, 0, 0);
+            TestUtils.VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
 
         [Test]
@@ -137,7 +135,7 @@ namespace fit.Test.NUnit {
             StoreSymbol("def", "ghi");
             stringFixture.Field = null;
             Assert.IsFalse(stringFixture.CellOperation.Compare(new TypedValue(null, typeof(string)), cell));
-            VerifyCounts(stringFixture, 0, 0, 0, 0);
+            TestUtils.VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
 
         [Test]
@@ -148,7 +146,7 @@ namespace fit.Test.NUnit {
             StoreSymbol("theKey", "theValue");
             stringFixture.Field = "theValue";
             TestUtils.DoCheck(stringFixture, TestUtils.CreateCellRange("Field"), cell);
-            VerifyCounts(stringFixture, 1, 0, 0, 0);
+            TestUtils.VerifyCounts(stringFixture, 1, 0, 0, 0);
         }
 
         [Test]
@@ -160,7 +158,7 @@ namespace fit.Test.NUnit {
             StoreSymbol("thePerson", person);
             personFixture.Field = person;
             TestUtils.DoCheck(personFixture, TestUtils.CreateCellRange("Field"), cell);
-            VerifyCounts(personFixture, 1, 0, 0, 0);
+            TestUtils.VerifyCounts(personFixture, 1, 0, 0, 0);
         }
 
         [Test]
@@ -171,7 +169,7 @@ namespace fit.Test.NUnit {
             StoreSymbol("theKey","theValue");
             stringFixture.Field = "anotherValue";
             TestUtils.DoCheck(stringFixture, TestUtils.CreateCellRange("Field"), cell);
-            VerifyCounts(stringFixture, 0, 1, 0, 0);
+            TestUtils.VerifyCounts(stringFixture, 0, 1, 0, 0);
         }
 
         [Test]
@@ -184,7 +182,7 @@ namespace fit.Test.NUnit {
             StoreSymbol("thePerson", person);
             personFixture.Field = person2;
             TestUtils.DoCheck(personFixture, TestUtils.CreateCellRange("Field"), cell);
-            VerifyCounts(personFixture, 0, 1, 0, 0);
+            TestUtils.VerifyCounts(personFixture, 0, 1, 0, 0);
         }
 
         private object LoadSymbol(string symbolName) {

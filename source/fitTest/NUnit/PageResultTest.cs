@@ -14,7 +14,7 @@ namespace fit.Test.NUnit {
         public void TestToString()
         {
             PageResult result = new PageResult("PageTitle");
-            result.Counts = new Counts(1, 2, 3, 4);
+            result.TestStatus = TestUtils.MakeTestStatus();
             result.Append("content");
             Assert.AreEqual("PageTitle\n1 right, 2 wrong, 3 ignored, 4 exceptions\ncontent", result.ToString());
         }

@@ -78,10 +78,7 @@ namespace fit.Test.NUnit {
             StoryTest test = new StoryTest(tables);
             test.Execute();
 
-            Assert.AreEqual(right, test.Counts.Right);
-            Assert.AreEqual(wrong, test.Counts.Wrong);
-            Assert.AreEqual(ignores, test.Counts.Ignores);
-            Assert.AreEqual(exceptions, test.Counts.Exceptions);
+            TestUtils.CheckCounts(test, right, wrong, ignores, exceptions);
         }
 
         [Test]
@@ -108,8 +105,7 @@ namespace fit.Test.NUnit {
             Assert.IsTrue(parse.ToString().IndexOf("number1") > 0);
             Assert.IsTrue(parse.ToString().IndexOf("number2") > 0);
             Assert.IsTrue(parse.ToString().IndexOf("number3") > 0);
-            Assert.AreEqual(1, test.Counts.Right);
-            Assert.AreEqual(2, test.Counts.Wrong);
+            TestUtils.CheckCounts(test, 1, 2, 0, 0);
         }
 
         [Test]
@@ -136,7 +132,7 @@ namespace fit.Test.NUnit {
             Assert.IsTrue(parse.ToString().IndexOf("number1") > 0);
             Assert.IsTrue(parse.ToString().IndexOf("number2") > 0);
             Assert.IsTrue(parse.ToString().IndexOf("number3") > 0);
-            Assert.AreEqual(2, test.Counts.Wrong);
+            TestUtils.CheckCounts(test, 1, 2, 0, 0);
         }
 
         [Test]
@@ -159,10 +155,7 @@ namespace fit.Test.NUnit {
             test.Execute();
             Assert.IsTrue(tables.ToString().IndexOf("Tuf..") > -1);
             Assert.IsFalse(tables.ToString().IndexOf("Tufnel") > -1);
-            Assert.AreEqual(2, test.Counts.Right);
-            Assert.AreEqual(0, test.Counts.Wrong);
-            Assert.AreEqual(0, test.Counts.Ignores);
-            Assert.AreEqual(0, test.Counts.Exceptions);
+            TestUtils.CheckCounts(test, 2, 0, 0, 0);
         }
 
         private string rowFixtureName = typeof (NewRowFixtureDerivative).Name;
@@ -194,7 +187,7 @@ namespace fit.Test.NUnit {
             myStoryTest = new StoryTest(table);
             myStoryTest.Execute();
             VerifyCounts(1, 0, 0, 0);
-            AssertTextInTag(table.At(0, 2, 0), CellAttributes.PassStatus);
+            AssertTextInTag(table.At(0, 2, 0), CellAttributes.RightStatus);
         }
 
         [Test]
@@ -208,8 +201,8 @@ namespace fit.Test.NUnit {
             myStoryTest = new StoryTest(table);
             myStoryTest.Execute();
             VerifyCounts(2, 0, 0, 0);
-            AssertTextInTag(table.At(0, 2, 0), CellAttributes.PassStatus);
-            AssertTextInTag(table.At(0, 2, 1), CellAttributes.PassStatus);
+            AssertTextInTag(table.At(0, 2, 0), CellAttributes.RightStatus);
+            AssertTextInTag(table.At(0, 2, 1), CellAttributes.RightStatus);
         }
 
         [Test]
@@ -250,8 +243,8 @@ namespace fit.Test.NUnit {
             myStoryTest = new StoryTest(table);
             myStoryTest.Execute();
             VerifyCounts(1, 1, 0, 0);
-            AssertTextInTag(table.At(0, 2, 0), CellAttributes.PassStatus);
-            AssertTextInTag(table.At(0, 2, 1), CellAttributes.FailStatus);
+            AssertTextInTag(table.At(0, 2, 0), CellAttributes.RightStatus);
+            AssertTextInTag(table.At(0, 2, 1), CellAttributes.WrongStatus);
         }
 
         [Test]
@@ -262,9 +255,9 @@ namespace fit.Test.NUnit {
             myStoryTest = new StoryTest(table);
             myStoryTest.Execute();
             VerifyCounts(0, 2, 0, 0);
-            AssertTextInTag(table.At(0, 2, 0), CellAttributes.FailStatus);
+            AssertTextInTag(table.At(0, 2, 0), CellAttributes.WrongStatus);
             AssertTextInBody(table.At(0, 2, 0), "missing");
-            AssertTextInTag(table.At(0, 3, 0), CellAttributes.FailStatus);
+            AssertTextInTag(table.At(0, 3, 0), CellAttributes.WrongStatus);
             AssertTextInBody(table.At(0, 3, 0), "surplus");
         }
 
@@ -350,7 +343,7 @@ namespace fit.Test.NUnit {
             myStoryTest = new StoryTest(table);
             myStoryTest.Execute();
             VerifyCounts(0, 1, 0, 0);
-            AssertTextInTag(table.At(0, 2, 0), CellAttributes.FailStatus);
+            AssertTextInTag(table.At(0, 2, 0), CellAttributes.WrongStatus);
             AssertTextInBody(table.At(0, 2, 0), "missing");
         }
 
@@ -362,7 +355,7 @@ namespace fit.Test.NUnit {
             myStoryTest = new StoryTest(table);
             myStoryTest.Execute();
             VerifyCounts(0, 1, 0, 0);
-            AssertTextInTag(table.At(0, 2, 0), CellAttributes.FailStatus);
+            AssertTextInTag(table.At(0, 2, 0), CellAttributes.WrongStatus);
             AssertTextInBody(table.At(0, 2, 0), "missing");
         }
 
@@ -376,10 +369,10 @@ namespace fit.Test.NUnit {
             myStoryTest = new StoryTest(table);
             myStoryTest.Execute();
             VerifyCounts(2, 1, 0, 0);
-            AssertTextInTag(table.At(0, 2, 0), CellAttributes.PassStatus);
-            AssertTextInTag(table.At(0, 2, 1), CellAttributes.PassStatus);
+            AssertTextInTag(table.At(0, 2, 0), CellAttributes.RightStatus);
+            AssertTextInTag(table.At(0, 2, 1), CellAttributes.RightStatus);
             AssertTextNotInBody(table.At(0, 2, 0), "missing");
-            AssertTextInTag(table.At(0, 3, 0), CellAttributes.FailStatus);
+            AssertTextInTag(table.At(0, 3, 0), CellAttributes.WrongStatus);
             AssertTextInBody(table.At(0, 3, 0), "missing");
         }
 
@@ -393,11 +386,11 @@ namespace fit.Test.NUnit {
             myStoryTest = new StoryTest(table);
             myStoryTest.Execute();
             VerifyCounts(2, 1, 0, 0);
-            AssertTextInTag(table.At(0, 2, 0), CellAttributes.FailStatus);
+            AssertTextInTag(table.At(0, 2, 0), CellAttributes.WrongStatus);
             AssertTextInBody(table.At(0, 2, 0), "missing");
             AssertTextNotInBody(table.At(0, 2, 1), "missing");
-            AssertTextInTag(table.At(0, 3, 0), CellAttributes.PassStatus);
-            AssertTextInTag(table.At(0, 3, 1), CellAttributes.PassStatus);
+            AssertTextInTag(table.At(0, 3, 0), CellAttributes.RightStatus);
+            AssertTextInTag(table.At(0, 3, 1), CellAttributes.RightStatus);
             AssertTextNotInBody(table.At(0, 3, 0), "missing");
             AssertTextNotInBody(table.At(0, 3, 1), "missing");
         }
@@ -489,10 +482,7 @@ namespace fit.Test.NUnit {
 
         private void VerifyCounts(int right, int wrong, int exceptions, int ignores)
         {
-            Assert.AreEqual(right, myStoryTest.Counts.Right);
-            Assert.AreEqual(wrong, myStoryTest.Counts.Wrong);
-            Assert.AreEqual(exceptions, myStoryTest.Counts.Exceptions);
-            Assert.AreEqual(ignores, myStoryTest.Counts.Ignores);
+            TestUtils.CheckCounts(myStoryTest, right, wrong, exceptions, ignores);
         }
 
         private void AddQueryValue(object obj)

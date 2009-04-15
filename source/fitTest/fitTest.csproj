@@ -125,7 +125,6 @@
     <Compile Include="NUnit\CellOperatorTest.cs" />
     <Compile Include="NUnit\ColumnFixtureTests.cs" />
     <Compile Include="NUnit\CompareDefaultTest.cs" />
-    <Compile Include="NUnit\CountsTest.cs" />
     <Compile Include="NUnit\DefaultCellHandlerTest.cs" />
     <Compile Include="NUnit\EmptyCellHandlerTest.cs" />
     <Compile Include="NUnit\EndsWithHandlerTest.cs" />

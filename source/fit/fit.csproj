@@ -39,8 +39,6 @@
   <ItemGroup>
     <Compile Include="Engine\Binding.cs" />
     <Compile Include="Engine\CellOperation.cs" />
-    <Compile Include="Engine\ExecuteContext.cs" />
-    <Compile Include="Engine\ExecuteParameters.cs" />
     <Compile Include="Exception\InvalidMethodException.cs" />
     <Compile Include="Fixtures\CalculateFixture.cs" />
     <Compile Include="Fixtures\ClearSymbolsFixture.cs" />
@@ -92,11 +90,8 @@
     <Compile Include="Operators\CompareFail.cs" />
     <Compile Include="Operators\CompareRegEx.cs" />
     <Compile Include="Operators\ExecuteEmpty.cs" />
-    <Compile Include="Operators\ExecuteError.cs" />
-    <Compile Include="Operators\ExecuteException.cs" />
     <Compile Include="Operators\ExecuteList.cs" />
     <Compile Include="Operators\ExecuteParse.cs" />
-    <Compile Include="Operators\ExecuteSymbolSave.cs" />
     <Compile Include="Operators\ParseTable.cs" />
     <Compile Include="Operators\ParseTree.cs" />
     <Compile Include="Runner\FitServer.cs" />
@@ -117,19 +112,14 @@
     <Compile Include="Operators\CellFactoryRepository.cs" />
     <Compile Include="Model\CellRange.cs" />
     <Compile Include="Operators\ComposeDefault.cs" />
-    <Compile Include="Operators\ExecuteBase.cs" />
-    <Compile Include="Operators\ExecuteDefault.cs" />
     <Compile Include="Operators\RuntimeFlow.cs" />
     <Compile Include="Operators\TableAdapter.cs" />
     <Compile Include="Parser\HtmlParser.cs" />
     <Compile Include="Runner\FixtureListener.cs" />
     <Compile Include="Runner\NullFixtureListener.cs" />
     <Compile Include="Exception\AbandonStoryTestException.cs" />
-    <Compile Include="Exception\IgnoredException.cs" />
     <Compile Include="Fixtures\FitVersionFixture.cs" />
     <Compile Include="Fixtures\Fixture.cs" />
-    <Compile Include="Engine\TestStatus.cs" />
-    <Compile Include="Model\Counts.cs" />
     <Compile Include="Model\Parse.cs" />
     <Compile Include="Parser\HtmlString.cs" />
     <Compile Include="Parser\Scanner.cs" />

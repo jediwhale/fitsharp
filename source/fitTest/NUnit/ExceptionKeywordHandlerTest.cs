@@ -3,8 +3,7 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-using fit.Engine;
-using fit.Operators;
+using fitSharp.Fit.Operators;
 using NUnit.Framework;
 
 namespace fit.Test.NUnit {
@@ -29,7 +28,7 @@ namespace fit.Test.NUnit {
             MakeExceptionFixture();
             TestUtils.DoCheck(exceptionFixture, TestUtils.CreateCellRange("ThrowNullReferenceException"), cell);
             AssertCellPasses(cell);
-            VerifyCounts(exceptionFixture, 1, 0, 0, 0);
+            TestUtils.VerifyCounts(exceptionFixture, 1, 0, 0, 0);
         }
 
         [Test]
@@ -39,7 +38,7 @@ namespace fit.Test.NUnit {
             MakeExceptionFixture();
             TestUtils.DoCheck(exceptionFixture, TestUtils.CreateCellRange("ThrowApplicationException"), cell);
             AssertCellFails(cell);
-            VerifyCounts(exceptionFixture, 0, 1, 0, 0);
+            TestUtils.VerifyCounts(exceptionFixture, 0, 1, 0, 0);
         }
 
         [Test]
@@ -50,7 +49,7 @@ namespace fit.Test.NUnit {
             exceptionFixture.Message = "an exception";
             TestUtils.DoCheck(exceptionFixture, TestUtils.CreateCellRange("ThrowApplicationException"), cell);
             AssertCellPasses(cell);
-            VerifyCounts(exceptionFixture, 1, 0, 0, 0);
+            TestUtils.VerifyCounts(exceptionFixture, 1, 0, 0, 0);
         }
 
         [Test]
@@ -61,7 +60,7 @@ namespace fit.Test.NUnit {
             exceptionFixture.Message = "an exception";
             TestUtils.DoCheck(exceptionFixture, TestUtils.CreateCellRange("ThrowApplicationException"), cell);
             AssertCellPasses(cell);
-            VerifyCounts(exceptionFixture, 1, 0, 0, 0);
+            TestUtils.VerifyCounts(exceptionFixture, 1, 0, 0, 0);
         }
 
         private void MakeExceptionFixture() {

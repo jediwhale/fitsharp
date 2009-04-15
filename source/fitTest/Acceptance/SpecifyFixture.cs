@@ -3,6 +3,7 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
+using fit.Engine;
 using fit.Operators;
 using fitlibrary;
 using fitlibrary.exception;
@@ -31,7 +32,7 @@ namespace fit.Test.Acceptance {
                 else {
                     Wrong(expectedCell);
                     expectedCell.More = ParseNode.MakeCells(Escape(differences));
-                    expectedCell.More.SetAttribute(CellAttributes.StatusKey, CellAttributes.FailStatus);
+                    expectedCell.More.SetAttribute(CellAttributes.StatusKey, CellAttributes.WrongStatus);
                 }
             }
         }
@@ -66,7 +67,7 @@ namespace fit.Test.Acceptance {
 
         private class SpecifyListener: FixtureListener {
 
-            public void TablesFinished(Parse theTables, Counts counts) {}
+            public void TablesFinished(Parse theTables, TestStatus status) {}
 
             public void TableFinished(Parse finishedTable) {
                 Parse newTable = finishedTable.Copy();

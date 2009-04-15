@@ -37,7 +37,7 @@ namespace fit.Test.NUnit {
             MakeFixture();
             intFixture.Field = 1;
             TestUtils.DoCheck(intFixture, TestUtils.CreateCellRange("Field"), cell);
-            VerifyCounts(intFixture, 1, 0, 0, 0);
+            TestUtils.VerifyCounts(intFixture, 1, 0, 0, 0);
         }
 
         [Test]
@@ -45,7 +45,7 @@ namespace fit.Test.NUnit {
             MakeFixture();
             intFixture.Field = 0;
             TestUtils.DoCheck(intFixture, TestUtils.CreateCellRange("Field"), cell);
-            VerifyCounts(intFixture, 1, 0, 0, 0);
+            TestUtils.VerifyCounts(intFixture, 1, 0, 0, 0);
         }
 
         [Test]
@@ -53,7 +53,7 @@ namespace fit.Test.NUnit {
             MakeFixture();
             intFixture.Field = 2;
             TestUtils.DoCheck(intFixture, TestUtils.CreateCellRange("Field"), cell);
-            VerifyCounts(intFixture, 1, 0, 0, 0);
+            TestUtils.VerifyCounts(intFixture, 1, 0, 0, 0);
         }
 
         [Test]
@@ -62,7 +62,7 @@ namespace fit.Test.NUnit {
             intFixture.Field = 5;
             TestUtils.DoCheck(intFixture, TestUtils.CreateCellRange("Field"), cell);
             AssertCellFails(cell);
-            VerifyCounts(intFixture, 0, 1, 0, 0);
+            TestUtils.VerifyCounts(intFixture, 0, 1, 0, 0);
         }
 
         [Test]
@@ -72,7 +72,7 @@ namespace fit.Test.NUnit {
             intFixture.Field = -400;
             TestUtils.DoCheck(intFixture, TestUtils.CreateCellRange("Field"), cell);
             AssertCellPasses(cell);
-            VerifyCounts(intFixture, 1, 0, 0, 0);
+            TestUtils.VerifyCounts(intFixture, 1, 0, 0, 0);
         }
 
         [Test]
@@ -82,7 +82,7 @@ namespace fit.Test.NUnit {
             intFixture.Field = 0;
             TestUtils.DoCheck(intFixture, TestUtils.CreateCellRange("Field"), cell);
             AssertCellPasses(cell);
-            VerifyCounts(intFixture, 1, 0, 0, 0);
+            TestUtils.VerifyCounts(intFixture, 1, 0, 0, 0);
         }
 
         private void MakeFixture() {

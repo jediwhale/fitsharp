@@ -29,7 +29,7 @@ namespace fit.Test.NUnit {
             intFixture.Field = 2;
             TestUtils.DoCheck(intFixture, TestUtils.CreateCellRange("field"), cell);
             AssertCellPasses(cell);
-            VerifyCounts(intFixture, 1, 0, 0, 0);
+            TestUtils.VerifyCounts(intFixture, 1, 0, 0, 0);
         }
 
         [Test]
@@ -40,7 +40,7 @@ namespace fit.Test.NUnit {
             intFixture.Field = 2;
             TestUtils.DoCheck(intFixture, TestUtils.CreateCellRange("field"), cell);
             AssertCellFails(cell);
-            VerifyCounts(intFixture, 0, 1, 0, 0);
+            TestUtils.VerifyCounts(intFixture, 0, 1, 0, 0);
         }
 
         [Test]
@@ -51,7 +51,7 @@ namespace fit.Test.NUnit {
             stringFixture.Field = "some other string";
             TestUtils.DoCheck(stringFixture, TestUtils.CreateCellRange("field"), cell);
             AssertCellPasses(cell);
-            VerifyCounts(stringFixture, 1, 0, 0, 0);
+            TestUtils.VerifyCounts(stringFixture, 1, 0, 0, 0);
         }
 
         [Test]
@@ -62,7 +62,7 @@ namespace fit.Test.NUnit {
             personFixture.Field = new Person("Mister", "Hyde");
             TestUtils.DoCheck(personFixture, TestUtils.CreateCellRange("field"), cell);
             AssertCellPasses(cell);
-            VerifyCounts(personFixture, 1, 0, 0, 0);
+            TestUtils.VerifyCounts(personFixture, 1, 0, 0, 0);
         }
     }
 }

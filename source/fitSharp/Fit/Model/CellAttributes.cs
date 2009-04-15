@@ -14,10 +14,10 @@ namespace fitSharp.Fit.Model {
 	    public const string LabelKey = "label";
 
 	    public const string StatusKey = "class";
-	    public const string ErrorStatus = "error";
-	    public const string FailStatus = "fail";
+	    public const string ExceptionStatus = "error";
+	    public const string WrongStatus = "fail";
 	    public const string IgnoreStatus = "ignore";
-	    public const string PassStatus = "pass";
+	    public const string RightStatus = "pass";
 
         public const string PrefixFormat = "{1} {0}";
         public const string SuffixFormat = "{0} {1}";

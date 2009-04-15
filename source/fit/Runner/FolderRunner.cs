@@ -23,10 +23,10 @@ namespace fit.Runner {
             ParseArguments(theArguments);
             myRunner = new SuiteRunner(myProgressReporter);
             myRunner.Run(new StoryTestFolder(new FileSystemModel()), string.Empty);
-            return myRunner.Counts.Wrong + myRunner.Counts.Exceptions;
+            return myRunner.TestStatus.FailCount;
         }
 
-        public string Results {get { return myRunner.Counts.ToString(); }}
+        public string Results {get { return myRunner.TestStatus.CountDescription; }}
 
         private static void ParseArguments(string[] theArguments) {
             if (theArguments.Length == 0) {

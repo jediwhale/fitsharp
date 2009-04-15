@@ -6,6 +6,7 @@
 
 using System;
 using System.IO;
+using fitSharp.Fit.Model;
 using fitnesse.fitserver;
 using fitSharp.Machine.Model;
 
@@ -47,13 +48,13 @@ namespace fit.Runner {
             myFolderModel.CopyFile(myPath.Name, OutputPath);
         }
 
-        private void WriteResult(Parse theTables, Counts theCounts, TimeSpan theElapsedTime) {
+        private void WriteResult(Parse theTables, TestStatus status, TimeSpan theElapsedTime) {
             string outputFile = OutputPath;
             var output = new StringWriter();
             theTables.Print(output);
             output.Close();
             myFolderModel.MakeFile(outputFile, output.ToString());
-            myFolder.ListFile(outputFile, theCounts, theElapsedTime);
+            myFolder.ListFile(outputFile, status, theElapsedTime);
         }
 
         private Parse Tables {
@@ -92,7 +93,7 @@ namespace fit.Runner {
             public void Execute() {
                 myFile.CopyFile();
             }
-            public Counts Counts {get { return new Counts(); }}
+            public TestStatus TestStatus {get { return new TestStatus(); }}
 
             private readonly StoryTestFile myFile;
         }
@@ -107,11 +108,11 @@ namespace fit.Runner {
 
             public void TableFinished(Parse finishedTable) {}
 
-            public void TablesFinished(Parse theTables, Counts counts) {
-                myFile.WriteResult(theTables, counts, Clock.Instance.UtcNow - myStartTime);
+            public void TablesFinished(Parse theTables, TestStatus status) {
+                myFile.WriteResult(theTables, status, Clock.Instance.UtcNow - myStartTime);
 
                 pageResult.Append(theTables.ToString());
-                pageResult.Counts = counts;
+                pageResult.TestStatus = status;
                 resultWriter.WritePageResult(pageResult);
             }
 

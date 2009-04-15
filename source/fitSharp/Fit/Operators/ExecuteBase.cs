@@ -4,12 +4,11 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-using fit.Engine;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
-namespace fit.Operators {
+namespace fitSharp.Fit.Operators {
     public abstract class ExecuteBase: ExecuteOperator<Cell> {
 
         public abstract bool TryExecute(Processor<Cell> processor, ExecuteParameters parameters, ref TypedValue result);

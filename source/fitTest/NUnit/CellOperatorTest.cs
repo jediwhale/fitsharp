@@ -4,7 +4,6 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System;
-using fit.Engine;
 using fit.Test.Acceptance;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
@@ -59,12 +58,12 @@ namespace fit.Test.NUnit {
 
         public static void AssertCellPasses(Parse cell)
         {
-            Assert.AreEqual(CellAttributes.PassStatus, cell.GetAttribute(CellAttributes.StatusKey));
+            Assert.AreEqual(CellAttributes.RightStatus, cell.GetAttribute(CellAttributes.StatusKey));
         }
 
         public static void AssertCellFails(Parse cell)
         {
-            Assert.AreEqual(CellAttributes.FailStatus, cell.GetAttribute(CellAttributes.StatusKey));
+            Assert.AreEqual(CellAttributes.WrongStatus, cell.GetAttribute(CellAttributes.StatusKey));
         }
 
         public static void AssertValueInBody(Parse cell, string value)
@@ -80,12 +79,5 @@ namespace fit.Test.NUnit {
             }
         }
 
-        public static void VerifyCounts(Fixture fixture, int right, int wrong, int ignores, int exceptions)
-        {
-            Assert.AreEqual(right, fixture.Counts.Right);
-            Assert.AreEqual(wrong, fixture.Counts.Wrong);
-            Assert.AreEqual(ignores, fixture.Counts.Ignores);
-            Assert.AreEqual(exceptions, fixture.Counts.Exceptions);
-        }
     }
 }

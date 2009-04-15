@@ -7,6 +7,8 @@
 using System;
 using System.IO;
 using fit;
+using fit.Engine;
+using fitSharp.Fit.Model;
 using fitSharp.Machine.Application;
 
 namespace fitnesse.fitserver
@@ -23,7 +25,7 @@ namespace fitnesse.fitserver
 		public bool verbose;
 	    public ResultWriter resultWriter = new NullResultWriter();
 		public bool deleteCacheOnExit;
-		public Counts pageCounts = new Counts();
+		public TestStatus pageCounts = new TestStatus();
 		public TextWriter output = Console.Out;
 		public string assemblyPath;
 	    public string suiteFilter = null;
@@ -40,7 +42,7 @@ namespace fitnesse.fitserver
 			fitServer.ValidateConnection();
 			AddAssemblies();
 			fitServer.ProcessTestDocuments();
-			HandleFinalCount(fitServer.Counts);
+			HandleFinalCount(fitServer.Status);
 			fitServer.CloseConnection();
 			fitServer.Exit();
 			resultWriter.Close();
@@ -132,19 +134,19 @@ namespace fitnesse.fitserver
 
 		public void AcceptResults(PageResult results)
 		{
-			Counts counts = results.Counts;
-			pageCounts.TallyPageCounts(counts);
-			fitServer.Transmit(Protocol.FormatCounts(counts));
+			TestStatus status = results.TestStatus;
+			pageCounts.TallyPageCounts(status);
+			fitServer.Transmit(Protocol.FormatCounts(status));
 			if(verbose)
 			{
-				for(int i = 0; i < counts.Right; i++)
+				for(int i = 0; i < status.GetCount(CellAttributes.RightStatus); i++)
 					output.Write(".");
-				if(counts.Wrong > 0)
+				if(status.GetCount(CellAttributes.WrongStatus) > 0)
 				{
 					output.WriteLine();
 					output.WriteLine(PageDescription(results) + " has failures");
 				}
-				if(counts.Exceptions > 0)
+				if(status.GetCount(CellAttributes.ExceptionStatus) > 0)
 				{
 					output.WriteLine();
 					output.WriteLine(PageDescription(results) + " has errors");
@@ -173,15 +175,15 @@ namespace fitnesse.fitserver
             }
         }
 
-		public void HandleFinalCount(Counts counts)
+		public void HandleFinalCount(TestStatus summary)
 		{
 			if(verbose)
 			{
 				output.WriteLine();
-				output.WriteLine("Test Pages: " + pageCounts);
-				output.WriteLine("Assertions: " + counts);
+				output.WriteLine("Test Pages: " + pageCounts.CountDescription);
+				output.WriteLine("Assertions: " + summary.CountDescription);
 			}
-			resultWriter.WriteFinalCount(counts);
+			resultWriter.WriteFinalCount(summary);
 		}
 	}
 }

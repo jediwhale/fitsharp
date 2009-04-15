@@ -7,6 +7,7 @@
 using System;
 using System.IO;
 using fit;
+using fitSharp.Fit.Model;
 
 namespace fitnesse.fitserver
 {
@@ -33,9 +34,9 @@ namespace fitnesse.fitserver
             _writer.Write(Protocol.FormatDocument(results + "\n"));
         }
 
-        public void WriteFinalCount(Counts counts)
+        public void WriteFinalCount(TestStatus summary)
         {
-            _writer.Write(Protocol.FormatCounts(counts));
+            _writer.Write(Protocol.FormatCounts(summary));
         }
     }
 }

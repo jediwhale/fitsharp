@@ -20,7 +20,7 @@ namespace fit.Test.NUnit {
             MakeStringFixture();
             TestUtils.DoInput(stringFixture, TestUtils.CreateCellRange("Field"), cell);
             Assert.AreEqual("xyz", stringFixture.Field);
-            VerifyCounts(stringFixture, 0, 0, 0, 0);
+            TestUtils.VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
 
         [Test]
@@ -31,7 +31,7 @@ namespace fit.Test.NUnit {
             stringFixture.Field = "xyz";
             TestUtils.DoCheck(stringFixture, TestUtils.CreateCellRange("Field"), cell);
             AssertCellPasses(cell);
-            VerifyCounts(stringFixture, 1, 0, 0, 0);
+            TestUtils.VerifyCounts(stringFixture, 1, 0, 0, 0);
         }
 
         [Test]
@@ -43,7 +43,7 @@ namespace fit.Test.NUnit {
             AssertCellFails(cell);
             Assert.IsTrue(cell.Body.IndexOf("abc") > -1);
             Assert.IsTrue(cell.Body.IndexOf("xyz") > -1);
-            VerifyCounts(stringFixture, 0, 1, 0, 0);
+            TestUtils.VerifyCounts(stringFixture, 0, 1, 0, 0);
         }
 
         [Test]
@@ -55,7 +55,7 @@ namespace fit.Test.NUnit {
             AssertCellFails(cell);
             Assert.IsTrue(cell.Body.IndexOf("null") > -1);
             Assert.IsTrue(cell.Body.IndexOf("xyz") > -1);
-            VerifyCounts(stringFixture, 0, 1, 0, 0);
+            TestUtils.VerifyCounts(stringFixture, 0, 1, 0, 0);
         }
 
 
@@ -76,10 +76,10 @@ namespace fit.Test.NUnit {
             MakeStringFixture();
             stringFixture.Field = "abc";
             Assert.IsFalse(stringFixture.CellOperation.Compare(new TypedValue("abc"), cell));
-            Assert.AreNotEqual(CellAttributes.FailStatus, cell.GetAttribute(CellAttributes.StatusKey));
+            Assert.AreNotEqual(CellAttributes.WrongStatus, cell.GetAttribute(CellAttributes.StatusKey));
             Assert.IsFalse(cell.Body.IndexOf("abc") > -1);
             Assert.IsTrue(cell.Body.IndexOf("xyz") > -1);
-            VerifyCounts(stringFixture, 0, 0, 0, 0);
+            TestUtils.VerifyCounts(stringFixture, 0, 0, 0, 0);
 			
         }
 
@@ -89,8 +89,8 @@ namespace fit.Test.NUnit {
             MakeStringFixture();
             stringFixture.Field = "xyz";
             Assert.IsTrue(stringFixture.CellOperation.Compare(new TypedValue("xyz"), cell));
-            Assert.AreNotEqual(CellAttributes.PassStatus, cell.GetAttribute(CellAttributes.StatusKey));
-            VerifyCounts(stringFixture, 0, 0, 0, 0);
+            Assert.AreNotEqual(CellAttributes.RightStatus, cell.GetAttribute(CellAttributes.StatusKey));
+            TestUtils.VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
 
         class FixtureWithExecutableMethod : Fixture

@@ -8,6 +8,8 @@ using System;
 using System.IO;
 using System.Xml;
 using fit;
+using fit.Engine;
+using fitSharp.Fit.Model;
 
 namespace fitnesse.fitserver
 {
@@ -53,22 +55,20 @@ namespace fitnesse.fitserver
             _writer.WriteStartElement("content");
             _writer.WriteCData(results.Content);
             _writer.WriteEndElement();
-            _writer.WriteStartElement("counts");
-            _writer.WriteElementString("right", results.Counts.Right.ToString());
-            _writer.WriteElementString("wrong", results.Counts.Wrong.ToString());
-            _writer.WriteElementString("ignores", results.Counts.Ignores.ToString());
-            _writer.WriteElementString("exceptions", results.Counts.Exceptions.ToString());
-            _writer.WriteEndElement();
+            WriteCounts(results.TestStatus, "counts");
             _writer.WriteEndElement();
         }
 
-        public void WriteFinalCount(Counts counts)
-        {
-            _writer.WriteStartElement("finalCounts");
-            _writer.WriteElementString("right", counts.Right.ToString());
-            _writer.WriteElementString("wrong", counts.Wrong.ToString());
-            _writer.WriteElementString("ignores", counts.Ignores.ToString());
-            _writer.WriteElementString("exceptions", counts.Exceptions.ToString());
+        public void WriteFinalCount(TestStatus summary) {
+            WriteCounts(summary, "finalCounts");
+        }
+
+        private void WriteCounts(TestStatus summary, string tag) {
+            _writer.WriteStartElement(tag);
+            _writer.WriteElementString("right", summary.GetCount(CellAttributes.RightStatus).ToString());
+            _writer.WriteElementString("wrong", summary.GetCount(CellAttributes.WrongStatus).ToString());
+            _writer.WriteElementString("ignores", summary.GetCount(CellAttributes.IgnoreStatus).ToString());
+            _writer.WriteElementString("exceptions", summary.GetCount(CellAttributes.ExceptionStatus).ToString());
             _writer.WriteEndElement();
         }
     }

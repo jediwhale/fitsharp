@@ -6,15 +6,16 @@
 
 using System;
 using System.Text;
-using fit;
+using fitSharp.Fit.Model;
 
 namespace fitnesse.fitserver
 {
 	public class PageResult
 	{
+	    public TestStatus TestStatus { get; set; }
+
 		private StringBuilder contentBuffer = new StringBuilder();
-		private Counts counts;
-		private string title;
+	    private string title;
 
 		public PageResult(String title)
 		{
@@ -36,17 +37,11 @@ namespace fitnesse.fitserver
 			get { return title; }
 		}
 
-		public Counts Counts
-		{
-			get {return counts;}
-			set {counts = value;}
-		}
-
-		public override string ToString()
+	    public override string ToString()
 		{
 			StringBuilder buffer = new StringBuilder();
 			buffer.Append(title).Append("\n");
-			buffer.Append(counts.ToString()).Append("\n");
+			buffer.Append(TestStatus.CountDescription).Append("\n");
 			buffer.Append(contentBuffer);
 			return buffer.ToString();
 		}

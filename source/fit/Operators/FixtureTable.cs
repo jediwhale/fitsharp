@@ -102,11 +102,11 @@ namespace fit.Operators {
                 originalNode = node;
                 Node = node.Copy();
                 if (HasKeyword("right")) {
-                    Node.SetAttribute(CellAttributes.StatusKey, CellAttributes.PassStatus);
+                    Node.SetAttribute(CellAttributes.StatusKey, CellAttributes.RightStatus);
                     if (BodyStartsWith("right")) Node.SetBody(Node.Body.Substring(7));
                 }
                 else if (HasKeyword("wrong")) {
-                    Node.SetAttribute(CellAttributes.StatusKey, CellAttributes.FailStatus);
+                    Node.SetAttribute(CellAttributes.StatusKey, CellAttributes.WrongStatus);
                     if (BodyStartsWith("wrong")) Node.SetBody(Node.Body.Substring(7));
                     else Node.SetBody("IGNORE");
                 }

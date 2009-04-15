@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using fitSharp.Fit.Model;
 using fitnesse.fitserver;
 using fitSharp.Machine.Application;
 
@@ -27,13 +28,13 @@ namespace fit.Runner {
     
 	public class SuiteRunner { //: Runnable {
 	    
-	    public Counts Counts { get; private set; }
+	    public TestStatus TestStatus { get; private set; }
         private string mySelection = string.Empty;
 	    private ProgressReporter myReporter;
 	    private ResultWriter resultWriter;
 
         public SuiteRunner() {
-		    Counts = new Counts();
+		    TestStatus = new TestStatus();
         }
 
 		public SuiteRunner(ProgressReporter theReporter): this() {
@@ -60,7 +61,7 @@ namespace fit.Runner {
 
 	        RunFolder(theSuite);
 
-            resultWriter.WriteFinalCount(Counts);
+            resultWriter.WriteFinalCount(TestStatus);
             resultWriter.Close();
 	    }
 
@@ -88,8 +89,8 @@ namespace fit.Runner {
 	        try {
                 StoryCommand command = page.MakeStoryCommand(resultWriter);
 	            command.Execute();
-	            myReporter.Write(command.Counts.Letter);
-	            Counts.Tally(command.Counts);
+	            myReporter.Write(command.TestStatus.Letter);
+	            TestStatus.TallyCounts(command.TestStatus);
 	        }
 	        catch (Exception e) {
 	            myReporter.Write(e.Message);

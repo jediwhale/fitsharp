@@ -31,10 +31,7 @@ namespace fit.Test.NUnit {
             TestUtils.InitAssembliesAndNamespaces();
             StoryTest test = new StoryTest(parse);
             test.Execute();
-            Assert.AreEqual(1, test.Counts.Right);
-            Assert.AreEqual(0, test.Counts.Wrong);
-            Assert.AreEqual(0, test.Counts.Ignores);
-            Assert.AreEqual(0, test.Counts.Exceptions);
+            TestUtils.CheckCounts(test, 1, 0, 0, 0);
         }
 
         [Test]
@@ -52,10 +49,7 @@ namespace fit.Test.NUnit {
             TestUtils.InitAssembliesAndNamespaces();
             StoryTest test = new StoryTest(parse);
             test.Execute();
-            Assert.AreEqual(3, test.Counts.Right);
-            Assert.AreEqual(0, test.Counts.Wrong);
-            Assert.AreEqual(0, test.Counts.Ignores);
-            Assert.AreEqual(0, test.Counts.Exceptions);
+            TestUtils.CheckCounts(test, 3, 0, 0, 0);
         }
 
         [Test]
@@ -134,10 +128,7 @@ namespace fit.Test.NUnit {
             Parse table = new Parse(builder.ToString());
             StoryTest test = new StoryTest(table);
             test.Execute();
-            Assert.AreEqual(0, test.Counts.Right);
-            Assert.AreEqual(0, test.Counts.Wrong);
-            Assert.AreEqual(0, test.Counts.Ignores);
-            Assert.AreEqual(0, test.Counts.Exceptions);
+            TestUtils.CheckCounts(test, 0, 0, 0, 0);
         }
 
         [Test]
@@ -159,10 +150,7 @@ namespace fit.Test.NUnit {
             Assert.AreEqual("Method()", testFixture.Values[1]);
             Assert.AreEqual("Execute()", testFixture.Values[2]);
             Assert.AreEqual("Method()", testFixture.Values[3]);
-            Assert.AreEqual(2, testFixture.Counts.Right);
-            Assert.AreEqual(0, testFixture.Counts.Wrong);
-            Assert.AreEqual(0, testFixture.Counts.Ignores);
-            Assert.AreEqual(0, testFixture.Counts.Exceptions);
+            TestUtils.VerifyCounts(testFixture, 2, 0, 0, 0);
         }
     }
 

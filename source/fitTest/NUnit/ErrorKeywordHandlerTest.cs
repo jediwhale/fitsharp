@@ -3,8 +3,7 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-using fit.Engine;
-using fit.Operators;
+using fitSharp.Fit.Operators;
 using NUnit.Framework;
 
 namespace fit.Test.NUnit {
@@ -28,7 +27,7 @@ namespace fit.Test.NUnit {
             TestUtils.DoCheck(fixture, TestUtils.CreateCellRange("ErrorThrowingMethod"), cell);
             AssertCellPasses(cell);
             Assert.IsTrue(cell.Body.IndexOf("error") > -1);
-            VerifyCounts(fixture, 1, 0, 0, 0);
+            TestUtils.VerifyCounts(fixture, 1, 0, 0, 0);
         }
 
         [Test]
@@ -41,7 +40,7 @@ namespace fit.Test.NUnit {
             AssertCellFails(cell);
             Assert.IsTrue(cell.Body.IndexOf("error") > -1);
             Assert.IsTrue(cell.Body.IndexOf("some value") > -1);
-            VerifyCounts(stringFixture, 0, 1, 0, 0);
+            TestUtils.VerifyCounts(stringFixture, 0, 1, 0, 0);
         }
 
         private void MakeErrorFixture() {

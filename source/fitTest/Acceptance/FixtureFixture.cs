@@ -5,6 +5,7 @@
 
 using fitlibrary.exception;
 using System;
+using fitSharp.Fit.Exception;
 using fitSharp.Fit.Model;
 
 namespace fit.Test.Acceptance {
@@ -13,14 +14,14 @@ namespace fit.Test.Acceptance {
         protected const string REPORT = "report";
         protected const string INSERT_ROW = "I";
 
-        protected static Counts ourEmbeddedCounts;
+        protected static TestStatus ourEmbeddedCounts;
         protected static StoryTest ourEmbeddedStoryTest;
 
         protected Parse myEmbeddedRow;
         protected Parse myEmbeddedTable;
 
         public FixtureFixture() {
-            ourEmbeddedCounts = new Counts();
+            ourEmbeddedCounts = new TestStatus();
             ourEmbeddedStoryTest = new StoryTest();
             ourEmbeddedStoryTest.TestStatus.Summary["run date"] = DateTime.Now;
             ourEmbeddedStoryTest.TestStatus.Summary["run elapsed time"] = new RunTime();
