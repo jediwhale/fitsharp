@@ -15,26 +15,19 @@ namespace fit
 {
 	public class Parse: Tree<Cell>, Cell
 	{
-
-		private string leader;
-		private string tag;
+	    private string tag;
 		private string body;
-		private string end;
-		private string trailer;
-
-	    private Parse more;
-		private Parse parts;
-
 	    private string originalBody;
 
         private CellAttributes Attributes { get; set; }
 
-		public string Leader
-		{
-			get { return leader; }
-		}
+	    public Parse More { get; set; }
+	    public Parse Parts { get; set; }
+	    public string Leader { get; private set; }
+	    public string Trailer { get; set; }
+	    public string End { get; private set; }
 
-        public string Tag {
+	    public string Tag {
             get {
 	            int space = tag.IndexOf(' ');
 	            if (space < 0) space = tag.Length - 1;
@@ -42,12 +35,7 @@ namespace fit
             }
         }
 
-        // added
-        public string End {
-            get { return end; }
-        }
-
-        public string Body {
+	    public string Body {
             get {
                 string result = body;
                 if (Attributes.HasAttribute(CellAttributes.InformationPrefixKey)) {
@@ -79,47 +67,28 @@ namespace fit
 		    AddToAttribute(CellAttributes.InformationSuffixKey, text, CellAttributes.SuffixFormat);
 		}
 
-		public string Trailer
-		{
-            get { return trailer; }
-            //added
-            set { trailer = value; }
-        }
-
-		public Parse More
-		{
-			get { return more; }
-			set { more = value; }
-		}
-
-		public Parse Parts
-		{
-			get { return parts; }
-            set { parts = value;}
-		}
-
-        private Parse() { Attributes = new CellAttributes(); }
+	    private Parse() { Attributes = new CellAttributes(); }
 
         //added
         public Parse(string theTag, string theEnd, string theLeader, string theBody, Parse theParts): this() {
             tag = theTag;
-            end = theEnd;
-            leader = theLeader;
+            End = theEnd;
+            Leader = theLeader;
             body = theBody;
             originalBody = theBody;
-            parts = theParts;
+            Parts = theParts;
         }
 
 		public Parse(string tag, string body, Parse parts, Parse more): this()
 		{
-			this.leader = "\n";
+			this.Leader = "\n";
 			this.tag = "<" + tag + ">";
 			this.body = body;
 			originalBody = body;
-			this.end = "</" + tag + ">";
-			this.trailer = "";
-			this.parts = parts;
-			this.more = more;
+			this.End = "</" + tag + ">";
+			this.Trailer = "";
+			this.Parts = parts;
+			this.More = more;
 		}
 
 		public static string[] Tags = {"table", "tr", "td"};
@@ -171,55 +140,55 @@ namespace fit
 			int endEnd = ProtectedIndexOf(lc, ">", startEnd, target) + 1;
 			int startMore = lc.IndexOf("<" + target, endEnd);
 
-			leader = Substring(text, 0, startTag);
+			Leader = Substring(text, 0, startTag);
 			tag = Substring(text, startTag, endTag);
 			body = Substring(text, endTag, startEnd);
 			originalBody = body;
-			end = Substring(text, startEnd, endEnd);
-			trailer = text.Substring(endEnd);
+			End = Substring(text, startEnd, endEnd);
+			Trailer = text.Substring(endEnd);
 
 			if (level + 1 < tags.Length)
 			{
-				parts = new Parse(body, tags, level + 1, offset + endTag);
+				Parts = new Parse(body, tags, level + 1, offset + endTag);
 				body = null;
 			    originalBody = null;
 			}
 
 			if (startMore >= 0)
 			{
-				more = new Parse(trailer, tags, level, offset + endEnd);
-				trailer = null;
+				More = new Parse(Trailer, tags, level, offset + endEnd);
+				Trailer = null;
 			}
 		}
 
 		public virtual int Size
 		{
-			get { return more == null ? 1 : more.Size + 1; }
+			get { return More == null ? 1 : More.Size + 1; }
 		}
 
 		public virtual Parse Last
 		{
-			get { return more == null ? this : more.Last; }
+			get { return More == null ? this : More.Last; }
 		}
 
 		public virtual Parse Leaf
 		{
-			get { return parts == null ? this : parts.Leaf; }
+			get { return Parts == null ? this : Parts.Leaf; }
 		}
 
 		public virtual Parse At(int i)
 		{
-			return i == 0 || more == null ? this : more.At(i - 1);
+			return i == 0 || More == null ? this : More.At(i - 1);
 		}
 
 		public virtual Parse At(int i, int j)
 		{
-			return At(i).parts.At(j);
+			return At(i).Parts.At(j);
 		}
 
 		public virtual Parse At(int i, int j, int k)
 		{
-			return At(i, j).parts.At(k);
+			return At(i, j).Parts.At(k);
 		}
 
 		public virtual string Text
@@ -295,20 +264,20 @@ namespace fit
 
 		private StringBuilder BuildString(StringBuilder builder)
 		{
-			builder.Append(leader);
+			builder.Append(Leader);
 			builder.Append(Tag);
             // change
-			if (parts != null) builder.Append(parts.BuildString(new StringBuilder()));
+			if (Parts != null) builder.Append(Parts.BuildString(new StringBuilder()));
             builder.Append(Body);
             // end change
-			builder.Append(end);
-			if (more != null)
+			builder.Append(End);
+			if (More != null)
 			{
-				return builder.Append(more.BuildString(new StringBuilder()));
+				return builder.Append(More.BuildString(new StringBuilder()));
 			}
 			else
 			{
-				builder.Append(trailer);
+				builder.Append(Trailer);
 				return builder;
 			}
 		}
@@ -350,15 +319,15 @@ namespace fit
 		}
 
         public Parse DeepCopy() {
-            return new Parse(tag, end, leader, body, (parts == null ? null : parts.DeepCopy())) {
+            return new Parse(tag, End, Leader, body, (Parts == null ? null : Parts.DeepCopy())) {
                 Attributes = Attributes,
-                trailer = trailer,
-                more = (more == null ? null : more.DeepCopy())
+                Trailer = Trailer,
+                More = (More == null ? null : More.DeepCopy())
             };
         }
 
         public Parse Copy() {
-            return new Parse(tag, end, leader, body, parts) {trailer = trailer, Attributes = Attributes};
+            return new Parse(tag, End, Leader, body, Parts) {Trailer = Trailer, Attributes = Attributes};
         }
 
 	    public override Cell Value { get { return this; } }

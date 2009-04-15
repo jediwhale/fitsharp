@@ -10,6 +10,7 @@ namespace fitSharp.Fit.Model {
     public class StringCell: Tree<Cell>, Cell {
         public StringCell(string text) { Text = text; }
         public string Text { get; private set; }
+
         public string GetAttribute(string key) { return string.Empty; }
         public void SetAttribute(string key, string value) {}
         public void AddToAttribute(string key, string value, string format) {}

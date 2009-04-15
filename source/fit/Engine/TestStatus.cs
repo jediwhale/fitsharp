@@ -39,7 +39,7 @@ namespace fit.Engine {
 			Counts.Ignores++;
 		}
 
-		public void MarkException(Parse cell, System.Exception exception) {
+		public void MarkException(Cell cell, System.Exception exception) {
             if (exception is IgnoredException) return;
 
             if (ContainsAbandonStoryTestException(exception) && IsAbandoned) throw new AbandonStoryTestException();

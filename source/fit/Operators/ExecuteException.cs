@@ -24,37 +24,37 @@ namespace fit.Operators {
 			string exceptionContent = parameters.Cell.Text.Substring("exception[".Length, parameters.Cell.Text.Length - ("exception[".Length + 1));
 			try {
 				parameters.GetActual(processor);
-			    parameters.TestStatus.MarkWrong(parameters.ParseCell, "no exception");
+			    parameters.TestStatus.MarkWrong(parameters.Cell, "no exception");
 			}
 			catch (TargetInvocationException e) {
-				if (isMessageOnly(exceptionContent)) {
-					evaluateException(e.InnerException.Message == exceptionContent.Substring(1, exceptionContent.Length - 2), parameters, e);
+				if (IsMessageOnly(exceptionContent)) {
+					EvaluateException(e.InnerException.Message == exceptionContent.Substring(1, exceptionContent.Length - 2), parameters, e);
 				}
-				else if (isExceptionTypeNameOnly(exceptionContent)) {
+				else if (IsExceptionTypeNameOnly(exceptionContent)) {
 					string actual = e.InnerException.GetType().Name + ": \"" + e.InnerException.Message + "\"";
-					evaluateException(exceptionContent == actual, parameters, e);
+					EvaluateException(exceptionContent == actual, parameters, e);
 				}
 				else {
-					evaluateException(e.InnerException.GetType().Name == exceptionContent, parameters, e);
+					EvaluateException(e.InnerException.GetType().Name == exceptionContent, parameters, e);
 				}
 			}
 	        return true;
 	    }
 
-		private static bool isExceptionTypeNameOnly(string exceptionContent) {
+		private static bool IsExceptionTypeNameOnly(string exceptionContent) {
 			return regexForExceptionTypeNameOnly.IsMatch(exceptionContent);
 		}
 
-		private static bool isMessageOnly(string exceptionContent) {
+		private static bool IsMessageOnly(string exceptionContent) {
 			return regexForMessageOnly.IsMatch(exceptionContent);
 		}
 
-		private static void evaluateException(bool expression, ExecuteParameters parameters, TargetInvocationException e) {
+		private static void EvaluateException(bool expression, ExecuteParameters parameters, TargetInvocationException e) {
 			if (expression) {
-				parameters.TestStatus.MarkRight(parameters.ParseCell);
+				parameters.TestStatus.MarkRight(parameters.Cell);
 			}
 			else {
-				parameters.TestStatus.MarkWrong(parameters.ParseCell, "exception[" + e.InnerException.GetType().Name + ": \"" + e.InnerException.Message + "\"]");
+				parameters.TestStatus.MarkWrong(parameters.Cell, "exception[" + e.InnerException.GetType().Name + ": \"" + e.InnerException.Message + "\"]");
 			}
 		}
 	}

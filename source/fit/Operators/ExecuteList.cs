@@ -31,7 +31,7 @@ namespace fit.Operators {
         }
 
         private static bool ExecuteEvaluate(Processor<Cell> processor, ExecuteParameters parameters, ref TypedValue result) {
-            var cell = parameters.ParseCell;
+            var cell = (Parse)parameters.Cell;
             if (!typeof(IList).IsAssignableFrom(parameters.Target.Type)) return false;
             if (cell.Parts == null) return false;
 
@@ -41,7 +41,7 @@ namespace fit.Operators {
         }
 
         private static bool ExecuteCheck(Processor<Cell> processor, ExecuteParameters parameters) {
-            var cell = parameters.ParseCell;
+            var cell = (Parse)parameters.Cell;
             if (cell.Parts == null) return false;
             if (!typeof(IList).IsAssignableFrom(parameters.GetTypedActual(processor).Type)) return false;
 

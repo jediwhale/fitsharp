@@ -46,10 +46,10 @@ namespace fit.Operators {
             try {
                 TypedValue actual = parameters.GetTypedActual(processor);
                 if (processor.Compare(actual, parameters.Cells)) {
-                    parameters.TestStatus.MarkRight(parameters.ParseCell);
+                    parameters.TestStatus.MarkRight(parameters.Cell);
                 }
                 else {
-                    parameters.TestStatus.MarkWrong(parameters.ParseCell, actual.ValueString);
+                    parameters.TestStatus.MarkWrong(parameters.Cell, actual.ValueString);
                 }
             }
             catch (IgnoredException) {}

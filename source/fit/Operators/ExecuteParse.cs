@@ -23,16 +23,17 @@ namespace fit.Operators {
             TypedValue actualValue = parameters.GetTypedActual(processor);
             if (!typeof (Parse).IsAssignableFrom(actualValue.Type)) return false;
 
-            var expected = new FixtureTable(parameters.ParseCell.Parts);
+            var cell = (Parse) parameters.Cell;
+            var expected = new FixtureTable(cell.Parts);
             var tables = (Parse) actualValue.Value;
             var actual = new FixtureTable(tables);
             string differences = actual.Differences(expected);
             if (differences.Length == 0) {
-				parameters.TestStatus.MarkRight(parameters.ParseCell);
+				parameters.TestStatus.MarkRight(parameters.Cell);
             }
             else {
-                parameters.TestStatus.MarkWrong(parameters.ParseCell, differences);
-                parameters.ParseCell.More = new Parse("td", string.Empty, tables, null);
+                parameters.TestStatus.MarkWrong(parameters.Cell, differences);
+                cell.More = new Parse("td", string.Empty, tables, null);
             }
             return true;
         }

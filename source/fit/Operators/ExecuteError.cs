@@ -17,10 +17,10 @@ namespace fit.Operators {
 			if (parameters.Verb != ExecuteParameters.Check || !errorIdentifier.Equals(parameters.Cell.Text)) return false;
             try {
                 object actual = parameters.GetActual(processor);
-                parameters.TestStatus.MarkWrong(parameters.ParseCell, actual.ToString());
+                parameters.TestStatus.MarkWrong(parameters.Cell, actual.ToString());
             }
             catch {
-                parameters.TestStatus.MarkRight(parameters.ParseCell);
+                parameters.TestStatus.MarkRight(parameters.Cell);
 	        }
 	        return true;
 	    }

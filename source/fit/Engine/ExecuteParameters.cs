@@ -27,7 +27,6 @@ namespace fit.Engine {
         public string Verb { get { return tree.Branches[0].Value.Text; } }
         public Cell Cell { get { return tree.Branches[1].Value; } }
         public Tree<Cell> Cells { get { return tree.Branches[1]; } }
-        public Parse ParseCell { get { return (Parse)Cell; } }
         public Tree<Cell> Members { get { return tree.Branches[2]; } }
         public Cell Member { get { return tree.Branches[2].Value; } }
         public Tree<Cell> Parameters { get { return tree.Branches[3]; } }
@@ -83,7 +82,7 @@ namespace fit.Engine {
                     context.Target = actualResult;
                 }
                 catch (ParseException<Cell> e) {
-                    TestStatus.MarkException((Parse)e.Subject, e);
+                    TestStatus.MarkException(e.Subject, e);
                     throw new IgnoredException();
                 }
             }

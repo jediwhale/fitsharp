@@ -14,7 +14,7 @@ namespace fit.Operators {
 	    public override bool TryExecute(Processor<Cell> processor, ExecuteParameters parameters, ref TypedValue result) {
 			if ((parameters.Verb != ExecuteParameters.Check && parameters.Verb != ExecuteParameters.Input)
                 || parameters.Cell.Text.Length != 0
-                || parameters.ParseCell.Parts != null) return false;
+                || ((Parse)parameters.Cell).Parts!= null) return false;
 
 	        switch (parameters.Verb) {
 	            case ExecuteParameters.Input:
