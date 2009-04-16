@@ -1,6 +1,5 @@
-// FitNesse.NET
-// Copyright © 2008 Syterra Software Inc. This program is free software;
-// you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
+// Copyright © 2009 Syterra Software Inc.
+// This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
@@ -13,14 +12,17 @@ using fitSharp.Machine.Application;
 
 namespace fit.Runner {
     public class StoryTestFolder: StoryTestSuite {
-        public StoryTestFolder(FolderModel theFolderModel)
-            : this(
-                Context.Configuration.GetItem<Settings>().InputFolder,
-                Context.Configuration.GetItem<Settings>().OutputFolder, null, theFolderModel, null) {
+        private readonly Configuration configuration;
+ 
+        public StoryTestFolder(Configuration configuration, FolderModel theFolderModel)
+            : this(configuration, 
+                configuration.GetItem<Settings>().InputFolder,
+                configuration.GetItem<Settings>().OutputFolder, null, theFolderModel, null) {
             myReport = new Report(OutputPath);
         }
 
-        public StoryTestFolder(string theInputPath, string theOutputPath, string theSelection, FolderModel theFolderModel, StoryTestFolder theParentFolder) {
+        public StoryTestFolder(Configuration configuration, string theInputPath, string theOutputPath, string theSelection, FolderModel theFolderModel, StoryTestFolder theParentFolder) {
+            this.configuration = configuration;
             Name = theInputPath;
             OutputPath = theOutputPath;
             myFolderModel = theFolderModel;
@@ -39,9 +41,9 @@ namespace fit.Runner {
                 foreach (string filePath in myFolderModel.GetFiles(Name)) {
                     string fileName = Path.GetFileName(filePath);
                     if (new StoryFileName(fileName).IsSuiteSetUp) continue;
-                    if (Context.Configuration.GetItem<FileExclusions>().IsExcluded(fileName)) continue;
+                    if (configuration.GetItem<FileExclusions>().IsExcluded(fileName)) continue;
                     if (mySelection != null && !filePath.EndsWith(mySelection)) continue;
-                    var file = new StoryTestFile(filePath, this, myFolderModel);
+                    var file = new StoryTestFile(configuration, filePath, this, myFolderModel);
                     yield return file;
                 }
             }
@@ -57,9 +59,9 @@ namespace fit.Runner {
             get {
                 foreach (string inputFolder in myFolderModel.GetFolders(Name)) {
                     string relativeFolder = inputFolder.Substring(Name.Length + 1);
-                    if (Context.Configuration.GetItem<FileExclusions>().IsExcluded(relativeFolder)) continue;
+                    if (configuration.GetItem<FileExclusions>().IsExcluded(relativeFolder)) continue;
                     if (mySelection != null && !mySelection.StartsWith(inputFolder)) continue;
-                    yield return new StoryTestFolder(inputFolder, Path.Combine(OutputPath, relativeFolder), mySelection, myFolderModel, this);
+                    yield return new StoryTestFolder(configuration, inputFolder, Path.Combine(OutputPath, relativeFolder), mySelection, myFolderModel, this);
                 }
             }
         }
@@ -102,7 +104,7 @@ namespace fit.Runner {
         private StoryTestFile FindFile(FileFilter filter) {
             foreach (string filePath in myFolderModel.GetFiles(Name)) {
                 if (filter(new StoryFileName(filePath))) {
-                    return new StoryTestFile(filePath, this, myFolderModel);
+                    return new StoryTestFile(configuration, filePath, this, myFolderModel);
                 }
             }
             return null;

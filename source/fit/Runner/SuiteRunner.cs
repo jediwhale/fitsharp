@@ -1,6 +1,5 @@
-// FitNesse.NET
-// Copyright © 2007,2008 Syterra Software Inc. This program is free software;
-// you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
+// Copyright © 2009 Syterra Software Inc.
+// This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
@@ -32,19 +31,18 @@ namespace fit.Runner {
         private string mySelection = string.Empty;
 	    private ProgressReporter myReporter;
 	    private ResultWriter resultWriter;
+	    private readonly Configuration configuration;
 
-        public SuiteRunner() {
+		public SuiteRunner(Configuration configuration, ProgressReporter theReporter) {
 		    TestStatus = new TestStatus();
-        }
-
-		public SuiteRunner(ProgressReporter theReporter): this() {
 		    myReporter = theReporter;
+		    this.configuration = configuration;
 		}
 
-	    public int Run(IEnumerable<string> arguments, ProgressReporter reporter) {
+	    public int Run(Configuration configuration, IEnumerable<string> arguments, ProgressReporter reporter) {
 	        ParseArguments(arguments);
 	        myReporter = reporter;
-		    Run(new StoryTestFolder(new FileSystemModel()), mySelection);
+		    Run(new StoryTestFolder(configuration, new FileSystemModel()), mySelection);
 	        return 0; //todo: return counts exceptions + wrong or whatever
 	    }
 
@@ -65,9 +63,9 @@ namespace fit.Runner {
             resultWriter.Close();
 	    }
 
-	    private static ResultWriter CreateResultWriter() {
-	        if (Context.Configuration.GetItem<Settings>().XmlOutput != null) {
-	            return new XmlResultWriter(Context.Configuration.GetItem<Settings>().XmlOutput, new FileSystemModel());
+	    private ResultWriter CreateResultWriter() {
+	        if (configuration.GetItem<Settings>().XmlOutput != null) {
+	            return new XmlResultWriter(configuration.GetItem<Settings>().XmlOutput, new FileSystemModel());
 	        }
 	        return new NullResultWriter();
 	    }
@@ -93,7 +91,7 @@ namespace fit.Runner {
 	            TestStatus.TallyCounts(command.TestStatus);
 	        }
 	        catch (Exception e) {
-	            myReporter.Write(e.Message);
+	            myReporter.Write(e.ToString());
 	        }
 	    }
 

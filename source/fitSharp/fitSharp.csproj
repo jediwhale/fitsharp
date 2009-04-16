@@ -43,6 +43,7 @@
     <Compile Include="Fit\Exception\IgnoredException.cs" />
     <Compile Include="Fit\Model\CellAttributes.cs" />
     <Compile Include="Fit\Model\CellSubstring.cs" />
+    <Compile Include="Fit\Model\StoryTestString.cs" />
     <Compile Include="Fit\Model\TargetObjectProvider.cs" />
     <Compile Include="Fit\Model\TestStatus.cs" />
     <Compile Include="Fit\Operators\CompareNumeric.cs" />

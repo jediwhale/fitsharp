@@ -136,6 +136,7 @@
     <Compile Include="NUnit\FixtureTableTest.cs" />
     <Compile Include="NUnit\FolderTestModel.cs" />
     <Compile Include="NUnit\GracefulNameConverterTest.cs" />
+    <Compile Include="NUnit\ComposeHtmlOperatorTest.cs" />
     <Compile Include="NUnit\HtmlParserTest.cs" />
     <Compile Include="NUnit\IntegralRangeHandlerTest.cs" />
     <Compile Include="NUnit\NullKeywordHandlerTest.cs" />

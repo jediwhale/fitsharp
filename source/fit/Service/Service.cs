@@ -17,6 +17,7 @@ namespace fit.Service {
             AddOperator(new RuntimeFlow());
 
             AddOperator(new ComposeDefault());
+            AddOperator(new ComposeHtml());
             AddOperator(new ParseDefault());
             AddOperator(new ExecuteDefault());
             AddOperator(new CompareDefault());

@@ -1,6 +1,5 @@
-// FitNesse.NET
-// Copyright © 2008 Syterra Software Inc. This program is free software;
-// you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
+// Copyright © 2009 Syterra Software Inc.
+// This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
@@ -8,11 +7,15 @@ using System;
 using System.IO;
 using fitSharp.Fit.Model;
 using fitnesse.fitserver;
+using fitSharp.Machine.Application;
 using fitSharp.Machine.Model;
 
 namespace fit.Runner {
     public class StoryTestFile: StoryTestPage {
-        public StoryTestFile(string thePath, StoryTestFolder theFolder, FolderModel theFolderModel) {
+        private readonly Configuration configuration;
+
+        public StoryTestFile(Configuration configuration, string thePath, StoryTestFolder theFolder, FolderModel theFolderModel) {
+            this.configuration = configuration;
             myPath = new StoryFileName(thePath);
             myFolder = theFolder;
             myFolderModel = theFolderModel;
@@ -61,7 +64,7 @@ namespace fit.Runner {
             get {
                 return myFolder.Decoration.IsEmpty
                            ? RawTables
-                           : HtmlParser.Instance.Parse(myFolder.Decoration.Decorate(Content));
+                           : Parse(myFolder.Decoration.Decorate(Content));
             }
         }
 
@@ -69,10 +72,15 @@ namespace fit.Runner {
             get {
                 if (myTables == null) {
                     FitVersionFixture.Reset();
-                    myTables = HtmlParser.Instance.Parse(Content);
+                    myTables = Parse(Content);
                 }
                 return myTables;
             }
+        }
+
+        private Parse Parse(string content) {
+            Tree<Cell> result = configuration.GetItem<Service.Service>().Compose(new StoryTestString(content));
+            return result != null ? (Parse)result.Value : null;
         }
 
         private string OutputPath {
