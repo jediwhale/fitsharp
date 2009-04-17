@@ -1,5 +1,4 @@
-// FitNesse.NET
-// Copyright © 2008 Syterra Software Inc. Includes work by Object Mentor, Inc., (c) 2002 Cunningham & Cunningham, Inc.
+// Copyright © 2009 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -9,6 +8,7 @@ using System.IO;
 using System.Net.Sockets;
 using System.Text;
 using fit;
+using fit.Service;
 using fitSharp.Fit.Model;
 using fitSharp.IO;
 using fitSharp.Machine.Application;
@@ -208,8 +208,8 @@ namespace fitnesse.fitserver
 		{
 			try
 			{
-                //Parse parse = new Parse(document);
-				Parse parse = HtmlParser.Instance.Parse(document);
+                Tree<Cell> result = configuration.GetItem<Service>().Compose(new StoryTestString(document));
+                var parse = result != null ? (Parse)result.Value : null;
 			    StoryTest storyTest = new StoryTest(parse, fixtureListener);
 			    WriteLogMessage(parse.Leader);
                 if (ourSuiteSetupIdentifier.IsStartOf(parse.Leader) || IMaybeProcessingSuiteSetup)
