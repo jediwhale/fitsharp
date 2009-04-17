@@ -50,8 +50,9 @@
     <Compile Include="Fixtures\FixtureResult.cs" />
     <Compile Include="Engine\OperationType.cs" />
     <Compile Include="Operators\ArrayMatchStrategy.cs" />
-    <Compile Include="Operators\ComposeHtml.cs" />
+    <Compile Include="Operators\ComposeStoryTestString.cs" />
     <Compile Include="Operators\NamedMatchStrategy.cs" />
+    <Compile Include="Operators\ParseStoryTestString.cs" />
     <Compile Include="Service\Service.cs" />
     <Compile Include="Exception\FitFailureException.cs" />
     <Compile Include="Exception\RowWidthException.cs" />

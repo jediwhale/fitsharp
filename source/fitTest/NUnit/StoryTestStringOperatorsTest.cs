@@ -8,7 +8,7 @@ using fitSharp.Machine.Model;
 using NUnit.Framework;
 
 namespace fit.Test.NUnit {
-    [TestFixture] public class ComposeHtmlOperatorTest {
+    [TestFixture] public class StoryTestStringOperatorsTest {
 
         [Test] public void HtmlStringIsParsed() {
             var service = new Service.Service();
@@ -24,6 +24,30 @@ namespace fit.Test.NUnit {
             var service = new Service.Service();
             Tree<Cell> result = service.Compose(new StoryTestString("<b>stuff</b>"));
             Assert.IsNull(result);
+        }
+        [Test] public void SimpleHtmlStringIsGenerated() {
+            CheckRoundTrip("<table><tr><td>hello</td></tr></table>");
+        }
+
+        [Test] public void ComplexHtmlStringIsGenerated() {
+            CheckRoundTrip("some stuff <table border=\"1\"><tr> umm <td>hello</td></tr></table> and more");
+        }
+
+        [Test] public void OnlyFirstHighLevelNodeIsGenerated() {
+            const string first = "some stuff <table border=\"1\"><tr> umm <td>hello</td></tr></table>";
+            const string rest = " and more <table><tr><td>more</td></tr></table>";
+            CheckComposeAndParse(first + rest, first);
+        }
+
+        private static void CheckRoundTrip(string input) {
+            CheckComposeAndParse(input, input);
+        }
+
+        private static void CheckComposeAndParse(string input, string expected) {
+            var service = new Service.Service();
+            var source = (Parse)service.Compose(new StoryTestString(input)).Value;
+            var result = service.Parse<StoryTestString>(source);
+            Assert.AreEqual(expected, result.ToString());
         }
     }
 }

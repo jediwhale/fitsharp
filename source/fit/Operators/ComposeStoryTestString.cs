@@ -8,7 +8,7 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fit.Operators {
-    public class ComposeHtml: ComposeOperator<Cell> {
+    public class ComposeStoryTestString: ComposeOperator<Cell> {
         public bool TryCompose(Processor<Cell> processor, TypedValue instance, ref Tree<Cell> result) {
             if (instance.Type != typeof(StoryTestString)) return false;
             result = HtmlParser.Instance.Parse(instance.ValueString);

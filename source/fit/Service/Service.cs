@@ -17,10 +17,12 @@ namespace fit.Service {
             AddOperator(new RuntimeFlow());
 
             AddOperator(new ComposeDefault());
-            AddOperator(new ComposeHtml());
             AddOperator(new ParseDefault());
             AddOperator(new ExecuteDefault());
             AddOperator(new CompareDefault());
+
+            AddOperator(new ComposeStoryTestString());
+            AddOperator(new ParseStoryTestString());
 
             AddOperator(new ExecuteSymbolSave());
             AddOperator(new CompareEmpty());

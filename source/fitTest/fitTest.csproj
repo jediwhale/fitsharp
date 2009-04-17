@@ -136,13 +136,13 @@
     <Compile Include="NUnit\FixtureTableTest.cs" />
     <Compile Include="NUnit\FolderTestModel.cs" />
     <Compile Include="NUnit\GracefulNameConverterTest.cs" />
-    <Compile Include="NUnit\ComposeHtmlOperatorTest.cs" />
     <Compile Include="NUnit\HtmlParserTest.cs" />
     <Compile Include="NUnit\IntegralRangeHandlerTest.cs" />
     <Compile Include="NUnit\NullKeywordHandlerTest.cs" />
     <Compile Include="NUnit\PageResultTest.cs" />
     <Compile Include="NUnit\ParseBlankTest.cs" />
     <Compile Include="NUnit\ParseBooleanTest.cs" />
+    <Compile Include="NUnit\StoryTestStringOperatorsTest.cs" />
     <Compile Include="NUnit\ParseTest.cs" />
     <Compile Include="NUnit\PathParserTest.cs" />
     <Compile Include="NUnit\RowFixtureTest.cs" />

@@ -1,5 +1,4 @@
-// FitNesse.NET
-// Copyright © 2007-2009 Syterra Software Inc. Includes work by Object Mentor, Inc., (c) 2002 Cunningham & Cunningham, Inc.
+// Copyright © 2009 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -258,28 +257,28 @@ namespace fit
 
 		public override string ToString()
 		{
-			StringBuilder builder = new StringBuilder();
-			return BuildString(builder).ToString();
+			return BuildString(new StringBuilder(), More).ToString();
 		}
 
-		private StringBuilder BuildString(StringBuilder builder)
+	    public string BranchString {
+	        get {
+	            return BuildString(new StringBuilder(), null).ToString();
+	        }
+	    }
+
+		private StringBuilder BuildString(StringBuilder builder, Parse moreNodes)
 		{
 			builder.Append(Leader);
 			builder.Append(Tag);
-            // change
-			if (Parts != null) builder.Append(Parts.BuildString(new StringBuilder()));
+			if (Parts != null) builder.Append(Parts.BuildString(new StringBuilder(), Parts.More));
             builder.Append(Body);
-            // end change
 			builder.Append(End);
-			if (More != null)
+			if (moreNodes != null)
 			{
-				return builder.Append(More.BuildString(new StringBuilder()));
+				return builder.Append(moreNodes.BuildString(new StringBuilder(), moreNodes.More));
 			}
-			else
-			{
-				builder.Append(Trailer);
-				return builder;
-			}
+			builder.Append(Trailer);
+			return builder;
 		}
 
 		public static int FootnoteFiles = 0;

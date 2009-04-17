@@ -1,9 +1,13 @@
-// Modified or written by Object Mentor, Inc. for inclusion with FitNesse.
-// Copyright (c) 2002 Cunningham & Cunningham, Inc.
-// Released under the terms of the GNU General Public License version 2 or later.
+// Copyright © 2009 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+// This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
+// This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
 using System;
 using fit;
+using fit.Service;
 using fitSharp.Fit.Model;
+using fitSharp.Machine.Application;
 
 namespace fitnesse.fitserver
 {
@@ -12,16 +16,18 @@ namespace fitnesse.fitserver
 		public TestStatus TestStatus = new TestStatus();
 		private bool atStartOfResult = true;
 		private PageResult currentPageResult;
-		private TestRunner runner;
+		private readonly TestRunner runner;
+	    private readonly Configuration configuration;
 
-		public TestRunnerFixtureListener(TestRunner runner)
+		public TestRunnerFixtureListener(TestRunner runner, Configuration configuration)
 		{
 			this.runner = runner;
+		    this.configuration = configuration;
 		}
 
 		public void TableFinished(Parse table)
 		{
-			String data = FitServer.FirstTableOf(table);
+            string data = configuration.GetItem<Service>().Parse<StoryTestString>(table).ToString();
 			if(atStartOfResult)
 			{
 				int indexOfFirstLineBreak = data.IndexOf("\n");
