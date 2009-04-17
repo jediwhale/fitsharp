@@ -111,11 +111,10 @@
     <Compile Include="Model\ParseTree.cs" />
     <Compile Include="Model\Table.cs" />
     <Compile Include="Model\Tree.cs" />
-    <Compile Include="Operators\CellFactoryRepository.cs" />
     <Compile Include="Model\CellRange.cs" />
     <Compile Include="Operators\ComposeDefault.cs" />
     <Compile Include="Operators\RuntimeFlow.cs" />
-    <Compile Include="Operators\TableAdapter.cs" />
+    <Compile Include="Operators\ComposeTable.cs" />
     <Compile Include="Parser\HtmlParser.cs" />
     <Compile Include="Runner\FixtureListener.cs" />
     <Compile Include="Runner\NullFixtureListener.cs" />

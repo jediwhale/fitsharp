@@ -61,7 +61,6 @@
     <Compile Include="Acceptance\CalculateFixtureUnderTest3.cs" />
     <Compile Include="Acceptance\CamelRowFixtureUnderTest.cs" />
     <Compile Include="Acceptance\CellHandlerStory.cs" />
-    <Compile Include="Acceptance\CellMaking.cs" />
     <Compile Include="Acceptance\CellMatching.cs" />
     <Compile Include="Acceptance\CellParsing.cs" />
     <Compile Include="Acceptance\Coloring.cs" />
@@ -121,6 +120,7 @@
     <Compile Include="NUnit\ActionFixtureTest.cs" />
     <Compile Include="NUnit\BindingTest.cs" />
     <Compile Include="NUnit\CellHandlerLoaderTest.cs" />
+    <Compile Include="NUnit\CellMaking.cs" />
     <Compile Include="NUnit\CellMatching.cs" />
     <Compile Include="NUnit\CellOperatorTest.cs" />
     <Compile Include="NUnit\ColumnFixtureTests.cs" />

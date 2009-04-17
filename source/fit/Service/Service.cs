@@ -24,6 +24,7 @@ namespace fit.Service {
             AddOperator(new ComposeStoryTestString());
             AddOperator(new ParseStoryTestString());
 
+            AddOperator(new ComposeTable());
             AddOperator(new ExecuteSymbolSave());
             AddOperator(new CompareEmpty());
             AddOperator(new ExecuteEmpty());

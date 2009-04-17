@@ -37,6 +37,9 @@ namespace fit
 	    public string Body {
             get {
                 string result = body;
+                if (Attributes.HasAttribute(CellAttributes.AddKey)) {
+                    result = string.Format("<span class=\"fit_grey\">{0}</span>", HttpUtility.HtmlEncode(result));
+                }
                 if (Attributes.HasAttribute(CellAttributes.InformationPrefixKey)) {
                     result = string.Format("<span class=\"fit_grey\">{0}</span>{1}", GetAttribute(CellAttributes.InformationPrefixKey), result);
                 }

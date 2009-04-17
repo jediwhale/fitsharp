@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using fit.exception;
 using fit.Fixtures;
 using fit.Model;
-using fit.Operators;
 using fitlibrary.exception;
 using fitSharp.Fit.Exception;
 using fitSharp.Fit.Model;
@@ -103,7 +102,7 @@ namespace fitlibrary {
             }
             catch (IgnoredException) {}
 	        catch (ParseException<Cell> e) {
-	            TestStatus.MarkException((Parse)e.Subject, e);
+	            TestStatus.MarkException(e.Subject, e);
 	        }
             catch (Exception e) {
                 TestStatus.MarkException(theCurrentRow.Parts, e);
@@ -126,8 +125,8 @@ namespace fitlibrary {
         protected abstract IEnumerable<Parse> MethodCells(CellRange theCells);
         protected abstract IEnumerable<Parse> ParameterCells(CellRange theCells);
 
-        private static void AddCell(Parse theCells, object theNewValue) {
-            theCells.Last.More = CellFactoryRepository.Instance.Make(theNewValue);
+        private void AddCell(Parse theCells, object theNewValue) {
+            theCells.Last.More = (Parse)Processor.Compose(theNewValue);
         }
 
         private void ColorMethodName(Parse theCells, bool thisIsRight) {
@@ -144,7 +143,7 @@ namespace fitlibrary {
                         Value;
             }
             catch (ParseException<Cell> e) {
-                TestStatus.MarkException((Parse)e.Subject, e.InnerException);
+                TestStatus.MarkException(e.Subject, e.InnerException);
                 throw new IgnoredException();
             }
 
@@ -269,7 +268,7 @@ namespace fitlibrary {
 
             public void Show(Parse theCells) {
                 try {
-                    AddCell(theCells, fixture.ExecuteEmbeddedMethod(theCells, 0));
+                    fixture.AddCell(theCells, fixture.ExecuteEmbeddedMethod(theCells, 0));
                 }
                 catch (IgnoredException) {}
             }

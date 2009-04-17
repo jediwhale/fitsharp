@@ -75,7 +75,7 @@ namespace fit
             foreach (Parse headerCell in new CellRange(headerCells).Cells)
 			{
 		        TypedValue actual = CellOperation.Invoke(this, headerCell);
-                Parse newCell = CellFactoryRepository.Instance.Make(actual.Value ?? "null", CellFactoryRepository.Grey);
+                var newCell = (Parse)Processor.Compose(actual.Value ?? "null");
 				if (cell == null)
 					cell = newCell;
 				else
