@@ -57,6 +57,7 @@
     <Compile Include="Fit\Operators\ExecuteSymbolSave.cs" />
     <Compile Include="Fit\Operators\ParseSymbol.cs" />
     <Compile Include="Fit\Service\CellOperation.cs" />
+    <Compile Include="Fit\Service\CellProcessor.cs" />
     <Compile Include="IO\SocketModel.cs" />
     <Compile Include="IO\SocketStream.cs" />
     <Compile Include="Machine\Application\Settings.cs" />

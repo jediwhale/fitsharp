@@ -5,45 +5,28 @@
 
 using System.Reflection;
 using fit.Operators;
-using fitSharp.Fit.Model;
-using fitSharp.Fit.Operators;
+using fitSharp.Fit.Service;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fit.Service {
-    public class Service: Processor<Cell>, Copyable {
+    public class Service: CellProcessor, Copyable {
         public Service() {
             AddOperator(new RuntimeFlow());
 
             AddOperator(new ComposeDefault());
-            AddOperator(new ParseDefault());
-            AddOperator(new ExecuteDefault());
-            AddOperator(new CompareDefault());
 
             AddOperator(new ComposeStoryTestString());
             AddOperator(new ParseStoryTestString());
 
             AddOperator(new ComposeTable());
-            AddOperator(new ExecuteSymbolSave());
             AddOperator(new CompareEmpty());
             AddOperator(new ExecuteEmpty());
             AddOperator(new ExecuteList());
-            AddOperator(new CompareNumeric());
-            AddOperator(new ParseMemberName());
-            AddOperator(new ParseArray());
-            AddOperator(new ParseEnum());
-            AddOperator(new ParseNullable());
-            AddOperator(new ParseBoolean());
-            AddOperator(new ParseType());
             AddOperator(new ParseTable());
             AddOperator(new ParseTree());
-            AddOperator(new ParseBlank());
-            AddOperator(new ParseNull());
-            AddOperator(new ParseSymbol());
 
-            AddOperator(new ExecuteError(), 1);
-            AddOperator(new ExecuteException(), 1);
             AddOperator(new CompareFail(), 1);
 
             ApplicationUnderTest = Context.Configuration.GetItem<ApplicationUnderTest>();
@@ -53,7 +36,7 @@ namespace fit.Service {
             ApplicationUnderTest.AddNamespace("fitSharp.Fit.Operators");
             ApplicationUnderTest.AddAssembly(Assembly.GetExecutingAssembly().CodeBase);
 
-            AddMemory<Symbol>();
+            //AddMemory<Symbol>();
         }
 
         public Service(Service other): base(other) {}
