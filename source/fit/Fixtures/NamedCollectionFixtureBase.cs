@@ -6,7 +6,6 @@
 using fit;
 using System;
 using System.Collections;
-using fit.Engine;
 using fit.Model;
 using fit.Operators;
 using fitlibrary.exception;

@@ -4,7 +4,6 @@
 using System;
 using System.Text;
 using fit;
-using fit.Engine;
 using fitSharp.Fit.Model;
 
 namespace fitnesse.fitserver

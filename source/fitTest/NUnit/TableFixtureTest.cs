@@ -4,7 +4,6 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System.Text;
-using fit.Engine;
 using fitnesse.fixtures;
 using fitSharp.Fit.Model;
 using NUnit.Framework;

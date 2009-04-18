@@ -37,8 +37,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Engine\Binding.cs" />
-    <Compile Include="Engine\CellOperation.cs" />
+    <Compile Include="Fixtures\Binding.cs" />
     <Compile Include="Exception\InvalidMethodException.cs" />
     <Compile Include="Fixtures\CalculateFixture.cs" />
     <Compile Include="Fixtures\ClearSymbolsFixture.cs" />
@@ -48,7 +47,6 @@
     <Compile Include="Fixtures\ConstraintFixture.cs" />
     <Compile Include="Fixtures\FileSystem.cs" />
     <Compile Include="Fixtures\FixtureResult.cs" />
-    <Compile Include="Engine\OperationType.cs" />
     <Compile Include="Operators\ArrayMatchStrategy.cs" />
     <Compile Include="Operators\ComposeStoryTestString.cs" />
     <Compile Include="Operators\NamedMatchStrategy.cs" />

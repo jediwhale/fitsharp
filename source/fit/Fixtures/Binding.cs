@@ -3,11 +3,19 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
+using fit.Model;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
 
 namespace fit
 {
+	public enum OperationType
+	{
+		Input,
+		Check,
+        Create,
+		None
+	}
 	public class Binding
 	{
 		public Binding(string columnHeader, Tree<Cell> headerCell, OperationType operationType)
@@ -32,7 +40,7 @@ namespace fit
 					fixture.CellOperation.Check(fixture.TestStatus, fixture.GetTargetObject(), MemberCell, cell);
 					break;
                 case OperationType.Create:
-			        fixture.CellOperation.Create(fixture, MemberName, cell);
+			        fixture.CellOperation.Create(fixture, MemberName, new CellRange(cell, 1));
 			        break;
 			}
 		}

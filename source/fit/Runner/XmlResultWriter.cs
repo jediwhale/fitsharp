@@ -8,7 +8,6 @@ using System;
 using System.IO;
 using System.Xml;
 using fit;
-using fit.Engine;
 using fitSharp.Fit.Model;
 
 namespace fitnesse.fitserver

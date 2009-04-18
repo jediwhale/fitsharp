@@ -6,12 +6,12 @@
 
 using System;
 using System.Collections;
-using fit.Engine;
 using fit.Model;
 using fitlibrary;
 using fitlibrary.exception;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
+using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
