@@ -45,7 +45,7 @@ namespace fit.Operators {
             if (!typeof(IList).IsAssignableFrom(parameters.GetTypedActual(processor).Type)) return false;
 
             var matcher = new ListMatcher(processor, new ArrayMatchStrategy(cell.Parts.Parts));
-            matcher.MarkCell(processor, parameters.TestStatus, parameters.SystemUnderTest.Value, parameters.GetActual(processor), cell.Parts.Parts);
+            matcher.MarkCell(parameters.TestStatus, parameters.SystemUnderTest.Value, parameters.GetActual(processor), cell.Parts.Parts);
             return true;
         }
 

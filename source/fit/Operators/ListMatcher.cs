@@ -41,7 +41,7 @@ namespace fit.Operators {
             return (actuals.UnmatchedCount == 0);
         }
 
-        public bool MarkCell(Processor<Cell> processor, TestStatus testStatus, object systemUnderTest, object theActualValue, Parse theTableRows) {
+        public bool MarkCell(TestStatus testStatus, object systemUnderTest, object theActualValue, Parse theTableRows) {
             Actuals actuals = new Actuals((IList)theActualValue, strategy);
             if (theTableRows.More == null && actuals.UnmatchedCount == 0) {
                 testStatus.MarkRight(theTableRows);
