@@ -41,14 +41,14 @@ namespace fit.Operators {
             return (actuals.UnmatchedCount == 0);
         }
 
-        public bool MarkCell(Processor<Cell> processor, TestStatus testStatus, object systemUnderTest, object theActualValue, Parse theTableRows, Parse theRowsToCompare) {
+        public bool MarkCell(Processor<Cell> processor, TestStatus testStatus, object systemUnderTest, object theActualValue, Parse theTableRows) {
             Actuals actuals = new Actuals((IList)theActualValue, strategy);
-            if (theRowsToCompare == null && actuals.UnmatchedCount == 0) {
+            if (theTableRows.More == null && actuals.UnmatchedCount == 0) {
                 testStatus.MarkRight(theTableRows);
             }
             bool result = true;
             int expectedRow = 0;
-            foreach (Parse currentRow in new CellRange(theRowsToCompare).Cells) {
+            foreach (Parse currentRow in new CellRange(theTableRows.More).Cells) {
                 try {
                     int match = actuals.FindMatch(RowMatches, expectedRow, currentRow.Parts);
                     if (match < 0) {
@@ -67,7 +67,7 @@ namespace fit.Operators {
                 result = false;
             }
 
-            Parse markRow = theRowsToCompare;
+            Parse markRow = theTableRows.More;
             for (int row = 0; row < expectedRow; row++) {
                 if (strategy.IsOrdered && actuals.IsOutOfOrder(row)) {
                     MarkAsIncorrect(testStatus, markRow, "out of order");

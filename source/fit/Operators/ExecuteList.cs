@@ -1,13 +1,11 @@
-// FitNesse.NET
-// Copyright © 2007,2008 Syterra Software Inc. This program is free software;
-// you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
+// Copyright © 2009 Syterra Software Inc.
+// This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System;
 using System.Collections;
 using fit.Model;
-using fitlibrary;
 using fitlibrary.exception;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
@@ -47,7 +45,7 @@ namespace fit.Operators {
             if (!typeof(IList).IsAssignableFrom(parameters.GetTypedActual(processor).Type)) return false;
 
             var matcher = new ListMatcher(processor, new ArrayMatchStrategy(cell.Parts.Parts));
-            matcher.MarkCell(processor, parameters.TestStatus, parameters.SystemUnderTest.Value, parameters.GetActual(processor), cell.Parts.Parts,  cell.Parts.Parts.More);
+            matcher.MarkCell(processor, parameters.TestStatus, parameters.SystemUnderTest.Value, parameters.GetActual(processor), cell.Parts.Parts);
             return true;
         }
 

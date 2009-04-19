@@ -4,14 +4,8 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using fit;
-using System;
 using System.Collections;
-using fit.Model;
-using fit.Operators;
 using fitlibrary.exception;
-using fitSharp.Fit.Model;
-using fitSharp.Machine.Engine;
-using fitSharp.Machine.Model;
 
 namespace fitlibrary {
 
@@ -26,7 +20,7 @@ namespace fitlibrary {
         public override void DoRows(Parse theRows) {
             if (theRows == null) throw new TableStructureException("Header row missing.");
             myHeaderRow = theRows;
-            CompareRows(theRows, theRows.More);
+            CompareRows(theRows);
         }
 
         protected Parse myHeaderRow;
