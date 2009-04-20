@@ -55,9 +55,7 @@ namespace fit.Runner {
         private void WriteResult(Parse theTables, TestStatus status, TimeSpan theElapsedTime) {
             string outputFile = OutputPath;
             var output = new StringWriter();
-            foreach (Parse table in new CellRange(theTables).Cells) {
-                output.Write(configuration.GetItem<Service.Service>().Parse<StoryTestString>(table).ToString());
-            }
+            output.Write(configuration.GetItem<Service.Service>().Parse<StoryTestString>(theTables).ToString());
             output.Close();
             myFolderModel.MakeFile(outputFile, output.ToString());
             myFolder.ListFile(outputFile, status, theElapsedTime);

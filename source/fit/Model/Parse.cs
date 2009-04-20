@@ -263,11 +263,11 @@ namespace fit
 			return BuildString(new StringBuilder(), More).ToString();
 		}
 
-	    public string BranchString {
+	    /*public string BranchString {
 	        get {
 	            return BuildString(new StringBuilder(), null).ToString();
 	        }
-	    }
+	    }*/
 
 		private StringBuilder BuildString(StringBuilder builder, Parse moreNodes)
 		{

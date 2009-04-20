@@ -13,7 +13,7 @@ namespace fit.Operators {
         public bool TryParse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters, ref TypedValue result) {
             if (type != typeof(StoryTestString)) return false;
             var source = (Parse) parameters.Value;
-            result = new TypedValue(new StoryTestString(source.BranchString));
+            result = new TypedValue(new StoryTestString(source.ToString()));
             return true;
         }
     }

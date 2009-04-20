@@ -3,7 +3,6 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-using System;
 using fit;
 using fit.Service;
 using fitSharp.Fit.Model;
@@ -14,7 +13,6 @@ namespace fitnesse.fitserver
 	public class TestRunnerFixtureListener : FixtureListener
 	{
 		public TestStatus TestStatus = new TestStatus();
-		private bool atStartOfResult = true;
 		private PageResult currentPageResult;
 		private readonly TestRunner runner;
 	    private readonly Configuration configuration;
@@ -25,25 +23,18 @@ namespace fitnesse.fitserver
 		    this.configuration = configuration;
 		}
 
-		public void TableFinished(Parse table)
-		{
-            string data = configuration.GetItem<Service>().Parse<StoryTestString>(table).ToString();
-			if(atStartOfResult)
-			{
-				int indexOfFirstLineBreak = data.IndexOf("\n");
-				String pageTitle = data.Substring(0, indexOfFirstLineBreak);
-				data = data.Substring(indexOfFirstLineBreak + 1);
-				currentPageResult = new PageResult(pageTitle);
-				atStartOfResult = false;
-			}
-			currentPageResult.Append(data);
-		}
+		public void TableFinished(Parse table) {}
 
 		public void TablesFinished(Parse theTables, TestStatus status)
 		{
+            string data = configuration.GetItem<Service>().Parse<StoryTestString>(theTables).ToString();
+			int indexOfFirstLineBreak = data.IndexOf("\n");
+			string pageTitle = data.Substring(0, indexOfFirstLineBreak);
+			data = data.Substring(indexOfFirstLineBreak + 1);
+			currentPageResult = new PageResult(pageTitle);
+			currentPageResult.Append(data);
 			currentPageResult.TestStatus = status;
 			runner.AcceptResults(currentPageResult);
-			atStartOfResult = true;
 			TestStatus.TallyCounts(status);
 		}
 	}

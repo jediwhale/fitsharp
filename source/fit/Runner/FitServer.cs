@@ -228,16 +228,9 @@ namespace fitnesse.fitserver
 			}
 		}
 
-		public string FirstTableOf(Parse tables)
+		public string TablesToString(Parse tables)
 		{
             return configuration.GetItem<Service>().Parse<StoryTestString>(tables).ToString();
-			/*Parse more = tables.More;
-			tables.More = null;
-			StringWriter writer = new StringWriter();
-			tables.Print(writer);
-			string firstTable = writer.ToString();
-			tables.More = more;
-			return firstTable;*/
 		}
 
 		public void WriteLogMessage(string logMessage)
@@ -313,15 +306,14 @@ namespace fitnesse.fitserver
 			this.fitServer = fitServer;
 		}
 
-		public void TableFinished(Parse finishedTable)
-		{
-			string testResultDocument = fitServer.FirstTableOf(finishedTable);
-			fitServer.WriteLogMessage("\tTransmitting table of length " + testResultDocument.Length);
-			fitServer.Transmit(Protocol.FormatDocument(testResultDocument));
-		}
+		public void TableFinished(Parse finishedTable) {}
 
 		public void TablesFinished(Parse theTables, TestStatus status)
 		{
+			string testResultDocument = fitServer.TablesToString(theTables);
+			fitServer.WriteLogMessage("\tTransmitting tables of length " + testResultDocument.Length);
+			fitServer.Transmit(Protocol.FormatDocument(testResultDocument));
+
 			fitServer.WriteLogMessage("\tTest Document finished");
 			fitServer.Transmit(Protocol.FormatCounts(status));
 		}
