@@ -20,7 +20,7 @@ namespace fit {
             reader = new StreamReader(FullName(theSecondFile));
             string secondContent = reader.ReadToEnd().Trim();
             reader.Close();
-            return firstContent == secondContent;
+            return firstContent.Replace("\r\n","\n") == secondContent.Replace("\r\n","\n");
         }
 
         public void MakeEmptyFolder(string theFolder) {

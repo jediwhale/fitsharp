@@ -129,6 +129,9 @@
     <Compile Include="Slim\Service\Messenger.cs" />
     <Compile Include="Slim\Service\Runner.cs" />
     <Compile Include="Slim\Service\Service.cs" />
+    <Compile Include="Document\Step.cs" />
+    <Compile Include="Swim\ResultCell.cs" />
+    <Compile Include="Swim\ResultPage.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

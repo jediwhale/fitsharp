@@ -75,7 +75,11 @@ namespace fit.Operators {
             if (expected[1] == null) {
                 return (actual[1] != null ? FormatDifference(actual[1], null) : string.Empty);
             }
-            return actual[1].IndexOf(expected[1]) >= 0 ? string.Empty : FormatDifference(actual[1], expected[1]);
+            return ContainsText(actual[1], expected[1]) ? string.Empty : FormatDifference(actual[1], expected[1]);
+        }
+
+        private static bool ContainsText(string actual, string expected) {
+            return actual.Replace("\r\n", "\n").IndexOf(expected.Replace("\r\n", "\n")) >= 0;
         }
 
         private static string[] SplitBody(string theSource) {
