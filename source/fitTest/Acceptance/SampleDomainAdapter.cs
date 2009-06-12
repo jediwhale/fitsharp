@@ -24,6 +24,10 @@ namespace fit.Test.Acceptance {
             throw new AbandonStoryTestException();
         }
 
+        public string ThrowAbandon(string message) {
+            throw new AbandonStoryTestException(message);
+        }
+
         private SampleDomain myDomain;
     }
 }

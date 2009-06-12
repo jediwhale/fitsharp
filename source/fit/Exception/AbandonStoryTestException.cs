@@ -9,5 +9,6 @@ using fitSharp.Fit.Model;
 namespace fit.exception {
     public class AbandonStoryTestException: ApplicationException, AbandonException {
         public AbandonStoryTestException(): base("Story test abandoned.") {}
+        public AbandonStoryTestException(string message): base(message) {}
     }
 }
