@@ -4,6 +4,7 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using fitSharp.Machine.Engine;
+using fitSharp.Machine.Model;
 using fitSharp.Slim.Operators;
 
 namespace fitSharp.Slim.Service {
@@ -25,5 +26,14 @@ namespace fitSharp.Slim.Service {
             AddOperator(new ComposeList());
         }
 
+        public Tree<string> ExecuteInstructions(Tree<string> instructions) {
+            var results = new TreeList<string>();
+            foreach (Tree<string> statement in instructions.Branches) {
+                var result = (Tree<string>) Execute(statement).Value;
+                results.AddBranchValue(result);
+                if (ExecuteBase.WasAborted(result)) break;
+            }
+            return results;
+        }
     }
 }

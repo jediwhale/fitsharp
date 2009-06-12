@@ -58,5 +58,9 @@ namespace fitSharp.Slim.Operators {
             result.ThrowExceptionIfNotValid();
             return result;
         }
+
+        public static bool WasAborted(Tree<string> result) {
+            return ComposeException.WasAborted(result.Branches[1].Value);
+        }
     }
 }

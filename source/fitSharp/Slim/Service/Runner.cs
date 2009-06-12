@@ -50,10 +50,7 @@ namespace fitSharp.Slim.Service {
 
         private string ExecuteInstruction(string instruction) {
             Document document = Document.Parse(instruction);
-            var results = new TreeList<string>();
-            foreach (Tree<string> statement in document.Content.Branches) {
-                results.AddBranchValue(service.Execute(statement).Value);
-            }
+            Tree<string> results = service.ExecuteInstructions(document.Content);
             return new Document(results).ToString();
         }
 

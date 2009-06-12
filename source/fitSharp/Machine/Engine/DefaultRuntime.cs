@@ -11,12 +11,9 @@ namespace fitSharp.Machine.Engine {
     public class DefaultRuntime<T>: RuntimeOperator<T> {
         public bool TryCreate(Processor<T> processor, string memberName, Tree<T> parameters, ref TypedValue result) {
             var runtimeType = processor.ParseString<RuntimeType>(memberName);
-            if (parameters.Branches.Count == 0) {
-                result = CreateWithoutParameters(runtimeType);
-            }
-            else {
-                result = CreateWithParameters(processor, parameters, runtimeType);
-            }
+            result = parameters.Branches.Count == 0
+                         ? CreateWithoutParameters(runtimeType)
+                         : CreateWithParameters(processor, parameters, runtimeType);
             return true;
         }
 

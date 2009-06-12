@@ -37,8 +37,22 @@ namespace fitSharp.Slim.Operators {
             if (TryResult<InstructionException>(instance,
                                                 e => string.Format("MALFORMED_INSTRUCTION {0}", List(e.Instruction)), ref result)) return true;
 
+            if (IsStopTestException(instance)) {
+                result = MakeResult(string.Format("ABORT_SLIM_TEST: {0}", instance.Value));
+                return true;
+            }
+            
             result = MakeResult(instance.Value.ToString());
             return true;
+        }
+
+        private static bool IsStopTestException(TypedValue instance) {
+            for (var exception = (System.Exception) instance.Value;
+                 exception != null;
+                 exception = exception.InnerException) {
+                if (exception.GetType().Name.Contains("StopTest")) return true;
+            }
+            return false;
         }
 
         private static string List(Tree<string> list) {
@@ -61,6 +75,10 @@ namespace fitSharp.Slim.Operators {
 
         private static Tree<string> MakeResult(string message) {
             return new TreeLeaf<string>(string.Format(ExceptionResult, message));
+        }
+
+        public static bool WasAborted(string result) {
+            return result.StartsWith("__EXCEPTION__:ABORT_SLIM_TEST:");
         }
     }
 }

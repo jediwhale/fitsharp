@@ -21,11 +21,46 @@ namespace fitSharp.Test.NUnit.Slim {
 
         [Test] public void InstanceIsCreated() {
             SampleClass.Count = 0;
-            var statement =
-                new TreeList<string>().AddBranchValue("step").AddBranchValue("make").AddBranchValue("variable").AddBranchValue(
-                    typeof(SampleClass).FullName);
+            var statement = MakeSampleClass();
             service.Execute(statement);
             Assert.AreEqual(1, SampleClass.Count);
+        }
+
+        private static Tree<string> MakeSampleClass() {
+            return new TreeList<string>().AddBranchValue("step1").AddBranchValue("make").AddBranchValue("variable").
+                AddBranchValue(typeof (SampleClass).FullName);
+        }
+
+        private static Tree<string> ExecuteSampleMethod() {
+            return new TreeList<string>().AddBranchValue("step2").AddBranchValue("call").AddBranchValue("variable").
+                AddBranchValue("samplemethod");
+        }
+
+        private static Tree<string> ExecuteAbortTest() {
+            return new TreeList<string>().AddBranchValue("step3").AddBranchValue("call").AddBranchValue("variable").
+                AddBranchValue("aborttest");
+        }
+
+        [Test] public void MultipleStepsAreExecuted() {
+            var instructions = new TreeList<string>()
+                .AddBranch(MakeSampleClass())
+                .AddBranch(ExecuteSampleMethod())
+                .AddBranch(ExecuteSampleMethod());
+            SampleClass.MethodCount = 0;
+            service.ExecuteInstructions(instructions);
+            Assert.AreEqual(2, SampleClass.MethodCount);
+        }
+
+        [Test] public void StopTestExceptionSkipsRemainingSteps() {
+            var instructions = new TreeList<string>()
+                .AddBranch(MakeSampleClass())
+                .AddBranch(ExecuteSampleMethod())
+                .AddBranch(ExecuteAbortTest())
+                .AddBranch(ExecuteSampleMethod());
+            SampleClass.MethodCount = 0;
+            service.ExecuteInstructions(instructions);
+            Assert.AreEqual(1, SampleClass.MethodCount);
+            
         }
 
         [Test] public void OperatorIsAddedFromConfiguration() {
