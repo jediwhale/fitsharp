@@ -6,6 +6,11 @@
 using System;
 using fitSharp.Machine.Model;
 
+// don't want to put processor in constructor? why not? could create the list initially with processor references
+// then still reusable
+
+// return a composite of bool valid and actual type - Valid<T>? (like int? etc?)
+
 namespace fitSharp.Machine.Engine {
     public interface Operator {}
 

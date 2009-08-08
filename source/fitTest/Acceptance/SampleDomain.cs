@@ -17,6 +17,7 @@ namespace fit.Test.Acceptance {
         public int IntegerField;
         public int another_field;
         public string StringField;
+        public DateTime DateTimeField;
         public Person PersonField;
 
         public static string StaticMethod() {
@@ -28,6 +29,8 @@ namespace fit.Test.Acceptance {
             if (Message == null) throw new NullReferenceException();
             else throw new ApplicationException(Message);
         }
+
+        public void AddDays(int days) { DateTimeField = DateTimeField.AddDays(days); }
     }
 
     public class another_sample_domain {}

@@ -21,6 +21,7 @@ namespace fitSharp.Fit.Service {
             AddOperator(new ParseEnum());
             AddOperator(new ParseNullable());
             AddOperator(new ParseBoolean());
+            AddOperator(new ParseDate());
             AddOperator(new ParseType());
             AddOperator(new ParseBlank());
             AddOperator(new ParseNull());

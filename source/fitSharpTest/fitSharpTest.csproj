@@ -38,6 +38,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NUnit\Fit\ParseDateTest.cs" />
     <Compile Include="NUnit\IO\SocketStreamTest.cs" />
     <Compile Include="NUnit\Machine\ApplicationUnderTestTest.cs" />
     <Compile Include="NUnit\Machine\ConfigurationTest.cs" />
