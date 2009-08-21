@@ -12,8 +12,11 @@ namespace fitSharp.Fit.Operators {
     public class ExecuteError : ExecuteBase {
         private static readonly IdentifierName errorIdentifier = new IdentifierName("error");
 
-        public override bool TryExecute(Processor<Cell> processor, ExecuteParameters parameters, ref TypedValue result) {
-            if (parameters.Verb != ExecuteParameters.Check || !errorIdentifier.Equals(parameters.Cell.Text)) return false;
+        public override bool IsMatch(Processor<Cell> processor, ExecuteParameters parameters) {
+            return parameters.Verb == ExecuteParameters.Check && errorIdentifier.Equals(parameters.Cell.Text);
+        }
+
+        public override TypedValue Execute(Processor<Cell> processor, ExecuteParameters parameters) {
             try {
                 object actual = parameters.GetActual(processor);
                 parameters.TestStatus.MarkWrong(parameters.Cell, actual.ToString());
@@ -21,7 +24,7 @@ namespace fitSharp.Fit.Operators {
             catch {
                 parameters.TestStatus.MarkRight(parameters.Cell);
             }
-            return true;
+            return TypedValue.Void;
         }
     }
 }

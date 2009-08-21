@@ -11,11 +11,13 @@ using fitSharp.Machine.Model;
 
 namespace fit.Operators {
 	public class ExecuteEmpty : ExecuteBase {
-	    public override bool TryExecute(Processor<Cell> processor, ExecuteParameters parameters, ref TypedValue result) {
-			if ((parameters.Verb != ExecuteParameters.Check && parameters.Verb != ExecuteParameters.Input)
-                || parameters.Cell.Text.Length != 0
-                || ((Parse)parameters.Cell).Parts!= null) return false;
+	    public override bool IsMatch(Processor<Cell> processor, ExecuteParameters parameters) {
+			return (parameters.Verb == ExecuteParameters.Check || parameters.Verb == ExecuteParameters.Input)
+                && parameters.Cell.Text.Length == 0
+                && ((Parse)parameters.Cell).Parts == null;
+	    }
 
+	    public override TypedValue Execute(Processor<Cell> processor, ExecuteParameters parameters) {
 	        switch (parameters.Verb) {
 	            case ExecuteParameters.Input:
                     TypedValue actual = processor.TryInvoke(parameters.SystemUnderTest, parameters.GetMemberName(processor),
@@ -26,7 +28,7 @@ namespace fit.Operators {
 			        ShowActual(parameters, parameters.GetActual(processor));
 	                break;
 	        }
-	        return true;
+	        return TypedValue.Void;
 	    }
 
 	    private static void ShowActual(ExecuteParameters parameters, object actual) {

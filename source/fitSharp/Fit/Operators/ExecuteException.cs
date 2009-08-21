@@ -16,10 +16,12 @@ namespace fitSharp.Fit.Operators {
         private static readonly Regex regexForMessageOnly = new Regex("^\".*\"$");
         private static readonly Regex regexForExceptionTypeNameOnly = new Regex("^.*: \".*\"$");
 
-        public override bool TryExecute(Processor<Cell> processor, ExecuteParameters parameters, ref TypedValue result) {
-            if (parameters.Verb != ExecuteParameters.Check
-                || !exceptionIdentifier.IsStartOf(parameters.Cell.Text) || !parameters.Cell.Text.EndsWith("]")) return false;
+        public override bool IsMatch(Processor<Cell> processor, ExecuteParameters parameters) {
+            return parameters.Verb == ExecuteParameters.Check
+                && exceptionIdentifier.IsStartOf(parameters.Cell.Text) && parameters.Cell.Text.EndsWith("]");
+        }
 
+        public override TypedValue Execute(Processor<Cell> processor, ExecuteParameters parameters) {
             string exceptionContent = parameters.Cell.Text.Substring("exception[".Length, parameters.Cell.Text.Length - ("exception[".Length + 1));
             try {
                 parameters.GetActual(processor);
@@ -37,7 +39,7 @@ namespace fitSharp.Fit.Operators {
                     EvaluateException(e.InnerException.GetType().Name == exceptionContent, parameters, e);
                 }
             }
-            return true;
+            return TypedValue.Void;
         }
 
         private static bool IsExceptionTypeNameOnly(string exceptionContent) {

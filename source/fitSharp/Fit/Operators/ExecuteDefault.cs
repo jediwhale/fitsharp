@@ -12,7 +12,11 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
     public class ExecuteDefault: ExecuteBase {
-        public override bool TryExecute(Processor<Cell> processor, ExecuteParameters parameters, ref TypedValue result) {
+        public override bool IsMatch(Processor<Cell> processor, ExecuteParameters parameters) {
+            return true;
+        }
+
+        public override TypedValue Execute(Processor<Cell> processor, ExecuteParameters parameters) {
             switch (parameters.Verb) {
                 case ExecuteParameters.Input:
                     Input(processor, parameters);
@@ -23,17 +27,15 @@ namespace fitSharp.Fit.Operators {
                     break;
 
                 case ExecuteParameters.Compare:
-                    result = new TypedValue(processor.Compare(parameters.Target, parameters.Cells));
-                    break;
+                    return new TypedValue(processor.Compare(parameters.Target, parameters.Cells));
 
                 case ExecuteParameters.Invoke:
-                    result = Invoke(processor, parameters);
-                    break;
+                    return Invoke(processor, parameters);
 
                 default:
                     throw new ArgumentException(string.Format("Unrecognized operation '{0}'", parameters.Verb));
             }
-            return true;
+            return TypedValue.Void;
         }
 
         private static void Input(Processor<Cell> processor, ExecuteParameters parameters) {

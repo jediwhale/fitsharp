@@ -15,38 +15,44 @@ using fitSharp.Machine.Model;
 
 namespace fit.Operators {
     public class ExecuteList: ExecuteBase, ParseOperator<Cell> {
-
-        public override bool TryExecute(Processor<Cell> processor, ExecuteParameters parameters, ref TypedValue result) {
+        public override bool IsMatch(Processor<Cell> processor, ExecuteParameters parameters) {
             switch (parameters.Verb) {
                 case ExecuteParameters.Check:
-                    return ExecuteCheck(processor, parameters);
+                    var cell1 = (Parse)parameters.Cell;
+                    return cell1.Parts != null && typeof(IList).IsAssignableFrom(parameters.GetTypedActual(processor).Type);
 
                 case ExecuteParameters.Compare:
-                    return ExecuteEvaluate(processor, parameters, ref result);
+                    var cell2 = (Parse)parameters.Cell;
+                    return cell2.Parts != null && typeof(IList).IsAssignableFrom(parameters.Target.Type);
 
                 default:
                     return false;
             }
         }
 
-        private static bool ExecuteEvaluate(Processor<Cell> processor, ExecuteParameters parameters, ref TypedValue result) {
-            var cell = (Parse)parameters.Cell;
-            if (!typeof(IList).IsAssignableFrom(parameters.Target.Type)) return false;
-            if (cell.Parts == null) return false;
+        public override TypedValue Execute(Processor<Cell> processor, ExecuteParameters parameters) {
+            switch (parameters.Verb) {
+                case ExecuteParameters.Check:
+                    ExecuteCheck(processor, parameters);
+                    break;
 
-            var matcher = new ListMatcher(processor, new ArrayMatchStrategy(cell.Parts.Parts));
-            result = new TypedValue(matcher.IsEqual(parameters.Target.Value, cell));
-            return true;
+                case ExecuteParameters.Compare:
+                    return ExecuteEvaluate(processor, parameters);
+
+            }
+            return TypedValue.Void;
         }
 
-        private static bool ExecuteCheck(Processor<Cell> processor, ExecuteParameters parameters) {
+        private static TypedValue ExecuteEvaluate(Processor<Cell> processor, ExecuteParameters parameters) {
             var cell = (Parse)parameters.Cell;
-            if (cell.Parts == null) return false;
-            if (!typeof(IList).IsAssignableFrom(parameters.GetTypedActual(processor).Type)) return false;
+            var matcher = new ListMatcher(processor, new ArrayMatchStrategy(cell.Parts.Parts));
+            return new TypedValue(matcher.IsEqual(parameters.Target.Value, cell));
+        }
 
+        private static void ExecuteCheck(Processor<Cell> processor, ExecuteParameters parameters) {
+            var cell = (Parse)parameters.Cell;
             var matcher = new ListMatcher(processor, new ArrayMatchStrategy(cell.Parts.Parts));
             matcher.MarkCell(parameters.TestStatus, parameters.SystemUnderTest.Value, parameters.GetActual(processor), cell.Parts.Parts);
-            return true;
         }
 
         public bool TryParse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters, ref TypedValue result) {

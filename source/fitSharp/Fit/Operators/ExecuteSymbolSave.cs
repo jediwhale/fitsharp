@@ -10,16 +10,19 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
     public class ExecuteSymbolSave : ExecuteBase {
-        public override bool TryExecute(Processor<Cell> processor, ExecuteParameters parameters, ref TypedValue result) {
-            if (parameters.Verb != ExecuteParameters.Check
-                || !parameters.Cell.Text.StartsWith(">>")) return false;
+        public override bool IsMatch(Processor<Cell> processor, ExecuteParameters parameters) {
+            return parameters.Verb == ExecuteParameters.Check
+                && parameters.Cell.Text.StartsWith(">>");
+        }
 
+        public override TypedValue Execute(Processor<Cell> processor, ExecuteParameters parameters) {
             object value = parameters.GetActual(processor);
             var symbol = new Symbol(parameters.Cell.Text.Substring(2), value);
             processor.Store(symbol);
 
             parameters.Cell.AddToAttribute(CellAttributes.InformationSuffixKey, value == null ? "null" : value.ToString(), CellAttributes.SuffixFormat);
-            return true;
+
+            return TypedValue.Void;
         }
     }
 }

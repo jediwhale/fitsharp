@@ -11,15 +11,18 @@ namespace fitSharp.Slim.Operators {
         private const string defaultResult = "OK";
         private readonly IdentifierName identifier;
 
-        public bool TryExecute(Processor<string> processor, TypedValue instance, Tree<string> parameters, ref TypedValue result) {
-            if (!identifier.IsEmpty && (parameters.Branches.Count < 2 || !identifier.Matches(parameters.Branches[1].Value))) return false;
+        public bool IsMatch(Processor<string> processor, TypedValue instance, Tree<string> parameters) {
+            return identifier.IsEmpty ||
+                   (parameters.Branches.Count > 1 && identifier.Matches(parameters.Branches[1].Value));
+        }
+
+        public TypedValue Execute(Processor<string> processor, TypedValue instance, Tree<string> parameters) {
             try {
-                result = new TypedValue(ExecuteOperation(processor, parameters));
+                return new TypedValue(ExecuteOperation(processor, parameters));
             }
             catch (System.Exception e) {
-                result = new TypedValue(Result(parameters, processor.Compose(e)));
+                return new TypedValue(Result(parameters, processor.Compose(e)));
             }
-            return true;
         }
 
         protected ExecuteBase(string identifierName) {

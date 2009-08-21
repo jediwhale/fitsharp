@@ -11,10 +11,15 @@ using fitSharp.Machine.Model;
 namespace fitSharp.Fit.Operators {
     public abstract class ExecuteBase: ExecuteOperator<Cell> {
 
-        public abstract bool TryExecute(Processor<Cell> processor, ExecuteParameters parameters, ref TypedValue result);
+        public abstract bool IsMatch(Processor<Cell> processor, ExecuteParameters parameters);
+        public abstract TypedValue Execute(Processor<Cell> processor, ExecuteParameters parameters);
 
-        public bool TryExecute(Processor<Cell> processor, TypedValue instance, Tree<Cell> parameters, ref TypedValue result) {
-            return TryExecute(processor, new ExecuteParameters((ExecuteContext)instance.Value, parameters), ref result);
+        public bool IsMatch(Processor<Cell> processor, TypedValue instance, Tree<Cell> parameters) {
+            return IsMatch(processor, new ExecuteParameters((ExecuteContext) instance.Value, parameters));
+        }
+
+        public TypedValue Execute(Processor<Cell> processor, TypedValue instance, Tree<Cell> parameters) {
+            return Execute(processor, new ExecuteParameters((ExecuteContext)instance.Value, parameters));
         }
     }
 }

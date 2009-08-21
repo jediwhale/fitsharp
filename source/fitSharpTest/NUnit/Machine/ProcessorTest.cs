@@ -85,9 +85,12 @@ namespace fitSharp.Test.NUnit.Machine {
         }
 
         private class DefaultTest: ExecuteOperator<string> {
-            public bool TryExecute(Processor<string> processor, TypedValue instance, Tree<string> parameters, ref TypedValue result) {
-                result = new TypedValue("defaultexecute");
+            public bool IsMatch(Processor<string> processor, TypedValue instance, Tree<string> parameters) {
                 return true;
+            }
+
+            public TypedValue Execute(Processor<string> processor, TypedValue instance, Tree<string> parameters) {
+                return new TypedValue("defaultexecute");
             }
         }
 
@@ -98,10 +101,12 @@ namespace fitSharp.Test.NUnit.Machine {
                 this.name = name;
             }
 
-            public bool TryExecute(Processor<string> processor, TypedValue instance, Tree<string> parameters, ref TypedValue result) {
-                if (parameters.Value != name) return false;
-                result = new TypedValue("execute" + name);
-                return true;
+            public bool IsMatch(Processor<string> processor, TypedValue instance, Tree<string> parameters) {
+                return parameters.Value == name;
+            }
+
+            public TypedValue Execute(Processor<string> processor, TypedValue instance, Tree<string> parameters) {
+                return new TypedValue("execute" + name);
             }
         }
 

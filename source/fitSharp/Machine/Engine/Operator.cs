@@ -23,7 +23,8 @@ namespace fitSharp.Machine.Engine {
     }
 
     public interface ExecuteOperator<T>: Operator {
-        bool TryExecute(Processor<T> processor, TypedValue instance, Tree<T> parameters, ref TypedValue result);
+        bool IsMatch(Processor<T> processor, TypedValue instance, Tree<T> parameters);
+        TypedValue Execute(Processor<T> processor, TypedValue instance, Tree<T> parameters);
     }
 
     public interface ParseOperator<T>: Operator {
