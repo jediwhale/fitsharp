@@ -83,7 +83,7 @@ namespace fitSharp.Machine.Engine {
         public TypedValue Execute(TypedValue instance, Tree<U> parameters) {
             TypedValue result = TypedValue.Void;
             Do<ExecuteOperator<U>>(o => {
-                                       if (o.IsMatch(this, instance, parameters)) {
+                                       if (o.CanExecute(this, instance, parameters)) {
                                            result = o.Execute(this, instance, parameters);
                                            return true;
                                        }

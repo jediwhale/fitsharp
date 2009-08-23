@@ -14,7 +14,7 @@ namespace fitSharp.Fit.Operators {
         public abstract bool IsMatch(Processor<Cell> processor, ExecuteParameters parameters);
         public abstract TypedValue Execute(Processor<Cell> processor, ExecuteParameters parameters);
 
-        public bool IsMatch(Processor<Cell> processor, TypedValue instance, Tree<Cell> parameters) {
+        public bool CanExecute(Processor<Cell> processor, TypedValue instance, Tree<Cell> parameters) {
             return IsMatch(processor, new ExecuteParameters((ExecuteContext) instance.Value, parameters));
         }
 

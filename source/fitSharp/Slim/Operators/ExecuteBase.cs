@@ -11,7 +11,7 @@ namespace fitSharp.Slim.Operators {
         private const string defaultResult = "OK";
         private readonly IdentifierName identifier;
 
-        public bool IsMatch(Processor<string> processor, TypedValue instance, Tree<string> parameters) {
+        public bool CanExecute(Processor<string> processor, TypedValue instance, Tree<string> parameters) {
             return identifier.IsEmpty ||
                    (parameters.Branches.Count > 1 && identifier.Matches(parameters.Branches[1].Value));
         }

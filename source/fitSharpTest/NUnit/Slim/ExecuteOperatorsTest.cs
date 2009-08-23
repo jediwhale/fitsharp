@@ -63,7 +63,7 @@ namespace fitSharp.Test.NUnit.Slim {
 
         private void ExecuteOperation(ExecuteOperator<string> executeOperator, Tree<string> input, int branchCount) {
             TypedValue executeResult = TypedValue.Void;
-            if (executeOperator.IsMatch(processor, TypedValue.Void, input)) {
+            if (executeOperator.CanExecute(processor, TypedValue.Void, input)) {
                 executeResult = executeOperator.Execute(processor, TypedValue.Void, input);
             }
             result = (Tree<string>)executeResult.Value;

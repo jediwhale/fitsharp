@@ -36,7 +36,7 @@ namespace fit.Test.NUnit {
             var processor = new Processor<Cell>();
             processor.AddMemory<Symbol>();
             processor.AddOperator(new ParseMemberName());
-            return executor.IsMatch(processor, new TypedValue(new ExecuteContext(new TestStatus(), null, new TypedValue("stuff"))), parameters);
+            return executor.CanExecute(processor, new TypedValue(new ExecuteContext(new TestStatus(), null, new TypedValue("stuff"))), parameters);
         }
 
         public void MakeStringFixture() {
