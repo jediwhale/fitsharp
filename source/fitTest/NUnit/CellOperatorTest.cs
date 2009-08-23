@@ -29,8 +29,7 @@ namespace fit.Test.NUnit {
         public static bool IsMatch(CompareOperator<Cell> compareOperator, object instance, Type type, string value) {
             var processor = new Processor<Cell>();
             processor.AddOperator(new CompareDefault());
-            bool result = true;
-            return compareOperator.TryCompare(processor, new TypedValue(instance, type), TestUtils.CreateCell(value), ref result);
+            return compareOperator.CanCompare(processor, new TypedValue(instance, type), TestUtils.CreateCell(value));
         }
 
         public static bool IsMatch(ExecuteOperator<Cell> executor, Tree<Cell> parameters) {

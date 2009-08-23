@@ -59,7 +59,7 @@ namespace fit.Test.NUnit {
         [Test]
         public void TestIntArrayAdapter()
         {
-            Assert.IsTrue(AreEqual(new int[] {1, 2, 3}, "1,2,3"));
+            Assert.IsTrue(AreEqual(new [] {1, 2, 3}, "1,2,3"));
         }
 
         [Test]
@@ -72,9 +72,7 @@ namespace fit.Test.NUnit {
         }
 
         private static bool AreEqual(object o1, string o2) {
-            bool result = false;
-            new CompareDefault().TryCompare(new Service.Service(), new TypedValue(o1), new StringCell(o2), ref result);
-            return result;
+            return new CompareDefault().Compare(new Service.Service(), new TypedValue(o1), new StringCell(o2));
         }
     }
 }

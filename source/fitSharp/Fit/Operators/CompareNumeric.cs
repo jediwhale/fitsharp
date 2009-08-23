@@ -20,26 +20,27 @@ namespace fitSharp.Fit.Operators {
             new Comparison(">", 1, 1), new Comparison("<", -1, -1)
         };
 
-        public bool TryCompare(Processor<Cell> processor, TypedValue instance, Tree<Cell> parameters, ref bool result) {
-            if (parameters.Value.Text.StartsWith("<<")
-                || FindComparison(parameters.Value.Text) == null
-                || Array.IndexOf(numericTypes, instance.Type) < 0) return false;
+        public bool CanCompare(Processor<Cell> processor, TypedValue actual, Tree<Cell> expected) {
+            return !expected.Value.Text.StartsWith("<<")
+                && FindComparison(expected.Value.Text) != null
+                && Array.IndexOf(numericTypes, actual.Type) >= 0;
+        }
 
-            object actual = instance.Value;
-            Cell cell = parameters.Value;
+        public bool Compare(Processor<Cell> processor, TypedValue actual, Tree<Cell> expected) {
+            object actualValue = actual.Value;
+            Cell cell = expected.Value;
             Comparison comparison = FindComparison(cell.Text);
 
             var rest = new CellSubstring(cell, cell.Text.Substring(comparison.Operator.Length));
-            object expected = processor.Parse(instance.Type, rest).Value;
-            parameters.Value.AddToAttribute(CellAttributes.InformationPrefixKey, actual.ToString(), CellAttributes.PrefixFormat);
+            object expectedValue = processor.Parse(actual.Type, rest).Value;
+            expected.Value.AddToAttribute(CellAttributes.InformationPrefixKey, actualValue.ToString(), CellAttributes.PrefixFormat);
 
-            int compare = actual is float || actual is double
-                              ? (Convert.ToDouble(actual) < Convert.ToDouble(expected)
+            int compare = actualValue is float || actualValue is double
+                              ? (Convert.ToDouble(actualValue) < Convert.ToDouble(expectedValue)
                                      ? -1
-                                     : (Convert.ToDouble(actual) > Convert.ToDouble(expected) ? 1 : 0))
-                              : decimal.Compare(Convert.ToDecimal(actual), Convert.ToDecimal(expected));
-            result = comparison.MinCompare <= compare && compare <= comparison.MaxCompare;
-            return true;
+                                     : (Convert.ToDouble(actualValue) > Convert.ToDouble(expectedValue) ? 1 : 0))
+                              : decimal.Compare(Convert.ToDecimal(actualValue), Convert.ToDecimal(expectedValue));
+            return comparison.MinCompare <= compare && compare <= comparison.MaxCompare;
         }
 
         private static Comparison FindComparison(string theExpectedValue) {

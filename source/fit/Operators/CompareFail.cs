@@ -13,15 +13,16 @@ namespace fit.Operators {
 	public class CompareFail : CompareOperator<Cell> {
 	    private static readonly IdentifierName failIdentifier = new IdentifierName("fail[");
 
-	    public bool TryCompare(Processor<Cell> processor, TypedValue instance, Tree<Cell> parameters, ref bool result) {
-	        if (parameters.Value.Text == null || !failIdentifier.IsStartOf(parameters.Value.Text) ||
-	            !parameters.Value.Text.EndsWith("]")) return false;
+	    public bool CanCompare(Processor<Cell> processor, TypedValue actual, Tree<Cell> expected) {
+	        return expected.Value.Text != null && failIdentifier.IsStartOf(expected.Value.Text) &&
+	            expected.Value.Text.EndsWith("]");
+	    }
 
+	    public bool Compare(Processor<Cell> processor, TypedValue actual, Tree<Cell> expected) {
             //todo: use cellsubstring?
-			string expected = parameters.Value.Text.Substring("fail[".Length, parameters.Value.Text.Length - ("fail[".Length + 1));
-			var newCell = new Parse("td", expected, null, null);
-            result = !processor.Compare(instance, newCell);
-	        return true;
+			string expectedValue = expected.Value.Text.Substring("fail[".Length, expected.Value.Text.Length - ("fail[".Length + 1));
+			var newCell = new Parse("td", expectedValue, null, null);
+            return !processor.Compare(actual, newCell);
 	    }
 	}
 }

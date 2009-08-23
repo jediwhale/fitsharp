@@ -12,10 +12,12 @@ namespace fitSharp.Fit.Operators {
     public class CompareEndsWith : CompareOperator<Cell> {
         private static readonly Regex matchExpression = new Regex("^\\.\\.+.*[^\\.\\.]$");
 
-        public bool TryCompare(Processor<Cell> processor, TypedValue instance, Tree<Cell> parameters, ref bool result) {
-            if (!matchExpression.IsMatch(parameters.Value.Text)) return false;
-            result = instance.Value != null && instance.Value.ToString().EndsWith(GetExpected(parameters.Value.Text));
-            return true;
+        public bool CanCompare(Processor<Cell> processor, TypedValue actual, Tree<Cell> expected) {
+            return matchExpression.IsMatch(expected.Value.Text);
+        }
+
+        public bool Compare(Processor<Cell> processor, TypedValue actual, Tree<Cell> expected) {
+            return actual.Value != null && actual.Value.ToString().EndsWith(GetExpected(expected.Value.Text));
         }
 
         private static string GetExpected(string text) {

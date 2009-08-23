@@ -11,19 +11,22 @@ using fitSharp.Machine.Model;
 
 namespace fit.Operators {
     public class CompareRegEx: CompareOperator<Cell> {
-        public bool TryCompare(Processor<Cell> processor, TypedValue instance, Tree<Cell> parameters, ref bool result) {
-            string compareValue = parameters.Value.Text;
-            if (!compareValue.StartsWith("/") || !compareValue.EndsWith("/") || instance.Type != typeof(string)) return false;
-
-            object actualValue = instance.Value;
+        public bool CanCompare(Processor<Cell> processor, TypedValue actual, Tree<Cell> expected) {
+            object actualValue = actual.Value;
             if (actualValue == null) return false;
+            string compareValue = expected.Value.Text;
+            return compareValue.StartsWith("/") && compareValue.EndsWith("/") && actual.Type == typeof(string);
+        }
 
-            var cell = (Parse)parameters.Value;
+        public bool Compare(Processor<Cell> processor, TypedValue actual, Tree<Cell> expected) {
+            string compareValue = expected.Value.Text;
+            object actualValue = actual.Value;
+
+            var cell = (Parse)expected.Value;
             cell.AddToAttribute(CellAttributes.InformationSuffixKey, actualValue.ToString(), CellAttributes.SuffixFormat);
 
-            var expected = new Regex(compareValue.Substring(1, compareValue.Length-2));
-            result = expected.IsMatch(actualValue.ToString());
-            return true;
+            var expectedPattern = new Regex(compareValue.Substring(1, compareValue.Length-2));
+            return expectedPattern.IsMatch(actualValue.ToString());
         }
     }
 }

@@ -9,10 +9,12 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
     public class CompareFloatingPoint: CompareOperator<Cell> {
-        public bool TryCompare(Processor<Cell> processor, TypedValue instance, Tree<Cell> parameters, ref bool result) {
-            if (instance.Type != typeof(double) && instance.Type != typeof(float)) return false;
-            result = instance.Value.ToString() == parameters.Value.Text;
-            return true;
+        public bool CanCompare(Processor<Cell> processor, TypedValue actual, Tree<Cell> expected) {
+            return actual.Type == typeof(double) || actual.Type == typeof(float);
+        }
+
+        public bool Compare(Processor<Cell> processor, TypedValue actual, Tree<Cell> expected) {
+            return actual.Value.ToString() == expected.Value.Text;
         }
     }
 }

@@ -10,15 +10,16 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
     public class CompareDefault: CompareOperator<Cell> {
-        public bool TryCompare(Processor<Cell> processor, TypedValue instance, Tree<Cell> parameters, ref bool result) {
-            if (instance.IsVoid) {
-                result = false;
-            }
-            else {
-                TypedValue expected = processor.Parse(instance.Type, parameters);
-                result = AreEqual(expected.Value, instance.Value);
-            }
+        public bool CanCompare(Processor<Cell> processor, TypedValue actual, Tree<Cell> expected) {
             return true;
+        }
+
+        public bool Compare(Processor<Cell> processor, TypedValue actual, Tree<Cell> expected) {
+            if (actual.IsVoid) {
+                return false;
+            }
+            TypedValue expectedValue = processor.Parse(actual.Type, expected);
+            return AreEqual(expectedValue.Value, actual.Value);
         }
 
         private static bool AreEqual(object o1, object o2)

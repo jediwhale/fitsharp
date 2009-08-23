@@ -9,13 +9,12 @@ using fitSharp.Machine.Model;
 // don't want to put processor in constructor? why not? could create the list initially with processor references
 // then still reusable
 
-// return a composite of bool valid and actual type - Valid<T>? (like int? etc?)
-
 namespace fitSharp.Machine.Engine {
     public interface Operator {}
 
     public interface CompareOperator<T>: Operator {
-        bool TryCompare(Processor<T> processor, TypedValue actual, Tree<T> expected, ref bool result);
+        bool CanCompare(Processor<T> processor, TypedValue actual, Tree<T> expected);
+        bool Compare(Processor<T> processor, TypedValue actual, Tree<T> expected);
     }
 
     public interface ComposeOperator<T>: Operator {

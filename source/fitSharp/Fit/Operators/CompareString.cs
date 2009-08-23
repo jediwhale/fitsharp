@@ -15,15 +15,18 @@ namespace fitSharp.Fit.Operators {
     public class CompareString: CompareOperator<Cell> {
         private static readonly Options defaultOption = Options.Parse(",IgnoreWhitespace");
 
-        public bool TryCompare(Processor<Cell> processor, TypedValue instance, Tree<Cell> parameters, ref bool result) {
+        public bool CanCompare(Processor<Cell> processor, TypedValue actual, Tree<Cell> expected) {
             var options = (OptionsList)Context.Configuration.GetItem(GetType().FullName);
-            if (!options.HasPrefix(parameters.Value.Text)) return false;
-            if (instance.Type != typeof(string)) return false;
+            if (!options.HasPrefix(expected.Value.Text)) return false;
+            if (actual.Type != typeof(string)) return false;
 
-            object actual = instance.Value;
-            if (actual == null) return false;
-            result = options.IsMatch(actual.ToString(), parameters.Value.Text);
-            return true;
+            object actualValue = actual.Value;
+            return actualValue != null;
+        }
+
+        public bool Compare(Processor<Cell> processor, TypedValue actual, Tree<Cell> expected) {
+            var options = (OptionsList)Context.Configuration.GetItem(GetType().FullName);
+            return options.IsMatch(actual.ValueString, expected.Value.Text);
         }
 
         public CompareString() {

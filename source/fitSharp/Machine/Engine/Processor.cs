@@ -60,7 +60,13 @@ namespace fitSharp.Machine.Engine {
 
         public bool Compare(TypedValue instance, Tree<U> parameters) {
             bool result = false;
-            Do<CompareOperator<U>>(o => o.TryCompare(this, instance, parameters, ref result));
+            Do<CompareOperator<U>>(o => {
+                                       if (o.CanCompare(this, instance, parameters)) {
+                                           result = o.Compare(this, instance, parameters);
+                                           return true;
+                                       }
+                                       return false;
+                                   });
             return result;
         }
 

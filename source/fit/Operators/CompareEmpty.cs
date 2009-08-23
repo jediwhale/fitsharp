@@ -9,11 +9,13 @@ using fitSharp.Machine.Model;
 
 namespace fit.Operators {
     public class CompareEmpty: CompareOperator<Cell> {
-        public bool TryCompare(Processor<Cell> processor, TypedValue instance, Tree<Cell> parameters, ref bool result) {
-            if ((!string.IsNullOrEmpty(parameters.Value.Text))
-                   || ((Parse) parameters.Value).Parts != null) return false;
-            result = instance.IsNullOrEmpty;
-            return true;
+        public bool CanCompare(Processor<Cell> processor, TypedValue actual, Tree<Cell> expected) {
+            return (string.IsNullOrEmpty(expected.Value.Text))
+                   && ((Parse) expected.Value).Parts == null;
+        }
+
+        public bool Compare(Processor<Cell> processor, TypedValue actual, Tree<Cell> expected) {
+            return actual.IsNullOrEmpty;
         }
     }
 }
