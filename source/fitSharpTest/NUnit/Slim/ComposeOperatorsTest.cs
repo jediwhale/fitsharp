@@ -96,9 +96,8 @@ namespace fitSharp.Test.NUnit.Slim {
         }
 
         private Tree<string> Compose(ComposeOperator<string> composeOperator, object instance, Type type) {
-            Tree<string> result = null;
-            Assert.IsTrue(composeOperator.TryCompose(processor, new TypedValue(instance, type), ref result));
-            return result;
+            Assert.IsTrue(composeOperator.CanCompose(processor, new TypedValue(instance, type)));
+            return composeOperator.Compose(processor, new TypedValue(instance, type));
         }
 
         private void CheckExceptionCompose(Exception exception, string expected) {
@@ -106,8 +105,8 @@ namespace fitSharp.Test.NUnit.Slim {
         }
 
         private void CheckCompose(ComposeOperator<string> composeOperator, object instance, Type type, object expected) {
-            Tree<string> result = null;
-            Assert.IsTrue(composeOperator.TryCompose(processor, new TypedValue(instance, type), ref result));
+            Assert.IsTrue(composeOperator.CanCompose(processor, new TypedValue(instance, type)));
+            Tree<string> result = composeOperator.Compose(processor, new TypedValue(instance, type));
             Assert.AreEqual(expected, result.Value);
         }
     }

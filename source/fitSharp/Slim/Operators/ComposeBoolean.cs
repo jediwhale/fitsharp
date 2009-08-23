@@ -8,10 +8,12 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Slim.Operators {
     public class ComposeBoolean: ComposeOperator<string> {
-        public bool TryCompose(Processor<string> processor, TypedValue instance, ref Tree<string> result) {
-            if (instance.Type != typeof (bool)) return false;
-            result = new TreeLeaf<string>((bool)instance.Value ? "true" : "false");
-            return true;
+        public bool CanCompose(Processor<string> processor, TypedValue instance) {
+            return instance.Type == typeof (bool);
+        }
+
+        public Tree<string> Compose(Processor<string> processor, TypedValue instance) {
+            return new TreeLeaf<string>((bool)instance.Value ? "true" : "false");
         }
     }
 }

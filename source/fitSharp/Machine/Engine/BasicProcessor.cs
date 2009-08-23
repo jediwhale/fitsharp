@@ -12,9 +12,12 @@ namespace fitSharp.Machine.Engine {
         }
 
         private class DefaultCompose: ComposeOperator<string> {
-            public bool TryCompose(Processor<string> processor, TypedValue instance, ref Tree<string> result) {
-                result = new TreeLeaf<string>(instance.Value.ToString());
+            public bool CanCompose(Processor<string> processor, TypedValue instance) {
                 return true;
+            }
+
+            public Tree<string> Compose(Processor<string> processor, TypedValue instance) {
+                return new TreeLeaf<string>(instance.Value.ToString());
             }
         }
     }

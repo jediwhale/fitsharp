@@ -9,15 +9,17 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Slim.Operators {
     public class ComposeList: ComposeOperator<string> { //todo: handle any enumerable type
-        public bool TryCompose(Processor<string> processor, TypedValue instance, ref Tree<string> result) {
-            if (instance.Type != typeof (List<object>)) return false;
+        public bool CanCompose(Processor<string> processor, TypedValue instance) {
+            return instance.Type == typeof (List<object>);
+        }
+
+        public Tree<string> Compose(Processor<string> processor, TypedValue instance) {
             var list = instance.Value as List<object> ?? new List<object>();
             var tree = new TreeList<string>();
             foreach (object value in list) {
                 tree.AddBranch(processor.Compose(value));
             }
-            result = tree;
-            return true;
+            return tree;
         }
     }
 }

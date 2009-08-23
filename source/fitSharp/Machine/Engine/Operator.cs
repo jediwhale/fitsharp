@@ -18,7 +18,8 @@ namespace fitSharp.Machine.Engine {
     }
 
     public interface ComposeOperator<T>: Operator {
-        bool TryCompose(Processor<T> processor, TypedValue instance, ref Tree<T> result);
+        bool CanCompose(Processor<T> processor, TypedValue instance);
+        Tree<T> Compose(Processor<T> processor, TypedValue instance);
     }
 
     public interface ExecuteOperator<T>: Operator {

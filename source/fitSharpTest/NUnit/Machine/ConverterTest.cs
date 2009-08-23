@@ -22,8 +22,8 @@ namespace fitSharp.Test.NUnit.Machine {
 
         [Test] public void CustomTypeIsComposed() {
             var converter = new CustomConverter();
-            Tree<string> composeResult = null;
-            Assert.IsTrue(converter.TryCompose(processor, new TypedValue(new CustomClass {Info = "stuff"}), ref composeResult));
+            Assert.IsTrue(converter.CanCompose(processor, new TypedValue(new CustomClass {Info = "stuff"})));
+            Tree<string> composeResult = converter.Compose(processor, new TypedValue(new CustomClass {Info = "stuff"}));
             var result = composeResult.Value;
             Assert.IsNotNull(result);
             Assert.AreEqual("mystuff", result);

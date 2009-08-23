@@ -8,15 +8,17 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
     public abstract class Converter<T>: ParseOperator<string>, ComposeOperator<string> {
+        public bool CanCompose(Processor<string> processor, TypedValue instance) {
+            return IsMatch(instance.Type);
+        }
+
+        public Tree<string> Compose(Processor<string> processor, TypedValue instance) {
+            return new TreeLeaf<string>(Compose((T)instance.Value));
+        }
+
         public bool TryParse(Processor<string> processor, Type type, TypedValue instance, Tree<string> parameters, ref TypedValue result) {
             if (!IsMatch(type)) return false;
             result = new TypedValue(Parse(parameters.Value), type);
-            return true;
-        }
-
-        public bool TryCompose(Processor<string> processor, TypedValue instance, ref Tree<string> result) {
-            if (!IsMatch(instance.Type)) return false;
-            result = new TreeLeaf<string>(Compose((T)instance.Value));
             return true;
         }
 

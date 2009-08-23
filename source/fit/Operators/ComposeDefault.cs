@@ -12,11 +12,14 @@ using fitSharp.Machine.Model;
 
 namespace fit.Operators {
     public class ComposeDefault : ComposeOperator<Cell> {
-        public bool TryCompose(Processor<Cell> processor, TypedValue instance, ref Tree<Cell> result) {
+        public bool CanCompose(Processor<Cell> processor, TypedValue instance) {
+            return true;
+        }
+
+        public Tree<Cell> Compose(Processor<Cell> processor, TypedValue instance) {
             var newCell = new Parse("td", GetValueString(instance), null, null);
             newCell.SetAttribute(CellAttributes.AddKey, string.Empty);
-            result = newCell;
-            return true;
+            return newCell;
         }
 
         private static string GetValueString(TypedValue instance) {

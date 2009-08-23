@@ -76,7 +76,13 @@ namespace fitSharp.Machine.Engine {
 
         public Tree<U> Compose(TypedValue instance) {
             Tree<U> result = null;
-            Do<ComposeOperator<U>>(o => o.TryCompose(this, instance, ref result));
+            Do<ComposeOperator<U>>(o => {
+                                       if (o.CanCompose(this, instance)) {
+                                           result = o.Compose(this, instance);
+                                           return true;
+                                       }
+                                       return false;
+                                   });
             return result;
         }
 

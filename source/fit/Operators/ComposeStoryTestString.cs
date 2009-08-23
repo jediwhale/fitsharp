@@ -14,5 +14,13 @@ namespace fit.Operators {
             result = HtmlParser.Instance.Parse(instance.ValueString);
             return true;
         }
+
+        public bool CanCompose(Processor<Cell> processor, TypedValue instance) {
+            return instance.Type == typeof(StoryTestString);
+        }
+
+        public Tree<Cell> Compose(Processor<Cell> processor, TypedValue instance) {
+            return HtmlParser.Instance.Parse(instance.ValueString);
+        }
     }
 }

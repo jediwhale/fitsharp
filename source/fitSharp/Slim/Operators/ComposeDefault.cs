@@ -8,14 +8,14 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Slim.Operators {
     public class ComposeDefault: ComposeOperator<string> {
-        private const string nullResult = "null";
         private const string voidResult = "/__VOID__/";
 
-        public bool TryCompose(Processor<string> processor, TypedValue instance, ref Tree<string> result) {
-            result = new TreeLeaf<string>(instance.IsVoid ? voidResult 
-                                              : instance.Value == null ? nullResult
-                                                    : instance.Value.ToString());
+        public bool CanCompose(Processor<string> processor, TypedValue instance) {
             return true;
+        }
+
+        public Tree<string> Compose(Processor<string> processor, TypedValue instance) {
+            return new TreeLeaf<string>(instance.IsVoid ? voidResult : instance.ValueString);
         }
     }
 }

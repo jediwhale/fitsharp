@@ -10,11 +10,12 @@ using fitSharp.Machine.Model;
 
 namespace fit.Operators {
     public class ComposeTable: ComposeOperator<Cell> {
+        public bool CanCompose(Processor<Cell> processor, TypedValue instance) {
+            return typeof(Table).IsAssignableFrom(instance.Type);
+        }
 
-        public bool TryCompose(Processor<Cell> processor, TypedValue instance, ref Tree<Cell> result) {
-            if (!typeof(Table).IsAssignableFrom(instance.Type)) return false;
-            result = new Parse("td", string.Empty, MakeTable(processor, (Table)instance.Value), null);
-            return true;
+        public Tree<Cell> Compose(Processor<Cell> processor, TypedValue instance) {
+            return new Parse("td", string.Empty, MakeTable(processor, (Table)instance.Value), null);
         }
 
         private static Parse MakeTable(Processor<Cell> processor, Table theTable) {
