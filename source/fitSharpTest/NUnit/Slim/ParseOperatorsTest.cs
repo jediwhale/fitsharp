@@ -40,8 +40,8 @@ namespace fitSharp.Test.NUnit.Slim {
         }
 
         private object Parse(ParseOperator<string> parseOperator, Type type, Tree<string> parameters) {
-            TypedValue result = TypedValue.Void;
-            Assert.IsTrue(parseOperator.TryParse(processor, type, TypedValue.Void, parameters, ref result));
+            Assert.IsTrue(parseOperator.CanParse(processor, type, TypedValue.Void, parameters));
+            TypedValue result = parseOperator.Parse(processor, type, TypedValue.Void, parameters);
             return result.Value;
         }
     }

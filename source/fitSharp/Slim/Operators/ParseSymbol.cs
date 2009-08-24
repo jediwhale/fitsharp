@@ -13,12 +13,15 @@ namespace fitSharp.Slim.Operators {
     public class ParseSymbol: ParseOperator<string> {
         private static readonly Regex symbolPattern = new Regex("\\$([a-zA-Z]\\w*)");
 
-        public bool TryParse(Processor<string> processor, Type type, TypedValue instance, Tree<string> parameters, ref TypedValue result) {
+        public bool CanParse(Processor<string> processor, Type type, TypedValue instance, Tree<string> parameters) {
             if (string.IsNullOrEmpty(parameters.Value)) return false;
             string decodedInput = ReplaceSymbols(parameters.Value, processor);
-            if (parameters.Value == decodedInput) return false;
-            result = processor.Parse(type, decodedInput);
-            return true;
+            return parameters.Value != decodedInput;
+        }
+
+        public TypedValue Parse(Processor<string> processor, Type type, TypedValue instance, Tree<string> parameters) {
+            string decodedInput = ReplaceSymbols(parameters.Value, processor);
+            return processor.Parse(type, decodedInput);
         }
 
         private static string ReplaceSymbols(string input, Processor<string> processor) {
@@ -33,6 +36,5 @@ namespace fitSharp.Slim.Operators {
             if (lastMatch < input.Length) result.Append(input.Substring(lastMatch, input.Length - lastMatch));
             return result.ToString();
         }
-
     }
 }

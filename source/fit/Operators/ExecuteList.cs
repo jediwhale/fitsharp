@@ -55,9 +55,11 @@ namespace fit.Operators {
             matcher.MarkCell(parameters.TestStatus, parameters.SystemUnderTest.Value, parameters.GetActual(processor), cell.Parts.Parts);
         }
 
-        public bool TryParse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters, ref TypedValue result) {
-            if (!typeof(IList).IsAssignableFrom(type)) return false;
+        public bool CanParse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters) {
+            return typeof(IList).IsAssignableFrom(type);
+        }
 
+        public TypedValue Parse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters) {
             var cell = (Parse) parameters;
             if (cell.Parts == null) throw new FitFailureException("No embedded table.");
             Parse headerCells = cell.Parts.Parts.Parts;
@@ -66,8 +68,7 @@ namespace fit.Operators {
                 list.Add(
                     new CellOperation(processor).Invoke(instance.Value, new CellRange(headerCells), new CellRange(row.Parts)).Value);
             }
-            result = new TypedValue(list);
-            return true;
+            return new TypedValue(list);
         }
     }
 }

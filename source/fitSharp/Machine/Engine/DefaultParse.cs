@@ -8,21 +8,23 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
     public class DefaultParse<T>: ParseOperator<T> {
-        public bool TryParse(Processor<T> processor, Type type, TypedValue instance, Tree<T> parameters, ref TypedValue result) {
+
+        public bool CanParse(Processor<T> processor, Type type, TypedValue instance, Tree<T> parameters) {
+            return true;
+        }
+
+        public TypedValue Parse(Processor<T> processor, Type type, TypedValue instance, Tree<T> parameters) {
             if (type.IsAssignableFrom(typeof(string))) {
-                result = new TypedValue(parameters.Value.ToString(), typeof(string));
-                return true;
+                return new TypedValue(parameters.Value.ToString(), typeof(string));
             }
             RuntimeMember parse = new RuntimeType(type).FindStatic("parse", new[] {typeof (string)});
             if (parse != null && parse.ReturnType == type) {
-                result = parse.Invoke(new object[] {parameters.Value.ToString()});
-                return true;
+                return parse.Invoke(new object[] {parameters.Value.ToString()});
             }
 
             RuntimeMember construct = new RuntimeType(type).FindConstructor(new[] {typeof (string)});
             if (construct != null) {
-                result = construct.Invoke(new object[] {parameters.Value.ToString()});
-                return true;
+                return construct.Invoke(new object[] {parameters.Value.ToString()});
             }
 
             throw new InvalidOperationException(

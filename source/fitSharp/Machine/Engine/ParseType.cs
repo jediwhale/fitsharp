@@ -8,10 +8,12 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
     public class ParseType<T>: ParseOperator<T> {
-        public bool TryParse(Processor<T> processor, Type type, TypedValue instance, Tree<T> parameters, ref TypedValue result) {
-            if (type != typeof (RuntimeType)) return false;
-            result = new TypedValue(processor.ApplicationUnderTest.FindType(new IdentifierName(parameters.Value.ToString())), type);
-            return true;
+        public bool CanParse(Processor<T> processor, Type type, TypedValue instance, Tree<T> parameters) {
+            return type == typeof (RuntimeType);
+        }
+
+        public TypedValue Parse(Processor<T> processor, Type type, TypedValue instance, Tree<T> parameters) {
+            return new TypedValue(processor.ApplicationUnderTest.FindType(new IdentifierName(parameters.Value.ToString())), type);
         }
     }
 }

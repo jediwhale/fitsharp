@@ -18,26 +18,22 @@ namespace fitSharp.Test.NUnit.Machine {
         }
 
         [Test] public void StringIsParsed() {
-            TypedValue result = TypedValue.Void;
-            parse.TryParse(processor, typeof (string), TypedValue.Void, new TreeLeaf<string>("stuff"), ref result);
+            TypedValue result =  parse.Parse(processor, typeof (string), TypedValue.Void, new TreeLeaf<string>("stuff"));
             Assert.AreEqual("stuff", result.Value);
         }
 
         [Test] public void DateIsParsed() {
-            TypedValue result = TypedValue.Void;
-            parse.TryParse(processor, typeof(DateTime), TypedValue.Void, new TreeLeaf<string>("03 Jan 2008"), ref result);
+            TypedValue result = parse.Parse(processor, typeof(DateTime), TypedValue.Void, new TreeLeaf<string>("03 Jan 2008"));
             Assert.AreEqual(new DateTime(2008, 1, 3), result.Value);
         }
 
         [Test] public void ClassIsParsed() {
-            TypedValue result = TypedValue.Void;
-            parse.TryParse(processor, typeof(SampleClass), TypedValue.Void, new TreeLeaf<string>("stuff"), ref result);
+            TypedValue result = parse.Parse(processor, typeof(SampleClass), TypedValue.Void, new TreeLeaf<string>("stuff"));
             Assert.IsTrue(result.Value is SampleClass);
         }
 
         [Test] public void ClassWithStringConstructorIsParsed() {
-            TypedValue result = TypedValue.Void;
-            parse.TryParse(processor, typeof(ClassFromString), TypedValue.Void, new TreeLeaf<string>("stuff"), ref result);
+            TypedValue result = parse.Parse(processor, typeof(ClassFromString), TypedValue.Void, new TreeLeaf<string>("stuff"));
             Assert.IsTrue(result.Value is ClassFromString);
         }
 

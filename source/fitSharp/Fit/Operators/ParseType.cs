@@ -11,11 +11,13 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
     public class ParseType: ParseOperator<Cell> {
-        public bool TryParse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters, ref TypedValue result) {
-            if (type != typeof(Type) && type != typeof(RuntimeType)) return false;
+        public bool CanParse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters) {
+            return type == typeof(Type) || type == typeof(RuntimeType);
+        }
+
+        public TypedValue Parse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters) {
             var runtimeType = processor.ApplicationUnderTest.FindType(new TypeMatcher(parameters.Value.Text));
-            result = new TypedValue(type == typeof (RuntimeType) ? runtimeType : (object)runtimeType.Type, type);
-            return true;
+            return new TypedValue(type == typeof (RuntimeType) ? runtimeType : (object)runtimeType.Type, type);
         }
 
         private class TypeMatcher: NameMatcher {

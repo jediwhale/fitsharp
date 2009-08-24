@@ -15,9 +15,11 @@ namespace fitSharp.Fit.Operators {
         private static readonly Dictionary<char, string> specialCharacterConversion;
         private static readonly Dictionary<char, string> digitConversion;
 
-        public bool TryParse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters, ref TypedValue result) {
-            if (type != typeof(MemberName)) return false;
+        public bool CanParse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters) {
+            return type == typeof(MemberName);
+        }
 
+        public TypedValue Parse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters) {
             var nameParts = new StringBuilder();
             
             foreach (Cell namePart in parameters.Leaves) {
@@ -29,9 +31,7 @@ namespace fitSharp.Fit.Operators {
                 name = digitConversion[name[0]] + name.Substring(1);
             }
 
-            result = new TypedValue(new MemberName(new GracefulName(name).IdentifierName.ToString()));
-
-            return true;
+            return new TypedValue(new MemberName(new GracefulName(name).IdentifierName.ToString()));
         }
 
         private static void Append(StringBuilder nameParts, string namePart) {

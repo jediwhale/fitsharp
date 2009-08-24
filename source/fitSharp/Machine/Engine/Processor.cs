@@ -104,7 +104,13 @@ namespace fitSharp.Machine.Engine {
 
         public TypedValue Parse(Type type, TypedValue instance, Tree<U> parameters) {
             TypedValue result = TypedValue.Void;
-            Do<ParseOperator<U>>(o => o.TryParse(this, type, instance, parameters, ref result));
+            Do<ParseOperator<U>>(o => {
+                                     if (o.CanParse(this, type, instance, parameters)) {
+                                         result = o.Parse(this, type, instance, parameters);
+                                         return true;
+                                     }
+                                     return false;
+                                 });
             return result;
         }
 

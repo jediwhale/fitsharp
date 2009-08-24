@@ -10,11 +10,13 @@ using fitSharp.Machine.Model;
 
 namespace fit.Operators {
     public class ParseStoryTestString: ParseOperator<Cell> {
-        public bool TryParse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters, ref TypedValue result) {
-            if (type != typeof(StoryTestString)) return false;
+        public bool CanParse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters) {
+            return type == typeof(StoryTestString);
+        }
+
+        public TypedValue Parse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters) {
             var source = (Parse) parameters.Value;
-            result = new TypedValue(new StoryTestString(source.ToString()));
-            return true;
+            return new TypedValue(new StoryTestString(source.ToString()));
         }
     }
 }

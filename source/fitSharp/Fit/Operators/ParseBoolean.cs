@@ -17,14 +17,16 @@ namespace fitSharp.Fit.Operators {
 	    private static readonly IdentifierName ourNoIdentifier = new IdentifierName("no");
 	    private static readonly IdentifierName ourNIdentifier = new IdentifierName("n");
 
-        public bool TryParse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters, ref TypedValue result) {
-            if (type != typeof(bool)) return false;
-            result = new TypedValue(ImpliesTrue(parameters.Value.Text)
+        public bool CanParse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters) {
+            return type == typeof(bool);
+        }
+
+        public TypedValue Parse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters) {
+            return new TypedValue(ImpliesTrue(parameters.Value.Text)
                        ? true
                        : ImpliesFalse(parameters.Value.Text)
                              ? false
                              : bool.Parse(parameters.Value.Text));
-            return true;
         }
 
 		private static bool ImpliesTrue(string possibleTrue) {

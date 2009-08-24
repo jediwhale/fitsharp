@@ -12,10 +12,12 @@ namespace fitSharp.Fit.Operators {
     public class ParseBlank : ParseOperator<Cell> {
         private static readonly IdentifierName blankIdentifier = new IdentifierName("blank");
 
-        public bool TryParse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters, ref TypedValue result) {
-            if (parameters.Value == null || !blankIdentifier.Equals(parameters.Value.Text)) return false;
-            result = new TypedValue(string.Empty);
-            return true;
+        public bool CanParse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters) {
+            return parameters.Value != null && blankIdentifier.Equals(parameters.Value.Text);
+        }
+
+        public TypedValue Parse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters) {
+            return new TypedValue(string.Empty);
         }
     }
 }

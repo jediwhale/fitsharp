@@ -11,14 +11,16 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Slim.Operators {
     public class ParseList: ParseOperator<string> { // todo: handle any IList type
-        public bool TryParse(Processor<string> processor, Type type, TypedValue instance, Tree<string> parameters, ref TypedValue result) {
-            if (!type.IsGenericType || type.GetGenericTypeDefinition() != typeof (List<>)) return false;
+        public bool CanParse(Processor<string> processor, Type type, TypedValue instance, Tree<string> parameters) {
+            return type.IsGenericType && type.GetGenericTypeDefinition() == typeof (List<>);
+        }
+
+        public TypedValue Parse(Processor<string> processor, Type type, TypedValue instance, Tree<string> parameters) {
             var list = (IList)Activator.CreateInstance(type);
             foreach (Tree<string> branch in parameters.Branches) {
                 list.Add(processor.Parse(type.GetGenericArguments()[0], branch).Value);
             }
-            result = new TypedValue(list);
-            return true;
+            return new TypedValue(list);
         }
     }
 }

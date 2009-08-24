@@ -18,12 +18,6 @@ namespace fit.Operators {
             return typeof (Parse).IsAssignableFrom(actualValue.Type);
         }
 
-        public bool TryParse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters, ref TypedValue result) {
-            if (!typeof (Parse).IsAssignableFrom(type)) return false;
-            result = new TypedValue(((Parse)parameters).Parts.DeepCopy());
-            return true;
-        }
-
         public override TypedValue Execute(Processor<Cell> processor, ExecuteParameters parameters) {
             TypedValue actualValue = parameters.GetTypedActual(processor);
 
@@ -40,6 +34,14 @@ namespace fit.Operators {
                 cell.More = new Parse("td", string.Empty, tables, null);
             }
             return TypedValue.Void;
+        }
+
+        public bool CanParse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters) {
+            return typeof (Parse).IsAssignableFrom(type);
+        }
+
+        public TypedValue Parse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters) {
+            return new TypedValue(((Parse)parameters).Parts.DeepCopy());
         }
     }
 }

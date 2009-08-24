@@ -20,10 +20,9 @@ namespace fit.Test.NUnit {
         protected PersonFixture personFixture;
 
         public static bool IsMatch(ParseOperator<Cell> parseOperator, string input) {
-            TypedValue result = TypedValue.Void;
             var processor = new Processor<Cell>();
             processor.AddMemory<Symbol>();
-            return parseOperator.TryParse(processor, typeof (string), TypedValue.Void, TestUtils.CreateCell(input), ref result);
+            return parseOperator.CanParse(processor, typeof (string), TypedValue.Void, TestUtils.CreateCell(input));
         }
 
         public static bool IsMatch(CompareOperator<Cell> compareOperator, object instance, Type type, string value) {

@@ -10,10 +10,12 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
     public class ParseEnum: ParseOperator<Cell> {
-        public bool TryParse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters, ref TypedValue result) {
-	        if (!type.IsEnum) return false;
-	        result = new TypedValue(Enum.Parse(type, parameters.Value.Text));
-            return true;
+        public bool CanParse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters) {
+	        return type.IsEnum;
+        }
+
+        public TypedValue Parse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters) {
+	        return new TypedValue(Enum.Parse(type, parameters.Value.Text));
         }
     }
 }

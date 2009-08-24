@@ -10,16 +10,18 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
     public class ParseSymbol: ParseOperator<Cell> {
-        public bool TryParse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters, ref TypedValue result) {
-            if (parameters.Value == null || !parameters.Value.Text.StartsWith("<<")) return false;
+        public bool CanParse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters) {
+            return parameters.Value != null && parameters.Value.Text.StartsWith("<<");
+        }
+
+        public TypedValue Parse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters) {
             var symbol = new Symbol(parameters.Value.Text.Substring(2));
-            result = new TypedValue(processor.Contains(symbol) ? processor.Load(symbol).Instance : null, type);
-            //parameters.Value.SetBody((result.Value == null ? "null" : result.Value.ToString()) + Fixture.Gray("&lt;&lt;" + symbol.Id));
+            var result = new TypedValue(processor.Contains(symbol) ? processor.Load(symbol).Instance : null, type);
             parameters.Value.AddToAttribute(
                 CellAttributes.InformationSuffixKey,
                 result.Value == null ? "null" : result.Value.ToString(),
                 CellAttributes.SuffixFormat);
-            return true;
+            return result;
         }
     }
 }

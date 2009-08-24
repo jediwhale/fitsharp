@@ -10,9 +10,11 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
     public class ParseArray: ParseOperator<Cell> {
-        public bool TryParse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters, ref TypedValue result) {
-            if (!type.IsArray) return false;
+        public bool CanParse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters) {
+            return type.IsArray;
+        }
 
+        public TypedValue Parse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters) {
 			string[] strings = parameters.Value.Text.Split(new [] {','});
 
 			Array list = Array.CreateInstance(type.GetElementType(), strings.Length);
@@ -21,8 +23,7 @@ namespace fitSharp.Fit.Operators {
 			    list.SetValue(processor.ParseString(type.GetElementType(), strings[i]).Value, i);
 			}
 
-            result = new TypedValue(list);
-            return true;
+            return new TypedValue(list);
         }
     }
 }

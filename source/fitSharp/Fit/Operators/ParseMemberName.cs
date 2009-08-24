@@ -11,15 +11,16 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
     public class ParseMemberName: ParseOperator<Cell> {
-        public bool TryParse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters, ref TypedValue result) {
-            if (type != typeof(MemberName)) return false;
+        public bool CanParse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters) {
+            return type == typeof(MemberName);
+        }
+
+        public TypedValue Parse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters) {
             var nameParts = new StringBuilder();
             foreach (Cell namePart in parameters.Leaves) {
                 nameParts.Append(namePart.Text);
             }
-            result = new TypedValue(new MemberName(new GracefulName(nameParts.ToString()).IdentifierName.ToString()));
-
-            return true;
+            return new TypedValue(new MemberName(new GracefulName(nameParts.ToString()).IdentifierName.ToString()));
         }
     }
 }

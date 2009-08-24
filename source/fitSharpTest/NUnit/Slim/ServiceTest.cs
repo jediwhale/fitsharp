@@ -79,9 +79,12 @@ namespace fitSharp.Test.NUnit.Slim {
         }
 
         private class ParseUpperCase: ParseOperator<string> {
-            public bool TryParse(Processor<string> processor, Type type, TypedValue instance, Tree<string> parameters, ref TypedValue result) {
-                result = new TypedValue(parameters.Value.ToUpper());
+            public bool CanParse(Processor<string> processor, Type type, TypedValue instance, Tree<string> parameters) {
                 return true;
+            }
+
+            public TypedValue Parse(Processor<string> processor, Type type, TypedValue instance, Tree<string> parameters) {
+                return new TypedValue(parameters.Value.ToUpper());
             }
         }
     }

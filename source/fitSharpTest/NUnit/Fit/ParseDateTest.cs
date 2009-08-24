@@ -2,7 +2,6 @@
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
 using fitSharp.Fit.Service;
-using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
 
@@ -24,9 +23,9 @@ namespace fitSharp.Test.NUnit.Fit {
         }
 
         private bool TryParse(Type type, string expected) {
-            TypedValue returnValue = TypedValue.Void;
             try {
-                if (parseDate.TryParse(processor, type, TypedValue.Void, new StringCell(expected), ref returnValue)) {
+                if (parseDate.CanParse(processor, type, TypedValue.Void, new StringCell(expected))) {
+                    TypedValue returnValue = parseDate.Parse(processor, type, TypedValue.Void, new StringCell(expected));
                     result = (DateTime) returnValue.Value;
                     return true;
                 }

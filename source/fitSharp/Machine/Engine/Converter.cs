@@ -16,10 +16,12 @@ namespace fitSharp.Machine.Engine {
             return new TreeLeaf<string>(Compose((T)instance.Value));
         }
 
-        public bool TryParse(Processor<string> processor, Type type, TypedValue instance, Tree<string> parameters, ref TypedValue result) {
-            if (!IsMatch(type)) return false;
-            result = new TypedValue(Parse(parameters.Value), type);
-            return true;
+        public bool CanParse(Processor<string> processor, Type type, TypedValue instance, Tree<string> parameters) {
+            return IsMatch(type);
+        }
+
+        public TypedValue Parse(Processor<string> processor, Type type, TypedValue instance, Tree<string> parameters) {
+            return new TypedValue(Parse(parameters.Value), type);
         }
 
         private static bool IsMatch(Type type) {

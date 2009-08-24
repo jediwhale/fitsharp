@@ -10,12 +10,14 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
     public class ParseDefault : ParseOperator<Cell> {
-        public bool TryParse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters,
-                             ref TypedValue result) {
-            var basicProcessor = new BasicProcessor();
-            new DefaultParse<string>().TryParse(basicProcessor, type, instance,
-                                                new TreeLeaf<string>(parameters.Value.Text), ref result);
+        public bool CanParse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters) {
             return true;
+        }
+
+        public TypedValue Parse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters) {
+            var basicProcessor = new BasicProcessor();
+            return new DefaultParse<string>().Parse(basicProcessor, type, instance,
+                                                new TreeLeaf<string>(parameters.Value.Text));
         }
     }
 }
