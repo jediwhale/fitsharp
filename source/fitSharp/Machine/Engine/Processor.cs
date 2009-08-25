@@ -144,13 +144,25 @@ namespace fitSharp.Machine.Engine {
 
         public TypedValue Create(string memberName, Tree<U> parameters) {
             TypedValue result = TypedValue.Void;
-            Do<RuntimeOperator<U>>(o => o.TryCreate(this, memberName, parameters, ref result));
+            Do<RuntimeOperator<U>>(o => {
+                                       if (o.CanCreate(this, memberName, parameters)) {
+                                           result = o.Create(this, memberName, parameters);
+                                           return true;
+                                       }
+                                       return false;
+                                   });
             return result;
         }
 
         public TypedValue TryInvoke(TypedValue instance, string memberName, Tree<U> parameters) {
             var result = new TypedValue();
-            Do<RuntimeOperator<U>>(o => o.TryInvoke(this, instance, memberName, parameters, ref result));
+            Do<RuntimeOperator<U>>(o => {
+                                       if (o.CanInvoke(this, instance, memberName, parameters)) {
+                                           result = o.Invoke(this, instance, memberName, parameters);
+                                           return true;
+                                       }
+                                       return false;
+                                   });
             return result;
         }
 

@@ -9,12 +9,15 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
     public class DefaultRuntime<T>: RuntimeOperator<T> {
-        public bool TryCreate(Processor<T> processor, string memberName, Tree<T> parameters, ref TypedValue result) {
+        public bool CanCreate(Processor<T> processor, string memberName, Tree<T> parameters) {
+            return true;
+        }
+
+        public TypedValue Create(Processor<T> processor, string memberName, Tree<T> parameters) {
             var runtimeType = processor.ParseString<RuntimeType>(memberName);
-            result = parameters.Branches.Count == 0
+            return parameters.Branches.Count == 0
                          ? CreateWithoutParameters(runtimeType)
                          : CreateWithParameters(processor, parameters, runtimeType);
-            return true;
         }
 
         private static TypedValue CreateWithoutParameters(RuntimeType runtimeType) {
@@ -37,14 +40,16 @@ namespace fitSharp.Machine.Engine {
             }
         }
 
-        public bool TryInvoke(Processor<T> processor, TypedValue instance, string memberName, Tree<T> parameters,
-                              ref TypedValue result) {
+        public bool CanInvoke(Processor<T> processor, TypedValue instance, string memberName, Tree<T> parameters) {
+            return true;
+        }
+
+        public TypedValue Invoke(Processor<T> processor, TypedValue instance, string memberName, Tree<T> parameters) {
             RuntimeMember member = RuntimeType.FindInstance(instance.Value, memberName, parameters.Branches.Count);
-            result = member != null
+            return member != null
                          ? member.Invoke(GetParameterList(processor, instance, parameters, member))
                          : TypedValue.MakeInvalid(new MemberMissingException(instance.Type, memberName,
                                                                              parameters.Branches.Count));
-            return true;
         }
 
         private static object[] GetParameterList(Processor<T> processor, TypedValue instance, Tree<T> parameters, RuntimeMember member) {

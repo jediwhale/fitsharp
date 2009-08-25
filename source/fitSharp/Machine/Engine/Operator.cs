@@ -33,7 +33,9 @@ namespace fitSharp.Machine.Engine {
     }
 
     public interface RuntimeOperator<T>: Operator {
-        bool TryCreate(Processor<T> processor, string memberName, Tree<T> parameters, ref TypedValue result);
-        bool TryInvoke(Processor<T> processor, TypedValue instance, string memberName, Tree<T> parameters, ref TypedValue result);
+        bool CanCreate(Processor<T> processor, string memberName, Tree<T> parameters);
+        TypedValue Create(Processor<T> processor, string memberName, Tree<T> parameters);
+        bool CanInvoke(Processor<T> processor, TypedValue instance, string memberName, Tree<T> parameters);
+        TypedValue Invoke(Processor<T> processor, TypedValue instance, string memberName, Tree<T> parameters);
     }
 }

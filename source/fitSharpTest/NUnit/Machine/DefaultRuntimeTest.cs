@@ -17,14 +17,12 @@ namespace fitSharp.Test.NUnit.Machine {
         }
 
         [Test] public void InstanceIsCreated() {
-            TypedValue result = TypedValue.Void;
-            runtime.TryCreate(processor, typeof(SampleClass).FullName, new TreeList<string>(), ref result);
+            TypedValue result = runtime.Create(processor, typeof(SampleClass).FullName, new TreeList<string>());
             Assert.IsTrue(result.Value is SampleClass);
         }
 
         [Test] public void StandardInstanceIsCreated() {
-            TypedValue result = TypedValue.Void;
-            runtime.TryCreate(processor, "System.Boolean", new TreeList<string>(), ref result);
+            TypedValue result = runtime.Create(processor, "System.Boolean", new TreeList<string>());
             Assert.IsTrue(result.Value is bool);
         }
 
@@ -39,8 +37,7 @@ namespace fitSharp.Test.NUnit.Machine {
         }
 
         private void CheckInvokeMethod(object instance) {
-            var result = new TypedValue();
-            runtime.TryInvoke(processor, new TypedValue(instance), "methodwithparms", new TreeList<string>().AddBranchValue("stuff"), ref result);
+            TypedValue result = runtime.Invoke(processor, new TypedValue(instance), "methodwithparms", new TreeList<string>().AddBranchValue("stuff"));
             Assert.AreEqual(typeof (string), result.Type);
             Assert.AreEqual("samplestuff", result.Value);
         }
