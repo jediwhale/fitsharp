@@ -3,7 +3,6 @@
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
-using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Slim.Operators {
@@ -11,10 +10,10 @@ namespace fitSharp.Slim.Operators {
 
         public ExecuteMake(): base("make") {}
 
-        protected override Tree<string> ExecuteOperation(Processor<string> processor, Tree<string> parameters) {
-            processor.Store(new SavedInstance(
+        protected override Tree<string> ExecuteOperation(Tree<string> parameters) {
+            Processor.Store(new SavedInstance(
                                 parameters.Branches[2].Value,
-                                processor.Create(parameters.Branches[3].Value, ParameterTree(parameters, 4)).Value));
+                                Processor.Create(parameters.Branches[3].Value, ParameterTree(parameters, 4)).Value));
             return DefaultResult(parameters);
         }
 

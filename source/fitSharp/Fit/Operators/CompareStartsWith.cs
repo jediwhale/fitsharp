@@ -9,14 +9,14 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
-    public class CompareStartsWith : CompareOperator<Cell> {
+    public class CompareStartsWith : Operator<Cell>, CompareOperator<Cell> {
         private static readonly Regex matchExpression = new Regex("^[^\\.\\.].*\\.\\.$");
 
-        public bool CanCompare(Processor<Cell> processor, TypedValue actual, Tree<Cell> expected) {
+        public bool CanCompare(TypedValue actual, Tree<Cell> expected) {
              return matchExpression.IsMatch(expected.Value.Text);
         }
 
-        public bool Compare(Processor<Cell> processor, TypedValue actual, Tree<Cell> expected) {
+        public bool Compare(TypedValue actual, Tree<Cell> expected) {
             return actual.Value != null && actual.Value.ToString().StartsWith(GetExpected(expected.Value.Text));
         }
 

@@ -10,27 +10,27 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Slim.Operators {
-    public class ParseSymbol: ParseOperator<string> {
+    public class ParseSymbol: Operator<string>, ParseOperator<string> {
         private static readonly Regex symbolPattern = new Regex("\\$([a-zA-Z]\\w*)");
 
-        public bool CanParse(Processor<string> processor, Type type, TypedValue instance, Tree<string> parameters) {
+        public bool CanParse(Type type, TypedValue instance, Tree<string> parameters) {
             if (string.IsNullOrEmpty(parameters.Value)) return false;
-            string decodedInput = ReplaceSymbols(parameters.Value, processor);
+            string decodedInput = ReplaceSymbols(parameters.Value);
             return parameters.Value != decodedInput;
         }
 
-        public TypedValue Parse(Processor<string> processor, Type type, TypedValue instance, Tree<string> parameters) {
-            string decodedInput = ReplaceSymbols(parameters.Value, processor);
-            return processor.Parse(type, decodedInput);
+        public TypedValue Parse(Type type, TypedValue instance, Tree<string> parameters) {
+            string decodedInput = ReplaceSymbols(parameters.Value);
+            return Processor.Parse(type, decodedInput);
         }
 
-        private static string ReplaceSymbols(string input, Processor<string> processor) {
+        private string ReplaceSymbols(string input) {
             var result = new StringBuilder();
             int lastMatch = 0;
             for (Match symbolMatch = symbolPattern.Match(input); symbolMatch.Success; symbolMatch = symbolMatch.NextMatch()) {
                 string symbolName = symbolMatch.Groups[1].Value;
                 if (symbolMatch.Index > lastMatch) result.Append(input.Substring(lastMatch, symbolMatch.Index - lastMatch));
-                result.Append(processor.Contains(new Symbol(symbolName)) ? processor.Load(new Symbol(symbolName)).Instance : symbolName);
+                result.Append(Processor.Contains(new Symbol(symbolName)) ? Processor.Load(new Symbol(symbolName)).Instance : symbolName);
                 lastMatch = symbolMatch.Index + symbolMatch.Length;
             }
             if (lastMatch < input.Length) result.Append(input.Substring(lastMatch, input.Length - lastMatch));

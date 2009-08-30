@@ -37,14 +37,15 @@ namespace fit.Test.NUnit {
         public static bool IsMatch(CompareOperator<Cell> compareOperator, object instance, Type type, string value) {
             var processor = new Processor<Cell>();
             processor.AddOperator(new CompareDefault());
-            return compareOperator.CanCompare(processor, new TypedValue(instance, type), CreateCell(value));
+            return compareOperator.CanCompare(new TypedValue(instance, type), CreateCell(value));
         }
 
         public static bool IsMatch(ExecuteOperator<Cell> executor, Tree<Cell> parameters) {
             var processor = new Processor<Cell>();
             processor.AddMemory<Symbol>();
             processor.AddOperator(new ParseMemberName());
-            return executor.CanExecute(processor, new TypedValue(new ExecuteContext(new TestStatus(), null, new TypedValue("stuff"))), parameters);
+            ((Operator<Cell>) executor).Processor = processor;
+            return executor.CanExecute(new TypedValue(new ExecuteContext(new TestStatus(), null, new TypedValue("stuff"))), parameters);
         }
 
         public static void DoInput(Fixture fixture, Tree<Cell> range, Parse cell) {
@@ -87,25 +88,11 @@ namespace fit.Test.NUnit {
 
     public class Person
     {
-        private int id;
-        private string firstName;
-        private string lastName;
-        private bool talented;
+        public int Id { get; private set; }
 
-        public int Id
-        {
-            get { return id; }
-        }
+        public string FirstName { get; private set; }
 
-        public string FirstName
-        {
-            get { return firstName; }
-        }
-
-        public string LastName
-        {
-            get { return lastName; }
-        }
+        public string LastName { get; private set; }
 
         public static Person Parse(string name)
         {
@@ -114,47 +101,44 @@ namespace fit.Test.NUnit {
         }
 
         public Person(string firstName, string lastName) {
-            this.firstName = firstName;
-            this.lastName = lastName;
+            FirstName = firstName;
+            LastName = lastName;
         }
 
         public Person(int id, string firstName, string lastName) {
-            this.id = id;
-            this.firstName = firstName;
-            this.lastName = lastName;
+            Id = id;
+            FirstName = firstName;
+            LastName = lastName;
         }
 
         public override string ToString()
         {
-            StringBuilder builder = new StringBuilder(firstName);
-            if (builder.Length > 0 && lastName != null && lastName.Length > 0)
+            var builder = new StringBuilder(FirstName);
+            if (builder.Length > 0 && !string.IsNullOrEmpty(LastName))
             {
                 builder.Append(" ");
             }
-            return builder.Append(lastName).ToString();
+            return builder.Append(LastName).ToString();
         }
 
         public override bool Equals(object obj)
         {
-            Person that = obj as Person;
+            var that = obj as Person;
             if (that == null)
                 return false;
-            return this.firstName == that.firstName && this.lastName == that.lastName;
+            return FirstName == that.FirstName && LastName == that.LastName;
         }
 
         public override int GetHashCode() {
-            return id.GetHashCode() + firstName.GetHashCode() + lastName.GetHashCode();
+            return Id.GetHashCode() + FirstName.GetHashCode() + LastName.GetHashCode();
         }
 
         public void SetTalented(bool talented)
         {
-            this.talented = talented;
+            IsTalented = talented;
         }
 
-        public bool IsTalented
-        {
-            get { return talented; }
-        }
+        public bool IsTalented { get; private set; }
     }
 
     [TestFixture]
@@ -162,13 +146,13 @@ namespace fit.Test.NUnit {
     {
         [Test]
         public void TestConstructor() {
-            Person person = new Person("john", "doe");
+            var person = new Person("john", "doe");
             Assert.AreEqual("john doe", person.ToString());
         }
 
         [Test]
         public void TestConstructorWithId() {
-            Person person = new Person(1, "jane", "roe");
+            var person = new Person(1, "jane", "roe");
             Assert.AreEqual("jane roe", person.ToString());
             Assert.AreEqual("jane", person.FirstName);
             Assert.AreEqual("roe", person.LastName);
@@ -178,7 +162,7 @@ namespace fit.Test.NUnit {
         [Test]
         public void TestIsTalented()
         {
-            Person person = new Person("Scott", "Henderson");
+            var person = new Person("Scott", "Henderson");
             person.SetTalented(true);
             Assert.IsTrue(person.IsTalented);
         }
@@ -186,7 +170,7 @@ namespace fit.Test.NUnit {
         [Test]
         public void TestParse()
         {
-            string name = "joe schmoe";
+            const string name = "joe schmoe";
             Person person = Person.Parse(name);
             Assert.AreEqual(name, person.ToString());
         }
@@ -194,8 +178,8 @@ namespace fit.Test.NUnit {
         [Test]
         public void TestEquals()
         {
-            Person original = new Person("Wes", "Montgomery");
-            Person copy = new Person("Wes", "Montgomery");
+            var original = new Person("Wes", "Montgomery");
+            var copy = new Person("Wes", "Montgomery");
             Assert.IsTrue(original.Equals(copy));
         }
     }

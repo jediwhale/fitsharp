@@ -8,18 +8,12 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fit.Operators {
-    public class ComposeStoryTestString: ComposeOperator<Cell> {
-        public bool TryCompose(Processor<Cell> processor, TypedValue instance, ref Tree<Cell> result) {
-            if (instance.Type != typeof(StoryTestString)) return false;
-            result = HtmlParser.Instance.Parse(instance.ValueString);
-            return true;
-        }
-
-        public bool CanCompose(Processor<Cell> processor, TypedValue instance) {
+    public class ComposeStoryTestString: Operator<Cell>, ComposeOperator<Cell> {
+        public bool CanCompose(TypedValue instance) {
             return instance.Type == typeof(StoryTestString);
         }
 
-        public Tree<Cell> Compose(Processor<Cell> processor, TypedValue instance) {
+        public Tree<Cell> Compose(TypedValue instance) {
             return HtmlParser.Instance.Parse(instance.ValueString);
         }
     }

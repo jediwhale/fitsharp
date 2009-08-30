@@ -10,14 +10,14 @@ using fitSharp.Machine.Model;
 using fitSharp.Slim.Exception;
 
 namespace fitSharp.Slim.Operators {
-    public class ComposeException: ComposeOperator<string> {
+    public class ComposeException: Operator<string>, ComposeOperator<string> {
         public const string ExceptionResult = "__EXCEPTION__:{0}";
 
-        public bool CanCompose(Processor<string> processor, TypedValue instance) {
+        public bool CanCompose(TypedValue instance) {
             return typeof(System.Exception).IsAssignableFrom(instance.Type);
         }
 
-        public Tree<string> Compose(Processor<string> processor, TypedValue instance) {
+        public Tree<string> Compose(TypedValue instance) {
             Tree<string> result = null;
             if (TryResult<MemberMissingException>(instance,
                                                   e => string.Format("NO_METHOD_IN_CLASS {0} {1}", e.MemberName, e.Type), ref result)) return result;

@@ -10,14 +10,14 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
-    public class CompareIntegralRange : CompareOperator<Cell> {
+    public class CompareIntegralRange : Operator<Cell>, CompareOperator<Cell> {
         private static readonly Regex matchExpression = new Regex("^-?[0-9]+\\.\\.-?[0-9]+$");
 
-        public bool CanCompare(Processor<Cell> processor, TypedValue actual, Tree<Cell> expected) {
+        public bool CanCompare(TypedValue actual, Tree<Cell> expected) {
             return actual.Type == typeof (int) && matchExpression.IsMatch(expected.Value.Text);
         }
 
-        public bool Compare(Processor<Cell> processor, TypedValue actual, Tree<Cell> expected) {
+        public bool Compare(TypedValue actual, Tree<Cell> expected) {
             string[] parts = expected.Value.Text.Split('.');
             return IsInRange((int)actual.Value, LowEnd(parts), HighEnd(parts));
         }

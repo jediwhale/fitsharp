@@ -7,13 +7,13 @@ using System;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
-    public class ParseType<T>: ParseOperator<T> {
-        public bool CanParse(Processor<T> processor, Type type, TypedValue instance, Tree<T> parameters) {
+    public class ParseType<T>: Operator<T>, ParseOperator<T> {
+        public bool CanParse(Type type, TypedValue instance, Tree<T> parameters) {
             return type == typeof (RuntimeType);
         }
 
-        public TypedValue Parse(Processor<T> processor, Type type, TypedValue instance, Tree<T> parameters) {
-            return new TypedValue(processor.ApplicationUnderTest.FindType(new IdentifierName(parameters.Value.ToString())), type);
+        public TypedValue Parse(Type type, TypedValue instance, Tree<T> parameters) {
+            return new TypedValue(Processor.ApplicationUnderTest.FindType(new IdentifierName(parameters.Value.ToString())), type);
         }
     }
 }

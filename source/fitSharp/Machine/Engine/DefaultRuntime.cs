@@ -8,16 +8,16 @@ using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
-    public class DefaultRuntime<T>: RuntimeOperator<T> {
-        public bool CanCreate(Processor<T> processor, string memberName, Tree<T> parameters) {
+    public class DefaultRuntime<T>: Operator<T>, RuntimeOperator<T> {
+        public bool CanCreate(string memberName, Tree<T> parameters) {
             return true;
         }
 
-        public TypedValue Create(Processor<T> processor, string memberName, Tree<T> parameters) {
-            var runtimeType = processor.ParseString<RuntimeType>(memberName);
+        public TypedValue Create(string memberName, Tree<T> parameters) {
+            var runtimeType = Processor.ParseString<RuntimeType>(memberName);
             return parameters.Branches.Count == 0
                          ? CreateWithoutParameters(runtimeType)
-                         : CreateWithParameters(processor, parameters, runtimeType);
+                         : CreateWithParameters(parameters, runtimeType);
         }
 
         private static TypedValue CreateWithoutParameters(RuntimeType runtimeType) {
@@ -29,9 +29,9 @@ namespace fitSharp.Machine.Engine {
             }
         }
 
-        private static TypedValue CreateWithParameters(Processor<T> processor, Tree<T> parameters, RuntimeType runtimeType) {
+        private TypedValue CreateWithParameters(Tree<T> parameters, RuntimeType runtimeType) {
             RuntimeMember member = runtimeType.GetConstructor(parameters.Branches.Count);
-            object[] parameterList = GetParameterList(processor, TypedValue.Void, parameters, member);
+            object[] parameterList = GetParameterList(TypedValue.Void, parameters, member);
             try {
                 return member.Invoke(parameterList);
             }
@@ -40,25 +40,25 @@ namespace fitSharp.Machine.Engine {
             }
         }
 
-        public bool CanInvoke(Processor<T> processor, TypedValue instance, string memberName, Tree<T> parameters) {
+        public bool CanInvoke(TypedValue instance, string memberName, Tree<T> parameters) {
             return true;
         }
 
-        public TypedValue Invoke(Processor<T> processor, TypedValue instance, string memberName, Tree<T> parameters) {
+        public TypedValue Invoke(TypedValue instance, string memberName, Tree<T> parameters) {
             RuntimeMember member = RuntimeType.FindInstance(instance.Value, memberName, parameters.Branches.Count);
             return member != null
-                         ? member.Invoke(GetParameterList(processor, instance, parameters, member))
+                         ? member.Invoke(GetParameterList(instance, parameters, member))
                          : TypedValue.MakeInvalid(new MemberMissingException(instance.Type, memberName,
                                                                              parameters.Branches.Count));
         }
 
-        private static object[] GetParameterList(Processor<T> processor, TypedValue instance, Tree<T> parameters, RuntimeMember member) {
+        private object[] GetParameterList(TypedValue instance, Tree<T> parameters, RuntimeMember member) {
             var parameterList = new List<object>();
             int i = 0;
             foreach (Tree<T> parameter in parameters.Branches) {
                 TypedValue parameterValue;
                 try {
-                    parameterValue = processor.Parse(member.GetParameterType(i), instance, parameter);
+                    parameterValue = Processor.Parse(member.GetParameterType(i), instance, parameter);
                 }
                 catch (System.Exception e) {
                     throw new ParseException<T>(member.Name, member.GetParameterType(i), i+1, parameter.Value, e);

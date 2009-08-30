@@ -9,16 +9,16 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
-    public class CompareDefault: CompareOperator<Cell> {
-        public bool CanCompare(Processor<Cell> processor, TypedValue actual, Tree<Cell> expected) {
+    public class CompareDefault: Operator<Cell>, CompareOperator<Cell> {
+        public bool CanCompare(TypedValue actual, Tree<Cell> expected) {
             return true;
         }
 
-        public bool Compare(Processor<Cell> processor, TypedValue actual, Tree<Cell> expected) {
+        public bool Compare(TypedValue actual, Tree<Cell> expected) {
             if (actual.IsVoid) {
                 return false;
             }
-            TypedValue expectedValue = processor.Parse(actual.Type, expected);
+            TypedValue expectedValue = Processor.Parse(actual.Type, expected);
             return AreEqual(expectedValue.Value, actual.Value);
         }
 

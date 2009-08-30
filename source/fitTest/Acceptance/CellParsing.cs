@@ -119,12 +119,12 @@ namespace fit.Test.Acceptance {
         public override string ToString() {return Content;}
     }
 
-    public class SampleCustomParser: ParseOperator<Cell> {
-        public bool CanParse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters) {
+    public class SampleCustomParser: Operator<Cell>, ParseOperator<Cell> {
+        public bool CanParse(Type type, TypedValue instance, Tree<Cell> parameters) {
             return type == typeof(CellParsingTestClass) && parameters.Value.Text == "one";
         }
 
-        public TypedValue Parse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters) {
+        public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
             return new TypedValue(new CellParsingTestClass(parameters.Value.Text == "one" ? "1" : "0"));
         }
     }

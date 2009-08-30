@@ -78,12 +78,12 @@ namespace fitSharp.Test.NUnit.Slim {
             Assert.AreEqual("TESTVALUE", value);
         }
 
-        private class ParseUpperCase: ParseOperator<string> {
-            public bool CanParse(Processor<string> processor, Type type, TypedValue instance, Tree<string> parameters) {
+        private class ParseUpperCase: Operator<string>, ParseOperator<string> {
+            public bool CanParse(Type type, TypedValue instance, Tree<string> parameters) {
                 return true;
             }
 
-            public TypedValue Parse(Processor<string> processor, Type type, TypedValue instance, Tree<string> parameters) {
+            public TypedValue Parse(Type type, TypedValue instance, Tree<string> parameters) {
                 return new TypedValue(parameters.Value.ToUpper());
             }
         }
@@ -91,7 +91,7 @@ namespace fitSharp.Test.NUnit.Slim {
 
     public class SampleOperator: ExecuteBase {
         public SampleOperator() : base("sampleCommand") {}
-        protected override Tree<string> ExecuteOperation(Processor<string> processor, Tree<string> parameters) {
+        protected override Tree<string> ExecuteOperation(Tree<string> parameters) {
             return Result(parameters, "sampleResult");
         }
     }

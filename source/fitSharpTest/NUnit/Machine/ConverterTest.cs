@@ -12,9 +12,9 @@ namespace fitSharp.Test.NUnit.Machine {
         private readonly Processor<string> processor = new Processor<string>(new ApplicationUnderTest());
 
         [Test] public void CustomTypeIsParsed() {
-            var converter = new CustomConverter();
-            Assert.IsTrue(converter.CanParse(processor, typeof(CustomClass), TypedValue.Void, new TreeLeaf<string>("info")));
-            TypedValue parseResult = converter.Parse(processor, typeof(CustomClass), TypedValue.Void, new TreeLeaf<string>("info"));
+            var converter = new CustomConverter {Processor = processor};
+            Assert.IsTrue(converter.CanParse(typeof(CustomClass), TypedValue.Void, new TreeLeaf<string>("info")));
+            TypedValue parseResult = converter.Parse(typeof(CustomClass), TypedValue.Void, new TreeLeaf<string>("info"));
             var result = parseResult.Value as CustomClass;
             Assert.IsNotNull(result);
             Assert.AreEqual("custominfo", result.Info);
@@ -22,8 +22,8 @@ namespace fitSharp.Test.NUnit.Machine {
 
         [Test] public void CustomTypeIsComposed() {
             var converter = new CustomConverter();
-            Assert.IsTrue(converter.CanCompose(processor, new TypedValue(new CustomClass {Info = "stuff"})));
-            Tree<string> composeResult = converter.Compose(processor, new TypedValue(new CustomClass {Info = "stuff"}));
+            Assert.IsTrue(converter.CanCompose(new TypedValue(new CustomClass {Info = "stuff"})));
+            Tree<string> composeResult = converter.Compose(new TypedValue(new CustomClass {Info = "stuff"}));
             var result = composeResult.Value;
             Assert.IsNotNull(result);
             Assert.AreEqual("mystuff", result);

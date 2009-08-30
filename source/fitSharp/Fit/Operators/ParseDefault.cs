@@ -9,15 +9,14 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
-    public class ParseDefault : ParseOperator<Cell> {
-        public bool CanParse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters) {
+    public class ParseDefault : Operator<Cell>, ParseOperator<Cell> {
+        public bool CanParse(Type type, TypedValue instance, Tree<Cell> parameters) {
             return true;
         }
 
-        public TypedValue Parse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters) {
-            var basicProcessor = new BasicProcessor();
-            return new DefaultParse<string>().Parse(basicProcessor, type, instance,
-                                                new TreeLeaf<string>(parameters.Value.Text));
+        public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
+            return new DefaultParse<string> {Processor = new BasicProcessor()}.
+                Parse(type, instance, new TreeLeaf<string>(parameters.Value.Text));
         }
     }
 }

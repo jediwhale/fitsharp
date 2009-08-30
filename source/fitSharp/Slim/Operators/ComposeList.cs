@@ -8,16 +8,16 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Slim.Operators {
-    public class ComposeList: ComposeOperator<string> { //todo: handle any enumerable type
-        public bool CanCompose(Processor<string> processor, TypedValue instance) {
+    public class ComposeList: Operator<string>, ComposeOperator<string> { //todo: handle any enumerable type
+        public bool CanCompose(TypedValue instance) {
             return instance.Type == typeof (List<object>);
         }
 
-        public Tree<string> Compose(Processor<string> processor, TypedValue instance) {
+        public Tree<string> Compose(TypedValue instance) {
             var list = instance.Value as List<object> ?? new List<object>();
             var tree = new TreeList<string>();
             foreach (object value in list) {
-                tree.AddBranch(processor.Compose(value));
+                tree.AddBranch(Processor.Compose(value));
             }
             return tree;
         }

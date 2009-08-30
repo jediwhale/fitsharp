@@ -7,20 +7,20 @@ using System;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
-    public abstract class Converter<T>: ParseOperator<string>, ComposeOperator<string> {
-        public bool CanCompose(Processor<string> processor, TypedValue instance) {
+    public abstract class Converter<T>: Operator<string>, ParseOperator<string>, ComposeOperator<string> {
+        public bool CanCompose(TypedValue instance) {
             return IsMatch(instance.Type);
         }
 
-        public Tree<string> Compose(Processor<string> processor, TypedValue instance) {
+        public Tree<string> Compose(TypedValue instance) {
             return new TreeLeaf<string>(Compose((T)instance.Value));
         }
 
-        public bool CanParse(Processor<string> processor, Type type, TypedValue instance, Tree<string> parameters) {
+        public bool CanParse(Type type, TypedValue instance, Tree<string> parameters) {
             return IsMatch(type);
         }
 
-        public TypedValue Parse(Processor<string> processor, Type type, TypedValue instance, Tree<string> parameters) {
+        public TypedValue Parse(Type type, TypedValue instance, Tree<string> parameters) {
             return new TypedValue(Parse(parameters.Value), type);
         }
 

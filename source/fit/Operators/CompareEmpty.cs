@@ -8,13 +8,13 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fit.Operators {
-    public class CompareEmpty: CompareOperator<Cell> {
-        public bool CanCompare(Processor<Cell> processor, TypedValue actual, Tree<Cell> expected) {
+    public class CompareEmpty: Operator<Cell>, CompareOperator<Cell> {
+        public bool CanCompare(TypedValue actual, Tree<Cell> expected) {
             return (string.IsNullOrEmpty(expected.Value.Text))
                    && ((Parse) expected.Value).Parts == null;
         }
 
-        public bool Compare(Processor<Cell> processor, TypedValue actual, Tree<Cell> expected) {
+        public bool Compare(TypedValue actual, Tree<Cell> expected) {
             return actual.IsNullOrEmpty;
         }
     }

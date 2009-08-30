@@ -22,14 +22,14 @@ namespace fitSharp.Test.NUnit.Slim {
         }
 
         [Test] public void ExecuteDefaultReturnsException() {
-            var executeDefault = new ExecuteDefault();
+            var executeDefault = new ExecuteDefault { Processor = processor };
             var input = new TreeList<string>().AddBranchValue("step").AddBranchValue("garbage");
             ExecuteOperation(executeDefault, input, 2);
             CheckForException("message:<<MALFORMED_INSTRUCTION step,garbage>>");
         }
 
         [Test] public void ExecuteMakeBadClassReturnsException() {
-            var executeMake = new ExecuteMake();
+            var executeMake = new ExecuteMake { Processor = processor };
             var input = new TreeList<string>().AddBranchValue("step").AddBranchValue("make").AddBranchValue("variable").AddBranchValue("garbage");
             ExecuteOperation(executeMake, input, 2);
             CheckForException("message:<<NO_CLASS garbage>>");
@@ -37,14 +37,14 @@ namespace fitSharp.Test.NUnit.Slim {
 
         [Test] public void ExecuteCallBadMethodReturnsException() {
             processor.Store(new SavedInstance("variable", new SampleClass()));
-            var executeCall = new ExecuteCall();
+            var executeCall = new ExecuteCall { Processor = processor };
             var input = new TreeList<string>().AddBranchValue("step").AddBranchValue("call").AddBranchValue("variable").AddBranchValue("garbage");
             ExecuteOperation(executeCall, input, 2);
             CheckForException("message:<<NO_METHOD_IN_CLASS garbage fitSharp.Test.NUnit.Slim.SampleClass>>");
         }
 
         [Test] public void ExecuteImportAddsNamespace() {
-            var executeImport = new ExecuteImport();
+            var executeImport = new ExecuteImport { Processor = processor };
             var input = new TreeList<string>().AddBranchValue("step").AddBranchValue("import").AddBranchValue("fitSharp.Test.NUnit.Slim");
             ExecuteOperation(executeImport, input, 2);
             Assert.IsTrue(processor.Create("SampleClass").Value is SampleClass);
@@ -52,7 +52,7 @@ namespace fitSharp.Test.NUnit.Slim {
 
         [Test] public void ExecuteCallAndAssignSavesSymbol() {
             processor.Store(new SavedInstance("variable", new SampleClass()));
-            var executeCallAndAssign = new ExecuteCallAndAssign();
+            var executeCallAndAssign = new ExecuteCallAndAssign { Processor = processor };
             var input =
                 new TreeList<string>().AddBranchValue("step").AddBranchValue("callAndAssign").AddBranchValue("symbol").AddBranchValue(
                     "variable").AddBranchValue("sampleMethod");
@@ -63,8 +63,8 @@ namespace fitSharp.Test.NUnit.Slim {
 
         private void ExecuteOperation(ExecuteOperator<string> executeOperator, Tree<string> input, int branchCount) {
             TypedValue executeResult = TypedValue.Void;
-            if (executeOperator.CanExecute(processor, TypedValue.Void, input)) {
-                executeResult = executeOperator.Execute(processor, TypedValue.Void, input);
+            if (executeOperator.CanExecute(TypedValue.Void, input)) {
+                executeResult = executeOperator.Execute(TypedValue.Void, input);
             }
             result = (Tree<string>)executeResult.Value;
             Assert.IsFalse(result.IsLeaf);

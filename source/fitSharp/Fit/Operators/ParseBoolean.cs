@@ -9,7 +9,7 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
-    public class ParseBoolean: ParseOperator<Cell> {
+    public class ParseBoolean: Operator<Cell>, ParseOperator<Cell> {
 	    private static readonly IdentifierName ourTrueIdentifier = new IdentifierName("true");
 	    private static readonly IdentifierName ourYesIdentifier = new IdentifierName("yes");
 	    private static readonly IdentifierName ourYIdentifier = new IdentifierName("y");
@@ -17,11 +17,11 @@ namespace fitSharp.Fit.Operators {
 	    private static readonly IdentifierName ourNoIdentifier = new IdentifierName("no");
 	    private static readonly IdentifierName ourNIdentifier = new IdentifierName("n");
 
-        public bool CanParse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters) {
+        public bool CanParse(Type type, TypedValue instance, Tree<Cell> parameters) {
             return type == typeof(bool);
         }
 
-        public TypedValue Parse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters) {
+        public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
             return new TypedValue(ImpliesTrue(parameters.Value.Text)
                        ? true
                        : ImpliesFalse(parameters.Value.Text)

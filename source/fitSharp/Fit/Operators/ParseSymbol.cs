@@ -9,14 +9,14 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
-    public class ParseSymbol: ParseOperator<Cell> {
-        public bool CanParse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters) {
+    public class ParseSymbol: Operator<Cell>, ParseOperator<Cell> {
+        public bool CanParse(Type type, TypedValue instance, Tree<Cell> parameters) {
             return parameters.Value != null && parameters.Value.Text.StartsWith("<<");
         }
 
-        public TypedValue Parse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters) {
+        public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
             var symbol = new Symbol(parameters.Value.Text.Substring(2));
-            var result = new TypedValue(processor.Contains(symbol) ? processor.Load(symbol).Instance : null, type);
+            var result = new TypedValue(Processor.Contains(symbol) ? Processor.Load(symbol).Instance : null, type);
             parameters.Value.AddToAttribute(
                 CellAttributes.InformationSuffixKey,
                 result.Value == null ? "null" : result.Value.ToString(),

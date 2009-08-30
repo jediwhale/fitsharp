@@ -10,15 +10,15 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fit.Operators {
-    public class CompareRegEx: CompareOperator<Cell> {
-        public bool CanCompare(Processor<Cell> processor, TypedValue actual, Tree<Cell> expected) {
+    public class CompareRegEx: Operator<Cell>, CompareOperator<Cell> {
+        public bool CanCompare(TypedValue actual, Tree<Cell> expected) {
             object actualValue = actual.Value;
             if (actualValue == null) return false;
             string compareValue = expected.Value.Text;
             return compareValue.StartsWith("/") && compareValue.EndsWith("/") && actual.Type == typeof(string);
         }
 
-        public bool Compare(Processor<Cell> processor, TypedValue actual, Tree<Cell> expected) {
+        public bool Compare(TypedValue actual, Tree<Cell> expected) {
             string compareValue = expected.Value.Text;
             object actualValue = actual.Value;
 

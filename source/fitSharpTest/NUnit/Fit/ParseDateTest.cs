@@ -9,12 +9,10 @@ namespace fitSharp.Test.NUnit.Fit {
     [TestFixture] public class ParseDateTest {
         private ParseDate parseDate;
         private DateTime result;
-        private CellProcessor processor;
         private string exceptionMessage;
 
         [SetUp] public void SetUp() {
-            parseDate = new ParseDate();
-            processor = new CellProcessor();
+            parseDate = new ParseDate {Processor = new CellProcessor()};
             exceptionMessage = string.Empty;
         }
 
@@ -24,8 +22,8 @@ namespace fitSharp.Test.NUnit.Fit {
 
         private bool TryParse(Type type, string expected) {
             try {
-                if (parseDate.CanParse(processor, type, TypedValue.Void, new StringCell(expected))) {
-                    TypedValue returnValue = parseDate.Parse(processor, type, TypedValue.Void, new StringCell(expected));
+                if (parseDate.CanParse(type, TypedValue.Void, new StringCell(expected))) {
+                    TypedValue returnValue = parseDate.Parse(type, TypedValue.Void, new StringCell(expected));
                     result = (DateTime) returnValue.Value;
                     return true;
                 }
@@ -68,7 +66,7 @@ namespace fitSharp.Test.NUnit.Fit {
 
         [Test] public void SymbolIsParsed() {
             var symbol = new Symbol("two", 2);
-            processor.Store(symbol);
+            parseDate.Processor.Store(symbol);
             Assert.IsTrue(TryParse(typeof(DateTime), "today-<<two"));
             Assert.AreEqual(DateTime.Now.Date.AddDays(-2), result);
         }

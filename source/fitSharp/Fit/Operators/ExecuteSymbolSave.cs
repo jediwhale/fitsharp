@@ -5,20 +5,19 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using fitSharp.Fit.Model;
-using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
     public class ExecuteSymbolSave : ExecuteBase {
-        public override bool IsMatch(Processor<Cell> processor, ExecuteParameters parameters) {
+        public override bool CanExecute(ExecuteParameters parameters) {
             return parameters.Verb == ExecuteParameters.Check
                 && parameters.Cell.Text.StartsWith(">>");
         }
 
-        public override TypedValue Execute(Processor<Cell> processor, ExecuteParameters parameters) {
-            object value = parameters.GetActual(processor);
+        public override TypedValue Execute(ExecuteParameters parameters) {
+            object value = parameters.GetActual(Processor);
             var symbol = new Symbol(parameters.Cell.Text.Substring(2), value);
-            processor.Store(symbol);
+            Processor.Store(symbol);
 
             parameters.Cell.AddToAttribute(CellAttributes.InformationSuffixKey, value == null ? "null" : value.ToString(), CellAttributes.SuffixFormat);
 

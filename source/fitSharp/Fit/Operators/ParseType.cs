@@ -10,13 +10,13 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
-    public class ParseType: ParseOperator<Cell> {
-        public bool CanParse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters) {
+    public class ParseType: Operator<Cell>, ParseOperator<Cell> {
+        public bool CanParse(Type type, TypedValue instance, Tree<Cell> parameters) {
             return type == typeof(Type) || type == typeof(RuntimeType);
         }
 
-        public TypedValue Parse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters) {
-            var runtimeType = processor.ApplicationUnderTest.FindType(new TypeMatcher(parameters.Value.Text));
+        public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
+            var runtimeType = Processor.ApplicationUnderTest.FindType(new TypeMatcher(parameters.Value.Text));
             return new TypedValue(type == typeof (RuntimeType) ? runtimeType : (object)runtimeType.Type, type);
         }
 

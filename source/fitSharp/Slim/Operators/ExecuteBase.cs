@@ -7,21 +7,21 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Slim.Operators {
-    public abstract class ExecuteBase: ExecuteOperator<string> {
+    public abstract class ExecuteBase: Operator<string>, ExecuteOperator<string> {
         private const string defaultResult = "OK";
         private readonly IdentifierName identifier;
 
-        public bool CanExecute(Processor<string> processor, TypedValue instance, Tree<string> parameters) {
+        public bool CanExecute(TypedValue instance, Tree<string> parameters) {
             return identifier.IsEmpty ||
                    (parameters.Branches.Count > 1 && identifier.Matches(parameters.Branches[1].Value));
         }
 
-        public TypedValue Execute(Processor<string> processor, TypedValue instance, Tree<string> parameters) {
+        public TypedValue Execute(TypedValue instance, Tree<string> parameters) {
             try {
-                return new TypedValue(ExecuteOperation(processor, parameters));
+                return new TypedValue(ExecuteOperation(parameters));
             }
             catch (System.Exception e) {
-                return new TypedValue(Result(parameters, processor.Compose(e)));
+                return new TypedValue(Result(parameters, Processor.Compose(e)));
             }
         }
 
@@ -29,7 +29,7 @@ namespace fitSharp.Slim.Operators {
             identifier = new IdentifierName(identifierName);
         }
 
-        protected abstract Tree<string> ExecuteOperation(Processor<string> processor, Tree<string> parameters);
+        protected abstract Tree<string> ExecuteOperation(Tree<string> parameters);
 
         protected static Tree<string> DefaultResult(Tree<string> parameters) {
             return Result(parameters, defaultResult);
@@ -55,9 +55,10 @@ namespace fitSharp.Slim.Operators {
             return result;
         }
 
-        protected static TypedValue InvokeMember(Processor<string> processor, Tree<string> parameters, int memberIndex) {
-            object target = processor.Load(new SavedInstance(parameters.Branches[memberIndex].Value)).Instance;
-            TypedValue result = processor.TryInvoke(new TypedValue(target), parameters.Branches[memberIndex + 1].Value, ParameterTree(parameters, memberIndex + 2));
+        protected TypedValue InvokeMember(
+            Tree<string> parameters, int memberIndex) {
+            object target = Processor.Load(new SavedInstance(parameters.Branches[memberIndex].Value)).Instance;
+            TypedValue result = Processor.TryInvoke(new TypedValue(target), parameters.Branches[memberIndex + 1].Value, ParameterTree(parameters, memberIndex + 2));
             result.ThrowExceptionIfNotValid();
             return result;
         }

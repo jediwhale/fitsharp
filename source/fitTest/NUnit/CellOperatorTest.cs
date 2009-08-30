@@ -22,20 +22,22 @@ namespace fit.Test.NUnit {
         public static bool IsMatch(ParseOperator<Cell> parseOperator, string input) {
             var processor = new Processor<Cell>();
             processor.AddMemory<Symbol>();
-            return parseOperator.CanParse(processor, typeof (string), TypedValue.Void, TestUtils.CreateCell(input));
+            ((Operator<Cell>) parseOperator).Processor = processor;
+            return parseOperator.CanParse(typeof (string), TypedValue.Void, TestUtils.CreateCell(input));
         }
 
         public static bool IsMatch(CompareOperator<Cell> compareOperator, object instance, Type type, string value) {
             var processor = new Processor<Cell>();
             processor.AddOperator(new CompareDefault());
-            return compareOperator.CanCompare(processor, new TypedValue(instance, type), TestUtils.CreateCell(value));
+            return compareOperator.CanCompare(new TypedValue(instance, type), TestUtils.CreateCell(value));
         }
 
         public static bool IsMatch(ExecuteOperator<Cell> executor, Tree<Cell> parameters) {
             var processor = new Processor<Cell>();
             processor.AddMemory<Symbol>();
             processor.AddOperator(new ParseMemberName());
-            return executor.CanExecute(processor, new TypedValue(new ExecuteContext(new TestStatus(), null, new TypedValue("stuff"))), parameters);
+            ((Operator<Cell>) executor).Processor = processor;
+            return executor.CanExecute(new TypedValue(new ExecuteContext(new TestStatus(), null, new TypedValue("stuff"))), parameters);
         }
 
         public void MakeStringFixture() {

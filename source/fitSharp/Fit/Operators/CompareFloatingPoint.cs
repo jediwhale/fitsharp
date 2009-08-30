@@ -8,12 +8,12 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
-    public class CompareFloatingPoint: CompareOperator<Cell> {
-        public bool CanCompare(Processor<Cell> processor, TypedValue actual, Tree<Cell> expected) {
+    public class CompareFloatingPoint: Operator<Cell>, CompareOperator<Cell> {
+        public bool CanCompare(TypedValue actual, Tree<Cell> expected) {
             return actual.Type == typeof(double) || actual.Type == typeof(float);
         }
 
-        public bool Compare(Processor<Cell> processor, TypedValue actual, Tree<Cell> expected) {
+        public bool Compare(TypedValue actual, Tree<Cell> expected) {
             return actual.Value.ToString() == expected.Value.Text;
         }
     }

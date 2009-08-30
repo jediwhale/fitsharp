@@ -10,12 +10,12 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
-    public class ParseMemberName: ParseOperator<Cell> {
-        public bool CanParse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters) {
+    public class ParseMemberName: Operator<Cell>, ParseOperator<Cell> {
+        public bool CanParse(Type type, TypedValue instance, Tree<Cell> parameters) {
             return type == typeof(MemberName);
         }
 
-        public TypedValue Parse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters) {
+        public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
             var nameParts = new StringBuilder();
             foreach (Cell namePart in parameters.Leaves) {
                 nameParts.Append(namePart.Text);

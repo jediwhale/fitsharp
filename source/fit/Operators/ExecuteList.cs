@@ -15,11 +15,11 @@ using fitSharp.Machine.Model;
 
 namespace fit.Operators {
     public class ExecuteList: ExecuteBase, ParseOperator<Cell> {
-        public override bool IsMatch(Processor<Cell> processor, ExecuteParameters parameters) {
+        public override bool CanExecute(ExecuteParameters parameters) {
             switch (parameters.Verb) {
                 case ExecuteParameters.Check:
                     var cell1 = (Parse)parameters.Cell;
-                    return cell1.Parts != null && typeof(IList).IsAssignableFrom(parameters.GetTypedActual(processor).Type);
+                    return cell1.Parts != null && typeof(IList).IsAssignableFrom(parameters.GetTypedActual(Processor).Type);
 
                 case ExecuteParameters.Compare:
                     var cell2 = (Parse)parameters.Cell;
@@ -30,43 +30,43 @@ namespace fit.Operators {
             }
         }
 
-        public override TypedValue Execute(Processor<Cell> processor, ExecuteParameters parameters) {
+        public override TypedValue Execute(ExecuteParameters parameters) {
             switch (parameters.Verb) {
                 case ExecuteParameters.Check:
-                    ExecuteCheck(processor, parameters);
+                    ExecuteCheck(parameters);
                     break;
 
                 case ExecuteParameters.Compare:
-                    return ExecuteEvaluate(processor, parameters);
+                    return ExecuteEvaluate(parameters);
 
             }
             return TypedValue.Void;
         }
 
-        private static TypedValue ExecuteEvaluate(Processor<Cell> processor, ExecuteParameters parameters) {
+        private TypedValue ExecuteEvaluate(ExecuteParameters parameters) {
             var cell = (Parse)parameters.Cell;
-            var matcher = new ListMatcher(processor, new ArrayMatchStrategy(cell.Parts.Parts));
+            var matcher = new ListMatcher(Processor, new ArrayMatchStrategy(cell.Parts.Parts));
             return new TypedValue(matcher.IsEqual(parameters.Target.Value, cell));
         }
 
-        private static void ExecuteCheck(Processor<Cell> processor, ExecuteParameters parameters) {
+        private void ExecuteCheck(ExecuteParameters parameters) {
             var cell = (Parse)parameters.Cell;
-            var matcher = new ListMatcher(processor, new ArrayMatchStrategy(cell.Parts.Parts));
-            matcher.MarkCell(parameters.TestStatus, parameters.SystemUnderTest.Value, parameters.GetActual(processor), cell.Parts.Parts);
+            var matcher = new ListMatcher(Processor, new ArrayMatchStrategy(cell.Parts.Parts));
+            matcher.MarkCell(parameters.TestStatus, parameters.SystemUnderTest.Value, parameters.GetActual(Processor), cell.Parts.Parts);
         }
 
-        public bool CanParse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters) {
+        public bool CanParse(Type type, TypedValue instance, Tree<Cell> parameters) {
             return typeof(IList).IsAssignableFrom(type);
         }
 
-        public TypedValue Parse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters) {
+        public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
             var cell = (Parse) parameters;
             if (cell.Parts == null) throw new FitFailureException("No embedded table.");
             Parse headerCells = cell.Parts.Parts.Parts;
             var list = new ArrayList();
             foreach (Parse row in new CellRange(cell.Parts.Parts.More).Cells) {
                 list.Add(
-                    new CellOperation(processor).Invoke(instance.Value, new CellRange(headerCells), new CellRange(row.Parts)).Value);
+                    new CellOperation(Processor).Invoke(instance.Value, new CellRange(headerCells), new CellRange(row.Parts)).Value);
             }
             return new TypedValue(list);
         }

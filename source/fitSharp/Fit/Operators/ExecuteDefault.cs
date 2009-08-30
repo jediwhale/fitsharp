@@ -12,25 +12,25 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
     public class ExecuteDefault: ExecuteBase {
-        public override bool IsMatch(Processor<Cell> processor, ExecuteParameters parameters) {
+        public override bool CanExecute(ExecuteParameters parameters) {
             return true;
         }
 
-        public override TypedValue Execute(Processor<Cell> processor, ExecuteParameters parameters) {
+        public override TypedValue Execute(ExecuteParameters parameters) {
             switch (parameters.Verb) {
                 case ExecuteParameters.Input:
-                    Input(processor, parameters);
+                    Input(parameters);
                     break;
 
                 case ExecuteParameters.Check:
-                    Check(processor, parameters);
+                    Check(parameters);
                     break;
 
                 case ExecuteParameters.Compare:
-                    return new TypedValue(processor.Compare(parameters.Target, parameters.Cells));
+                    return new TypedValue(Processor.Compare(parameters.Target, parameters.Cells));
 
                 case ExecuteParameters.Invoke:
-                    return Invoke(processor, parameters);
+                    return Invoke(parameters);
 
                 default:
                     throw new ArgumentException(string.Format("Unrecognized operation '{0}'", parameters.Verb));
@@ -38,15 +38,15 @@ namespace fitSharp.Fit.Operators {
             return TypedValue.Void;
         }
 
-        private static void Input(Processor<Cell> processor, ExecuteParameters parameters) {
-            processor.Invoke(parameters.SystemUnderTest, parameters.GetMemberName(processor),
+        private  void Input(ExecuteParameters parameters) {
+            Processor.Invoke(parameters.SystemUnderTest, parameters.GetMemberName(Processor),
                              new TreeList<Cell>().AddBranch(parameters.Cells));
         }
 
-        private static void Check(Processor<Cell> processor, ExecuteParameters parameters) {
+        private  void Check(ExecuteParameters parameters) {
             try {
-                TypedValue actual = parameters.GetTypedActual(processor);
-                if (processor.Compare(actual, parameters.Cells)) {
+                TypedValue actual = parameters.GetTypedActual(Processor);
+                if (Processor.Compare(actual, parameters.Cells)) {
                     parameters.TestStatus.MarkRight(parameters.Cell);
                 }
                 else {
@@ -56,11 +56,11 @@ namespace fitSharp.Fit.Operators {
             catch (IgnoredException) {}
         }
 
-        private static TypedValue Invoke(Processor<Cell> processor, ExecuteParameters parameters) {
+        private TypedValue Invoke(ExecuteParameters parameters) {
             TypedValue target = parameters.Target;
             var targetObjectProvider = target.Value as TargetObjectProvider;
-            var name = processor.ParseTree<MemberName>(parameters.Members);
-            return processor.TryInvoke(targetObjectProvider != null ? new TypedValue(targetObjectProvider.GetTargetObject()) : target, name.ToString(), parameters.Parameters);
+            var name = Processor.ParseTree<MemberName>(parameters.Members);
+            return Processor.TryInvoke(targetObjectProvider != null ? new TypedValue(targetObjectProvider.GetTargetObject()) : target, name.ToString(), parameters.Parameters);
         }
     }
 }

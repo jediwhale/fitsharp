@@ -6,26 +6,25 @@
 
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
-using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fit.Operators {
 	public class ExecuteEmpty : ExecuteBase {
-	    public override bool IsMatch(Processor<Cell> processor, ExecuteParameters parameters) {
+	    public override bool CanExecute(ExecuteParameters parameters) {
 			return (parameters.Verb == ExecuteParameters.Check || parameters.Verb == ExecuteParameters.Input)
                 && parameters.Cell.Text.Length == 0
                 && ((Parse)parameters.Cell).Parts == null;
 	    }
 
-	    public override TypedValue Execute(Processor<Cell> processor, ExecuteParameters parameters) {
+	    public override TypedValue Execute(ExecuteParameters parameters) {
 	        switch (parameters.Verb) {
 	            case ExecuteParameters.Input:
-                    TypedValue actual = processor.TryInvoke(parameters.SystemUnderTest, parameters.GetMemberName(processor),
+                    TypedValue actual = Processor.TryInvoke(parameters.SystemUnderTest, parameters.GetMemberName(Processor),
                              new TreeList<Cell>());
                     if (actual.IsValid) ShowActual(parameters, actual.Value);
 	                break;
                 case ExecuteParameters.Check:
-			        ShowActual(parameters, parameters.GetActual(processor));
+			        ShowActual(parameters, parameters.GetActual(Processor));
 	                break;
 	        }
 	        return TypedValue.Void;

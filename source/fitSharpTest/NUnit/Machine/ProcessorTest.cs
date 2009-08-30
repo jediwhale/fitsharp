@@ -84,28 +84,49 @@ namespace fitSharp.Test.NUnit.Machine {
             Assert.AreEqual("stuff", processor.Load(new KeyValueMemory<string, string>("something")).Instance);
         }
 
-        private class DefaultTest: ExecuteOperator<string> {
-            public bool CanExecute(Processor<string> processor, TypedValue instance, Tree<string> parameters) {
+        [Test] public void ProcessorCopyHasIndependentOperators() {
+            processor.AddOperator(new MemoryOperator());
+            var copy = new Processor<string>(processor);
+            processor.AddMemory<KeyValueMemory<string, string>>();
+            processor.Store(new KeyValueMemory<string, string>("something", "stuff"));
+            copy.AddMemory<KeyValueMemory<string, string>>();
+            copy.Store(new KeyValueMemory<string, string>("something", "else"));
+            Assert.AreEqual("stuff", processor.Execute(null).Value);
+            Assert.AreEqual("else", copy.Execute(null).Value);
+        }
+
+        private class MemoryOperator: Operator<string>, ExecuteOperator<string> {
+            public bool CanExecute(TypedValue instance, Tree<string> parameters) {
                 return true;
             }
 
-            public TypedValue Execute(Processor<string> processor, TypedValue instance, Tree<string> parameters) {
+            public TypedValue Execute(TypedValue instance, Tree<string> parameters) {
+                return new TypedValue(Processor.Load(new KeyValueMemory<string, string>("something")).Instance);
+            }
+        }
+
+        private class DefaultTest: Operator<string>, ExecuteOperator<string> {
+            public bool CanExecute(TypedValue instance, Tree<string> parameters) {
+                return true;
+            }
+
+            public TypedValue Execute(TypedValue instance, Tree<string> parameters) {
                 return new TypedValue("defaultexecute");
             }
         }
 
-        private class SpecificTest: ExecuteOperator<string> {
+        private class SpecificTest: Operator<string>, ExecuteOperator<string> {
             private readonly string name;
 
             public SpecificTest(string name) {
                 this.name = name;
             }
 
-            public bool CanExecute(Processor<string> processor, TypedValue instance, Tree<string> parameters) {
+            public bool CanExecute(TypedValue instance, Tree<string> parameters) {
                 return parameters.Value == name;
             }
 
-            public TypedValue Execute(Processor<string> processor, TypedValue instance, Tree<string> parameters) {
+            public TypedValue Execute(TypedValue instance, Tree<string> parameters) {
                 return new TypedValue("execute" + name);
             }
         }

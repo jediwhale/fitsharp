@@ -10,19 +10,19 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fit.Operators {
-	public class CompareFail : CompareOperator<Cell> {
+	public class CompareFail : Operator<Cell>, CompareOperator<Cell> {
 	    private static readonly IdentifierName failIdentifier = new IdentifierName("fail[");
 
-	    public bool CanCompare(Processor<Cell> processor, TypedValue actual, Tree<Cell> expected) {
+	    public bool CanCompare(TypedValue actual, Tree<Cell> expected) {
 	        return expected.Value.Text != null && failIdentifier.IsStartOf(expected.Value.Text) &&
 	            expected.Value.Text.EndsWith("]");
 	    }
 
-	    public bool Compare(Processor<Cell> processor, TypedValue actual, Tree<Cell> expected) {
+	    public bool Compare(TypedValue actual, Tree<Cell> expected) {
             //todo: use cellsubstring?
 			string expectedValue = expected.Value.Text.Substring("fail[".Length, expected.Value.Text.Length - ("fail[".Length + 1));
 			var newCell = new Parse("td", expectedValue, null, null);
-            return !processor.Compare(actual, newCell);
+            return !Processor.Compare(actual, newCell);
 	    }
 	}
 }

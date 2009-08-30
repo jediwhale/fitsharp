@@ -13,11 +13,9 @@ using NUnit.Framework;
 namespace fit.Test.NUnit {
     [TestFixture] public class ParseBooleanTest {
         private ParseBoolean parseBoolean;
-        private Processor<Cell> processor;
 
         [SetUp] public void SetUp() {
-            parseBoolean = new ParseBoolean();
-            processor = new Processor<Cell>();
+            parseBoolean = new ParseBoolean {Processor = new Processor<Cell>()};
         }
 
         [Test]
@@ -52,8 +50,8 @@ namespace fit.Test.NUnit {
         }
 
         private bool Parse(string validString) {
-            Assert.IsTrue(parseBoolean.CanParse(processor, typeof (bool), TypedValue.Void, TestUtils.CreateCell(validString)));
-            TypedValue result = parseBoolean.Parse(processor, typeof (bool), TypedValue.Void, TestUtils.CreateCell(validString));
+            Assert.IsTrue(parseBoolean.CanParse(typeof (bool), TypedValue.Void, TestUtils.CreateCell(validString)));
+            TypedValue result = parseBoolean.Parse(typeof (bool), TypedValue.Void, TestUtils.CreateCell(validString));
             return (bool)result.Value;
         }
     }

@@ -7,12 +7,12 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Slim.Operators {
-    public class ComposeBoolean: ComposeOperator<string> {
-        public bool CanCompose(Processor<string> processor, TypedValue instance) {
+    public class ComposeBoolean: Operator<string>, ComposeOperator<string> {
+        public bool CanCompose(TypedValue instance) {
             return instance.Type == typeof (bool);
         }
 
-        public Tree<string> Compose(Processor<string> processor, TypedValue instance) {
+        public Tree<string> Compose(TypedValue instance) {
             return new TreeLeaf<string>((bool)instance.Value ? "true" : "false");
         }
     }

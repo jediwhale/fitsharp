@@ -9,17 +9,17 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
-    public abstract class ExecuteBase: ExecuteOperator<Cell> {
+    public abstract class ExecuteBase: Operator<Cell>, ExecuteOperator<Cell> {
 
-        public abstract bool IsMatch(Processor<Cell> processor, ExecuteParameters parameters);
-        public abstract TypedValue Execute(Processor<Cell> processor, ExecuteParameters parameters);
+        public abstract bool CanExecute(ExecuteParameters parameters);
+        public abstract TypedValue Execute(ExecuteParameters parameters);
 
-        public bool CanExecute(Processor<Cell> processor, TypedValue instance, Tree<Cell> parameters) {
-            return IsMatch(processor, new ExecuteParameters((ExecuteContext) instance.Value, parameters));
+        public bool CanExecute(TypedValue instance, Tree<Cell> parameters) {
+            return CanExecute(new ExecuteParameters((ExecuteContext) instance.Value, parameters));
         }
 
-        public TypedValue Execute(Processor<Cell> processor, TypedValue instance, Tree<Cell> parameters) {
-            return Execute(processor, new ExecuteParameters((ExecuteContext)instance.Value, parameters));
+        public TypedValue Execute(TypedValue instance, Tree<Cell> parameters) {
+            return Execute(new ExecuteParameters((ExecuteContext)instance.Value, parameters));
         }
     }
 }

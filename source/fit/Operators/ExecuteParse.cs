@@ -12,14 +12,14 @@ using fitSharp.Machine.Model;
 
 namespace fit.Operators {
     public class ExecuteParse: ExecuteBase, ParseOperator<Cell> {
-        public override bool IsMatch(Processor<Cell> processor, ExecuteParameters parameters) {
+        public override bool CanExecute(ExecuteParameters parameters) {
             if (parameters.Verb != ExecuteParameters.Check) return false;
-            TypedValue actualValue = parameters.GetTypedActual(processor);
+            TypedValue actualValue = parameters.GetTypedActual(Processor);
             return typeof (Parse).IsAssignableFrom(actualValue.Type);
         }
 
-        public override TypedValue Execute(Processor<Cell> processor, ExecuteParameters parameters) {
-            TypedValue actualValue = parameters.GetTypedActual(processor);
+        public override TypedValue Execute(ExecuteParameters parameters) {
+            TypedValue actualValue = parameters.GetTypedActual(Processor);
 
             var cell = (Parse) parameters.Cell;
             var expected = new FixtureTable(cell.Parts);
@@ -36,11 +36,11 @@ namespace fit.Operators {
             return TypedValue.Void;
         }
 
-        public bool CanParse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters) {
+        public bool CanParse(Type type, TypedValue instance, Tree<Cell> parameters) {
             return typeof (Parse).IsAssignableFrom(type);
         }
 
-        public TypedValue Parse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters) {
+        public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
             return new TypedValue(((Parse)parameters).Parts.DeepCopy());
         }
     }

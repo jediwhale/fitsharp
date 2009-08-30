@@ -6,8 +6,6 @@
 
 using System.Reflection;
 using System.Text.RegularExpressions;
-using fitSharp.Fit.Model;
-using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
@@ -16,15 +14,15 @@ namespace fitSharp.Fit.Operators {
         private static readonly Regex regexForMessageOnly = new Regex("^\".*\"$");
         private static readonly Regex regexForExceptionTypeNameOnly = new Regex("^.*: \".*\"$");
 
-        public override bool IsMatch(Processor<Cell> processor, ExecuteParameters parameters) {
+        public override bool CanExecute(ExecuteParameters parameters) {
             return parameters.Verb == ExecuteParameters.Check
                 && exceptionIdentifier.IsStartOf(parameters.Cell.Text) && parameters.Cell.Text.EndsWith("]");
         }
 
-        public override TypedValue Execute(Processor<Cell> processor, ExecuteParameters parameters) {
+        public override TypedValue Execute(ExecuteParameters parameters) {
             string exceptionContent = parameters.Cell.Text.Substring("exception[".Length, parameters.Cell.Text.Length - ("exception[".Length + 1));
             try {
-                parameters.GetActual(processor);
+                parameters.GetActual(Processor);
                 parameters.TestStatus.MarkWrong(parameters.Cell, "no exception");
             }
             catch (TargetInvocationException e) {

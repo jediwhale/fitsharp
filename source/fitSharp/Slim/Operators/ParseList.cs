@@ -10,15 +10,15 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Slim.Operators {
-    public class ParseList: ParseOperator<string> { // todo: handle any IList type
-        public bool CanParse(Processor<string> processor, Type type, TypedValue instance, Tree<string> parameters) {
+    public class ParseList: Operator<string>, ParseOperator<string> { // todo: handle any IList type
+        public bool CanParse(Type type, TypedValue instance, Tree<string> parameters) {
             return type.IsGenericType && type.GetGenericTypeDefinition() == typeof (List<>);
         }
 
-        public TypedValue Parse(Processor<string> processor, Type type, TypedValue instance, Tree<string> parameters) {
+        public TypedValue Parse(Type type, TypedValue instance, Tree<string> parameters) {
             var list = (IList)Activator.CreateInstance(type);
             foreach (Tree<string> branch in parameters.Branches) {
-                list.Add(processor.Parse(type.GetGenericArguments()[0], branch).Value);
+                list.Add(Processor.Parse(type.GetGenericArguments()[0], branch).Value);
             }
             return new TypedValue(list);
         }

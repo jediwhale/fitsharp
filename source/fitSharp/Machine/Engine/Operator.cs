@@ -6,36 +6,35 @@
 using System;
 using fitSharp.Machine.Model;
 
-// don't want to put processor in constructor? why not? could create the list initially with processor references
-// then still reusable
-
 namespace fitSharp.Machine.Engine {
-    public interface Operator {}
-
-    public interface CompareOperator<T>: Operator {
-        bool CanCompare(Processor<T> processor, TypedValue actual, Tree<T> expected);
-        bool Compare(Processor<T> processor, TypedValue actual, Tree<T> expected);
+    public abstract class Operator<T> {
+        public Processor<T> Processor;
     }
 
-    public interface ComposeOperator<T>: Operator {
-        bool CanCompose(Processor<T> processor, TypedValue instance);
-        Tree<T> Compose(Processor<T> processor, TypedValue instance);
+    public interface CompareOperator<T> {
+        bool CanCompare(TypedValue actual, Tree<T> expected);
+        bool Compare(TypedValue actual, Tree<T> expected);
     }
 
-    public interface ExecuteOperator<T>: Operator {
-        bool CanExecute(Processor<T> processor, TypedValue instance, Tree<T> parameters);
-        TypedValue Execute(Processor<T> processor, TypedValue instance, Tree<T> parameters);
+    public interface ComposeOperator<T> {
+        bool CanCompose(TypedValue instance);
+        Tree<T> Compose(TypedValue instance);
     }
 
-    public interface ParseOperator<T>: Operator {
-        bool CanParse(Processor<T> processor, Type type, TypedValue instance, Tree<T> parameters);
-        TypedValue Parse(Processor<T> processor, Type type, TypedValue instance, Tree<T> parameters);
+    public interface ExecuteOperator<T> {
+        bool CanExecute(TypedValue instance, Tree<T> parameters);
+        TypedValue Execute(TypedValue instance, Tree<T> parameters);
     }
 
-    public interface RuntimeOperator<T>: Operator {
-        bool CanCreate(Processor<T> processor, string memberName, Tree<T> parameters);
-        TypedValue Create(Processor<T> processor, string memberName, Tree<T> parameters);
-        bool CanInvoke(Processor<T> processor, TypedValue instance, string memberName, Tree<T> parameters);
-        TypedValue Invoke(Processor<T> processor, TypedValue instance, string memberName, Tree<T> parameters);
+    public interface ParseOperator<T> {
+        bool CanParse(Type type, TypedValue instance, Tree<T> parameters);
+        TypedValue Parse(Type type, TypedValue instance, Tree<T> parameters);
+    }
+
+    public interface RuntimeOperator<T> {
+        bool CanCreate(string memberName, Tree<T> parameters);
+        TypedValue Create(string memberName, Tree<T> parameters);
+        bool CanInvoke(TypedValue instance, string memberName, Tree<T> parameters);
+        TypedValue Invoke(TypedValue instance, string memberName, Tree<T> parameters);
     }
 }

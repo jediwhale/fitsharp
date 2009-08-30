@@ -10,20 +10,20 @@ using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
 
 namespace fit.Operators {
-    public class RuntimeFlow: RuntimeOperator<Cell> {
-        public bool CanCreate(Processor<Cell> processor, string memberName, Tree<Cell> parameters) {
+    public class RuntimeFlow: Operator<Cell>, RuntimeOperator<Cell> {
+        public bool CanCreate(string memberName, Tree<Cell> parameters) {
             return false;
         }
 
-        public TypedValue Create(Processor<Cell> processor, string memberName, Tree<Cell> parameters) {
+        public TypedValue Create(string memberName, Tree<Cell> parameters) {
             return TypedValue.Void;
         }
 
-        public bool CanInvoke(Processor<Cell> processor, TypedValue instance, string memberName, Tree<Cell> parameters) {
+        public bool CanInvoke(TypedValue instance, string memberName, Tree<Cell> parameters) {
             return parameters.IsLeaf;
         }
 
-        public TypedValue Invoke(Processor<Cell> processor, TypedValue instance, string memberName, Tree<Cell> parameters) {
+        public TypedValue Invoke(TypedValue instance, string memberName, Tree<Cell> parameters) {
             if (memberName == "setup" || memberName == "teardown") {
                 RuntimeMember member = RuntimeType.FindDirectInstance(instance.Value, memberName, 0);
                 return member != null

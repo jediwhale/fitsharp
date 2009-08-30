@@ -72,7 +72,8 @@ namespace fit.Test.NUnit {
         }
 
         private static bool AreEqual(object o1, string o2) {
-            return new CompareDefault().Compare(new Service.Service(), new TypedValue(o1), new StringCell(o2));
+            var compare = new CompareDefault {Processor = new Service.Service()};
+            return compare.Compare(new TypedValue(o1), new StringCell(o2));
         }
     }
 }

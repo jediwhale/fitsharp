@@ -9,14 +9,14 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
-    public class ParseNull: ParseOperator<Cell> {
+    public class ParseNull: Operator<Cell>, ParseOperator<Cell> {
         private static readonly IdentifierName nullIdentifier = new IdentifierName("null");
 
-        public bool CanParse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters) {
+        public bool CanParse(Type type, TypedValue instance, Tree<Cell> parameters) {
             return parameters.Value != null && nullIdentifier.Equals(parameters.Value.Text);
         }
 
-        public TypedValue Parse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters) {
+        public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
             return new TypedValue(null, type);
         }
     }

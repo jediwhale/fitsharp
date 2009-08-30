@@ -21,27 +21,27 @@ namespace fitSharp.Test.NUnit.Slim {
 
         [Test] public void ParseSymbolReplacesWithValue() {
             processor.Store(new Symbol("symbol", "testvalue"));
-            Assert.AreEqual("testvalue", Parse(new ParseSymbol(), typeof(object), new TreeLeaf<string>("$symbol")));
+            Assert.AreEqual("testvalue", Parse(new ParseSymbol { Processor = processor }, typeof(object), new TreeLeaf<string>("$symbol")));
         }
 
         [Test] public void ParseSymbolReplacesEmbeddedValues() {
             processor.Store(new Symbol("symbol1", "test"));
             processor.Store(new Symbol("symbol2", "value"));
-            Assert.AreEqual("-testvalue-", Parse(new ParseSymbol(), typeof(object), new TreeLeaf<string>("-$symbol1$symbol2-")));
+            Assert.AreEqual("-testvalue-", Parse(new ParseSymbol { Processor = processor }, typeof(object), new TreeLeaf<string>("-$symbol1$symbol2-")));
         }
 
         [Test] public void TreeIsParsedForList() {
             var list =
-                Parse(new ParseList(), typeof (List<int>), new TreeList<string>().AddBranchValue("5").AddBranchValue("4")) as List<int>;
+                Parse(new ParseList{ Processor = processor }, typeof (List<int>), new TreeList<string>().AddBranchValue("5").AddBranchValue("4")) as List<int>;
             Assert.IsNotNull(list);
             Assert.AreEqual(2, list.Count);
             Assert.AreEqual(5, list[0]);
             Assert.AreEqual(4, list[1]);
         }
 
-        private object Parse(ParseOperator<string> parseOperator, Type type, Tree<string> parameters) {
-            Assert.IsTrue(parseOperator.CanParse(processor, type, TypedValue.Void, parameters));
-            TypedValue result = parseOperator.Parse(processor, type, TypedValue.Void, parameters);
+        private static object Parse(ParseOperator<string> parseOperator, Type type, Tree<string> parameters) {
+            Assert.IsTrue(parseOperator.CanParse(type, TypedValue.Void, parameters));
+            TypedValue result = parseOperator.Parse(type, TypedValue.Void, parameters);
             return result.Value;
         }
     }

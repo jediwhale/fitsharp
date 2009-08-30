@@ -9,21 +9,21 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fit.Operators {
-    public class ComposeTable: ComposeOperator<Cell> {
-        public bool CanCompose(Processor<Cell> processor, TypedValue instance) {
+    public class ComposeTable: Operator<Cell>, ComposeOperator<Cell> {
+        public bool CanCompose(TypedValue instance) {
             return typeof(Table).IsAssignableFrom(instance.Type);
         }
 
-        public Tree<Cell> Compose(Processor<Cell> processor, TypedValue instance) {
-            return new Parse("td", string.Empty, MakeTable(processor, (Table)instance.Value), null);
+        public Tree<Cell> Compose(TypedValue instance) {
+            return new Parse("td", string.Empty, MakeTable((Table)instance.Value), null);
         }
 
-        private static Parse MakeTable(Processor<Cell> processor, Table theTable) {
+        private Parse MakeTable(Table theTable) {
             Parse rows = null;
             for (int row = theTable.Rows() - 1; row >= 0 ; row--) {
                 Parse cells = null;
                 for (int cell = theTable.Cells(row) - 1; cell >= 0 ; cell--) {
-                    var newCell = (Parse) processor.Compose(theTable.StringAt(row, cell));
+                    var newCell = (Parse) Processor.Compose(theTable.StringAt(row, cell));
                     newCell.More = cells;
                     cells = newCell;
                 }

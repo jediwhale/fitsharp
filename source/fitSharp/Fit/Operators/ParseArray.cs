@@ -9,18 +9,18 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
-    public class ParseArray: ParseOperator<Cell> {
-        public bool CanParse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters) {
+    public class ParseArray: Operator<Cell>, ParseOperator<Cell> {
+        public bool CanParse(Type type, TypedValue instance, Tree<Cell> parameters) {
             return type.IsArray;
         }
 
-        public TypedValue Parse(Processor<Cell> processor, Type type, TypedValue instance, Tree<Cell> parameters) {
+        public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
 			string[] strings = parameters.Value.Text.Split(new [] {','});
 
 			Array list = Array.CreateInstance(type.GetElementType(), strings.Length);
 			for (int i = 0; i < strings.Length; i++) {
                 //todo: use cellsubstring?
-			    list.SetValue(processor.ParseString(type.GetElementType(), strings[i]).Value, i);
+			    list.SetValue(Processor.ParseString(type.GetElementType(), strings[i]).Value, i);
 			}
 
             return new TypedValue(list);

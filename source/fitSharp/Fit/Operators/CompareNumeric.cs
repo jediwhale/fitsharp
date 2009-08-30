@@ -9,7 +9,7 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
-    public class CompareNumeric : CompareOperator<Cell> {
+    public class CompareNumeric : Operator<Cell>, CompareOperator<Cell> {
         private static readonly Type[] numericTypes = {
             typeof(byte), typeof(sbyte), typeof(decimal), typeof(double),
             typeof(float), typeof(int), typeof(uint), typeof(long), typeof(ulong), typeof(short), typeof(ushort)
@@ -20,19 +20,19 @@ namespace fitSharp.Fit.Operators {
             new Comparison(">", 1, 1), new Comparison("<", -1, -1)
         };
 
-        public bool CanCompare(Processor<Cell> processor, TypedValue actual, Tree<Cell> expected) {
+        public bool CanCompare(TypedValue actual, Tree<Cell> expected) {
             return !expected.Value.Text.StartsWith("<<")
                 && FindComparison(expected.Value.Text) != null
                 && Array.IndexOf(numericTypes, actual.Type) >= 0;
         }
 
-        public bool Compare(Processor<Cell> processor, TypedValue actual, Tree<Cell> expected) {
+        public bool Compare(TypedValue actual, Tree<Cell> expected) {
             object actualValue = actual.Value;
             Cell cell = expected.Value;
             Comparison comparison = FindComparison(cell.Text);
 
             var rest = new CellSubstring(cell, cell.Text.Substring(comparison.Operator.Length));
-            object expectedValue = processor.Parse(actual.Type, rest).Value;
+            object expectedValue = Processor.Parse(actual.Type, rest).Value;
             expected.Value.AddToAttribute(CellAttributes.InformationPrefixKey, actualValue.ToString(), CellAttributes.PrefixFormat);
 
             int compare = actualValue is float || actualValue is double

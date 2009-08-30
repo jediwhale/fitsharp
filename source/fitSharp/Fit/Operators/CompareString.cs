@@ -12,10 +12,10 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
-    public class CompareString: CompareOperator<Cell> {
+    public class CompareString: Operator<Cell>, CompareOperator<Cell> {
         private static readonly Options defaultOption = Options.Parse(",IgnoreWhitespace");
 
-        public bool CanCompare(Processor<Cell> processor, TypedValue actual, Tree<Cell> expected) {
+        public bool CanCompare(TypedValue actual, Tree<Cell> expected) {
             var options = (OptionsList)Context.Configuration.GetItem(GetType().FullName);
             if (!options.HasPrefix(expected.Value.Text)) return false;
             if (actual.Type != typeof(string)) return false;
@@ -24,7 +24,7 @@ namespace fitSharp.Fit.Operators {
             return actualValue != null;
         }
 
-        public bool Compare(Processor<Cell> processor, TypedValue actual, Tree<Cell> expected) {
+        public bool Compare(TypedValue actual, Tree<Cell> expected) {
             var options = (OptionsList)Context.Configuration.GetItem(GetType().FullName);
             return options.IsMatch(actual.ValueString, expected.Value.Text);
         }
