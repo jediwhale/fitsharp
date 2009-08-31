@@ -15,6 +15,8 @@ namespace fitSharp.Fit.Service {
             AddOperator(new ExecuteDefault());
             AddOperator(new CompareDefault());
 
+            AddOperator(new CompareEmpty());
+            AddOperator(new ExecuteEmpty());
             AddOperator(new ExecuteSymbolSave());
             AddOperator(new CompareNumeric());
             AddOperator(new ParseMemberName());
@@ -30,6 +32,7 @@ namespace fitSharp.Fit.Service {
             AddOperator(new ParseArray(), 1);
             AddOperator(new ExecuteError(), 1);
             AddOperator(new ExecuteException(), 1);
+            AddOperator(new CompareFail(), 1);
 
             AddMemory<Symbol>();
         }

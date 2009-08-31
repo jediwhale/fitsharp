@@ -21,13 +21,9 @@ namespace fit.Service {
             AddOperator(new ParseStoryTestString());
 
             AddOperator(new ComposeTable());
-            AddOperator(new CompareEmpty());
-            AddOperator(new ExecuteEmpty());
             AddOperator(new ExecuteList());
             AddOperator(new ParseTable());
             AddOperator(new ParseTree());
-
-            AddOperator(new CompareFail(), 1);
 
             ApplicationUnderTest = Context.Configuration.GetItem<ApplicationUnderTest>();
             ApplicationUnderTest.AddNamespace("fit");

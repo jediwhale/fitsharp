@@ -86,10 +86,6 @@
     <Compile Include="Model\ParseTable.cs" />
     <Compile Include="Model\ScientificDouble.cs" />
     <Compile Include="Model\ValueArray.cs" />
-    <Compile Include="Operators\CompareEmpty.cs" />
-    <Compile Include="Operators\CompareFail.cs" />
-    <Compile Include="Operators\CompareRegEx.cs" />
-    <Compile Include="Operators\ExecuteEmpty.cs" />
     <Compile Include="Operators\ExecuteList.cs" />
     <Compile Include="Operators\ExecuteParse.cs" />
     <Compile Include="Operators\ParseTable.cs" />

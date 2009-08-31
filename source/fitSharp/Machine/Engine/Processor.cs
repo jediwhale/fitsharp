@@ -13,6 +13,9 @@ namespace fitSharp.Machine.Engine {
         //todo: add setup and teardown?
         //todo: this is turning into a facade so push everything else out?
 
+        private delegate bool CanDoOperation<T>(T anOperator);
+        private delegate void DoOperation<T>(T anOperator);
+
         private readonly Operators<U> operators;
         private readonly Dictionary<Type, object> memoryBanks = new Dictionary<Type, object>();
 
@@ -41,7 +44,7 @@ namespace fitSharp.Machine.Engine {
 
         public bool Compare(TypedValue instance, Tree<U> parameters) {
             bool result = false;
-            Do<CompareOperator<U>>(
+            operators.Do<CompareOperator<U>>(
                 o => o.CanCompare(instance, parameters),
                 o => result = o.Compare(instance, parameters));
             return result;
@@ -53,7 +56,7 @@ namespace fitSharp.Machine.Engine {
 
         public Tree<U> Compose(TypedValue instance) {
             Tree<U> result = null;
-            Do<ComposeOperator<U>>(
+            operators.Do<ComposeOperator<U>>(
                 o => o.CanCompose(instance),
                 o => result = o.Compose(instance));
             return result;
@@ -61,7 +64,7 @@ namespace fitSharp.Machine.Engine {
 
         public TypedValue Execute(TypedValue instance, Tree<U> parameters) {
             TypedValue result = TypedValue.Void;
-            Do<ExecuteOperator<U>>(
+            operators.Do<ExecuteOperator<U>>(
                 o => o.CanExecute(instance, parameters),
                 o => result = o.Execute(instance, parameters));
             return result;
@@ -73,7 +76,7 @@ namespace fitSharp.Machine.Engine {
 
         public TypedValue Parse(Type type, TypedValue instance, Tree<U> parameters) {
             TypedValue result = TypedValue.Void;
-            Do<ParseOperator<U>>(
+            operators.Do<ParseOperator<U>>(
                 o => o.CanParse(type, instance, parameters),
                 o => result = o.Parse(type, instance, parameters));
             return result;
@@ -109,7 +112,7 @@ namespace fitSharp.Machine.Engine {
 
         public TypedValue Create(string memberName, Tree<U> parameters) {
             TypedValue result = TypedValue.Void;
-            Do<RuntimeOperator<U>>(
+            operators.Do<RuntimeOperator<U>>(
                 o => o.CanCreate(memberName, parameters),
                 o => result = o.Create(memberName, parameters));
             return result;
@@ -117,7 +120,7 @@ namespace fitSharp.Machine.Engine {
 
         public TypedValue TryInvoke(TypedValue instance, string memberName, Tree<U> parameters) {
             TypedValue result = TypedValue.Void;
-            Do<RuntimeOperator<U>>(
+            operators.Do<RuntimeOperator<U>>(
                 o => o.CanInvoke(instance, memberName, parameters),
                 o => result = o.Invoke(instance, memberName, parameters));
             return result;
@@ -127,19 +130,6 @@ namespace fitSharp.Machine.Engine {
             TypedValue result = TryInvoke(instance, memberName, parameters);
             result.ThrowExceptionIfNotValid();
             return result;
-        }
-
-        public delegate bool CanDoOperation<T>(T anOperator);
-        public delegate void DoOperation<T>(T anOperator);
-
-        public void Do<T>(CanDoOperation<T> canDoOperation, DoOperation<T> doOperation) where T: class {
-            foreach (Operator<U> anOperator in operators.List) {
-                var candidate = anOperator as T;
-                if (candidate == null || !canDoOperation(candidate)) continue;
-                doOperation(candidate);
-                return;
-            }
-            throw new ApplicationException(string.Format("No default for {0}", typeof(T).Name));
         }
 
         Copyable Copyable.Copy() {
@@ -191,9 +181,7 @@ namespace fitSharp.Machine.Engine {
                 Add(new DefaultRuntime<V>());
             }
 
-            public void Add(string operatorName) {
-                Add((Operator<V>)processor.Create(operatorName).Value);
-            }
+            public void Add(string operatorName) { Add((Operator<V>)processor.Create(operatorName).Value); }
 
             public void Add(Operator<V> anOperator) { Add(anOperator, 0); }
 
@@ -221,16 +209,17 @@ namespace fitSharp.Machine.Engine {
                         }
             }
 
-            public IEnumerable<Operator<V>> List {
-                get {
-                    for (int priority = operators.Count - 1; priority >= 0; priority--) {
-                        for (int i = operators[priority].Count - 1; i >= 0; i--) {
-                            yield return operators[priority][i];
-                        }
+            public void Do<T>(CanDoOperation<T> canDoOperation, DoOperation<T> doOperation) where T: class {
+                for (int priority = operators.Count - 1; priority >= 0; priority--) {
+                    for (int i = operators[priority].Count - 1; i >= 0; i--) {
+                        var candidate = operators[priority][i] as T;
+                        if (candidate == null || !canDoOperation(candidate)) continue;
+                        doOperation(candidate);
+                        return;
                     }
                 }
+                throw new ApplicationException(string.Format("No default for {0}", typeof(T).Name));
             }
-
         }
     }
 }

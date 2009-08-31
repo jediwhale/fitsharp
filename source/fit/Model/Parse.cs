@@ -333,7 +333,7 @@ namespace fit
         }
 
 	    public override Cell Value { get { return this; } }
-	    public override bool IsLeaf { get { return true; } }
+	    public override bool IsLeaf { get { return Parts == null; } }
 	    public override ReadList<Tree<Cell>> Branches { get { throw new InvalidOperationException(); } }
         public Parse ParseCell { get { return this; }}
 	}

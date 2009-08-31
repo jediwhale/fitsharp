@@ -1,15 +1,14 @@
-// FitNesse.NET
-// Copyright � 2008 Syterra Software Inc.
-// This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
-// This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+﻿// Copyright © 2009 Syterra Software Inc. All rights reserved.
+// The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+// which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
+// to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System.Text.RegularExpressions;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
-namespace fit.Operators {
+namespace fitSharp.Fit.Operators {
     public class CompareRegEx: Operator<Cell>, CompareOperator<Cell> {
         public bool CanCompare(TypedValue actual, Tree<Cell> expected) {
             object actualValue = actual.Value;
@@ -22,7 +21,7 @@ namespace fit.Operators {
             string compareValue = expected.Value.Text;
             object actualValue = actual.Value;
 
-            var cell = (Parse)expected.Value;
+            var cell = expected.Value;
             cell.AddToAttribute(CellAttributes.InformationSuffixKey, actualValue.ToString(), CellAttributes.SuffixFormat);
 
             var expectedPattern = new Regex(compareValue.Substring(1, compareValue.Length-2));

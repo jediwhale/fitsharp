@@ -1,19 +1,17 @@
-// FitNesse.NET
-// Copyright © 2008 Syterra Software Inc. Includes work by Object Mentor, Inc., (c) 2002 Cunningham & Cunningham, Inc.
-// This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
-// This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+// Copyright © 2009 Syterra Software Inc. All rights reserved.
+// The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+// which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
+// to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using fitSharp.Fit.Model;
-using fitSharp.Fit.Operators;
 using fitSharp.Machine.Model;
 
-namespace fit.Operators {
+namespace fitSharp.Fit.Operators {
 	public class ExecuteEmpty : ExecuteBase {
 	    public override bool CanExecute(ExecuteParameters parameters) {
-			return (parameters.Verb == ExecuteParameters.Check || parameters.Verb == ExecuteParameters.Input)
-                && parameters.Cell.Text.Length == 0
-                && ((Parse)parameters.Cell).Parts == null;
+	        return (parameters.Verb == ExecuteParameters.Check || parameters.Verb == ExecuteParameters.Input)
+	               && parameters.Cell.Text.Length == 0
+	               && parameters.Cells.IsLeaf;
 	    }
 
 	    public override TypedValue Execute(ExecuteParameters parameters) {
