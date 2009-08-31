@@ -9,55 +9,31 @@ using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
-    public class Processor<U>: Copyable { //todo: add setup and teardown
-        //todo: this is turning into a facade so push everything else out
+    public class Processor<U>: Copyable {
+        //todo: add setup and teardown?
+        //todo: this is turning into a facade so push everything else out?
 
-        //todo: make this a class
-        private readonly List<List<Operator<U>>> operators = new List<List<Operator<U>>>();
-
+        private readonly Operators<U> operators;
         private readonly Dictionary<Type, object> memoryBanks = new Dictionary<Type, object>();
 
         public ApplicationUnderTest ApplicationUnderTest { get; set; }
 
         public Processor(ApplicationUnderTest applicationUnderTest) {
             ApplicationUnderTest = applicationUnderTest;
-            AddOperator(new DefaultParse<U>());
-            AddOperator(new ParseType<U>());
-            AddOperator(new DefaultRuntime<U>());
+            operators = new Operators<U>(this);
         }
 
         public Processor(): this(new ApplicationUnderTest()) {}
 
         public Processor(Processor<U> other): this(new ApplicationUnderTest(other.ApplicationUnderTest)) {
-            operators.Clear();
-            for (int priority = 0; priority < other.operators.Count; priority++) {
-                foreach (Operator<U> anOperator in other.operators[priority]) {
-                    AddOperator((Operator<U>)Activator.CreateInstance(anOperator.GetType()), priority);
-                }
-            }
+            operators.Copy(other.operators);
             memoryBanks = new Dictionary<Type, object>(other.memoryBanks);
         }
 
-        public void AddOperator(string operatorName) {
-            AddOperator((Operator<U>)Create(operatorName).Value);
-        }
-
-        public void AddOperator(Operator<U> anOperator) { AddOperator(anOperator, 0); }
-
-        public void AddOperator(Operator<U> anOperator, int priority) {
-            while (operators.Count <= priority) operators.Add(new List<Operator<U>>());
-            anOperator.Processor = this;
-            operators[priority].Add(anOperator);
-        }
-
-        public void RemoveOperator(string operatorName) {
-            foreach (List<Operator<U>> list in operators)
-                foreach (Operator<U> item in list)
-                    if (item.GetType().FullName == operatorName) {
-                        list.Remove(item);
-                        return;
-                    }
-        }
+        public void AddOperator(string operatorName) { operators.Add(operatorName); }
+        public void AddOperator(Operator<U> anOperator) { operators.Add(anOperator); }
+        public void AddOperator(Operator<U> anOperator, int priority) { operators.Add(anOperator, priority); }
+        public void RemoveOperator(string operatorName) { operators.Remove(operatorName); }
 
         public void AddNamespace(string namespaceName) {
             ApplicationUnderTest.AddNamespace(namespaceName);
@@ -157,13 +133,11 @@ namespace fitSharp.Machine.Engine {
         public delegate void DoOperation<T>(T anOperator);
 
         public void Do<T>(CanDoOperation<T> canDoOperation, DoOperation<T> doOperation) where T: class {
-            for (int priority = operators.Count - 1; priority >= 0; priority--) {
-                for (int i = operators[priority].Count - 1; i >= 0; i--) {
-                    var candidate = operators[priority][i] as T;
-                    if (candidate == null || !canDoOperation(candidate)) continue;
-                    doOperation(candidate);
-                    return;
-                }
+            foreach (Operator<U> anOperator in operators.List) {
+                var candidate = anOperator as T;
+                if (candidate == null || !canDoOperation(candidate)) continue;
+                doOperation(candidate);
+                return;
             }
             throw new ApplicationException(string.Format("No default for {0}", typeof(T).Name));
         }
@@ -205,5 +179,58 @@ namespace fitSharp.Machine.Engine {
         }
 
         private List<T> GetMemory<T>() { return (List<T>) memoryBanks[typeof (T)];}
+
+        private class Operators<V> {
+            private readonly Processor<V> processor;
+            private readonly List<List<Operator<V>>> operators = new List<List<Operator<V>>>();
+
+            public Operators(Processor<V> processor) {
+                this.processor = processor;
+                Add(new DefaultParse<V>());
+                Add(new ParseType<V>());
+                Add(new DefaultRuntime<V>());
+            }
+
+            public void Add(string operatorName) {
+                Add((Operator<V>)processor.Create(operatorName).Value);
+            }
+
+            public void Add(Operator<V> anOperator) { Add(anOperator, 0); }
+
+            public void Add(Operator<V> anOperator, int priority) {
+                while (operators.Count <= priority) operators.Add(new List<Operator<V>>());
+                anOperator.Processor = processor;
+                operators[priority].Add(anOperator);
+            }
+
+            public void Copy(Operators<V> from) {
+                operators.Clear();
+                for (int priority = 0; priority < from.operators.Count; priority++) {
+                    foreach (Operator<V> anOperator in from.operators[priority]) {
+                        Add((Operator<V>)Activator.CreateInstance(anOperator.GetType()), priority);
+                    }
+                }
+            }
+
+            public void Remove(string operatorName) {
+                foreach (List<Operator<V>> list in operators)
+                    foreach (Operator<V> item in list)
+                        if (item.GetType().FullName == operatorName) {
+                            list.Remove(item);
+                            return;
+                        }
+            }
+
+            public IEnumerable<Operator<V>> List {
+                get {
+                    for (int priority = operators.Count - 1; priority >= 0; priority--) {
+                        for (int i = operators[priority].Count - 1; i >= 0; i--) {
+                            yield return operators[priority][i];
+                        }
+                    }
+                }
+            }
+
+        }
     }
 }
