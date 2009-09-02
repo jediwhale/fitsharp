@@ -35,11 +35,11 @@ namespace fitlibrary {
         }
 
         public void DoSetUp(Parse table) {
-            ExecuteOptionalMethod("setup", table.Parts.Parts);
+            ExecuteOptionalMethod(":setup", table.Parts.Parts);
         }
 
         public void DoTearDown(Parse table) {
-            ExecuteOptionalMethod("teardown", table.Parts.Parts);
+            ExecuteOptionalMethod(":teardown", table.Parts.Parts);
         }
         
         	    protected void ProcessFlowRows(Parse theRows) {
@@ -54,12 +54,11 @@ namespace fitlibrary {
 
         protected void ProcessFlowRow(Parse theCurrentRow) {
             try {
-                string specialActionName = Processor.ParseTree<MemberName>(new CellRange(theCurrentRow.Parts, 1)).ToString();
+                string specialActionName = ":" + Processor.ParseTree<MemberName>(new CellRange(theCurrentRow.Parts, 1));
                 TypedValue result = Processor.TryInvoke(new TypedValue(new Keywords(this, TestStatus)),
                                                                                   specialActionName, theCurrentRow.Parts);
                 if (!result.IsValid) {
-                    result = Processor.TryInvoke(new TypedValue(this),
-                                                                                 specialActionName, theCurrentRow.Parts);
+                    result = Processor.TryInvoke(new TypedValue(this), specialActionName, theCurrentRow.Parts);
                 }
                 if (!result.IsValid) {
                      result = CellOperation.TryInvoke(this,
@@ -111,7 +110,7 @@ namespace fitlibrary {
 
         private void ExecuteOptionalMethod(string theMethodName, Parse theCell) {
             try {
-                Processor.TryInvoke(new TypedValue(this), theMethodName, new TreeLeaf<Cell>(null)); //todo: non-intuitive! use method name?
+                Processor.TryInvoke(new TypedValue(this), theMethodName, theCell);
             }
             catch (Exception e) {
                 TestStatus.MarkException(theCell, e);

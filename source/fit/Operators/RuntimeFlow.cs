@@ -20,10 +20,12 @@ namespace fit.Operators {
         }
 
         public bool CanInvoke(TypedValue instance, string memberName, Tree<Cell> parameters) {
-            return parameters.IsLeaf;
+            //return parameters.IsLeaf;
+            return memberName.StartsWith(":");
         }
 
-        public TypedValue Invoke(TypedValue instance, string memberName, Tree<Cell> parameters) {
+        public TypedValue Invoke(TypedValue instance, string directMemberName, Tree<Cell> parameters) {
+            string memberName = directMemberName.Substring(1);
             if (memberName == "setup" || memberName == "teardown") {
                 RuntimeMember member = RuntimeType.FindDirectInstance(instance.Value, memberName, 0);
                 return member != null
