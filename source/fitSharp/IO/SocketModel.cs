@@ -9,6 +9,7 @@ namespace fitSharp.IO {
     public interface SocketModel {
         int Receive(byte[] buffer, int offset, int bytesToRead);
         void Send(byte[] buffer);
+        void Close();
     }
 
     public class SocketModelImpl: SocketModel {
@@ -25,5 +26,7 @@ namespace fitSharp.IO {
         public void Send(byte[] buffer) {
             socket.Send(buffer);
         }
+
+        public void Close() { socket.Close(); }
     }
 }

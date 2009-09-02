@@ -72,6 +72,8 @@ namespace fitSharp.Test.NUnit.IO {
             public byte[] GetBytes() {
                 return buffer.ToArray();
             }
+
+            public void Close() {}
         }
     }
 }

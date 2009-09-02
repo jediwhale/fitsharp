@@ -5,8 +5,6 @@
 
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
-using fitSharp.Machine.Model;
-using fitSharp.Slim.Operators;
 
 namespace fitSharp.Slim.Service {
     public class Runner: Runnable {
@@ -18,7 +16,7 @@ namespace fitSharp.Slim.Service {
             service = configuration.GetItem<Service>();
             service.ApplicationUnderTest = configuration.GetItem<ApplicationUnderTest>();
             ParseCommandLine(commandLineArguments);
-            ProcessInstructions();
+            new Interpreter(messenger, assemblyPaths, service).ProcessInstructions();
             return 0;
         }
 
@@ -27,47 +25,6 @@ namespace fitSharp.Slim.Service {
             if (commandLineArguments.Length > 1) {
                 assemblyPaths = commandLineArguments[0];
             }
-        }
-
-        private void ProcessInstructions() {
-            while (true) {
-                string instruction = messenger.Read();
-                if (messenger.IsEnd) break;
-                string results = Execute(instruction);
-                messenger.Write(results);
-            }
-        }
-
-        private string Execute(string instruction) {
-            try {
-                AddAssemblies();
-                return ExecuteInstruction(instruction);
-            }
-            catch (System.Exception e) {
-                return FormatException(e);
-            }
-        }
-
-        private string ExecuteInstruction(string instruction) {
-            Document document = Document.Parse(instruction);
-            Tree<string> results = service.ExecuteInstructions(document.Content);
-            return new Document(results).ToString();
-        }
-
-        private void AddAssemblies() {
-            if (string.IsNullOrEmpty(assemblyPaths)) return;
-            foreach (string path in assemblyPaths.Split(';')) {
-                if (path.Length == 0) continue;
-                service.ApplicationUnderTest.AddAssembly(path);
-            }
-            assemblyPaths = null;
-        }
-
-        private static string FormatException(System.Exception e) {
-            // this format is hardcoded in case there is an exception in the general formatting code
-            string exception = string.Format(ComposeException.ExceptionResult, e);
-            string step = string.Format("[000002:000005:error:{0:000000}:{1}:]", exception.Length, exception);
-            return string.Format("[000001:{0:000000}:{1}:]", step.Length, step);
         }
     }
 }

@@ -9,11 +9,11 @@ using fitSharp.IO;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Slim.Service {
-    class Messenger {
+    public class Messenger {
         private static readonly IdentifierName EndIdentifier = new IdentifierName("bye");
 
         private readonly SocketStream stream;
-        private readonly Socket socket;
+        private readonly SocketModel socket;
         public bool IsEnd { get; private set; }
 
         public static Messenger Make(int port) {
@@ -21,12 +21,12 @@ namespace fitSharp.Slim.Service {
             listener.Start();
             Socket socket = listener.AcceptSocket();
             listener.Stop();
-            return new Messenger(socket);
+            return new Messenger(new SocketModelImpl(socket));
         }
 
-        public Messenger(Socket socket) {
+        public Messenger(SocketModel socket) {
             this.socket = socket;
-            stream = new SocketStream(new SocketModelImpl(socket));
+            stream = new SocketStream(socket);
             stream.Write("Slim -- V0.0\n");
         }
 

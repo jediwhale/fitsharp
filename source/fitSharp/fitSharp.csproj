@@ -131,6 +131,7 @@
     <Compile Include="Slim\Operators\SavedInstance.cs" />
     <Compile Include="Slim\Operators\Symbol.cs" />
     <Compile Include="Slim\Service\Document.cs" />
+    <Compile Include="Slim\Service\Interpreter.cs" />
     <Compile Include="Slim\Service\Messenger.cs" />
     <Compile Include="Slim\Service\Runner.cs" />
     <Compile Include="Slim\Service\Service.cs" />

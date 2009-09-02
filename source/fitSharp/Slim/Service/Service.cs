@@ -25,15 +25,5 @@ namespace fitSharp.Slim.Service {
             AddOperator(new ComposeBoolean());
             AddOperator(new ComposeList());
         }
-
-        public Tree<string> ExecuteInstructions(Tree<string> instructions) {
-            var results = new TreeList<string>();
-            foreach (Tree<string> statement in instructions.Branches) {
-                var result = (Tree<string>) Execute(statement).Value;
-                results.AddBranchValue(result);
-                if (ExecuteBase.WasAborted(result)) break;
-            }
-            return results;
-        }
     }
 }
