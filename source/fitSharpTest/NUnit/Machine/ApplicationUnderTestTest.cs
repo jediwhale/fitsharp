@@ -48,6 +48,11 @@ namespace fitSharp.Test.NUnit.Machine {
             Assert.AreEqual("fitSharp.TestTarget.SampleDomain", sample.Type.FullName);
         }
 
+        [Test] public void JarFilesAreIgnored() {
+            applicationUnderTest.AddAssembly("testtarget.jAr");
+            Assert.IsTrue(true);
+        }
+
         [Test] public void TypeIsFoundInDefaultNamespace() {
             CheckTypeFound<ApplicationUnderTest>("ApplicationUnderTest");
         }

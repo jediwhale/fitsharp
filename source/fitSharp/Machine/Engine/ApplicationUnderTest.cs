@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using System.Text;
 using fitSharp.Machine.Exception;
@@ -29,9 +30,14 @@ namespace fitSharp.Machine.Engine {
         }
 
         public void AddAssembly(string assemblyName) {
+            if (IsIgnored(assemblyName)) return;
             Assembly assembly = Assembly.LoadFrom(assemblyName);
             if (assemblies.Contains(assembly)) return;
             assemblies.Add(assembly);
+        }
+
+        private static bool IsIgnored(string assemblyName) {
+            return string.Equals(".jar", Path.GetExtension(assemblyName), StringComparison.OrdinalIgnoreCase);
         }
 
         public void AddNamespace(string namespaceName) {
