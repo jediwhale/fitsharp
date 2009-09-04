@@ -14,9 +14,9 @@ namespace fitSharp.Test.NUnit.Slim
                 AddBranchValue(typeof (SampleClass).FullName);
         }
 
-        public static Tree<string> ExecuteSampleMethod() {
+        public static Tree<string> ExecuteMethod(string methodName) {
             return new TreeList<string>().AddBranchValue("step2").AddBranchValue("call").AddBranchValue("variable").
-                AddBranchValue("samplemethod");
+                AddBranchValue(methodName);
         }
 
         public static Tree<string> ExecuteAbortTest() {

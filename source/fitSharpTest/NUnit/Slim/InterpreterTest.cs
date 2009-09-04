@@ -15,8 +15,8 @@ namespace fitSharp.Test.NUnit.Slim {
         [Test] public void MultipleStepsAreExecuted() {
             var instructions = new TreeList<string>()
                 .AddBranch(Instructions.MakeSampleClass())
-                .AddBranch(Instructions.ExecuteSampleMethod())
-                .AddBranch(Instructions.ExecuteSampleMethod());
+                .AddBranch(Instructions.ExecuteMethod("samplemethod"))
+                .AddBranch(Instructions.ExecuteMethod("samplemethod"));
             SampleClass.MethodCount = 0;
             ExecuteInstructions(instructions);
             Assert.AreEqual(2, SampleClass.MethodCount);
@@ -25,9 +25,9 @@ namespace fitSharp.Test.NUnit.Slim {
         [Test] public void StopTestExceptionSkipsRemainingSteps() {
             var instructions = new TreeList<string>()
                 .AddBranch(Instructions.MakeSampleClass())
-                .AddBranch(Instructions.ExecuteSampleMethod())
+                .AddBranch(Instructions.ExecuteMethod("samplemethod"))
                 .AddBranch(Instructions.ExecuteAbortTest())
-                .AddBranch(Instructions.ExecuteSampleMethod());
+                .AddBranch(Instructions.ExecuteMethod("samplemethod"));
             SampleClass.MethodCount = 0;
             ExecuteInstructions(instructions);
             Assert.AreEqual(1, SampleClass.MethodCount);

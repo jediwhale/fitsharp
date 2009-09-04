@@ -60,7 +60,7 @@ namespace fitSharp.Slim.Service {
             return string.Format("[000001:{0:000000}:{1}:]", step.Length, step);
         }
 
-        public Tree<string> ExecuteInstructions(Tree<string> instructions) {
+        private Tree<string> ExecuteInstructions(Tree<string> instructions) {
             var results = new TreeList<string>();
             foreach (Tree<string> statement in instructions.Branches) {
                 var result = (Tree<string>) processor.Execute(statement).Value;

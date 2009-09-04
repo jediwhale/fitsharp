@@ -39,8 +39,14 @@ namespace fitSharp.Slim.Service {
         public static Document Parse(string input) { return new Document(Read(input)); }
 
         private static Tree<string> Read(string input) {
-            if (input.StartsWith("[") && input.EndsWith("]")) return ReadList(input.Substring(1, input.Length - 2));
+            if (IsList(input)) return ReadList(input.Substring(1, input.Length - 2));
             return new TreeLeaf<string>(input);
+        }
+
+        private static bool IsList(string input) {
+            int result;
+            return input.StartsWith("[") && input.Substring(7, 1) == ":" && input.EndsWith("]") &&
+                   int.TryParse(input.Substring(1, 6), out result);
         }
 
         private static TreeList<string> ReadList(string input) {

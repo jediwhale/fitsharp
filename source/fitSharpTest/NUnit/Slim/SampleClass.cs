@@ -23,6 +23,8 @@ namespace fitSharp.Test.NUnit.Slim {
             return "with " + parameter;
         }
 
+        public void SampleVoidMethod() {}
+
         public void AbortTest() {
             throw new SampleStopTest();
         }

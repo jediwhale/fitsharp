@@ -75,7 +75,7 @@ namespace fitSharp.Slim.Operators {
         }
 
         public static bool WasAborted(string result) {
-            return result.StartsWith("__EXCEPTION__:ABORT_SLIM_TEST:");
+            return result != null && result.StartsWith("__EXCEPTION__:ABORT_SLIM_TEST:");
         }
     }
 }

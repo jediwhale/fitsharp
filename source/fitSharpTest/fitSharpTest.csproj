@@ -53,6 +53,7 @@
     <Compile Include="NUnit\Machine\ShellTest.cs" />
     <Compile Include="NUnit\Machine\TreeTest.cs" />
     <Compile Include="NUnit\Slim\ComposeOperatorsTest.cs" />
+    <Compile Include="NUnit\Slim\DocumentTest.cs" />
     <Compile Include="NUnit\Slim\ExecuteOperatorsTest.cs" />
     <Compile Include="NUnit\Slim\Instructions.cs" />
     <Compile Include="NUnit\Slim\InterpreterTest.cs" />
