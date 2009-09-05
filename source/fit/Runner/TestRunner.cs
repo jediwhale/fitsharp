@@ -7,6 +7,7 @@ using System;
 using System.IO;
 using fit;
 using fitSharp.Fit.Model;
+using fitSharp.IO;
 using fitSharp.Machine.Application;
 
 namespace fitnesse.fitserver
@@ -26,7 +27,7 @@ namespace fitnesse.fitserver
 		public TestStatus pageCounts = new TestStatus();
 		public TextWriter output = Console.Out;
 		public string assemblyPath;
-	    public string suiteFilter = null;
+	    public string suiteFilter;
 
 	    public int Run(string[] commandLineArguments, Configuration configuration, ProgressReporter reporter) {
 			if(!ParseArgs(configuration, commandLineArguments))
@@ -51,7 +52,7 @@ namespace fitnesse.fitserver
 		{
 			if(usingDownloadedPaths)
 				assemblyPath += fitServer.ReceiveDocument();
-			if(assemblyPath != null && assemblyPath.Length > 0)
+			if(!string.IsNullOrEmpty(assemblyPath))
 			{
 				if(verbose)
 					output.WriteLine("Adding assemblies: " + assemblyPath);
@@ -162,18 +163,15 @@ namespace fitnesse.fitserver
 			return description;
 		}
 
-	    private void CreateResultWriter(string fileName, string outputType)
-        {
-            if (!string.IsNullOrEmpty(fileName))
-            {
-                if (outputType.Equals("xml"))
-                    resultWriter = new XmlResultWriter(fileName, new FileSystemModel());
-                else
-                    resultWriter = new TextResultWriter(fileName, new FileSystemModel());
-            }
-        }
+	    private void CreateResultWriter(string fileName, string outputType) {
+	        if (string.IsNullOrEmpty(fileName)) return;
+	        if (outputType == "xml")
+	            resultWriter = new XmlResultWriter(fileName, new FileSystemModel());
+	        else
+	            resultWriter = new TextResultWriter(fileName, new FileSystemModel());
+	    }
 
-		public void HandleFinalCount(TestStatus summary)
+	    public void HandleFinalCount(TestStatus summary)
 		{
 			if(verbose)
 			{

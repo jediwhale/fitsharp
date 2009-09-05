@@ -20,7 +20,6 @@ namespace fit.Operators {
         }
 
         public bool CanInvoke(TypedValue instance, string memberName, Tree<Cell> parameters) {
-            //return parameters.IsLeaf;
             return memberName.StartsWith(":");
         }
 

@@ -5,6 +5,7 @@
 
 using System.Collections;
 using System.IO;
+using fitSharp.IO;
 using fitSharp.Machine.Application;
 
 namespace fit.Test.NUnit {
@@ -32,8 +33,8 @@ namespace fit.Test.NUnit {
         }
 
         public string[] GetFiles(string thePath) {
-            if (thePath.Contains(".")) return new string[] {thePath};
-            ArrayList result = new ArrayList();
+            if (thePath.Contains(".")) return new [] {thePath};
+            var result = new ArrayList();
             foreach (string file in myFiles.Keys) {
                 if (file.StartsWith(thePath + "\\") && file.Substring(thePath.Length + 1).IndexOf("\\") < 0) result.Add(file);
             }
@@ -41,15 +42,13 @@ namespace fit.Test.NUnit {
         }
 
         public string[] GetFolders(string thePath) {
-            ArrayList result = new ArrayList();
+            var result = new ArrayList();
             foreach (string file in myFiles.Keys) {
-                if (file.StartsWith(thePath + "\\")) {
-                    int length = file.LastIndexOf("\\");
-                    if (length > thePath.Length) {
-                        string folder = file.Substring(0, length);
-                        if (!result.Contains(folder)) result.Add(folder);
-                    }
-                }
+                if (!file.StartsWith(thePath + "\\")) continue;
+                int length = file.LastIndexOf("\\");
+                if (length <= thePath.Length) continue;
+                string folder = file.Substring(0, length);
+                if (!result.Contains(folder)) result.Add(folder);
             }
             return (string[])result.ToArray(typeof(string));
         }
@@ -60,6 +59,6 @@ namespace fit.Test.NUnit {
         
         public void Write(string theMessage) {}
 
-        private Hashtable myFiles;
+        private readonly Hashtable myFiles;
     }
 }

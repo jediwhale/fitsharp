@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Application;
+using fitSharp.IO;
 using fitSharp.Machine.Application;
 
 namespace fit.Runner {

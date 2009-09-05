@@ -1,15 +1,14 @@
-// FitNesse.NET
-// Copyright © 2007, 2008 Syterra Software Inc. This program is free software;
-// you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
-// This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+// Copyright © 2009 Syterra Software Inc. All rights reserved.
+// The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+// which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
+// to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
 using System.IO;
 using System.Text;
 using fitSharp.Machine.Application;
 
-namespace fit {
+namespace fitSharp.IO {
     public class FileSystemModel: FolderModel {
         
         private const int ourDefaultCodePage = 1252;
@@ -38,7 +37,7 @@ namespace fit {
             
             StreamReader reader;
             try {
-                FileStream file = new FileStream(thePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                var file = new FileStream(thePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 reader = new StreamReader(file, Encoding.GetEncoding(myCodePage));
             }
             catch (FileNotFoundException) {
@@ -50,14 +49,13 @@ namespace fit {
         }
 
         public string[] GetFiles(string thePath) {
-            if (Directory.Exists(thePath)) return Directory.GetFiles(thePath);
-            if (File.Exists(thePath)) return new string[] {thePath};
-            return new string[] {};
+            return Directory.Exists(thePath)
+                       ? Directory.GetFiles(thePath)
+                       : (File.Exists(thePath) ? new[] {thePath} : new string[] {});
         }
 
         public string[] GetFolders(string thePath) {
-            if (Directory.Exists(thePath)) return Directory.GetDirectories(thePath);
-            return new string[] {};
+            return !Directory.Exists(thePath) ? new string[] {} : Directory.GetDirectories(thePath);
         }
 
         public void CopyFile(string theInputPath, string theOutputPath) {
@@ -74,6 +72,6 @@ namespace fit {
             Console.Write(theMessage);
         }
 
-        private int myCodePage;
+        private readonly int myCodePage;
     }
 }

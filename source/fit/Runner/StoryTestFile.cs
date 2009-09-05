@@ -5,9 +5,9 @@
 
 using System;
 using System.IO;
-using fit.Model;
 using fitSharp.Fit.Model;
 using fitnesse.fitserver;
+using fitSharp.IO;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Model;
 
@@ -52,7 +52,7 @@ namespace fit.Runner {
             myFolderModel.CopyFile(myPath.Name, OutputPath);
         }
 
-        private void WriteResult(Parse theTables, TestStatus status, TimeSpan theElapsedTime) {
+        private void WriteResult(Cell theTables, TestStatus status, TimeSpan theElapsedTime) {
             string outputFile = OutputPath;
             var output = new StringWriter();
             output.Write(configuration.GetItem<Service.Service>().Parse<StoryTestString>(theTables).ToString());

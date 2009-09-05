@@ -4,7 +4,9 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System;
+using System.Collections.Generic;
 using fitSharp.Fit.Application;
+using fitSharp.IO;
 using fitSharp.Machine.Application;
 
 namespace fit.Runner {
@@ -18,7 +20,7 @@ namespace fit.Runner {
             return result;
         }
 
-        private int Run(Configuration configuration, string[] theArguments) {
+        private int Run(Configuration configuration, ICollection<string> theArguments) {
             ParseArguments(configuration, theArguments);
             myRunner = new SuiteRunner(configuration, myProgressReporter);
             myRunner.Run(new StoryTestFolder(configuration, new FileSystemModel()), string.Empty);
@@ -27,8 +29,8 @@ namespace fit.Runner {
 
         public string Results {get { return myRunner.TestStatus.CountDescription; }}
 
-        private static void ParseArguments(Configuration configuration, string[] theArguments) {
-            if (theArguments.Length == 0) {
+        private static void ParseArguments(Configuration configuration, ICollection<string> theArguments) {
+            if (theArguments.Count == 0) {
                 return;
             }
             string lastSwitch = string.Empty;

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using fitSharp.Fit.Model;
 using fitnesse.fitserver;
+using fitSharp.IO;
 using fitSharp.Machine.Application;
 
 namespace fit.Runner {

@@ -7,8 +7,8 @@
 using System;
 using System.IO;
 using System.Xml;
-using fit;
 using fitSharp.Fit.Model;
+using fitSharp.IO;
 
 namespace fitnesse.fitserver
 {
@@ -22,8 +22,7 @@ namespace fitnesse.fitserver
         {
             _folderModel = theFolderModel;
 
-            XmlWriterSettings settings = new XmlWriterSettings();
-            settings.Indent = true;
+            var settings = new XmlWriterSettings {Indent = true};
 
             if ("stdout".Equals(outputFileName))
                 _writer = XmlWriter.Create(Console.Out, settings);

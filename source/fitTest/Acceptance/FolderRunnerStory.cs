@@ -5,6 +5,7 @@
 
 using System;
 using fit.Runner;
+using fitSharp.IO;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Model;
 

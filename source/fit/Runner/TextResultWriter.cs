@@ -6,8 +6,8 @@
 
 using System;
 using System.IO;
-using fit;
 using fitSharp.Fit.Model;
+using fitSharp.IO;
 
 namespace fitnesse.fitserver
 {
@@ -15,12 +15,8 @@ namespace fitnesse.fitserver
     {
         private readonly TextWriter _writer;
 
-        public TextResultWriter(string outputFileName, FolderModel theFolderModel)
-        {
-            if ("stdout".Equals(outputFileName))
-                _writer = Console.Out;
-            else
-                _writer = theFolderModel.MakeWriter(outputFileName);
+        public TextResultWriter(string outputFileName, FolderModel theFolderModel) {
+            _writer = "stdout".Equals(outputFileName) ? Console.Out : theFolderModel.MakeWriter(outputFileName);
         }
 
         public void Close()
