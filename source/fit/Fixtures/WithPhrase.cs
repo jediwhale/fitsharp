@@ -22,21 +22,16 @@ namespace fit.Fixtures {
             if (ourNewIdentifier.Equals(restOfCells.Text)) {
                 return new WithPhrase(restOfCells).EvaluateNew(theFixture);
             }
-            else if (ourTypeIdentifier.Equals(restOfCells.Text)) {
+            if (ourTypeIdentifier.Equals(restOfCells.Text)) {
                 if (restOfCells.More == null) throw new TableStructureException("missing cells for with.");
-                //return new TypeName(restOfCells.More.Text).Type;
                 return theFixture.Processor.ParseTree<Type>(restOfCells.More);
             }
-            else if (ourCurrentIdentifier.Equals(restOfCells.Text)) {
+            if (ourCurrentIdentifier.Equals(restOfCells.Text)) {
                 return theFixture.SystemUnderTest;
             }
-            else {
-                FlowFixtureBase fixture = theFixture as FlowFixtureBase;
-                if (fixture == null) throw new TableStructureException("flow fixture required.");
-                object namedObject = fixture.NamedFixture(restOfCells.Text);
-                if (namedObject != null) return namedObject;
-                return fixture.ExecuteEmbeddedMethod(myCells, 0);
-            }
+            var fixture = theFixture as FlowFixtureBase;
+            if (fixture == null) throw new TableStructureException("flow fixture required.");
+            return fixture.NamedFixture(restOfCells.Text) ?? fixture.ExecuteEmbeddedMethod(myCells);
         }
 
         public object EvaluateNew(Fixture theFixture) {
@@ -49,6 +44,6 @@ namespace fit.Fixtures {
         private static readonly IdentifierName ourTypeIdentifier = new IdentifierName("type"); 
         private static readonly IdentifierName ourCurrentIdentifier = new IdentifierName("current"); 
 
-        private Parse myCells;
+        private readonly Parse myCells;
     }
 }

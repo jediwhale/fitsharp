@@ -5,6 +5,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System.Collections.Generic;
+using fitlibrary.exception;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
 
@@ -47,6 +48,14 @@ namespace fit.Model {
                 }
                 return result;
             }
+        }
+
+        public static CellRange GetMethodCellRange(Parse cells, int excludedCellCount) {
+            Parse restOfTheRow = cells.More;
+            if (restOfTheRow == null) {
+                throw new FitFailureException("Missing cells for embedded method");
+            }
+            return new CellRange(restOfTheRow, restOfTheRow.Size - excludedCellCount);
         }
     }
 }

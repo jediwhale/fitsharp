@@ -47,6 +47,7 @@
     <Compile Include="Fixtures\ConstraintFixture.cs" />
     <Compile Include="Fixtures\FileSystem.cs" />
     <Compile Include="Fixtures\FixtureResult.cs" />
+    <Compile Include="Fixtures\FlowKeywords.cs" />
     <Compile Include="Operators\ArrayMatchStrategy.cs" />
     <Compile Include="Operators\ComposeStoryTestString.cs" />
     <Compile Include="Operators\NamedMatchStrategy.cs" />
