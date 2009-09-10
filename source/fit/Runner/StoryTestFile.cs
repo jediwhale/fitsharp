@@ -17,7 +17,7 @@ namespace fit.Runner {
         private readonly StoryFileName myPath;
         private readonly StoryTestFolder myFolder;
         private readonly FolderModel myFolderModel;
-        private DateTime myStartTime;
+        private ElapsedTime elapsedTime;
         private ResultWriter resultWriter;
         private TestStatusHandler handler;
         private string myContent;
@@ -33,7 +33,7 @@ namespace fit.Runner {
         public string Name { get { return Path.GetFileName(myPath.Name); }}
 
         public void ExecuteStoryPage(ResultWriter resultWriter, TestStatusHandler handler) {
-            myStartTime = Clock.Instance.UtcNow;
+            elapsedTime = new ElapsedTime();
             this.resultWriter = resultWriter;
             this.handler = handler;
             if (IsTest) {
@@ -49,7 +49,7 @@ namespace fit.Runner {
         }
 
         private void WriteFile(Parse theTables, TestStatus status) {
-            WriteResult(theTables, status, Clock.Instance.UtcNow - myStartTime);
+            WriteResult(theTables, status, elapsedTime);
             var pageResult = new PageResult(myPath.Name);
             pageResult.Append(theTables.ToString());
             pageResult.TestStatus = status;
@@ -75,13 +75,13 @@ namespace fit.Runner {
             myFolderModel.CopyFile(myPath.Name, OutputPath);
         }
 
-        private void WriteResult(Cell theTables, TestStatus status, TimeSpan theElapsedTime) {
+        private void WriteResult(Cell theTables, TestStatus status, ElapsedTime elapsedTime) {
             string outputFile = OutputPath;
             var output = new StringWriter();
             output.Write(configuration.GetItem<Service.Service>().Parse<StoryTestString>(theTables).ToString());
             output.Close();
             myFolderModel.MakeFile(outputFile, output.ToString());
-            myFolder.ListFile(outputFile, status, theElapsedTime);
+            myFolder.ListFile(outputFile, status, elapsedTime);
         }
 
         private Parse Tables {

@@ -97,7 +97,6 @@
     <Compile Include="Runner\ResultWriter.cs" />
     <Compile Include="Runner\StoryTest.cs" />
     <Compile Include="Fixtures\UtilityFixtures.cs" />
-    <Compile Include="IO\RunTime.cs" />
     <Compile Include="Model\ListTree.cs" />
     <Compile Include="Model\ParseNode.cs" />
     <Compile Include="Model\ParseTree.cs" />

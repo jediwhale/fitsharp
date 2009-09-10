@@ -63,6 +63,7 @@
     <Compile Include="Fit\Operators\ParseSymbol.cs" />
     <Compile Include="Fit\Service\CellOperation.cs" />
     <Compile Include="Fit\Service\CellProcessor.cs" />
+    <Compile Include="IO\ElapsedTime.cs" />
     <Compile Include="IO\FileSystemModel.cs" />
     <Compile Include="IO\FolderModel.cs" />
     <Compile Include="IO\SocketModel.cs" />

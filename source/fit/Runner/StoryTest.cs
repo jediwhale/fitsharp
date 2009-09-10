@@ -9,6 +9,7 @@ using System.Threading;
 using fitSharp.Fit.Model;
 using fit.exception;
 using fitlibrary;
+using fitSharp.IO;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
 
@@ -94,7 +95,7 @@ namespace fit {
 
         public TestStatus DoTables(Parse tables) {
  			testStatus.Summary["run date"] = DateTime.Now;
-			testStatus.Summary["run elapsed time"] = new RunTime();
+			testStatus.Summary["run elapsed time"] = new ElapsedTime();
             Parse heading = tables.At(0, 0, 0);
             Fixture myFirstFixture;
             try {

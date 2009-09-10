@@ -77,13 +77,13 @@ namespace fit.Runner {
             }
         }
 
-        public void ListFile(string theFileName, TestStatus status, TimeSpan theElapsedTime) {
+        public void ListFile(string theFileName, TestStatus status, ElapsedTime elapsedTime) {
             IHaveFiles = true;
             if (myReport != null) {
-                myReport.ListFile(theFileName, status, theElapsedTime);
+                myReport.ListFile(theFileName, status, elapsedTime);
             }
             else {
-                myParent.ListFile(theFileName, status, theElapsedTime);
+                myParent.ListFile(theFileName, status, elapsedTime);
             }
         }
 
@@ -159,12 +159,12 @@ namespace fit.Runner {
 	        
             public string Content {get { return myReport.ToString(); }}
 	        
-            public void ListFile(string thePath, TestStatus status, TimeSpan theElapsedTime) {
+            public void ListFile(string thePath, TestStatus status, ElapsedTime elapsedTime) {
                 myReport.WriteLine("<br /><a href=\"{0}\">{0}</a> <span class=\"{2}\">{1}</span> in {3}",
                                    thePath.Substring(myReportPath.Length + 1).Replace('\\', '/'),
                                    status.CountDescription,
                                    status.Style,
-                                   theElapsedTime);
+                                   elapsedTime);
             }
 	        
             public void Finish() {

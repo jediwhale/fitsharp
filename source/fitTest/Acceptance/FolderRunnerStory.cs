@@ -8,6 +8,7 @@ using fit.Runner;
 using fitSharp.IO;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Model;
+using fitSharp.Test.Double.IO;
 
 namespace fit.Test.Acceptance {
     public class FolderRunnerStory: DomainAdapter {
@@ -20,7 +21,9 @@ namespace fit.Test.Acceptance {
         }
 
         public void Run(string[] theArguments) {
-            Clock.Instance = new TestClock();
+            TestClock.Instance.Now = new DateTime(2006, 12, 6, 13, 14, 15);
+            TestClock.Instance.UtcNow = new DateTime(2006, 12, 6, 13, 14, 15);
+            Clock.Instance = TestClock.Instance;
             shell.Run(theArguments);
             Clock.Instance = new Clock();
         }
@@ -29,15 +32,6 @@ namespace fit.Test.Acceptance {
 
         private class NullProgressReporter: ProgressReporter {
             public void Write(string theMessage) {}
-        }
-
-        private class TestClock: TimeKeeper {
-            public DateTime Now {
-                get { return new DateTime(2006, 12, 6, 13, 14, 15); }
-            }
-            public DateTime UtcNow {
-                get { return new DateTime(2006, 12, 6, 13, 14, 15); }
-            }
         }
     }
 }

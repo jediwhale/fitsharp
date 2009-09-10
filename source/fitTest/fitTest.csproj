@@ -159,6 +159,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\fitSharpTest\fitSharpTest.csproj">
+      <Project>{8C5E0127-E52C-46B7-B253-BD88F5F29034}</Project>
+      <Name>fitSharpTest</Name>
+    </ProjectReference>
     <ProjectReference Include="..\fitSharp\fitSharp.csproj">
       <Project>{204FF2CD-475F-4C6E-A6B5-6779364B33F8}</Project>
       <Name>fitSharp</Name>
