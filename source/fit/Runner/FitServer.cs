@@ -23,11 +23,10 @@ namespace fitnesse.fitserver
 
 		private Socket clientSocket;
 	    private SocketStream socketStream;
-		private bool verbose = false;
+		private bool verbose;
 		private string host;
 		private int port;
 		private string socketToken;
-		public FixtureListener fixtureListener;
 	    private bool IMaybeProcessingSuiteSetup = true;
 	    private Configuration configuration;
 
@@ -36,17 +35,17 @@ namespace fitnesse.fitserver
 		private const int PORT = 2;
 		private const int SOCKET_TOKEN = 3;
 		private const int DONE = 4;
+	    private static readonly IdentifierName ourSuiteSetupIdentifier = new IdentifierName("suitesetup");
 
 		public static int Main(string[] CommandLineArguments)
 		{
-			FitServer fitServer = new FitServer();
+			var fitServer = new FitServer();
 			fitServer.Run(CommandLineArguments);
 			return fitServer.ExitCode();
 		}
 
 		public FitServer() {
 		    Status = new TestStatus();
-		    fixtureListener = new TablePrintingFixtureListener(this);
 		}
 
 	    public FitServer(Configuration configuration, string host, int port, bool verbose) : this()
@@ -111,7 +110,7 @@ namespace fitnesse.fitserver
 
 		public void ParseAssemblyList(string path)
 		{
-			PathParser parser = new PathParser(path);
+			var parser = new PathParser(path);
 			foreach (string assemblyPath in parser.AssemblyPaths) {
                 if (assemblyPath == "defaultPath") continue;
                 configuration.GetItem<ApplicationUnderTest>().AddAssembly(assemblyPath.Replace("\"", string.Empty));
@@ -127,7 +126,7 @@ namespace fitnesse.fitserver
 			EstablishConnection();
 			ValidateConnection();
 
-			int errorCount = ProcessTestDocuments();
+			int errorCount = ProcessTestDocuments(WriteFitProtocol);
 			CloseConnection();
 			Exit();
 			return errorCount;
@@ -177,16 +176,14 @@ namespace fitnesse.fitserver
 			}
 		}
 
-		public int ProcessTestDocuments()
+		public int ProcessTestDocuments(WriteTestResult writer)
 		{
 			string document;
 
             while ((document = ReceiveDocument()).Length > 0)
 			{
 				WriteLogMessage("processing document of size: " + document.Length);
-				TestStatus currentStatus = ProcessTestDocument(document);
-				Status.TallyCounts(currentStatus);
-				WriteLogMessage("\tresults: " + currentStatus.CountDescription);
+				ProcessTestDocument(document, writer);
 		        IMaybeProcessingSuiteSetup = false;
 			}
 			WriteLogMessage("\ncompletion signal recieved");
@@ -199,32 +196,25 @@ namespace fitnesse.fitserver
 			return Status.FailCount;
 		}
 
-		private TestStatus ProcessTestDocument(string document)
-		{
-			return RunTest(document);
-		}
-
-		private TestStatus RunTest(string document)
+		private void ProcessTestDocument(string document, WriteTestResult writer)
 		{
 			try
 			{
                 Tree<Cell> result = configuration.GetItem<Service>().Compose(new StoryTestString(document));
                 var parse = result != null ? (Parse)result.Value : null;
-			    StoryTest storyTest = new StoryTest(parse, fixtureListener);
+			    var storyTest = new StoryTest(parse, writer);
 			    WriteLogMessage(parse.Leader);
                 if (ourSuiteSetupIdentifier.IsStartOf(parse.Leader) || IMaybeProcessingSuiteSetup)
                     storyTest.ExecuteOnConfiguration();
                 else
 				    storyTest.Execute();
-				return storyTest.TestStatus;
 			}
 			catch (Exception e)
 			{
-			    Fixture fixture = new Fixture();
-				Parse parse = new Parse("body", "Unable to parse input. Input ignored.", null, null);
-				fixture.Exception(parse, e);
-				fixtureListener.TableFinished(parse);
-				return fixture.TestStatus;
+			    var testStatus = new TestStatus();
+				var parse = new Parse("div", "Unable to parse input. Input ignored.", null, null);
+			    testStatus.MarkException(parse, e);
+                writer(parse, testStatus);
 			}
 		}
 
@@ -241,7 +231,7 @@ namespace fitnesse.fitserver
 
 		private static Socket SocketConnectionTo(string hostName, int port)
 		{
-			Socket clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+			var clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 		    clientSocket.Connect(hostName, port);
 			return clientSocket;
 		}
@@ -269,9 +259,9 @@ namespace fitnesse.fitserver
 			return Convert.ToInt32(encodedInteger);
 		}
 
-		private static string ReadFixedLengthString(StreamReader reader, int stringLength)
+		private static string ReadFixedLengthString(TextReader reader, int stringLength)
 		{
-			char[] numberCharacters = new char[stringLength];
+			var numberCharacters = new char[stringLength];
 			reader.Read(numberCharacters, 0, stringLength);
 
 			return new StringBuilder(stringLength).Append(numberCharacters).ToString();
@@ -294,29 +284,17 @@ namespace fitnesse.fitserver
 			return ReadFixedLengthString(reader, contentLength);
 		}
 
-	    private static readonly IdentifierName ourSuiteSetupIdentifier = new IdentifierName("suitesetup");
-	}
+	    private void WriteFitProtocol(Parse theTables, TestStatus status)
+	    {
+		    string testResultDocument = TablesToString(theTables);
+		    WriteLogMessage("\tTransmitting tables of length " + testResultDocument.Length);
+		    Transmit(Protocol.FormatDocument(testResultDocument));
 
-	public class TablePrintingFixtureListener : FixtureListener
-	{
-		private FitServer fitServer;
+		    WriteLogMessage("\tTest Document finished");
+		    Transmit(Protocol.FormatCounts(status));
 
-		public TablePrintingFixtureListener(FitServer fitServer)
-		{
-			this.fitServer = fitServer;
-		}
-
-		public void TableFinished(Parse finishedTable) {}
-
-		public void TablesFinished(Parse theTables, TestStatus status)
-		{
-			string testResultDocument = fitServer.TablesToString(theTables);
-			fitServer.WriteLogMessage("\tTransmitting tables of length " + testResultDocument.Length);
-			fitServer.Transmit(Protocol.FormatDocument(testResultDocument));
-
-			fitServer.WriteLogMessage("\tTest Document finished");
-			fitServer.Transmit(Protocol.FormatCounts(status));
-		}
-		
+            Status.TallyCounts(status);
+			WriteLogMessage("\tresults: " + status.CountDescription);
+        }
 	}
 }

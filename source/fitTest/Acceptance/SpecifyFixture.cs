@@ -10,20 +10,20 @@ using fitSharp.Fit.Model;
 
 namespace fit.Test.Acceptance {
     public class SpecifyFixture: Fixture {
+        private Parse resultTables;
 
         public override void DoTable(Parse theTable) {
             Parse embeddedTables = GetEmbeddedTables(theTable);
             Parse expectedCell = GetExpectedCell(theTable);
 
-            SpecifyListener listener = new SpecifyListener();
-            StoryTest storyTest = new StoryTest(embeddedTables, listener);
+            var storyTest = new StoryTest(embeddedTables, SpecifyWriter);
             storyTest.Execute();
 
-            SetEmbeddedTables(theTable, listener.Tables);
+            SetEmbeddedTables(theTable, resultTables);
 
             if (expectedCell != null) {
-                FixtureTable actual = new FixtureTable(listener.Tables);
-                FixtureTable expected = new FixtureTable(expectedCell.Parts);
+                var actual = new FixtureTable(resultTables);
+                var expected = new FixtureTable(expectedCell.Parts);
                 string differences = actual.Differences(expected);
                 if (differences.Length == 0) {
                     Right(expectedCell);
@@ -36,7 +36,7 @@ namespace fit.Test.Acceptance {
             }
         }
 
-        private Parse GetEmbeddedTables(Parse theTable) {
+        private static Parse GetEmbeddedTables(Parse theTable) {
             Parse secondRow = theTable.Parts.More;
             if (secondRow == null)
                 throw new FitFailureException("No second row.");
@@ -46,12 +46,12 @@ namespace fit.Test.Acceptance {
             return embeddedTable;
         }
 
-        private void SetEmbeddedTables(Parse theParentTable, Parse theTables) {
+        private static void SetEmbeddedTables(Parse theParentTable, Parse theTables) {
             Parse secondRow = theParentTable.Parts.More;
             secondRow.Parts.Parts = theTables;
         }
 
-        private Parse GetExpectedCell(Parse theTable) {
+        private static Parse GetExpectedCell(Parse theTable) {
             Parse secondRow = theTable.Parts.More;
             Parse expectedCell = secondRow.Parts.More;
             if (expectedCell == null && secondRow.More != null) {
@@ -64,25 +64,16 @@ namespace fit.Test.Acceptance {
             return expectedCell;
         }
 
-        private class SpecifyListener: FixtureListener {
-
-            public void TablesFinished(Parse theTables, TestStatus status) {}
-
-            public void TableFinished(Parse finishedTable) {
-                Parse newTable = finishedTable.Copy();
-                if (myTables == null) {
-                    myTables = newTable;
+        private void SpecifyWriter(Parse theTables, TestStatus status) {
+            for (Parse table = theTables; table != null; table = table.More) {
+                Parse newTable = table.Copy();
+                if (resultTables == null) {
+                    resultTables = newTable;
                 }
                 else {
-                    myTables.Last.More = newTable;
+                    resultTables.Last.More = newTable;
                 }
             }
-
-            public Parse Tables {get {return myTables;}}
-
-            private Parse myTables;
-
         }
-
     }
 }

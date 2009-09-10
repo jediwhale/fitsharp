@@ -13,3 +13,4 @@ mwiki/
 my*.*
 *.pdb
 testoutput/
+my*/

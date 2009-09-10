@@ -5,12 +5,15 @@
 
 using System.Collections;
 using System.Text;
+using fitSharp.Fit.Model;
 using NUnit.Framework;
 
 namespace fit.Test.NUnit {
     [TestFixture]
     public class ColumnFixtureTests
     {
+        private TestStatus resultStatus;
+
         [Test]
         public void TestNullCell()
         {
@@ -29,9 +32,13 @@ namespace fit.Test.NUnit {
             Parse parse = new Parse(builder.ToString());
 
             TestUtils.InitAssembliesAndNamespaces();
-            StoryTest test = new StoryTest(parse);
+            RunTest(parse);
+            TestUtils.CheckCounts(resultStatus, 1, 0, 0, 0);
+        }
+
+        private void RunTest(Parse parse) {
+            StoryTest test = new StoryTest(parse, (t,s) => { resultStatus = s;});
             test.Execute();
-            TestUtils.CheckCounts(test, 1, 0, 0, 0);
         }
 
         [Test]
@@ -47,9 +54,8 @@ namespace fit.Test.NUnit {
             Parse parse = new Parse(builder.ToString());
 
             TestUtils.InitAssembliesAndNamespaces();
-            StoryTest test = new StoryTest(parse);
-            test.Execute();
-            TestUtils.CheckCounts(test, 3, 0, 0, 0);
+            RunTest(parse);
+            TestUtils.CheckCounts(resultStatus, 3, 0, 0, 0);
         }
 
         [Test]
@@ -126,9 +132,8 @@ namespace fit.Test.NUnit {
             builder.Append("<tr><td>some value</td><td>this is a comment</td></tr>");
             builder.Append("</table>");
             Parse table = new Parse(builder.ToString());
-            StoryTest test = new StoryTest(table);
-            test.Execute();
-            TestUtils.CheckCounts(test, 0, 0, 0, 0);
+            RunTest(table);
+            TestUtils.CheckCounts(resultStatus, 0, 0, 0, 0);
         }
 
         [Test]

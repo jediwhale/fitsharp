@@ -14,6 +14,14 @@ using fitSharp.Machine.Model;
 namespace fit.Runner {
     public class StoryTestFile: StoryTestPage {
         private readonly Configuration configuration;
+        private readonly StoryFileName myPath;
+        private readonly StoryTestFolder myFolder;
+        private readonly FolderModel myFolderModel;
+        private DateTime myStartTime;
+        private ResultWriter resultWriter;
+        private TestStatusHandler handler;
+        private string myContent;
+        private Parse myTables;
 
         public StoryTestFile(Configuration configuration, string thePath, StoryTestFolder theFolder, FolderModel theFolderModel) {
             this.configuration = configuration;
@@ -24,19 +32,34 @@ namespace fit.Runner {
 
         public string Name { get { return Path.GetFileName(myPath.Name); }}
 
-        public StoryCommand MakeStoryCommand(ResultWriter writer) {
+        public void ExecuteStoryPage(ResultWriter resultWriter, TestStatusHandler handler) {
+            myStartTime = Clock.Instance.UtcNow;
+            this.resultWriter = resultWriter;
+            this.handler = handler;
             if (IsTest) {
-                return new StoryTest(Tables, new FileListener(this, writer));
+                new StoryTest(Tables, WriteFile).Execute();
+                return;
             }
             if (myPath.IsSuiteSetUp) {
-                return new StoryTest(RawTables, new FileListener(this, writer));
+                new StoryTest(RawTables, WriteFile).Execute();
+                return;
             }
-            return new Copy(this);
+            CopyFile();
+            handler(new TestStatus());
+        }
+
+        private void WriteFile(Parse theTables, TestStatus status) {
+            WriteResult(theTables, status, Clock.Instance.UtcNow - myStartTime);
+            var pageResult = new PageResult(myPath.Name);
+            pageResult.Append(theTables.ToString());
+            pageResult.TestStatus = status;
+            resultWriter.WritePageResult(pageResult);
+            handler(status);
         }
 
         public bool IsTest {
             get {
-                if (myPath.IsSetUp || myPath.IsTearDown) return false;
+                if (myPath.IsSetUp || myPath.IsTearDown || myPath.IsSuiteSetUp) return false;
                 return (RawTables != null);
             }
         }
@@ -88,47 +111,6 @@ namespace fit.Runner {
             get {
                 return Path.Combine(myFolder.OutputPath, Path.GetFileName(myPath.Name));
             }
-        }
-        private readonly StoryFileName myPath;
-        private readonly StoryTestFolder myFolder;
-        private readonly FolderModel myFolderModel;
-        private string myContent;
-        private Parse myTables;
-
-        private class Copy: StoryCommand {
-            public Copy(StoryTestFile theFile) {
-                myFile = theFile;
-            }
-            public void Execute() {
-                myFile.CopyFile();
-            }
-            public TestStatus TestStatus {get { return new TestStatus(); }}
-
-            private readonly StoryTestFile myFile;
-        }
-
-        private class FileListener: FixtureListener {
-            public FileListener(StoryTestFile theFile, ResultWriter resultWriter) {
-                myFile = theFile;
-                myStartTime = Clock.Instance.UtcNow;
-                this.resultWriter = resultWriter;
-                pageResult = new PageResult(theFile.myPath.Name);
-            }
-
-            public void TableFinished(Parse finishedTable) {}
-
-            public void TablesFinished(Parse theTables, TestStatus status) {
-                myFile.WriteResult(theTables, status, Clock.Instance.UtcNow - myStartTime);
-
-                pageResult.Append(theTables.ToString());
-                pageResult.TestStatus = status;
-                resultWriter.WritePageResult(pageResult);
-            }
-
-            private readonly StoryTestFile myFile;
-            private readonly DateTime myStartTime;
-            private readonly ResultWriter resultWriter;
-            private readonly PageResult pageResult;
         }
     }
 

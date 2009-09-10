@@ -20,9 +20,11 @@ namespace fit.Runner {
         void Finish();
     }
 
+    public delegate void TestStatusHandler(TestStatus status);
+
     public interface StoryTestPage {
         string Name { get; }
-        StoryCommand MakeStoryCommand(ResultWriter writer);
+        void ExecuteStoryPage(ResultWriter resultWriter, TestStatusHandler handler);
         bool IsTest { get; }
     }
     
@@ -86,15 +88,16 @@ namespace fit.Runner {
 
 	    private void ExecuteStoryPage(StoryTestPage page) {
 	        try {
-                StoryCommand command = page.MakeStoryCommand(resultWriter);
-	            command.Execute();
-	            myReporter.Write(command.TestStatus.Letter);
-	            TestStatus.TallyCounts(command.TestStatus);
+                page.ExecuteStoryPage(resultWriter, HandleTestStatus);
 	        }
 	        catch (Exception e) {
 	            myReporter.Write(e.ToString());
 	        }
 	    }
 
+        private void HandleTestStatus(TestStatus status) {
+	        myReporter.Write(status.Letter);
+	        TestStatus.TallyCounts(status);
+        }
 	}
 }

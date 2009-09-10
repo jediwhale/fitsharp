@@ -15,18 +15,20 @@ namespace fit.Test.NUnit
 	{
 		private string table;
 	    private StoryTest myStoryTest;
+	    private Parse finishedTable;
+	    private TestStatus resultStatus;
 
 		[SetUp]
 		public void SetUp()
 		{
 			TestUtils.InitAssembliesAndNamespaces();
-			StringBuilder builder = new StringBuilder();
+			var builder = new StringBuilder();
 			builder.Append("<table>");
 			builder.Append("<tr><td colspan='5'>ExampleTableFixture</td></tr>");
 			builder.Append("<tr><td>0,0</td><td>0,1</td><td>0,2</td><td>37</td><td></td></tr>");
 			builder.Append("</table>");
 			table = builder.ToString();
-		    myStoryTest = new StoryTest(new Parse(table), new SimpleFixtureListener());
+		    myStoryTest = new StoryTest(new Parse(table), SimpleWriter);
 		    myStoryTest.Execute();
 		}
 
@@ -36,29 +38,9 @@ namespace fit.Test.NUnit
 			ExampleTableFixture.ResetStatics();
 		}
 
-		private class SimpleFixtureListener : FixtureListener
-		{
-			private Parse finishedTable;
-
-			public Parse FinishedTable
-			{
-				get { return finishedTable; }
-				set { finishedTable = value; }
-			}
-
-			public void TableFinished(Parse finishedTable)
-			{
-				this.finishedTable = finishedTable;
-			}
-
-			public void TablesFinished(Parse theTables, TestStatus status)
-			{
-			}
-		}
-
-		private Parse getFinishedTable()
-		{
-			return ((SimpleFixtureListener)myStoryTest.Listener).FinishedTable;
+		private void SimpleWriter(Parse theTables, TestStatus status) {
+			finishedTable = theTables;
+		    resultStatus = status;
 		}
 
 		[Test]
@@ -94,24 +76,24 @@ namespace fit.Test.NUnit
 		[Test]
 		public void TestRight()
 		{
-			Assert.AreEqual(1, myStoryTest.TestStatus.GetCount(CellAttributes.RightStatus));
-            Assert.AreEqual(CellAttributes.RightStatus, getFinishedTable().At(0,1,0).GetAttribute(CellAttributes.StatusKey));
+			Assert.AreEqual(1, resultStatus.GetCount(CellAttributes.RightStatus));
+            Assert.AreEqual(CellAttributes.RightStatus, finishedTable.At(0,1,0).GetAttribute(CellAttributes.StatusKey));
 		}
 
 		[Test]
 		public void TestWrong()
 		{
-			Assert.AreEqual(2, myStoryTest.TestStatus.GetCount(CellAttributes.WrongStatus));
-            Assert.AreEqual(CellAttributes.WrongStatus, getFinishedTable().At(0,1,1).GetAttribute(CellAttributes.StatusKey));
-            Assert.AreEqual(CellAttributes.WrongStatus, getFinishedTable().At(0,1,2).GetAttribute(CellAttributes.StatusKey));
-			Assert.IsTrue(getFinishedTable().At(0,1,2).Body.IndexOf("actual") > 0);
+			Assert.AreEqual(2, resultStatus.GetCount(CellAttributes.WrongStatus));
+            Assert.AreEqual(CellAttributes.WrongStatus, finishedTable.At(0,1,1).GetAttribute(CellAttributes.StatusKey));
+            Assert.AreEqual(CellAttributes.WrongStatus, finishedTable.At(0,1,2).GetAttribute(CellAttributes.StatusKey));
+			Assert.IsTrue(finishedTable.At(0,1,2).Body.IndexOf("actual") > 0);
 		}
 
 		[Test]
 		public void TestIgnore()
 		{
-			Assert.AreEqual(1, myStoryTest.TestStatus.GetCount(CellAttributes.IgnoreStatus));
-            Assert.AreEqual(CellAttributes.IgnoreStatus, getFinishedTable().At(0,1,3).GetAttribute(CellAttributes.StatusKey));
+			Assert.AreEqual(1, resultStatus.GetCount(CellAttributes.IgnoreStatus));
+            Assert.AreEqual(CellAttributes.IgnoreStatus, finishedTable.At(0,1,3).GetAttribute(CellAttributes.StatusKey));
 		}
 
 		[Test]

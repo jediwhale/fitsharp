@@ -16,6 +16,8 @@ namespace fit.Test.NUnit {
     [TestFixture]
     public class RowFixtureTest
     {
+        private TestStatus resultStatus;
+
         public void TestExpectBlankOrNullAllCorrect()
         {
             TestUtils.InitAssembliesAndNamespaces();
@@ -75,10 +77,14 @@ namespace fit.Test.NUnit {
         public void DoTable(Parse tables, object[] businessObjects, int right, int wrong, int ignores, int exceptions)
         {
             BusinessObjectRowFixture.objects = businessObjects;
-            StoryTest test = new StoryTest(tables);
-            test.Execute();
+            RunTest(tables);
 
-            TestUtils.CheckCounts(test, right, wrong, ignores, exceptions);
+            TestUtils.CheckCounts(resultStatus, right, wrong, ignores, exceptions);
+        }
+
+        private void RunTest(Parse parse) {
+            StoryTest test = new StoryTest(parse, (t,s) => { resultStatus = s;});
+            test.Execute();
         }
 
         [Test]
@@ -100,12 +106,11 @@ namespace fit.Test.NUnit {
                                                    new BusinessObject(new string[] {"number3"})
                                                };
 
-            StoryTest test = new StoryTest(parse);
-            test.Execute();
+            RunTest(parse);
             Assert.IsTrue(parse.ToString().IndexOf("number1") > 0);
             Assert.IsTrue(parse.ToString().IndexOf("number2") > 0);
             Assert.IsTrue(parse.ToString().IndexOf("number3") > 0);
-            TestUtils.CheckCounts(test, 1, 2, 0, 0);
+            TestUtils.CheckCounts(resultStatus, 1, 2, 0, 0);
         }
 
         [Test]
@@ -127,12 +132,11 @@ namespace fit.Test.NUnit {
                                                    new BusinessObject(new string[] {"number1"}),
                                                };
 
-            StoryTest test = new StoryTest(parse);
-            test.Execute();
+            RunTest(parse);
             Assert.IsTrue(parse.ToString().IndexOf("number1") > 0);
             Assert.IsTrue(parse.ToString().IndexOf("number2") > 0);
             Assert.IsTrue(parse.ToString().IndexOf("number3") > 0);
-            TestUtils.CheckCounts(test, 1, 2, 0, 0);
+            TestUtils.CheckCounts(resultStatus, 1, 2, 0, 0);
         }
 
         [Test]
@@ -151,11 +155,10 @@ namespace fit.Test.NUnit {
             PeopleLoaderFixture.people.Clear();
             PeopleLoaderFixture.people.Add(new Person("Nigel", "Tufnel"));
             Parse tables = new Parse(builder.ToString());
-            StoryTest test = new StoryTest(tables);
-            test.Execute();
+            RunTest(tables);
             Assert.IsTrue(tables.ToString().IndexOf("Tuf..") > -1);
             Assert.IsFalse(tables.ToString().IndexOf("Tufnel") > -1);
-            TestUtils.CheckCounts(test, 2, 0, 0, 0);
+            TestUtils.CheckCounts(resultStatus, 2, 0, 0, 0);
         }
 
         private string rowFixtureName = typeof (NewRowFixtureDerivative).Name;
@@ -171,11 +174,14 @@ namespace fit.Test.NUnit {
         }
 
         [Test]
-        public void TestZeroExpectedZeroActual()
-        {
-            myStoryTest = new StoryTest(table);
-            myStoryTest.Execute();
+        public void TestZeroExpectedZeroActual() {
+            RunTest();
             VerifyCounts(0, 0, 0, 0);
+        }
+
+        private void RunTest() {
+            myStoryTest = new StoryTest(table, (t,s) => { resultStatus = s;});
+            myStoryTest.Execute();
         }
 
         [Test]
@@ -184,8 +190,7 @@ namespace fit.Test.NUnit {
             string name = "Joe";
             AddQueryValue(new RowFixturePerson(name));
             AddRow(new string[] {name});
-            myStoryTest = new StoryTest(table);
-            myStoryTest.Execute();
+            RunTest();
             VerifyCounts(1, 0, 0, 0);
             AssertTextInTag(table.At(0, 2, 0), CellAttributes.RightStatus);
         }
@@ -198,8 +203,7 @@ namespace fit.Test.NUnit {
             string address = "First Street";
             AddQueryValue(new RowFixturePerson(name, address));
             AddRow(new string[] {name, address});
-            myStoryTest = new StoryTest(table);
-            myStoryTest.Execute();
+            RunTest();
             VerifyCounts(2, 0, 0, 0);
             AssertTextInTag(table.At(0, 2, 0), CellAttributes.RightStatus);
             AssertTextInTag(table.At(0, 2, 1), CellAttributes.RightStatus);
@@ -214,8 +218,7 @@ namespace fit.Test.NUnit {
             AddRow(new string[] {"Joe", "Second Street", "234-2345"});
             AddQueryValue(new RowFixturePerson("Joe", "First Street", "123-1234"));
             AddQueryValue(new RowFixturePerson("Joe", "Second Street", "234-2345"));
-            myStoryTest = new StoryTest(table);
-            myStoryTest.Execute();
+            RunTest();
             VerifyCounts(6, 0, 0, 0);
         }
 
@@ -228,8 +231,7 @@ namespace fit.Test.NUnit {
             AddRow(new string[] {"Joe", "Second Street", "234-2345"});
             AddQueryValue(new RowFixturePerson("Joe", "First Street", "123-1234"));
             AddQueryValue(new RowFixturePerson("Joe", "Second Street", "234-2346"));
-            myStoryTest = new StoryTest(table);
-            myStoryTest.Execute();
+            RunTest();
             VerifyCounts(5, 1, 0, 0);
         }
 
@@ -240,8 +242,7 @@ namespace fit.Test.NUnit {
             string name = "Joe";
             AddQueryValue(new RowFixturePerson(name, "First Street"));
             AddRow(new string[] {name, "Second Street"});
-            myStoryTest = new StoryTest(table);
-            myStoryTest.Execute();
+            RunTest();
             VerifyCounts(1, 1, 0, 0);
             AssertTextInTag(table.At(0, 2, 0), CellAttributes.RightStatus);
             AssertTextInTag(table.At(0, 2, 1), CellAttributes.WrongStatus);
@@ -252,8 +253,7 @@ namespace fit.Test.NUnit {
         {
             AddQueryValue(new RowFixturePerson("Joe"));
             AddRow(new string[] {"John"});
-            myStoryTest = new StoryTest(table);
-            myStoryTest.Execute();
+            RunTest();
             VerifyCounts(0, 2, 0, 0);
             AssertTextInTag(table.At(0, 2, 0), CellAttributes.WrongStatus);
             AssertTextInBody(table.At(0, 2, 0), "missing");
@@ -268,8 +268,7 @@ namespace fit.Test.NUnit {
             AddQueryValue(new RowFixturePerson("Joe"));
             AddRow(new string[] {"Joe"});
             AddRow(new string[] {"Joe"});
-            myStoryTest = new StoryTest(table);
-            myStoryTest.Execute();
+            RunTest();
             VerifyCounts(2, 0, 0, 0);
         }
 
@@ -283,8 +282,7 @@ namespace fit.Test.NUnit {
             AddRow(new string[] {"A", "1"});
             AddRow(new string[] {"A", "2"});
             AddRow(new string[] {"B", "1"});
-            myStoryTest = new StoryTest(table);
-            myStoryTest.Execute();
+            RunTest();
             VerifyCounts(6, 0, 0, 0);
         }
 
@@ -295,8 +293,7 @@ namespace fit.Test.NUnit {
             AddQueryValue(new RowFixturePerson("Jane"));
             AddRow(new string[] {"Joe"});
             AddRow(new string[] {"Jane"});
-            myStoryTest = new StoryTest(table);
-            myStoryTest.Execute();
+            RunTest();
             VerifyCounts(2, 0, 0, 0);
         }
 
@@ -307,8 +304,7 @@ namespace fit.Test.NUnit {
             AddQueryValue(new RowFixturePerson("Jane"));
             AddRow(new string[] {"Jane"});
             AddRow(new string[] {"Joe"});
-            myStoryTest = new StoryTest(table);
-            myStoryTest.Execute();
+            RunTest();
             VerifyCounts(2, 0, 0, 0);
         }
 
@@ -319,8 +315,7 @@ namespace fit.Test.NUnit {
             AddQueryValue(new RowFixturePerson("Jane"));
             AddRow(new string[] {"Joe"});
             AddRow(new string[] {"Susan"});
-            myStoryTest = new StoryTest(table);
-            myStoryTest.Execute();
+            RunTest();
             VerifyCounts(1, 2, 0, 0);
         }
 
@@ -331,8 +326,7 @@ namespace fit.Test.NUnit {
             AddQueryValue(new RowFixturePerson("Jane"));
             AddRow(new string[] {"Susan"});
             AddRow(new string[] {"Joe"});
-            myStoryTest = new StoryTest(table);
-            myStoryTest.Execute();
+            RunTest();
             VerifyCounts(1, 2, 0, 0);
         }
 
@@ -340,8 +334,7 @@ namespace fit.Test.NUnit {
         public void TestOneMissing()
         {
             AddRow(new string[] {"Joe"});
-            myStoryTest = new StoryTest(table);
-            myStoryTest.Execute();
+            RunTest();
             VerifyCounts(0, 1, 0, 0);
             AssertTextInTag(table.At(0, 2, 0), CellAttributes.WrongStatus);
             AssertTextInBody(table.At(0, 2, 0), "missing");
@@ -352,8 +345,7 @@ namespace fit.Test.NUnit {
         {
             AddColumn(table, "address");
             AddRow(new string[] {"Joe", "First Street"});
-            myStoryTest = new StoryTest(table);
-            myStoryTest.Execute();
+            RunTest();
             VerifyCounts(0, 1, 0, 0);
             AssertTextInTag(table.At(0, 2, 0), CellAttributes.WrongStatus);
             AssertTextInBody(table.At(0, 2, 0), "missing");
@@ -366,8 +358,7 @@ namespace fit.Test.NUnit {
             AddRow(new string[] {"Lilian", "First Street"});
             AddRow(new string[] {"Joe", "Second Street"});
             AddQueryValue(new RowFixturePerson("Lilian", "First Street"));
-            myStoryTest = new StoryTest(table);
-            myStoryTest.Execute();
+            RunTest();
             VerifyCounts(2, 1, 0, 0);
             AssertTextInTag(table.At(0, 2, 0), CellAttributes.RightStatus);
             AssertTextInTag(table.At(0, 2, 1), CellAttributes.RightStatus);
@@ -383,8 +374,7 @@ namespace fit.Test.NUnit {
             AddRow(new string[] {"Joe", "Second Street"});
             AddRow(new string[] {"Lilian", "First Street"});
             AddQueryValue(new RowFixturePerson("Lilian", "First Street"));
-            myStoryTest = new StoryTest(table);
-            myStoryTest.Execute();
+            RunTest();
             VerifyCounts(2, 1, 0, 0);
             AssertTextInTag(table.At(0, 2, 0), CellAttributes.WrongStatus);
             AssertTextInBody(table.At(0, 2, 0), "missing");
@@ -419,8 +409,7 @@ namespace fit.Test.NUnit {
                                                    "\n<tr>\n<td class=\"fail\"><span class=\"fit_grey\">1</span> <span class=\"fit_label\">surplus</span></td>\n<td><span class=\"fit_grey\">null</span></td>\n<td><span class=\"fit_grey\">Jones</span></td></tr>" +
                                                    "</table>";
             Parse tables = new Parse(loaderFixtureHtml + inspectorFixtureHtml);
-            myStoryTest = new StoryTest(tables);
-            myStoryTest.Execute();
+            RunTest(tables);
             Assert.AreEqual(loaderFixtureHtml + processedInspectorFixtureHtml, tables.ToString());
         }
 
@@ -461,8 +450,7 @@ namespace fit.Test.NUnit {
                               "<tr><td class=\"pass\">a,b,c</td></tr>" +
                               "</table>";
             Parse tables = new Parse(setUpTableHtml + tableHtml);
-            myStoryTest = new StoryTest(tables);
-            myStoryTest.Execute();
+            RunTest(tables);
             var x = tables.ToString();
             Assert.AreEqual(processedSetUpTableHtml + expected, tables.ToString());
         }
@@ -482,7 +470,7 @@ namespace fit.Test.NUnit {
 
         private void VerifyCounts(int right, int wrong, int exceptions, int ignores)
         {
-            TestUtils.CheckCounts(myStoryTest, right, wrong, exceptions, ignores);
+            TestUtils.CheckCounts(resultStatus, right, wrong, exceptions, ignores);
         }
 
         private void AddQueryValue(object obj)

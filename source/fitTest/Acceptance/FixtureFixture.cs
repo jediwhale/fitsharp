@@ -15,22 +15,16 @@ namespace fit.Test.Acceptance {
         protected const string INSERT_ROW = "I";
 
         protected static TestStatus ourEmbeddedCounts;
-        protected static StoryTest ourEmbeddedStoryTest;
 
         protected Parse myEmbeddedRow;
         protected Parse myEmbeddedTable;
 
         public FixtureFixture() {
             ourEmbeddedCounts = new TestStatus();
-            ourEmbeddedStoryTest = new StoryTest();
-            ourEmbeddedStoryTest.TestStatus.Summary["run date"] = DateTime.Now;
-            ourEmbeddedStoryTest.TestStatus.Summary["run elapsed time"] = new RunTime();
         }
 
         public override void DoTable(Parse theTable) {
-            //FixtureFactory original = FixtureFactory;
             ProcessFirstTable(theTable);
-            //FixtureFactory = original;
         }
 
         protected void ProcessFirstTable(Parse theTable) {
@@ -146,12 +140,8 @@ namespace fit.Test.Acceptance {
             Parse heading = theTable.At(0, 0, 0);
             if (heading != null) {
                 try {
-                    //Fixture fixture = FixtureFactory.LoadFixture(theTable);
                     Fixture fixture = LoadFixture(heading.Text);
-                    //(Fixture) (Class.forName(heading.text()).newInstance());
                     RunFixture(theTable, fixture);
-                    //			} catch (ClassNotFoundException ex) {
-                    //				failure(heading, ": Unknown Class");
                 } catch (Exception e) {
                     Exception(heading, e);
                 }
@@ -160,7 +150,6 @@ namespace fit.Test.Acceptance {
 
         private void RunFixture(Parse theTables, Fixture theFixture) {
             theFixture.Processor = Processor;
-            theFixture.TestStatus = ourEmbeddedStoryTest.TestStatus;
             theFixture.DoTable(theTables);
         }
 

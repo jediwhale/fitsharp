@@ -71,11 +71,11 @@ namespace fit.Test.NUnit {
             return status;
         }
 
-        public static void CheckCounts(StoryTest test, int right, int wrong, int ignore, int exception) {
-            Assert.AreEqual(right, test.TestStatus.GetCount(CellAttributes.RightStatus));
-            Assert.AreEqual(wrong, test.TestStatus.GetCount(CellAttributes.WrongStatus));
-            Assert.AreEqual(ignore, test.TestStatus.GetCount(CellAttributes.IgnoreStatus));
-            Assert.AreEqual(exception, test.TestStatus.GetCount(CellAttributes.ExceptionStatus));
+        public static void CheckCounts(TestStatus status, int right, int wrong, int ignore, int exception) {
+            Assert.AreEqual(right, status.GetCount(CellAttributes.RightStatus));
+            Assert.AreEqual(wrong, status.GetCount(CellAttributes.WrongStatus));
+            Assert.AreEqual(ignore, status.GetCount(CellAttributes.IgnoreStatus));
+            Assert.AreEqual(exception, status.GetCount(CellAttributes.ExceptionStatus));
         }
 
         public static void VerifyCounts(Fixture fixture, int right, int wrong, int ignores, int exceptions) {

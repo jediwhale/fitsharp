@@ -6,6 +6,7 @@
 using System;
 using System.IO;
 using fit;
+using fit.Service;
 using fitSharp.Fit.Model;
 using fitSharp.IO;
 using fitSharp.Machine.Application;
@@ -17,7 +18,6 @@ namespace fitnesse.fitserver
 		public string pageName;
 		public bool usingDownloadedPaths = true;
 		private FitServer fitServer;
-		private FixtureListener fixtureListener;
 		public string host;
 		public int port;
 		public bool debug;
@@ -28,19 +28,19 @@ namespace fitnesse.fitserver
 		public TextWriter output = Console.Out;
 		public string assemblyPath;
 	    public string suiteFilter;
+	    private Configuration configuration;
 
 	    public int Run(string[] commandLineArguments, Configuration configuration, ProgressReporter reporter) {
+	        this.configuration = configuration;
 			if(!ParseArgs(configuration, commandLineArguments))
 			{
 				PrintUsage();
 				return ExitCode();
 			}
-			fixtureListener = new TestRunnerFixtureListener(this, configuration);
-			fitServer.fixtureListener = fixtureListener;
 			fitServer.EstablishConnection(MakeHttpRequest());
 			fitServer.ValidateConnection();
 			AddAssemblies();
-			fitServer.ProcessTestDocuments();
+			fitServer.ProcessTestDocuments(WriteTestRunner);
 			HandleFinalCount(fitServer.Status);
 			fitServer.CloseConnection();
 			fitServer.Exit();
@@ -180,6 +180,18 @@ namespace fitnesse.fitserver
 				output.WriteLine("Assertions: " + summary.CountDescription);
 			}
 			resultWriter.WriteFinalCount(summary);
+		}
+
+		private void WriteTestRunner(Parse theTables, TestStatus status)
+		{
+            string data = configuration.GetItem<Service>().Parse<StoryTestString>(theTables).ToString();
+			int indexOfFirstLineBreak = data.IndexOf("\n");
+			string pageTitle = data.Substring(0, indexOfFirstLineBreak);
+			data = data.Substring(indexOfFirstLineBreak + 1);
+			var currentPageResult = new PageResult(pageTitle);
+			currentPageResult.Append(data);
+			currentPageResult.TestStatus = status;
+			AcceptResults(currentPageResult);
 		}
 	}
 }

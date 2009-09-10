@@ -108,8 +108,6 @@
     <Compile Include="Operators\RuntimeFlow.cs" />
     <Compile Include="Operators\ComposeTable.cs" />
     <Compile Include="Parser\HtmlParser.cs" />
-    <Compile Include="Runner\FixtureListener.cs" />
-    <Compile Include="Runner\NullFixtureListener.cs" />
     <Compile Include="Exception\AbandonStoryTestException.cs" />
     <Compile Include="Fixtures\FitVersionFixture.cs" />
     <Compile Include="Fixtures\Fixture.cs" />
@@ -123,7 +121,6 @@
     <Compile Include="Runner\SuiteRunner.cs" />
     <Compile Include="Runner\TestPageDecoration.cs" />
     <Compile Include="Runner\TestRunner.cs" />
-    <Compile Include="Runner\TestRunnerFixtureListener.cs" />
     <Compile Include="Runner\TextResultWriter.cs" />
     <Compile Include="Runner\XmlResultWriter.cs" />
   </ItemGroup>

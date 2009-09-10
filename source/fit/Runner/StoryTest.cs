@@ -15,33 +15,31 @@ using fitSharp.Machine.Engine;
 namespace fit {
     public interface StoryCommand {
         void Execute();
-        TestStatus TestStatus { get; }
     }
 
     public class StoryTest: StoryCommand {
-        public TestStatus TestStatus { get; private set; }
+        private WriteTestResult writer;
+        private Parse resultTables;
 
-        public FixtureListener Listener { get; private set; }
         public Parse Tables { get; private set; }
 
         public static Parse TestResult(Parse theTest) {
-            var listener = new SpecifyListener();
-            var story = new StoryTest(theTest, listener);
+            var story = new StoryTest(theTest);
+            story.writer = story.SaveTestResult;
             story.Execute();
-            return listener.Tables;
+            return story.resultTables;
         }
 
         public StoryTest() {
-            Listener = new NullFixtureListener();
-            TestStatus = new TestStatus();
+            writer = (t, s) => {};
         }
 
         public StoryTest(Parse theTables): this() {
             Tables = theTables;
         }
 
-        public StoryTest(Parse theTables, FixtureListener theListener): this(theTables) {
-            Listener = theListener;
+        public StoryTest(Parse theTables, WriteTestResult writer): this(theTables) {
+            this.writer = writer;
         }
 
         public void Execute() {
@@ -67,27 +65,51 @@ namespace fit {
         }
 
         private void DoTables() {
- 			TestStatus.Summary["run date"] = DateTime.Now;
-			TestStatus.Summary["run elapsed time"] = new RunTime();
-            Parse heading = Tables.At(0, 0, 0);
-            try {
-                object instance = Fixture.LoadClass(Tables.At(0, 0, 0).Text);
-                myFirstFixture = instance as Fixture;
-                if (myFirstFixture == null) {
-                    myFirstFixture = new DoFixture(instance);
+            new ExecuteStoryTest(writer).DoTables(Tables);
+        }
+
+        private void SaveTestResult(Parse theTables, TestStatus status) {
+            for (Parse table = theTables; table != null; table = table.More) {
+                Parse newTable = table.Copy();
+                if (resultTables == null) {
+                    resultTables = newTable;
+                }
+                else {
+                    resultTables.Last.More = newTable;
                 }
             }
-            catch (Exception e) {
-                myFirstFixture = new Fixture();
-                myFirstFixture.TestStatus = TestStatus;
-                TestStatus.MarkException(heading, e);
-                Listener.TableFinished(Tables);
-                Listener.TablesFinished(Tables, TestStatus);
-                return;
+        }
+    }
+
+    public delegate void WriteTestResult(Parse tables, TestStatus status);
+
+    public class ExecuteStoryTest {
+        private readonly WriteTestResult writer;
+        private readonly TestStatus testStatus;
+
+        public ExecuteStoryTest(WriteTestResult writer) {
+            this.writer = writer;
+            testStatus = new TestStatus();
+        }
+
+        public TestStatus DoTables(Parse tables) {
+ 			testStatus.Summary["run date"] = DateTime.Now;
+			testStatus.Summary["run elapsed time"] = new RunTime();
+            Parse heading = tables.At(0, 0, 0);
+            Fixture myFirstFixture;
+            try {
+                object instance = Fixture.LoadClass(tables.At(0, 0, 0).Text);
+                myFirstFixture = instance as Fixture ?? new DoFixture(instance);
             }
-            myFirstFixture.TestStatus = TestStatus;
+            catch (Exception e) {
+                testStatus.MarkException(heading, e);
+                writer(tables, testStatus);
+                return testStatus;
+            }
+            myFirstFixture.TestStatus = testStatus;
             myFirstFixture.Processor = Context.Configuration.GetItem<Service.Service>();
-            DoTables(myFirstFixture, Tables);
+            DoTables(myFirstFixture, tables);
+            return testStatus;
         }
 
 		private void DoTables(Fixture firstFixture, Parse theTables) {
@@ -98,7 +120,7 @@ namespace fit {
                     try {
                         try {
                             Parse heading = table.At(0, 0, 0);
-                            if (heading != null && !TestStatus.IsAbandoned) {
+                            if (heading != null && !testStatus.IsAbandoned) {
                                 if (flowFixture == null) {
                                     object instance = Fixture.LoadClass(heading.Text);
                                     var activeFixture = instance as Fixture ?? new DoFixture(instance);
@@ -113,20 +135,18 @@ namespace fit {
                             }
                         }
                         catch (Exception e) {
-                            TestStatus.MarkException(table.At(0, 0, 0), e);
+                            testStatus.MarkException(table.At(0, 0, 0), e);
                         }
                     }
                     catch (AbandonStoryTestException) {}
-                    Listener.TableFinished(table);
                     tableCount++;
                 }
                 if (flowFixture != null) flowFixture.DoTearDown(theTables);
             }
             catch (Exception e) {
-                TestStatus.MarkException(theTables.Parts.Parts, e);
-                Listener.TableFinished(theTables);
+                testStatus.MarkException(theTables.Parts.Parts, e);
             }
-			Listener.TablesFinished(theTables, TestStatus);
+			writer(theTables, testStatus);
 		}
 
         public static void DoTable(Parse table, Fixture activeFixture, bool inFlow) {
@@ -134,28 +154,6 @@ namespace fit {
             if (activeFlowFixture != null) activeFlowFixture.DoSetUp(table);
             activeFixture.DoTable(table);
             if (activeFlowFixture != null && !inFlow) activeFlowFixture.DoTearDown(table);
-        }
-
-        private Fixture myFirstFixture;
-
-        private class SpecifyListener: FixtureListener {
-
-            public void TablesFinished(Parse theTables, TestStatus status) {}
-
-            public void TableFinished(Parse finishedTable) {
-                Parse newTable = finishedTable.Copy();
-                if (myTables == null) {
-                    myTables = newTable;
-                }
-                else {
-                    myTables.Last.More = newTable;
-                }
-            }
-
-            public Parse Tables {get {return myTables;}}
-
-            private Parse myTables;
-
         }
     }
 }

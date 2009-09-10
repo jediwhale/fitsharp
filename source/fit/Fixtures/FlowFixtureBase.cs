@@ -158,7 +158,7 @@ namespace fitlibrary {
             var restOfTable = new Parse("table", "", theRestOfTheRows, null);
             theFixture.Prepare(this, restOfTable);
             try {
-                StoryTest.DoTable(restOfTable, theFixture, false);
+                ExecuteStoryTest.DoTable(restOfTable, theFixture, false);
             }
             catch (Exception e) {
                 TestStatus.MarkException(theRestOfTheRows.Parts, e);
