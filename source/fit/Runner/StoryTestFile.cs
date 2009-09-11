@@ -48,8 +48,9 @@ namespace fit.Runner {
             handler(new TestStatus());
         }
 
-        private void WriteFile(Parse theTables, TestStatus status) {
-            WriteResult(theTables, status, elapsedTime);
+        private void WriteFile(Tree<Cell> theTables, TestStatus status) {
+            var tables = (Parse) theTables.Value;
+            WriteResult(tables, status, elapsedTime);
             var pageResult = new PageResult(myPath.Name);
             pageResult.Append(theTables.ToString());
             pageResult.TestStatus = status;

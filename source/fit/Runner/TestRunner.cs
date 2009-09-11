@@ -10,6 +10,7 @@ using fit.Service;
 using fitSharp.Fit.Model;
 using fitSharp.IO;
 using fitSharp.Machine.Application;
+using fitSharp.Machine.Model;
 
 namespace fitnesse.fitserver
 {
@@ -182,9 +183,10 @@ namespace fitnesse.fitserver
 			resultWriter.WriteFinalCount(summary);
 		}
 
-		private void WriteTestRunner(Parse theTables, TestStatus status)
+		private void WriteTestRunner(Tree<Cell> theTables, TestStatus status)
 		{
-            string data = configuration.GetItem<Service>().Parse<StoryTestString>(theTables).ToString();
+            var tables = (Parse) theTables.Value;
+            string data = configuration.GetItem<Service>().Parse<StoryTestString>(tables).ToString();
 			int indexOfFirstLineBreak = data.IndexOf("\n");
 			string pageTitle = data.Substring(0, indexOfFirstLineBreak);
 			data = data.Substring(indexOfFirstLineBreak + 1);

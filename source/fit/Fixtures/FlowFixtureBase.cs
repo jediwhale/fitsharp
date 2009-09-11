@@ -11,12 +11,13 @@ using fit.Fixtures;
 using fit.Model;
 using fitSharp.Fit.Exception;
 using fitSharp.Fit.Model;
+using fitSharp.Fit.Service;
 using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
 
 namespace fitlibrary {
 
-	public abstract class FlowFixtureBase: Fixture {
+	public abstract class FlowFixtureBase: Fixture, FlowInterpreter {
 
 	    protected bool IHaveFinishedTable;
         protected Hashtable myNamedFixtures;
@@ -31,18 +32,24 @@ namespace fitlibrary {
 
         public override bool IsInFlow(int tableCount) { return tableCount == 1; }
         
-        public virtual void DoFlowTable(Parse table) {
+	    public virtual void InterpretFlow(Tree<Cell> table) {
+	        DoFlowTable((Parse)table.Value);
+	    }
+
+	    public virtual void DoFlowTable(Parse table) {
             if (TestStatus.IsAbandoned) return;
             ProcessFlowRows(table.Parts);
-        }
+	    }
 
-        public void DoSetUp(Parse table) {
-            ExecuteOptionalMethod(":setup", table.Parts.Parts);
-        }
+	    public void DoSetUp(Tree<Cell> table) {
+	        var tableCell = (Parse) table.Value;
+            ExecuteOptionalMethod(":setup", tableCell.Parts.Parts);
+	    }
 
-        public void DoTearDown(Parse table) {
-            ExecuteOptionalMethod(":teardown", table.Parts.Parts);
-        }
+	    public void DoTearDown(Tree<Cell> table) {
+	        var tableCell = (Parse) table.Value;
+            ExecuteOptionalMethod(":teardown", tableCell.Parts.Parts);
+	    }
         
         protected void ProcessFlowRows(Parse theRows) {
             Parse currentRow = theRows;
@@ -168,5 +175,5 @@ namespace fitlibrary {
         public override object GetTargetObject() {
             return this;
         }
-    }
+	}
 }

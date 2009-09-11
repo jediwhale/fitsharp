@@ -10,6 +10,7 @@ using System.Text;
 using fit;
 using fit.Service;
 using fitSharp.Fit.Model;
+using fitSharp.Fit.Service;
 using fitSharp.IO;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
@@ -284,9 +285,10 @@ namespace fitnesse.fitserver
 			return ReadFixedLengthString(reader, contentLength);
 		}
 
-	    private void WriteFitProtocol(Parse theTables, TestStatus status)
+	    private void WriteFitProtocol(Tree<Cell> theTables, TestStatus status)
 	    {
-		    string testResultDocument = TablesToString(theTables);
+            var tables = (Parse) theTables.Value;
+		    string testResultDocument = TablesToString(tables);
 		    WriteLogMessage("\tTransmitting tables of length " + testResultDocument.Length);
 		    Transmit(Protocol.FormatDocument(testResultDocument));
 

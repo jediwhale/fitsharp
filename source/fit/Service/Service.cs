@@ -24,6 +24,7 @@ namespace fit.Service {
             AddOperator(new ExecuteList());
             AddOperator(new ParseTable());
             AddOperator(new ParseTree());
+            AddOperator(new ParseInterpreter());
 
             ApplicationUnderTest = Context.Configuration.GetItem<ApplicationUnderTest>();
             ApplicationUnderTest.AddNamespace("fit");

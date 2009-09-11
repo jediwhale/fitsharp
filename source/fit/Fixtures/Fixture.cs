@@ -13,29 +13,31 @@ using fitSharp.Machine.Model;
 
 namespace fit
 {
-	public class Fixture: MutableDomainAdapter, TargetObjectProvider
+	public class Fixture: MutableDomainAdapter, TargetObjectProvider, Interpreter
 	{
 		private string[] args;
 
         public Processor<Cell> Processor { get; set; }
 
-	    public TestStatus TestStatus = new TestStatus();
+	    public TestStatus TestStatus { get; set; }
 
         public CellOperation CellOperation { get { return new CellOperation(Processor); }}
 
-        public Fixture() {}
-        public Fixture(object systemUnderTest) { mySystemUnderTest = systemUnderTest; }
+        public Fixture() { TestStatus = new TestStatus(); }
+        public Fixture(object systemUnderTest): this() { mySystemUnderTest = systemUnderTest; }
 
         public virtual bool IsInFlow(int tableCount) { return false; }
         public virtual bool IsVisible { get { return true; } }
 
-
-	    public void Prepare(Fixture theParentFixture, Parse table) {
-	        Processor = theParentFixture.Processor;
-	        myParentFixture = theParentFixture;
-	        TestStatus = theParentFixture.TestStatus;
-	        GetArgsForTable(table);
+	    public void Prepare(Interpreter parent, Tree<Cell> table) {
+	        var parentFixture = (Fixture) parent;
+	        Processor = parentFixture.Processor;
+	        myParentFixture = parentFixture;
+	        TestStatus = parentFixture.TestStatus;
+	        GetArgsForTable((Parse)table.Value);
 	    }
+
+        public void Interpret(Tree<Cell> table) { DoTable((Parse)table.Value); }
 
 	    public virtual void DoTable(Parse table)
 		{

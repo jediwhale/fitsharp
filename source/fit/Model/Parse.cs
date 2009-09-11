@@ -4,6 +4,8 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Web;
@@ -334,7 +336,28 @@ namespace fit
 
 	    public override Cell Value { get { return this; } }
 	    public override bool IsLeaf { get { return Parts == null; } }
-	    public override ReadList<Tree<Cell>> Branches { get { throw new InvalidOperationException(); } }
+	    public override ReadList<Tree<Cell>> Branches { get { return new ParseList(this); } }
         public Parse ParseCell { get { return this; }}
 	}
+
+    public class ParseList: ReadList<Tree<Cell>> {
+        private readonly Parse parse;
+
+        public ParseList(Parse parse) { this.parse = parse; }
+        public IEnumerator<Tree<Cell>> GetEnumerator() {
+            for (Parse part = parse.Parts; part !=null; part = part.More) yield return part;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator() {
+            return GetEnumerator();
+        }
+
+        public Tree<Cell> this[int index] {
+            get { return parse.Parts.At(index); }
+        }
+
+        public int Count {
+            get { return parse.Parts.Size; }
+        }
+    }
 }

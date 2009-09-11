@@ -6,6 +6,7 @@
 using System.Text;
 using fitnesse.fixtures;
 using fitSharp.Fit.Model;
+using fitSharp.Machine.Model;
 using NUnit.Framework;
 
 namespace fit.Test.NUnit
@@ -38,8 +39,8 @@ namespace fit.Test.NUnit
 			ExampleTableFixture.ResetStatics();
 		}
 
-		private void SimpleWriter(Parse theTables, TestStatus status) {
-			finishedTable = theTables;
+		private void SimpleWriter(Tree<Cell> theTables, TestStatus status) {
+            finishedTable = (Parse) theTables.Value;
 		    resultStatus = status;
 		}
 

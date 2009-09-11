@@ -37,6 +37,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exception\AbandonStoryTestException.cs" />
     <Compile Include="Fixtures\Binding.cs" />
     <Compile Include="Exception\InvalidMethodException.cs" />
     <Compile Include="Fixtures\CalculateFixture.cs" />
@@ -51,6 +52,7 @@
     <Compile Include="Operators\ArrayMatchStrategy.cs" />
     <Compile Include="Operators\ComposeStoryTestString.cs" />
     <Compile Include="Operators\NamedMatchStrategy.cs" />
+    <Compile Include="Operators\ParseInterpreter.cs" />
     <Compile Include="Operators\ParseStoryTestString.cs" />
     <Compile Include="Service\Service.cs" />
     <Compile Include="Exception\FitFailureException.cs" />
@@ -107,7 +109,6 @@
     <Compile Include="Operators\RuntimeFlow.cs" />
     <Compile Include="Operators\ComposeTable.cs" />
     <Compile Include="Parser\HtmlParser.cs" />
-    <Compile Include="Exception\AbandonStoryTestException.cs" />
     <Compile Include="Fixtures\FitVersionFixture.cs" />
     <Compile Include="Fixtures\Fixture.cs" />
     <Compile Include="Model\Parse.cs" />

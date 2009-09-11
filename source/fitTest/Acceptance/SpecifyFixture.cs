@@ -7,6 +7,7 @@ using fit.Operators;
 using fitlibrary;
 using fitlibrary.exception;
 using fitSharp.Fit.Model;
+using fitSharp.Machine.Model;
 
 namespace fit.Test.Acceptance {
     public class SpecifyFixture: Fixture {
@@ -64,8 +65,9 @@ namespace fit.Test.Acceptance {
             return expectedCell;
         }
 
-        private void SpecifyWriter(Parse theTables, TestStatus status) {
-            for (Parse table = theTables; table != null; table = table.More) {
+        private void SpecifyWriter(Tree<Cell> theTables, TestStatus status) {
+            var tables = (Parse) theTables.Value;
+            for (Parse table = tables; table != null; table = table.More) {
                 Parse newTable = table.Copy();
                 if (resultTables == null) {
                     resultTables = newTable;
