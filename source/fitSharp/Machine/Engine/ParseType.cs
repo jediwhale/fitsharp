@@ -7,7 +7,7 @@ using System;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
-    public class ParseType<T>: Operator<T>, ParseOperator<T> {
+    public class ParseType<T,P>: Operator<P>, ParseOperator<T> where P: Processor<T,P> {
         public bool CanParse(Type type, TypedValue instance, Tree<T> parameters) {
             return type == typeof (RuntimeType);
         }

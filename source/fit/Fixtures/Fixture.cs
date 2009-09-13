@@ -8,7 +8,6 @@ using System.Collections;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Service;
 using fitSharp.Machine.Application;
-using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fit
@@ -17,7 +16,7 @@ namespace fit
 	{
 		private string[] args;
 
-        public Processor<Cell> Processor { get; set; }
+        public CellProcessor Processor { get; set; }
 
 	    public TestStatus TestStatus { get; set; }
 

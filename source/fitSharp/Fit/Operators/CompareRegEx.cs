@@ -5,11 +5,12 @@
 
 using System.Text.RegularExpressions;
 using fitSharp.Fit.Model;
+using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
-    public class CompareRegEx: Operator<Cell>, CompareOperator<Cell> {
+    public class CompareRegEx: Operator<CellProcessor>, CompareOperator<Cell> {
         public bool CanCompare(TypedValue actual, Tree<Cell> expected) {
             object actualValue = actual.Value;
             if (actualValue == null) return false;

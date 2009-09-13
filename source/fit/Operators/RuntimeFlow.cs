@@ -5,12 +5,13 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using fitSharp.Fit.Model;
+using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
 
 namespace fit.Operators {
-    public class RuntimeFlow: Operator<Cell>, RuntimeOperator<Cell> {
+    public class RuntimeFlow: Operator<CellProcessor>, RuntimeOperator<Cell> {
         public bool CanCreate(string memberName, Tree<Cell> parameters) {
             return false;
         }

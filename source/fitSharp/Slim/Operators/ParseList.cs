@@ -10,7 +10,7 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Slim.Operators {
-    public class ParseList: Operator<string>, ParseOperator<string> { // todo: handle any IList type
+    public class ParseList: Operator<Service.Service>, ParseOperator<string> { // todo: handle any IList type
         public bool CanParse(Type type, TypedValue instance, Tree<string> parameters) {
             return type.IsGenericType && type.GetGenericTypeDefinition() == typeof (List<>);
         }

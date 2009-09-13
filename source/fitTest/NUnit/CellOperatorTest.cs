@@ -7,6 +7,7 @@ using System;
 using fit.Test.Acceptance;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
+using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
@@ -20,23 +21,21 @@ namespace fit.Test.NUnit {
         protected PersonFixture personFixture;
 
         public static bool IsMatch(ParseOperator<Cell> parseOperator, string input) {
-            var processor = new Processor<Cell>();
-            processor.AddMemory<Symbol>();
-            ((Operator<Cell>) parseOperator).Processor = processor;
+            var processor = new CellProcessor();
+            ((Operator<CellProcessor>) parseOperator).Processor = processor;
             return parseOperator.CanParse(typeof (string), TypedValue.Void, TestUtils.CreateCell(input));
         }
 
         public static bool IsMatch(CompareOperator<Cell> compareOperator, object instance, Type type, string value) {
-            var processor = new Processor<Cell>();
+            var processor = new CellProcessor();
             processor.AddOperator(new CompareDefault());
             return compareOperator.CanCompare(new TypedValue(instance, type), TestUtils.CreateCell(value));
         }
 
         public static bool IsMatch(ExecuteOperator<Cell> executor, Tree<Cell> parameters) {
-            var processor = new Processor<Cell>();
-            processor.AddMemory<Symbol>();
+            var processor = new CellProcessor();
             processor.AddOperator(new ParseMemberName());
-            ((Operator<Cell>) executor).Processor = processor;
+            ((Operator<CellProcessor>) executor).Processor = processor;
             return executor.CanExecute(new TypedValue(new ExecuteContext(new TestStatus(), null, new TypedValue("stuff"))), parameters);
         }
 

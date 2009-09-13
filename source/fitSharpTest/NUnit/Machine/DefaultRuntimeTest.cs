@@ -9,11 +9,11 @@ using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Machine {
     [TestFixture] public class DefaultRuntimeTest {
-        private DefaultRuntime<string> runtime;
+        private DefaultRuntime<string, BasicProcessor> runtime;
         private readonly BasicProcessor processor = new BasicProcessor();
 
         [SetUp] public void SetUp() {
-            runtime = new DefaultRuntime<string> { Processor = processor};
+            runtime = new DefaultRuntime<string, BasicProcessor> { Processor = processor};
         }
 
         [Test] public void InstanceIsCreated() {

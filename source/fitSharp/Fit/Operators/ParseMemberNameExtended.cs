@@ -7,11 +7,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using fitSharp.Fit.Model;
+using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
-    public class ParseMemberNameExtended: Operator<Cell>, ParseOperator<Cell> {
+    public class ParseMemberNameExtended: Operator<CellProcessor>, ParseOperator<Cell> {
         private static readonly Dictionary<char, string> specialCharacterConversion;
         private static readonly Dictionary<char, string> digitConversion;
 
@@ -34,7 +35,7 @@ namespace fitSharp.Fit.Operators {
             return new TypedValue(new MemberName(new GracefulName(name).IdentifierName.ToString()));
         }
 
-        private static void Append(StringBuilder nameParts, string namePart) {
+        private static void Append(StringBuilder nameParts, IEnumerable<char> namePart) {
             foreach (char character in namePart) {
                 if (!specialCharacterConversion.ContainsKey(character)) {
                     nameParts.Append(character);

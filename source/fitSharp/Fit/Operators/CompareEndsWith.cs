@@ -5,11 +5,12 @@
 
 using System.Text.RegularExpressions;
 using fitSharp.Fit.Model;
+using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
-    public class CompareEndsWith : Operator<Cell>, CompareOperator<Cell> {
+    public class CompareEndsWith : Operator<CellProcessor>, CompareOperator<Cell> {
         private static readonly Regex matchExpression = new Regex("^\\.\\.+.*[^\\.\\.]$");
 
         public bool CanCompare(TypedValue actual, Tree<Cell> expected) {

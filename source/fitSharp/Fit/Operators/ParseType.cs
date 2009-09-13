@@ -6,11 +6,12 @@
 using System;
 using System.Text.RegularExpressions;
 using fitSharp.Fit.Model;
+using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
-    public class ParseType: Operator<Cell>, ParseOperator<Cell> {
+    public class ParseType: Operator<CellProcessor>, ParseOperator<Cell> {
         public bool CanParse(Type type, TypedValue instance, Tree<Cell> parameters) {
             return type == typeof(Type) || type == typeof(RuntimeType);
         }

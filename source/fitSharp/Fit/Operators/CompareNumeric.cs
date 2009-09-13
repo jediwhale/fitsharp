@@ -5,11 +5,12 @@
 
 using System;
 using fitSharp.Fit.Model;
+using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
-    public class CompareNumeric : Operator<Cell>, CompareOperator<Cell> {
+    public class CompareNumeric : Operator<CellProcessor>, CompareOperator<Cell> {
         private static readonly Type[] numericTypes = {
             typeof(byte), typeof(sbyte), typeof(decimal), typeof(double),
             typeof(float), typeof(int), typeof(uint), typeof(long), typeof(ulong), typeof(short), typeof(ushort)

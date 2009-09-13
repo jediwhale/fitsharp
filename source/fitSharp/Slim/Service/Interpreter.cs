@@ -3,7 +3,6 @@
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
-using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using fitSharp.Slim.Operators;
 
@@ -11,9 +10,9 @@ namespace fitSharp.Slim.Service {
     public class Interpreter {
         private readonly Messenger messenger;
         private string assemblyPaths;
-        private readonly Processor<string> processor;
+        private readonly Service processor;
 
-        public Interpreter(Messenger messenger, string assemblyPaths, Processor<string> processor) {
+        public Interpreter(Messenger messenger, string assemblyPaths, Service processor) {
             this.messenger = messenger;
             this.assemblyPaths = assemblyPaths;
             this.processor = processor;

@@ -41,7 +41,7 @@ namespace fitSharp.Test.NUnit.Slim {
             Assert.AreEqual("TESTVALUE", value);
         }
 
-        private class ParseUpperCase: Operator<string>, ParseOperator<string> {
+        private class ParseUpperCase: Operator<Service>, ParseOperator<string> {
             public bool CanParse(Type type, TypedValue instance, Tree<string> parameters) {
                 return true;
             }

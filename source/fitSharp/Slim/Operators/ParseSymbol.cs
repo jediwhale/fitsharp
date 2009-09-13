@@ -10,7 +10,7 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Slim.Operators {
-    public class ParseSymbol: Operator<string>, ParseOperator<string> {
+    public class ParseSymbol: Operator<Service.Service>, ParseOperator<string> {
         private static readonly Regex symbolPattern = new Regex("\\$([a-zA-Z]\\w*)");
 
         public bool CanParse(Type type, TypedValue instance, Tree<string> parameters) {

@@ -6,19 +6,16 @@
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using fitSharp.Slim.Operators;
+using fitSharp.Slim.Service;
 using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Slim {
     [TestFixture] public class ExecuteOperatorsTest {
-        private Processor<string> processor;
+        private Service processor;
         private Tree<string> result;
 
         [SetUp] public void SetUp() {
-            processor = new Processor<string>();
-            processor.AddOperator(new ComposeDefault());
-            processor.AddOperator(new ComposeException());
-            processor.AddMemory<SavedInstance>();
-            processor.AddMemory<Symbol>();
+            processor = new Service();
         }
 
         [Test] public void ExecuteDefaultReturnsException() {

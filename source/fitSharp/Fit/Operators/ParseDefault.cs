@@ -5,17 +5,18 @@
 
 using System;
 using fitSharp.Fit.Model;
+using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
-    public class ParseDefault : Operator<Cell>, ParseOperator<Cell> {
+    public class ParseDefault : Operator<CellProcessor>, ParseOperator<Cell> {
         public bool CanParse(Type type, TypedValue instance, Tree<Cell> parameters) {
             return true;
         }
 
         public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
-            return new DefaultParse<string> {Processor = new BasicProcessor()}.
+            return new DefaultParse<string, BasicProcessor> {Processor = new BasicProcessor()}.
                 Parse(type, instance, new TreeLeaf<string>(parameters.Value.Text));
         }
     }

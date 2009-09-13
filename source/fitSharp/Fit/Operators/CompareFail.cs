@@ -4,12 +4,13 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using fitSharp.Fit.Model;
+using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators
 {
-	public class CompareFail : Operator<Cell>, CompareOperator<Cell> {
+	public class CompareFail : Operator<CellProcessor>, CompareOperator<Cell> {
 	    private static readonly IdentifierName failIdentifier = new IdentifierName("fail[");
 
 	    public bool CanCompare(TypedValue actual, Tree<Cell> expected) {

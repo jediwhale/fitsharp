@@ -7,8 +7,8 @@ using System;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
-    public abstract class Operator<T> {
-        public Processor<T> Processor;
+    public abstract class Operator<P> {
+        public P Processor;
     }
 
     public interface CompareOperator<T> {

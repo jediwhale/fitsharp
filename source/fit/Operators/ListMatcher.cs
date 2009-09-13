@@ -9,29 +9,28 @@ using System.Collections.Generic;
 using fit.Model;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Service;
-using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fit.Operators {
     public interface ListMatchStrategy {
         bool IsOrdered { get; }
-        TypedValue[] ActualValues(Processor<Cell> processor, object theActualRow);
+        TypedValue[] ActualValues(CellProcessor processor, object theActualRow);
         bool IsExpectedSize(Parse theExpectedCells, object theActualRow);
         bool FinalCheck(TestStatus testStatus);
         bool SurplusAllowed {get;}
     }
 
     public class ListMatcher {
-        private readonly Processor<Cell> processor;
+        private readonly CellProcessor processor;
         private readonly ListMatchStrategy strategy;
 
-        public ListMatcher(Processor<Cell> processor, ListMatchStrategy strategy) {
+        public ListMatcher(CellProcessor processor, ListMatchStrategy strategy) {
             this.strategy = strategy;
             this.processor = processor;
         }
 
         public bool IsEqual(object theActualValue, Parse theExpectedValueCell) {
-            Actuals actuals = new Actuals((IList)theActualValue, strategy);
+            var actuals = new Actuals((IList)theActualValue, strategy);
             int expectedRow = 0;
             foreach (Parse currentRow in new CellRange(theExpectedValueCell.Parts.Parts.More).Cells) {
                 int match = actuals.FindMatch(RowMatches, expectedRow, currentRow.Parts);
@@ -42,7 +41,7 @@ namespace fit.Operators {
         }
 
         public bool MarkCell(TestStatus testStatus, object systemUnderTest, object theActualValue, Parse theTableRows) {
-            Actuals actuals = new Actuals((IList)theActualValue, strategy);
+            var actuals = new Actuals((IList)theActualValue, strategy);
             if (theTableRows.More == null && actuals.UnmatchedCount == 0) {
                 testStatus.MarkRight(theTableRows);
             }
@@ -100,13 +99,11 @@ namespace fit.Operators {
         private bool RowMatches(Parse theExpectedCells, object theActualRow) {
             if (!strategy.IsExpectedSize(theExpectedCells, theActualRow)) return false;
             Parse expectedCell = theExpectedCells;
-            int column = 0;
             foreach (TypedValue actualValue in strategy.ActualValues(processor, theActualRow)) {
                 if (actualValue.Type != typeof(void) || expectedCell.Text.Length > 0) {
                     if (!new CellOperation(processor).Compare(actualValue, expectedCell)) return false;
                 }
                 expectedCell = expectedCell.More;
-                column++;
             }
             return true;
         }
@@ -119,10 +116,11 @@ namespace fit.Operators {
                     myActuals.Add(new ActualItem(actualValue));
                 }
                 myStrategy = theStrategy;
-                myUnmatchedCount = theActualValues.Count;
+                UnmatchedCount = theActualValues.Count;
             }
 
-            public int UnmatchedCount { get { return myUnmatchedCount; }}
+            public int UnmatchedCount { get; private set; }
+
             public object Match(int theIndex) {
                 foreach (ActualItem item in myActuals) {
                     if (item.MatchRow == theIndex) return item.Value;
@@ -145,14 +143,14 @@ namespace fit.Operators {
                 }
                 if (result > -1) {
                     myActuals[result].MatchRow = theExpectedRow;
-                    myUnmatchedCount--;
+                    UnmatchedCount--;
                 } else {
                     myActuals.Insert(lastMatched + 1, new ActualItem(null, -1));
                 }
                 return result;
             }
 
-            public void ShowSurplus(Processor<Cell> processor, TestStatus testStatus, Parse theLastRow) {
+            public void ShowSurplus(CellProcessor processor, TestStatus testStatus, Parse theLastRow) {
                 Parse lastRow = theLastRow;
                 for (int i = 0; i < myActuals.Count;) {
                     ActualItem surplus = myActuals[i];
@@ -173,7 +171,7 @@ namespace fit.Operators {
                      myActuals[theExpectedRow].MatchRow != -1);
             }
 
-            private Parse MakeSurplusRow(Processor<Cell> processor, TestStatus testStatus, object theSurplusRow) {
+            private Parse MakeSurplusRow(CellProcessor processor, TestStatus testStatus, object theSurplusRow) {
                 Parse cells = null;
                 foreach (TypedValue actualValue in myStrategy.ActualValues(processor, theSurplusRow)) {
                     var cell = (Parse) processor.Compose(actualValue.Value);
@@ -184,17 +182,16 @@ namespace fit.Operators {
                     else
                         cells.Last.More = cell;
                 }
-                Parse row = new Parse("tr", null, cells, null);
+                var row = new Parse("tr", null, cells, null);
                 testStatus.MarkWrong(row);
                 return row;
             }
 
-            private List<ActualItem> myActuals;
-            private ListMatchStrategy myStrategy;
-            private int myUnmatchedCount;
+            private readonly List<ActualItem> myActuals;
+            private readonly ListMatchStrategy myStrategy;
 
             private class ActualItem {
-                public object Value;
+                public readonly object Value;
                 public int? MatchRow;
                 public ActualItem(object theValue) {
                     Value = theValue;

@@ -5,11 +5,12 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using fitSharp.Fit.Model;
+using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
-    public abstract class ExecuteBase: Operator<Cell>, ExecuteOperator<Cell> {
+    public abstract class ExecuteBase: Operator<CellProcessor>, ExecuteOperator<Cell> {
 
         public abstract bool CanExecute(ExecuteParameters parameters);
         public abstract TypedValue Execute(ExecuteParameters parameters);

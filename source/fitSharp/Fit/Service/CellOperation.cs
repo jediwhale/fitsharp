@@ -5,14 +5,13 @@
 
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
-using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Service {
     public class CellOperation {
-        private readonly Processor<Cell> processor;
+        private readonly CellProcessor processor;
 
-        public CellOperation(Processor<Cell> processor) {
+        public CellOperation(CellProcessor processor) {
             this.processor = processor;
         }
 

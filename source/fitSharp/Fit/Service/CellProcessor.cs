@@ -8,7 +8,9 @@ using fitSharp.Machine.Engine;
 using fitSharp.Fit.Operators;
 
 namespace fitSharp.Fit.Service {
-    public class CellProcessor: Processor<Cell> {
+    public class CellProcessor: Processor<Cell, CellProcessor> {
+
+	    public TestStatus TestStatus { get; set; }
 
         public CellProcessor() {
             AddOperator(new ParseDefault());
@@ -37,6 +39,8 @@ namespace fitSharp.Fit.Service {
             AddMemory<Symbol>();
         }
 
-        public CellProcessor(Processor<Cell> other): base(other) {}
+        public CellProcessor(CellProcessor other): base(other) {
+            TestStatus = other.TestStatus;
+        }
     }
 }

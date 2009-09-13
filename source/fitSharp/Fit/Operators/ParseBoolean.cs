@@ -5,11 +5,12 @@
 
 using System;
 using fitSharp.Fit.Model;
+using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
-    public class ParseBoolean: Operator<Cell>, ParseOperator<Cell> {
+    public class ParseBoolean: Operator<CellProcessor>, ParseOperator<Cell> {
 	    private static readonly IdentifierName ourTrueIdentifier = new IdentifierName("true");
 	    private static readonly IdentifierName ourYesIdentifier = new IdentifierName("yes");
 	    private static readonly IdentifierName ourYIdentifier = new IdentifierName("y");

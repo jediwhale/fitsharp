@@ -86,7 +86,7 @@ namespace fitSharp.Test.NUnit.Machine {
 
         [Test] public void ProcessorCopyHasIndependentOperators() {
             processor.AddOperator(new MemoryOperator());
-            var copy = new Processor<string>(processor);
+            var copy = new BasicProcessor(processor);
             processor.AddMemory<KeyValueMemory<string, string>>();
             processor.Store(new KeyValueMemory<string, string>("something", "stuff"));
             copy.AddMemory<KeyValueMemory<string, string>>();
@@ -95,7 +95,7 @@ namespace fitSharp.Test.NUnit.Machine {
             Assert.AreEqual("else", copy.Execute(null).Value);
         }
 
-        private class MemoryOperator: Operator<string>, ExecuteOperator<string> {
+        private class MemoryOperator: Operator<BasicProcessor>, ExecuteOperator<string> {
             public bool CanExecute(TypedValue instance, Tree<string> parameters) {
                 return true;
             }
@@ -105,7 +105,7 @@ namespace fitSharp.Test.NUnit.Machine {
             }
         }
 
-        private class DefaultTest: Operator<string>, ExecuteOperator<string> {
+        private class DefaultTest: Operator<BasicProcessor>, ExecuteOperator<string> {
             public bool CanExecute(TypedValue instance, Tree<string> parameters) {
                 return true;
             }
@@ -115,7 +115,7 @@ namespace fitSharp.Test.NUnit.Machine {
             }
         }
 
-        private class SpecificTest: Operator<string>, ExecuteOperator<string> {
+        private class SpecificTest: Operator<BasicProcessor>, ExecuteOperator<string> {
             private readonly string name;
 
             public SpecificTest(string name) {

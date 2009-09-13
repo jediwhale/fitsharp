@@ -8,7 +8,6 @@ using fit.Model;
 using fitlibrary.exception;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Service;
-using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fit.Operators {
@@ -21,7 +20,7 @@ namespace fit.Operators {
 
         public abstract bool IsOrdered { get;}
 
-        public TypedValue[] ActualValues(Processor<Cell> processor, object theActualRow) {
+        public TypedValue[] ActualValues(CellProcessor processor, object theActualRow) {
             if (myColumnsUsed == null) myColumnsUsed = new bool[myHeaderRow.Parts.Size];
             var result = new TypedValue[myHeaderRow.Parts.Size];
             int column = 0;
@@ -65,7 +64,7 @@ namespace fit.Operators {
             return true;
         }
 
-        private Parse myHeaderRow;
+        private readonly Parse myHeaderRow;
         private bool[] myColumnsUsed;
     }
 }

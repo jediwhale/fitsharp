@@ -7,7 +7,7 @@ using System.Collections;
 using fit;
 using fit.Operators;
 using fitSharp.Fit.Model;
-using fitSharp.Machine.Engine;
+using fitSharp.Fit.Service;
 using fitSharp.Machine.Model;
 
 namespace fitlibrary {
@@ -29,7 +29,7 @@ namespace fitlibrary {
         private class UnnamedCollectionMatchStrategy: ListMatchStrategy {
             public bool IsOrdered {get { return true; }}
             public bool SurplusAllowed {get {return false;}}
-            public TypedValue[] ActualValues(Processor<Cell> processor, object theActualRow) {
+            public TypedValue[] ActualValues(CellProcessor processor, object theActualRow) {
                 var actuals = (object[]) theActualRow;
                 var result = new TypedValue[actuals.Length];
                 for (int i = 0; i < actuals.Length; i++) result[i] = new TypedValue(actuals[i]);

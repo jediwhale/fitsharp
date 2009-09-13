@@ -10,7 +10,7 @@ using fitSharp.Machine.Model;
 using fitSharp.Slim.Exception;
 
 namespace fitSharp.Slim.Operators {
-    public class ComposeException: Operator<string>, ComposeOperator<string> {
+    public class ComposeException: Operator<Service.Service>, ComposeOperator<string> {
         public const string ExceptionResult = "__EXCEPTION__:{0}";
 
         public bool CanCompose(TypedValue instance) {

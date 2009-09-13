@@ -45,7 +45,7 @@ namespace fitSharp.Machine.Application {
 
         private void LoadNode(string typeName, XmlNode methodNode) {
             try {
-                new Processor<string>().TryInvoke(new TypedValue(GetItem(typeName)), methodNode.Name, NodeParameters(methodNode));
+                new BasicProcessor().TryInvoke(new TypedValue(GetItem(typeName)), methodNode.Name, NodeParameters(methodNode));
             }
             catch (TargetInvocationException e) {
                 throw e.InnerException;

@@ -20,50 +20,50 @@ namespace fit.Test.Acceptance {
 
         public string ParseWithCustomParser(string theSource) {
             Context.Configuration.GetItem<Service.Service>().AddOperator(new SampleCustomParser());
-            CellParsingTestClass testClass = (CellParsingTestClass)
+            var testClass = (CellParsingTestClass)
                                              InputValue(new Parse("td", theSource, null, null), typeof(CellParsingTestClass));
             string result =  QuotedString(testClass.ToString());
             return result;
         }
 
         public string ParseAsTypeCode(string theSource) {
-            TypeCode result =
+            var result =
                 (TypeCode)
                 InputValue(new Parse("td", theSource, null, null), typeof (TypeCode));
             return QuotedString(result.ToString());
         }
 
         public string ParseAsNullableInt(string theSource) {
-            Nullable<int> result =
-                (Nullable<int>)InputValue(new Parse("td", theSource ?? "null", null, null), typeof (Nullable<int>));
+            var result =
+                (int?)InputValue(new Parse("td", theSource ?? "null", null, null), typeof (int?));
             return QuotedString(result.ToString());
         }
 
         public bool CheckParseString(Parse theCells) {
-            string result = (string)InputValue(theCells.More, typeof(string));
+            var result = (string)InputValue(theCells.More, typeof(string));
             return IsEqual(theCells.Last, string.Format("'{0}'", result));
         }
 
-        private bool IsEqual(Parse cell, object value) {
+        private static bool IsEqual(Tree<Cell> cell, object value) {
             return new CellOperation(new Service.Service()).Compare(new TypedValue(value), cell);
         }
 
         public bool CheckParseInteger(Parse theCells) {
-            int result = (int)InputValue(theCells.More, typeof(int));
+            var result = (int)InputValue(theCells.More, typeof(int));
             return IsEqual(theCells.Last, result.ToString("###,###,###"));
         }
 
         public bool CheckParseTestClass(Parse theCells) {
-            CellParsingTestClass result = (CellParsingTestClass)InputValue(theCells.More, typeof(CellParsingTestClass));
+            var result = (CellParsingTestClass)InputValue(theCells.More, typeof(CellParsingTestClass));
             return IsEqual(theCells.Last, result.Content);
         }
 
         public bool CheckParseTree(Parse theCells) {
-            Tree result = (Tree)InputValue(theCells.More, typeof(Tree));
+            var result = (Tree)InputValue(theCells.More, typeof(Tree));
             return IsEqual(theCells.Last, TreeString(result));
         }
 
-        private object InputValue(Parse cell, Type theType) {
+        private object InputValue(Tree<Cell> cell, Type theType) {
             return Context.Configuration.GetItem<Service.Service>().Parse(theType, new TypedValue(this), cell).Value;
         }
 
@@ -72,7 +72,7 @@ namespace fit.Test.Acceptance {
         }
 
         private static string TreeString(Tree theTree) {
-            StringBuilder result = new StringBuilder(theTree.Title);
+            var result = new StringBuilder(theTree.Title);
             result.Append("[");
             foreach (Tree child in theTree.GetChildren()) {
                 result.AppendFormat("{0} ", TreeString(child));
@@ -82,12 +82,12 @@ namespace fit.Test.Acceptance {
         }
 
         public bool CheckParseTable(Parse theCells) {
-            Table result = (Table)InputValue(theCells.More, typeof(Table));
+            var result = (Table)InputValue(theCells.More, typeof(Table));
             return IsEqual(theCells.Last, TableString(result));
         }
 
         private static string TableString(Table theTable) {
-            StringBuilder result = new StringBuilder();
+            var result = new StringBuilder();
             result.Append("{");
             for (int row = 0; row < theTable.Rows(); row++) {
                 result.Append("[");
@@ -101,7 +101,7 @@ namespace fit.Test.Acceptance {
         }
 
         public bool CheckParseList(Parse theCells) {
-            IList result = (IList)InputValue(theCells.More, typeof(IList));
+            var result = (IList)InputValue(theCells.More, typeof(IList));
             return IsEqual(theCells.Last, result);
         }
 
@@ -119,7 +119,7 @@ namespace fit.Test.Acceptance {
         public override string ToString() {return Content;}
     }
 
-    public class SampleCustomParser: Operator<Cell>, ParseOperator<Cell> {
+    public class SampleCustomParser: Operator<CellProcessor>, ParseOperator<Cell> {
         public bool CanParse(Type type, TypedValue instance, Tree<Cell> parameters) {
             return type == typeof(CellParsingTestClass) && parameters.Value.Text == "one";
         }

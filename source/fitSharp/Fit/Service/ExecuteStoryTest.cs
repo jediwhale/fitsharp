@@ -6,7 +6,6 @@
 using System;
 using fitSharp.Fit.Model;
 using fitSharp.IO;
-using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Service
@@ -14,31 +13,28 @@ namespace fitSharp.Fit.Service
     public delegate void WriteTestResult(Tree<Cell> tables, TestStatus status);
 
     public class ExecuteStoryTest {
-        private readonly Processor<Cell> processor;
+        private readonly CellProcessor processor;
         private readonly WriteTestResult writer;
-        private TestStatus testStatus;
 
-        public ExecuteStoryTest(Processor<Cell> processor, WriteTestResult writer) {
+        public ExecuteStoryTest(CellProcessor processor, WriteTestResult writer) {
             this.writer = writer;
             this.processor = processor;
         }
 
         public void DoTables(Tree<Cell> tables) {
-            var elapsedTime = new ElapsedTime();
+            processor.TestStatus = new TestStatus();
+ 			processor.TestStatus.Summary["run date"] = DateTime.Now;
+			processor.TestStatus.Summary["run elapsed time"] = new ElapsedTime();
             Cell heading = tables.Branches[0].Branches[0].Branches[0].Value;
             Interpreter myFirstFixture;
             try {
                 myFirstFixture = (Interpreter)processor.Parse(typeof(Interpreter), TypedValue.Void, tables.Branches[0]).Value;
             }
             catch (System.Exception e) {
-                testStatus = new TestStatus();
-                testStatus.MarkException(heading, e);
-                writer(tables.Branches[0], testStatus);
+                processor.TestStatus.MarkException(heading, e);
+                writer(tables.Branches[0], processor.TestStatus);
                 return;
             }
-            testStatus = myFirstFixture.TestStatus;
- 			testStatus.Summary["run date"] = DateTime.Now;
-			testStatus.Summary["run elapsed time"] = elapsedTime;
             DoTables(myFirstFixture, tables);
         }
 
@@ -50,7 +46,7 @@ namespace fitSharp.Fit.Service
                     try {
                         try {
                             Cell heading = table.Branches[0].Branches[0].Value;
-                            if (heading != null && !testStatus.IsAbandoned) {
+                            if (heading != null && !processor.TestStatus.IsAbandoned) {
                                 if (flowFixture == null) {
                                     var activeFixture = (Interpreter)processor.Parse(typeof(Interpreter), TypedValue.Void, table).Value;
                                     activeFixture.Prepare(firstFixture, table);
@@ -64,7 +60,7 @@ namespace fitSharp.Fit.Service
                             }
                         }
                         catch (System.Exception e) {
-                            testStatus.MarkException(table.Branches[0].Branches[0].Value, e);
+                            processor.TestStatus.MarkException(table.Branches[0].Branches[0].Value, e);
                         }
                     }
                     catch (System.Exception e) {
@@ -75,9 +71,9 @@ namespace fitSharp.Fit.Service
                 if (flowFixture != null) flowFixture.DoTearDown(theTables.Branches[0]);
             }
             catch (System.Exception e) {
-                testStatus.MarkException(theTables.Branches[0].Branches[0].Branches[0].Value, e);
+                processor.TestStatus.MarkException(theTables.Branches[0].Branches[0].Branches[0].Value, e);
             }
-			writer(theTables.Branches[0], testStatus);
+			writer(theTables.Branches[0], processor.TestStatus);
 		}
 
         public static void DoTable(Tree<Cell> table, Interpreter activeFixture, bool inFlow) {

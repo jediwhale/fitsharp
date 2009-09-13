@@ -8,14 +8,15 @@ using System.Collections.Generic;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using fitSharp.Slim.Operators;
+using fitSharp.Slim.Service;
 using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Slim {
     [TestFixture] public class ParseOperatorsTest {
-        private Processor<string> processor;
+        private Service processor;
 
         [SetUp] public void SetUp() {
-            processor = new Processor<string>(new ApplicationUnderTest());
+            processor = new Service();
             processor.AddMemory<Symbol>();
         }
 

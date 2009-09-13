@@ -10,15 +10,16 @@ using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
 using fitSharp.Slim.Exception;
 using fitSharp.Slim.Operators;
+using fitSharp.Slim.Service;
 using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Slim {
     [TestFixture] public class ComposeOperatorsTest {
 
-        private Processor<string> processor;
+        private Service processor;
 
         [SetUp] public void SetUp() {
-            processor = new Processor<string>(new ApplicationUnderTest());
+            processor = new Service();
         }
         
         [Test] public void NullIsComposed() {
@@ -96,7 +97,7 @@ namespace fitSharp.Test.NUnit.Slim {
         }
 
         private Tree<string> Compose(ComposeOperator<string> composeOperator, object instance, Type type) {
-            var compose = (Operator<string>)composeOperator;
+            var compose = (Operator<Service>)composeOperator;
             compose.Processor = processor;
             Assert.IsTrue(composeOperator.CanCompose(new TypedValue(instance, type)));
             return composeOperator.Compose(new TypedValue(instance, type));
@@ -107,7 +108,7 @@ namespace fitSharp.Test.NUnit.Slim {
         }
 
         private void CheckCompose(ComposeOperator<string> composeOperator, object instance, Type type, object expected) {
-            var compose = (Operator<string>)composeOperator;
+            var compose = (Operator<Service>)composeOperator;
             compose.Processor = processor;
             Assert.IsTrue(composeOperator.CanCompose(new TypedValue(instance, type)));
             Tree<string> result = composeOperator.Compose(new TypedValue(instance, type));

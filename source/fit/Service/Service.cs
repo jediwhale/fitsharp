@@ -30,6 +30,7 @@ namespace fit.Service {
             ApplicationUnderTest.AddNamespace("fit");
             ApplicationUnderTest.AddNamespace("fitnesse.handlers");
             ApplicationUnderTest.AddNamespace("fit.Operators");
+            ApplicationUnderTest.AddNamespace("fitSharp.Fit.Fixtures");
             ApplicationUnderTest.AddNamespace("fitSharp.Fit.Operators");
             ApplicationUnderTest.AddAssembly(Assembly.GetExecutingAssembly().CodeBase);
 

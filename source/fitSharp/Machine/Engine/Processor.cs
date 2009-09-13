@@ -9,140 +9,137 @@ using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
-    public class Processor<U>: Copyable {
+    public class Processor<T, P>: Copyable where P: Processor<T, P> {
         //todo: add setup and teardown?
         //todo: this is turning into a facade so push everything else out?
 
-        private delegate bool CanDoOperation<T>(T anOperator);
-        private delegate void DoOperation<T>(T anOperator);
-
-        private readonly Operators<U> operators;
+        private readonly Operators<T,P> operators;
         private readonly Dictionary<Type, object> memoryBanks = new Dictionary<Type, object>();
 
         public ApplicationUnderTest ApplicationUnderTest { get; set; }
 
         public Processor(ApplicationUnderTest applicationUnderTest) {
             ApplicationUnderTest = applicationUnderTest;
-            operators = new Operators<U>(this);
+            operators = new Operators<T,P>((P)this);
         }
 
         public Processor(): this(new ApplicationUnderTest()) {}
 
-        public Processor(Processor<U> other): this(new ApplicationUnderTest(other.ApplicationUnderTest)) {
+        public Processor(Processor<T,P> other): this(new ApplicationUnderTest(other.ApplicationUnderTest)) {
             operators.Copy(other.operators);
             memoryBanks = new Dictionary<Type, object>(other.memoryBanks);
         }
 
         public void AddOperator(string operatorName) { operators.Add(operatorName); }
-        public void AddOperator(Operator<U> anOperator) { operators.Add(anOperator); }
-        public void AddOperator(Operator<U> anOperator, int priority) { operators.Add(anOperator, priority); }
+        public void AddOperator(Operator<P> anOperator) { operators.Add(anOperator); }
+        public void AddOperator(Operator<P> anOperator, int priority) { operators.Add(anOperator, priority); }
         public void RemoveOperator(string operatorName) { operators.Remove(operatorName); }
 
         public void AddNamespace(string namespaceName) {
             ApplicationUnderTest.AddNamespace(namespaceName);
         }
 
-        public bool Compare(TypedValue instance, Tree<U> parameters) {
+        public bool Compare(TypedValue instance, Tree<T> parameters) {
             bool result = false;
-            operators.Do<CompareOperator<U>>(
+            operators.Do<CompareOperator<T>>(
                 o => o.CanCompare(instance, parameters),
                 o => result = o.Compare(instance, parameters));
             return result;
         }
 
-        public Tree<U> Compose(object instance) {
+        public Tree<T> Compose(object instance) {
             return Compose(new TypedValue(instance));
         }
 
-        public Tree<U> Compose(TypedValue instance) {
-            Tree<U> result = null;
-            operators.Do<ComposeOperator<U>>(
+        public Tree<T> Compose(TypedValue instance) {
+            Tree<T> result = null;
+            operators.Do<ComposeOperator<T>>(
                 o => o.CanCompose(instance),
                 o => result = o.Compose(instance));
             return result;
         }
 
-        public TypedValue Execute(TypedValue instance, Tree<U> parameters) {
+        public TypedValue Execute(TypedValue instance, Tree<T> parameters) {
             TypedValue result = TypedValue.Void;
-            operators.Do<ExecuteOperator<U>>(
+            operators.Do<ExecuteOperator<T>>(
                 o => o.CanExecute(instance, parameters),
                 o => result = o.Execute(instance, parameters));
             return result;
         }
 
-        public TypedValue Execute(Tree<U> parameters) {
+        public TypedValue Execute(Tree<T> parameters) {
             return Execute(TypedValue.Void, parameters);
         }
 
-        public TypedValue Parse(Type type, TypedValue instance, Tree<U> parameters) {
+        public TypedValue Parse(Type type, TypedValue instance, Tree<T> parameters) {
             TypedValue result = TypedValue.Void;
-            operators.Do<ParseOperator<U>>(
+            operators.Do<ParseOperator<T>>(
                 o => o.CanParse(type, instance, parameters),
                 o => result = o.Parse(type, instance, parameters));
             return result;
         }
 
-        public TypedValue Parse(Type type, Tree<U> parameters) {
+        public TypedValue Parse(Type type, Tree<T> parameters) {
             return Parse(type, TypedValue.Void, parameters);
         }
 
-        public TypedValue Parse(Type type, U input) {
-            return Parse(type, new TreeLeaf<U>(input));
+        public TypedValue Parse(Type type, T input) {
+            return Parse(type, new TreeLeaf<T>(input));
         }
 
-        public T ParseTree<T>(Tree<U> input) {
-            return (T) Parse(typeof (T), input).Value;
+        public V ParseTree<V>(Tree<T> input) {
+            return (V) Parse(typeof (V), input).Value;
         }
 
-        public T Parse<T>(U input) {
-            return (T) Parse(typeof (T), input).Value;
+        public V Parse<V>(T input) {
+            return (V) Parse(typeof (V), input).Value;
         }
 
         public TypedValue ParseString(Type type, string input) {
             return Parse(type, Compose(new TypedValue(input, typeof(string))));
         }
 
-        public T ParseString<T>(string input) {
-            return (T) ParseString(typeof (T), input).Value;
+        public V ParseString<V>(string input) {
+            return (V) ParseString(typeof (V), input).Value;
         }
 
         public TypedValue Create(string membername) {
-            return Create(membername, new TreeList<U>());
+            return Create(membername, new TreeList<T>());
         }
 
-        public TypedValue Create(string memberName, Tree<U> parameters) {
+        public TypedValue Create(string memberName, Tree<T> parameters) {
             TypedValue result = TypedValue.Void;
-            operators.Do<RuntimeOperator<U>>(
+            operators.Do<RuntimeOperator<T>>(
                 o => o.CanCreate(memberName, parameters),
                 o => result = o.Create(memberName, parameters));
             return result;
         }
 
-        public TypedValue TryInvoke(TypedValue instance, string memberName, Tree<U> parameters) {
+        public TypedValue TryInvoke(TypedValue instance, string memberName, Tree<T> parameters) {
             TypedValue result = TypedValue.Void;
-            operators.Do<RuntimeOperator<U>>(
+            operators.Do<RuntimeOperator<T>>(
                 o => o.CanInvoke(instance, memberName, parameters),
                 o => result = o.Invoke(instance, memberName, parameters));
             return result;
         }
 
-        public TypedValue Invoke(TypedValue instance, string memberName, Tree<U> parameters) {
+        public TypedValue Invoke(TypedValue instance, string memberName, Tree<T> parameters) {
             TypedValue result = TryInvoke(instance, memberName, parameters);
             result.ThrowExceptionIfNotValid();
             return result;
         }
 
         Copyable Copyable.Copy() {
-            return new Processor<U>(this);
+            return new Processor<T,P>(this);
         }
 
-        public void AddMemory<T>() {
-            memoryBanks[typeof (T)] = new List<T>();
+        public void AddMemory<V>() {
+            memoryBanks[typeof (V)] = new List<V>();
         }
 
-        public void Store<T>(T newItem) {
-            List<T> memory = GetMemory<T>();
-            foreach (T item in memory) {
+        public void Store<V>(V newItem) {
+            List<V> memory = GetMemory<V>();
+            foreach (V item in memory) {
                 if (!newItem.Equals(item)) continue;
                 memory.Remove(item);
                 break;
@@ -150,76 +147,24 @@ namespace fitSharp.Machine.Engine {
             memory.Add(newItem);
         }
 
-        public T Load<T>(T matchItem) {
-            foreach (T item in GetMemory<T>()) {
+        public V Load<V>(V matchItem) {
+            foreach (V item in GetMemory<V>()) {
                 if (matchItem.Equals(item)) return item;
             }
-            throw new MemoryMissingException<T>(matchItem);
+            throw new MemoryMissingException<V>(matchItem);
         }
 
-        public bool Contains<T>(T matchItem) {
-            foreach (T item in GetMemory<T>()) {
+        public bool Contains<V>(V matchItem) {
+            foreach (V item in GetMemory<V>()) {
                 if (matchItem.Equals(item)) return true;
             }
             return false;
         }
 
-        public void Clear<T>() {
-            GetMemory<T>().Clear();
+        public void Clear<V>() {
+            GetMemory<V>().Clear();
         }
 
-        private List<T> GetMemory<T>() { return (List<T>) memoryBanks[typeof (T)];}
-
-        private class Operators<V> {
-            private readonly Processor<V> processor;
-            private readonly List<List<Operator<V>>> operators = new List<List<Operator<V>>>();
-
-            public Operators(Processor<V> processor) {
-                this.processor = processor;
-                Add(new DefaultParse<V>());
-                Add(new ParseType<V>());
-                Add(new DefaultRuntime<V>());
-            }
-
-            public void Add(string operatorName) { Add((Operator<V>)processor.Create(operatorName).Value); }
-
-            public void Add(Operator<V> anOperator) { Add(anOperator, 0); }
-
-            public void Add(Operator<V> anOperator, int priority) {
-                while (operators.Count <= priority) operators.Add(new List<Operator<V>>());
-                anOperator.Processor = processor;
-                operators[priority].Add(anOperator);
-            }
-
-            public void Copy(Operators<V> from) {
-                operators.Clear();
-                for (int priority = 0; priority < from.operators.Count; priority++) {
-                    foreach (Operator<V> anOperator in from.operators[priority]) {
-                        Add((Operator<V>)Activator.CreateInstance(anOperator.GetType()), priority);
-                    }
-                }
-            }
-
-            public void Remove(string operatorName) {
-                foreach (List<Operator<V>> list in operators)
-                    foreach (Operator<V> item in list)
-                        if (item.GetType().FullName == operatorName) {
-                            list.Remove(item);
-                            return;
-                        }
-            }
-
-            public void Do<T>(CanDoOperation<T> canDoOperation, DoOperation<T> doOperation) where T: class {
-                for (int priority = operators.Count - 1; priority >= 0; priority--) {
-                    for (int i = operators[priority].Count - 1; i >= 0; i--) {
-                        var candidate = operators[priority][i] as T;
-                        if (candidate == null || !canDoOperation(candidate)) continue;
-                        doOperation(candidate);
-                        return;
-                    }
-                }
-                throw new ApplicationException(string.Format("No default for {0}", typeof(T).Name));
-            }
-        }
+        private List<V> GetMemory<V>() { return (List<V>) memoryBanks[typeof (V)];}
     }
 }

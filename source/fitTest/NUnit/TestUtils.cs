@@ -9,6 +9,7 @@ using System.Text;
 using fit.Model;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
+using fitSharp.Fit.Service;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
@@ -35,16 +36,13 @@ namespace fit.Test.NUnit {
 		}
 
         public static bool IsMatch(CompareOperator<Cell> compareOperator, object instance, Type type, string value) {
-            var processor = new Processor<Cell>();
-            processor.AddOperator(new CompareDefault());
             return compareOperator.CanCompare(new TypedValue(instance, type), CreateCell(value));
         }
 
         public static bool IsMatch(ExecuteOperator<Cell> executor, Tree<Cell> parameters) {
-            var processor = new Processor<Cell>();
-            processor.AddMemory<Symbol>();
+            var processor = new CellProcessor();
             processor.AddOperator(new ParseMemberName());
-            ((Operator<Cell>) executor).Processor = processor;
+            ((Operator<CellProcessor>) executor).Processor = processor;
             return executor.CanExecute(new TypedValue(new ExecuteContext(new TestStatus(), null, new TypedValue("stuff"))), parameters);
         }
 

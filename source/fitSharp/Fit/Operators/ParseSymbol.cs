@@ -5,11 +5,12 @@
 
 using System;
 using fitSharp.Fit.Model;
+using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
-    public class ParseSymbol: Operator<Cell>, ParseOperator<Cell> {
+    public class ParseSymbol: Operator<CellProcessor>, ParseOperator<Cell> {
         public bool CanParse(Type type, TypedValue instance, Tree<Cell> parameters) {
             return parameters.Value != null && parameters.Value.Text.StartsWith("<<");
         }

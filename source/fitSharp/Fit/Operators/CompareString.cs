@@ -7,12 +7,13 @@ using System;
 using System.Text;
 using fitSharp.Fit.Application;
 using fitSharp.Fit.Model;
+using fitSharp.Fit.Service;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
-    public class CompareString: Operator<Cell>, CompareOperator<Cell> {
+    public class CompareString: Operator<CellProcessor>, CompareOperator<Cell> {
         private static readonly Options defaultOption = Options.Parse(",IgnoreWhitespace");
 
         public bool CanCompare(TypedValue actual, Tree<Cell> expected) {

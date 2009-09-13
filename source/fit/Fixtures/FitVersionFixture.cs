@@ -37,7 +37,7 @@ namespace fit {
         }
 
         public static void Reset() {
-            Set(ConfigurationSettings.AppSettings["fitVersion"]);
+            Set(ConfigurationManager.AppSettings["fitVersion"]);
         }
 
         private static string myVersion;

@@ -42,11 +42,13 @@ namespace fit {
             this.writer = writer;
         }
 
-        public void Execute() {
-		    var saveConfig = new Configuration(Context.Configuration);
-            saveConfig.GetItem<Service.Service>().ApplicationUnderTest = saveConfig.GetItem<ApplicationUnderTest>();
+        public void Execute() { //todo: current status being changed
+            Configuration currentConfig = Context.Configuration;
+		    var newConfig = new Configuration(Context.Configuration);
+            newConfig.GetItem<Service.Service>().ApplicationUnderTest = newConfig.GetItem<ApplicationUnderTest>();
+            Context.Configuration = newConfig;
             ExecuteOnConfiguration();
-		    Context.Configuration = saveConfig;
+		    Context.Configuration = currentConfig;
         }
 
         public void ExecuteOnConfiguration() {

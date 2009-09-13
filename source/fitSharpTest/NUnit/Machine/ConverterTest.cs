@@ -5,11 +5,12 @@
 
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
+using fitSharp.Slim.Service;
 using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Machine {
     [TestFixture] public class ConverterTest {
-        private readonly Processor<string> processor = new Processor<string>(new ApplicationUnderTest());
+        private readonly Service processor = new Service();
 
         [Test] public void CustomTypeIsParsed() {
             var converter = new CustomConverter {Processor = processor};

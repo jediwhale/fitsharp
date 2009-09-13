@@ -6,15 +6,16 @@
 using System;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
+using fitSharp.Slim.Service;
 using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Machine {
     [TestFixture] public class DefaultParseTest {
-        private DefaultParse<string> parse;
-        private readonly Processor<string> processor = new Processor<string>(new ApplicationUnderTest());
+        private DefaultParse<string, Service> parse;
+        private readonly Service processor = new Service();
 
         [SetUp] public void SetUp() {
-            parse = new DefaultParse<string> {Processor = processor};
+            parse = new DefaultParse<string, Service> {Processor = processor};
         }
 
         [Test] public void StringIsParsed() {

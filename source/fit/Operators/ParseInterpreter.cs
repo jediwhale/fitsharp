@@ -11,7 +11,7 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fit.Operators {
-    public class ParseInterpreter: Operator<Cell>, ParseOperator<Cell> {
+    public class ParseInterpreter: Operator<CellProcessor>, ParseOperator<Cell> {
         public bool CanParse(Type type, TypedValue instance, Tree<Cell> parameters) {
             return typeof (Interpreter).IsAssignableFrom(type);
         }
@@ -19,8 +19,14 @@ namespace fit.Operators {
         public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
             var tableCell = (Parse)parameters.Value;
             TypedValue result = Processor.Create(tableCell.At(0, 0, 0).Text.Trim());
-            var fixture = result.Value as Fixture ?? new DoFixture(result.Value);
-            fixture.Processor = Processor;
+            var interpreter = result.Value as Interpreter;
+            if (interpreter != null ) interpreter.Processor = Processor;
+            var fixture = result.Value as Fixture;
+            if (fixture == null) {
+                if (interpreter != null) return new TypedValue(interpreter);
+                fixture = new DoFixture(result.Value) {Processor = Processor}; // todo: missing set processor
+            }
+            fixture.TestStatus = Processor.TestStatus;
             return new TypedValue(fixture);
         }
     }

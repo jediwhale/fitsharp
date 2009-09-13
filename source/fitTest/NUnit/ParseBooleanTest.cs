@@ -4,9 +4,8 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System;
-using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
-using fitSharp.Machine.Engine;
+using fitSharp.Fit.Service;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
 
@@ -15,7 +14,7 @@ namespace fit.Test.NUnit {
         private ParseBoolean parseBoolean;
 
         [SetUp] public void SetUp() {
-            parseBoolean = new ParseBoolean {Processor = new Processor<Cell>()};
+            parseBoolean = new ParseBoolean {Processor = new CellProcessor()};
         }
 
         [Test]

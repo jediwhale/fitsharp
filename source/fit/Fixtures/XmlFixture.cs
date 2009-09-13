@@ -9,7 +9,7 @@ using System.Xml;
 using fit;
 using fit.Operators;
 using fitSharp.Fit.Model;
-using fitSharp.Machine.Engine;
+using fitSharp.Fit.Service;
 using fitSharp.Machine.Model;
 
 namespace fitlibrary {
@@ -25,7 +25,7 @@ namespace fitlibrary {
         private class XmlMatchStrategy: ListMatchStrategy {
             public bool IsOrdered {get { return true; }}
             public bool SurplusAllowed {get {return false;}}
-            public TypedValue[] ActualValues(Processor<Cell> processor, object theActualRow) {
+            public TypedValue[] ActualValues(CellProcessor processor, object theActualRow) {
                 var actuals = (object[]) theActualRow;
                 var result = new TypedValue[actuals.Length];
                 for (int i = 0; i < actuals.Length; i++) result[i] = new TypedValue(actuals[i], actuals[i] == null ? typeof(void) : typeof(string));
@@ -50,12 +50,12 @@ namespace fitlibrary {
 
             public object Current {
                 get {
-                    ArrayList result = new ArrayList();
+                    var result = new ArrayList();
                     for (int i = 0; i < depth - 1; i++) result.Add(null);
                     result.Add(CurrentElement.Name);
                     string text = String.Empty;
                     foreach (XmlNode child in CurrentElement.ChildNodes) {
-                        if (child is XmlText) text += ((XmlText)child).Value;
+                        if (child is XmlText) text += child.Value;
                     }
                     if (text.Length > 0) result.Add(text);
                     foreach (XmlAttribute attribute in CurrentElement.Attributes) {
@@ -93,7 +93,7 @@ namespace fitlibrary {
 
             private XmlElement CurrentElement {get {return (XmlElement)myElements.Peek();}}
 
-            private XmlDocument myDocument;
+            private readonly XmlDocument myDocument;
             private Stack myElements;
             private int depth;
 

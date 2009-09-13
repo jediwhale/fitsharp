@@ -7,7 +7,7 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Slim.Operators {
-    public abstract class ExecuteBase: Operator<string>, ExecuteOperator<string> {
+    public abstract class ExecuteBase: Operator<Service.Service>, ExecuteOperator<string> {
         private const string defaultResult = "OK";
         private readonly IdentifierName identifier;
 

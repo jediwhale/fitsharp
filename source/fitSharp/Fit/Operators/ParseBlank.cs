@@ -5,11 +5,12 @@
 
 using System;
 using fitSharp.Fit.Model;
+using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
-    public class ParseBlank : Operator<Cell>, ParseOperator<Cell> {
+    public class ParseBlank : Operator<CellProcessor>, ParseOperator<Cell> {
         private static readonly IdentifierName blankIdentifier = new IdentifierName("blank");
 
         public bool CanParse(Type type, TypedValue instance, Tree<Cell> parameters) {

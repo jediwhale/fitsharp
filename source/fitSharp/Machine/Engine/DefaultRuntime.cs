@@ -8,7 +8,7 @@ using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
-    public class DefaultRuntime<T>: Operator<T>, RuntimeOperator<T> {
+    public class DefaultRuntime<T,P>: Operator<P>, RuntimeOperator<T> where P: Processor<T,P> {
         public bool CanCreate(string memberName, Tree<T> parameters) {
             return true;
         }

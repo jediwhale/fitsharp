@@ -8,7 +8,7 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Slim.Operators {
-    public class ComposeList: Operator<string>, ComposeOperator<string> { //todo: handle any enumerable type
+    public class ComposeList: Operator<Service.Service>, ComposeOperator<string> { //todo: handle any enumerable type
         public bool CanCompose(TypedValue instance) {
             return instance.Type == typeof (List<object>);
         }
