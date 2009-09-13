@@ -65,10 +65,10 @@ namespace fitlibrary {
             try {
                 string specialActionName = ":" +
                     Processor.Parse(typeof (MemberName), TypedValue.Void, new CellRange(theCurrentRow.Parts, 1)).ValueString;
-                TypedValue result = Processor.TryInvoke(new TypedValue(new FlowKeywords(this)),
+                TypedValue result = Processor.Invoke(new TypedValue(new FlowKeywords(this)),
                                                                                   specialActionName, theCurrentRow.Parts);
                 if (!result.IsValid) {
-                    result = Processor.TryInvoke(new TypedValue(this), specialActionName, theCurrentRow.Parts);
+                    result = Processor.Invoke(new TypedValue(this), specialActionName, theCurrentRow.Parts);
                 }
                 if (!result.IsValid) {
                      result = CellOperation.TryInvoke(this,
@@ -120,7 +120,7 @@ namespace fitlibrary {
 
         private void ExecuteOptionalMethod(string theMethodName, Parse theCell) {
             try {
-                Processor.TryInvoke(new TypedValue(this), theMethodName, theCell);
+                Processor.Invoke(new TypedValue(this), theMethodName, theCell);
             }
             catch (Exception e) {
                 TestStatus.MarkException(theCell, e);

@@ -17,7 +17,7 @@ namespace fitSharp.Fit.Operators {
 	    public override TypedValue Execute(ExecuteParameters parameters) {
 	        switch (parameters.Verb) {
 	            case ExecuteParameters.Input:
-                    TypedValue actual = Processor.TryInvoke(parameters.SystemUnderTest, GetMemberName(parameters.Members),
+                    TypedValue actual = Processor.Invoke(parameters.SystemUnderTest, GetMemberName(parameters.Members),
                              new TreeList<Cell>());
                     if (actual.IsValid) ShowActual(parameters, actual.Value);
 	                break;

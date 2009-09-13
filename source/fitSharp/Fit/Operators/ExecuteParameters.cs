@@ -73,7 +73,7 @@ namespace fitSharp.Fit.Operators {
         public TypedValue GetTypedActual(CellOperator cellOperator) {
             if (!context.Target.HasValue) {
                 try {
-                    TypedValue actualResult = cellOperator.Processor.Invoke(SystemUnderTest, cellOperator.GetMemberName(Members), Parameters);
+                    TypedValue actualResult = cellOperator.InvokeWithThrow(SystemUnderTest, cellOperator.GetMemberName(Members), Parameters);
                     context.Target = actualResult;
                 }
                 catch (ParseException<Cell> e) {

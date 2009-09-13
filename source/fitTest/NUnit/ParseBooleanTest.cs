@@ -14,7 +14,7 @@ namespace fit.Test.NUnit {
         private ParseBoolean parseBoolean;
 
         [SetUp] public void SetUp() {
-            parseBoolean = new ParseBoolean {Processor = new CellProcessor()};
+            parseBoolean = new ParseBoolean {Processor = new CellProcessorBase()};
         }
 
         [Test]

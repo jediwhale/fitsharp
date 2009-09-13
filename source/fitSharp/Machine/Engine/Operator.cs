@@ -18,6 +18,16 @@ namespace fitSharp.Machine.Engine {
             return Processor.Create(membername, new TreeList<T>());
         }
 
+        public TypedValue Execute(Tree<T> parameters) {
+            return Processor.Execute(TypedValue.Void, parameters);
+        }
+
+        public TypedValue InvokeWithThrow(TypedValue instance, string memberName, Tree<T> parameters) {
+            TypedValue result = Processor.Invoke(instance, memberName, parameters);
+            result.ThrowExceptionIfNotValid();
+            return result;
+        }
+
         public TypedValue Parse(Type type, Tree<T> parameters) {
             return Processor.Parse(type, TypedValue.Void, parameters);
         }

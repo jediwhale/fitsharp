@@ -40,7 +40,7 @@ namespace fit.Test.NUnit {
         }
 
         public static bool IsMatch(ExecuteOperator<Cell> executor, Tree<Cell> parameters) {
-            var processor = new CellProcessor();
+            var processor = new CellProcessorBase();
             processor.AddOperator(new ParseMemberName());
             ((CellOperator) executor).Processor = processor;
             return executor.CanExecute(new TypedValue(new ExecuteContext(new TestStatus(), null, new TypedValue("stuff"))), parameters);

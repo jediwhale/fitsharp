@@ -22,7 +22,7 @@ namespace fitSharp.Test.NUnit.Slim {
         [Test] public void InstanceIsCreated() {
             SampleClass.Count = 0;
             var statement = Instructions.MakeSampleClass();
-            service.Execute(statement);
+            service.Execute(TypedValue.Void, statement);
             Assert.AreEqual(1, SampleClass.Count);
         }
 
@@ -30,7 +30,7 @@ namespace fitSharp.Test.NUnit.Slim {
             var configuration = new Configuration();
             configuration.LoadXml("<config><fitSharp.Slim.Service.Service><addOperator>fitSharp.Test.NUnit.Slim.SampleOperator</addOperator></fitSharp.Slim.Service.Service></config>");
             var statement = new TreeList<string>().AddBranchValue("step").AddBranchValue("sampleCommand");
-            var result = (Tree<string>)configuration.GetItem<Service>().Execute(statement).Value;
+            var result = (Tree<string>)configuration.GetItem<Service>().Execute(TypedValue.Void, statement).Value;
             Assert.AreEqual("sampleResult", result.Branches[1].Value);
         }
 

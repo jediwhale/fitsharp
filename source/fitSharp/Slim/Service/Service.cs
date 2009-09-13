@@ -4,12 +4,15 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using fitSharp.Machine.Engine;
+using fitSharp.Machine.Model;
 using fitSharp.Slim.Operators;
 
 namespace fitSharp.Slim.Service {
-    public class Service: ProcessorImpl<string, Service> {
+    public class Service: ProcessorBase<string, Service>, Copyable {
+        private readonly Operators<string, Service> operators;
 
         public Service() {
+            operators = new Operators<string, Service>(this);
             AddMemory<SavedInstance>();
             AddMemory<Symbol>();
             AddOperator(new ExecuteDefault());
@@ -23,6 +26,19 @@ namespace fitSharp.Slim.Service {
             AddOperator(new ComposeException());
             AddOperator(new ComposeBoolean());
             AddOperator(new ComposeList());
+        }
+
+        public Service(Service other): base(other) {
+            operators = new Operators<string, Service>(this);
+            operators.Copy(other.operators);
+        }
+
+        protected override Operators<string, Service> Operators {
+            get { return operators; }
+        }
+
+        Copyable Copyable.Copy() {
+            return new Service(this);
         }
     }
 }

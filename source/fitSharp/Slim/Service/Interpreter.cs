@@ -62,7 +62,7 @@ namespace fitSharp.Slim.Service {
         private Tree<string> ExecuteInstructions(Tree<string> instructions) {
             var results = new TreeList<string>();
             foreach (Tree<string> statement in instructions.Branches) {
-                var result = (Tree<string>) processor.Execute(statement).Value;
+                var result = (Tree<string>) processor.Execute(TypedValue.Void, statement).Value;
                 results.AddBranchValue(result);
                 if (ComposeException.WasAborted(result.Branches[1].Value)) break;
             }

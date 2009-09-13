@@ -38,7 +38,7 @@ namespace fitSharp.Fit.Operators {
         }
 
         private  void Input(ExecuteParameters parameters) {
-            Processor.Invoke(parameters.SystemUnderTest, GetMemberName(parameters.Members),
+            InvokeWithThrow(parameters.SystemUnderTest, GetMemberName(parameters.Members),
                              new TreeList<Cell>().AddBranch(parameters.Cells));
         }
 
@@ -59,7 +59,7 @@ namespace fitSharp.Fit.Operators {
             TypedValue target = parameters.Target;
             var targetObjectProvider = target.Value as TargetObjectProvider;
             var name = ParseTree<MemberName>(parameters.Members);
-            return Processor.TryInvoke(targetObjectProvider != null ? new TypedValue(targetObjectProvider.GetTargetObject()) : target, name.ToString(), parameters.Parameters);
+            return Processor.Invoke(targetObjectProvider != null ? new TypedValue(targetObjectProvider.GetTargetObject()) : target, name.ToString(), parameters.Parameters);
         }
     }
 }

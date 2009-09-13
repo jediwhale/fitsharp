@@ -8,7 +8,6 @@ using fit;
 using fit.Operators;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
-using fitSharp.Machine.Application;
 
 namespace fitnesse.handlers
 {

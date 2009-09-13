@@ -21,19 +21,19 @@ namespace fit.Test.NUnit {
         protected PersonFixture personFixture;
 
         public static bool IsMatch(ParseOperator<Cell> parseOperator, string input) {
-            var processor = new CellProcessor();
+            var processor = new CellProcessorBase();
             ((CellOperator) parseOperator).Processor = processor;
             return parseOperator.CanParse(typeof (string), TypedValue.Void, TestUtils.CreateCell(input));
         }
 
         public static bool IsMatch(CompareOperator<Cell> compareOperator, object instance, Type type, string value) {
-            var processor = new CellProcessor();
+            var processor = new CellProcessorBase();
             processor.AddOperator(new CompareDefault());
             return compareOperator.CanCompare(new TypedValue(instance, type), TestUtils.CreateCell(value));
         }
 
         public static bool IsMatch(ExecuteOperator<Cell> executor, Tree<Cell> parameters) {
-            var processor = new CellProcessor();
+            var processor = new CellProcessorBase();
             processor.AddOperator(new ParseMemberName());
             ((CellOperator) executor).Processor = processor;
             return executor.CanExecute(new TypedValue(new ExecuteContext(new TestStatus(), null, new TypedValue("stuff"))), parameters);

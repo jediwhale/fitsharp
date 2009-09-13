@@ -12,37 +12,43 @@ namespace fitSharp.Machine.Engine {
 
     public interface Processor<T> {
         ApplicationUnderTest ApplicationUnderTest { get;}
+        void AddNamespace(string namespaceName);
+        void AddOperator(string operatorName);
         TypedValue Create(string memberName, Tree<T> parameters);
         bool Compare(TypedValue instance, Tree<T> parameters);
         Tree<T> Compose(TypedValue instance);
+        bool Contains<V>(V matchItem);
+        TypedValue Execute(TypedValue instance, Tree<T> parameters);
+        TypedValue Invoke(TypedValue instance, string memberName, Tree<T> parameters);
+        V Load<V>(V matchItem);
         TypedValue Parse(Type type, TypedValue instance, Tree<T> parameters);
+        void RemoveOperator(string operatorName);
+        void Store<V>(V newItem);
     }
 
 
-    public class ProcessorImpl<T, P>: Processor<T>, Copyable where P: ProcessorImpl<T, P> {
+    public abstract class ProcessorBase<T, P>: Processor<T> where P: Processor<T> {
         //todo: add setup and teardown?
-        //todo: this is turning into a facade so push everything else out?
+
+        protected abstract Operators<T,P> Operators { get; }
 
         public ApplicationUnderTest ApplicationUnderTest { get; set;}
-        private readonly Operators<T,P> operators;
         private readonly Dictionary<Type, object> memoryBanks = new Dictionary<Type, object>();
 
-        public ProcessorImpl(ApplicationUnderTest applicationUnderTest) {
+        protected ProcessorBase(ApplicationUnderTest applicationUnderTest) {
             ApplicationUnderTest = applicationUnderTest;
-            operators = new Operators<T,P>((P)this);
         }
 
-        public ProcessorImpl(): this(new ApplicationUnderTest()) {}
+        protected ProcessorBase(): this(new ApplicationUnderTest()) {}
 
-        public ProcessorImpl(ProcessorImpl<T,P> other): this(new ApplicationUnderTest(other.ApplicationUnderTest)) {
-            operators.Copy(other.operators);
+        protected ProcessorBase(ProcessorBase<T,P> other): this(new ApplicationUnderTest(other.ApplicationUnderTest)) {
             memoryBanks = new Dictionary<Type, object>(other.memoryBanks);
         }
 
-        public void AddOperator(string operatorName) { operators.Add(operatorName); }
-        public void AddOperator(Operator<T, P> anOperator) { operators.Add(anOperator); }
-        public void AddOperator(Operator<T, P> anOperator, int priority) { operators.Add(anOperator, priority); }
-        public void RemoveOperator(string operatorName) { operators.Remove(operatorName); }
+        public void AddOperator(string operatorName) { Operators.Add(operatorName); }
+        public void AddOperator(Operator<T, P> anOperator) { Operators.Add(anOperator); }
+        public void AddOperator(Operator<T, P> anOperator, int priority) { Operators.Add(anOperator, priority); }
+        public void RemoveOperator(string operatorName) { Operators.Remove(operatorName); }
 
         public void AddNamespace(string namespaceName) {
             ApplicationUnderTest.AddNamespace(namespaceName);
@@ -50,7 +56,7 @@ namespace fitSharp.Machine.Engine {
 
         public bool Compare(TypedValue instance, Tree<T> parameters) {
             bool result = false;
-            operators.Do<CompareOperator<T>>(
+            Operators.Do<CompareOperator<T>>(
                 o => o.CanCompare(instance, parameters),
                 o => result = o.Compare(instance, parameters));
             return result;
@@ -58,7 +64,7 @@ namespace fitSharp.Machine.Engine {
 
         public Tree<T> Compose(TypedValue instance) {
             Tree<T> result = null;
-            operators.Do<ComposeOperator<T>>(
+            Operators.Do<ComposeOperator<T>>(
                 o => o.CanCompose(instance),
                 o => result = o.Compose(instance));
             return result;
@@ -66,19 +72,15 @@ namespace fitSharp.Machine.Engine {
 
         public TypedValue Execute(TypedValue instance, Tree<T> parameters) {
             TypedValue result = TypedValue.Void;
-            operators.Do<ExecuteOperator<T>>(
+            Operators.Do<ExecuteOperator<T>>(
                 o => o.CanExecute(instance, parameters),
                 o => result = o.Execute(instance, parameters));
             return result;
         }
 
-        public TypedValue Execute(Tree<T> parameters) {
-            return Execute(TypedValue.Void, parameters);
-        }
-
         public TypedValue Parse(Type type, TypedValue instance, Tree<T> parameters) {
             TypedValue result = TypedValue.Void;
-            operators.Do<ParseOperator<T>>(
+            Operators.Do<ParseOperator<T>>(
                 o => o.CanParse(type, instance, parameters),
                 o => result = o.Parse(type, instance, parameters));
             return result;
@@ -86,28 +88,18 @@ namespace fitSharp.Machine.Engine {
 
         public TypedValue Create(string memberName, Tree<T> parameters) {
             TypedValue result = TypedValue.Void;
-            operators.Do<RuntimeOperator<T>>(
+            Operators.Do<RuntimeOperator<T>>(
                 o => o.CanCreate(memberName, parameters),
                 o => result = o.Create(memberName, parameters));
             return result;
         }
 
-        public TypedValue TryInvoke(TypedValue instance, string memberName, Tree<T> parameters) {
+        public TypedValue Invoke(TypedValue instance, string memberName, Tree<T> parameters) {
             TypedValue result = TypedValue.Void;
-            operators.Do<RuntimeOperator<T>>(
+            Operators.Do<RuntimeOperator<T>>(
                 o => o.CanInvoke(instance, memberName, parameters),
                 o => result = o.Invoke(instance, memberName, parameters));
             return result;
-        }
-
-        public TypedValue Invoke(TypedValue instance, string memberName, Tree<T> parameters) {
-            TypedValue result = TryInvoke(instance, memberName, parameters);
-            result.ThrowExceptionIfNotValid();
-            return result;
-        }
-
-        Copyable Copyable.Copy() {
-            return new ProcessorImpl<T,P>(this);
         }
 
         public void AddMemory<V>() {

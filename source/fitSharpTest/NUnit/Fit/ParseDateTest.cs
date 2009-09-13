@@ -12,7 +12,7 @@ namespace fitSharp.Test.NUnit.Fit {
         private string exceptionMessage;
 
         [SetUp] public void SetUp() {
-            parseDate = new ParseDate {Processor = new CellProcessor()};
+            parseDate = new ParseDate {Processor = new CellProcessorBase()};
             exceptionMessage = string.Empty;
         }
 

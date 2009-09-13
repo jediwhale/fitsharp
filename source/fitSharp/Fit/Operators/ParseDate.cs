@@ -1,11 +1,10 @@
 ﻿using System;
 using fitSharp.Fit.Model;
-using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
-    public class ParseDate: Operator<Cell, CellProcessor>, ParseOperator<Cell> {
+    public class ParseDate: CellOperator, ParseOperator<Cell> {
         private static readonly IdentifierName today = new IdentifierName("today");
 
         public bool CanParse(Type type, TypedValue instance, Tree<Cell> parameters) {

@@ -11,7 +11,7 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fit.Service {
-    public class Service: CellProcessor, Copyable {
+    public class Service: CellProcessorBase, Copyable {
         public Service() {
             AddOperator(new RuntimeFlow());
 

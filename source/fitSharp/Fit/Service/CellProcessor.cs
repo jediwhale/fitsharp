@@ -6,14 +6,20 @@
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Engine;
 using fitSharp.Fit.Operators;
+using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Service {
 
-    public class CellProcessor: ProcessorImpl<Cell, CellProcessor> {
+    public interface CellProcessor: Processor<Cell> {
+	    TestStatus TestStatus { get; set; }
+    }
 
+    public class CellProcessorBase: ProcessorBase<Cell, CellProcessor>, Copyable, CellProcessor {
+        private readonly Operators<Cell, CellProcessor> operators;
 	    public TestStatus TestStatus { get; set; }
 
-        public CellProcessor() {
+        public CellProcessorBase() {
+            operators = new Operators<Cell, CellProcessor>(this);
             AddOperator(new ParseDefault());
             AddOperator(new ExecuteDefault());
             AddOperator(new CompareDefault());
@@ -40,8 +46,18 @@ namespace fitSharp.Fit.Service {
             AddMemory<Symbol>();
         }
 
-        public CellProcessor(CellProcessor other): base(other) {
+        public CellProcessorBase(CellProcessorBase other): base(other) {
             TestStatus = other.TestStatus;
+            operators = new Operators<Cell, CellProcessor>(this);
+            operators.Copy(other.operators);
+        }
+
+        protected override Operators<Cell, CellProcessor> Operators {
+            get { return operators; }
+        }
+
+        Copyable Copyable.Copy() {
+            return new CellProcessorBase(this);
         }
     }
 }

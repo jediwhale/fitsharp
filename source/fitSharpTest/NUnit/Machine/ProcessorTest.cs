@@ -23,7 +23,7 @@ namespace fitSharp.Test.NUnit.Machine {
 
         [Test] public void NoOperatorIsFound() {
             try {
-                processor.Execute(new TreeList<string>());
+                Execute();
                 Assert.Fail();
             }
             catch (ApplicationException) {
@@ -33,16 +33,24 @@ namespace fitSharp.Test.NUnit.Machine {
 
         [Test] public void DefaultOperatorIsFound() {
             processor.AddOperator(defaultTest);
-            object result = processor.Execute(new TreeList<string>()).Value;
+            object result = Execute();
             Assert.AreEqual("defaultexecute", result.ToString());
+        }
+
+        private object Execute() {
+            return processor.Execute(TypedValue.Void, new TreeList<string>()).Value;
         }
 
         [Test] public void SpecificOperatorIsFound() {
             processor.AddOperator(defaultTest);
             processor.AddOperator(specificTestA);
             processor.AddOperator(specificTestB);
-            object result = processor.Execute(new TreeLeaf<string>("A")).Value;
+            object result = Execute("A");
             Assert.AreEqual("executeA", result.ToString());
+        }
+
+        private object Execute(string parameter) {
+            return processor.Execute(TypedValue.Void, new TreeLeaf<string>(parameter)).Value;
         }
 
         [Test] public void TypeIsCreated() {
@@ -52,23 +60,23 @@ namespace fitSharp.Test.NUnit.Machine {
 
         [Test] public void MethodIsInvoked() {
             var instance = new TypedValue(new SampleClass());
-            TypedValue result = processor.TryInvoke(instance, "methodnoparms", new TreeList<string>());
+            TypedValue result = processor.Invoke(instance, "methodnoparms", new TreeList<string>());
             Assert.AreEqual("samplereturn", result.Value);
         }
 
         [Test] public void MethodWithParameterIsInvoked() {
             var instance = new TypedValue(new SampleClass());
-            TypedValue result = processor.TryInvoke(instance, "MethodWithParms", new TreeList<string>().AddBranchValue("stringparm0"));
+            TypedValue result = processor.Invoke(instance, "MethodWithParms", new TreeList<string>().AddBranchValue("stringparm0"));
             Assert.AreEqual("samplestringparm0", result.Value);
         }
 
         [Test] public void OperatorIsRemoved() {
             processor.AddOperator(defaultTest);
             processor.AddOperator(specificTestA);
-            object result = processor.Execute(new TreeLeaf<string>("A")).Value;
+            object result = Execute("A");
             Assert.AreEqual("executeA", result.ToString());
             processor.RemoveOperator(specificTestA.GetType().FullName);
-            result = processor.Execute(new TreeList<string>("A")).Value;
+            result = Execute("A");
             Assert.AreEqual("defaultexecute", result.ToString());
         }
 
@@ -91,8 +99,8 @@ namespace fitSharp.Test.NUnit.Machine {
             processor.Store(new KeyValueMemory<string, string>("something", "stuff"));
             copy.AddMemory<KeyValueMemory<string, string>>();
             copy.Store(new KeyValueMemory<string, string>("something", "else"));
-            Assert.AreEqual("stuff", processor.Execute(null).Value);
-            Assert.AreEqual("else", copy.Execute(null).Value);
+            Assert.AreEqual("stuff", processor.Execute(TypedValue.Void, null).Value);
+            Assert.AreEqual("else", copy.Execute(TypedValue.Void, null).Value);
         }
 
         private class MemoryOperator: Operator<string, BasicProcessor>, ExecuteOperator<string> {

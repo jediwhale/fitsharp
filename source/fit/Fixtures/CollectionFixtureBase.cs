@@ -10,26 +10,25 @@ using fit.Operators;
 namespace fitlibrary {
 
 	public abstract class CollectionFixtureBase: Fixture {
-
-        public CollectionFixtureBase() {
+	    protected CollectionFixtureBase() {
             myArray = new ArrayList();
         }
 
-        public CollectionFixtureBase(object[] theArray) {
+	    protected CollectionFixtureBase(object[] theArray) {
             myArray = new ArrayList(theArray);
         }
 
-        public CollectionFixtureBase(ICollection theCollection) {
+	    protected CollectionFixtureBase(ICollection theCollection) {
             myArray = new ArrayList(theCollection);
         }
 
-        public CollectionFixtureBase(IEnumerator theEnumerator): this() {
+	    protected CollectionFixtureBase(IEnumerator theEnumerator): this() {
             while (theEnumerator.MoveNext()) {
                 myArray.Add(theEnumerator.Current);
             }
         }
 
-        public CollectionFixtureBase(object[][] theGrid): this() {
+	    protected CollectionFixtureBase(object[][] theGrid): this() {
             for (int i = 0; i < theGrid.Length; i++) {
                 myArray.Add(theGrid[i]);
             }
@@ -38,7 +37,7 @@ namespace fitlibrary {
         protected abstract ListMatchStrategy MatchStrategy {get;}
 
         protected void CompareRows(Parse theTableRows) {
-            ListMatcher matcher = new ListMatcher(Processor, MatchStrategy);
+            var matcher = new ListMatcher(Processor, MatchStrategy);
             matcher.MarkCell(TestStatus, GetTargetObject(), myArray, theTableRows);
         }
 
