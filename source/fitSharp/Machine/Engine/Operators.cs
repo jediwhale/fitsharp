@@ -5,13 +5,14 @@
 
 using System;
 using System.Collections.Generic;
+using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
     public delegate bool CanDoOperation<T>(T anOperator);
     public delegate void DoOperation<T>(T anOperator);
-    public class Operators<T, P> where P: Processor<T, P> {
+    public class Operators<T, P> where P: Processor<T> {
         private readonly P processor;
-        private readonly List<List<Operator<P>>> operators = new List<List<Operator<P>>>();
+        private readonly List<List<Operator<T, P>>> operators = new List<List<Operator<T, P>>>();
 
         public Operators(P processor) {
             this.processor = processor;
@@ -20,12 +21,12 @@ namespace fitSharp.Machine.Engine {
             Add(new DefaultRuntime<T,P>());
         }
 
-        public void Add(string operatorName) { Add((Operator<P>)processor.Create(operatorName).Value); }
+        public void Add(string operatorName) { Add((Operator<T, P>)processor.Create(operatorName, new TreeList<T>()).Value); }
 
-        public void Add(Operator<P> anOperator) { Add(anOperator, 0); }
+        public void Add(Operator<T, P> anOperator) { Add(anOperator, 0); }
 
-        public void Add(Operator<P> anOperator, int priority) {
-            while (operators.Count <= priority) operators.Add(new List<Operator<P>>());
+        public void Add(Operator<T, P> anOperator, int priority) {
+            while (operators.Count <= priority) operators.Add(new List<Operator<T, P>>());
             anOperator.Processor = processor;
             operators[priority].Add(anOperator);
         }
@@ -33,15 +34,15 @@ namespace fitSharp.Machine.Engine {
         public void Copy(Operators<T,P> from) {
             operators.Clear();
             for (int priority = 0; priority < from.operators.Count; priority++) {
-                foreach (Operator<P> anOperator in from.operators[priority]) {
-                    Add((Operator<P>)Activator.CreateInstance(anOperator.GetType()), priority);
+                foreach (Operator<T, P> anOperator in from.operators[priority]) {
+                    Add((Operator<T, P>)Activator.CreateInstance(anOperator.GetType()), priority);
                 }
             }
         }
 
         public void Remove(string operatorName) {
-            foreach (List<Operator<P>> list in operators)
-                foreach (Operator<P> item in list)
+            foreach (List<Operator<T, P>> list in operators)
+                foreach (Operator<T, P> item in list)
                     if (item.GetType().FullName == operatorName) {
                         list.Remove(item);
                         return;

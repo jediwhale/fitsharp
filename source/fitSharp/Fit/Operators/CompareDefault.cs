@@ -5,12 +5,11 @@
 
 using System;
 using fitSharp.Fit.Model;
-using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
-    public class CompareDefault: Operator<CellProcessor>, CompareOperator<Cell> {
+    public class CompareDefault: CellOperator, CompareOperator<Cell> {
         public bool CanCompare(TypedValue actual, Tree<Cell> expected) {
             return true;
         }
@@ -19,7 +18,7 @@ namespace fitSharp.Fit.Operators {
             if (actual.IsVoid) {
                 return false;
             }
-            TypedValue expectedValue = Processor.Parse(actual.Type, expected);
+            TypedValue expectedValue = Parse(actual.Type, expected);
             return AreEqual(expectedValue.Value, actual.Value);
         }
 

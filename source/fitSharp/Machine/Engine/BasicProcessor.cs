@@ -6,14 +6,14 @@
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
-    public class BasicProcessor: Processor<string, BasicProcessor> {
+    public class BasicProcessor: ProcessorImpl<string, BasicProcessor> {
         public BasicProcessor() {
             AddOperator(new DefaultCompose());
         }
 
-        public BasicProcessor(Processor<string, BasicProcessor> other): base(other) {}
+        public BasicProcessor(ProcessorImpl<string, BasicProcessor> other): base(other) {}
 
-        private class DefaultCompose: Operator<BasicProcessor>, ComposeOperator<string> {
+        private class DefaultCompose: Operator<string, BasicProcessor>, ComposeOperator<string> {
             public bool CanCompose(TypedValue instance) {
                 return true;
             }

@@ -63,7 +63,8 @@ namespace fitlibrary {
 
         protected void ProcessFlowRow(Parse theCurrentRow) {
             try {
-                string specialActionName = ":" + Processor.ParseTree<MemberName>(new CellRange(theCurrentRow.Parts, 1));
+                string specialActionName = ":" +
+                    Processor.Parse(typeof (MemberName), TypedValue.Void, new CellRange(theCurrentRow.Parts, 1)).ValueString;
                 TypedValue result = Processor.TryInvoke(new TypedValue(new FlowKeywords(this)),
                                                                                   specialActionName, theCurrentRow.Parts);
                 if (!result.IsValid) {
@@ -161,7 +162,7 @@ namespace fitlibrary {
             }
         }
 
-        private void ProcessRestOfTable(Fixture theFixture, Parse theRestOfTheRows) {
+        private void ProcessRestOfTable(Interpreter theFixture, Parse theRestOfTheRows) {
             var restOfTable = new Parse("table", "", theRestOfTheRows, null);
             theFixture.Prepare(this, restOfTable);
             try {

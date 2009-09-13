@@ -5,10 +5,10 @@
 
 using System;
 using fitSharp.Machine.Model;
-using fitSharp.Slim.Service;
+using fitSharp.Slim.Operators;
 
 namespace fitSharp.Machine.Engine {
-    public abstract class Converter<T>: Operator<Service>, ParseOperator<string>, ComposeOperator<string> {
+    public abstract class Converter<T>: SlimOperator, ParseOperator<string>, ComposeOperator<string> {
         public bool CanCompose(TypedValue instance) {
             return IsMatch(instance.Type);
         }

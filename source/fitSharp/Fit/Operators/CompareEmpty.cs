@@ -4,13 +4,12 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using fitSharp.Fit.Model;
-using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators
 {
-    public class CompareEmpty: Operator<CellProcessor>, CompareOperator<Cell> {
+    public class CompareEmpty: CellOperator, CompareOperator<Cell> {
         public bool CanCompare(TypedValue actual, Tree<Cell> expected) {
             return (string.IsNullOrEmpty(expected.Value.Text))
                    && expected.IsLeaf;

@@ -16,7 +16,7 @@ namespace fitSharp.Fit.Operators {
 
         public override TypedValue Execute(ExecuteParameters parameters) {
             try {
-                object actual = parameters.GetActual(Processor);
+                object actual = GetActual(parameters);
                 parameters.TestStatus.MarkWrong(parameters.Cell, actual.ToString());
             }
             catch {

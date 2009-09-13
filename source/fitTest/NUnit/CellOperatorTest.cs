@@ -22,7 +22,7 @@ namespace fit.Test.NUnit {
 
         public static bool IsMatch(ParseOperator<Cell> parseOperator, string input) {
             var processor = new CellProcessor();
-            ((Operator<CellProcessor>) parseOperator).Processor = processor;
+            ((CellOperator) parseOperator).Processor = processor;
             return parseOperator.CanParse(typeof (string), TypedValue.Void, TestUtils.CreateCell(input));
         }
 
@@ -35,7 +35,7 @@ namespace fit.Test.NUnit {
         public static bool IsMatch(ExecuteOperator<Cell> executor, Tree<Cell> parameters) {
             var processor = new CellProcessor();
             processor.AddOperator(new ParseMemberName());
-            ((Operator<CellProcessor>) executor).Processor = processor;
+            ((CellOperator) executor).Processor = processor;
             return executor.CanExecute(new TypedValue(new ExecuteContext(new TestStatus(), null, new TypedValue("stuff"))), parameters);
         }
 

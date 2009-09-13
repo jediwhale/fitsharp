@@ -6,12 +6,11 @@
 using System;
 using System.Text.RegularExpressions;
 using fitSharp.Fit.Model;
-using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
-    public class CompareIntegralRange : Operator<CellProcessor>, CompareOperator<Cell> {
+    public class CompareIntegralRange : CellOperator, CompareOperator<Cell> {
         private static readonly Regex matchExpression = new Regex("^-?[0-9]+\\.\\.-?[0-9]+$");
 
         public bool CanCompare(TypedValue actual, Tree<Cell> expected) {

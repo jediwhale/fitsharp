@@ -5,12 +5,11 @@
 
 using System;
 using fitSharp.Fit.Model;
-using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
-    public class ParseDefault : Operator<CellProcessor>, ParseOperator<Cell> {
+    public class ParseDefault : CellOperator, ParseOperator<Cell> {
         public bool CanParse(Type type, TypedValue instance, Tree<Cell> parameters) {
             return true;
         }

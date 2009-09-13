@@ -5,8 +5,10 @@
 
 using System.IO;
 using fitlibrary;
+using fitSharp.Fit.Model;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
+using fitSharp.Machine.Model;
 
 namespace fit.Test.FitUnit {
     public class ObjectFactoryTest: DoFixture {
@@ -19,7 +21,7 @@ namespace fit.Test.FitUnit {
         }
 
         public string CreateInstance(string theFixture) {
-            return Context.Configuration.GetItem<Service.Service>().Create(theFixture).Type.FullName;
+            return Context.Configuration.GetItem<Service.Service>().Create(theFixture, new TreeList<Cell>()).Type.FullName;
         }
     }
 }

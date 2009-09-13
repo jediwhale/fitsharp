@@ -97,7 +97,7 @@ namespace fitSharp.Test.NUnit.Slim {
         }
 
         private Tree<string> Compose(ComposeOperator<string> composeOperator, object instance, Type type) {
-            var compose = (Operator<Service>)composeOperator;
+            var compose = (SlimOperator)composeOperator;
             compose.Processor = processor;
             Assert.IsTrue(composeOperator.CanCompose(new TypedValue(instance, type)));
             return composeOperator.Compose(new TypedValue(instance, type));
@@ -108,7 +108,7 @@ namespace fitSharp.Test.NUnit.Slim {
         }
 
         private void CheckCompose(ComposeOperator<string> composeOperator, object instance, Type type, object expected) {
-            var compose = (Operator<Service>)composeOperator;
+            var compose = (SlimOperator)composeOperator;
             compose.Processor = processor;
             Assert.IsTrue(composeOperator.CanCompose(new TypedValue(instance, type)));
             Tree<string> result = composeOperator.Compose(new TypedValue(instance, type));

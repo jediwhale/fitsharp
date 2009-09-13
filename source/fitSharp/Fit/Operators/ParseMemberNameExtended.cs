@@ -7,12 +7,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using fitSharp.Fit.Model;
-using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
-    public class ParseMemberNameExtended: Operator<CellProcessor>, ParseOperator<Cell> {
+    public class ParseMemberNameExtended: CellOperator, ParseOperator<Cell> {
         private static readonly Dictionary<char, string> specialCharacterConversion;
         private static readonly Dictionary<char, string> digitConversion;
 

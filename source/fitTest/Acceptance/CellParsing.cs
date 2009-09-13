@@ -10,6 +10,7 @@ using fitlibrary;
 using fitlibrary.table;
 using fitlibrary.tree;
 using fitSharp.Fit.Model;
+using fitSharp.Fit.Operators;
 using fitSharp.Fit.Service;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
@@ -119,7 +120,7 @@ namespace fit.Test.Acceptance {
         public override string ToString() {return Content;}
     }
 
-    public class SampleCustomParser: Operator<CellProcessor>, ParseOperator<Cell> {
+    public class SampleCustomParser: CellOperator, ParseOperator<Cell> {
         public bool CanParse(Type type, TypedValue instance, Tree<Cell> parameters) {
             return type == typeof(CellParsingTestClass) && parameters.Value.Text == "one";
         }

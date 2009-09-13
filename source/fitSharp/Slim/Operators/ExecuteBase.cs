@@ -7,7 +7,7 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Slim.Operators {
-    public abstract class ExecuteBase: Operator<Service.Service>, ExecuteOperator<string> {
+    public abstract class ExecuteBase: SlimOperator, ExecuteOperator<string> {
         private const string defaultResult = "OK";
         private readonly IdentifierName identifier;
 
@@ -21,7 +21,7 @@ namespace fitSharp.Slim.Operators {
                 return new TypedValue(ExecuteOperation(parameters));
             }
             catch (System.Exception e) {
-                return new TypedValue(Result(parameters, Processor.Compose(e)));
+                return new TypedValue(Result(parameters, Compose(e)));
             }
         }
 

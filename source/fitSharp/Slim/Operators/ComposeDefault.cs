@@ -7,7 +7,7 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Slim.Operators {
-    public class ComposeDefault: Operator<Service.Service>, ComposeOperator<string> {
+    public class ComposeDefault: SlimOperator, ComposeOperator<string> {
         private const string voidResult = "/__VOID__/";
 
         public bool CanCompose(TypedValue instance) {

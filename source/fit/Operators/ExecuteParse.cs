@@ -14,12 +14,12 @@ namespace fit.Operators {
     public class ExecuteParse: ExecuteBase, ParseOperator<Cell> {
         public override bool CanExecute(ExecuteParameters parameters) {
             if (parameters.Verb != ExecuteParameters.Check) return false;
-            TypedValue actualValue = parameters.GetTypedActual(Processor);
+            TypedValue actualValue = parameters.GetTypedActual(this);
             return typeof (Parse).IsAssignableFrom(actualValue.Type);
         }
 
         public override TypedValue Execute(ExecuteParameters parameters) {
-            TypedValue actualValue = parameters.GetTypedActual(Processor);
+            TypedValue actualValue = parameters.GetTypedActual(this);
 
             var cell = (Parse) parameters.Cell;
             var expected = new FixtureTable(cell.Parts);

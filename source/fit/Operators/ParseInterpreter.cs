@@ -6,19 +6,20 @@
 using System;
 using fitlibrary;
 using fitSharp.Fit.Model;
+using fitSharp.Fit.Operators;
 using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fit.Operators {
-    public class ParseInterpreter: Operator<CellProcessor>, ParseOperator<Cell> {
+    public class ParseInterpreter: CellOperator, ParseOperator<Cell> {
         public bool CanParse(Type type, TypedValue instance, Tree<Cell> parameters) {
             return typeof (Interpreter).IsAssignableFrom(type);
         }
 
         public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
             var tableCell = (Parse)parameters.Value;
-            TypedValue result = Processor.Create(tableCell.At(0, 0, 0).Text.Trim());
+            TypedValue result = Create(tableCell.At(0, 0, 0).Text.Trim());
             var interpreter = result.Value as Interpreter;
             if (interpreter != null ) interpreter.Processor = Processor;
             var fixture = result.Value as Fixture;

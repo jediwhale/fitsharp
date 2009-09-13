@@ -37,11 +37,11 @@ namespace fitSharp.Test.NUnit.Slim {
         [Test] public void ParseSymbolIsDoneFirst() {
             service.Store(new Symbol("symbol", "testvalue"));
             service.AddOperator(new ParseUpperCase());
-            var value = service.Parse<string>("$symbol");
+            var value = service.Parse(typeof(string), TypedValue.Void, new TreeLeaf<string>("$symbol")).Value;
             Assert.AreEqual("TESTVALUE", value);
         }
 
-        private class ParseUpperCase: Operator<Service>, ParseOperator<string> {
+        private class ParseUpperCase: SlimOperator, ParseOperator<string> {
             public bool CanParse(Type type, TypedValue instance, Tree<string> parameters) {
                 return true;
             }

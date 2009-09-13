@@ -6,7 +6,6 @@
 using System;
 using System.Collections;
 using fit.Model;
-using fit.Operators;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
 
@@ -24,7 +23,7 @@ namespace fit
 		public override void DoRows(Parse rows)
 		{
 		    headerCells = rows.Parts;
-			ArrayList queryResults = new ArrayList(Query());
+			var queryResults = new ArrayList(Query());
 			Parse row = rows;
 			while ((row = row.More) != null)
 			{
@@ -75,7 +74,7 @@ namespace fit
             foreach (Parse headerCell in new CellRange(headerCells).Cells)
 			{
 		        TypedValue actual = CellOperation.Invoke(this, headerCell);
-                var newCell = (Parse)Processor.Compose(actual.Value ?? "null");
+                var newCell = (Parse)Processor.Compose(new TypedValue(actual.Value ?? "null"));
 				if (cell == null)
 					cell = newCell;
 				else
@@ -85,7 +84,7 @@ namespace fit
 			MarkRowAsSurplus(rows.Last);
 		}
 
-		private void AddRowToTable(Parse cells, Parse rows)
+		private static void AddRowToTable(Parse cells, Parse rows)
 		{
 			rows.Last.More = new Parse("tr", null, cells, null);
 		}
@@ -99,7 +98,7 @@ namespace fit
 		{
 			if (!ColumnHasBinding(col))
 				return null;
-			ArrayList matches = new ArrayList();
+			var matches = new ArrayList();
 			foreach (object queryItem in queryItems)
 			{
 				SetTargetObject(queryItem);
@@ -108,10 +107,9 @@ namespace fit
 			}
 			if (UniqueMatchFound(matches))	
 				return UniqueMatch(matches);
-			else if (matches.Count > 0 && !ColumnHasBinding(col + 1))
-				return matches[0];
-			else 
-				return FindMatchingObject(matches, row, col + 1);
+		    if (matches.Count > 0 && !ColumnHasBinding(col + 1))
+		        return matches[0];
+		    return FindMatchingObject(matches, row, col + 1);
 		}
 
 		private bool IsMatch(Parse row, int col)
@@ -121,7 +119,7 @@ namespace fit
 		    //return new ExpectedValueCell(GetCellForColumn(row, col)).IsEqual(actual);
 		}
 
-		private Parse GetCellForColumn(Parse row, int col)
+		private static Parse GetCellForColumn(Parse row, int col)
 		{
 			Parse cell = row.Parts;
 			for (int i = 0; i < col; i++)
@@ -134,12 +132,12 @@ namespace fit
 			return col < headerCells.Size;
 		}
 
-		private bool UniqueMatchFound(ArrayList matches)
+		private static bool UniqueMatchFound(ICollection matches)
 		{
 			return matches.Count == 1;
 		}
 
-		private object UniqueMatch(ArrayList matches)
+		private static object UniqueMatch(IList matches)
 		{
 			return matches[0];
 		}
@@ -170,6 +168,6 @@ namespace fit
 		public abstract object[] Query(); // get rows to be compared
 		public abstract Type GetTargetClass(); // get expected type of row
 
-		private object targetObject = null;
+		private object targetObject;
 	}
 }

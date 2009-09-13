@@ -5,7 +5,6 @@
 
 using fitSharp.Fit.Exception;
 using fitSharp.Fit.Model;
-using fitSharp.Fit.Service;
 using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
 
@@ -71,14 +70,10 @@ namespace fitSharp.Fit.Operators {
             this.tree = tree;
         }
 
-        public object GetActual(CellProcessor processor) {
-            return GetTypedActual(processor).Value;
-        }
-
-        public TypedValue GetTypedActual(CellProcessor processor) {
+        public TypedValue GetTypedActual(CellOperator cellOperator) {
             if (!context.Target.HasValue) {
                 try {
-                    TypedValue actualResult = processor.Invoke(SystemUnderTest, GetMemberName(processor), Parameters);
+                    TypedValue actualResult = cellOperator.Processor.Invoke(SystemUnderTest, cellOperator.GetMemberName(Members), Parameters);
                     context.Target = actualResult;
                 }
                 catch (ParseException<Cell> e) {
@@ -87,10 +82,6 @@ namespace fitSharp.Fit.Operators {
                 }
             }
             return context.Target.Value;
-        }
-
-        public string GetMemberName(CellProcessor processor) {
-            return processor.ParseTree<MemberName>(Members).ToString();
         }
     }
 }

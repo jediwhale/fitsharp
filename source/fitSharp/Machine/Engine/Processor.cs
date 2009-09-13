@@ -9,30 +9,39 @@ using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
-    public class Processor<T, P>: Copyable where P: Processor<T, P> {
+
+    public interface Processor<T> {
+        ApplicationUnderTest ApplicationUnderTest { get;}
+        TypedValue Create(string memberName, Tree<T> parameters);
+        bool Compare(TypedValue instance, Tree<T> parameters);
+        Tree<T> Compose(TypedValue instance);
+        TypedValue Parse(Type type, TypedValue instance, Tree<T> parameters);
+    }
+
+
+    public class ProcessorImpl<T, P>: Processor<T>, Copyable where P: ProcessorImpl<T, P> {
         //todo: add setup and teardown?
         //todo: this is turning into a facade so push everything else out?
 
+        public ApplicationUnderTest ApplicationUnderTest { get; set;}
         private readonly Operators<T,P> operators;
         private readonly Dictionary<Type, object> memoryBanks = new Dictionary<Type, object>();
 
-        public ApplicationUnderTest ApplicationUnderTest { get; set; }
-
-        public Processor(ApplicationUnderTest applicationUnderTest) {
+        public ProcessorImpl(ApplicationUnderTest applicationUnderTest) {
             ApplicationUnderTest = applicationUnderTest;
             operators = new Operators<T,P>((P)this);
         }
 
-        public Processor(): this(new ApplicationUnderTest()) {}
+        public ProcessorImpl(): this(new ApplicationUnderTest()) {}
 
-        public Processor(Processor<T,P> other): this(new ApplicationUnderTest(other.ApplicationUnderTest)) {
+        public ProcessorImpl(ProcessorImpl<T,P> other): this(new ApplicationUnderTest(other.ApplicationUnderTest)) {
             operators.Copy(other.operators);
             memoryBanks = new Dictionary<Type, object>(other.memoryBanks);
         }
 
         public void AddOperator(string operatorName) { operators.Add(operatorName); }
-        public void AddOperator(Operator<P> anOperator) { operators.Add(anOperator); }
-        public void AddOperator(Operator<P> anOperator, int priority) { operators.Add(anOperator, priority); }
+        public void AddOperator(Operator<T, P> anOperator) { operators.Add(anOperator); }
+        public void AddOperator(Operator<T, P> anOperator, int priority) { operators.Add(anOperator, priority); }
         public void RemoveOperator(string operatorName) { operators.Remove(operatorName); }
 
         public void AddNamespace(string namespaceName) {
@@ -45,10 +54,6 @@ namespace fitSharp.Machine.Engine {
                 o => o.CanCompare(instance, parameters),
                 o => result = o.Compare(instance, parameters));
             return result;
-        }
-
-        public Tree<T> Compose(object instance) {
-            return Compose(new TypedValue(instance));
         }
 
         public Tree<T> Compose(TypedValue instance) {
@@ -79,34 +84,6 @@ namespace fitSharp.Machine.Engine {
             return result;
         }
 
-        public TypedValue Parse(Type type, Tree<T> parameters) {
-            return Parse(type, TypedValue.Void, parameters);
-        }
-
-        public TypedValue Parse(Type type, T input) {
-            return Parse(type, new TreeLeaf<T>(input));
-        }
-
-        public V ParseTree<V>(Tree<T> input) {
-            return (V) Parse(typeof (V), input).Value;
-        }
-
-        public V Parse<V>(T input) {
-            return (V) Parse(typeof (V), input).Value;
-        }
-
-        public TypedValue ParseString(Type type, string input) {
-            return Parse(type, Compose(new TypedValue(input, typeof(string))));
-        }
-
-        public V ParseString<V>(string input) {
-            return (V) ParseString(typeof (V), input).Value;
-        }
-
-        public TypedValue Create(string membername) {
-            return Create(membername, new TreeList<T>());
-        }
-
         public TypedValue Create(string memberName, Tree<T> parameters) {
             TypedValue result = TypedValue.Void;
             operators.Do<RuntimeOperator<T>>(
@@ -130,7 +107,7 @@ namespace fitSharp.Machine.Engine {
         }
 
         Copyable Copyable.Copy() {
-            return new Processor<T,P>(this);
+            return new ProcessorImpl<T,P>(this);
         }
 
         public void AddMemory<V>() {

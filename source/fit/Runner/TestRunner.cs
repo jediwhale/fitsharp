@@ -186,7 +186,7 @@ namespace fitnesse.fitserver
 		private void WriteTestRunner(Tree<Cell> theTables, TestStatus status)
 		{
             var tables = (Parse) theTables.Value;
-            string data = configuration.GetItem<Service>().Parse<StoryTestString>(tables).ToString();
+            string data = configuration.GetItem<Service>().Parse(typeof(StoryTestString), TypedValue.Void, tables).ValueString;
 			int indexOfFirstLineBreak = data.IndexOf("\n");
 			string pageTitle = data.Substring(0, indexOfFirstLineBreak);
 			data = data.Substring(indexOfFirstLineBreak + 1);

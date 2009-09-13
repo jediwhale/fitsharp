@@ -24,7 +24,7 @@ namespace fit.Fixtures {
             }
             if (ourTypeIdentifier.Equals(restOfCells.Text)) {
                 if (restOfCells.More == null) throw new TableStructureException("missing cells for with.");
-                return theFixture.Processor.ParseTree<Type>(restOfCells.More);
+                return theFixture.Processor.Parse(typeof (Type), TypedValue.Void, restOfCells.More).Value;
             }
             if (ourCurrentIdentifier.Equals(restOfCells.Text)) {
                 return theFixture.SystemUnderTest;

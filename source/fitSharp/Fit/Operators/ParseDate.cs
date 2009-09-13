@@ -5,7 +5,7 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
-    public class ParseDate: Operator<CellProcessor>, ParseOperator<Cell> {
+    public class ParseDate: Operator<Cell, CellProcessor>, ParseOperator<Cell> {
         private static readonly IdentifierName today = new IdentifierName("today");
 
         public bool CanParse(Type type, TypedValue instance, Tree<Cell> parameters) {
@@ -25,7 +25,7 @@ namespace fitSharp.Fit.Operators {
             if (cell.Text.Length > today.Length) {
                 string modifier = cell.Text.Substring(today.Length).Trim();
                 var rest = new CellSubstring(cell, modifier.Substring(1));
-                daysToAdd = (int)Processor.Parse(typeof(int), rest).Value;
+                daysToAdd = (int)Parse(typeof(int), rest).Value;
                 if (modifier.StartsWith("-")) {
                     daysToAdd = - daysToAdd;
                 }

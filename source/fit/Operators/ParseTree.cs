@@ -6,12 +6,12 @@
 
 using System;
 using fitSharp.Fit.Model;
-using fitSharp.Fit.Service;
+using fitSharp.Fit.Operators;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fit.Operators {
-    public class ParseTree : Operator<CellProcessor>, ParseOperator<Cell> {
+    public class ParseTree : CellOperator, ParseOperator<Cell> {
         public bool CanParse(Type type, TypedValue instance, Tree<Cell> parameters) {
             return typeof(fitlibrary.tree.Tree).IsAssignableFrom(type);
         }

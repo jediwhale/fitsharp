@@ -37,7 +37,21 @@ to be bound by the terms of this license. You must not remove this notice, or an
 <tr><td>myprocedure</td></tr>
 <tr><td>check</td><td>name</td><td>Bob</td></tr>
 </table>
-</td><td></td></tr>
+</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>define</td><td>myprocedure</td></tr>
+<tr><td>set</td><td>name</td><td>Bob</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td class="error">do<hr /><pre><div class="fit_stacktrace">System.InvalidCastException: Unable to cast object of type 'fitSharp.Fit.Fixtures.Define' to type 'fit.Fixture'.
+   at fit.Fixture.Prepare(Interpreter parent, Tree`1 table)
+   at fitSharp.Fit.Service.ExecuteStoryTest.DoTables(Interpreter firstFixture, Tree`1 theTables)</div></pre></td></tr>
+<tr><td>with</td><td>new</td><td>sample domain</td></tr>
+
+<tr><td>myprocedure</td></tr>
+<tr><td>check</td><td>name</td><td>Bob</td></tr>
+</table></td></tr>
 </table>
 </div>
 <div style="width:100%;text-align:right">

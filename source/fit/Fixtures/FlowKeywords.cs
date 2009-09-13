@@ -119,7 +119,7 @@ namespace fit.Fixtures {
         }
 
         private void AddCell(Parse theCells, object theNewValue) {
-            theCells.Last.More = (Parse)fixture.Processor.Compose(theNewValue);
+            theCells.Last.More = (Parse)fixture.Processor.Compose(new TypedValue(theNewValue));
         }
 
     }

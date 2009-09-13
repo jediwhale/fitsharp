@@ -14,9 +14,7 @@ namespace fit
 {
 	public class Fixture: MutableDomainAdapter, TargetObjectProvider, Interpreter
 	{
-		private string[] args;
-
-        public CellProcessor Processor { get; set; }
+	    public CellProcessor Processor { get; set; }
 
 	    public TestStatus TestStatus { get; set; }
 
@@ -120,7 +118,7 @@ namespace fit
 		}
 
         public static object LoadClass(string theClassName) {
-            return Context.Configuration.GetItem<Service.Service>().Create(theClassName.Trim()).Value;
+            return Context.Configuration.GetItem<Service.Service>().Create(theClassName.Trim(), new TreeList<Cell>()).Value;
         }
 
 		public static Fixture LoadFixture(string theClassName)
@@ -157,21 +155,18 @@ namespace fit
 			return this;
 		}
 
-		public string[] Args
-		{
-			get { return args; }
-		}
+	    public string[] Args { get; private set; }
 
 	    public void GetArgsForTable(Parse table)
 		{
-			ArrayList list = new ArrayList();
+			var list = new ArrayList();
 			list.Clear();
 			Parse parameters = table.Parts.Parts.More;
 			for (; parameters != null; parameters = parameters.More)
 				list.Add(parameters.Text);
-			args = new string[list.Count];
+			Args = new string[list.Count];
 			for (int i = 0; i < list.Count; i++)
-				args[i] = (string) list[i];
+				Args[i] = (string) list[i];
 		}
 
         public object GetArgumentInput(int theIndex, Type theType) {

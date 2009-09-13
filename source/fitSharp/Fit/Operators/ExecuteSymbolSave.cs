@@ -15,7 +15,7 @@ namespace fitSharp.Fit.Operators {
         }
 
         public override TypedValue Execute(ExecuteParameters parameters) {
-            object value = parameters.GetActual(Processor);
+            object value = GetActual(parameters);
             var symbol = new Symbol(parameters.Cell.Text.Substring(2), value);
             Processor.Store(symbol);
 

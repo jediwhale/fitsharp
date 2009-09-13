@@ -4,12 +4,12 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using fitSharp.Fit.Model;
-using fitSharp.Fit.Service;
+using fitSharp.Fit.Operators;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fit.Operators {
-    public class ComposeStoryTestString: Operator<CellProcessor>, ComposeOperator<Cell> {
+    public class ComposeStoryTestString: CellOperator, ComposeOperator<Cell> {
         public bool CanCompose(TypedValue instance) {
             return instance.Type == typeof(StoryTestString);
         }

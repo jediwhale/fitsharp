@@ -8,7 +8,8 @@ using fitSharp.Machine.Engine;
 using fitSharp.Fit.Operators;
 
 namespace fitSharp.Fit.Service {
-    public class CellProcessor: Processor<Cell, CellProcessor> {
+
+    public class CellProcessor: ProcessorImpl<Cell, CellProcessor> {
 
 	    public TestStatus TestStatus { get; set; }
 

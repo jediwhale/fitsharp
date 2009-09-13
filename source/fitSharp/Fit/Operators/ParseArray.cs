@@ -5,12 +5,11 @@
 
 using System;
 using fitSharp.Fit.Model;
-using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
-    public class ParseArray: Operator<CellProcessor>, ParseOperator<Cell> {
+    public class ParseArray: CellOperator, ParseOperator<Cell> {
         public bool CanParse(Type type, TypedValue instance, Tree<Cell> parameters) {
             return type.IsArray;
         }
@@ -21,7 +20,7 @@ namespace fitSharp.Fit.Operators {
 			Array list = Array.CreateInstance(type.GetElementType(), strings.Length);
 			for (int i = 0; i < strings.Length; i++) {
                 //todo: use cellsubstring?
-			    list.SetValue(Processor.ParseString(type.GetElementType(), strings[i]).Value, i);
+			    list.SetValue(ParseString(type.GetElementType(), strings[i]).Value, i);
 			}
 
             return new TypedValue(list);

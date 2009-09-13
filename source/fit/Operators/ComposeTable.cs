@@ -5,12 +5,12 @@
 
 using fitlibrary.table;
 using fitSharp.Fit.Model;
-using fitSharp.Fit.Service;
+using fitSharp.Fit.Operators;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fit.Operators {
-    public class ComposeTable: Operator<CellProcessor>, ComposeOperator<Cell> {
+    public class ComposeTable: CellOperator, ComposeOperator<Cell> {
         public bool CanCompose(TypedValue instance) {
             return typeof(Table).IsAssignableFrom(instance.Type);
         }
@@ -24,7 +24,7 @@ namespace fit.Operators {
             for (int row = theTable.Rows() - 1; row >= 0 ; row--) {
                 Parse cells = null;
                 for (int cell = theTable.Cells(row) - 1; cell >= 0 ; cell--) {
-                    var newCell = (Parse) Processor.Compose(theTable.StringAt(row, cell));
+                    var newCell = (Parse) Compose(theTable.StringAt(row, cell));
                     newCell.More = cells;
                     cells = newCell;
                 }

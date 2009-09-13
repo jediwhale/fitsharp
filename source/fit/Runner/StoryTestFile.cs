@@ -3,7 +3,6 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-using System;
 using System.IO;
 using fitSharp.Fit.Model;
 using fitnesse.fitserver;
@@ -79,7 +78,7 @@ namespace fit.Runner {
         private void WriteResult(Cell theTables, TestStatus status, ElapsedTime elapsedTime) {
             string outputFile = OutputPath;
             var output = new StringWriter();
-            output.Write(configuration.GetItem<Service.Service>().Parse<StoryTestString>(theTables).ToString());
+            output.Write(configuration.GetItem<Service.Service>().Parse(typeof(StoryTestString), TypedValue.Void, new TreeLeaf<Cell>(theTables)).ValueString);
             output.Close();
             myFolderModel.MakeFile(outputFile, output.ToString());
             myFolder.ListFile(outputFile, status, elapsedTime);
@@ -104,7 +103,7 @@ namespace fit.Runner {
         }
 
         private Parse Parse(string content) {
-            Tree<Cell> result = configuration.GetItem<Service.Service>().Compose(new StoryTestString(content));
+            Tree<Cell> result = configuration.GetItem<Service.Service>().Compose(new TypedValue(new StoryTestString(content)));
             return result != null ? (Parse)result.Value : null;
         }
 

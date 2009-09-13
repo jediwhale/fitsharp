@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using fitSharp.Machine.Engine;
+using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Application {
     public interface ProgressReporter {
@@ -112,7 +113,7 @@ namespace fitSharp.Machine.Application {
         }
 
         private int ExecuteRunner() {
-            Runner = (Runnable) new BasicProcessor().Create(Context.Configuration.GetItem<Settings>().Runner).Value;
+            Runner = (Runnable) new BasicProcessor().Create(Context.Configuration.GetItem<Settings>().Runner, new TreeList<string>()).Value;
             return Runner.Run(extraArguments.ToArray(), Context.Configuration, progressReporter);
         }
     }

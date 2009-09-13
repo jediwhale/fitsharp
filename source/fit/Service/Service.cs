@@ -33,8 +33,6 @@ namespace fit.Service {
             ApplicationUnderTest.AddNamespace("fitSharp.Fit.Fixtures");
             ApplicationUnderTest.AddNamespace("fitSharp.Fit.Operators");
             ApplicationUnderTest.AddAssembly(Assembly.GetExecutingAssembly().CodeBase);
-
-            //AddMemory<Symbol>();
         }
 
         public Service(Service other): base(other) {}

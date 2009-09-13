@@ -201,7 +201,7 @@ namespace fitnesse.fitserver
 		{
 			try
 			{
-                Tree<Cell> result = configuration.GetItem<Service>().Compose(new StoryTestString(document));
+                Tree<Cell> result = configuration.GetItem<Service>().Compose(new TypedValue(new StoryTestString(document)));
                 var parse = result != null ? (Parse)result.Value : null;
 			    var storyTest = new StoryTest(parse, writer);
 			    WriteLogMessage(parse.Leader);
@@ -221,7 +221,7 @@ namespace fitnesse.fitserver
 
 		public string TablesToString(Parse tables)
 		{
-            return configuration.GetItem<Service>().Parse<StoryTestString>(tables).ToString();
+            return configuration.GetItem<Service>().Parse(typeof(StoryTestString), TypedValue.Void, tables).ValueString;
 		}
 
 		public void WriteLogMessage(string logMessage)

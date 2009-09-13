@@ -7,12 +7,12 @@ using System;
 using System.Collections;
 using System.Text;
 using fitSharp.Fit.Model;
-using fitSharp.Fit.Service;
+using fitSharp.Fit.Operators;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fit.Operators {
-    public class ComposeDefault : Operator<CellProcessor>, ComposeOperator<Cell> {
+    public class ComposeDefault : CellOperator, ComposeOperator<Cell> {
         public bool CanCompose(TypedValue instance) {
             return true;
         }

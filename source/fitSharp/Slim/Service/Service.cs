@@ -7,7 +7,7 @@ using fitSharp.Machine.Engine;
 using fitSharp.Slim.Operators;
 
 namespace fitSharp.Slim.Service {
-    public class Service: Processor<string, Service> {
+    public class Service: ProcessorImpl<string, Service> {
 
         public Service() {
             AddMemory<SavedInstance>();

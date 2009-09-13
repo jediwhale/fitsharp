@@ -46,7 +46,7 @@ namespace fitSharp.Test.NUnit.Machine {
         }
 
         [Test] public void TypeIsCreated() {
-            TypedValue result = processor.Create(typeof(SampleClass).FullName);
+            TypedValue result = processor.Create(typeof(SampleClass).FullName, new TreeList<string>());
             Assert.IsTrue(result.Value is SampleClass);
         }
 
@@ -95,7 +95,7 @@ namespace fitSharp.Test.NUnit.Machine {
             Assert.AreEqual("else", copy.Execute(null).Value);
         }
 
-        private class MemoryOperator: Operator<BasicProcessor>, ExecuteOperator<string> {
+        private class MemoryOperator: Operator<string, BasicProcessor>, ExecuteOperator<string> {
             public bool CanExecute(TypedValue instance, Tree<string> parameters) {
                 return true;
             }
@@ -105,7 +105,7 @@ namespace fitSharp.Test.NUnit.Machine {
             }
         }
 
-        private class DefaultTest: Operator<BasicProcessor>, ExecuteOperator<string> {
+        private class DefaultTest: Operator<string, BasicProcessor>, ExecuteOperator<string> {
             public bool CanExecute(TypedValue instance, Tree<string> parameters) {
                 return true;
             }
@@ -115,7 +115,7 @@ namespace fitSharp.Test.NUnit.Machine {
             }
         }
 
-        private class SpecificTest: Operator<BasicProcessor>, ExecuteOperator<string> {
+        private class SpecificTest: Operator<string, BasicProcessor>, ExecuteOperator<string> {
             private readonly string name;
 
             public SpecificTest(string name) {

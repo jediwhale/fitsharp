@@ -8,7 +8,7 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Slim.Operators {
-    public class ComposeList: Operator<Service.Service>, ComposeOperator<string> { //todo: handle any enumerable type
+    public class ComposeList: SlimOperator, ComposeOperator<string> { //todo: handle any enumerable type
         public bool CanCompose(TypedValue instance) {
             return instance.Type == typeof (List<object>);
         }
@@ -17,7 +17,7 @@ namespace fitSharp.Slim.Operators {
             var list = instance.Value as List<object> ?? new List<object>();
             var tree = new TreeList<string>();
             foreach (object value in list) {
-                tree.AddBranch(Processor.Compose(value));
+                tree.AddBranch(Compose(value));
             }
             return tree;
         }

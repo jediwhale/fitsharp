@@ -44,7 +44,7 @@ namespace fitSharp.Test.NUnit.Slim {
             var executeImport = new ExecuteImport { Processor = processor };
             var input = new TreeList<string>().AddBranchValue("step").AddBranchValue("import").AddBranchValue("fitSharp.Test.NUnit.Slim");
             ExecuteOperation(executeImport, input, 2);
-            Assert.IsTrue(processor.Create("SampleClass").Value is SampleClass);
+            Assert.IsTrue(processor.Create("SampleClass", new TreeList<string>()).Value is SampleClass);
         }
 
         [Test] public void ExecuteCallAndAssignSavesSymbol() {

@@ -4,7 +4,9 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System;
+using fitSharp.Fit.Model;
 using fitSharp.Machine.Application;
+using fitSharp.Machine.Model;
 
 namespace fit.Test.Acceptance {
     public class TypeName {
@@ -12,7 +14,7 @@ namespace fit.Test.Acceptance {
 
         public TypeName(string name) {
             try {
-                type = Context.Configuration.GetItem<Service.Service>().Create(name).Type;
+                type = Context.Configuration.GetItem<Service.Service>().Create(name, new TreeList<Cell>()).Type;
             }
             catch (Exception) {}
         }

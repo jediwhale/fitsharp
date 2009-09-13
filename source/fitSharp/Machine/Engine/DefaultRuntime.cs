@@ -8,13 +8,13 @@ using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
-    public class DefaultRuntime<T,P>: Operator<P>, RuntimeOperator<T> where P: Processor<T,P> {
+    public class DefaultRuntime<T,P>: Operator<T, P>, RuntimeOperator<T> where P: Processor<T> {
         public bool CanCreate(string memberName, Tree<T> parameters) {
             return true;
         }
 
         public TypedValue Create(string memberName, Tree<T> parameters) {
-            var runtimeType = Processor.ParseString<RuntimeType>(memberName);
+            var runtimeType = ParseString<RuntimeType>(memberName);
             return parameters.Branches.Count == 0
                          ? CreateWithoutParameters(runtimeType)
                          : CreateWithParameters(parameters, runtimeType);

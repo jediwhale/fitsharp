@@ -22,7 +22,7 @@ namespace fitSharp.Fit.Operators {
         public override TypedValue Execute(ExecuteParameters parameters) {
             string exceptionContent = parameters.Cell.Text.Substring("exception[".Length, parameters.Cell.Text.Length - ("exception[".Length + 1));
             try {
-                parameters.GetActual(Processor);
+                GetActual(parameters);
                 parameters.TestStatus.MarkWrong(parameters.Cell, "no exception");
             }
             catch (TargetInvocationException e) {

@@ -5,12 +5,11 @@
 
 using System;
 using fitSharp.Fit.Model;
-using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
-    public class CompareNumeric : Operator<CellProcessor>, CompareOperator<Cell> {
+    public class CompareNumeric : CellOperator, CompareOperator<Cell> {
         private static readonly Type[] numericTypes = {
             typeof(byte), typeof(sbyte), typeof(decimal), typeof(double),
             typeof(float), typeof(int), typeof(uint), typeof(long), typeof(ulong), typeof(short), typeof(ushort)
@@ -33,7 +32,7 @@ namespace fitSharp.Fit.Operators {
             Comparison comparison = FindComparison(cell.Text);
 
             var rest = new CellSubstring(cell, cell.Text.Substring(comparison.Operator.Length));
-            object expectedValue = Processor.Parse(actual.Type, rest).Value;
+            object expectedValue = Parse(actual.Type, rest).Value;
             expected.Value.AddToAttribute(CellAttributes.InformationPrefixKey, actualValue.ToString(), CellAttributes.PrefixFormat);
 
             int compare = actualValue is float || actualValue is double

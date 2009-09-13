@@ -7,8 +7,40 @@ using System;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
-    public abstract class Operator<P> {
+    public abstract class Operator<T, P> where P: Processor<T> {
         public P Processor;
+
+        public Tree<T> Compose(object instance)  {
+            return Processor.Compose(new TypedValue(instance));
+        }
+
+        public TypedValue Create(string membername) {
+            return Processor.Create(membername, new TreeList<T>());
+        }
+
+        public TypedValue Parse(Type type, Tree<T> parameters) {
+            return Processor.Parse(type, TypedValue.Void, parameters);
+        }
+
+        public TypedValue Parse(Type type, T input) {
+            return Parse(type, new TreeLeaf<T>(input));
+        }
+
+        public V ParseTree<V>(Tree<T> input) {
+            return (V) Parse(typeof (V), input).Value;
+        }
+
+        public V Parse<V>(T input) {
+            return (V) Parse(typeof (V), input).Value;
+        }
+
+        public TypedValue ParseString(Type type, string input) {
+            return Parse(type, Processor.Compose(new TypedValue(input, typeof(string))));
+        }
+
+        public V ParseString<V>(string input) {
+            return (V) ParseString(typeof (V), input).Value;
+        }
     }
 
     public interface CompareOperator<T> {

@@ -7,7 +7,7 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Slim.Operators {
-    public class ComposeBoolean: Operator<Service.Service>, ComposeOperator<string> {
+    public class ComposeBoolean: SlimOperator, ComposeOperator<string> {
         public bool CanCompose(TypedValue instance) {
             return instance.Type == typeof (bool);
         }

@@ -19,7 +19,7 @@ namespace fit.Operators {
             switch (parameters.Verb) {
                 case ExecuteParameters.Check:
                     var cell1 = (Parse)parameters.Cell;
-                    return cell1.Parts != null && typeof(IList).IsAssignableFrom(parameters.GetTypedActual(Processor).Type);
+                    return cell1.Parts != null && typeof(IList).IsAssignableFrom(parameters.GetTypedActual(this).Type);
 
                 case ExecuteParameters.Compare:
                     var cell2 = (Parse)parameters.Cell;
@@ -52,7 +52,7 @@ namespace fit.Operators {
         private void ExecuteCheck(ExecuteParameters parameters) {
             var cell = (Parse)parameters.Cell;
             var matcher = new ListMatcher(Processor, new ArrayMatchStrategy(cell.Parts.Parts));
-            matcher.MarkCell(parameters.TestStatus, parameters.SystemUnderTest.Value, parameters.GetActual(Processor), cell.Parts.Parts);
+            matcher.MarkCell(parameters.TestStatus, parameters.SystemUnderTest.Value, GetActual(parameters), cell.Parts.Parts);
         }
 
         public bool CanParse(Type type, TypedValue instance, Tree<Cell> parameters) {
