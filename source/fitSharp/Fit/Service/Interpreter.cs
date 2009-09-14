@@ -9,7 +9,6 @@ using fitSharp.Machine.Model;
 namespace fitSharp.Fit.Service {
     public interface Interpreter {
         CellProcessor Processor { set; }
-        void Prepare(Interpreter parent, Tree<Cell> table);
         bool IsInFlow(int tableCount);
         bool IsVisible { get; }
         void Interpret(Tree<Cell> table);

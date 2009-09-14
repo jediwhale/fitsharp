@@ -14,8 +14,6 @@ namespace fitSharp.Fit.Fixtures {
             set { processor = value; }
         }
 
-        public void Prepare(Interpreter parent, Tree<Cell> table) {}
-
         public bool IsInFlow(int tableCount) { return false; }
 
         public bool IsVisible { get { return false; } }

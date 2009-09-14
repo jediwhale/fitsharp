@@ -17,18 +17,41 @@ namespace fit.Test.NUnit {
     [TestFixture] public class ParseInterpreterTest{
 
         private static readonly SampleDomain sampleDomain = new SampleDomain();
+        private static readonly SampleDoFixture sampleDo = new SampleDoFixture();
         private static readonly TestStatus testStatus = new TestStatus();
 
-        [Test] public void DomainClassIsWrappedInDoFixture() {
-            var processor = new TestProcessor();
+        private TestProcessor processor;
+
+        [Test] public void FixtureIsCreated() {
+            TypedValue result = Parse("<table><tr><td>sample do</td></tr></table>");
+            VerifyFixture<SampleDoFixture>(result);
+        }
+
+        private TypedValue Parse(string inputTables) {
+            processor = new TestProcessor();
             var parser = new ParseInterpreter { Processor = processor };
-            Parse table = HtmlParser.Instance.Parse("<table><tr><td>sample domain</td></tr></table>");
-            TypedValue result = parser.Parse(typeof(Interpreter), TypedValue.Void, table);
-            var doFixture = result.Value as DoFixture;
-            Assert.IsNotNull(doFixture);
+            Parse table = HtmlParser.Instance.Parse(inputTables);
+            return parser.Parse(typeof(Interpreter), TypedValue.Void, table);
+        }
+
+         private T VerifyFixture<T>(TypedValue result) where T: Fixture {
+            var fixture = result.Value as T;
+            Assert.IsNotNull(fixture);
+            Assert.AreEqual(testStatus, fixture.TestStatus);
+            Assert.AreEqual(processor, fixture.Processor);
+            return fixture;
+        }
+
+        [Test] public void FixtureWithArgumentsIsCreated() {
+            TypedValue result = Parse("<table><tr><td>sample do</td><td>hi</td></tr></table>");
+            var fixture = VerifyFixture<SampleDoFixture>(result);
+            Assert.AreEqual(1, fixture.ArgumentCount);
+        }
+
+        [Test] public void DomainClassIsWrappedInDoFixture() {
+            TypedValue result = Parse("<table><tr><td>sample domain</td></tr></table>");
+            var doFixture = VerifyFixture<DoFixture>(result);
             Assert.AreEqual(sampleDomain, doFixture.SystemUnderTest);
-            Assert.AreEqual(testStatus, doFixture.TestStatus);
-            Assert.AreEqual(processor, doFixture.Processor);
         }
 
         private class TestProcessor: CellProcessor {
@@ -46,6 +69,7 @@ namespace fit.Test.NUnit {
 
             public TypedValue Create(string memberName, Tree<Cell> parameters) {
                 if (memberName == "sample domain") return new TypedValue(sampleDomain);
+                if (memberName == "sample do") return new TypedValue(sampleDo);
                 throw new NotImplementedException();
             }
 

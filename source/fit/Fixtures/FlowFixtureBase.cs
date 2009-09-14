@@ -162,7 +162,7 @@ namespace fitlibrary {
             }
         }
 
-        private void ProcessRestOfTable(Interpreter theFixture, Parse theRestOfTheRows) {
+        private void ProcessRestOfTable(Fixture theFixture, Parse theRestOfTheRows) {
             var restOfTable = new Parse("table", "", theRestOfTheRows, null);
             theFixture.Prepare(this, restOfTable);
             try {

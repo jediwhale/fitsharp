@@ -26,19 +26,18 @@ namespace fitSharp.Fit.Service
  			processor.TestStatus.Summary["run date"] = DateTime.Now;
 			processor.TestStatus.Summary["run elapsed time"] = new ElapsedTime();
             Cell heading = tables.Branches[0].Branches[0].Branches[0].Value;
-            Interpreter myFirstFixture;
             try {
-                myFirstFixture = (Interpreter)processor.Parse(typeof(Interpreter), TypedValue.Void, tables.Branches[0]).Value;
+                processor.Parse(typeof(Interpreter), TypedValue.Void, tables.Branches[0]);
             }
             catch (System.Exception e) {
                 processor.TestStatus.MarkException(heading, e);
                 writer(tables.Branches[0], processor.TestStatus);
                 return;
             }
-            DoTables(myFirstFixture, tables);
+            InterpretTables(tables);
         }
 
-		private void DoTables(Interpreter firstFixture, Tree<Cell> theTables) {
+		private void InterpretTables(Tree<Cell> theTables) {
             try {
                 FlowInterpreter flowFixture = null;
                 int tableCount = 1;
@@ -49,7 +48,6 @@ namespace fitSharp.Fit.Service
                             if (heading != null && !processor.TestStatus.IsAbandoned) {
                                 if (flowFixture == null) {
                                     var activeFixture = (Interpreter)processor.Parse(typeof(Interpreter), TypedValue.Void, table).Value;
-                                    activeFixture.Prepare(firstFixture, table);
                                     if (activeFixture.IsInFlow(tableCount)) flowFixture = activeFixture as FlowInterpreter;
                                     if (!activeFixture.IsVisible) tableCount--;
                                     DoTable(table, activeFixture, flowFixture != null);

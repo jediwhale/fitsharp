@@ -20,14 +20,19 @@ namespace fit.Operators {
         public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
             var tableCell = (Parse)parameters.Value;
             TypedValue result = Create(tableCell.At(0, 0, 0).Text.Trim());
-            var interpreter = result.Value as Interpreter;
-            if (interpreter != null ) interpreter.Processor = Processor;
+
             var fixture = result.Value as Fixture;
             if (fixture == null) {
-                if (interpreter != null) return new TypedValue(interpreter);
-                fixture = new DoFixture(result.Value) { Processor = Processor }; 
+                var interpreter = result.Value as Interpreter;
+                if (interpreter != null) {
+                    interpreter.Processor = Processor;
+                    return new TypedValue(interpreter);
+                }
+                fixture = new DoFixture(result.Value);
             }
+            fixture.Processor = Processor;
             fixture.TestStatus = Processor.TestStatus;
+            fixture.GetArgsForTable(tableCell);
             return new TypedValue(fixture);
         }
     }

@@ -3,9 +3,10 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
+using fit.Test.Acceptance;
 using fitlibrary;
 
-namespace fit.Test.Acceptance {
+namespace fit.Test.Double {
     public class SampleDoFixture: DoFixture {
         public SampleDoFixture() {}
         public SampleDoFixture(string theText) {Text = theText;}
@@ -17,7 +18,7 @@ namespace fit.Test.Acceptance {
         public string GetArgumentInputAsString(int theIndex) { return (string)GetArgumentInput(theIndex, typeof(string)); }
 
         public int[] GetArgumentInputAsArray(int theIndex) {
-            int[] result = new int[] {};
+            var result = new int[] {};
             result = (int[]) GetArgumentInput(theIndex, result.GetType());
             return result;
         }

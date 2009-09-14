@@ -42,7 +42,7 @@ namespace fit {
             this.writer = writer;
         }
 
-        public void Execute() { //todo: current status being changed
+        public void Execute() {
             Configuration currentConfig = Context.Configuration;
 		    var newConfig = new Configuration(Context.Configuration);
             newConfig.GetItem<Service.Service>().ApplicationUnderTest = newConfig.GetItem<ApplicationUnderTest>();

@@ -44,13 +44,13 @@ to be bound by the terms of this license. You must not remove this notice, or an
 </table>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td class="error">do<hr /><pre><div class="fit_stacktrace">System.InvalidCastException: Unable to cast object of type 'fitSharp.Fit.Fixtures.Define' to type 'fit.Fixture'.
-   at fit.Fixture.Prepare(Interpreter parent, Tree`1 table)
-   at fitSharp.Fit.Service.ExecuteStoryTest.DoTables(Interpreter firstFixture, Tree`1 theTables)</div></pre></td></tr>
+<tr><td>do</td></tr>
 <tr><td>with</td><td>new</td><td>sample domain</td></tr>
 
-<tr><td>myprocedure</td></tr>
-<tr><td>check</td><td>name</td><td>Bob</td></tr>
+<tr><td class="error">myprocedure<hr /><pre><div class="fit_stacktrace">fitSharp.Machine.Exception.MemberMissingException: Member 'myprocedure' with 0 parameter(s) not found for type 'fitlibrary.DoFixture'.
+   at fitSharp.Machine.Model.TypedValue.ThrowExceptionIfNotValid()
+   at fitlibrary.FlowFixtureBase.ProcessFlowRow(Parse theCurrentRow)</div></pre></td></tr>
+<tr><td>check</td><td>name</td><td class="fail">Bob <span class="fit_label">expected</span><hr />null <span class="fit_label">actual</span></td></tr>
 </table></td></tr>
 </table>
 </div>
