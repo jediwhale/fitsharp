@@ -93,7 +93,7 @@
     <Compile Include="Acceptance\ResetNamespacesFixture.cs" />
     <Compile Include="Acceptance\SampleArrayFixture.cs" />
     <Compile Include="Acceptance\SampleDoFixture.cs" />
-    <Compile Include="Acceptance\SampleDomain.cs" />
+    <Compile Include="Double\SampleDomain.cs" />
     <Compile Include="Acceptance\SampleDomainAdapter.cs" />
     <Compile Include="Acceptance\SampleRowFixture.cs" />
     <Compile Include="Acceptance\SetFixtureUnderTest.cs" />

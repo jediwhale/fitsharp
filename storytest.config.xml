@@ -11,6 +11,7 @@
     
     <ApplicationUnderTest>
         <addNamespace>fit.Test.Acceptance</addNamespace>
+        <addNamespace>fit.Test.Double</addNamespace>
         <addNamespace>fit.Runner</addNamespace>
         <addNamespace>fitSharp.Fit.Model</addNamespace>
         <addNamespace>fitlibrary</addNamespace>

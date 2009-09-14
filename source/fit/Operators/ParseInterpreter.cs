@@ -25,7 +25,7 @@ namespace fit.Operators {
             var fixture = result.Value as Fixture;
             if (fixture == null) {
                 if (interpreter != null) return new TypedValue(interpreter);
-                fixture = new DoFixture(result.Value) {Processor = Processor}; // todo: missing set processor
+                fixture = new DoFixture(result.Value) { Processor = Processor }; 
             }
             fixture.TestStatus = Processor.TestStatus;
             return new TypedValue(fixture);

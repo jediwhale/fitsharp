@@ -4,6 +4,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using fit.exception;
+using fit.Test.Double;
 using fitSharp.Machine.Model;
 
 namespace fit.Test.Acceptance {
@@ -28,6 +29,6 @@ namespace fit.Test.Acceptance {
             throw new AbandonStoryTestException(message);
         }
 
-        private SampleDomain myDomain;
+        private readonly SampleDomain myDomain;
     }
 }

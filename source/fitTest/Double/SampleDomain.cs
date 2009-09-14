@@ -6,7 +6,7 @@
 using System;
 using fit.Test.NUnit;
 
-namespace fit.Test.Acceptance {
+namespace fit.Test.Double {
     public class SampleDomain {
         public SampleDomain() {}
         public SampleDomain(string theName) {
