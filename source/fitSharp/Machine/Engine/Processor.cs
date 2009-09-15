@@ -28,8 +28,6 @@ namespace fitSharp.Machine.Engine {
 
 
     public abstract class ProcessorBase<T, P>: Processor<T> where P: Processor<T> {
-        //todo: add setup and teardown?
-
         protected abstract Operators<T,P> Operators { get; }
 
         public ApplicationUnderTest ApplicationUnderTest { get; set;}

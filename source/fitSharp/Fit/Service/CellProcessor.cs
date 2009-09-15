@@ -44,6 +44,7 @@ namespace fitSharp.Fit.Service {
             AddOperator(new CompareFail(), 1);
 
             AddMemory<Symbol>();
+            AddMemory<Procedure>();
         }
 
         public CellProcessorBase(CellProcessorBase other): base(other) {

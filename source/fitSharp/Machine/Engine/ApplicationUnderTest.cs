@@ -64,8 +64,10 @@ namespace fitSharp.Machine.Engine {
 
         private static string TypeNotFoundMessage() {
             var result = new StringBuilder();
-            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies()) {
+                if (IsDynamic(assembly)) continue;
                 result.AppendFormat("    {0}{1}", assembly.CodeBase, Environment.NewLine);
+            }
             return result.ToString();
         }
 
@@ -86,8 +88,13 @@ namespace fitSharp.Machine.Engine {
 
         private static IEnumerable<Type> AssemblyTypes(IEnumerable<Assembly> assemblies) {
             foreach (Assembly assembly in assemblies) {
+                if (IsDynamic(assembly)) continue;
                 foreach (Type type in assembly.GetExportedTypes()) yield return type;
             }
+        }
+
+        private static bool IsDynamic(Assembly assembly) {
+            return assembly.ManifestModule is System.Reflection.Emit.ModuleBuilder;
         }
 
         private bool IsRegistered(string namespaceString) {

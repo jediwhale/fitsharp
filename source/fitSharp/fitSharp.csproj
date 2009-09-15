@@ -69,6 +69,7 @@
     <Compile Include="Fit\Service\CellProcessor.cs" />
     <Compile Include="Fit\Service\ExecuteStoryTest.cs" />
     <Compile Include="Fit\Service\Interpreter.cs" />
+    <Compile Include="Fit\Service\Procedure.cs" />
     <Compile Include="IO\ElapsedTime.cs" />
     <Compile Include="IO\FileSystemModel.cs" />
     <Compile Include="IO\FolderModel.cs" />
