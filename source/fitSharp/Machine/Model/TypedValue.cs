@@ -29,5 +29,7 @@ namespace fitSharp.Machine.Model {
         public void ThrowExceptionIfNotValid() {
             if (!IsValid) throw (System.Exception) Value;
         }
+
+        public override string ToString() { return ValueString; }
     }
 }

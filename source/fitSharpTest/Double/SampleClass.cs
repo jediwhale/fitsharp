@@ -3,7 +3,7 @@
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
-namespace fitSharp.Test.NUnit.Machine {
+namespace fitSharp.Test.Double {
     public class SampleClass {
         public static SampleClass Parse(string input) {
             return new SampleClass();
@@ -30,5 +30,8 @@ namespace fitSharp.Test.NUnit.Machine {
         public string this[string input] {
             get { return "index" + input; }
         }
+
+        public string Duplicate;
+        private string _duplicate { get { return Duplicate.ToUpper();} }
     }
 }

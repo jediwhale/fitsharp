@@ -5,7 +5,7 @@
 
 using System;
 using fitSharp.IO;
-using fitSharp.Test.Double.IO;
+using fitSharp.Test.Double;
 using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.IO {

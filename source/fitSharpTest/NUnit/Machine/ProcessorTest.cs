@@ -6,6 +6,7 @@
 using System;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
+using fitSharp.Test.Double;
 using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Machine {

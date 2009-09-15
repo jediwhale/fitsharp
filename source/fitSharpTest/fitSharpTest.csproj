@@ -50,7 +50,7 @@
     <Compile Include="NUnit\Fit\ParseDateTest.cs" />
     <Compile Include="NUnit\IO\ElapsedTimeTest.cs" />
     <Compile Include="NUnit\IO\SocketStreamTest.cs" />
-    <Compile Include="Double\IO\TestClock.cs" />
+    <Compile Include="Double\TestClock.cs" />
     <Compile Include="NUnit\Machine\ApplicationUnderTestTest.cs" />
     <Compile Include="NUnit\Machine\ConfigurationTest.cs" />
     <Compile Include="NUnit\Machine\ConverterTest.cs" />
@@ -60,7 +60,7 @@
     <Compile Include="NUnit\Machine\LanguageNameTest.cs" />
     <Compile Include="NUnit\Machine\ProcessorTest.cs" />
     <Compile Include="NUnit\Machine\RuntimeTypeTest.cs" />
-    <Compile Include="NUnit\Machine\SampleClass.cs" />
+    <Compile Include="Double\SampleClass.cs" />
     <Compile Include="NUnit\Machine\ShellTest.cs" />
     <Compile Include="NUnit\Machine\TreeTest.cs" />
     <Compile Include="NUnit\Slim\ComposeOperatorsTest.cs" />

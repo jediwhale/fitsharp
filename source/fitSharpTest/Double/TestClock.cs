@@ -6,7 +6,7 @@
 using System;
 using fitSharp.IO;
 
-namespace fitSharp.Test.Double.IO {
+namespace fitSharp.Test.Double {
     public class TestClock: TimeKeeper {
         public static TestClock Instance = new TestClock();
         public DateTime Now { get; set; }

@@ -8,7 +8,7 @@ using fit.Runner;
 using fitSharp.IO;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Model;
-using fitSharp.Test.Double.IO;
+using fitSharp.Test.Double;
 
 namespace fit.Test.Acceptance {
     public class FolderRunnerStory: DomainAdapter {

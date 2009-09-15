@@ -89,7 +89,12 @@ namespace fitSharp.Machine.Engine {
             }
 
             private RuntimeMember FindMemberByName(object instance, Type targetType) {
-                foreach (MemberInfo memberInfo in targetType.GetMembers(flags | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.FlattenHierarchy)) {
+                return FindMemberByName(instance, targetType, BindingFlags.Public)
+                       ?? FindMemberByName(instance, targetType, BindingFlags.NonPublic);
+            }
+
+            private RuntimeMember FindMemberByName(object instance, Type targetType, BindingFlags accessFlag) {
+                foreach (MemberInfo memberInfo in targetType.GetMembers(flags | accessFlag | BindingFlags.FlattenHierarchy)) {
                     if (!MatchesName(memberInfo.Name)) continue;
                     RuntimeMember runtimeMember = MakeMember(memberInfo, instance);
                     if (Matches(runtimeMember)) return runtimeMember;

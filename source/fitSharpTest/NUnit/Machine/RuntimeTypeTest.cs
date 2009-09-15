@@ -5,6 +5,7 @@
 
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
+using fitSharp.Test.Double;
 using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Machine {
@@ -93,6 +94,15 @@ namespace fitSharp.Test.NUnit.Machine {
             result = method.Invoke(new object[] {});
             Assert.AreEqual("stuff", result.Value.ToString());
             Assert.AreEqual(typeof(string), result.Type);
+        }
+
+        [Test] public void DuplicateIsInvoked() {
+            RuntimeMember method = RuntimeType.GetInstance(new TypedValue(instance), "duplicate", 1);
+            method.Invoke(new object[] {"stuff"});
+
+            method = RuntimeType.GetInstance(new TypedValue(instance), "duplicate", 0);
+            TypedValue result = method.Invoke(new object[] {});
+            Assert.AreEqual("stuff", result.ToString());
         }
 
     }
