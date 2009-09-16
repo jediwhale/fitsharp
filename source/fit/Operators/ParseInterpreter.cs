@@ -31,7 +31,6 @@ namespace fit.Operators {
                 fixture = new DoFixture(result.Value);
             }
             fixture.Processor = Processor;
-            fixture.TestStatus = Processor.TestStatus;
             fixture.GetArgsForTable(tableCell);
             if (!instance.IsVoid) fixture.SetSystemUnderTest(instance.Value);
             return new TypedValue(fixture);

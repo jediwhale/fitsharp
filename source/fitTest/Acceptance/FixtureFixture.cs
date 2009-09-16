@@ -149,7 +149,7 @@ namespace fit.Test.Acceptance {
         }
 
         private void RunFixture(Parse theTables, Fixture theFixture) {
-            theFixture.Processor = Processor;
+            theFixture.Processor = new Service.Service();
             theFixture.DoTable(theTables);
         }
 

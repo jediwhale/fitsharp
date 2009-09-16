@@ -17,10 +17,10 @@ namespace fitSharp.Fit.Operators {
         public override TypedValue Execute(ExecuteParameters parameters) {
             try {
                 object actual = GetActual(parameters);
-                parameters.TestStatus.MarkWrong(parameters.Cell, actual.ToString());
+                Processor.TestStatus.MarkWrong(parameters.Cell, actual.ToString());
             }
             catch {
-                parameters.TestStatus.MarkRight(parameters.Cell);
+                Processor.TestStatus.MarkRight(parameters.Cell);
             }
             return TypedValue.Void;
         }

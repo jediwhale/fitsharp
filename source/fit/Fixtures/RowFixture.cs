@@ -54,7 +54,7 @@ namespace fit
                 }
                 else {
                     CheckCalled();
-                    CellOperation.Check(TestStatus, GetTargetObject(), headerCell, cell);
+                    CellOperation.Check(GetTargetObject(), headerCell, cell);
 
                 }
 				cell = cell.More;

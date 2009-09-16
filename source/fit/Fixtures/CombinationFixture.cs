@@ -35,7 +35,7 @@ namespace fitlibrary {
 	        Parse headerCell = firstRowCells;
 	        foreach (Parse expectedValueCell in new CellRange(theRow.Parts.More).Cells) {
 	            try {
-	                CellOperation.Check(TestStatus, GetTargetObject(), combineMember,
+	                CellOperation.Check(GetTargetObject(), combineMember,
 	                                    new TreeList<Cell>().AddBranch(theRow.Parts).AddBranch(headerCell),
 	                                    expectedValueCell);
 	            }

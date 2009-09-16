@@ -3,21 +3,18 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
     public class ExecuteContext {
         public TypedValue SystemUnderTest { get; private set; }
-        public TestStatus TestStatus { get; private set; }
         public TypedValue? Target { get; set; }
 
         public static TypedValue Make(TypedValue target) { return new TypedValue(new ExecuteContext(target)); }
-        public static TypedValue Make(TestStatus testStatus, object systemUnderTest) { return new TypedValue(new ExecuteContext(testStatus, systemUnderTest)); }
-        public static TypedValue Make(TestStatus testStatus, object systemUnderTest, TypedValue target) { return new TypedValue(new ExecuteContext(testStatus, systemUnderTest, target)); }
+        public static TypedValue Make(object systemUnderTest) { return new TypedValue(new ExecuteContext(systemUnderTest)); }
+        public static TypedValue Make(object systemUnderTest, TypedValue target) { return new TypedValue(new ExecuteContext(systemUnderTest, target)); }
 
-        public ExecuteContext(TestStatus testStatus, object systemUnderTest) {
-            TestStatus = testStatus;
+        public ExecuteContext(object systemUnderTest) {
             SystemUnderTest = new TypedValue(systemUnderTest);
         }
 
@@ -25,8 +22,7 @@ namespace fitSharp.Fit.Operators {
             Target = target;
         }
 
-        public ExecuteContext(TestStatus testStatus, object systemUnderTest, TypedValue target) {
-            TestStatus = testStatus;
+        public ExecuteContext(object systemUnderTest, TypedValue target) {
             SystemUnderTest = new TypedValue(systemUnderTest);
             Target = target;
         }

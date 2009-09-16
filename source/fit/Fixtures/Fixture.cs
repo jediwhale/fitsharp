@@ -16,11 +16,11 @@ namespace fit
 	{
 	    public CellProcessor Processor { get; set; }
 
-	    public TestStatus TestStatus { get; set; }
+	    public TestStatus TestStatus { get { return Processor.TestStatus; } }
 
         public CellOperation CellOperation { get { return new CellOperation(Processor); }}
 
-        public Fixture() { TestStatus = new TestStatus(); }
+        public Fixture() {}
         public Fixture(object systemUnderTest): this() { mySystemUnderTest = systemUnderTest; }
 
         public virtual bool IsInFlow(int tableCount) { return false; }
@@ -30,7 +30,6 @@ namespace fit
 	        var parentFixture = (Fixture) parent;
 	        Processor = parentFixture.Processor;
 	        myParentFixture = parentFixture;
-	        TestStatus = parentFixture.TestStatus;
 	        GetArgsForTable((Parse)table.Value);
 	    }
 
@@ -117,20 +116,18 @@ namespace fit
 			return text;
 		}
 
-        public static object LoadClass(string theClassName) {
-            return Context.Configuration.GetItem<Service.Service>().Create(theClassName.Trim(), new TreeList<Cell>()).Value;
+        private object LoadClass(string theClassName) {
+            return Processor.Create(theClassName.Trim(), new TreeList<Cell>()).Value;
         }
 
-		public static Fixture LoadFixture(string theClassName)
+		public Fixture LoadFixture(string theClassName)
 		{
-			try
-			{
-				return (Fixture) LoadClass(theClassName);
+			var result = LoadClass(theClassName) as Fixture;
+            if (result == null) {
+				throw new ApplicationException("Couldn't cast " + theClassName + " to Fixture.  Did you remember to extend Fixture?");
 			}
-			catch (InvalidCastException e)
-			{
-				throw new ApplicationException("Couldn't cast " + theClassName + " to Fixture.  Did you remember to extend Fixture?", e);
-			}
+		    result.Processor = Processor;
+			return result;
 		}
 
 		public static object Recall(string key)

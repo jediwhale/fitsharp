@@ -27,10 +27,10 @@ namespace fit.Operators {
             var actual = new FixtureTable(tables);
             string differences = actual.Differences(expected);
             if (differences.Length == 0) {
-				parameters.TestStatus.MarkRight(parameters.Cell);
+				Processor.TestStatus.MarkRight(parameters.Cell);
             }
             else {
-                parameters.TestStatus.MarkWrong(parameters.Cell, differences);
+                Processor.TestStatus.MarkWrong(parameters.Cell, differences);
                 cell.More = new Parse("td", string.Empty, tables, null);
             }
             return TypedValue.Void;

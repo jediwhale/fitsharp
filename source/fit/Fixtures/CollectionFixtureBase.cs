@@ -38,7 +38,7 @@ namespace fitlibrary {
 
         protected void CompareRows(Parse theTableRows) {
             var matcher = new ListMatcher(Processor, MatchStrategy);
-            matcher.MarkCell(TestStatus, GetTargetObject(), myArray, theTableRows);
+            matcher.MarkCell(GetTargetObject(), myArray, theTableRows);
         }
 
         protected ArrayList myArray;

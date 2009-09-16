@@ -43,15 +43,15 @@ namespace fit.Test.NUnit {
             var processor = new CellProcessorBase();
             processor.AddOperator(new ParseMemberName());
             ((CellOperator) executor).Processor = processor;
-            return executor.CanExecute(new TypedValue(new ExecuteContext(new TestStatus(), null, new TypedValue("stuff"))), parameters);
+            return executor.CanExecute(new TypedValue(new ExecuteContext(null, new TypedValue("stuff"))), parameters);
         }
 
         public static void DoInput(Fixture fixture, Tree<Cell> range, Parse cell) {
-            fixture.CellOperation.Input(fixture.TestStatus, fixture.GetTargetObject(), range, cell);
+            fixture.CellOperation.Input(fixture.GetTargetObject(), range, cell);
         }
 
         public static void DoCheck(Fixture fixture, Tree<Cell> range, Parse cell) {
-            fixture.CellOperation.Check(fixture.TestStatus, fixture.GetTargetObject(), range, cell);
+            fixture.CellOperation.Check(fixture.GetTargetObject(), range, cell);
         }
 
         public static TestStatus MakeTestStatus() {

@@ -16,7 +16,7 @@ namespace fit.Test.Acceptance {
             myTestValue = string.Empty;
             myResult = null;
             try {
-                new SpecifyFixture().DoTable(table);
+                new SpecifyFixture{Processor = new Service.Service()}.DoTable(table);
                 myResult = table;
             }
             catch (Exception e) {

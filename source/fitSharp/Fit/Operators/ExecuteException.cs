@@ -23,7 +23,7 @@ namespace fitSharp.Fit.Operators {
             string exceptionContent = parameters.Cell.Text.Substring("exception[".Length, parameters.Cell.Text.Length - ("exception[".Length + 1));
             try {
                 GetActual(parameters);
-                parameters.TestStatus.MarkWrong(parameters.Cell, "no exception");
+                Processor.TestStatus.MarkWrong(parameters.Cell, "no exception");
             }
             catch (TargetInvocationException e) {
                 if (IsMessageOnly(exceptionContent)) {
@@ -48,12 +48,12 @@ namespace fitSharp.Fit.Operators {
             return regexForMessageOnly.IsMatch(exceptionContent);
         }
 
-        private static void EvaluateException(bool expression, ExecuteParameters parameters, TargetInvocationException e) {
+        private void EvaluateException(bool expression, ExecuteParameters parameters, TargetInvocationException e) {
             if (expression) {
-                parameters.TestStatus.MarkRight(parameters.Cell);
+                Processor.TestStatus.MarkRight(parameters.Cell);
             }
             else {
-                parameters.TestStatus.MarkWrong(parameters.Cell, "exception[" + e.InnerException.GetType().Name + ": \"" + e.InnerException.Message + "\"]");
+                Processor.TestStatus.MarkWrong(parameters.Cell, "exception[" + e.InnerException.GetType().Name + ": \"" + e.InnerException.Message + "\"]");
             }
         }
     }

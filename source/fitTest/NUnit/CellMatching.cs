@@ -17,7 +17,7 @@ namespace fit.Test.NUnit {
             Assert.IsTrue(IsEqual(new Parse("td", null, null, null), null));
         }
 
-        private static bool IsEqual(Parse cell, object value) {
+        private static bool IsEqual(Tree<Cell> cell, object value) {
             return new CellOperation(new Service.Service()).Compare(new TypedValue(value), cell);
         }
 
@@ -34,16 +34,16 @@ namespace fit.Test.NUnit {
         }
     
         [Test] public void MarksSameStringCellAsRight() {
-            Parse cell = new Parse("td", "something", null, null);
+            var cell = new Parse("td", "something", null, null);
             var fixture = new Fixture {Processor = new Service.Service()};
-            fixture.CellOperation.Check(new TestStatus(), null, new TypedValue("something"), cell);
+            fixture.CellOperation.Check(null, new TypedValue("something"), cell);
             Assert.AreEqual("\n<td class=\"pass\">something</td>", cell.ToString());
         }
     
         [Test] public void MarksSameArrayCellAsRight() {
-            Parse cell = new Parse("td", "something,more", null, null);
+            var cell = new Parse("td", "something,more", null, null);
             var fixture = new Fixture {Processor = new Service.Service()};
-            fixture.CellOperation.Check(new TestStatus(), null, new TypedValue(new string[] {"something", "more"}), cell);
+            fixture.CellOperation.Check(null, new TypedValue(new [] {"something", "more"}), cell);
             Assert.AreEqual("\n<td class=\"pass\">something,more</td>", cell.ToString());
         }
     
@@ -52,40 +52,37 @@ namespace fit.Test.NUnit {
         }
     
         [Test] public void MarksDifferentStringCellAsWrong() {
-            Parse cell = new Parse("td", "something else", null, null);
+            var cell = new Parse("td", "something else", null, null);
             var fixture = new Fixture {Processor = new Service.Service()};
-            fixture.CellOperation.Check(new TestStatus(), null, new TypedValue("something"), cell);
+            fixture.CellOperation.Check(null, new TypedValue("something"), cell);
             Assert.AreEqual("\n<td class=\"fail\">something else <span class=\"fit_label\">expected</span><hr />something <span class=\"fit_label\">actual</span></td>", cell.ToString());
         }
     
         [Test] public void TreeEqualsSameTreeCell() {
-            object actual = new ListTree(string.Empty, new ListTree[]{new ListTree("a")});
+            object actual = new ListTree(string.Empty, new []{new ListTree("a")});
             Parse table = HtmlParser.Instance.Parse("<table><tr><td><ul><li>a</li></ul></td></tr></table>");
             Assert.IsTrue(IsEqual(table.Parts.Parts, actual));
         }
     
         [Test] public void ListEqualsSameTableCell() {
-            ArrayList actual = new ArrayList();
-            actual.Add(new Name("joe", "smith"));
+            var actual = new ArrayList {new Name("joe", "smith")};
             Parse table = HtmlParser.Instance.Parse("<table><tr><td><table><tr><td>first</td><td>last</td></tr><tr><td>joe</td><td>smith</td></tr></table></td></tr></table>");
             Assert.IsTrue(IsEqual(table.Parts.Parts, actual));
         }
 
         [Test] public void MarksSameTableCellAsRight() {
-            ArrayList actual = new ArrayList();
-            actual.Add(new Name("joe", "smith"));
+            var actual = new ArrayList {new Name("joe", "smith")};
             Parse table = HtmlParser.Instance.Parse("<table><tr><td><table><tr><td>first</td><td>last</td></tr><tr><td>joe</td><td>smith</td></tr></table></td></tr></table>");
             var fixture = new Fixture {Processor = new Service.Service()};
-            fixture.CellOperation.Check(new TestStatus(), null, new TypedValue(actual), table.Parts.Parts);
+            fixture.CellOperation.Check(null, new TypedValue(actual), table.Parts.Parts);
             Assert.AreEqual("<td><table><tr><td>first</td><td>last</td></tr><tr><td class=\"pass\">joe</td><td class=\"pass\">smith</td></tr></table></td>", table.Parts.Parts.ToString());
         }
 
         [Test] public void MarksExtraTableHeaderAsError() {
-            ArrayList actual = new ArrayList();
-            actual.Add(new Name("joe", "smith"));
+            var actual = new ArrayList {new Name("joe", "smith")};
             Parse table = HtmlParser.Instance.Parse("<table><tr><td><table><tr><td>first</td><td>last</td><td>address</td></tr><tr><td>joe</td><td>smith</td><td></td></tr></table></td></tr></table>");
             var fixture = new Fixture {Processor = new Service.Service()};
-            fixture.CellOperation.Check(new TestStatus(), null, new TypedValue(actual), table.Parts.Parts);
+            fixture.CellOperation.Check(null, new TypedValue(actual), table.Parts.Parts);
             Assert.AreEqual("<td><table><tr><td>first</td><td>last</td><td class=\"error\">address<hr /><pre><div class=\"fit_stacktrace\">fitlibrary.exception.FitFailureException: Column 'address' not used.</div></pre></td></tr><tr><td class=\"pass\">joe</td><td class=\"pass\">smith</td><td></td></tr></table></td>", table.Parts.Parts.ToString());
         }
 

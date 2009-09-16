@@ -45,10 +45,10 @@ namespace fitSharp.Fit.Operators {
             try {
                 TypedValue actual = parameters.GetTypedActual(this);
                 if (Processor.Compare(actual, parameters.Cells)) {
-                    parameters.TestStatus.MarkRight(parameters.Cell);
+                    Processor.TestStatus.MarkRight(parameters.Cell);
                 }
                 else {
-                    parameters.TestStatus.MarkWrong(parameters.Cell, actual.ValueString);
+                    Processor.TestStatus.MarkWrong(parameters.Cell, actual.ValueString);
                 }
             }
             catch (IgnoredException) {}

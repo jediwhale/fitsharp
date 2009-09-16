@@ -143,7 +143,7 @@ namespace fitlibrary {
         }
 
         public  void DoCheckOperation(Parse expectedValue, CellRange cells) {
-            CellOperation.Check(TestStatus, GetTargetObject(),
+            CellOperation.Check(GetTargetObject(),
                                         new CellRange(MethodCells(cells)),
                                         new CellRange(ParameterCells(cells)),
                                         expectedValue);

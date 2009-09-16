@@ -35,12 +35,11 @@ namespace fit
 		public virtual void Start()
 		{
 			actor = LoadFixture(cells.More.Text);
-			actor.TestStatus = TestStatus;
 		}
 
 		public virtual void Enter()
 		{
-			CellOperation.Input(actor.TestStatus, actor.GetTargetObject(), cells.More, cells.More.More);
+			CellOperation.Input(actor.GetTargetObject(), cells.More, cells.More.More);
 		}
 
 		public virtual void Press()
@@ -50,7 +49,7 @@ namespace fit
 
 		public virtual void Check()
 		{
-			CellOperation.Check(actor.TestStatus, actor.GetTargetObject(), cells.More, cells.More.More);
+			CellOperation.Check(actor.GetTargetObject(), cells.More, cells.More.More);
 		}
 
 		public override object GetTargetObject() {

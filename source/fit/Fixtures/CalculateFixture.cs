@@ -50,7 +50,7 @@ namespace fitlibrary {
                     Parse expectedCell = theRow.Parts.At(myParameterCount + j + 1);
 
                     try {
-                        CellOperation.Check(TestStatus, GetTargetObject(), new CellRange(memberCells),
+                        CellOperation.Check(GetTargetObject(), new CellRange(memberCells),
                                             myValues.GetCells(new CellRange(theRow.Parts, myParameterCount).Cells),
                                             expectedCell);
                     }

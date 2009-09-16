@@ -52,7 +52,7 @@ namespace fit.Operators {
         private void ExecuteCheck(ExecuteParameters parameters) {
             var cell = (Parse)parameters.Cell;
             var matcher = new ListMatcher(Processor, new ArrayMatchStrategy(cell.Parts.Parts));
-            matcher.MarkCell(parameters.TestStatus, parameters.SystemUnderTest.Value, GetActual(parameters), cell.Parts.Parts);
+            matcher.MarkCell(parameters.SystemUnderTest.Value, GetActual(parameters), cell.Parts.Parts);
         }
 
         public bool CanParse(Type type, TypedValue instance, Tree<Cell> parameters) {

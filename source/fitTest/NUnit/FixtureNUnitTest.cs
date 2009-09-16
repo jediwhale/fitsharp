@@ -8,33 +8,6 @@ using NUnit.Framework;
 
 namespace fit.Test.NUnit {
     [TestFixture]
-    public class FixtureNUnitTest
-    {
-        [SetUp]
-        public void SetUp()
-        {
-            TestUtils.InitAssembliesAndNamespaces();
-        }
-
-        [Test]
-        public void testMissingFixtureError()
-        {
-            string message = null;
-            Fixture fixture = new Fixture();
-            try
-            {
-                Fixture.LoadFixture("NonExistentFixture");
-            }
-            catch (Exception e)
-            {
-                message = e.Message;
-            }
-            Assert.IsTrue(message.IndexOf("in assemblies:") > 0);
-            Assert.IsTrue(message.ToLower().IndexOf("fit.dll") > 0, message);
-        }
-    }
-
-    [TestFixture]
     public class FixtureParametersTest{
 
         [Test]

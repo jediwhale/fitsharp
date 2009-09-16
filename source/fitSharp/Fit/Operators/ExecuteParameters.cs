@@ -20,7 +20,6 @@ namespace fitSharp.Fit.Operators {
         private readonly ExecuteContext context;
 
         public TypedValue SystemUnderTest { get { return context.SystemUnderTest; } }
-        public TestStatus TestStatus { get { return context.TestStatus; } }
         public TypedValue Target { get { return context.Target.Value; } }
 
         public string Verb { get { return tree.Branches[0].Value.Text; } }
@@ -77,7 +76,7 @@ namespace fitSharp.Fit.Operators {
                     context.Target = actualResult;
                 }
                 catch (ParseException<Cell> e) {
-                    TestStatus.MarkException(e.Subject, e);
+                    cellOperator.Processor.TestStatus.MarkException(e.Subject, e);
                     throw new IgnoredException();
                 }
             }

@@ -20,25 +20,25 @@ namespace fitSharp.Fit.Service {
             adapter.SetSystemUnderTest(instance.Value);
         }
 
-        public void Input(TestStatus testStatus, object systemUnderTest, Tree<Cell> memberName, Tree<Cell> cell) {
+        public void Input(object systemUnderTest, Tree<Cell> memberName, Tree<Cell> cell) {
             processor.Execute(
-                ExecuteContext.Make(testStatus, systemUnderTest), 
+                ExecuteContext.Make(systemUnderTest), 
                 ExecuteParameters.MakeInput(memberName, cell));
         }
 
-        public void Check(TestStatus testStatus, object systemUnderTest, Tree<Cell> memberName, Tree<Cell> parameters, Tree<Cell> expectedCell) {
+        public void Check(object systemUnderTest, Tree<Cell> memberName, Tree<Cell> parameters, Tree<Cell> expectedCell) {
             processor.Execute(
-                ExecuteContext.Make(testStatus, systemUnderTest), 
+                ExecuteContext.Make(systemUnderTest), 
                 ExecuteParameters.MakeCheck(memberName, parameters, expectedCell));
         }
 
-        public void Check(TestStatus testStatus, object systemUnderTest, Tree<Cell> memberName, Tree<Cell> expectedCell) {
-            Check(testStatus, systemUnderTest, memberName, new TreeList<Cell>(), expectedCell);
+        public void Check(object systemUnderTest, Tree<Cell> memberName, Tree<Cell> expectedCell) {
+            Check(systemUnderTest, memberName, new TreeList<Cell>(), expectedCell);
         }
 
-        public void Check(TestStatus testStatus, object systemUnderTest, TypedValue actualValue, Tree<Cell> expectedCell) {
+        public void Check(object systemUnderTest, TypedValue actualValue, Tree<Cell> expectedCell) {
             processor.Execute(
-                ExecuteContext.Make(testStatus, systemUnderTest, actualValue),
+                ExecuteContext.Make(systemUnderTest, actualValue),
                 ExecuteParameters.MakeCheck(expectedCell));
         }
 

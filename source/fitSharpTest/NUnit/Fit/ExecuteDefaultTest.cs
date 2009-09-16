@@ -30,6 +30,8 @@ namespace fitSharp.Test.NUnit.Fit {
         }
 
         [Test] public void ProcedureIsInvoked() {
+            var flow = new Mock<FlowInterpreter>();
+            var doFixture = new TypedValue(flow.Object);
             var processor = new Mock<CellProcessor>();
             var execute = new ExecuteDefault {Processor = processor.Object};
             var target = new TypedValue("target");
@@ -45,7 +47,14 @@ namespace fitSharp.Test.NUnit.Fit {
                 .Returns(new TypedValue(new MemberName("procedure")));
             processor
                 .Setup(p => p.Load(It.Is<Procedure>(v => v.Id == "procedure"))).Returns(procedure);
-            execute.Execute(parameters);
+            processor
+                .Setup(p => p.Parse(typeof (Interpreter), target,
+                                    It.Is<Tree<Cell>>(
+                                        c => c.Branches[0].Branches[0].Branches[0].ToString() == "dofixture")))
+                .Returns(doFixture);
+            
+
+            //Assert.AreEqual(result, execute.Execute(parameters));
         }
     }
 }

@@ -10,15 +10,16 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Service {
 
-    public interface CellProcessor: Processor<Cell> {
+    public interface CellProcessor: Processor<Cell>, Copyable {
 	    TestStatus TestStatus { get; set; }
     }
 
-    public class CellProcessorBase: ProcessorBase<Cell, CellProcessor>, Copyable, CellProcessor {
+    public class CellProcessorBase: ProcessorBase<Cell, CellProcessor>, CellProcessor {
         private readonly Operators<Cell, CellProcessor> operators;
 	    public TestStatus TestStatus { get; set; }
 
         public CellProcessorBase() {
+            TestStatus = new TestStatus();
             operators = new Operators<Cell, CellProcessor>(this);
             AddOperator(new ParseDefault());
             AddOperator(new ExecuteDefault());
