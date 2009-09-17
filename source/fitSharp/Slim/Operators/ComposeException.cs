@@ -44,7 +44,7 @@ namespace fitSharp.Slim.Operators {
         }
 
         private static bool IsStopTestException(TypedValue instance) {
-            for (var exception = (System.Exception) instance.Value;
+            for (var exception = instance.GetValue<System.Exception>();
                  exception != null;
                  exception = exception.InnerException) {
                 if (exception.GetType().Name.Contains("StopTest")) return true;

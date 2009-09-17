@@ -10,40 +10,38 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
     public class ExecuteDefault: ExecuteBase {
-        public override bool CanExecute(ExecuteParameters parameters) {
+        public override bool CanExecute(ExecuteContext context, ExecuteParameters parameters) {
             return true;
         }
 
-        public override TypedValue Execute(ExecuteParameters parameters) {
-            switch (parameters.Verb) {
-                case ExecuteParameters.Input:
-                    Input(parameters);
+        public override TypedValue Execute(ExecuteContext context, ExecuteParameters parameters) {
+            switch (context.Command) {
+                case ExecuteCommand.Input:
+                    Input(context, parameters);
                     break;
-
-                case ExecuteParameters.Check:
-                    Check(parameters);
+                case ExecuteCommand.Check:
+                    Check(context, parameters);
                     break;
+                case ExecuteCommand.Compare:
+                    return new TypedValue(Processor.Compare(context.Target.Value, parameters.Cells));
 
-                case ExecuteParameters.Compare:
-                    return new TypedValue(Processor.Compare(parameters.Target, parameters.Cells));
-
-                case ExecuteParameters.Invoke:
-                    return Invoke(parameters);
+                case ExecuteCommand.Invoke:
+                    return Invoke(context, parameters);
 
                 default:
-                    throw new ArgumentException(string.Format("Unrecognized operation '{0}'", parameters.Verb));
+                    throw new ArgumentException(string.Format("Unrecognized operation '{0}'", context.Command));
             }
             return TypedValue.Void;
         }
 
-        private  void Input(ExecuteParameters parameters) {
-            InvokeWithThrow(parameters.SystemUnderTest, GetMemberName(parameters.Members),
+        private  void Input(ExecuteContext context, ExecuteParameters parameters) {
+            InvokeWithThrow(context.SystemUnderTest, GetMemberName(parameters.Members),
                              new TreeList<Cell>().AddBranch(parameters.Cells));
         }
 
-        private  void Check(ExecuteParameters parameters) {
+        private  void Check(ExecuteContext context, ExecuteParameters parameters) {
             try {
-                TypedValue actual = parameters.GetTypedActual(this);
+                TypedValue actual = GetTypedActual(context, parameters);
                 if (Processor.Compare(actual, parameters.Cells)) {
                     Processor.TestStatus.MarkRight(parameters.Cell);
                 }
@@ -54,8 +52,8 @@ namespace fitSharp.Fit.Operators {
             catch (IgnoredException) {}
         }
 
-        private TypedValue Invoke(ExecuteParameters parameters) {
-            TypedValue target = parameters.Target;
+        private TypedValue Invoke(ExecuteContext context, ExecuteParameters parameters) {
+            TypedValue target = context.Target.Value;
             var targetObjectProvider = target.Value as TargetObjectProvider;
             var name = ParseTree<MemberName>(parameters.Members);
             return Processor.Invoke(targetObjectProvider != null ? new TypedValue(targetObjectProvider.GetTargetObject()) : target, name.ToString(), parameters.Parameters);

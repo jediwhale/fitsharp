@@ -3,9 +3,11 @@
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
+using fitSharp.Fit.Exception;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
+using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
@@ -14,8 +16,22 @@ namespace fitSharp.Fit.Operators {
             return ParseTree<MemberName>(members).ToString();
         }
 
-        public object GetActual(ExecuteParameters parameters) {
-            return parameters.GetTypedActual(this).Value;
+        public object GetActual(ExecuteContext context, ExecuteParameters parameters) {
+            return GetTypedActual(context, parameters).Value;
+        }
+
+        public TypedValue GetTypedActual(ExecuteContext context, ExecuteParameters parameters) {
+            if (!context.Target.HasValue) {
+                try {
+                    TypedValue actualResult = InvokeWithThrow(context.SystemUnderTest, GetMemberName(parameters.Members), parameters.Parameters);
+                    context.Target = actualResult;
+                }
+                catch (ParseException<Cell> e) {
+                    Processor.TestStatus.MarkException(e.Subject, e);
+                    throw new IgnoredException();
+                }
+            }
+            return context.Target.Value;
         }
     }
 }

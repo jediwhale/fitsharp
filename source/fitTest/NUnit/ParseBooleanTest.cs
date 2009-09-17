@@ -51,7 +51,7 @@ namespace fit.Test.NUnit {
         private bool Parse(string validString) {
             Assert.IsTrue(parseBoolean.CanParse(typeof (bool), TypedValue.Void, TestUtils.CreateCell(validString)));
             TypedValue result = parseBoolean.Parse(typeof (bool), TypedValue.Void, TestUtils.CreateCell(validString));
-            return (bool)result.Value;
+            return result.GetValue<bool>();
         }
     }
 }

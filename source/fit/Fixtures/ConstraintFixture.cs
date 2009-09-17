@@ -46,7 +46,7 @@ namespace fitlibrary {
 	                if (result.Type != typeof (bool)) {
 	                    throw new InvalidMethodException(string.Format("Method does not return boolean."));
 	                }
-	                if ((bool) result.Value == expectedCondition) {
+	                if (result.GetValue<bool>() == expectedCondition) {
 	                    TestStatus.MarkRight(row);
 	                }
 	                else {

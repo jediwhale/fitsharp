@@ -15,44 +15,41 @@ using fitSharp.Machine.Model;
 
 namespace fit.Operators {
     public class ExecuteList: ExecuteBase, ParseOperator<Cell> {
-        public override bool CanExecute(ExecuteParameters parameters) {
-            switch (parameters.Verb) {
-                case ExecuteParameters.Check:
+        public override bool CanExecute(ExecuteContext context, ExecuteParameters parameters) {
+            switch (context.Command) {
+                case ExecuteCommand.Check:
                     var cell1 = (Parse)parameters.Cell;
-                    return cell1.Parts != null && typeof(IList).IsAssignableFrom(parameters.GetTypedActual(this).Type);
-
-                case ExecuteParameters.Compare:
+                    return cell1.Parts != null && typeof(IList).IsAssignableFrom(GetTypedActual(context, parameters).Type);
+                case ExecuteCommand.Compare:
                     var cell2 = (Parse)parameters.Cell;
-                    return cell2.Parts != null && typeof(IList).IsAssignableFrom(parameters.Target.Type);
+                    return cell2.Parts != null && typeof(IList).IsAssignableFrom(context.Target.Value.Type);
 
                 default:
                     return false;
             }
         }
 
-        public override TypedValue Execute(ExecuteParameters parameters) {
-            switch (parameters.Verb) {
-                case ExecuteParameters.Check:
-                    ExecuteCheck(parameters);
+        public override TypedValue Execute(ExecuteContext context, ExecuteParameters parameters) {
+            switch (context.Command) {
+                case ExecuteCommand.Check:
+                    ExecuteCheck(context, parameters);
                     break;
-
-                case ExecuteParameters.Compare:
-                    return ExecuteEvaluate(parameters);
-
+                case ExecuteCommand.Compare:
+                    return ExecuteEvaluate(context, parameters);
             }
             return TypedValue.Void;
         }
 
-        private TypedValue ExecuteEvaluate(ExecuteParameters parameters) {
+        private TypedValue ExecuteEvaluate(ExecuteContext context, ExecuteParameters parameters) {
             var cell = (Parse)parameters.Cell;
             var matcher = new ListMatcher(Processor, new ArrayMatchStrategy(cell.Parts.Parts));
-            return new TypedValue(matcher.IsEqual(parameters.Target.Value, cell));
+            return new TypedValue(matcher.IsEqual(context.Target.Value.Value, cell));
         }
 
-        private void ExecuteCheck(ExecuteParameters parameters) {
+        private void ExecuteCheck(ExecuteContext context, ExecuteParameters parameters) {
             var cell = (Parse)parameters.Cell;
             var matcher = new ListMatcher(Processor, new ArrayMatchStrategy(cell.Parts.Parts));
-            matcher.MarkCell(parameters.SystemUnderTest.Value, GetActual(parameters), cell.Parts.Parts);
+            matcher.MarkCell(context.SystemUnderTest.Value, GetActual(context, parameters), cell.Parts.Parts);
         }
 
         public bool CanParse(Type type, TypedValue instance, Tree<Cell> parameters) {

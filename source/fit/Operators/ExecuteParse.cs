@@ -12,18 +12,18 @@ using fitSharp.Machine.Model;
 
 namespace fit.Operators {
     public class ExecuteParse: ExecuteBase, ParseOperator<Cell> {
-        public override bool CanExecute(ExecuteParameters parameters) {
-            if (parameters.Verb != ExecuteParameters.Check) return false;
-            TypedValue actualValue = parameters.GetTypedActual(this);
+        public override bool CanExecute(ExecuteContext context, ExecuteParameters parameters) {
+            if (context.Command != ExecuteCommand.Check) return false;
+            TypedValue actualValue = GetTypedActual(context, parameters);
             return typeof (Parse).IsAssignableFrom(actualValue.Type);
         }
 
-        public override TypedValue Execute(ExecuteParameters parameters) {
-            TypedValue actualValue = parameters.GetTypedActual(this);
+        public override TypedValue Execute(ExecuteContext context, ExecuteParameters parameters) {
+            TypedValue actualValue = GetTypedActual(context, parameters);
 
             var cell = (Parse) parameters.Cell;
             var expected = new FixtureTable(cell.Parts);
-            var tables = (Parse) actualValue.Value;
+            var tables = actualValue.GetValue<Parse>();
             var actual = new FixtureTable(tables);
             string differences = actual.Differences(expected);
             if (differences.Length == 0) {

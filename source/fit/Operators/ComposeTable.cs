@@ -16,7 +16,7 @@ namespace fit.Operators {
         }
 
         public Tree<Cell> Compose(TypedValue instance) {
-            return new Parse("td", string.Empty, MakeTable((Table)instance.Value), null);
+            return new Parse("td", string.Empty, MakeTable(instance.GetValue<Table>()), null);
         }
 
         private Parse MakeTable(Table theTable) {

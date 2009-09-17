@@ -19,8 +19,8 @@ namespace fit.Test.NUnit {
 
         [Test]
         public void TestMatch() {
-            Assert.IsTrue(IsMatch(new ExecuteEmpty(), ExecuteParameters.MakeCheck(TestUtils.CreateCell(""))));
-            Assert.IsTrue(IsMatch(new ExecuteEmpty(), ExecuteParameters.MakeInput(TestUtils.CreateCellRange("stuff"), TestUtils.CreateCell(""))));
+            Assert.IsTrue(IsMatch(ExecuteCommand.Check, new ExecuteEmpty(), ExecuteParameters.Make(TestUtils.CreateCell(""))));
+            Assert.IsTrue(IsMatch(ExecuteCommand.Input, new ExecuteEmpty(), ExecuteParameters.MakeMemberCell(TestUtils.CreateCellRange("stuff"), TestUtils.CreateCell(""))));
         }
 
         [Test]

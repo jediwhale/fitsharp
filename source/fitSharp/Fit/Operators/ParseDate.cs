@@ -24,7 +24,7 @@ namespace fitSharp.Fit.Operators {
             if (cell.Text.Length > today.Length) {
                 string modifier = cell.Text.Substring(today.Length).Trim();
                 var rest = new CellSubstring(cell, modifier.Substring(1));
-                daysToAdd = (int)Parse(typeof(int), rest).Value;
+                daysToAdd = Parse<int>(rest);
                 if (modifier.StartsWith("-")) {
                     daysToAdd = - daysToAdd;
                 }

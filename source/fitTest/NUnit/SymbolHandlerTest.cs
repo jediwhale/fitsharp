@@ -16,14 +16,14 @@ namespace fit.Test.NUnit {
         public void TestRegisterAndGet()
         {
             Assert.IsTrue(IsMatch("<<xyz"));
-            Assert.IsFalse(TestUtils.IsMatch(new ExecuteSymbolSave(), ExecuteParameters.MakeCheck(TestUtils.CreateCell("x<<yz"))));
+            Assert.IsFalse(TestUtils.IsMatch(ExecuteCommand.Check, new ExecuteSymbolSave(), ExecuteParameters.Make(TestUtils.CreateCell("x<<yz"))));
             Assert.IsFalse(IsMatch("x<<yz"));
-            Assert.IsTrue(TestUtils.IsMatch(new ExecuteSymbolSave(), ExecuteParameters.MakeCheck(TestUtils.CreateCell(">>xyz"))));
-            Assert.IsFalse(TestUtils.IsMatch(new ExecuteSymbolSave(), ExecuteParameters.MakeInput(TestUtils.CreateCell("stuff"), TestUtils.CreateCell(">>xyz"))));
-            Assert.IsFalse(TestUtils.IsMatch(new ExecuteSymbolSave(), ExecuteParameters.MakeCheck(TestUtils.CreateCell("x>>yz"))));
+            Assert.IsTrue(TestUtils.IsMatch(ExecuteCommand.Check, new ExecuteSymbolSave(), ExecuteParameters.Make(TestUtils.CreateCell(">>xyz"))));
+            Assert.IsFalse(TestUtils.IsMatch(ExecuteCommand.Input, new ExecuteSymbolSave(), ExecuteParameters.MakeMemberCell(TestUtils.CreateCell("stuff"), TestUtils.CreateCell(">>xyz"))));
+            Assert.IsFalse(TestUtils.IsMatch(ExecuteCommand.Check, new ExecuteSymbolSave(), ExecuteParameters.Make(TestUtils.CreateCell("x>>yz"))));
             Assert.IsFalse(IsMatch("x>>yz"));
 
-            Assert.IsFalse(TestUtils.IsMatch(new ExecuteSymbolSave(), ExecuteParameters.MakeInput(TestUtils.CreateCell("stuff"), TestUtils.CreateCell("error"))));
+            Assert.IsFalse(TestUtils.IsMatch(ExecuteCommand.Input, new ExecuteSymbolSave(), ExecuteParameters.MakeMemberCell(TestUtils.CreateCell("stuff"), TestUtils.CreateCell("error"))));
         }
 
         private static bool IsMatch(string input) {

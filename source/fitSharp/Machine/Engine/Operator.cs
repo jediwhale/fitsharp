@@ -37,11 +37,11 @@ namespace fitSharp.Machine.Engine {
         }
 
         public V ParseTree<V>(Tree<T> input) {
-            return (V) Parse(typeof (V), input).Value;
+            return Parse(typeof (V), input).GetValue<V>();
         }
 
         public V Parse<V>(T input) {
-            return (V) Parse(typeof (V), input).Value;
+            return Parse(typeof (V), input).GetValue<V>();
         }
 
         public TypedValue ParseString(Type type, string input) {
@@ -49,7 +49,7 @@ namespace fitSharp.Machine.Engine {
         }
 
         public V ParseString<V>(string input) {
-            return (V) ParseString(typeof (V), input).Value;
+            return ParseString(typeof (V), input).GetValue<V>();
         }
     }
 

@@ -69,13 +69,13 @@ namespace fitSharp.Machine.Application {
         }
 
         public Copyable GetItem(string typeName) {
-            var type = (RuntimeType)new BasicProcessor().Parse(typeof(RuntimeType), TypedValue.Void, new TreeLeaf<string>(typeName)).Value;
+            var type = new BasicProcessor().Parse(typeof(RuntimeType), TypedValue.Void, new TreeLeaf<string>(typeName)).GetValue<RuntimeType>();
             return GetItem(type.Type);
         }
 
         public Copyable GetItem(Type type) {
             if (!items.ContainsKey(type)) {
-                items[type] = (Copyable)new BasicProcessor().Create(type.AssemblyQualifiedName, new TreeList<string>()).Value;
+                items[type] = new BasicProcessor().Create(type.AssemblyQualifiedName, new TreeList<string>()).GetValue<Copyable>();
             }
             return items[type];
         }

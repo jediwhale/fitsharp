@@ -9,13 +9,13 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
     public class ExecuteSymbolSave : ExecuteBase {
-        public override bool CanExecute(ExecuteParameters parameters) {
-            return parameters.Verb == ExecuteParameters.Check
+        public override bool CanExecute(ExecuteContext context, ExecuteParameters parameters) {
+            return context.Command == ExecuteCommand.Check
                 && parameters.Cell.Text.StartsWith(">>");
         }
 
-        public override TypedValue Execute(ExecuteParameters parameters) {
-            object value = GetActual(parameters);
+        public override TypedValue Execute(ExecuteContext context, ExecuteParameters parameters) {
+            object value = GetActual(context, parameters);
             var symbol = new Symbol(parameters.Cell.Text.Substring(2), value);
             Processor.Store(symbol);
 

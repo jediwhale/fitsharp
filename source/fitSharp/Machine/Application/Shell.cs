@@ -113,7 +113,7 @@ namespace fitSharp.Machine.Application {
         }
 
         private int ExecuteRunner() {
-            Runner = (Runnable) new BasicProcessor().Create(Context.Configuration.GetItem<Settings>().Runner, new TreeList<string>()).Value;
+            Runner = new BasicProcessor().Create(Context.Configuration.GetItem<Settings>().Runner, new TreeList<string>()).GetValue<Runnable>();
             return Runner.Run(extraArguments.ToArray(), Context.Configuration, progressReporter);
         }
     }

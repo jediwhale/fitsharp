@@ -19,7 +19,7 @@ namespace fitSharp.Fit.Operators {
 
         public bool Compare(TypedValue actual, Tree<Cell> expected) {
             string[] parts = expected.Value.Text.Split('.');
-            return IsInRange((int)actual.Value, LowEnd(parts), HighEnd(parts));
+            return IsInRange(actual.GetValue<int>(), LowEnd(parts), HighEnd(parts));
         }
 
         private static int HighEnd(string[] args) {

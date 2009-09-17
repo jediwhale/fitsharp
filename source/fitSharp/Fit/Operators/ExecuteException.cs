@@ -14,15 +14,15 @@ namespace fitSharp.Fit.Operators {
         private static readonly Regex regexForMessageOnly = new Regex("^\".*\"$");
         private static readonly Regex regexForExceptionTypeNameOnly = new Regex("^.*: \".*\"$");
 
-        public override bool CanExecute(ExecuteParameters parameters) {
-            return parameters.Verb == ExecuteParameters.Check
+        public override bool CanExecute(ExecuteContext context, ExecuteParameters parameters) {
+            return context.Command == ExecuteCommand.Check
                 && exceptionIdentifier.IsStartOf(parameters.Cell.Text) && parameters.Cell.Text.EndsWith("]");
         }
 
-        public override TypedValue Execute(ExecuteParameters parameters) {
+        public override TypedValue Execute(ExecuteContext context, ExecuteParameters parameters) {
             string exceptionContent = parameters.Cell.Text.Substring("exception[".Length, parameters.Cell.Text.Length - ("exception[".Length + 1));
             try {
-                GetActual(parameters);
+                GetActual(context, parameters);
                 Processor.TestStatus.MarkWrong(parameters.Cell, "no exception");
             }
             catch (TargetInvocationException e) {

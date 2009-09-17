@@ -6,25 +6,39 @@
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
+    public enum ExecuteCommand { Check, Compare, Input, Invoke }
+
     public class ExecuteContext {
         public TypedValue SystemUnderTest { get; private set; }
         public TypedValue? Target { get; set; }
+        public ExecuteCommand Command { get; private set; }
 
-        public static TypedValue Make(TypedValue target) { return new TypedValue(new ExecuteContext(target)); }
-        public static TypedValue Make(object systemUnderTest) { return new TypedValue(new ExecuteContext(systemUnderTest)); }
-        public static TypedValue Make(object systemUnderTest, TypedValue target) { return new TypedValue(new ExecuteContext(systemUnderTest, target)); }
-
-        public ExecuteContext(object systemUnderTest) {
-            SystemUnderTest = new TypedValue(systemUnderTest);
+        public static TypedValue Make(ExecuteCommand command, object systemUnderTest) {
+            return new TypedValue(new ExecuteContext(command, systemUnderTest));
         }
 
-        public ExecuteContext(TypedValue target) {
+        public static TypedValue Make(ExecuteCommand command, object systemUnderTest, TypedValue target) {
+            return new TypedValue(new ExecuteContext(command, systemUnderTest, target));
+        }
+
+        public static TypedValue Make(ExecuteCommand command, TypedValue target) {
+            return new TypedValue(new ExecuteContext(command, target));
+        }
+
+        public ExecuteContext(ExecuteCommand command, TypedValue target) {
+            Command = command;
             Target = target;
         }
 
-        public ExecuteContext(object systemUnderTest, TypedValue target) {
+        public ExecuteContext(ExecuteCommand command, object systemUnderTest) {
+            SystemUnderTest = new TypedValue(systemUnderTest);
+            Command = command;
+        }
+
+        public ExecuteContext(ExecuteCommand command, object systemUnderTest, TypedValue target) {
             SystemUnderTest = new TypedValue(systemUnderTest);
             Target = target;
+            Command = command;
         }
     }
 }

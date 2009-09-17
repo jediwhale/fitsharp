@@ -18,15 +18,14 @@ namespace fitSharp.Test.NUnit.Fit {
             var target = new TypedValue("target");
             var result = new TypedValue("result");
             var parameters = new ExecuteParameters(
-                new ExecuteContext(target),
-                ExecuteParameters.MakeInvoke(new StringCell("member"), new TreeList<Cell>()));
+                ExecuteParameters.MakeMemberParameters(new StringCell("member"), new TreeList<Cell>()));
             processor
                 .Setup(p => p.Parse(typeof (MemberName), It.IsAny<TypedValue>(), It.Is<StringCell>(c => c.Text == "member")))
                 .Returns(new TypedValue(new MemberName("member")));
             processor
                 .Setup(p => p.Invoke(target, "member", It.Is<Tree<Cell>>(c => c.Branches.Count == 0)))
                 .Returns(result);
-            Assert.AreEqual(result, execute.Execute(parameters));
+            Assert.AreEqual(result, execute.Execute(new ExecuteContext(ExecuteCommand.Invoke, target), parameters));
         }
 
         [Test] public void ProcedureIsInvoked() {
@@ -40,8 +39,7 @@ namespace fitSharp.Test.NUnit.Fit {
                                           new TreeList<Cell>().AddBranch(
                                               new TreeList<Cell>().AddBranch(new StringCell("member"))));
             var parameters = new ExecuteParameters(
-                new ExecuteContext(target),
-                ExecuteParameters.MakeInvoke(new StringCell("procedure"), new TreeList<Cell>()));
+                ExecuteParameters.MakeMemberParameters(new StringCell("procedure"), new TreeList<Cell>()));
             processor
                 .Setup(p => p.Parse(typeof (MemberName), It.IsAny<TypedValue>(), It.Is<StringCell>(c => c.Text == "procedure")))
                 .Returns(new TypedValue(new MemberName("procedure")));

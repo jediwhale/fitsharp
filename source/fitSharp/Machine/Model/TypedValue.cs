@@ -12,6 +12,7 @@ namespace fitSharp.Machine.Model {
         public static TypedValue MakeInvalid(System.Exception exception) { return new TypedValue(exception, typeof(void)); }
 
         public object Value { get; private set; }
+        public T GetValue<T>() { return (T)Value;} 
         public Type Type { get; private set; }
 
         public TypedValue(object value, Type type) : this() {

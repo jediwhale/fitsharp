@@ -22,14 +22,14 @@ namespace fitSharp.Fit.Service {
 
         public void Input(object systemUnderTest, Tree<Cell> memberName, Tree<Cell> cell) {
             processor.Execute(
-                ExecuteContext.Make(systemUnderTest), 
-                ExecuteParameters.MakeInput(memberName, cell));
+                ExecuteContext.Make(ExecuteCommand.Input, systemUnderTest), 
+                ExecuteParameters.MakeMemberCell(memberName, cell));
         }
 
         public void Check(object systemUnderTest, Tree<Cell> memberName, Tree<Cell> parameters, Tree<Cell> expectedCell) {
             processor.Execute(
-                ExecuteContext.Make(systemUnderTest), 
-                ExecuteParameters.MakeCheck(memberName, parameters, expectedCell));
+                ExecuteContext.Make(ExecuteCommand.Check, systemUnderTest), 
+                ExecuteParameters.Make(memberName, parameters, expectedCell));
         }
 
         public void Check(object systemUnderTest, Tree<Cell> memberName, Tree<Cell> expectedCell) {
@@ -38,8 +38,8 @@ namespace fitSharp.Fit.Service {
 
         public void Check(object systemUnderTest, TypedValue actualValue, Tree<Cell> expectedCell) {
             processor.Execute(
-                ExecuteContext.Make(systemUnderTest, actualValue),
-                ExecuteParameters.MakeCheck(expectedCell));
+                ExecuteContext.Make(ExecuteCommand.Check, systemUnderTest, actualValue),
+                ExecuteParameters.Make(expectedCell));
         }
 
         public TypedValue TryInvoke(object target, Tree<Cell> memberName) {
@@ -48,8 +48,8 @@ namespace fitSharp.Fit.Service {
 
         public TypedValue TryInvoke(object target, Tree<Cell> memberName, Tree<Cell> parameters) {
             return processor.Execute(
-                ExecuteContext.Make(new TypedValue(target)), 
-                ExecuteParameters.MakeInvoke(memberName, parameters));
+                ExecuteContext.Make(ExecuteCommand.Invoke, new TypedValue(target)), 
+                ExecuteParameters.MakeMemberParameters(memberName, parameters));
         }
 
         public TypedValue Invoke(object target, Tree<Cell> memberName) {
@@ -64,8 +64,8 @@ namespace fitSharp.Fit.Service {
 
         public bool Compare(TypedValue actual, Tree<Cell> expectedCell) {
             return (bool)processor.Execute(
-                             ExecuteContext.Make(actual), 
-                             ExecuteParameters.MakeCompare(expectedCell)).Value;
+                             ExecuteContext.Make(ExecuteCommand.Compare, actual), 
+                             ExecuteParameters.Make(expectedCell)).Value;
         }
     }
 }

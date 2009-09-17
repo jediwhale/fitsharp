@@ -10,13 +10,13 @@ namespace fitSharp.Fit.Operators {
     public class ExecuteError : ExecuteBase {
         private static readonly IdentifierName errorIdentifier = new IdentifierName("error");
 
-        public override bool CanExecute(ExecuteParameters parameters) {
-            return parameters.Verb == ExecuteParameters.Check && errorIdentifier.Equals(parameters.Cell.Text);
+        public override bool CanExecute(ExecuteContext context, ExecuteParameters parameters) {
+            return context.Command == ExecuteCommand.Check && errorIdentifier.Equals(parameters.Cell.Text);
         }
 
-        public override TypedValue Execute(ExecuteParameters parameters) {
+        public override TypedValue Execute(ExecuteContext context, ExecuteParameters parameters) {
             try {
-                object actual = GetActual(parameters);
+                object actual = GetActual(context, parameters);
                 Processor.TestStatus.MarkWrong(parameters.Cell, actual.ToString());
             }
             catch {
