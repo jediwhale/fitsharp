@@ -16,11 +16,14 @@ namespace fitSharp.Test.NUnit.Fit {
         [Test] public void ProcedureIsSaved() {
             var processor = new Mock<CellProcessor>();
             var define = new Define {Processor = processor.Object};
-            var input = new TreeList<Cell>()
-                .AddBranch(new TreeList<Cell>().AddBranch(new StringCell("define")).AddBranch(new StringCell("myprocedure")))
-                .AddBranch(new TreeList<Cell>().AddBranch(new StringCell("stuff")));
+            var input = new CellTree(new CellTree("define", "myprocedure"), new CellTree("stuff"));
             define.Interpret(input);
-            processor.Verify(p => p.Store(It.Is<Procedure>(v => v.Id == "myprocedure" && v.Instance.Branches[0].Value.Text == "stuff")));
+            processor.Verify(p => p.Store(It.Is<Procedure>(v => v.Id == "myprocedure" && IsScript(v.Instance))));
+        }
+
+        private static bool IsScript(Tree<Cell> tables) {
+            if (tables.Branches[0].Branches[0].Branches[0].Value.Text != "stuff") return false;
+            return true;
         }
     }
 }

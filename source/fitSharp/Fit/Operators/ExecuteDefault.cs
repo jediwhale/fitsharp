@@ -6,6 +6,7 @@
 using System;
 using fitSharp.Fit.Exception;
 using fitSharp.Fit.Model;
+using fitSharp.Fit.Service;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
@@ -56,7 +57,15 @@ namespace fitSharp.Fit.Operators {
             TypedValue target = context.Target.Value;
             var targetObjectProvider = target.Value as TargetObjectProvider;
             var name = ParseTree<MemberName>(parameters.Members);
-            return Processor.Invoke(targetObjectProvider != null ? new TypedValue(targetObjectProvider.GetTargetObject()) : target, name.ToString(), parameters.Parameters);
+            if (!Processor.Contains(new Procedure(name.ToString()))) {
+                return Processor.Invoke(
+                    targetObjectProvider != null ? new TypedValue(targetObjectProvider.GetTargetObject()) : target,
+                    name.ToString(), parameters.Parameters);
+            }
+            var procedure = Processor.Load(new Procedure(name.ToString()));
+            var doFixture = new CellTree(new CellTree("dofixture"));
+            var fixture = Processor.Parse(typeof (Interpreter), target, doFixture);
+            return Processor.Execute(fixture, procedure.Instance);
         }
     }
 }

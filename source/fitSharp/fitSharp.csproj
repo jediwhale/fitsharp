@@ -47,6 +47,7 @@
     <Compile Include="Fit\Fixtures\Define.cs" />
     <Compile Include="Fit\Model\CellAttributes.cs" />
     <Compile Include="Fit\Model\CellSubstring.cs" />
+    <Compile Include="Fit\Model\CellTree.cs" />
     <Compile Include="Fit\Model\StoryTestString.cs" />
     <Compile Include="Fit\Model\TargetObjectProvider.cs" />
     <Compile Include="Fit\Model\TestStatus.cs" />
@@ -54,6 +55,7 @@
     <Compile Include="Fit\Operators\CompareFail.cs" />
     <Compile Include="Fit\Operators\CompareRegEx.cs" />
     <Compile Include="Fit\Operators\ExecuteEmpty.cs" />
+    <Compile Include="Fit\Operators\ExecuteInterpret.cs" />
     <Compile Include="Fit\Operators\ParseDate.cs" />
     <Compile Include="Fit\Operators\CompareNumeric.cs" />
     <Compile Include="Fit\Operators\CompareString.cs" />

@@ -30,15 +30,11 @@ namespace fitlibrary {
             mySystemUnderTest = theSystemUnderTest;
         }
 
-        public override bool IsInFlow(int tableCount) { return tableCount == 1; }
+        public virtual bool IsInFlow(int tableCount) { return tableCount == 1; }
         
 	    public virtual void InterpretFlow(Tree<Cell> table) {
-	        DoFlowTable((Parse)table.Value);
-	    }
-
-	    public virtual void DoFlowTable(Parse table) {
             if (TestStatus.IsAbandoned) return;
-            ProcessFlowRows(table.Parts);
+            ProcessFlowRows((Parse)table.Branches[0].Value);
 	    }
 
 	    public void DoSetUp(Tree<Cell> table) {

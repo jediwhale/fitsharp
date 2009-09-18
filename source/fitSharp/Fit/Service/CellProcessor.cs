@@ -23,6 +23,7 @@ namespace fitSharp.Fit.Service {
             operators = new Operators<Cell, CellProcessor>(this);
             AddOperator(new ParseDefault());
             AddOperator(new ExecuteDefault());
+            AddOperator(new ExecuteInterpret());
             AddOperator(new CompareDefault());
 
             AddOperator(new CompareEmpty());

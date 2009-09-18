@@ -19,7 +19,11 @@ namespace fitSharp.Fit.Fixtures {
         public bool IsVisible { get { return false; } }
 
         public void Interpret(Tree<Cell> table) {
-            processor.Store(new Procedure(table.Branches[0].Branches[1].Value.Text.Trim(), table.Branches[1]));
+            var body = new TreeList<Cell>();
+            for (int i = 1; i < table.Branches.Count; i++) {
+                body.AddBranch(table.Branches[i]);
+            }
+            processor.Store(new Procedure(table.Branches[0].Branches[1].Value.Text.Trim(), new CellTree(body)));
         }
     }
 }

@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="NUnit\Fit\DefineTest.cs" />
     <Compile Include="NUnit\Fit\ExecuteDefaultTest.cs" />
+    <Compile Include="NUnit\Fit\ExecuteInterpretTest.cs" />
     <Compile Include="NUnit\Fit\ParseDateTest.cs" />
     <Compile Include="NUnit\IO\ElapsedTimeTest.cs" />
     <Compile Include="NUnit\IO\SocketStreamTest.cs" />

@@ -23,7 +23,6 @@ namespace fit
         public Fixture() {}
         public Fixture(object systemUnderTest): this() { mySystemUnderTest = systemUnderTest; }
 
-        public virtual bool IsInFlow(int tableCount) { return false; }
         public virtual bool IsVisible { get { return true; } }
 
 	    public void Prepare(Interpreter parent, Tree<Cell> table) {
@@ -154,13 +153,13 @@ namespace fit
 
 	    public string[] Args { get; private set; }
 
-	    public void GetArgsForTable(Parse table)
+	    public void GetArgsForTable(Tree<Cell> table)
 		{
 			var list = new ArrayList();
 			list.Clear();
-			Parse parameters = table.Parts.Parts.More;
-			for (; parameters != null; parameters = parameters.More)
-				list.Add(parameters.Text);
+            for (int i = 1; i < table.Branches[0].Branches.Count; i++) {
+                list.Add(table.Branches[0].Branches[i].Value.Text);
+            }
 			Args = new string[list.Count];
 			for (int i = 0; i < list.Count; i++)
 				Args[i] = (string) list[i];

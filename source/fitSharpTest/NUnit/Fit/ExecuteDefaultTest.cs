@@ -34,25 +34,29 @@ namespace fitSharp.Test.NUnit.Fit {
             var processor = new Mock<CellProcessor>();
             var execute = new ExecuteDefault {Processor = processor.Object};
             var target = new TypedValue("target");
-            var result = new TypedValue("result");
             var procedure = new Procedure("procedure",
                                           new TreeList<Cell>().AddBranch(
                                               new TreeList<Cell>().AddBranch(new StringCell("member"))));
             var parameters = new ExecuteParameters(
                 ExecuteParameters.MakeMemberParameters(new StringCell("procedure"), new TreeList<Cell>()));
+
             processor
                 .Setup(p => p.Parse(typeof (MemberName), It.IsAny<TypedValue>(), It.Is<StringCell>(c => c.Text == "procedure")))
                 .Returns(new TypedValue(new MemberName("procedure")));
             processor
-                .Setup(p => p.Load(It.Is<Procedure>(v => v.Id == "procedure"))).Returns(procedure);
+                .Setup(p => p.Contains(It.Is<Procedure>(v => v.Id == "procedure")))
+                .Returns(true);
+            processor
+                .Setup(p => p.Load(It.Is<Procedure>(v => v.Id == "procedure")))
+                .Returns(procedure);
             processor
                 .Setup(p => p.Parse(typeof (Interpreter), target,
-                                    It.Is<Tree<Cell>>(
-                                        c => c.Branches[0].Branches[0].Branches[0].ToString() == "dofixture")))
+                                    It.Is<Tree<Cell>>(c => c.Branches[0].Branches[0].Value.Text == "dofixture")))
                 .Returns(doFixture);
-            
 
-            //Assert.AreEqual(result, execute.Execute(parameters));
+            execute.Execute(new ExecuteContext(ExecuteCommand.Invoke, target), parameters);
+
+            processor.Verify(p => p.Execute(doFixture, procedure.Instance));
         }
     }
 }

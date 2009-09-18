@@ -8,6 +8,7 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Service {
     public class Procedure: KeyValueMemory<string, Tree<Cell>> {
+        public Procedure(string id): base(id) {}
         public Procedure(string id, Tree<Cell> instance): base(id, instance) {}
     }
 }

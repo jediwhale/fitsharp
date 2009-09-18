@@ -48,7 +48,8 @@ namespace fitSharp.Fit.Service
                             if (heading != null && !processor.TestStatus.IsAbandoned) {
                                 if (flowFixture == null) {
                                     var activeFixture = processor.Parse(typeof(Interpreter), TypedValue.Void, table).GetValue<Interpreter>();
-                                    if (activeFixture.IsInFlow(tableCount)) flowFixture = activeFixture as FlowInterpreter;
+                                    var activeFlowFixture = activeFixture as FlowInterpreter;
+                                    if (activeFlowFixture != null && activeFlowFixture.IsInFlow(tableCount)) flowFixture = activeFlowFixture;
                                     if (!activeFixture.IsVisible) tableCount--;
                                     DoTable(table, activeFixture, flowFixture != null);
                                 }
