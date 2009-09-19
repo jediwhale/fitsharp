@@ -99,6 +99,7 @@
     <Compile Include="Acceptance\Rectangle.cs" />
     <Compile Include="Acceptance\ResetNamespacesFixture.cs" />
     <Compile Include="Acceptance\SampleArrayFixture.cs" />
+    <Compile Include="Double\SampleColumnFixture.cs" />
     <Compile Include="Double\SampleDoFixture.cs" />
     <Compile Include="Double\SampleDomain.cs" />
     <Compile Include="Acceptance\SampleDomainAdapter.cs" />

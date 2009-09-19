@@ -43,6 +43,7 @@
     <Compile Include="Fit\Application\Configurable.cs" />
     <Compile Include="Fit\Application\ConfigurationList.cs" />
     <Compile Include="Fit\Application\FileExclusions.cs" />
+    <Compile Include="Fit\Engine\CellProcessor.cs" />
     <Compile Include="Fit\Exception\IgnoredException.cs" />
     <Compile Include="Fit\Fixtures\Define.cs" />
     <Compile Include="Fit\Model\CellAttributes.cs" />
@@ -68,10 +69,10 @@
     <Compile Include="Fit\Operators\ExecuteSymbolSave.cs" />
     <Compile Include="Fit\Operators\ParseSymbol.cs" />
     <Compile Include="Fit\Service\CellOperation.cs" />
-    <Compile Include="Fit\Service\CellProcessor.cs" />
+    <Compile Include="Fit\Service\CellProcessorBase.cs" />
     <Compile Include="Fit\Service\ExecuteStoryTest.cs" />
-    <Compile Include="Fit\Service\Interpreter.cs" />
-    <Compile Include="Fit\Service\Procedure.cs" />
+    <Compile Include="Fit\Engine\Interpreter.cs" />
+    <Compile Include="Fit\Model\Procedure.cs" />
     <Compile Include="IO\ElapsedTime.cs" />
     <Compile Include="IO\FileSystemModel.cs" />
     <Compile Include="IO\FolderModel.cs" />

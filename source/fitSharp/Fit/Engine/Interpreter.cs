@@ -6,9 +6,18 @@
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
 
-namespace fitSharp.Fit.Service {
-    public class Procedure: KeyValueMemory<string, Tree<Cell>> {
-        public Procedure(string id): base(id) {}
-        public Procedure(string id, Tree<Cell> instance): base(id, instance) {}
+namespace fitSharp.Fit.Engine {
+    public interface Interpreter {
+        CellProcessor Processor { set; }
+        bool IsVisible { get; }
+        void Interpret(Tree<Cell> table);
+        TestStatus TestStatus { get; }
+    }
+
+    public interface FlowInterpreter: Interpreter {
+        bool IsInFlow(int tableCount);
+        void InterpretFlow(Tree<Cell> table);
+        void DoSetUp(Tree<Cell> table);
+        void DoTearDown(Tree<Cell> table);
     }
 }

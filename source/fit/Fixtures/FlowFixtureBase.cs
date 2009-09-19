@@ -9,6 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using fit.Fixtures;
 using fit.Model;
+using fitSharp.Fit.Engine;
 using fitSharp.Fit.Exception;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Service;

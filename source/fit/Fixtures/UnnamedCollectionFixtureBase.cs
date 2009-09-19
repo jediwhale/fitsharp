@@ -6,8 +6,8 @@
 using System.Collections;
 using fit;
 using fit.Operators;
+using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
-using fitSharp.Fit.Service;
 using fitSharp.Machine.Model;
 
 namespace fitlibrary {

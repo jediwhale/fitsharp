@@ -29,6 +29,10 @@ namespace fit.Test.Double {
             return new SampleRowFixture();
         }
 
+        public Fixture MakeSampleColumn() {
+            return new SampleColumnFixture();
+        }
+
         public float DivideFloat(float x, float y) {
             return x/y;
         }

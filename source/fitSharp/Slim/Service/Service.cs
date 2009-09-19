@@ -8,11 +8,11 @@ using fitSharp.Machine.Model;
 using fitSharp.Slim.Operators;
 
 namespace fitSharp.Slim.Service {
-    public class Service: ProcessorBase<string, Service>, Copyable {
-        private readonly Operators<string, Service> operators;
+    public class Service: ProcessorBase<string, Processor<string>>, Copyable {
+        private readonly Operators<string, Processor<string>> operators;
 
         public Service() {
-            operators = new Operators<string, Service>(this);
+            operators = new Operators<string, Processor<string>>(this);
             AddMemory<SavedInstance>();
             AddMemory<Symbol>();
             AddOperator(new ExecuteDefault());
@@ -29,11 +29,11 @@ namespace fitSharp.Slim.Service {
         }
 
         public Service(Service other): base(other) {
-            operators = new Operators<string, Service>(this);
+            operators = new Operators<string, Processor<string>>(this);
             operators.Copy(other.operators);
         }
 
-        protected override Operators<string, Service> Operators {
+        protected override Operators<string, Processor<string>> Operators {
             get { return operators; }
         }
 
