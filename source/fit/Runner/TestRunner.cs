@@ -8,6 +8,7 @@ using System.IO;
 using fit;
 using fit.Service;
 using fitSharp.Fit.Model;
+using fitSharp.Fit.Service;
 using fitSharp.IO;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Model;
@@ -190,10 +191,7 @@ namespace fitnesse.fitserver
 			int indexOfFirstLineBreak = data.IndexOf("\n");
 			string pageTitle = data.Substring(0, indexOfFirstLineBreak);
 			data = data.Substring(indexOfFirstLineBreak + 1);
-			var currentPageResult = new PageResult(pageTitle);
-			currentPageResult.Append(data);
-			currentPageResult.TestStatus = status;
-			AcceptResults(currentPageResult);
+			AcceptResults(new PageResult(pageTitle, data, status));
 		}
 	}
 }

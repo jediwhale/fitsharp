@@ -49,6 +49,7 @@
     <Compile Include="Fit\Model\CellAttributes.cs" />
     <Compile Include="Fit\Model\CellSubstring.cs" />
     <Compile Include="Fit\Model\CellTree.cs" />
+    <Compile Include="Fit\Model\PageResult.cs" />
     <Compile Include="Fit\Model\StoryTestString.cs" />
     <Compile Include="Fit\Model\TargetObjectProvider.cs" />
     <Compile Include="Fit\Model\TestStatus.cs" />
@@ -73,6 +74,9 @@
     <Compile Include="Fit\Service\ExecuteStoryTest.cs" />
     <Compile Include="Fit\Engine\Interpreter.cs" />
     <Compile Include="Fit\Model\Procedure.cs" />
+    <Compile Include="Fit\Service\NullResultWriter.cs" />
+    <Compile Include="Fit\Service\ResultWriter.cs" />
+    <Compile Include="Fit\Service\XmlResultWriter.cs" />
     <Compile Include="IO\ElapsedTime.cs" />
     <Compile Include="IO\FileSystemModel.cs" />
     <Compile Include="IO\FolderModel.cs" />

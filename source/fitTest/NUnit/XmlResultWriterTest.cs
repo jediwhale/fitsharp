@@ -4,7 +4,8 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System.Text;
-using fitnesse.fitserver;
+using fitSharp.Fit.Model;
+using fitSharp.Fit.Service;
 using NUnit.Framework;
 
 namespace fit.Test.NUnit {
@@ -42,9 +43,7 @@ namespace fit.Test.NUnit {
         public void TestWriteResults()
         {
             string pageName = "Test Page";
-            PageResult pageResult = new PageResult(pageName);
-            pageResult.TestStatus = TestUtils.MakeTestStatus();
-            pageResult.Append("<table border=\"1\" cellspacing=\"0\">\r\n<tr><td>Text</td>\r\n</tr>\r\n</table>");
+            var pageResult = new PageResult(pageName, "<table border=\"1\" cellspacing=\"0\">\r\n<tr><td>Text</td>\r\n</tr>\r\n</table>", TestUtils.MakeTestStatus());
             _strategy = new XmlResultWriter(TEST_RESULT_FILE_NAME, _folderModel);
             _strategy.WritePageResult(pageResult);
             _strategy.Close();

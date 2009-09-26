@@ -5,7 +5,7 @@
 
 using System.IO;
 using fitSharp.Fit.Model;
-using fitnesse.fitserver;
+using fitSharp.Fit.Service;
 using fitSharp.IO;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Model;
@@ -50,10 +50,7 @@ namespace fit.Runner {
         private void WriteFile(Tree<Cell> theTables, TestStatus status) {
             var tables = (Parse) theTables.Value;
             WriteResult(tables, status, elapsedTime);
-            var pageResult = new PageResult(myPath.Name);
-            pageResult.Append(theTables.ToString());
-            pageResult.TestStatus = status;
-            resultWriter.WritePageResult(pageResult);
+            resultWriter.WritePageResult(new PageResult(myPath.Name, theTables.ToString(), status));
             handler(status);
         }
 

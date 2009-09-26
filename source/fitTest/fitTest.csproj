@@ -147,7 +147,6 @@
     <Compile Include="NUnit\HtmlParserTest.cs" />
     <Compile Include="NUnit\IntegralRangeHandlerTest.cs" />
     <Compile Include="NUnit\NullKeywordHandlerTest.cs" />
-    <Compile Include="NUnit\PageResultTest.cs" />
     <Compile Include="NUnit\ParseBlankTest.cs" />
     <Compile Include="NUnit\ParseBooleanTest.cs" />
     <Compile Include="NUnit\ParseInterpreterTest.cs" />

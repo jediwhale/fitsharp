@@ -6,6 +6,7 @@
 using System;
 using System.IO;
 using fitnesse.fitserver;
+using fitSharp.Fit.Service;
 using fitSharp.Machine.Application;
 using NUnit.Framework;
 

@@ -6,7 +6,7 @@
 using System;
 using System.Collections.Generic;
 using fitSharp.Fit.Model;
-using fitnesse.fitserver;
+using fitSharp.Fit.Service;
 using fitSharp.IO;
 using fitSharp.Machine.Application;
 

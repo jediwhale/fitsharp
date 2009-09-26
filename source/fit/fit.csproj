@@ -55,6 +55,11 @@
     <Compile Include="Operators\NamedMatchStrategy.cs" />
     <Compile Include="Operators\ParseInterpreter.cs" />
     <Compile Include="Operators\ParseStoryTestString.cs" />
+    <Compile Include="Runner\FolderRunner.cs" />
+    <Compile Include="Runner\StoryTestFile.cs" />
+    <Compile Include="Runner\StoryTestFolder.cs" />
+    <Compile Include="Runner\SuiteRunner.cs" />
+    <Compile Include="Runner\TestPageDecoration.cs" />
     <Compile Include="Service\Service.cs" />
     <Compile Include="Exception\FitFailureException.cs" />
     <Compile Include="Exception\RowWidthException.cs" />
@@ -92,12 +97,8 @@
     <Compile Include="Operators\ParseTable.cs" />
     <Compile Include="Operators\ParseTree.cs" />
     <Compile Include="Runner\FitServer.cs" />
-    <Compile Include="Runner\FolderRunner.cs" />
-    <Compile Include="Runner\NullResultWriter.cs" />
-    <Compile Include="Runner\PageResult.cs" />
     <Compile Include="Runner\PathParser.cs" />
     <Compile Include="Runner\Protocol.cs" />
-    <Compile Include="Runner\ResultWriter.cs" />
     <Compile Include="Runner\StoryTest.cs" />
     <Compile Include="Fixtures\UtilityFixtures.cs" />
     <Compile Include="Model\ListTree.cs" />
@@ -117,13 +118,8 @@
     <Compile Include="Parser\Scanner.cs" />
     <Compile Include="Parser\Substring.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Runner\StoryTestFile.cs" />
-    <Compile Include="Runner\StoryTestFolder.cs" />
-    <Compile Include="Runner\SuiteRunner.cs" />
-    <Compile Include="Runner\TestPageDecoration.cs" />
     <Compile Include="Runner\TestRunner.cs" />
     <Compile Include="Runner\TextResultWriter.cs" />
-    <Compile Include="Runner\XmlResultWriter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\fitSharp\fitSharp.csproj">
