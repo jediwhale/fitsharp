@@ -16,8 +16,7 @@ namespace fit.Operators {
         }
 
         public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
-            var source = (Parse) parameters.Value;
-            return new TypedValue(new StoryTestString(source.ToString()));
+            return new TypedValue(new StoryTestString(parameters.ToString()));
         }
     }
 }

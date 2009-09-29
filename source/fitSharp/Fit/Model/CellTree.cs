@@ -7,9 +7,12 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Model {
     public class CellTree: TreeList<Cell> {
+        public CellTree() {}
+
+        public CellTree(Cell value): base(value) {}
 
         public CellTree(params string[] cells) {
-            foreach (var cell in cells) AddBranch(new StringCell(cell));
+            foreach (var cell in cells) AddBranch(new StringCellLeaf(cell));
         }
 
         public CellTree(params Tree<Cell>[] lists) {

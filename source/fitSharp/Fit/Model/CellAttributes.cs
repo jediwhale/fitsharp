@@ -13,6 +13,7 @@ namespace fitSharp.Fit.Model {
 	    public const string InformationSuffixKey = "informationSuffix";
 	    public const string LabelKey = "label";
 	    public const string AddKey = "add";
+	    public const string ExtensionKey = "extension";
 
 	    public const string StatusKey = "class";
 	    public const string ExceptionStatus = "error";

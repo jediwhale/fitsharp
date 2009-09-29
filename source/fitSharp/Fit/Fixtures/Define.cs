@@ -24,7 +24,7 @@ namespace fitSharp.Fit.Fixtures {
         public bool IsVisible { get { return false; } }
 
         public void Interpret(Tree<Cell> table) {
-            var body = new TreeList<Cell>();
+            var body = new TreeList<Cell>(new StringCell("table"));
             for (int i = 1; i < table.Branches.Count; i++) {
                 body.AddBranch(table.Branches[i]);
             }

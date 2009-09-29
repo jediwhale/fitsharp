@@ -4,7 +4,6 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
-using fitSharp.Fit.Engine;
 using fitSharp.Fit.Exception;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
@@ -57,15 +56,14 @@ namespace fitSharp.Fit.Operators {
             TypedValue target = context.Target.Value;
             var targetObjectProvider = target.Value as TargetObjectProvider;
             var name = ParseTree<MemberName>(parameters.Members);
-            if (!Processor.Contains(new Procedure(name.ToString()))) {
-                return Processor.Invoke(
+            TypedValue result = Processor.Invoke(
                     targetObjectProvider != null ? new TypedValue(targetObjectProvider.GetTargetObject()) : target,
                     name.ToString(), parameters.Parameters);
+            if (parameters.Cells != null && !string.IsNullOrEmpty(Processor.TestStatus.LastAction)) {
+                parameters.Cell.SetAttribute(CellAttributes.ExtensionKey, Processor.TestStatus.LastAction);
+                Processor.TestStatus.LastAction = null;
             }
-            var procedure = Processor.Load(new Procedure(name.ToString()));
-            var doFixture = new CellTree(new CellTree("dofixture"));
-            var fixture = Processor.Parse(typeof (Interpreter), target, doFixture);
-            return Processor.Execute(fixture, procedure.Instance);
+            return result;
         }
     }
 }

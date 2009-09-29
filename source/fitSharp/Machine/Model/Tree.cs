@@ -53,7 +53,7 @@ namespace fitSharp.Machine.Model {
 
         public TreeList(T value) { aValue = value; }
 
-        public override bool IsLeaf { get { return false; } }
+        public override bool IsLeaf { get { return list.Count == 0; } }
 
         public override ReadList<Tree<T>> Branches { get { return list; } }
 

@@ -13,8 +13,8 @@ namespace fitSharp.Fit.Model {
 
     public class TestStatus {
         public bool IsAbandoned { get; set; }
+        public string LastAction { get; set; }
         public Hashtable Summary { get; private set; }
-
         private readonly Dictionary<string, int> counts = new Dictionary<string, int>();
         
         public TestStatus() {

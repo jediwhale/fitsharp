@@ -25,14 +25,14 @@ namespace fitSharp.Fit.Operators {
         public static Tree<Cell> Make(Tree<Cell> member, Tree<Cell> parameters, Tree<Cell> expectedCell) {
             return new TreeList<Cell>()
                 .AddBranch(expectedCell)
-                .AddBranchValue(member)
+                .AddBranch(member)
                 .AddBranch(parameters);
         }
 
         public static Tree<Cell> MakeMemberCell(Tree<Cell> member, Tree<Cell> inputCell) {
             return new TreeList<Cell>()
                 .AddBranch(inputCell)
-                .AddBranchValue(member);
+                .AddBranch(member);
         }
 
         public static Tree<Cell> MakeMemberParameters(Tree<Cell> member, Tree<Cell> parameters) {

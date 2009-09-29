@@ -33,7 +33,7 @@ namespace fit.Operators {
                 }
                 else {
                     TypedValue itemResult = new CellOperation(processor).TryInvoke(theActualRow,
-                                                                 new StringCell("getitem"),
+                                                                 new StringCellLeaf("getitem"),
                                                                  new CellRange(headerCell, 1));
                     if (itemResult.IsValid) {
                         result[column] = itemResult;

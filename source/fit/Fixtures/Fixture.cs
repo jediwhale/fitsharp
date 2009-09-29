@@ -167,7 +167,7 @@ namespace fit
 		}
 
         public object GetArgumentInput(int theIndex, Type theType) {
-            return Processor.Parse(theType, new TypedValue(this), new StringCell(Args[theIndex])).Value;
+            return Processor.Parse(theType, new TypedValue(this), new StringCellLeaf(Args[theIndex])).Value;
         }
 
 	    public object SystemUnderTest {

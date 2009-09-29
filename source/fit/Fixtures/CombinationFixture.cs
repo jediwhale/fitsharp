@@ -14,7 +14,7 @@ using fitSharp.Machine.Model;
 namespace fitlibrary {
 
 	public class CombinationFixture: DoFixtureBase {
-        private static readonly Tree<Cell> combineMember = new StringCell("combine");
+        private static readonly Tree<Cell> combineMember = new StringCellLeaf("combine");
 	    private Parse firstRowCells;
 
         public CombinationFixture(): this(null) {}

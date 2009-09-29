@@ -18,11 +18,12 @@ namespace fitSharp.Fit.Service {
         public CellProcessorBase() {
             TestStatus = new TestStatus();
             operators = new Operators<Cell, CellProcessor>(this);
+
+            AddOperator(new RuntimeProcedure());
             AddOperator(new ParseDefault());
             AddOperator(new ExecuteDefault());
             AddOperator(new ExecuteInterpret());
             AddOperator(new CompareDefault());
-
             AddOperator(new CompareEmpty());
             AddOperator(new ExecuteEmpty());
             AddOperator(new ExecuteSymbolSave());

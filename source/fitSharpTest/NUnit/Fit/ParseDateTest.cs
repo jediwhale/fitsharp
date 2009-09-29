@@ -22,8 +22,8 @@ namespace fitSharp.Test.NUnit.Fit {
 
         private bool TryParse(Type type, string expected) {
             try {
-                if (parseDate.CanParse(type, TypedValue.Void, new StringCell(expected))) {
-                    TypedValue returnValue = parseDate.Parse(type, TypedValue.Void, new StringCell(expected));
+                if (parseDate.CanParse(type, TypedValue.Void, new StringCellLeaf(expected))) {
+                    TypedValue returnValue = parseDate.Parse(type, TypedValue.Void, new StringCellLeaf(expected));
                     result = returnValue.GetValue<DateTime>();
                     return true;
                 }

@@ -48,9 +48,8 @@ namespace fit.Runner {
         }
 
         private void WriteFile(Tree<Cell> theTables, TestStatus status) {
-            var tables = (Parse) theTables.Value;
-            WriteResult(tables, status, elapsedTime);
-            resultWriter.WritePageResult(new PageResult(myPath.Name, theTables.ToString(), status));
+            WriteResult(theTables, status, elapsedTime);
+            resultWriter.WritePageResult(new PageResult(myPath.Name, theTables.ToString(), status)); // todo: use the processor parse result not tostring
             handler(status);
         }
 
@@ -72,10 +71,10 @@ namespace fit.Runner {
             myFolderModel.CopyFile(myPath.Name, OutputPath);
         }
 
-        private void WriteResult(Cell theTables, TestStatus status, ElapsedTime elapsedTime) {
+        private void WriteResult(Tree<Cell> theTables, TestStatus status, ElapsedTime elapsedTime) {
             string outputFile = OutputPath;
             var output = new StringWriter();
-            output.Write(configuration.GetItem<Service.Service>().Parse(typeof(StoryTestString), TypedValue.Void, new TreeLeaf<Cell>(theTables)).ValueString);
+            output.Write(configuration.GetItem<Service.Service>().Parse(typeof(StoryTestString), TypedValue.Void, theTables).ValueString);
             output.Close();
             myFolderModel.MakeFile(outputFile, output.ToString());
             myFolder.ListFile(outputFile, status, elapsedTime);

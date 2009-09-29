@@ -3,20 +3,16 @@
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
-using System;
-using fitSharp.Machine.Model;
-
 namespace fitSharp.Fit.Model {
-    public class StringCell: Tree<Cell>, Cell {
-        public StringCell(string text) { Text = text; }
-        public string Text { get; private set; }
+    public class StringCell: CellBase {
+        private readonly string text;
+        public StringCell(string text) { this.text = text; }
+        public override string Text { get { return text; } }
+    }
 
-        public string GetAttribute(string key) { return string.Empty; }
-        public void SetAttribute(string key, string value) {}
-        public void AddToAttribute(string key, string value, string format) {}
+    public class StringCellLeaf: CellTree {
+        public StringCellLeaf(string text): base(new StringCell(text)) {}
 
-        public override Cell Value { get { return this; } }
-        public override bool IsLeaf { get { return true; } }
-        public override ReadList<Tree<Cell>> Branches { get { throw new InvalidOperationException(); } }
+        public string Text { get { return Value.Text; } }
     }
 }

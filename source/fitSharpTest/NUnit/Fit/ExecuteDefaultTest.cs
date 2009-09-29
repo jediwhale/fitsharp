@@ -12,51 +12,44 @@ using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Fit {
     [TestFixture] public class ExecuteDefaultTest {
+        private Mock<CellProcessor> processor;
+        private ExecuteDefault execute;
+        private TypedValue target;
+        private TypedValue result;
+        private TestStatus testStatus;
+
         [Test] public void MethodIsInvoked() {
-            var processor = new Mock<CellProcessor>();
-            var execute = new ExecuteDefault {Processor = processor.Object};
-            var target = new TypedValue("target");
-            var result = new TypedValue("result");
+            SetUpSUT();
             var parameters = new ExecuteParameters(
-                ExecuteParameters.MakeMemberParameters(new StringCell("member"), new TreeList<Cell>()));
+                ExecuteParameters.MakeMemberParameters(new StringCellLeaf("member"), new TreeList<Cell>()));
+            Assert.AreEqual(result, execute.Execute(new ExecuteContext(ExecuteCommand.Invoke, target), parameters));
+        }
+
+        [Test] public void LastActionIsSetAsCellAttribute() {
+            SetUpSUT();
+            var targetCell = new StringCellLeaf("stuff");
+            var parameters = new ExecuteParameters(
+                ExecuteParameters.Make(new StringCellLeaf("member"), new TreeList<Cell>(), targetCell));
+            testStatus.LastAction = "blah blah";
+            execute.Execute(new ExecuteContext(ExecuteCommand.Invoke, target), parameters);
+            Assert.AreEqual("blah blah", targetCell.Value.GetAttribute(CellAttributes.ExtensionKey));
+        }
+
+        private void SetUpSUT() {
+            testStatus = new TestStatus();
+            processor = new Mock<CellProcessor>();
+            execute = new ExecuteDefault {Processor = processor.Object};
+
+            target = new TypedValue("target");
+            result = new TypedValue("result");
+
             processor
-                .Setup(p => p.Parse(typeof (MemberName), It.IsAny<TypedValue>(), It.Is<StringCell>(c => c.Text == "member")))
+                .Setup(p => p.Parse(typeof (MemberName), It.IsAny<TypedValue>(), It.Is<StringCellLeaf>(c => c.Text == "member")))
                 .Returns(new TypedValue(new MemberName("member")));
             processor
                 .Setup(p => p.Invoke(target, "member", It.Is<Tree<Cell>>(c => c.Branches.Count == 0)))
                 .Returns(result);
-            Assert.AreEqual(result, execute.Execute(new ExecuteContext(ExecuteCommand.Invoke, target), parameters));
-        }
-
-        [Test] public void ProcedureIsInvoked() {
-            var flow = new Mock<FlowInterpreter>();
-            var doFixture = new TypedValue(flow.Object);
-            var processor = new Mock<CellProcessor>();
-            var execute = new ExecuteDefault {Processor = processor.Object};
-            var target = new TypedValue("target");
-            var procedure = new Procedure("procedure",
-                                          new TreeList<Cell>().AddBranch(
-                                              new TreeList<Cell>().AddBranch(new StringCell("member"))));
-            var parameters = new ExecuteParameters(
-                ExecuteParameters.MakeMemberParameters(new StringCell("procedure"), new TreeList<Cell>()));
-
-            processor
-                .Setup(p => p.Parse(typeof (MemberName), It.IsAny<TypedValue>(), It.Is<StringCell>(c => c.Text == "procedure")))
-                .Returns(new TypedValue(new MemberName("procedure")));
-            processor
-                .Setup(p => p.Contains(It.Is<Procedure>(v => v.Id == "procedure")))
-                .Returns(true);
-            processor
-                .Setup(p => p.Load(It.Is<Procedure>(v => v.Id == "procedure")))
-                .Returns(procedure);
-            processor
-                .Setup(p => p.Parse(typeof (Interpreter), target,
-                                    It.Is<Tree<Cell>>(c => c.Branches[0].Branches[0].Value.Text == "dofixture")))
-                .Returns(doFixture);
-
-            execute.Execute(new ExecuteContext(ExecuteCommand.Invoke, target), parameters);
-
-            processor.Verify(p => p.Execute(doFixture, procedure.Instance));
+            processor.Setup(p => p.TestStatus).Returns(testStatus);
         }
     }
 }

@@ -69,7 +69,7 @@ namespace fit
 		        return new Binding(name, nameCell, operationType);
 		    }
 		    string memberName = name.Substring(4);
-		    return new Binding(memberName, new StringCell(memberName), OperationType.Create);
+		    return new Binding(memberName, new StringCellLeaf(memberName), OperationType.Create);
 		}
 
 		private OperationType GetOperationType(string name)
