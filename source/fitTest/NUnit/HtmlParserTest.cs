@@ -69,6 +69,11 @@ namespace fit.Test.NUnit {
             Assert.AreEqual("<table> <tr> <td> <table> <tr> <td> content</td></tr></table> somebody</td></tr></table>", result);
         }
     
+        [Test] public void ParseNestedTableAndSplitBody() {
+            string result = Format(HtmlParser.Instance.Parse("<table><tr><td>some<table><tr><td>content</td></tr></table>body</td></tr></table>"), " ");
+            Assert.AreEqual("<table> <tr> <td> some <table> <tr> <td> content</td></tr></table> body</td></tr></table>", result);
+        }
+    
         [Test] public void ParseNestedList() {
             string result = Format(HtmlParser.Instance.Parse("<table><tr><td><ul><li>content</li></ul></td></tr></table>"), " ");
             Assert.AreEqual("<table> <tr> <td> <ul> <li> content</li></ul></td></tr></table>", result);
@@ -79,14 +84,14 @@ namespace fit.Test.NUnit {
             Assert.AreEqual("<table> <tr> <td> <ul> <li> content</li></ul> <table> <tr> <td> content</td></tr></table></td></tr></table>", result);
         }
 
-        private string Format(Parse theParseTree, string theSeparator) {
-            StringBuilder result = new StringBuilder();
-            if (theParseTree.Leader != null && theParseTree.Leader.Length > 0) result.AppendFormat("{0}{1}", theParseTree.Leader, theSeparator);
+        private static string Format(Parse theParseTree, string theSeparator) {
+            var result = new StringBuilder();
+            if (!string.IsNullOrEmpty(theParseTree.Leader)) result.AppendFormat("{0}{1}", theParseTree.Leader, theSeparator);
             result.Append(theParseTree.Tag);
             if (theParseTree.Parts != null) result.AppendFormat("{0}{1}", theSeparator, Format(theParseTree.Parts, theSeparator));
-            if (theParseTree.Body != null && theParseTree.Body.Length > 0) result.AppendFormat("{0}{1}", theSeparator, theParseTree.Body);
+            if (!string.IsNullOrEmpty(theParseTree.Body)) result.AppendFormat("{0}{1}", theSeparator, theParseTree.Body);
             result.Append(theParseTree.End);
-            if (theParseTree.Trailer != null && theParseTree.Trailer.Length > 0) result.AppendFormat("{0}{1}", theSeparator, theParseTree.Trailer);
+            if (!string.IsNullOrEmpty(theParseTree.Trailer)) result.AppendFormat("{0}{1}", theSeparator, theParseTree.Trailer);
             if (theParseTree.More != null) result.AppendFormat("{0}{1}", theSeparator, Format(theParseTree.More, theSeparator));
             return result.ToString();
         }

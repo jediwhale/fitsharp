@@ -9,14 +9,14 @@ to be bound by the terms of this license. You must not remove this notice, or an
   <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
  <link href="../fitsharp1.css" type="text/css" rel="stylesheet">
   <link href="fit.css" type="text/css" rel="stylesheet">
-  <title>Cell Operators</title>
+  <title>Write Your Own Cell Operator</title>
 </head>
 <body>
 <div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
-<div class="pagename">Cell Operators</div>
-<div class="content">An input value cell or an expected value cell is normally handled by parsing the cell contents based on the value type. Special processing of cell contents is implemented by a set of classes known as cell operators. There is a variety of cell operators provided (*list them*), and you can <a href="../Fit/WriteYourOwnCellOperator.html">Write Your Own Cell Operator</a>.<br>
+<div class="pagename">Write Your Own Cell Operator</div>
+<div class="content"><a href="../Fit/CellOperators.html">Cell Operators</a> are classes that change the default handling of cells. For example, we can write a cell operator that lets us put the string "pi" in a cell and treats this as a numeric value instead of a string.<br>
 <br>
-New in <span style="font-family:verdana,sans-serif"><i>fit</i>Sharp</span>:<ul><li><a href="../Fit/ParseDateOperator.html">Parse Date Operator</a></li></ul><br>
+Every cell operator inherits from fitSharp.Fit.Operators.CellOperator. Our cell operator class is going to change how we parse cell contents, so we implement fitSharp.Machine.Engine.ParseOperator&lt;Cell&gt;.<br>
 </div>
 <div style="width:100%;text-align:right">
 <span class="footer">&copy; Copyright <a href="http://www.syterra.com">Syterra Software Inc.</a> All rights reserved.</span>

@@ -57,6 +57,12 @@ namespace fit
                 if (Attributes.HasAttribute(CellAttributes.LabelKey)) {
                     result += Label(GetAttribute(CellAttributes.LabelKey));
                 }
+                if (Attributes.HasAttribute(CellAttributes.ExtensionKey)) {
+                    result += string.Format(
+                        "<span><a href=\"javascript:void(0)\" onclick=\"this.parentNode.nextSibling.style.display="
+                        + "this.parentNode.nextSibling.style.display=='none'?'':'none'\">&#8659;</a></span><div style=\"display:none\">{0}</div>",
+                        GetAttribute(CellAttributes.ExtensionKey));
+                }
                 return result;
             }
         }

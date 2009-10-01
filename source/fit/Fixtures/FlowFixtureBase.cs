@@ -70,7 +70,8 @@ namespace fitlibrary {
                 if (!result.IsValid) {
                      result = CellOperation.TryInvoke(this,
                         new CellRange(MethodCells(new CellRange(theCurrentRow.Parts))),
-                        new CellRange(ParameterCells(new CellRange(theCurrentRow.Parts))));
+                        new CellRange(ParameterCells(new CellRange(theCurrentRow.Parts))),
+                        theCurrentRow.Parts);
 
                 }
                 if (!result.IsValid) {

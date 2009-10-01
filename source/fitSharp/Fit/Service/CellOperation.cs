@@ -53,6 +53,12 @@ namespace fitSharp.Fit.Service {
                 ExecuteParameters.MakeMemberParameters(memberName, parameters));
         }
 
+        public TypedValue TryInvoke(object target, Tree<Cell> memberName, Tree<Cell> parameters, Tree<Cell> targetCell) {
+            return processor.Execute(
+                ExecuteContext.Make(ExecuteCommand.Invoke, new TypedValue(target)), 
+                ExecuteParameters.Make(memberName, parameters,targetCell));
+        }
+
         public TypedValue Invoke(object target, Tree<Cell> memberName) {
             return Invoke(target, memberName, new TreeList<Cell>());
         }
