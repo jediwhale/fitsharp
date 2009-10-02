@@ -13,7 +13,7 @@ namespace fitSharp.Machine.Engine {
         }
 
         public Tree<string> Compose(TypedValue instance) {
-            return new TreeLeaf<string>(Compose((T)instance.Value));
+            return new TreeList<string>(Compose((T)instance.Value));
         }
 
         public bool CanParse(Type type, TypedValue instance, Tree<string> parameters) {

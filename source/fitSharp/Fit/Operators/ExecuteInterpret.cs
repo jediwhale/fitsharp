@@ -6,6 +6,7 @@
 using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Engine;
+using fitSharp.Machine.Extension;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
@@ -16,18 +17,18 @@ namespace fitSharp.Fit.Operators {
 
         public TypedValue Execute(TypedValue instance, Tree<Cell> parameters) {
             var flowInterpreter = instance.Value as FlowInterpreter;
-            foreach (Tree<Cell> table in parameters.Branches) {
-                if (flowInterpreter == null) {
-                    var interpreter =
-                        Processor.Parse(typeof (Interpreter), TypedValue.Void, table).GetValue<Interpreter>();
-                    interpreter.Interpret(table);
-                    flowInterpreter = interpreter as FlowInterpreter;
-                }
-                else {
-                    flowInterpreter.InterpretFlow(table);
-                }
-            }
+            parameters.Branches.ForEach(table => { flowInterpreter = InterpretTable(flowInterpreter, table); });
             return TypedValue.Void;
+        }
+
+        private FlowInterpreter InterpretTable(FlowInterpreter flowInterpreter, Tree<Cell> table) {
+            if (flowInterpreter == null) {
+                var interpreter = Processor.Parse(typeof (Interpreter), TypedValue.Void, table).GetValue<Interpreter>();
+                interpreter.Interpret(table);
+                return interpreter as FlowInterpreter;
+            }
+            flowInterpreter.InterpretFlow(table);
+            return flowInterpreter;
         }
     }
 }

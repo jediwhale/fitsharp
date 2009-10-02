@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Text;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Engine;
+using fitSharp.Machine.Extension;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
@@ -20,11 +21,7 @@ namespace fitSharp.Fit.Operators {
         }
 
         public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
-            var nameParts = new StringBuilder();
-            
-            foreach (Cell namePart in parameters.Leaves) {
-                Append(nameParts, namePart.Text);
-            }
+            StringBuilder nameParts = parameters.Leaves().Aggregate((StringBuilder t, Cell cell) => Append(t, cell.Text));
             if (nameParts.Length == 0) nameParts.Append("blank");
             string name = nameParts.ToString();
             if (char.IsDigit(name, 0)) {
@@ -34,15 +31,14 @@ namespace fitSharp.Fit.Operators {
             return new TypedValue(new MemberName(new GracefulName(name).IdentifierName.ToString()));
         }
 
-        private static void Append(StringBuilder nameParts, IEnumerable<char> namePart) {
-            foreach (char character in namePart) {
-                if (!specialCharacterConversion.ContainsKey(character)) {
-                    nameParts.Append(character);
-                }
-                else {
-                    nameParts.Append(specialCharacterConversion[character]);
-                }
-            }
+        private static StringBuilder Append(StringBuilder nameParts, IEnumerable<char> namePart) {
+            return
+                nameParts.Append(
+                    namePart.Aggregate(
+                        (StringBuilder t, char character) =>
+                        !specialCharacterConversion.ContainsKey(character)
+                            ? t.Append(character)
+                            : t.Append(specialCharacterConversion[character])));
         }
 
         static ParseMemberNameExtended() {

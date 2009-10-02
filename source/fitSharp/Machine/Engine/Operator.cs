@@ -33,7 +33,7 @@ namespace fitSharp.Machine.Engine {
         }
 
         public TypedValue Parse(Type type, T input) {
-            return Parse(type, new TreeLeaf<T>(input));
+            return Parse(type, new TreeList<T>(input));
         }
 
         public V ParseTree<V>(Tree<T> input) {

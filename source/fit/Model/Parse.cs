@@ -16,9 +16,9 @@ namespace fit
 {
 	public class Parse: Tree<Cell>, Cell
 	{
-	    private string tag;
+	    private readonly string tag;
 		private string body;
-	    private string originalBody;
+	    private readonly string originalBody;
 
         private CellAttributes Attributes { get; set; }
 
@@ -91,14 +91,14 @@ namespace fit
 
 		public Parse(string tag, string body, Parse parts, Parse more): this()
 		{
-			this.Leader = "\n";
+			Leader = "\n";
 			this.tag = "<" + tag + ">";
 			this.body = body;
 			originalBody = body;
-			this.End = "</" + tag + ">";
-			this.Trailer = "";
-			this.Parts = parts;
-			this.More = more;
+			End = "</" + tag + ">";
+			Trailer = "";
+			Parts = parts;
+			More = more;
 		}
 
 		public static string[] Tags = {"table", "tr", "td"};
@@ -135,8 +135,7 @@ namespace fit
 			int result = text.IndexOf(searchValue, offset);
 			if (result < 0)
 				throw new ApplicationException("Can't find tag: " + tag);
-			else
-				return result;
+			return result;
 		}
 
 		public Parse(string text, string[] tags, int level, int offset): this()
@@ -164,11 +163,9 @@ namespace fit
 			    originalBody = null;
 			}
 
-			if (startMore >= 0)
-			{
-				More = new Parse(Trailer, tags, level, offset + endEnd);
-				Trailer = null;
-			}
+		    if (startMore < 0) return;
+		    More = new Parse(Trailer, tags, level, offset + endEnd);
+		    Trailer = null;
 		}
 
 		public virtual int Size
@@ -220,9 +217,10 @@ namespace fit
 
         private static string StripMarkup(string s)
         {
-            int i = 0, j;
+            int i = 0;
             while ((i = s.IndexOf('<', i)) >= 0)
             {
+                int j;
                 if ((j = s.IndexOf('>', i + 1)) > 0)
                     s = Substring(s, 0, i) + s.Substring(j + 1);
                 else
@@ -233,16 +231,15 @@ namespace fit
 	    
 	    public static string UnEscape(string s)
 		{
-			int i = -1, j;
+			int i = -1;
 			while ((i = s.IndexOf('&', i + 1)) >= 0)
 			{
-				if ((j = s.IndexOf(';', i + 1)) > 0)
-				{
-					string from = Substring(s, i + 1, j).ToLower();
-					string to = null;
-					if ((to = Replacement(from)) != null)
-						s = Substring(s, 0, i) + to + s.Substring(j + 1);
-				}
+			    int j;
+			    if ((j = s.IndexOf(';', i + 1)) <= 0) continue;
+			    string from = Substring(s, i + 1, j).ToLower();
+			    string to;
+			    if ((to = Replacement(from)) != null)
+			        s = Substring(s, 0, i) + to + s.Substring(j + 1);
 			}
 			return s;
 		}
@@ -251,14 +248,11 @@ namespace fit
 		{
 			if (from == "lt")
 				return "<";
-			else if (from == "gt")
+			if (from == "gt")
 				return ">";
-			else if (from == "amp")
+			if (from == "amp")
 				return "&";
-            else if (from == "nbsp")
-                return " ";
-            else
-				return null;
+            return from == "nbsp" ? " " : null;
 		}
 
 		public virtual void Print(TextWriter output)
@@ -292,7 +286,7 @@ namespace fit
 			return builder;
 		}
 
-		public static int FootnoteFiles = 0;
+		public static int FootnoteFiles;
 
 		public virtual string Footnote
 		{
@@ -300,30 +294,27 @@ namespace fit
 			{
 				if (FootnoteFiles >= 25)
 					return "[-]";
-				else
+				try
 				{
-					try
-					{
-						int thisFootnote = ++FootnoteFiles;
-						string html = "footnotes/" + thisFootnote + ".html";
-						FileInfo file = new FileInfo("Reports/" + html);
+					int thisFootnote = ++FootnoteFiles;
+					string html = "footnotes/" + thisFootnote + ".html";
+					var file = new FileInfo("Reports/" + html);
 
-						// Create the Reports directory if not exists
-						string directory = file.DirectoryName;
-						if (!Directory.Exists(directory))
-							Directory.CreateDirectory(directory);
-						else if (file.Exists)
-							file.Delete();
+					// Create the Reports directory if not exists
+					string directory = file.DirectoryName;
+					if (!Directory.Exists(directory))
+						Directory.CreateDirectory(directory);
+					else if (file.Exists)
+						file.Delete();
 
-						TextWriter output = file.CreateText();
-						Print(output);
-						output.Close();
-						return string.Format("<a href={0}>[{1}]</a>", file.FullName, thisFootnote);
-					}
-					catch (IOException)
-					{
-						return "[!]";
-					}
+					TextWriter output = file.CreateText();
+					Print(output);
+					output.Close();
+					return string.Format("<a href={0}>[{1}]</a>", file.FullName, thisFootnote);
+				}
+				catch (IOException)
+				{
+					return "[!]";
 				}
 			}
 		}
@@ -340,9 +331,9 @@ namespace fit
             return new Parse(tag, End, Leader, body, Parts) {Trailer = Trailer, Attributes = Attributes};
         }
 
-	    public override Cell Value { get { return this; } }
-	    public override bool IsLeaf { get { return Parts == null; } }
-	    public override ReadList<Tree<Cell>> Branches { get { return new ParseList(this); } }
+	    public Cell Value { get { return this; } }
+	    public bool IsLeaf { get { return Parts == null; } }
+	    public ReadList<Tree<Cell>> Branches { get { return new ParseList(this); } }
         public Parse ParseCell { get { return this; }}
 	}
 

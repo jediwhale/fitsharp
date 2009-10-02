@@ -7,6 +7,7 @@ using System;
 using System.Text;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Engine;
+using fitSharp.Machine.Extension;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
@@ -16,11 +17,8 @@ namespace fitSharp.Fit.Operators {
         }
 
         public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
-            var nameParts = new StringBuilder();
-            foreach (Cell namePart in parameters.Leaves) {
-                nameParts.Append(namePart.Text);
-            }
-            return new TypedValue(new MemberName(new GracefulName(nameParts.ToString()).IdentifierName.ToString()));
+            var nameParts = parameters.Leaves().Aggregate((StringBuilder t, Cell u) => t.Append(u.Text)).ToString();
+            return new TypedValue(new MemberName(new GracefulName(nameParts).IdentifierName.ToString()));
         }
     }
 }

@@ -6,6 +6,7 @@
 using System.Text;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Exception;
+using fitSharp.Machine.Extension;
 using fitSharp.Machine.Model;
 using fitSharp.Slim.Exception;
 
@@ -53,12 +54,10 @@ namespace fitSharp.Slim.Operators {
         }
 
         private static string List(Tree<string> list) {
-            var result = new StringBuilder();
-            foreach (Tree<string> branch in list.Branches) {
+            return list.Branches.Aggregate((StringBuilder result, Tree<string> branch) => {
                 if (result.Length > 0) result.Append(",");
-                result.Append(branch.Value ?? "null");
-            }
-            return result.ToString();
+                return result.Append(branch.Value ?? "null");
+            }).ToString();
         }
 
         private delegate string Format<T>(T exception);
@@ -71,7 +70,7 @@ namespace fitSharp.Slim.Operators {
         }
 
         private static Tree<string> MakeResult(string message) {
-            return new TreeLeaf<string>(string.Format(ExceptionResult, message));
+            return new TreeList<string>(string.Format(ExceptionResult, message));
         }
 
         public static bool WasAborted(string result) {

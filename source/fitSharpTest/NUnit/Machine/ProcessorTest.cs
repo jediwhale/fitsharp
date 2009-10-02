@@ -51,7 +51,7 @@ namespace fitSharp.Test.NUnit.Machine {
         }
 
         private object Execute(string parameter) {
-            return processor.Execute(TypedValue.Void, new TreeLeaf<string>(parameter)).Value;
+            return processor.Execute(TypedValue.Void, new TreeList<string>(parameter)).Value;
         }
 
         [Test] public void TypeIsCreated() {

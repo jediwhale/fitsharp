@@ -15,7 +15,7 @@ namespace fitSharp.Slim.Operators {
         }
 
         public Tree<string> Compose(TypedValue instance) {
-            return new TreeLeaf<string>(instance.IsVoid ? voidResult : instance.ValueString);
+            return new TreeList<string>(instance.IsVoid ? voidResult : instance.ValueString);
         }
     }
 }

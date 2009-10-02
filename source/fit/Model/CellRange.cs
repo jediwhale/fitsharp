@@ -36,11 +36,11 @@ namespace fit.Model {
             }
         }
 
-        public override Cell Value { get { return null; } }
+        public Cell Value { get { return null; } }
 
-        public override bool IsLeaf { get { return false; } }
+        public bool IsLeaf { get { return false; } }
 
-        public override ReadList<Tree<Cell>> Branches {
+        public ReadList<Tree<Cell>> Branches {
             get {
                 var result = new BranchList<Cell>();
                 foreach (Parse currentCell in cells) {

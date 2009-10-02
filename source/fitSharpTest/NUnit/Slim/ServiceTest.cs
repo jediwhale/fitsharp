@@ -37,7 +37,7 @@ namespace fitSharp.Test.NUnit.Slim {
         [Test] public void ParseSymbolIsDoneFirst() {
             service.Store(new Symbol("symbol", "testvalue"));
             service.AddOperator(new ParseUpperCase());
-            var value = service.Parse(typeof(string), TypedValue.Void, new TreeLeaf<string>("$symbol")).Value;
+            var value = service.Parse(typeof(string), TypedValue.Void, new TreeList<string>("$symbol")).Value;
             Assert.AreEqual("TESTVALUE", value);
         }
 

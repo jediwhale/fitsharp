@@ -16,7 +16,7 @@ namespace fitSharp.Fit.Operators {
 
         public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
             return new DefaultParse<string, BasicProcessor> {Processor = new BasicProcessor()}.
-                Parse(type, instance, new TreeLeaf<string>(parameters.Value.Text));
+                Parse(type, instance, new TreeList<string>(parameters.Value.Text));
         }
     }
 }

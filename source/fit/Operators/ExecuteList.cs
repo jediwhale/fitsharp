@@ -11,6 +11,7 @@ using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
 using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
+using fitSharp.Machine.Extension;
 using fitSharp.Machine.Model;
 
 namespace fit.Operators {
@@ -60,12 +61,10 @@ namespace fit.Operators {
             var cell = (Parse) parameters;
             if (cell.Parts == null) throw new FitFailureException("No embedded table.");
             Parse headerCells = cell.Parts.Parts.Parts;
-            var list = new ArrayList();
-            foreach (Parse row in new CellRange(cell.Parts.Parts.More).Cells) {
-                list.Add(
-                    new CellOperation(Processor).Invoke(instance.Value, new CellRange(headerCells), new CellRange(row.Parts)).Value);
-            }
-            return new TypedValue(list);
+            Parse dataRows = cell.Parts.Parts.More;
+            return new TypedValue(
+                new CellRange(dataRows).Cells.Aggregate((ArrayList list, Parse row) =>
+                    list.Add(new CellOperation(Processor).Invoke(instance.Value, new CellRange(headerCells), new CellRange(row.Parts)).Value)));
         }
     }
 }

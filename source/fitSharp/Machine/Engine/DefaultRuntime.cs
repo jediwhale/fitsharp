@@ -5,6 +5,7 @@
 
 using System.Collections.Generic;
 using fitSharp.Machine.Exception;
+using fitSharp.Machine.Extension;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
@@ -53,10 +54,9 @@ namespace fitSharp.Machine.Engine {
         }
 
         private object[] GetParameterList(TypedValue instance, Tree<T> parameters, RuntimeMember member) {
-            var parameterList = new List<object>();
-            int i = 0;
-            foreach (Tree<T> parameter in parameters.Branches) {
+            return parameters.Branches.Aggregate((List<object> parameterList, Tree<T> parameter) => {
                 TypedValue parameterValue;
+                int i = parameterList.Count;
                 try {
                     parameterValue = Processor.Parse(member.GetParameterType(i), instance, parameter);
                 }
@@ -64,9 +64,7 @@ namespace fitSharp.Machine.Engine {
                     throw new ParseException<T>(member.Name, member.GetParameterType(i), i+1, parameter.Value, e);
                 }
                 parameterList.Add(parameterValue.Value);
-                i++;
-            }
-            return parameterList.ToArray();
+            }).ToArray();
         }
     }
 }

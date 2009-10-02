@@ -14,8 +14,8 @@ namespace fitSharp.Test.NUnit.Machine {
 
         [Test] public void CustomTypeIsParsed() {
             var converter = new CustomConverter {Processor = processor};
-            Assert.IsTrue(converter.CanParse(typeof(CustomClass), TypedValue.Void, new TreeLeaf<string>("info")));
-            TypedValue parseResult = converter.Parse(typeof(CustomClass), TypedValue.Void, new TreeLeaf<string>("info"));
+            Assert.IsTrue(converter.CanParse(typeof(CustomClass), TypedValue.Void, new TreeList<string>("info")));
+            TypedValue parseResult = converter.Parse(typeof(CustomClass), TypedValue.Void, new TreeList<string>("info"));
             var result = parseResult.Value as CustomClass;
             Assert.IsNotNull(result);
             Assert.AreEqual("custominfo", result.Info);

@@ -33,7 +33,7 @@ namespace fitSharp.Machine.Engine {
             }
 
             public Tree<string> Compose(TypedValue instance) {
-                return new TreeLeaf<string>(instance.Value.ToString());
+                return new TreeList<string>(instance.Value.ToString());
             }
         }
     }

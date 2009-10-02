@@ -40,7 +40,7 @@ namespace fitSharp.Slim.Service {
 
         private static Tree<string> Read(string input) {
             if (IsList(input)) return ReadList(input.Substring(1, input.Length - 2));
-            return new TreeLeaf<string>(input);
+            return new TreeList<string>(input);
         }
 
         private static bool IsList(string input) {

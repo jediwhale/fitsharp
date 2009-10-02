@@ -19,7 +19,7 @@ namespace fitSharp.Fit.Operators
 
 	    public bool Compare(TypedValue actual, Tree<Cell> expected) {
 			string expectedText = expected.Value.Text.Substring("fail[".Length, expected.Value.Text.Length - ("fail[".Length + 1));
-            var rest = new TreeLeaf<Cell>(new CellSubstring(expected.Value, expectedText));
+            var rest = new CellTree(new CellSubstring(expected.Value, expectedText));
             return !Processor.Compare(actual, rest);
 	    }
 	}

@@ -7,6 +7,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using fitSharp.Machine.Engine;
+using fitSharp.Machine.Extension;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Slim.Operators {
@@ -16,11 +17,10 @@ namespace fitSharp.Slim.Operators {
         }
 
         public TypedValue Parse(Type type, TypedValue instance, Tree<string> parameters) {
-            var list = (IList)Activator.CreateInstance(type);
-            foreach (Tree<string> branch in parameters.Branches) {
-                list.Add(Parse(type.GetGenericArguments()[0], branch).Value);
-            }
-            return new TypedValue(list);
+            return new TypedValue(
+                parameters.Branches.AggregateTo(
+                    (IList) Activator.CreateInstance(type),
+                    (list, branch) => list.Add(Parse(type.GetGenericArguments()[0], branch).Value)));
         }
     }
 }

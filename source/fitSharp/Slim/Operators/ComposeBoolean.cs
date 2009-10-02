@@ -13,7 +13,7 @@ namespace fitSharp.Slim.Operators {
         }
 
         public Tree<string> Compose(TypedValue instance) {
-            return new TreeLeaf<string>((bool)instance.Value ? "true" : "false");
+            return new TreeList<string>((bool)instance.Value ? "true" : "false");
         }
     }
 }
