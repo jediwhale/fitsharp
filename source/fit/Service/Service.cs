@@ -14,6 +14,7 @@ namespace fit.Service {
     public class Service: CellProcessorBase, Copyable {
         public Service() {
             AddOperator(new RuntimeFlow());
+            AddOperator(new RuntimeProcedure());
 
             AddOperator(new ComposeDefault());
 

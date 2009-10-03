@@ -70,7 +70,6 @@
     <Compile Include="Fit\Operators\ExecuteParameters.cs" />
     <Compile Include="Fit\Operators\ExecuteSymbolSave.cs" />
     <Compile Include="Fit\Operators\ParseSymbol.cs" />
-    <Compile Include="Fit\Operators\RuntimeProcedure.cs" />
     <Compile Include="Fit\Service\CellOperation.cs" />
     <Compile Include="Fit\Service\CellProcessorBase.cs" />
     <Compile Include="Fit\Service\ExecuteStoryTest.cs" />

@@ -26,6 +26,12 @@ namespace fitSharp.Fit.Model {
 
 	    private Dictionary<string, string> attributes;
 
+        public CellAttributes() {}
+
+        public CellAttributes(CellAttributes other) {
+            if (other.attributes != null) attributes = new Dictionary<string, string>(other.attributes);
+        }
+
         public bool HasAttribute(string key) {
             return attributes == null ? false : attributes.ContainsKey(key);
         }

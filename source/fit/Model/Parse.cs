@@ -321,14 +321,14 @@ namespace fit
 
         public Parse DeepCopy() {
             return new Parse(tag, End, Leader, body, (Parts == null ? null : Parts.DeepCopy())) {
-                Attributes = Attributes,
+                Attributes = new CellAttributes(Attributes),
                 Trailer = Trailer,
                 More = (More == null ? null : More.DeepCopy())
             };
         }
 
         public Parse Copy() {
-            return new Parse(tag, End, Leader, body, Parts) {Trailer = Trailer, Attributes = Attributes};
+            return new Parse(tag, End, Leader, body, Parts) {Trailer = Trailer, Attributes = new CellAttributes(Attributes)};
         }
 
 	    public Cell Value { get { return this; } }

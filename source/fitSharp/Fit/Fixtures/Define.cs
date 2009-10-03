@@ -24,11 +24,7 @@ namespace fitSharp.Fit.Fixtures {
         public bool IsVisible { get { return false; } }
 
         public void Interpret(Tree<Cell> table) {
-            var body = new CellTree(new StringCell("<table border=\"1\" cellpadding=\"2\" cellspacing=\"0\">{0}</table>")); // todo: yuck - encapsulate
-            for (int i = 1; i < table.Branches.Count; i++) {
-                body.AddBranch(table.Branches[i]);
-            }
-            processor.Store(new Procedure(table.Branches[0].Branches[1].Value.Text.Trim(), new CellTree(body)));
+            processor.Store(new Procedure(table.Branches[0].Branches[1].Value.Text.Trim(), table));
         }
     }
 }

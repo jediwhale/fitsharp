@@ -150,6 +150,7 @@
     <Compile Include="NUnit\ParseBlankTest.cs" />
     <Compile Include="NUnit\ParseBooleanTest.cs" />
     <Compile Include="NUnit\ParseInterpreterTest.cs" />
+    <Compile Include="NUnit\RuntimeProcedureTest.cs" />
     <Compile Include="NUnit\StoryTestStringOperatorsTest.cs" />
     <Compile Include="NUnit\ParseTest.cs" />
     <Compile Include="NUnit\PathParserTest.cs" />

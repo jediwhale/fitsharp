@@ -19,7 +19,6 @@ namespace fitSharp.Fit.Service {
             TestStatus = new TestStatus();
             operators = new Operators<Cell, CellProcessor>(this);
 
-            AddOperator(new RuntimeProcedure());
             AddOperator(new ParseDefault());
             AddOperator(new ExecuteDefault());
             AddOperator(new ExecuteInterpret());
