@@ -53,6 +53,7 @@ namespace fitSharp.Fit.Operators {
         }
 
         private TypedValue Invoke(ExecuteContext context, ExecuteParameters parameters) {
+            var beforeCounts = new TestCounts(Processor.TestStatus.Counts);
             TypedValue target = context.Target.Value;
             var targetObjectProvider = target.Value as TargetObjectProvider;
             var name = ParseTree<MemberName>(parameters.Members);
@@ -61,6 +62,8 @@ namespace fitSharp.Fit.Operators {
                     name.ToString(), parameters.Parameters);
             if (parameters.Cells != null && !string.IsNullOrEmpty(Processor.TestStatus.LastAction)) {
                 parameters.Cell.SetAttribute(CellAttributes.ExtensionKey, Processor.TestStatus.LastAction);
+                string style = Processor.TestStatus.Counts.Subtract(beforeCounts).Style;
+                if (!string.IsNullOrEmpty(style)) parameters.Cell.SetAttribute(CellAttributes.StatusKey, style);
                 Processor.TestStatus.LastAction = null;
             }
             return result;

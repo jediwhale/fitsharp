@@ -18,7 +18,7 @@ namespace fit
 	{
 	    private readonly string tag;
 		private string body;
-	    private readonly string originalBody;
+	    private string originalBody;
 
         private CellAttributes Attributes { get; set; }
 
@@ -71,6 +71,11 @@ namespace fit
 		{
 			body = val;
 		}
+
+        public void SetOriginalBody(string value) {
+            originalBody = value;
+            body = value;
+        }
 
 		public virtual void AddToBody(string text)
 		{

@@ -35,6 +35,17 @@ namespace fitSharp.Test.NUnit.Fit {
             Assert.AreEqual("blah blah", targetCell.Value.GetAttribute(CellAttributes.ExtensionKey));
         }
 
+        [Test] public void CellIsMarkedWithInvokeStatus() {
+            SetUpSUT();
+            testStatus.Counts.AddCount(CellAttributes.WrongStatus);
+            var targetCell = new StringCellLeaf("stuff");
+            var parameters = new ExecuteParameters(
+                ExecuteParameters.Make(new StringCellLeaf("member"), new TreeList<Cell>(), targetCell));
+            testStatus.LastAction = "blah blah";
+            execute.Execute(new ExecuteContext(ExecuteCommand.Invoke, target), parameters);
+            Assert.AreEqual(CellAttributes.RightStatus, targetCell.Value.GetAttribute(CellAttributes.StatusKey));
+        }
+
         private void SetUpSUT() {
             testStatus = new TestStatus();
             processor = new Mock<CellProcessor>();
@@ -48,7 +59,10 @@ namespace fitSharp.Test.NUnit.Fit {
                 .Returns(new TypedValue(new MemberName("member")));
             processor
                 .Setup(p => p.Invoke(target, "member", It.Is<Tree<Cell>>(c => c.Branches.Count == 0)))
-                .Returns(result);
+                .Returns((TypedValue t, string s, Tree<Cell> c) => {
+                    testStatus.Counts.AddCount(CellAttributes.RightStatus);
+                    return result;
+                });
             processor.Setup(p => p.TestStatus).Returns(testStatus);
         }
     }

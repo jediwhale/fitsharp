@@ -22,15 +22,24 @@ namespace fit.Operators {
 
         public TypedValue Invoke(TypedValue instance, string memberName, Tree<Cell> parameters) {
             var procedure = Processor.Load(new Procedure(memberName));
-            return Invoke(procedure.Instance, instance);
+            return Invoke(procedure.Instance, instance, parameters);
         }
 
-        private TypedValue Invoke(Tree<Cell> procedure, TypedValue target) {
+        private TypedValue Invoke(Tree<Cell> procedure, TypedValue target, Tree<Cell> parameters) {
             var doFixture = new CellTree(new CellTree("dofixture"));
             var fixture = Processor.Parse(typeof (Interpreter), target, doFixture);
 
             var body = ((Parse)procedure).DeepCopy();
             body.More = null;
+            foreach (Tree<Cell> leaf in body.Parts.More.Leaves()) {
+                int i = 2;
+                foreach (Tree<Cell> parameterValue in parameters.Branches) {
+                    if (body.Parts.Branches[i].Value.Text == leaf.Value.Text) {
+                        ((Parse) leaf.Value).SetOriginalBody(parameterValue.Value.Text);
+                    }
+                    i += 2;
+                }
+            }
             body.Parts = body.Parts.More;
 
             TypedValue result = Processor.Execute(fixture, new CellTree((Tree<Cell>)body));

@@ -12,6 +12,10 @@ using NUnit.Framework;
 
 namespace fit.Test.NUnit {
     [TestFixture] public class RuntimeProcedureTest {
+        private const string simpleProcedureHtml = "<table><tr><td>define</td><td>procedure</td></tr><tr><td>verb</td></tr></table>";
+        private const string parameterProcedureHtml =
+            "<table><tr><td>define</td><td>procedure</td><td>parm</td></tr><tr><td>verb</td><td>parm</td></tr></table>";
+
         private Mock<CellProcessor> processor;
         private RuntimeProcedure runtime;
         private Procedure procedure;
@@ -21,39 +25,44 @@ namespace fit.Test.NUnit {
         private TestStatus testStatus;
 
         [Test] public void CreateIsntHandled() {
-            SetupSUT();
+            SetupSUT(simpleProcedureHtml);
             Assert.IsFalse(runtime.CanCreate("anything", new CellTree()));
         }
 
         [Test] public void InvokeForMembersIsntHandled() {
-            SetupSUT();
+            SetupSUT(simpleProcedureHtml);
             Assert.IsFalse(runtime.CanInvoke(target, "member", new CellTree()));
         }
 
         [Test] public void InvokeForProceduresIsHandled() {
-            SetupSUT();
+            SetupSUT(simpleProcedureHtml);
             Assert.IsTrue(runtime.CanInvoke(target, "procedure", new CellTree()));
         }
 
         [Test] public void ProcedureIsExecuted() {
-            SetupSUT();
+            SetupSUT(simpleProcedureHtml);
             Assert.AreEqual(result, runtime.Invoke(target, "procedure", new CellTree()));
         }
 
         [Test] public void ProcedureExecutionIsLogged() {
-            SetupSUT();
+            SetupSUT(simpleProcedureHtml);
             runtime.Invoke(target, "procedure", new CellTree());
             Assert.AreEqual("procedure log", testStatus.LastAction);
         }
 
         [Test] public void ProcedureIsExecutedOnACopyOfBody() {
-            SetupSUT();
+            SetupSUT(simpleProcedureHtml);
             runtime.Invoke(target, "procedure", new CellTree());
             Assert.AreEqual(string.Empty, procedure.Instance.Branches[1].Branches[0].Value.GetAttribute("some"));
         }
 
-        private void SetupSUT() {
-            procedure = new Procedure("procedure", HtmlParser.Instance.Parse("<table><tr><td>define</td><td>procedure</td></tr><tr><td>verb</td></tr></table>"));
+        [Test] public void ParameterValueIsSubstituted() {
+            SetupSUT(parameterProcedureHtml);
+            Assert.AreEqual(result, runtime.Invoke(target, "procedure", new CellTree("actual")));
+        }
+
+        private void SetupSUT(string html) {
+            procedure = new Procedure("procedure", HtmlParser.Instance.Parse(html));
 
             result = new TypedValue("result");
             target = new TypedValue("target");
@@ -62,23 +71,42 @@ namespace fit.Test.NUnit {
             testStatus = new TestStatus();
 
             processor = new Mock<CellProcessor>();
+            runtime = new RuntimeProcedure {Processor = processor.Object};
+
             processor.Setup(p => p.TestStatus).Returns(testStatus);
             processor.Setup(p => p.Contains(It.Is<Procedure>(v => v.Id == "member"))).Returns(false);
             processor.Setup(p => p.Contains(It.Is<Procedure>(v => v.Id == "procedure"))).Returns(true);
             processor.Setup(p => p.Load(It.Is<Procedure>(v => v.Id == "procedure"))).Returns(procedure);
-            processor.Setup(p => p.Parse(typeof (Interpreter), target,
-                                         It.Is<Tree<Cell>>(c => c.Branches[0].Branches[0].Value.Text == "dofixture")))
+
+            processor.Setup(p => p.Parse(typeof (Interpreter), target, It.Is<Tree<Cell>>(c => IsDoFixture(c))))
                 .Returns(fixture);
-            processor.Setup(p => p.Execute(fixture,
-                                           It.Is<Tree<Cell>>(t => t.Branches[0].Branches[0].Branches[0].Value.Text == "verb")))
+
+            processor.Setup(p => p.Execute(fixture, It.Is<Tree<Cell>>(t => IsTablesWithVerb(t))))
                 .Returns((TypedValue f, Tree<Cell> t) => {
                     t.Branches[0].Branches[0].Branches[0].Value.SetAttribute("some", "stuff");
                     return result;
                 });
+
             processor.Setup(p => p.Parse(typeof (StoryTestString), It.IsAny<TypedValue>(),
-                                         It.Is<Tree<Cell>>(t => t.Branches[0].Branches[0].Value.Text == "verb")))
+                                         It.Is<Tree<Cell>>(t => IsTableWithVerb(t))))
                 .Returns(new TypedValue("procedure log"));
-            runtime = new RuntimeProcedure {Processor = processor.Object};
+        }
+
+        private static bool IsTableWithVerb(Tree<Cell> t) {
+            return t.Branches[0].Branches.Count == 1 && t.Branches[0].Branches[0].Value.Text == "verb";
+        }
+
+        private static bool IsTablesWithVerb(Tree<Cell> t) {
+            if (t.Branches[0].Branches[0].Branches.Count == 1
+                && t.Branches[0].Branches[0].Branches[0].Value.Text == "verb") return true;
+            if (t.Branches[0].Branches[0].Branches.Count == 2
+                && t.Branches[0].Branches[0].Branches[0].Value.Text == "verb"
+                && t.Branches[0].Branches[0].Branches[1].Value.Text == "actual") return true;
+            return false;
+        }
+
+        private static bool IsDoFixture(Tree<Cell> c) {
+            return c.Branches[0].Branches[0].Value.Text == "dofixture";
         }
     }
 }

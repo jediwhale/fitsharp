@@ -9,11 +9,24 @@ namespace fitSharp.Fit.Model {
     public class TestCounts {
         private readonly Dictionary<string, int> counts = new Dictionary<string, int>();
 
+        public TestCounts() {}
+
+        public TestCounts(TestCounts other) {
+            counts = new Dictionary<string, int>(other.counts);
+        }
+
+        public TestCounts Subtract(TestCounts other) {
+            var result = new TestCounts(this);
+            foreach (string cellStatus in other.counts.Keys) result.counts[cellStatus] = result.GetCount(cellStatus) - other.GetCount(cellStatus);
+            return result;
+        }
+
         public int GetCount(string cellStatus) {
             return counts.ContainsKey(cellStatus) ? counts[cellStatus] : 0;
         }
 
         public void AddCount(string cellStatus) {
+            if (string.IsNullOrEmpty(cellStatus)) return;
             counts[cellStatus] = GetCount(cellStatus) + 1;
         }
 
@@ -48,7 +61,9 @@ namespace fitSharp.Fit.Model {
             get {
                 if (GetCount(CellAttributes.ExceptionStatus) > 0) return CellAttributes.ExceptionStatus;
                 if (GetCount(CellAttributes.WrongStatus) > 0) return CellAttributes.WrongStatus;
-                return GetCount(CellAttributes.RightStatus) > 0 ? CellAttributes.RightStatus : CellAttributes.IgnoreStatus;
+                if (GetCount(CellAttributes.RightStatus) > 0 ) return CellAttributes.RightStatus;
+                if (GetCount(CellAttributes.IgnoreStatus) > 0) return CellAttributes.IgnoreStatus;
+                return string.Empty;
             }
         }
 
