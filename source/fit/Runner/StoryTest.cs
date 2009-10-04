@@ -70,7 +70,7 @@ namespace fit {
             new ExecuteStoryTest(Context.Configuration.GetItem<Service.Service>(), writer).DoTables(new Parse("div", string.Empty, Tables, null));
         }
 
-        private void SaveTestResult(Tree<Cell> theTables, TestStatus status) {
+        private void SaveTestResult(Tree<Cell> theTables, TestCounts counts) {
             var tables = (Parse) theTables.Value;
             for (Parse table = tables; table != null; table = table.More) {
                 Parse newTable = table.Copy();

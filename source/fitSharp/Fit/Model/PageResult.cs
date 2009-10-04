@@ -7,12 +7,12 @@ namespace fitSharp.Fit.Model {
     public class PageResult {
         public string Content { get; private set; }
         public string Title { get; private set; }
-        public TestStatus TestStatus { get; private set; }
+        public TestCounts TestCounts { get; private set; }
 
-        public PageResult(string title, string content, TestStatus testStatus) {
+        public PageResult(string title, string content, TestCounts testCounts) {
             Title = title;
             Content = content;
-            TestStatus = testStatus;
+            TestCounts = testCounts;
         }
     }
 }

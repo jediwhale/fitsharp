@@ -20,24 +20,24 @@ namespace fit.Runner {
         void Finish();
     }
 
-    public delegate void TestStatusHandler(TestStatus status);
+    public delegate void TestCountsHandler(TestCounts counts);
 
     public interface StoryTestPage {
         string Name { get; }
-        void ExecuteStoryPage(ResultWriter resultWriter, TestStatusHandler handler);
+        void ExecuteStoryPage(ResultWriter resultWriter, TestCountsHandler handler);
         bool IsTest { get; }
     }
     
 	public class SuiteRunner { //: Runnable {
 	    
-	    public TestStatus TestStatus { get; private set; }
+	    public TestCounts TestCounts { get; private set; }
         private string mySelection = string.Empty;
 	    private ProgressReporter myReporter;
 	    private ResultWriter resultWriter;
 	    private readonly Configuration configuration;
 
 		public SuiteRunner(Configuration configuration, ProgressReporter theReporter) {
-		    TestStatus = new TestStatus();
+		    TestCounts = new TestCounts();
 		    myReporter = theReporter;
 		    this.configuration = configuration;
 		}
@@ -62,7 +62,7 @@ namespace fit.Runner {
 
 	        RunFolder(theSuite);
 
-            resultWriter.WriteFinalCount(TestStatus);
+            resultWriter.WriteFinalCount(TestCounts);
             resultWriter.Close();
 	    }
 
@@ -95,9 +95,9 @@ namespace fit.Runner {
 	        }
 	    }
 
-        private void HandleTestStatus(TestStatus status) {
-	        myReporter.Write(status.Letter);
-	        TestStatus.TallyCounts(status);
+        private void HandleTestStatus(TestCounts counts) {
+	        myReporter.Write(counts.Letter);
+	        TestCounts.TallyCounts(counts);
         }
 	}
 }

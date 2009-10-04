@@ -12,12 +12,12 @@ namespace fit.Test.NUnit {
     [TestFixture]
     public class ColumnFixtureTests
     {
-        private TestStatus resultStatus;
+        private TestCounts resultCounts;
 
         [Test]
         public void TestNullCell()
         {
-            StringBuilder builder = new StringBuilder();
+            var builder = new StringBuilder();
             //builder.Append("<table>");
             //builder.Append("<tr><td>configuration setup</td></tr>");
             //builder.Append("<tr><td>service</td></tr>");
@@ -29,47 +29,47 @@ namespace fit.Test.NUnit {
             builder.Append("<tr><td></td><td>null</td></tr>");
             builder.Append("</table>");
 
-            Parse parse = new Parse(builder.ToString());
+            var parse = new Parse(builder.ToString());
 
             TestUtils.InitAssembliesAndNamespaces();
             RunTest(parse);
-            TestUtils.CheckCounts(resultStatus, 1, 0, 0, 0);
+            TestUtils.CheckCounts(resultCounts, 1, 0, 0, 0);
         }
 
         private void RunTest(Parse parse) {
-            StoryTest test = new StoryTest(parse, (t,s) => { resultStatus = s;});
+            var test = new StoryTest(parse, (t,c) => { resultCounts = c;});
             test.Execute();
         }
 
         [Test]
         public void TestBlankCell()
         {
-            StringBuilder builder = new StringBuilder();
+            var builder = new StringBuilder();
             builder.Append("<table>");
             builder.Append("<tr><td colspan=\"6\">string fixture</td></tr>");
             builder.Append("<tr><td>field</td><td>field?</td><td>property</td><td>property?</td><td>set</td><td>get?</td></tr>");
             builder.Append("<tr><td>blank</td><td>blank</td><td>blank</td><td>blank</td><td>blank</td><td>blank</td></tr>");
             builder.Append("</table>");
 
-            Parse parse = new Parse(builder.ToString());
+            var parse = new Parse(builder.ToString());
 
             TestUtils.InitAssembliesAndNamespaces();
             RunTest(parse);
-            TestUtils.CheckCounts(resultStatus, 3, 0, 0, 0);
+            TestUtils.CheckCounts(resultCounts, 3, 0, 0, 0);
         }
 
         [Test]
         public void TestExecuteAtEnd()
         {
             TestUtils.InitAssembliesAndNamespaces();
-            StringBuilder builder = new StringBuilder();
+            var builder = new StringBuilder();
             builder.Append("<table>");
             builder.Append("<tr><td colspan=\"2\">ExecuteTestFixture</td></tr>");
             builder.Append("<tr><td>Property</td><td>Property</td></tr>");
             builder.Append("<tr><td>first call</td><td>second call</td></tr>");
             builder.Append("</table>");
-            Parse table = new Parse(builder.ToString());
-            ExecuteTestFixture testFixture = new ExecuteTestFixture { Processor = new Service.Service()};
+            var table = new Parse(builder.ToString());
+            var testFixture = new ExecuteTestFixture { Processor = new Service.Service()};
             testFixture.DoTable(table);
             Assert.AreEqual(3, testFixture.Values.Count);
             Assert.AreEqual("first call", testFixture.Values[0]);
@@ -81,14 +81,14 @@ namespace fit.Test.NUnit {
         public void TestExecuteInMiddle()
         {
             TestUtils.InitAssembliesAndNamespaces();
-            StringBuilder builder = new StringBuilder();
+            var builder = new StringBuilder();
             builder.Append("<table>");
             builder.Append("<tr><td colspan=\"2\">ExecuteTestFixture</td></tr>");
             builder.Append("<tr><td>Property</td><td>Property?</td><td>Property</td></tr>");
             builder.Append("<tr><td>first call</td><td>null</td><td>second call</td></tr>");
             builder.Append("</table>");
-            Parse table = new Parse(builder.ToString());
-            ExecuteTestFixture testFixture = new ExecuteTestFixture { Processor = new Service.Service()};
+            var table = new Parse(builder.ToString());
+            var testFixture = new ExecuteTestFixture { Processor = new Service.Service()};
             testFixture.DoTable(table);
             Assert.AreEqual(3, testFixture.Values.Count);
             Assert.AreEqual("first call", testFixture.Values[0]);
@@ -100,14 +100,14 @@ namespace fit.Test.NUnit {
         public void TestExecuteWithMethod()
         {
             TestUtils.InitAssembliesAndNamespaces();
-            StringBuilder builder = new StringBuilder();
+            var builder = new StringBuilder();
             builder.Append("<table>");
             builder.Append("<tr><td colspan=\"2\">ExecuteTestFixture</td></tr>");
             builder.Append("<tr><td>Property</td><td>BoolMethod?</td></tr>");
             builder.Append("<tr><td>first call</td><td>true</td></tr>");
             builder.Append("</table>");
-            Parse table = new Parse(builder.ToString());
-            ExecuteTestFixture testFixture = new ExecuteTestFixture { Processor = new Service.Service()};
+            var table = new Parse(builder.ToString());
+            var testFixture = new ExecuteTestFixture { Processor = new Service.Service()};
             testFixture.DoTable(table);
             Assert.AreEqual(3, testFixture.Values.Count);
             Assert.AreEqual("first call", testFixture.Values[0]);
@@ -125,30 +125,30 @@ namespace fit.Test.NUnit {
         public void TestEmptyHeaderCell()
         {
             TestUtils.InitAssembliesAndNamespaces();
-            StringBuilder builder = new StringBuilder();
+            var builder = new StringBuilder();
             builder.Append("<table>");
             builder.Append("<tr><td colspan=\"2\">string fixture</td></tr>");
             builder.Append("<tr><td>field</td><td></td></tr>");
             builder.Append("<tr><td>some value</td><td>this is a comment</td></tr>");
             builder.Append("</table>");
-            Parse table = new Parse(builder.ToString());
+            var table = new Parse(builder.ToString());
             RunTest(table);
-            TestUtils.CheckCounts(resultStatus, 0, 0, 0, 0);
+            TestUtils.CheckCounts(resultCounts, 0, 0, 0, 0);
         }
 
         [Test]
         public void TestExecuteDoesNotCauseMethodsToGetCalledThrice()
         {
             TestUtils.InitAssembliesAndNamespaces();
-            StringBuilder builder = new StringBuilder();
+            var builder = new StringBuilder();
             builder.Append("<table>");
             builder.Append("<tr><td colspan=\"2\">ExecuteTestFixture</td></tr>");
             builder.Append("<tr><td>Method()</td></tr>");
             builder.Append("<tr><td>1</td></tr>");
             builder.Append("<tr><td>2</td></tr>");
             builder.Append("</table>");
-            Parse table = new Parse(builder.ToString());
-            ExecuteTestFixture testFixture = new ExecuteTestFixture { Processor = new Service.Service()};
+            var table = new Parse(builder.ToString());
+            var testFixture = new ExecuteTestFixture { Processor = new Service.Service()};
             testFixture.DoTable(table);
             Assert.AreEqual(4, testFixture.Values.Count);
             Assert.AreEqual("Execute()", testFixture.Values[0]);

@@ -4,7 +4,6 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System.Collections;
-using System.Collections.Generic;
 using fitSharp.Fit.Exception;
 
 namespace fitSharp.Fit.Model {
@@ -15,54 +14,11 @@ namespace fitSharp.Fit.Model {
         public bool IsAbandoned { get; set; }
         public string LastAction { get; set; }
         public Hashtable Summary { get; private set; }
-        private readonly Dictionary<string, int> counts = new Dictionary<string, int>();
+        public TestCounts Counts { get; private set; }
         
         public TestStatus() {
             Summary = new Hashtable();
-        }
-
-        public void TallyCounts(TestStatus other) {
-            foreach (string cellStatus in other.counts.Keys) counts[cellStatus] = GetCount(cellStatus) + other.GetCount(cellStatus);
-        }
-
-        public void TallyPageCounts(TestStatus other) {
-            AddCount(other.Style);
-        }
-
-        public void AddCount(string cellStatus) {
-            counts[cellStatus] = GetCount(cellStatus) + 1;
-        }
-
-        public int FailCount { get { return GetCount(CellAttributes.WrongStatus) + GetCount(CellAttributes.ExceptionStatus); } }
-
-        public int GetCount(string cellStatus) {
-            return counts.ContainsKey(cellStatus) ? counts[cellStatus] : 0;
-        }
-
-        public string CountDescription {
-            get {
-                return string.Format("{0} right, {1} wrong, {2} ignored, {3} exceptions",
-                                     GetCount(CellAttributes.RightStatus),
-                                     GetCount(CellAttributes.WrongStatus),
-                                     GetCount(CellAttributes.IgnoreStatus),
-                                     GetCount(CellAttributes.ExceptionStatus));
-            }
-        }
-
-        public string Letter {
-            get {
-                return GetCount(CellAttributes.ExceptionStatus) > 0 ? "E"
-                           : (GetCount(CellAttributes.WrongStatus) > 0 ? "F" : ".");
-            }
-        }
-
-        public string Style {
-            get {
-                if (GetCount(CellAttributes.ExceptionStatus) > 0) return CellAttributes.ExceptionStatus;
-                if (GetCount(CellAttributes.WrongStatus) > 0) return CellAttributes.WrongStatus;
-                if (GetCount(CellAttributes.RightStatus) > 0) return CellAttributes.RightStatus;
-                return CellAttributes.IgnoreStatus;
-            }
+            Counts = new TestCounts();
         }
 
         public void MarkRight(Cell cell) {
@@ -98,10 +54,14 @@ namespace fitSharp.Fit.Model {
                 AddCount(CellAttributes.ExceptionStatus);
             }
 
-            if (abandonException != null) {
-                IsAbandoned = true;
-                throw abandonException;
-            }
+            if (abandonException == null) return;
+
+            IsAbandoned = true;
+            throw abandonException;
+        }
+
+        private void AddCount(string cellStatus) {
+            Counts.AddCount(cellStatus);
         }
 
         private static System.Exception GetAbandonStoryTestException(System.Exception exception) {

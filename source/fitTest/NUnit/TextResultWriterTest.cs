@@ -40,7 +40,7 @@ namespace fit.Test.NUnit {
         [Test]
         public void TestWriteResults()
         {
-            var pageResult = new PageResult("Test Page", "content", TestUtils.MakeTestStatus());
+            var pageResult = new PageResult("Test Page", "content", TestUtils.MakeTestCounts());
             _strategy = new TextResultWriter(TEST_RESULT_FILE_NAME, _folderModel);
             _strategy.WritePageResult(pageResult);
             _strategy.Close();
@@ -51,7 +51,7 @@ namespace fit.Test.NUnit {
         public void TestWriteFinalCounts()
         {
             _strategy = new TextResultWriter(TEST_RESULT_FILE_NAME, _folderModel);
-            _strategy.WriteFinalCount(TestUtils.MakeTestStatus());
+            _strategy.WriteFinalCount(TestUtils.MakeTestCounts());
             _strategy.Close();
             Assert.AreEqual("00000000000000000001000000000200000000030000000004", _folderModel.FileContent(TEST_RESULT_FILE_NAME));
         }

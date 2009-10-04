@@ -3,7 +3,6 @@
 // Released under the terms of the GNU General Public License version 2 or later.
 using System;
 using System.Text;
-using fit;
 using fitSharp.Fit.Model;
 
 namespace fitnesse.fitserver
@@ -18,12 +17,12 @@ namespace fitnesse.fitserver
 
 		public static string FormatDocument(string document)
 		{
-			return Protocol.FormatInteger(Encoding.UTF8.GetBytes(document).Length) + document;
+			return FormatInteger(Encoding.UTF8.GetBytes(document).Length) + document;
 		}
 
-		public static String FormatCounts(TestStatus status)
+		public static String FormatCounts(TestCounts status)
 		{
-			StringBuilder builder = new StringBuilder();
+			var builder = new StringBuilder();
 			builder.Append(FormatInteger(0));
 			builder.Append(FormatInteger(status.GetCount(CellAttributes.RightStatus)));
 			builder.Append(FormatInteger(status.GetCount(CellAttributes.WrongStatus)));

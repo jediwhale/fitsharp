@@ -26,7 +26,7 @@ namespace fitnesse.fitserver
 		public bool verbose;
 	    public ResultWriter resultWriter = new NullResultWriter();
 		public bool deleteCacheOnExit;
-		public TestStatus pageCounts = new TestStatus();
+		public TestCounts pageCounts = new TestCounts();
 		public TextWriter output = Console.Out;
 		public string assemblyPath;
 	    public string suiteFilter;
@@ -43,7 +43,7 @@ namespace fitnesse.fitserver
 			fitServer.ValidateConnection();
 			AddAssemblies();
 			fitServer.ProcessTestDocuments(WriteTestRunner);
-			HandleFinalCount(fitServer.Status);
+			HandleFinalCount(fitServer.Counts);
 			fitServer.CloseConnection();
 			fitServer.Exit();
 			resultWriter.Close();
@@ -135,19 +135,19 @@ namespace fitnesse.fitserver
 
 		public void AcceptResults(PageResult results)
 		{
-			TestStatus status = results.TestStatus;
-			pageCounts.TallyPageCounts(status);
-			fitServer.Transmit(Protocol.FormatCounts(status));
+			TestCounts counts = results.TestCounts;
+			pageCounts.TallyPageCounts(counts);
+			fitServer.Transmit(Protocol.FormatCounts(counts));
 			if(verbose)
 			{
-				for(int i = 0; i < status.GetCount(CellAttributes.RightStatus); i++)
+				for(int i = 0; i < counts.GetCount(CellAttributes.RightStatus); i++)
 					output.Write(".");
-				if(status.GetCount(CellAttributes.WrongStatus) > 0)
+				if(counts.GetCount(CellAttributes.WrongStatus) > 0)
 				{
 					output.WriteLine();
 					output.WriteLine(PageDescription(results) + " has failures");
 				}
-				if(status.GetCount(CellAttributes.ExceptionStatus) > 0)
+				if(counts.GetCount(CellAttributes.ExceptionStatus) > 0)
 				{
 					output.WriteLine();
 					output.WriteLine(PageDescription(results) + " has errors");
@@ -173,25 +173,25 @@ namespace fitnesse.fitserver
 	            resultWriter = new TextResultWriter(fileName, new FileSystemModel());
 	    }
 
-	    public void HandleFinalCount(TestStatus summary)
+	    public void HandleFinalCount(TestCounts summary)
 		{
 			if(verbose)
 			{
 				output.WriteLine();
-				output.WriteLine("Test Pages: " + pageCounts.CountDescription);
-				output.WriteLine("Assertions: " + summary.CountDescription);
+				output.WriteLine("Test Pages: " + pageCounts.Description);
+				output.WriteLine("Assertions: " + summary.Description);
 			}
 			resultWriter.WriteFinalCount(summary);
 		}
 
-		private void WriteTestRunner(Tree<Cell> theTables, TestStatus status)
+		private void WriteTestRunner(Tree<Cell> theTables, TestCounts counts)
 		{
             var tables = (Parse) theTables.Value;
             string data = configuration.GetItem<Service>().Parse(typeof(StoryTestString), TypedValue.Void, tables).ValueString;
 			int indexOfFirstLineBreak = data.IndexOf("\n");
 			string pageTitle = data.Substring(0, indexOfFirstLineBreak);
 			data = data.Substring(indexOfFirstLineBreak + 1);
-			AcceptResults(new PageResult(pageTitle, data, status));
+			AcceptResults(new PageResult(pageTitle, data, counts));
 		}
 	}
 }

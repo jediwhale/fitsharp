@@ -20,9 +20,9 @@ namespace fit.Test.NUnit {
             TestUtils.InitAssembliesAndNamespaces();
         }
 
-        private string BuildTable(string name)
+        private static string BuildTable(string name)
         {
-            StringBuilder builder = new StringBuilder();
+            var builder = new StringBuilder();
             builder.Append("<table border=\"1\" cellspacing=\"0\">");
             builder.Append("<tr><td colspan=\"3\">").Append(name).Append("</td></tr>");
             builder.Append("<tr><td>start</td><td colspan=\"2\">Count Fixture</td></tr>");
@@ -44,36 +44,36 @@ namespace fit.Test.NUnit {
         public void TestStart()
         {
             table = new Parse(BuildTable("ActionFixture"));
-            ActionFixture fixture = new ActionFixture { Processor = new Service.Service() };
+            var fixture = new ActionFixture { Processor = new Service.Service() };
             fixture.DoTable(table);
-            Assert.AreEqual(0, fixture.TestStatus.GetCount(CellAttributes.ExceptionStatus), table.ToString());
-            Assert.IsNotNull((CountFixture) fixture.GetTargetObject());
+            Assert.AreEqual(0, fixture.TestStatus.Counts.GetCount(CellAttributes.ExceptionStatus), table.ToString());
+            Assert.IsNotNull(fixture.GetTargetObject());
         }
 
         [Test]
         public void TestCheck()
         {
             table = new Parse(BuildTable("ActionFixture"));
-            ActionFixture fixture = new ActionFixture{ Processor = new Service.Service() };
+            var fixture = new ActionFixture{ Processor = new Service.Service() };
             fixture.DoTable(table);
-            Assert.AreEqual(0, fixture.TestStatus.GetCount(CellAttributes.ExceptionStatus), table.ToString());
-            CountFixture countFixture = (CountFixture)fixture.GetTargetObject();
-            int actualCount = ((CountFixture)countFixture).Counter;
+            Assert.AreEqual(0, fixture.TestStatus.Counts.GetCount(CellAttributes.ExceptionStatus), table.ToString());
+            var countFixture = (CountFixture)fixture.GetTargetObject();
+            int actualCount = countFixture.Counter;
             Assert.AreEqual(6, actualCount);
-            Assert.AreEqual(4, fixture.TestStatus.GetCount(CellAttributes.RightStatus));
+            Assert.AreEqual(4, fixture.TestStatus.Counts.GetCount(CellAttributes.RightStatus));
         }
 
         [Test]
         public void TestCheckOnTimedActionFixture()
         {
             table = new Parse(BuildTable("TimedActionFixture"));
-            ActionFixture fixture = new ActionFixture{ Processor = new Service.Service() };
+            var fixture = new ActionFixture{ Processor = new Service.Service() };
             fixture.DoTable(table);
-            Assert.AreEqual(0, fixture.TestStatus.GetCount(CellAttributes.ExceptionStatus), table.ToString());
-            CountFixture countFixture = (CountFixture)fixture.GetTargetObject();
-            int actualCount = ((CountFixture)countFixture).Counter;
+            Assert.AreEqual(0, fixture.TestStatus.Counts.GetCount(CellAttributes.ExceptionStatus), table.ToString());
+            var countFixture = (CountFixture)fixture.GetTargetObject();
+            int actualCount = countFixture.Counter;
             Assert.AreEqual(6, actualCount);
-            Assert.AreEqual(4, countFixture.TestStatus.GetCount(CellAttributes.RightStatus));
+            Assert.AreEqual(4, countFixture.TestStatus.Counts.GetCount(CellAttributes.RightStatus));
         }
     }
 }

@@ -17,7 +17,7 @@ namespace fit.Test.NUnit
 		private string table;
 	    private StoryTest myStoryTest;
 	    private Parse finishedTable;
-	    private TestStatus resultStatus;
+	    private TestCounts resultCounts;
 
 		[SetUp]
 		public void SetUp()
@@ -39,9 +39,9 @@ namespace fit.Test.NUnit
 			ExampleTableFixture.ResetStatics();
 		}
 
-		private void SimpleWriter(Tree<Cell> theTables, TestStatus status) {
+		private void SimpleWriter(Tree<Cell> theTables, TestCounts counts) {
             finishedTable = (Parse) theTables.Value;
-		    resultStatus = status;
+		    resultCounts = counts;
 		}
 
 		[Test]
@@ -77,14 +77,14 @@ namespace fit.Test.NUnit
 		[Test]
 		public void TestRight()
 		{
-			Assert.AreEqual(1, resultStatus.GetCount(CellAttributes.RightStatus));
+			Assert.AreEqual(1, resultCounts.GetCount(CellAttributes.RightStatus));
             Assert.AreEqual(CellAttributes.RightStatus, finishedTable.At(0,1,0).GetAttribute(CellAttributes.StatusKey));
 		}
 
 		[Test]
 		public void TestWrong()
 		{
-			Assert.AreEqual(2, resultStatus.GetCount(CellAttributes.WrongStatus));
+			Assert.AreEqual(2, resultCounts.GetCount(CellAttributes.WrongStatus));
             Assert.AreEqual(CellAttributes.WrongStatus, finishedTable.At(0,1,1).GetAttribute(CellAttributes.StatusKey));
             Assert.AreEqual(CellAttributes.WrongStatus, finishedTable.At(0,1,2).GetAttribute(CellAttributes.StatusKey));
 			Assert.IsTrue(finishedTable.At(0,1,2).Body.IndexOf("actual") > 0);
@@ -93,7 +93,7 @@ namespace fit.Test.NUnit
 		[Test]
 		public void TestIgnore()
 		{
-			Assert.AreEqual(1, resultStatus.GetCount(CellAttributes.IgnoreStatus));
+			Assert.AreEqual(1, resultCounts.GetCount(CellAttributes.IgnoreStatus));
             Assert.AreEqual(CellAttributes.IgnoreStatus, finishedTable.At(0,1,3).GetAttribute(CellAttributes.StatusKey));
 		}
 

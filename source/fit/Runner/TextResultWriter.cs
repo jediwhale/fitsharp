@@ -28,10 +28,10 @@ namespace fitnesse.fitserver
 
         public void WritePageResult(PageResult results)
         {
-            _writer.Write(Protocol.FormatDocument(string.Format("{0}\n{1}\n{2}\n", results.Title, results.TestStatus.CountDescription, results.Content)));
+            _writer.Write(Protocol.FormatDocument(string.Format("{0}\n{1}\n{2}\n", results.Title, results.TestCounts.Description, results.Content)));
         }
 
-        public void WriteFinalCount(TestStatus summary)
+        public void WriteFinalCount(TestCounts summary)
         {
             _writer.Write(Protocol.FormatCounts(summary));
         }

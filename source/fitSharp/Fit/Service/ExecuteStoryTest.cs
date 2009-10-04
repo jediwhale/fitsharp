@@ -11,7 +11,7 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Service
 {
-    public delegate void WriteTestResult(Tree<Cell> tables, TestStatus status);
+    public delegate void WriteTestResult(Tree<Cell> tables, TestCounts counts);
 
     public class ExecuteStoryTest {
         private readonly CellProcessor processor;
@@ -32,7 +32,7 @@ namespace fitSharp.Fit.Service
             }
             catch (System.Exception e) {
                 processor.TestStatus.MarkException(heading, e);
-                writer(tables.Branches[0], processor.TestStatus);
+                writer(tables.Branches[0], processor.TestStatus.Counts);
                 return;
             }
             InterpretTables(tables);
@@ -73,7 +73,7 @@ namespace fitSharp.Fit.Service
             catch (System.Exception e) {
                 processor.TestStatus.MarkException(theTables.Branches[0].Branches[0].Branches[0].Value, e);
             }
-			writer(theTables.Branches[0], processor.TestStatus);
+			writer(theTables.Branches[0], processor.TestStatus.Counts);
 		}
 
         public static void DoTable(Tree<Cell> table, Interpreter activeFixture, bool inFlow) {

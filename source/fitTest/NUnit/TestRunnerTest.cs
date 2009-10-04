@@ -58,7 +58,7 @@ namespace fit.Test.NUnit {
             bool result = runner.ParseArgs(configuration, new string[] {});
             Assert.IsFalse(result);
 
-            result = runner.ParseArgs(configuration, new string[] {"localhost", "8081", "SomeTestPage"});
+            result = runner.ParseArgs(configuration, new[] {"localhost", "8081", "SomeTestPage"});
             Assert.IsTrue(result);
             Assert.AreEqual("localhost", runner.host);
             Assert.AreEqual(8081, runner.port);
@@ -69,7 +69,7 @@ namespace fit.Test.NUnit {
         [Test]
         public void ExtraAssemblyArgs()
         {
-            bool result = runner.ParseArgs(configuration, new string[] {"host", "80", "SomePage", "fit.dll", "fit.config", "testTarget.dll"});
+            bool result = runner.ParseArgs(configuration, new[] {"host", "80", "SomePage", "fit.dll", "fit.config", "testTarget.dll"});
             Assert.IsTrue(result);
             Assert.AreEqual("host", runner.host);
             Assert.AreEqual(80, runner.port);
@@ -84,7 +84,7 @@ namespace fit.Test.NUnit {
         [Test]
         public void TestParseArgsWithOptions()
         {
-            bool result = runner.ParseArgs(configuration, new string[] {"-v", "-debug", "-nopaths", "-suiteFilter", "myfilter", 
+            bool result = runner.ParseArgs(configuration, new[] {"-v", "-debug", "-nopaths", "-suiteFilter", "myfilter", 
                 "-results", "stdout", "-format", "text", "localhost", "8081", "SomeTestPage"});
             Assert.IsTrue(runner.verbose);
             Assert.IsTrue(runner.debug);
@@ -101,7 +101,7 @@ namespace fit.Test.NUnit {
         [Test]
         public void TestParseArgsWithResultOption_StandardOut()
         {
-            bool result = runner.ParseArgs(configuration, new string[] {"-results", "stdout", "-format", "text", "localhost", "8081", "SomeTestPage"});
+            bool result = runner.ParseArgs(configuration, new[] {"-results", "stdout", "-format", "text", "localhost", "8081", "SomeTestPage"});
             Assert.IsFalse(runner.verbose);
             Assert.IsFalse(runner.debug);
             Assert.IsTrue(runner.usingDownloadedPaths);
@@ -115,7 +115,7 @@ namespace fit.Test.NUnit {
         [Test]
         public void TestParseArgsWithResultOption_Filename()
         {
-            bool result = runner.ParseArgs(configuration, new string[] { "-results", TEST_FILE_NAME, "-format", "xml", "localhost", "8081", "SomeTestPage" });
+            bool result = runner.ParseArgs(configuration, new[] { "-results", TEST_FILE_NAME, "-format", "xml", "localhost", "8081", "SomeTestPage" });
             Assert.IsFalse(runner.verbose);
             Assert.IsFalse(runner.debug);
             Assert.IsTrue(runner.usingDownloadedPaths);
@@ -129,16 +129,16 @@ namespace fit.Test.NUnit {
         [Test]
         public void TestVerbose()
         {
-            StringWriter output = new StringWriter();
+            var output = new StringWriter();
             runner.verbose = false;
             runner.output = output;
 
-            runner.HandleFinalCount(TestUtils.MakeTestStatus());
+            runner.HandleFinalCount(TestUtils.MakeTestCounts());
             Assert.AreEqual("", output.ToString());
 			
             runner.verbose = true;
-            runner.HandleFinalCount(TestUtils.MakeTestStatus());
-            string expected = "\r\n" +
+            runner.HandleFinalCount(TestUtils.MakeTestCounts());
+            var expected = "\r\n" +
                               "Test Pages: 0 right, 0 wrong, 0 ignored, 0 exceptions\r\n" +
                               "Assertions: 1 right, 2 wrong, 3 ignored, 4 exceptions\r\n";
             Assert.AreEqual(expected, output.ToString());

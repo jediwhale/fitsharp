@@ -9,6 +9,6 @@ namespace fitSharp.Fit.Service {
     public interface ResultWriter {
         void Close();
         void WritePageResult(PageResult results);
-        void WriteFinalCount(TestStatus summary);
+        void WriteFinalCount(TestCounts summary);
     }
 }

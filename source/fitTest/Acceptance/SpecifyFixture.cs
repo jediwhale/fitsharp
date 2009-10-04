@@ -65,7 +65,7 @@ namespace fit.Test.Acceptance {
             return expectedCell;
         }
 
-        private void SpecifyWriter(Tree<Cell> theTables, TestStatus status) {
+        private void SpecifyWriter(Tree<Cell> theTables, TestCounts counts) {
             var tables = (Parse) theTables.Value;
             for (Parse table = tables; table != null; table = table.More) {
                 Parse newTable = table.Copy();

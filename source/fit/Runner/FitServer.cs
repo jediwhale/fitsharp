@@ -20,7 +20,7 @@ namespace fitnesse.fitserver
 {
 	public class FitServer: Runnable
 	{
-	    public TestStatus Status { get; private set; }
+	    public TestCounts Counts { get; private set; }
 
 		private Socket clientSocket;
 	    private SocketStream socketStream;
@@ -46,7 +46,7 @@ namespace fitnesse.fitserver
 		}
 
 		public FitServer() {
-		    Status = new TestStatus();
+		    Counts = new TestCounts();
 		}
 
 	    public FitServer(Configuration configuration, string host, int port, bool verbose) : this()
@@ -141,7 +141,7 @@ namespace fitnesse.fitserver
 		public void Exit()
 		{
 			WriteLogMessage("exiting...");
-			WriteLogMessage("End results: " + Status.CountDescription);
+			WriteLogMessage("End results: " + Counts.Description);
 		}
 
 		private void EstablishConnection()
@@ -194,7 +194,7 @@ namespace fitnesse.fitserver
 
 		public int ExitCode()
 		{
-			return Status.FailCount;
+			return Counts.FailCount;
 		}
 
 		private void ProcessTestDocument(string document, WriteTestResult writer)
@@ -215,7 +215,7 @@ namespace fitnesse.fitserver
 			    var testStatus = new TestStatus();
 				var parse = new Parse("div", "Unable to parse input. Input ignored.", null, null);
 			    testStatus.MarkException(parse, e);
-                writer(parse, testStatus);
+                writer(parse, testStatus.Counts);
 			}
 		}
 
@@ -285,7 +285,7 @@ namespace fitnesse.fitserver
 			return ReadFixedLengthString(reader, contentLength);
 		}
 
-	    private void WriteFitProtocol(Tree<Cell> theTables, TestStatus status)
+	    private void WriteFitProtocol(Tree<Cell> theTables, TestCounts counts)
 	    {
             var tables = (Parse) theTables.Value;
 		    string testResultDocument = TablesToString(tables);
@@ -293,10 +293,10 @@ namespace fitnesse.fitserver
 		    Transmit(Protocol.FormatDocument(testResultDocument));
 
 		    WriteLogMessage("\tTest Document finished");
-		    Transmit(Protocol.FormatCounts(status));
+		    Transmit(Protocol.FormatCounts(counts));
 
-            Status.TallyCounts(status);
-			WriteLogMessage("\tresults: " + status.CountDescription);
+            Counts.TallyCounts(counts);
+			WriteLogMessage("\tresults: " + counts.Description);
         }
 	}
 }

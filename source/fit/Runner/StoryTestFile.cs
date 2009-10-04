@@ -18,7 +18,7 @@ namespace fit.Runner {
         private readonly FolderModel myFolderModel;
         private ElapsedTime elapsedTime;
         private ResultWriter resultWriter;
-        private TestStatusHandler handler;
+        private TestCountsHandler handler;
         private string myContent;
         private Parse myTables;
 
@@ -31,7 +31,7 @@ namespace fit.Runner {
 
         public string Name { get { return Path.GetFileName(myPath.Name); }}
 
-        public void ExecuteStoryPage(ResultWriter resultWriter, TestStatusHandler handler) {
+        public void ExecuteStoryPage(ResultWriter resultWriter, TestCountsHandler handler) {
             elapsedTime = new ElapsedTime();
             this.resultWriter = resultWriter;
             this.handler = handler;
@@ -44,13 +44,13 @@ namespace fit.Runner {
                 return;
             }
             CopyFile();
-            handler(new TestStatus());
+            handler(new TestCounts());
         }
 
-        private void WriteFile(Tree<Cell> theTables, TestStatus status) {
-            WriteResult(theTables, status, elapsedTime);
-            resultWriter.WritePageResult(new PageResult(myPath.Name, theTables.ToString(), status)); // todo: use the processor parse result not tostring
-            handler(status);
+        private void WriteFile(Tree<Cell> theTables, TestCounts counts) {
+            WriteResult(theTables, counts, elapsedTime);
+            resultWriter.WritePageResult(new PageResult(myPath.Name, theTables.ToString(), counts)); // todo: use the processor parse result not tostring
+            handler(counts);
         }
 
         public bool IsTest {
@@ -71,13 +71,13 @@ namespace fit.Runner {
             myFolderModel.CopyFile(myPath.Name, OutputPath);
         }
 
-        private void WriteResult(Tree<Cell> theTables, TestStatus status, ElapsedTime elapsedTime) {
+        private void WriteResult(Tree<Cell> theTables, TestCounts counts, ElapsedTime elapsedTime) {
             string outputFile = OutputPath;
             var output = new StringWriter();
             output.Write(configuration.GetItem<Service.Service>().Parse(typeof(StoryTestString), TypedValue.Void, theTables).ValueString);
             output.Close();
             myFolderModel.MakeFile(outputFile, output.ToString());
-            myFolder.ListFile(outputFile, status, elapsedTime);
+            myFolder.ListFile(outputFile, counts, elapsedTime);
         }
 
         private Parse Tables {

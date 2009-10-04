@@ -53,6 +53,7 @@
     <Compile Include="Fit\Model\PageResult.cs" />
     <Compile Include="Fit\Model\StoryTestString.cs" />
     <Compile Include="Fit\Model\TargetObjectProvider.cs" />
+    <Compile Include="Fit\Model\TestCounts.cs" />
     <Compile Include="Fit\Model\TestStatus.cs" />
     <Compile Include="Fit\Operators\CompareEmpty.cs" />
     <Compile Include="Fit\Operators\CompareFail.cs" />

@@ -48,15 +48,15 @@ namespace fitSharp.Fit.Service {
             writer.WriteStartElement("content");
             writer.WriteCData(results.Content);
             writer.WriteEndElement();
-            WriteCounts(results.TestStatus, "counts");
+            WriteCounts(results.TestCounts, "counts");
             writer.WriteEndElement();
         }
 
-        public void WriteFinalCount(TestStatus summary) {
+        public void WriteFinalCount(TestCounts summary) {
             WriteCounts(summary, "finalCounts");
         }
 
-        private void WriteCounts(TestStatus summary, string tag) {
+        private void WriteCounts(TestCounts summary, string tag) {
             writer.WriteStartElement(tag);
             writer.WriteElementString("right", summary.GetCount(CellAttributes.RightStatus).ToString());
             writer.WriteElementString("wrong", summary.GetCount(CellAttributes.WrongStatus).ToString());

@@ -42,8 +42,8 @@ namespace fit.Test.NUnit {
         [Test]
         public void TestWriteResults()
         {
-            string pageName = "Test Page";
-            var pageResult = new PageResult(pageName, "<table border=\"1\" cellspacing=\"0\">\r\n<tr><td>Text</td>\r\n</tr>\r\n</table>", TestUtils.MakeTestStatus());
+            const string pageName = "Test Page";
+            var pageResult = new PageResult(pageName, "<table border=\"1\" cellspacing=\"0\">\r\n<tr><td>Text</td>\r\n</tr>\r\n</table>", TestUtils.MakeTestCounts());
             _strategy = new XmlResultWriter(TEST_RESULT_FILE_NAME, _folderModel);
             _strategy.WritePageResult(pageResult);
             _strategy.Close();
@@ -56,7 +56,7 @@ namespace fit.Test.NUnit {
         public void TestWriteFinalCounts()
         {
             _strategy = new XmlResultWriter(TEST_RESULT_FILE_NAME, _folderModel);
-            _strategy.WriteFinalCount(TestUtils.MakeTestStatus());
+            _strategy.WriteFinalCount(TestUtils.MakeTestCounts());
             _strategy.Close();
             Assert.AreEqual(BuildFinalCountsString(1, 2, 3, 4),
                             _folderModel.FileContent(TEST_RESULT_FILE_NAME));
@@ -64,7 +64,7 @@ namespace fit.Test.NUnit {
 
         private static string BuildPageResultString(string pageName, string content, int right, int wrong, int ignores, int exceptions)
         {
-            StringBuilder builder = new StringBuilder();
+            var builder = new StringBuilder();
             builder.AppendLine("<?xml version=\"1.0\" encoding=\"utf-16\"?>");
             builder.AppendLine("<testResults>");
             builder.AppendLine("  <result>");
@@ -83,7 +83,7 @@ namespace fit.Test.NUnit {
 
         private static string BuildFinalCountsString(int right, int wrong, int ignores, int exceptions)
         {
-            StringBuilder builder = new StringBuilder();
+            var builder = new StringBuilder();
             builder.AppendLine("<?xml version=\"1.0\" encoding=\"utf-16\"?>");
             builder.AppendLine("<testResults>");
             builder.AppendLine("  <finalCounts>");

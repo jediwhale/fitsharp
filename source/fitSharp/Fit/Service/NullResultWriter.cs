@@ -9,6 +9,6 @@ namespace fitSharp.Fit.Service {
     public class NullResultWriter: ResultWriter {
         public void Close() {}
         public void WritePageResult(PageResult results) {}
-        public void WriteFinalCount(TestStatus summary) {}
+        public void WriteFinalCount(TestCounts summary) {}
     }
 }
