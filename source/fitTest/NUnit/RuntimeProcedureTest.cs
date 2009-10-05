@@ -58,7 +58,7 @@ namespace fit.Test.NUnit {
 
         [Test] public void ParameterValueIsSubstituted() {
             SetupSUT(parameterProcedureHtml);
-            Assert.AreEqual(result, runtime.Invoke(target, "procedure", new CellTree("actual")));
+            Assert.AreEqual(result, runtime.Invoke(target, "procedure", new Parse("tr", "", new Parse("td", "actual", null, null), null)));
         }
 
         private void SetupSUT(string html) {

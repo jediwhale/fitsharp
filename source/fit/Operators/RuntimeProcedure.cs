@@ -22,30 +22,35 @@ namespace fit.Operators {
 
         public TypedValue Invoke(TypedValue instance, string memberName, Tree<Cell> parameters) {
             var procedure = Processor.Load(new Procedure(memberName));
-            return Invoke(procedure.Instance, instance, parameters);
+            return Invoke((Parse)procedure.Instance, instance, parameters);
         }
 
-        private TypedValue Invoke(Tree<Cell> procedure, TypedValue target, Tree<Cell> parameters) {
+        private TypedValue Invoke(Parse procedure, TypedValue target, Tree<Cell> parameterValues) {
             var doFixture = new CellTree(new CellTree("dofixture"));
             var fixture = Processor.Parse(typeof (Interpreter), target, doFixture);
 
-            var body = ((Parse)procedure).DeepCopy();
+            Parse body = DeepCopy(procedure, procedure.Parts, parameterValues);
             body.More = null;
-            foreach (Tree<Cell> leaf in body.Parts.More.Leaves()) {
-                int i = 2;
-                foreach (Tree<Cell> parameterValue in parameters.Branches) {
-                    if (body.Parts.Branches[i].Value.Text == leaf.Value.Text) {
-                        ((Parse) leaf.Value).SetOriginalBody(parameterValue.Value.Text);
-                    }
-                    i += 2;
-                }
-            }
             body.Parts = body.Parts.More;
 
             TypedValue result = Processor.Execute(fixture, new CellTree((Tree<Cell>)body));
 
             Processor.TestStatus.LastAction = Processor.Parse(typeof(StoryTestString), TypedValue.Void, body).ValueString;
             return result;
+        }
+
+        private static Parse DeepCopy(Parse source, Tree<Cell> parameterNames, Tree<Cell> parameterValues) {
+            int i = 2;
+            foreach (Tree<Cell> parameterValue in parameterValues.Branches) {
+                if (parameterNames.Branches[i].Value.Text == source.Value.Text) {
+                    return ((Parse) parameterValue).DeepCopy();
+                }
+                i += 2;
+            }
+            return new Parse(source.Tag, source.End, source.Leader, source.Body, (source.Parts == null ? null : DeepCopy(source.Parts, parameterNames, parameterValues))) {
+                Trailer = source.Trailer,
+                More = (source.More == null ? null : DeepCopy(source.More, parameterNames, parameterValues))
+            };
         }
     }
 }
