@@ -10,6 +10,7 @@ using System.IO;
 using System.Text;
 using System.Web;
 using fitSharp.Fit.Model;
+using fitSharp.Machine.Extension;
 using fitSharp.Machine.Model;
 
 namespace fit
@@ -18,7 +19,7 @@ namespace fit
 	{
 	    private readonly string tag;
 		private string body;
-	    private string originalBody;
+	    private readonly string originalBody;
 
         private CellAttributes Attributes { get; set; }
 
@@ -71,11 +72,6 @@ namespace fit
 		{
 			body = val;
 		}
-
-        public void SetOriginalBody(string value) {
-            originalBody = value;
-            body = value;
-        }
 
 		public virtual void AddToBody(string text)
 		{
@@ -325,10 +321,15 @@ namespace fit
 		}
 
         public Parse DeepCopy() {
-            return new Parse(tag, End, Leader, body, (Parts == null ? null : Parts.DeepCopy())) {
+            return DeepCopy(s => null, s => s.More, s => s.Parts);
+        }
+
+        public Parse DeepCopy(Func<Parse, Parse> substitute, Func<Parse, Parse> more, Func<Parse, Parse> parts) {
+
+            return substitute(this) ?? new Parse(tag, End, Leader, body, (parts(this) == null ? null : parts(this).DeepCopy(substitute, more, parts))) {
                 Attributes = new CellAttributes(Attributes),
                 Trailer = Trailer,
-                More = (More == null ? null : More.DeepCopy())
+                More = (more(this) == null ? null : more(this).DeepCopy(substitute, more, parts))
             };
         }
 

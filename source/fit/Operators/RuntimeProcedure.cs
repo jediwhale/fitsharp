@@ -29,9 +29,11 @@ namespace fit.Operators {
             var doFixture = new CellTree(new CellTree("dofixture"));
             var fixture = Processor.Parse(typeof (Interpreter), target, doFixture);
 
-            Parse body = DeepCopy(procedure, procedure.Parts, parameterValues);
-            body.More = null;
-            body.Parts = body.Parts.More;
+            var parameters = new Parameters(procedure.Parts, parameterValues);
+            Parse body = procedure.DeepCopy(
+                parameters.Substitute,
+                s => s == procedure ? null : s.More,
+                s => s == procedure ? s.Parts.More : s.Parts);
 
             TypedValue result = Processor.Execute(fixture, new CellTree((Tree<Cell>)body));
 
@@ -39,18 +41,25 @@ namespace fit.Operators {
             return result;
         }
 
-        private static Parse DeepCopy(Parse source, Tree<Cell> parameterNames, Tree<Cell> parameterValues) {
-            int i = 2;
-            foreach (Tree<Cell> parameterValue in parameterValues.Branches) {
-                if (parameterNames.Branches[i].Value.Text == source.Value.Text) {
-                    return ((Parse) parameterValue).DeepCopy();
-                }
-                i += 2;
+        private class Parameters {
+            private readonly Tree<Cell> names;
+            private readonly Tree<Cell> values;
+           
+            public Parameters(Tree<Cell> names, Tree<Cell> values) {
+                this.names = names;
+                this.values = values;
             }
-            return new Parse(source.Tag, source.End, source.Leader, source.Body, (source.Parts == null ? null : DeepCopy(source.Parts, parameterNames, parameterValues))) {
-                Trailer = source.Trailer,
-                More = (source.More == null ? null : DeepCopy(source.More, parameterNames, parameterValues))
-            };
+
+            public Parse Substitute(Parse source) {
+                int i = 2;
+                foreach (Tree<Cell> parameterValue in values.Branches) {
+                    if (names.Branches[i].Value.Text == source.Value.Text) {
+                        return ((Parse) parameterValue).DeepCopy();
+                    }
+                    i += 2;
+                }
+                return null;
+            }
         }
     }
 }
