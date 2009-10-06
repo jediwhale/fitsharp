@@ -3,6 +3,7 @@
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
+using System.Collections.Generic;
 using System.Text;
 using fitSharp.Machine.Extension;
 using fitSharp.Machine.Model;
@@ -19,6 +20,10 @@ namespace fitSharp.Fit.Model {
 
         public CellTree(params Tree<Cell>[] lists) {
             foreach (var list in lists) AddBranch(list);
+        }
+
+        public CellTree(IEnumerable<Tree<Cell>> trees) {
+            foreach (var tree in trees) AddBranch(tree);
         }
 
         public override string ToString() {

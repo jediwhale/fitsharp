@@ -337,6 +337,18 @@ namespace fit
             return new Parse(tag, End, Leader, body, Parts) {Trailer = Trailer, Attributes = new CellAttributes(Attributes)};
         }
 
+        public IEnumerable<Parse> Siblings {
+            get {
+                for (var sibling = this; sibling != null; sibling = sibling.More) yield return sibling;
+            }
+        }
+
+        public IEnumerable<Tree<Cell>> SiblingTrees {
+            get {
+                for (var sibling = this; sibling != null; sibling = sibling.More) yield return sibling;
+            }
+        }
+
 	    public Cell Value { get { return this; } }
 	    public bool IsLeaf { get { return Parts == null; } }
 	    public ReadList<Tree<Cell>> Branches { get { return new ParseList(this); } }

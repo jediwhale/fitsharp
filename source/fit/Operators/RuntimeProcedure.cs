@@ -30,14 +30,16 @@ namespace fit.Operators {
             var fixture = Processor.Parse(typeof (Interpreter), target, doFixture);
 
             var parameters = new Parameters(procedure.Parts, parameterValues);
-            Parse body = procedure.DeepCopy(
-                parameters.Substitute,
-                s => s == procedure ? null : s.More,
-                s => s == procedure ? s.Parts.More : s.Parts);
+            var body = procedure.Parts.More.Parts.Parts != null
+                ? new CellTree(procedure.Parts.More.Parts.Parts.DeepCopy(parameters.Substitute, s => s.More, s => s.Parts).SiblingTrees)
+                : new CellTree((Tree<Cell>)procedure.DeepCopy(
+                    parameters.Substitute,
+                    s => s == procedure ? null : s.More,
+                    s => s == procedure ? s.Parts.More : s.Parts));
 
-            TypedValue result = Processor.Execute(fixture, new CellTree((Tree<Cell>)body));
+            TypedValue result = Processor.Execute(fixture, body);
 
-            Processor.TestStatus.LastAction = Processor.Parse(typeof(StoryTestString), TypedValue.Void, body).ValueString;
+            Processor.TestStatus.LastAction = Processor.Parse(typeof(StoryTestString), TypedValue.Void, body.Branches[0]).ValueString;
             return result;
         }
 

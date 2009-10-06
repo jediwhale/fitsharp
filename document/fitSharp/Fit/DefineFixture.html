@@ -69,6 +69,58 @@ to be bound by the terms of this license. You must not remove this notice, or an
 </table>
 </td></tr>
 </table>
+<br>
+A multi-table procedure can be defined as nested tables.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>check</td><td>test result</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>define</td><td>testname</td><td>newname</td></tr>
+<tr><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>set</td><td>name</td><td>newname</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>check</td><td>name</td><td>newname</td></tr>
+</table>
+</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>do</td></tr>
+<tr><td>with</td><td>new</td><td>sample domain</td></tr>
+<tr><td>testname</td><td>Bob</td></tr>
+</table>
+</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>define</td><td>testname</td><td>newname</td></tr>
+<tr><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>set</td><td>name</td><td>newname</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>check</td><td>name</td><td>newname</td></tr>
+
+</table>
+</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>do</td></tr>
+<tr><td>with</td><td>new</td><td>sample domain</td></tr>
+<tr><td class="pass">testname<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>set</td><td>name</td><td>Bob</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>check</td><td>name</td><td class="pass">Bob</td></tr>
+</table></div></td><td>Bob</td></tr>
+</table>
+</td></tr>
+</table>
 </div>
 <div style="width:100%;text-align:right">
 <span class="footer">&copy; Copyright <a href="http://www.syterra.com">Syterra Software Inc.</a> All rights reserved.</span>
