@@ -17,15 +17,24 @@ to be bound by the terms of this license. You must not remove this notice, or an
 <div class="content">The Define fixture lets you create reusable test procedures that can be run by other fixtures.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>do</td></tr>
-</table>
-<br>
+<tr><td>define</td><td>for storytest</td><td>input</td><td>result is</td><td>output</td></tr>
+<tr><td><br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>with</td><td>type</td><td>story test</td></tr>
 </table>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>check</td><td>test result</td><td><br>
+<tr><td>check</td><td>test result</td><td>input</td><td>output</td></tr>
+</table>
+</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>do</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>for story test</td><td><br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>define</td><td>changename</td><td>newname</td></tr>
 <tr><td>set</td><td>name</td><td>newname</td></tr>
@@ -42,7 +51,7 @@ to be bound by the terms of this license. You must not remove this notice, or an
 <tr><td>changename</td><td>Bob</td></tr>
 <tr><td>checkname</td></tr>
 </table>
-</td><td><br>
+</td><td>result is</td><td><br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>define</td><td>changename</td><td>newname</td></tr>
 <tr><td>set</td><td>name</td><td>newname</td></tr>
@@ -73,7 +82,7 @@ to be bound by the terms of this license. You must not remove this notice, or an
 A multi-table procedure can be defined as nested tables.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>check</td><td>test result</td><td><br>
+<tr><td>for story test</td><td><br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>define</td><td>testname</td><td>newname</td></tr>
 <tr><td><br>
@@ -92,7 +101,7 @@ A multi-table procedure can be defined as nested tables.<br>
 <tr><td>with</td><td>new</td><td>sample domain</td></tr>
 <tr><td>testname</td><td>Bob</td></tr>
 </table>
-</td><td><br>
+</td><td>result is</td><td><br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>define</td><td>testname</td><td>newname</td></tr>
 <tr><td><br>
@@ -120,6 +129,39 @@ A multi-table procedure can be defined as nested tables.<br>
 </table></div></td><td>Bob</td></tr>
 </table>
 </td></tr>
+</table>
+<br>
+The return keyword returns a value from the procedure.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>for storytest</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>define</td><td>changename</td><td>newname</td></tr>
+<tr><td>set</td><td>name</td><td>newname</td></tr>
+<tr><td>return</td><td>name</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>do</td></tr>
+<tr><td>with</td><td>new</td><td>sampledomain</td></tr>
+<tr><td>show</td><td>changename</td><td>Bob</td></tr>
+</table>
+</td><td>result is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+
+<tr><td>define</td><td>changename</td><td>newname</td></tr>
+<tr><td>set</td><td>name</td><td>newname</td></tr>
+<tr><td>return</td><td>name</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>do</td></tr>
+<tr><td>with</td><td>new</td><td>sampledomain</td></tr>
+
+<tr><td>show</td><td>changename</td><td>Bob</td>
+<td><span class="fit_grey">Bob</span></td></tr>
+</table></td></tr>
+</table></td></tr>
 </table>
 </div>
 <div style="width:100%;text-align:right">

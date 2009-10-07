@@ -37,10 +37,10 @@ namespace fit.Operators {
                     s => s == procedure ? null : s.More,
                     s => s == procedure ? s.Parts.More : s.Parts));
 
-            TypedValue result = Processor.Execute(fixture, body);
-
+            Processor.TestStatus.PushReturn(TypedValue.Void);
+            Processor.Execute(fixture, body);
             Processor.TestStatus.LastAction = Processor.Parse(typeof(StoryTestString), TypedValue.Void, body.Branches[0]).ValueString;
-            return result;
+            return Processor.TestStatus.PopReturn();
         }
 
         private class Parameters {
@@ -56,7 +56,7 @@ namespace fit.Operators {
                 int i = 2;
                 foreach (Tree<Cell> parameterValue in values.Branches) {
                     if (names.Branches[i].Value.Text == source.Value.Text) {
-                        return ((Parse) parameterValue).DeepCopy();
+                        return ((Parse) parameterValue).DeepCopy(s => null, s=> s == parameterValue ? null : s.More, s => s.Parts);
                     }
                     i += 2;
                 }

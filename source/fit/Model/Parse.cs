@@ -325,11 +325,15 @@ namespace fit
         }
 
         public Parse DeepCopy(Func<Parse, Parse> substitute, Func<Parse, Parse> more, Func<Parse, Parse> parts) {
-
-            return substitute(this) ?? new Parse(tag, End, Leader, body, (parts(this) == null ? null : parts(this).DeepCopy(substitute, more, parts))) {
+            Parse sub = substitute(this);
+            if (sub != null) {
+                sub.More = more(this) == null ? null : more(this).DeepCopy(substitute, more, parts);
+                return sub;
+            }
+            return new Parse(tag, End, Leader, body, (parts(this) == null ? null : parts(this).DeepCopy(substitute, more, parts))) {
                 Attributes = new CellAttributes(Attributes),
                 Trailer = Trailer,
-                More = (more(this) == null ? null : more(this).DeepCopy(substitute, more, parts))
+                More = more(this) == null ? null : more(this).DeepCopy(substitute, more, parts)
             };
         }
 

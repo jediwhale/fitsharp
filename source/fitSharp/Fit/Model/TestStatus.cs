@@ -4,7 +4,9 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System.Collections;
+using System.Collections.Generic;
 using fitSharp.Fit.Exception;
+using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Model {
 
@@ -15,10 +17,21 @@ namespace fitSharp.Fit.Model {
         public string LastAction { get; set; }
         public Hashtable Summary { get; private set; }
         public TestCounts Counts { get; private set; }
+
+        private readonly Stack<TypedValue> returnValues = new Stack<TypedValue>();
         
         public TestStatus() {
             Summary = new Hashtable();
             Counts = new TestCounts();
+        }
+
+        public TypedValue PopReturn() { return returnValues.Pop(); }
+        public void PushReturn(TypedValue value) { returnValues.Push(value); }
+
+        public void SetReturn(TypedValue value) {
+            if (returnValues.Count == 0) return;
+            PopReturn();
+            PushReturn(value);
         }
 
         public void MarkRight(Cell cell) {

@@ -15,6 +15,8 @@ namespace fit.Test.NUnit {
         private const string simpleProcedureHtml = "<table><tr><td>define</td><td>procedure</td></tr><tr><td>verb</td></tr></table>";
         private const string parameterProcedureHtml =
             "<table><tr><td>define</td><td>procedure</td><td>parm</td></tr><tr><td>verb</td><td>parm</td></tr></table>";
+        private const string twoParameterProcedureHtml =
+            "<table><tr><td>define</td><td>procedure</td><td>parm1</td><td></td><td>parm2</td></tr><tr><td>verb</td><td>parm1</td><td>parm2</td></tr></table>";
 
         private Mock<CellProcessor> processor;
         private RuntimeProcedure runtime;
@@ -61,6 +63,13 @@ namespace fit.Test.NUnit {
             Assert.AreEqual(result, runtime.Invoke(target, "procedure", new Parse("tr", "", new Parse("td", "actual", null, null), null)));
         }
 
+        [Test] public void TwoParameterValuesAreSubstituted() {
+            SetupSUT(twoParameterProcedureHtml);
+            Assert.AreEqual(result, runtime.Invoke(target, "procedure", new Parse("tr", "",
+                new Parse("td", "actual1", null, new Parse("td", "actual2", null, null)),
+                null)));
+        }
+
         private void SetupSUT(string html) {
             procedure = new Procedure("procedure", HtmlParser.Instance.Parse(html));
 
@@ -84,7 +93,9 @@ namespace fit.Test.NUnit {
             processor.Setup(p => p.Execute(fixture, It.Is<Tree<Cell>>(t => IsTablesWithVerb(t))))
                 .Returns((TypedValue f, Tree<Cell> t) => {
                     t.Branches[0].Branches[0].Branches[0].Value.SetAttribute("some", "stuff");
-                    return result;
+                    testStatus.PopReturn();
+                    testStatus.PushReturn(result);
+                    return TypedValue.Void;
                 });
 
             processor.Setup(p => p.Parse(typeof (StoryTestString), It.IsAny<TypedValue>(),
@@ -102,6 +113,10 @@ namespace fit.Test.NUnit {
             if (t.Branches[0].Branches[0].Branches.Count == 2
                 && t.Branches[0].Branches[0].Branches[0].Value.Text == "verb"
                 && t.Branches[0].Branches[0].Branches[1].Value.Text == "actual") return true;
+            if (t.Branches[0].Branches[0].Branches.Count == 3
+                && t.Branches[0].Branches[0].Branches[0].Value.Text == "verb"
+                && t.Branches[0].Branches[0].Branches[1].Value.Text == "actual1"
+                && t.Branches[0].Branches[0].Branches[2].Value.Text == "actual2") return true;
             return false;
         }
 

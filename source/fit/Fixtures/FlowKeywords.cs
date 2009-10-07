@@ -47,6 +47,11 @@ namespace fit.Fixtures {
             catch (IgnoredException) {}
         }
 
+        public void Return(Parse cells) {
+            var result = fixture.ExecuteEmbeddedMethod(cells);
+            fixture.Processor.TestStatus.SetReturn(new TypedValue(result));
+        }
+
         public void Set(Parse theCells) {
             fixture.ExecuteEmbeddedMethod(theCells);
         }
