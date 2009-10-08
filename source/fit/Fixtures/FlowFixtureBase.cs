@@ -151,7 +151,7 @@ namespace fitlibrary {
             try {
                 CellRange cells = CellRange.GetMethodCellRange(theCells, 0);
                 return
-                    CellOperation.Invoke(this, new CellRange(MethodCells(cells)), new CellRange(ParameterCells(cells))).
+                    CellOperation.Invoke(this, new CellRange(MethodCells(cells)), new CellRange(ParameterCells(cells)), theCells.More).
                         Value;
             }
             catch (ParseException<Cell> e) {

@@ -7,6 +7,7 @@ using fit;
 using fit.Model;
 using fitlibrary.exception;
 using fitSharp.Fit.Model;
+using fitSharp.Fit.Service;
 using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
 
@@ -54,7 +55,7 @@ namespace fitlibrary {
 	                }
 	            }
 	            catch (ParseException<Cell> e) {
-	                TestStatus.MarkException((Parse)e.Subject, e.InnerException);
+	                TestStatus.MarkException(e.Subject, e.InnerException);
 	            }
 	        }
 	    }

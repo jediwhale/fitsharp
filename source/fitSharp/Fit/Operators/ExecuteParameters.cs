@@ -35,13 +35,6 @@ namespace fitSharp.Fit.Operators {
                 .AddBranch(member);
         }
 
-        public static Tree<Cell> MakeMemberParameters(Tree<Cell> member, Tree<Cell> parameters) {
-            return new TreeList<Cell>()
-                .AddBranch(null)
-                .AddBranch(member)
-                .AddBranch(parameters);
-        }
-
         public ExecuteParameters(Tree<Cell> tree) {
             this.tree = tree;
         }

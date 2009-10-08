@@ -6,6 +6,7 @@
 using fit.Model;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
+using fitSharp.Fit.Service;
 using NUnit.Framework;
 
 namespace fit.Test.NUnit {

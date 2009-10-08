@@ -14,53 +14,44 @@ to be bound by the terms of this license. You must not remove this notice, or an
 <body>
 <div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
 <div class="pagename">Define Fixture</div>
-<div class="content">The Define fixture lets you create reusable test procedures that can be run by other fixtures.<br>
-<br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>define</td><td>for storytest</td><td>input</td><td>result is</td><td>output</td></tr>
-<tr><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>with</td><td>type</td><td>story test</td></tr>
-</table>
-<br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>check</td><td>test result</td><td>input</td><td>output</td></tr>
-</table>
-</td></tr>
-</table>
+<div class="content">The Define fixture lets us create reusable test procedures that can be run by other fixtures.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>do</td></tr>
 </table>
 <br>
+We declare the procedure in the first row of the Define table and write the procedure body as the rest of the table. We can also declare parameters in the first row. We use the Do Fixture style, where alternating cells make up the procedure name and the parameter names.<br>
+<br>
+We invoke the procedure by using the procedure name in any place where we'd use a fixture or domain method name. The test results will include an expandable section showing the details of the procedure execution.<br>
+<br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>for story test</td><td><br>
+<tr><td>when test is</td><td><br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>define</td><td>changename</td><td>newname</td></tr>
-<tr><td>set</td><td>name</td><td>newname</td></tr>
+<tr><td>define</td><td>changename</td></tr>
+<tr><td>set</td><td>name</td><td>Bob</td></tr>
 </table>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>define</td><td>checkname</td></tr>
-<tr><td>check</td><td>name</td><td>Bob</td></tr>
+<tr><td>define</td><td>check field</td><td>fieldname</td><td>is</td><td>expected</td></tr>
+<tr><td>check</td><td>fieldname</td><td>expected</td></tr>
 </table>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>do</td></tr>
 <tr><td>with</td><td>new</td><td>sample domain</td></tr>
-<tr><td>changename</td><td>Bob</td></tr>
-<tr><td>checkname</td></tr>
+<tr><td>changename</td></tr>
+<tr><td>check field</td><td>name</td><td>is</td><td>Bob</td></tr>
 </table>
-</td><td>result is</td><td><br>
+</td><td>then result is</td><td><br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>define</td><td>changename</td><td>newname</td></tr>
-<tr><td>set</td><td>name</td><td>newname</td></tr>
+<tr><td>define</td><td>changename</td></tr>
+<tr><td>set</td><td>name</td><td>Bob</td></tr>
 </table>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
 
-<tr><td>define</td><td>checkname</td></tr>
-<tr><td>check</td><td>name</td><td>Bob</td></tr>
+<tr><td>define</td><td>check field</td><td>fieldname</td><td>is</td><td>expected</td></tr>
+<tr><td>check</td><td>fieldname</td><td>expected</td></tr>
 </table>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
@@ -69,20 +60,20 @@ to be bound by the terms of this license. You must not remove this notice, or an
 <tr><td>changename<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>set</td><td>name</td><td>Bob</td></tr>
-</table></div></td><td>Bob</td></tr>
-<tr><td class="pass">checkname<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none">
+</table></div></td></tr>
+<tr><td class="pass">check field<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none">
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>check</td><td>name</td><td class="pass">Bob</td></tr>
-</table></div></td></tr>
+</table></div></td><td>name</td><td>is</td><td>Bob</td></tr>
 </table>
 </td></tr>
 </table>
 <br>
-A multi-table procedure can be defined as nested tables.<br>
+We can define a multi-table procedure by placing nested tables in the first cell of the second row of the Define table.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>for story test</td><td><br>
+<tr><td>when test is</td><td><br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>define</td><td>testname</td><td>newname</td></tr>
 <tr><td><br>
@@ -101,7 +92,7 @@ A multi-table procedure can be defined as nested tables.<br>
 <tr><td>with</td><td>new</td><td>sample domain</td></tr>
 <tr><td>testname</td><td>Bob</td></tr>
 </table>
-</td><td>result is</td><td><br>
+</td><td>then result is</td><td><br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>define</td><td>testname</td><td>newname</td></tr>
 <tr><td><br>
@@ -131,10 +122,10 @@ A multi-table procedure can be defined as nested tables.<br>
 </td></tr>
 </table>
 <br>
-The return keyword returns a value from the procedure.<br>
+To return a value from a procedure, we use the return keyword.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>for storytest</td><td><br>
+<tr><td>when test is</td><td><br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>define</td><td>changename</td><td>newname</td></tr>
 <tr><td>set</td><td>name</td><td>newname</td></tr>
@@ -146,7 +137,7 @@ The return keyword returns a value from the procedure.<br>
 <tr><td>with</td><td>new</td><td>sampledomain</td></tr>
 <tr><td>show</td><td>changename</td><td>Bob</td></tr>
 </table>
-</td><td>result is</td><td><br>
+</td><td>then result is</td><td><br>
 <table border="1" cellpadding="2" cellspacing="0">
 
 <tr><td>define</td><td>changename</td><td>newname</td></tr>
@@ -157,8 +148,11 @@ The return keyword returns a value from the procedure.<br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>do</td></tr>
 <tr><td>with</td><td>new</td><td>sampledomain</td></tr>
-
-<tr><td>show</td><td>changename</td><td>Bob</td>
+<tr><td>show</td><td>changename<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>set</td><td>name</td><td>Bob</td></tr>
+<tr><td>return</td><td>name</td></tr>
+</table></div></td><td>Bob</td>
 <td><span class="fit_grey">Bob</span></td></tr>
 </table></td></tr>
 </table></td></tr>

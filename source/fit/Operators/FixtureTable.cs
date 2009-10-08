@@ -25,7 +25,10 @@ namespace fit.Operators {
             if (theExpected == null) {
                 return FormatNodeDifference(theActual, theExpected);
             }
-            if (theActual.ToString() == theExpected.ToString()) return string.Empty;
+            var actualString = theActual.ToString().Replace("\n", string.Empty).Replace("\r", string.Empty);
+            var expectedString = theExpected.ToString().Replace("\n", string.Empty).Replace("\r", string.Empty);
+            if (actualString == expectedString) return string.Empty;
+
             var expected = new Expected(theExpected);
             if (theActual.Tag != expected.Node.Tag) {
                 return FormatNodeDifference(theActual, expected.Node);

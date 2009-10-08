@@ -9,10 +9,50 @@ using fitSharp.Fit.Operators;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Service {
-    public class CellOperation {
+    public interface CellOperation {
+        void Check(object systemUnderTest, Tree<Cell> memberName, Tree<Cell> parameters, Tree<Cell> expectedCell);
+        void Check(object systemUnderTest, TypedValue actualValue, Tree<Cell> expectedCell);
+        bool Compare(TypedValue actual, Tree<Cell> expectedCell);
+        void Create(MutableDomainAdapter adapter, string className, Tree<Cell> parameterCell);
+        void Input(object systemUnderTest, Tree<Cell> memberName, Tree<Cell> cell);
+        TypedValue TryInvoke(object target, Tree<Cell> memberName, Tree<Cell> parameters, Tree<Cell> targetCell);
+    }
+
+    public static class CellOperationExtension {
+        public static TypedValue Invoke(this CellOperation operation, object target, Tree<Cell> memberName) {
+            return operation.Invoke(target, memberName, new TreeList<Cell>());
+        }
+
+        public static TypedValue Invoke(this CellOperation operation, object target, Tree<Cell> memberName, Tree<Cell> parameters) {
+            TypedValue result = operation.TryInvoke(target, memberName, parameters);
+            result.ThrowExceptionIfNotValid();
+            return result;
+        }
+
+        public static void Check(this CellOperation operation, object systemUnderTest, Tree<Cell> memberName, Tree<Cell> expectedCell) {
+            operation.Check(systemUnderTest, memberName, new TreeList<Cell>(), expectedCell);
+        }
+
+        public static TypedValue Invoke(this CellOperation operation, object target, Tree<Cell> memberName, Tree<Cell> parameters, Tree<Cell> targetCell) {
+            TypedValue result = operation.TryInvoke(target, memberName, parameters, targetCell);
+            result.ThrowExceptionIfNotValid();
+            return result;
+        }
+
+        public static TypedValue TryInvoke(this CellOperation operation, object target, Tree<Cell> memberName) {
+            return operation.TryInvoke(target, memberName, new TreeList<Cell>());
+        }
+
+        public static TypedValue TryInvoke(this CellOperation operation, object target, Tree<Cell> memberName, Tree<Cell> parameters) {
+            return operation.TryInvoke(target, memberName, parameters, null);
+        }
+
+    }
+
+    public class CellOperationImpl: CellOperation {
         private readonly CellProcessor processor;
 
-        public CellOperation(CellProcessor processor) {
+        public CellOperationImpl(CellProcessor processor) {
             this.processor = processor;
         }
 
@@ -33,40 +73,16 @@ namespace fitSharp.Fit.Service {
                 ExecuteParameters.Make(memberName, parameters, expectedCell));
         }
 
-        public void Check(object systemUnderTest, Tree<Cell> memberName, Tree<Cell> expectedCell) {
-            Check(systemUnderTest, memberName, new TreeList<Cell>(), expectedCell);
-        }
-
         public void Check(object systemUnderTest, TypedValue actualValue, Tree<Cell> expectedCell) {
             processor.Execute(
                 ExecuteContext.Make(ExecuteCommand.Check, systemUnderTest, actualValue),
                 ExecuteParameters.Make(expectedCell));
         }
 
-        public TypedValue TryInvoke(object target, Tree<Cell> memberName) {
-            return TryInvoke(target, memberName, new TreeList<Cell>());
-        }
-
-        public TypedValue TryInvoke(object target, Tree<Cell> memberName, Tree<Cell> parameters) {
-            return processor.Execute(
-                ExecuteContext.Make(ExecuteCommand.Invoke, new TypedValue(target)), 
-                ExecuteParameters.MakeMemberParameters(memberName, parameters));
-        }
-
         public TypedValue TryInvoke(object target, Tree<Cell> memberName, Tree<Cell> parameters, Tree<Cell> targetCell) {
             return processor.Execute(
                 ExecuteContext.Make(ExecuteCommand.Invoke, new TypedValue(target)), 
-                ExecuteParameters.Make(memberName, parameters,targetCell));
-        }
-
-        public TypedValue Invoke(object target, Tree<Cell> memberName) {
-            return Invoke(target, memberName, new TreeList<Cell>());
-        }
-
-        public TypedValue Invoke(object target, Tree<Cell> memberName, Tree<Cell> parameters) {
-            TypedValue result = TryInvoke(target, memberName, parameters);
-            result.ThrowExceptionIfNotValid();
-            return result;
+                ExecuteParameters.Make(memberName, parameters, targetCell));
         }
 
         public bool Compare(TypedValue actual, Tree<Cell> expectedCell) {

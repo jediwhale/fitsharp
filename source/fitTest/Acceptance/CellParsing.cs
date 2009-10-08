@@ -46,7 +46,7 @@ namespace fit.Test.Acceptance {
         }
 
         private static bool IsEqual(Tree<Cell> cell, object value) {
-            return new CellOperation(new Service.Service()).Compare(new TypedValue(value), cell);
+            return new CellOperationImpl(new Service.Service()).Compare(new TypedValue(value), cell);
         }
 
         public bool CheckParseInteger(Parse theCells) {

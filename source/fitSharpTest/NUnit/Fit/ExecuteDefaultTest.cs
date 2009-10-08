@@ -21,7 +21,7 @@ namespace fitSharp.Test.NUnit.Fit {
         [Test] public void MethodIsInvoked() {
             SetUpSUT();
             var parameters = new ExecuteParameters(
-                ExecuteParameters.MakeMemberParameters(new StringCellLeaf("member"), new TreeList<Cell>()));
+                ExecuteParameters.Make(new StringCellLeaf("member"), new TreeList<Cell>(), null));
             Assert.AreEqual(result, execute.Execute(new ExecuteContext(ExecuteCommand.Invoke, target), parameters));
         }
 

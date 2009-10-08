@@ -26,13 +26,13 @@ namespace fit.Operators {
             var result = new TypedValue[myHeaderRow.Parts.Size];
             int column = 0;
             foreach (Parse headerCell in new CellRange(myHeaderRow.Parts).Cells) {
-                TypedValue memberResult = new CellOperation(processor).TryInvoke(theActualRow, headerCell);
+                TypedValue memberResult = new CellOperationImpl(processor).TryInvoke(theActualRow, headerCell);
                 if (memberResult.IsValid) {
                     result[column] = memberResult;
                     myColumnsUsed[column] = true;
                 }
                 else {
-                    TypedValue itemResult = new CellOperation(processor).TryInvoke(theActualRow,
+                    TypedValue itemResult = new CellOperationImpl(processor).TryInvoke(theActualRow,
                                                                  new StringCellLeaf("getitem"),
                                                                  new CellRange(headerCell, 1));
                     if (itemResult.IsValid) {

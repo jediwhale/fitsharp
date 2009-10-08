@@ -18,7 +18,7 @@ namespace fit.Test.NUnit {
         }
 
         private static bool IsEqual(Tree<Cell> cell, object value) {
-            return new CellOperation(new Service.Service()).Compare(new TypedValue(value), cell);
+            return new CellOperationImpl(new Service.Service()).Compare(new TypedValue(value), cell);
         }
 
         [Test] public void NullEqualsEmptyCell() {

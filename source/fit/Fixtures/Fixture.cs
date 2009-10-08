@@ -19,7 +19,7 @@ namespace fit
 
 	    public TestStatus TestStatus { get { return Processor.TestStatus; } }
 
-        public CellOperation CellOperation { get { return new CellOperation(Processor); }}
+        public CellOperation CellOperation { get { return new CellOperationImpl(Processor); }}
 
         public Fixture() {}
         public Fixture(object systemUnderTest): this() { mySystemUnderTest = systemUnderTest; }

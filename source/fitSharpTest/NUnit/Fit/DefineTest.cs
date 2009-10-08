@@ -13,7 +13,6 @@ using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Fit {
     [TestFixture] public class DefineTest {
-
         [Test] public void ProcedureIsSaved() {
             TestDefine(IsSinglePartName, new CellTree("define", "myprocedure"));
         }

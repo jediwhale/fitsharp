@@ -78,7 +78,7 @@ namespace fit.Operators {
                     int i = 0;
                     foreach (Parse cell in new CellRange(markRow.Parts).Cells) {
                         if (actualValues[i].Type != typeof(void) || cell.Text.Length > 0) {
-                             new CellOperation(processor).Check(systemUnderTest, actualValues[i], cell);
+                             new CellOperationImpl(processor).Check(systemUnderTest, actualValues[i], cell);
 
                         }
                         i++;
@@ -102,7 +102,7 @@ namespace fit.Operators {
             Parse expectedCell = theExpectedCells;
             foreach (TypedValue actualValue in strategy.ActualValues(processor, theActualRow)) {
                 if (actualValue.Type != typeof(void) || expectedCell.Text.Length > 0) {
-                    if (!new CellOperation(processor).Compare(actualValue, expectedCell)) return false;
+                    if (!new CellOperationImpl(processor).Compare(actualValue, expectedCell)) return false;
                 }
                 expectedCell = expectedCell.More;
             }

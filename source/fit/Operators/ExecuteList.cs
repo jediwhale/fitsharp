@@ -64,7 +64,7 @@ namespace fit.Operators {
             Parse dataRows = cell.Parts.Parts.More;
             return new TypedValue(
                 new CellRange(dataRows).Cells.Aggregate((ArrayList list, Parse row) =>
-                    list.Add(new CellOperation(Processor).Invoke(instance.Value, new CellRange(headerCells), new CellRange(row.Parts)).Value)));
+                    list.Add(new CellOperationImpl(Processor).Invoke(instance.Value, new CellRange(headerCells), new CellRange(row.Parts)).Value)));
         }
     }
 }
