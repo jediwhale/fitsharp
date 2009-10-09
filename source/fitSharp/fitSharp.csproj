@@ -130,11 +130,13 @@
     <Compile Include="Machine\Extension\Enumerable.cs" />
     <Compile Include="Machine\Model\Copyable.cs" />
     <Compile Include="Machine\Model\DomainAdapter.cs" />
+    <Compile Include="Machine\Model\EnumeratedTree.cs" />
     <Compile Include="Machine\Model\IdentifierName.cs" />
     <Compile Include="Machine\Model\KeyValueMemory.cs" />
     <Compile Include="Machine\Model\LanguageName.cs" />
     <Compile Include="Machine\Model\NameMatcher.cs" />
     <Compile Include="Machine\Model\Tree.cs" />
+    <Compile Include="Machine\Model\TreeList.cs" />
     <Compile Include="Machine\Model\TypedValue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Slim\Exception\InstructionException.cs" />

@@ -36,5 +36,30 @@ namespace fitSharp.Machine.Extension {
         public static void ForEach<T>(this IEnumerable<T> collection, Action<T> actor) {
             foreach (T unit in collection) actor(unit);
         }
+
+        public static IEnumerable<T> Alternate<T>(this IEnumerable<T> collection) {
+            bool alternate = true;
+            foreach (T unit in collection) {
+                if (alternate) yield return unit;
+                alternate = !alternate;
+            }
+        }
+
+        public static IEnumerable<T> From<T>(this IEnumerable<T> collection, int start) {
+            int count = 0;
+            foreach (T unit in collection) {
+                if (count >= start) yield return unit;
+                count++;
+            }
+        }
+
+        public static IEnumerable<T> First<T>(this IEnumerable<T> collection, int number) {
+            int count = 0;
+            foreach (T unit in collection) {
+                if (count >= number) break;
+                yield return unit;
+                count++;
+            }
+        }
     }
 }

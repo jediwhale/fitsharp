@@ -6,6 +6,7 @@
 using System.Collections.Generic;
 using fit;
 using fit.Model;
+using fitSharp.Machine.Extension;
 
 namespace fitlibrary {
 
@@ -19,18 +20,11 @@ namespace fitlibrary {
         }
 
         protected override IEnumerable<Parse> MethodCells(CellRange theCells) {
-            foreach (Parse cell in theCells.Cells) {
-                yield return cell;
-                break;
-            }
+            return theCells.Cells.First(1);
         }
 
         protected override IEnumerable<Parse>  ParameterCells(CellRange theCells) {
-            bool skip = true;
-            foreach (Parse cell in theCells.Cells) {
-                if (!skip) yield return cell;
-                skip = false;
-            }
+            return theCells.Cells.From(1);
         }
     }
 }

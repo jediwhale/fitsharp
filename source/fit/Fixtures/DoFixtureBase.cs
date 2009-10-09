@@ -6,6 +6,7 @@
 using System.Collections.Generic;
 using fit;
 using fit.Model;
+using fitSharp.Machine.Extension;
 
 namespace fitlibrary {
 
@@ -15,19 +16,11 @@ namespace fitlibrary {
         public DoFixtureBase(object theSystemUnderTest): base(theSystemUnderTest) {}
 
         protected override IEnumerable<Parse> MethodCells(CellRange theCells) {
-            bool alternate = true;
-            foreach (Parse cell in theCells.Cells) {
-                if (alternate) yield return cell;
-                alternate = !alternate;
-            }
+            return theCells.Cells.Alternate();
         }
 
         protected override IEnumerable<Parse> ParameterCells(CellRange theCells) {
-            bool alternate = false;
-            foreach (Parse cell in theCells.Cells) {
-                if (alternate) yield return cell;
-                alternate = !alternate;
-            }
+            return theCells.Cells.From(1).Alternate();
         }
     }
 }
