@@ -3,10 +3,17 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
+using System;
+
 namespace fit.Test.Double {
-    public class SampleColumnFixture: ColumnFixture {
-        public SampleColumnFixture() {
-            SetSystemUnderTest(new SampleDomain());
+    public class SampleRowDomain: RowFixture {
+        public override object[] Query() {
+            return new object[] {
+                new SampleDomain("Bob"),
+                new SampleDomain("Ted")
+            };
         }
+
+        public override Type GetTargetClass() { return typeof(SampleDomain); }
     }
 }

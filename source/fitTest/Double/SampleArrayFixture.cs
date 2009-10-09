@@ -6,7 +6,7 @@
 using System.Collections.Generic;
 using fitlibrary;
 
-namespace fit.Test.Acceptance {
+namespace fit.Test.Double {
     public class SampleArrayFixture: ArrayFixture {
         public static List<SampleItem> List;
         public SampleArrayFixture(): base(List) {}

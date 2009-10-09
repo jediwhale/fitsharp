@@ -4,10 +4,9 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using fit.exception;
-using fit.Test.Double;
 using fitSharp.Machine.Model;
 
-namespace fit.Test.Acceptance {
+namespace fit.Test.Double {
     public class SampleDomainAdapter: DomainAdapter {
         public SampleDomainAdapter() {
             myDomain = new SampleDomain();

@@ -1,0 +1,145 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- fitSharp
+Copyright © Syterra Software Inc. All rights reserved.
+The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
+to be bound by the terms of this license. You must not remove this notice, or any other, from this software. -->
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+ <link href="../fitsharp1.css" type="text/css" rel="stylesheet">
+  <link href="fit.css" type="text/css" rel="stylesheet">
+  <title>Fixtures Using Procedures</title>
+</head>
+<body>
+<div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
+<div class="pagename">Fixtures Using Procedures</div>
+<div class="content"><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>do</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>when test is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>define</td><td>bobname</td></tr>
+<tr><td>set</td><td>name</td><td>Bob</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>define</td><td>changename</td><td>newname</td></tr>
+<tr><td>set</td><td>name</td><td>newname</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>define</td><td>isnamed</td></tr>
+<tr><td>return</td><td>name</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>action</td></tr>
+<tr><td>start</td><td>sample domain</td></tr>
+<tr><td>press</td><td>bobname</td></tr>
+<tr><td>check</td><td>is named</td><td>Bob</td></tr>
+<tr><td>enter</td><td>changename</td><td>Ted</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample column</td></tr>
+<tr><td>changename</td><td>isnamed?</td></tr>
+<tr><td>Bob</td><td>Bob</td></tr>
+<tr><td>Ted</td><td>Ted</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample row domain</td></tr>
+<tr><td>is named</td></tr>
+<tr><td>Bob</td></tr>
+<tr><td>Carol</td></tr>
+</table>
+</td><td>then result is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>define</td><td>bobname</td></tr>
+<tr><td>set</td><td>name</td><td>Bob</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>define</td><td>changename</td><td>newname</td></tr>
+<tr><td>set</td><td>name</td><td>newname</td></tr>
+
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>define</td><td>isnamed</td></tr>
+<tr><td>return</td><td>name</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>action</td></tr>
+<tr><td>start</td><td>sample domain</td></tr>
+
+<tr><td>press</td><td>bobname<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>set</td><td>name</td><td>Bob</td></tr>
+</table></div></td></tr>
+<tr><td>check</td><td>is named</td><td class="pass">Bob<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none">
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>return</td><td>name</td></tr>
+
+</table></div></td></tr>
+<tr><td>enter</td><td>changename</td><td>Ted<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none">
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>set</td><td>name</td><td>Ted</td></tr>
+</table></div></td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample column</td></tr>
+
+<tr><td>changename</td><td>isnamed?</td></tr>
+<tr><td>Bob<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none">
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>set</td><td>name</td><td>Bob</td></tr>
+</table></div></td><td class="pass">Bob<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none">
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>return</td><td>name</td></tr>
+
+</table></div></td></tr>
+<tr><td>Ted<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none">
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>set</td><td>name</td><td>Ted</td></tr>
+</table></div></td><td class="pass">Ted<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none">
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>return</td><td>name</td></tr>
+</table></div></td></tr>
+
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample row domain</td></tr>
+<tr><td>is named</td></tr>
+<tr><td class="pass">Bob<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none">
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>return</td><td>name</td></tr>
+</table></div></td></tr>
+<tr><td class="fail">Carol <span class="fit_label">missing</span></td></tr>
+
+<tr>
+<td class="fail"><span class="fit_grey">Ted</span> <span class="fit_label">surplus</span></td></tr></table></td></tr>
+</table></td></tr>
+</table>
+<br>
+</div>
+<div style="width:100%;text-align:right">
+<span class="footer">&copy; Copyright <a href="http://www.syterra.com">Syterra Software Inc.</a> All rights reserved.</span>
+</div>
+
+</body>
+</html>

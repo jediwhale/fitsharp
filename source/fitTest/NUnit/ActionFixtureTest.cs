@@ -6,6 +6,9 @@
 using System.Text;
 using fit.Test.Acceptance;
 using fitSharp.Fit.Model;
+using fitSharp.Fit.Service;
+using fitSharp.Machine.Model;
+using Moq;
 using NUnit.Framework;
 
 namespace fit.Test.NUnit {
@@ -74,6 +77,23 @@ namespace fit.Test.NUnit {
             int actualCount = countFixture.Counter;
             Assert.AreEqual(6, actualCount);
             Assert.AreEqual(4, countFixture.TestStatus.Counts.GetCount(CellAttributes.RightStatus));
+        }
+
+        [Test] public void PressInvokesMethodOnActor() {
+            var method = new Parse("td", "method", null, null);
+            var cells = new Parse("td", "press", null, method);
+            var cellOperation = new Mock<CellOperation>();
+            var actor = new Fixture();
+            var actionFixture = new MyActionFixture(actor, cells) {CellOperation = cellOperation.Object};
+            actionFixture.Press();
+            cellOperation.Verify(o => o.TryInvoke(actor, method, It.Is<Tree<Cell>>(t => t.IsLeaf), method));
+        }
+
+        private class MyActionFixture: ActionFixture {
+            public MyActionFixture(Fixture actor, Parse cells) {
+                ActionFixture.actor = actor;
+                this.cells = cells;
+            }
         }
     }
 }

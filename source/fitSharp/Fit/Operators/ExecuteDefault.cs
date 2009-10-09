@@ -35,8 +35,10 @@ namespace fitSharp.Fit.Operators {
         }
 
         private  void Input(ExecuteContext context, ExecuteParameters parameters) {
+            var beforeCounts = new TestCounts(Processor.TestStatus.Counts);
             InvokeWithThrow(context.SystemUnderTest, GetMemberName(parameters.Members),
                              new TreeList<Cell>().AddBranch(parameters.Cells));
+            MarkCellWithLastResults(parameters, p => MarkCellWithCounts(p, beforeCounts));
         }
 
         private  void Check(ExecuteContext context, ExecuteParameters parameters) {
@@ -50,6 +52,7 @@ namespace fitSharp.Fit.Operators {
                 }
             }
             catch (IgnoredException) {}
+            MarkCellWithLastResults(parameters, p => {});
         }
 
         private TypedValue Invoke(ExecuteContext context, ExecuteParameters parameters) {
@@ -60,13 +63,23 @@ namespace fitSharp.Fit.Operators {
             TypedValue result = Processor.Invoke(
                     targetObjectProvider != null ? new TypedValue(targetObjectProvider.GetTargetObject()) : target,
                     name.ToString(), parameters.Parameters);
+            MarkCellWithLastResults(parameters, p => MarkCellWithCounts(p, beforeCounts));
+            return result;
+        }
+
+        private void MarkCellWithLastResults(ExecuteParameters parameters, Action<ExecuteParameters> markWithCounts) {
             if (parameters.Cells != null && !string.IsNullOrEmpty(Processor.TestStatus.LastAction)) {
                 parameters.Cell.SetAttribute(CellAttributes.ExtensionKey, Processor.TestStatus.LastAction);
-                string style = Processor.TestStatus.Counts.Subtract(beforeCounts).Style;
-                if (!string.IsNullOrEmpty(style)) parameters.Cell.SetAttribute(CellAttributes.StatusKey, style);
-                Processor.TestStatus.LastAction = null;
+                markWithCounts(parameters);
             }
-            return result;
+            Processor.TestStatus.LastAction = null;
+        }
+
+        private void MarkCellWithCounts(ExecuteParameters parameters, TestCounts beforeCounts) {
+            string style = Processor.TestStatus.Counts.Subtract(beforeCounts).Style;
+            if (!string.IsNullOrEmpty(style) && string.IsNullOrEmpty(parameters.Cell.GetAttribute(CellAttributes.StatusKey))) {
+                parameters.Cell.SetAttribute(CellAttributes.StatusKey, style);
+            }
         }
     }
 }

@@ -15,11 +15,19 @@ namespace fit
 {
 	public class Fixture: MutableDomainAdapter, TargetObjectProvider, Interpreter
 	{
+	    private CellOperation cellOperation;
+
 	    public CellProcessor Processor { get; set; }
 
 	    public TestStatus TestStatus { get { return Processor.TestStatus; } }
 
-        public CellOperation CellOperation { get { return new CellOperationImpl(Processor); }}
+	    public CellOperation CellOperation {
+	        get {
+                if (cellOperation == null) cellOperation = new CellOperationImpl(Processor);
+	            return cellOperation;
+	        }
+            set { cellOperation = value;}
+	    }
 
         public Fixture() {}
         public Fixture(object systemUnderTest): this() { mySystemUnderTest = systemUnderTest; }

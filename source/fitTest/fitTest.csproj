@@ -98,12 +98,12 @@
     <Compile Include="Acceptance\PersonFixture.cs" />
     <Compile Include="Acceptance\Rectangle.cs" />
     <Compile Include="Acceptance\ResetNamespacesFixture.cs" />
-    <Compile Include="Acceptance\SampleArrayFixture.cs" />
+    <Compile Include="Double\SampleArrayFixture.cs" />
     <Compile Include="Double\SampleColumnFixture.cs" />
     <Compile Include="Double\SampleDoFixture.cs" />
     <Compile Include="Double\SampleDomain.cs" />
-    <Compile Include="Acceptance\SampleDomainAdapter.cs" />
-    <Compile Include="Acceptance\SampleRowFixture.cs" />
+    <Compile Include="Double\SampleDomainAdapter.cs" />
+    <Compile Include="Double\SampleRowFixture.cs" />
     <Compile Include="Acceptance\SetFixtureUnderTest.cs" />
     <Compile Include="Acceptance\SetFixtureUnderTest2.cs" />
     <Compile Include="Acceptance\SetFixtureUnderTest3.cs" />
@@ -121,6 +121,7 @@
     <Compile Include="Acceptance\TypeName.cs" />
     <Compile Include="Acceptance\WithinFlow.cs" />
     <Compile Include="Acceptance\XmlFixtureUnderTest.cs" />
+    <Compile Include="Double\SampleRowDomain.cs" />
     <Compile Include="FitUnit\ConfigurationTest.cs" />
     <Compile Include="FitUnit\FixtureTest.cs" />
     <Compile Include="FitUnit\ObjectFactoryTest.cs" />

@@ -5,7 +5,7 @@
 
 using System;
 
-namespace fit.Test.Acceptance {
+namespace fit.Test.Double {
     public class SampleRowFixture: RowFixture {
         public override object[] Query() {
             return new TwoNames[] {new TwoNames("too short", "<stuff>"), new TwoNames("too", "too")};

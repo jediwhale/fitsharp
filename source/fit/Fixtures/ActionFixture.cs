@@ -4,6 +4,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System;
+using fitSharp.Fit.Model;
 using fitSharp.Fit.Service;
 
 namespace fit
@@ -11,7 +12,7 @@ namespace fit
 	public class ActionFixture : Fixture
 	{
 		protected Parse cells;
-		protected static Fixture actor;
+		protected static object actor;
 		protected object targetObject;
 
 		// Traversal ////////////////////////////////
@@ -35,26 +36,33 @@ namespace fit
 
 		public virtual void Start()
 		{
-			actor = LoadFixture(cells.More.Text);
+		    actor = CellOperation.Create(cells.More.Text.Trim()).Value;
+		    var fixture = actor as Fixture;
+            if (fixture != null) fixture.Processor = Processor;
 		}
 
 		public virtual void Enter()
 		{
-			CellOperation.Input(actor.GetTargetObject(), cells.More, cells.More.More);
+			CellOperation.Input(GetTarget(actor), cells.More, cells.More.More);
 		}
 
 		public virtual void Press()
 		{
-			CellOperation.Invoke(actor, cells.More);
+			CellOperation.Invoke(actor, cells.More, new CellTree(), cells.More);
 		}
 
 		public virtual void Check()
 		{
-			CellOperation.Check(actor.GetTargetObject(), cells.More, cells.More.More);
+			CellOperation.Check(GetTarget(actor), cells.More, cells.More.More);
 		}
 
 		public override object GetTargetObject() {
 			return targetObject;
 		}
+
+        private static object GetTarget(object actor) {
+            var target = actor as TargetObjectProvider;
+            return target == null ? actor : target.GetTargetObject();
+        }
 	}
 }
