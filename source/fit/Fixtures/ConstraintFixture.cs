@@ -43,7 +43,7 @@ namespace fitlibrary {
 	        else {
 	            try {
 	                TypedValue result = CellOperation.Invoke(this, memberNameCells,
-	                                                         valueCells.GetCells(new CellRange(row.Parts).Cells));
+	                    valueCells.GetCells(new CellRange(row.Parts).Cells), row.Parts);
 	                if (result.Type != typeof (bool)) {
 	                    throw new InvalidMethodException(string.Format("Method does not return boolean."));
 	                }

@@ -19,6 +19,8 @@ to be bound by the terms of this license. You must not remove this notice, or an
 <tr><td>do</td></tr>
 </table>
 <br>
+This is a gallery of common fixtures using procedures.<br>
+<br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>when test is</td><td><br>
 <table border="1" cellpadding="2" cellspacing="0">
@@ -27,8 +29,9 @@ to be bound by the terms of this license. You must not remove this notice, or an
 </table>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>define</td><td>changename</td><td>newname</td></tr>
+<tr><td>define</td><td>changethename</td><td>newname</td></tr>
 <tr><td>set</td><td>name</td><td>newname</td></tr>
+<tr><td>return</td><td>name</td></tr>
 </table>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
@@ -41,14 +44,13 @@ to be bound by the terms of this license. You must not remove this notice, or an
 <tr><td>start</td><td>sample domain</td></tr>
 <tr><td>press</td><td>bobname</td></tr>
 <tr><td>check</td><td>is named</td><td>Bob</td></tr>
-<tr><td>enter</td><td>changename</td><td>Ted</td></tr>
+<tr><td>enter</td><td>changethename</td><td>Ted</td></tr>
 </table>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>sample column</td></tr>
-<tr><td>changename</td><td>isnamed?</td></tr>
+<tr><td>changethename</td><td>isnamed?</td></tr>
 <tr><td>Bob</td><td>Bob</td></tr>
-<tr><td>Ted</td><td>Ted</td></tr>
 </table>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
@@ -57,15 +59,36 @@ to be bound by the terms of this license. You must not remove this notice, or an
 <tr><td>Bob</td></tr>
 <tr><td>Carol</td></tr>
 </table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample calculate domain</td></tr>
+<tr><td>thename</td><td></td><td>change</td></tr>
+<tr><td>Bob</td><td></td><td>Bob</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>do</td></tr>
+<tr><td>with</td><td>new</td><td>sample domain</td></tr>
+<tr><td>changethename</td><td>Bob</td></tr>
+<tr><td>check</td><td>isnamed</td><td>Bob</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample setup domain</td></tr>
+<tr><td>changethename</td></tr>
+<tr><td>Bob</td></tr>
+</table>
 </td><td>then result is</td><td><br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>define</td><td>bobname</td></tr>
+
 <tr><td>set</td><td>name</td><td>Bob</td></tr>
 </table>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>define</td><td>changename</td><td>newname</td></tr>
+<tr><td>define</td><td>changethename</td><td>newname</td></tr>
 <tr><td>set</td><td>name</td><td>newname</td></tr>
+<tr><td>return</td><td>name</td></tr>
 
 </table>
 <br>
@@ -88,51 +111,85 @@ to be bound by the terms of this license. You must not remove this notice, or an
 <tr><td>return</td><td>name</td></tr>
 
 </table></div></td></tr>
-<tr><td>enter</td><td>changename</td><td>Ted<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none">
+<tr><td>enter</td><td>changethename</td><td>Ted<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none">
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>set</td><td>name</td><td>Ted</td></tr>
+<tr><td>return</td><td>name</td></tr>
 </table></div></td></tr>
 </table>
 <br>
+
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>sample column</td></tr>
-
-<tr><td>changename</td><td>isnamed?</td></tr>
+<tr><td>changethename</td><td>isnamed?</td></tr>
 <tr><td>Bob<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none">
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>set</td><td>name</td><td>Bob</td></tr>
+<tr><td>return</td><td>name</td></tr>
+
 </table></div></td><td class="pass">Bob<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none">
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>return</td><td>name</td></tr>
-
 </table></div></td></tr>
-<tr><td>Ted<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none">
-<br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>set</td><td>name</td><td>Ted</td></tr>
-</table></div></td><td class="pass">Ted<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none">
-<br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>return</td><td>name</td></tr>
-</table></div></td></tr>
-
 </table>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>sample row domain</td></tr>
 <tr><td>is named</td></tr>
 <tr><td class="pass">Bob<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none">
+
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>return</td><td>name</td></tr>
 </table></div></td></tr>
 <tr><td class="fail">Carol <span class="fit_label">missing</span></td></tr>
-
 <tr>
-<td class="fail"><span class="fit_grey">Ted</span> <span class="fit_label">surplus</span></td></tr></table></td></tr>
+<td class="fail"><span class="fit_grey">Ted</span> <span class="fit_label">surplus</span></td></tr></table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample calculate domain</td></tr>
+
+<tr><td>thename</td><td></td><td>change</td></tr>
+<tr><td>Bob</td><td></td><td class="pass">Bob<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none">
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>set</td><td>name</td><td>Bob</td></tr>
+<tr><td>return</td><td>name</td></tr>
+</table></div></td></tr>
+</table>
+
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>do</td></tr>
+<tr><td>with</td><td>new</td><td>sample domain</td></tr>
+<tr><td>changethename<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none">
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>set</td><td>name</td><td>Bob</td></tr>
+<tr><td>return</td><td>name</td></tr>
+
+</table></div></td><td>Bob</td></tr>
+<tr><td>check</td><td>isnamed</td><td class="pass">Bob<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none">
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>return</td><td>name</td></tr>
+</table></div></td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample setup domain</td></tr>
+
+<tr><td>changethename</td></tr>
+<tr><td>Bob<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none">
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>set</td><td>name</td><td>Bob</td></tr>
+<tr><td>return</td><td>name</td></tr>
+</table></div></td></tr>
+</table></td></tr>
 </table></td></tr>
 </table>
 <br>
