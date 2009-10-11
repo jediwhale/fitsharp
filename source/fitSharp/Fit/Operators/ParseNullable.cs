@@ -16,7 +16,7 @@ namespace fitSharp.Fit.Operators {
 
         public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
             return parameters.Value.Text.Length > 0
-                ? Parse(type.GetGenericArguments()[0], parameters)
+                ? Processor.ParseTree(type.GetGenericArguments()[0], parameters)
                 : new TypedValue(null, type);
         }
     }

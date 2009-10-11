@@ -24,7 +24,7 @@ namespace fit.Operators {
             for (int row = theTable.Rows() - 1; row >= 0 ; row--) {
                 Parse cells = null;
                 for (int cell = theTable.Cells(row) - 1; cell >= 0 ; cell--) {
-                    var newCell = (Parse) Compose(theTable.StringAt(row, cell));
+                    var newCell = (Parse) Processor.Compose(theTable.StringAt(row, cell));
                     newCell.More = cells;
                     cells = newCell;
                 }

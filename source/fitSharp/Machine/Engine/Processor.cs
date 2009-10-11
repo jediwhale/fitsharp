@@ -26,6 +26,49 @@ namespace fitSharp.Machine.Engine {
         void Store<V>(V newItem);
     }
 
+    public static class ProcessorExtension {
+
+        public static Tree<T> Compose<T>(this Processor<T> processor, object instance)  {
+            return processor.Compose(new TypedValue(instance));
+        }
+
+        public static TypedValue Create<T>(this Processor<T> processor, string membername) {
+            return processor.Create(membername, new TreeList<T>());
+        }
+
+        public static TypedValue Execute<T>(this Processor<T> processor, Tree<T> parameters) {
+            return processor.Execute(TypedValue.Void, parameters);
+        }
+
+        public static TypedValue InvokeWithThrow<T>(this Processor<T> processor, TypedValue instance, string memberName, Tree<T> parameters) {
+            TypedValue result = processor.Invoke(instance, memberName, parameters);
+            result.ThrowExceptionIfNotValid();
+            return result;
+        }
+        public static TypedValue ParseTree<T>(this Processor<T> processor, Type type, Tree<T> parameters) {
+            return processor.Parse(type, TypedValue.Void, parameters);
+        }
+
+        public static TypedValue Parse<T>(this Processor<T> processor, Type type, T input) {
+            return processor.ParseTree(type, new TreeList<T>(input));
+        }
+
+        public static V ParseTree<T, V>(this Processor<T> processor, Tree<T> input) {
+            return processor.ParseTree(typeof (V), input).GetValue<V>();
+        }
+
+        public static V Parse<T, V>(this Processor<T> processor, T input) {
+            return processor.Parse(typeof (V), input).GetValue<V>();
+        }
+
+        public static TypedValue ParseString<T>(this Processor<T> processor, Type type, string input) {
+            return processor.ParseTree(type, processor.Compose(new TypedValue(input, typeof(string))));
+        }
+
+        public static V ParseString<T, V>(this Processor<T> processor, string input) {
+            return processor.ParseString(typeof (V), input).GetValue<V>();
+        }
+    }
 
     public abstract class ProcessorBase<T, P>: Processor<T> where P: Processor<T> {
         protected abstract Operators<T,P> Operators { get; }

@@ -221,7 +221,7 @@ namespace fitnesse.fitserver
 
 		public string TablesToString(Parse tables)
 		{
-            return configuration.GetItem<Service>().Parse(typeof(StoryTestString), TypedValue.Void, tables).ValueString;
+            return configuration.GetItem<Service>().ParseTree<Cell, StoryTestString>(tables).ToString();
 		}
 
 		public void WriteLogMessage(string logMessage)

@@ -18,7 +18,7 @@ namespace fitSharp.Fit.Operators {
             if (actual.IsVoid) {
                 return false;
             }
-            TypedValue expectedValue = Parse(actual.Type, expected);
+            TypedValue expectedValue = Processor.ParseTree(actual.Type, expected);
             return AreEqual(expectedValue.Value, actual.Value);
         }
 

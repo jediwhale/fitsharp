@@ -5,6 +5,7 @@
 
 using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
+using fitSharp.Machine.Engine;
 using fitSharp.Machine.Extension;
 using fitSharp.Machine.Model;
 
@@ -23,7 +24,7 @@ namespace fitSharp.Fit.Fixtures {
         public bool IsVisible { get { return false; } }
 
         public void Interpret(Tree<Cell> table) {
-            var name = processor.Parse(typeof (MemberName), TypedValue.Void, new EnumeratedTree<Cell>(table.Branches[0].Branches.From(1).Alternate())).GetValue<MemberName>();
+            var name = processor.ParseTree<Cell, MemberName>(new EnumeratedTree<Cell>(table.Branches[0].Branches.From(1).Alternate()));
             processor.Store(new Procedure(name.ToString(), table));
         }
     }

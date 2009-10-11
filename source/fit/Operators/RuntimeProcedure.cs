@@ -39,7 +39,7 @@ namespace fit.Operators {
 
             Processor.TestStatus.PushReturn(TypedValue.Void);
             Processor.Execute(fixture, body);
-            Processor.TestStatus.LastAction = Processor.Parse(typeof(StoryTestString), TypedValue.Void, body.Branches[0]).ValueString;
+            Processor.TestStatus.LastAction = Processor.ParseTree(typeof(StoryTestString), body.Branches[0]).ValueString;
             return Processor.TestStatus.PopReturn();
         }
 

@@ -9,48 +9,6 @@ using fitSharp.Machine.Model;
 namespace fitSharp.Machine.Engine {
     public abstract class Operator<T, P> where P: Processor<T> {
         public P Processor;
-
-        public Tree<T> Compose(object instance)  {
-            return Processor.Compose(new TypedValue(instance));
-        }
-
-        public TypedValue Create(string membername) {
-            return Processor.Create(membername, new TreeList<T>());
-        }
-
-        public TypedValue Execute(Tree<T> parameters) {
-            return Processor.Execute(TypedValue.Void, parameters);
-        }
-
-        public TypedValue InvokeWithThrow(TypedValue instance, string memberName, Tree<T> parameters) {
-            TypedValue result = Processor.Invoke(instance, memberName, parameters);
-            result.ThrowExceptionIfNotValid();
-            return result;
-        }
-
-        public TypedValue Parse(Type type, Tree<T> parameters) {
-            return Processor.Parse(type, TypedValue.Void, parameters);
-        }
-
-        public TypedValue Parse(Type type, T input) {
-            return Parse(type, new TreeList<T>(input));
-        }
-
-        public V ParseTree<V>(Tree<T> input) {
-            return Parse(typeof (V), input).GetValue<V>();
-        }
-
-        public V Parse<V>(T input) {
-            return Parse(typeof (V), input).GetValue<V>();
-        }
-
-        public TypedValue ParseString(Type type, string input) {
-            return Parse(type, Processor.Compose(new TypedValue(input, typeof(string))));
-        }
-
-        public V ParseString<V>(string input) {
-            return ParseString(typeof (V), input).GetValue<V>();
-        }
     }
 
     public interface CompareOperator<T> {

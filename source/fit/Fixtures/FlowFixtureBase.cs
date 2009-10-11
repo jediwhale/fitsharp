@@ -13,6 +13,7 @@ using fitSharp.Fit.Engine;
 using fitSharp.Fit.Exception;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Service;
+using fitSharp.Machine.Engine;
 using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
 
@@ -61,7 +62,7 @@ namespace fitlibrary {
         protected void ProcessFlowRow(Parse theCurrentRow) {
             try {
                 string specialActionName = ":" +
-                    Processor.Parse(typeof (MemberName), TypedValue.Void, new CellRange(theCurrentRow.Parts, 1)).ValueString;
+                    Processor.ParseTree<Cell, MemberName>(new CellRange(theCurrentRow.Parts, 1));
                 TypedValue result = Processor.Invoke(new TypedValue(new FlowKeywords(this)),
                                                                                   specialActionName, theCurrentRow.Parts);
                 if (!result.IsValid) {

@@ -17,7 +17,7 @@ namespace fitSharp.Slim.Operators {
             var list = instance.Value as List<object> ?? new List<object>();
             var tree = new TreeList<string>();
             foreach (object value in list) {
-                tree.AddBranch(Compose(value));
+                tree.AddBranch(Processor.Compose(value));
             }
             return tree;
         }

@@ -15,7 +15,7 @@ namespace fitSharp.Machine.Engine {
         }
 
         public TypedValue Create(string memberName, Tree<T> parameters) {
-            var runtimeType = ParseString<RuntimeType>(memberName);
+            var runtimeType = Processor.ParseString<T, RuntimeType>(memberName);
             return parameters.Branches.Count == 0
                          ? CreateWithoutParameters(runtimeType)
                          : CreateWithParameters(parameters, runtimeType);

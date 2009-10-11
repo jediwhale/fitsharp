@@ -3,6 +3,7 @@
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
+using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using fitSharp.Slim.Operators;
 
@@ -62,7 +63,7 @@ namespace fitSharp.Slim.Service {
         private Tree<string> ExecuteInstructions(Tree<string> instructions) {
             var results = new TreeList<string>();
             foreach (Tree<string> statement in instructions.Branches) {
-                var result = processor.Execute(TypedValue.Void, statement).GetValue<Tree<string>>();
+                var result = processor.Execute(statement).GetValue<Tree<string>>();
                 results.AddBranchValue(result);
                 if (ComposeException.WasAborted(result.Branches[1].Value)) break;
             }

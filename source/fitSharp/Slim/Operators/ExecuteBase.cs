@@ -21,7 +21,7 @@ namespace fitSharp.Slim.Operators {
                 return new TypedValue(ExecuteOperation(parameters));
             }
             catch (System.Exception e) {
-                return new TypedValue(Result(parameters, Compose(e)));
+                return new TypedValue(Result(parameters, Processor.Compose(e)));
             }
         }
 

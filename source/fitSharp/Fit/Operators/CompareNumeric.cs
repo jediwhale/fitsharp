@@ -32,7 +32,7 @@ namespace fitSharp.Fit.Operators {
             Comparison comparison = FindComparison(cell.Text);
 
             var rest = new CellSubstring(cell, cell.Text.Substring(comparison.Operator.Length));
-            object expectedValue = Parse(actual.Type, rest).Value;
+            object expectedValue = Processor.Parse(actual.Type, rest).Value;
             expected.Value.AddToAttribute(CellAttributes.InformationPrefixKey, actualValue.ToString(), CellAttributes.PrefixFormat);
 
             int compare = actualValue is float || actualValue is double

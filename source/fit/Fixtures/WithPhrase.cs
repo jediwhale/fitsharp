@@ -7,6 +7,7 @@ using System;
 using fit.Model;
 using fitlibrary;
 using fitlibrary.exception;
+using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 
@@ -24,7 +25,7 @@ namespace fit.Fixtures {
             }
             if (ourTypeIdentifier.Equals(restOfCells.Text)) {
                 if (restOfCells.More == null) throw new TableStructureException("missing cells for with.");
-                return theFixture.Processor.Parse(typeof (Type), TypedValue.Void, restOfCells.More).Value;
+                return theFixture.Processor.ParseTree(typeof (Type), restOfCells.More).Value;
             }
             if (ourCurrentIdentifier.Equals(restOfCells.Text)) {
                 return theFixture.SystemUnderTest;

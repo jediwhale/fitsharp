@@ -7,6 +7,7 @@ using System;
 using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
 using fitSharp.IO;
+using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Service
@@ -28,7 +29,7 @@ namespace fitSharp.Fit.Service
 			processor.TestStatus.Summary["run elapsed time"] = new ElapsedTime();
             Cell heading = tables.Branches[0].Branches[0].Branches[0].Value;
             try {
-                processor.Parse(typeof(Interpreter), TypedValue.Void, tables.Branches[0]);
+                processor.ParseTree<Cell, Interpreter>(tables.Branches[0]);
             }
             catch (System.Exception e) {
                 processor.TestStatus.MarkException(heading, e);
@@ -48,7 +49,7 @@ namespace fitSharp.Fit.Service
                             Cell heading = table.Branches[0].Branches[0].Value;
                             if (heading != null && !processor.TestStatus.IsAbandoned) {
                                 if (flowFixture == null) {
-                                    var activeFixture = processor.Parse(typeof(Interpreter), TypedValue.Void, table).GetValue<Interpreter>();
+                                    var activeFixture = processor.ParseTree<Cell, Interpreter>(table);
                                     var activeFlowFixture = activeFixture as FlowInterpreter;
                                     if (activeFlowFixture != null && activeFlowFixture.IsInFlow(tableCount)) flowFixture = activeFlowFixture;
                                     if (!activeFixture.IsVisible) tableCount--;

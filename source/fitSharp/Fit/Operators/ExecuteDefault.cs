@@ -6,6 +6,7 @@
 using System;
 using fitSharp.Fit.Exception;
 using fitSharp.Fit.Model;
+using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
@@ -36,7 +37,7 @@ namespace fitSharp.Fit.Operators {
 
         private  void Input(ExecuteContext context, ExecuteParameters parameters) {
             var beforeCounts = new TestCounts(Processor.TestStatus.Counts);
-            InvokeWithThrow(context.SystemUnderTest, GetMemberName(parameters.Members),
+            Processor.InvokeWithThrow(context.SystemUnderTest, GetMemberName(parameters.Members),
                              new TreeList<Cell>().AddBranch(parameters.Cells));
             MarkCellWithLastResults(parameters, p => MarkCellWithCounts(p, beforeCounts));
         }
@@ -59,10 +60,10 @@ namespace fitSharp.Fit.Operators {
             var beforeCounts = new TestCounts(Processor.TestStatus.Counts);
             TypedValue target = context.Target.Value;
             var targetObjectProvider = target.Value as TargetObjectProvider;
-            var name = ParseTree<MemberName>(parameters.Members);
+            string name = GetMemberName(parameters.Members);
             TypedValue result = Processor.Invoke(
                     targetObjectProvider != null ? new TypedValue(targetObjectProvider.GetTargetObject()) : target,
-                    name.ToString(), parameters.Parameters);
+                    name, parameters.Parameters);
             MarkCellWithLastResults(parameters, p => MarkCellWithCounts(p, beforeCounts));
             return result;
         }

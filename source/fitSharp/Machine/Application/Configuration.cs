@@ -69,7 +69,7 @@ namespace fitSharp.Machine.Application {
         }
 
         public Copyable GetItem(string typeName) {
-            var type = new BasicProcessor().Parse(typeof(RuntimeType), TypedValue.Void, new TreeList<string>(typeName)).GetValue<RuntimeType>();
+            var type = new BasicProcessor().Parse<string, RuntimeType>(typeName);
             return GetItem(type.Type);
         }
 

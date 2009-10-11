@@ -13,7 +13,7 @@ using fitSharp.Machine.Model;
 namespace fitSharp.Fit.Operators {
     public abstract class CellOperator: Operator<Cell, CellProcessor> {
         public string GetMemberName(Tree<Cell> members) {
-            return ParseTree<MemberName>(members).ToString();
+            return Processor.ParseTree<Cell, MemberName>(members).ToString();
         }
 
         public object GetActual(ExecuteContext context, ExecuteParameters parameters) {
@@ -23,7 +23,7 @@ namespace fitSharp.Fit.Operators {
         public TypedValue GetTypedActual(ExecuteContext context, ExecuteParameters parameters) {
             if (!context.Target.HasValue) {
                 try {
-                    TypedValue actualResult = InvokeWithThrow(context.SystemUnderTest, GetMemberName(parameters.Members), parameters.Parameters);
+                    TypedValue actualResult = Processor.InvokeWithThrow(context.SystemUnderTest, GetMemberName(parameters.Members), parameters.Parameters);
                     context.Target = actualResult;
                 }
                 catch (ParseException<Cell> e) {

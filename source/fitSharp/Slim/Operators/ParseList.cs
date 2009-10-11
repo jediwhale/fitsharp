@@ -20,7 +20,7 @@ namespace fitSharp.Slim.Operators {
             return new TypedValue(
                 parameters.Branches.AggregateTo(
                     (IList) Activator.CreateInstance(type),
-                    (list, branch) => list.Add(Parse(type.GetGenericArguments()[0], branch).Value)));
+                    (list, branch) => list.Add(Processor.ParseTree(type.GetGenericArguments()[0], branch).Value)));
         }
     }
 }

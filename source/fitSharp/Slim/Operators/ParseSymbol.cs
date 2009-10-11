@@ -21,7 +21,7 @@ namespace fitSharp.Slim.Operators {
 
         public TypedValue Parse(Type type, TypedValue instance, Tree<string> parameters) {
             string decodedInput = ReplaceSymbols(parameters.Value);
-            return Parse(type, decodedInput);
+            return Processor.Parse(type, decodedInput);
         }
 
         private string ReplaceSymbols(string input) {

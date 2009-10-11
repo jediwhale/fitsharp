@@ -19,7 +19,7 @@ namespace fit.Operators {
 
         public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
             string className = parameters.Branches[0].Branches[0].Value.Text.Trim();
-            TypedValue result = Create(className);
+            TypedValue result = Processor.Create(className);
 
             var fixture = result.Value as Fixture;
             if (fixture == null) {

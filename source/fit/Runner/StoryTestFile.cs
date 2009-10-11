@@ -8,6 +8,7 @@ using fitSharp.Fit.Model;
 using fitSharp.Fit.Service;
 using fitSharp.IO;
 using fitSharp.Machine.Application;
+using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fit.Runner {
@@ -74,7 +75,7 @@ namespace fit.Runner {
         private void WriteResult(Tree<Cell> theTables, TestCounts counts, ElapsedTime elapsedTime) {
             string outputFile = OutputPath;
             var output = new StringWriter();
-            output.Write(configuration.GetItem<Service.Service>().Parse(typeof(StoryTestString), TypedValue.Void, theTables).ValueString);
+            output.Write(configuration.GetItem<Service.Service>().ParseTree(typeof(StoryTestString), theTables).ValueString);
             output.Close();
             myFolderModel.MakeFile(outputFile, output.ToString());
             myFolder.ListFile(outputFile, counts, elapsedTime);
