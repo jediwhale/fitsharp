@@ -5,10 +5,13 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Service;
 using fitSharp.Machine.Application;
+using fitSharp.Machine.Engine;
+using fitSharp.Machine.Extension;
 using fitSharp.Machine.Model;
 
 namespace fit
@@ -38,7 +41,7 @@ namespace fit
 	        var parentFixture = (Fixture) parent;
 	        Processor = parentFixture.Processor;
 	        myParentFixture = parentFixture;
-	        GetArgsForTable((Parse)table.Value);
+	        GetArgsForRow(table.Branches[0]);
 	    }
 
         public void Interpret(Tree<Cell> table) { DoTable((Parse)table.Value); }
@@ -125,7 +128,7 @@ namespace fit
 		}
 
         private object LoadClass(string theClassName) {
-            return Processor.Create(theClassName.Trim(), new TreeList<Cell>()).Value;
+            return Processor.Create(theClassName.Trim()).Value;
         }
 
 		public Fixture LoadFixture(string theClassName)
@@ -162,16 +165,9 @@ namespace fit
 
 	    public string[] Args { get; private set; }
 
-	    public void GetArgsForTable(Tree<Cell> table)
-		{
-			var list = new ArrayList();
-			list.Clear();
-            for (int i = 1; i < table.Branches[0].Branches.Count; i++) {
-                list.Add(table.Branches[0].Branches[i].Value.Text);
-            }
-			Args = new string[list.Count];
-			for (int i = 0; i < list.Count; i++)
-				Args[i] = (string) list[i];
+	    public void GetArgsForRow(Tree<Cell> row) {
+	        Args = row.Branches.From(1).Aggregate<List<string>, Tree<Cell>>(
+                (list, cell) => list.Add(cell.Value.Text)).ToArray();
 		}
 
         public object GetArgumentInput(int theIndex, Type theType) {

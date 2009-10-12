@@ -20,9 +20,9 @@ to be bound by the terms of this license. You must not remove this notice, or an
 <tr><td>do</td></tr>
 </table>
 <br>
-We declare the procedure name in the first row of the Define table and write the procedure body as the rest of the table. We can also declare parameters in the first row. This uses the Do Fixture style, where alternating cells make up the procedure name and the parameter names.<br>
-<br>
-To invoke the procedure, we use the procedure name in any place where we'd use a fixture or domain method name. The test results include an expandable section showing the details of the procedure execution.<br>
+We declare the procedure name in the first row of the Define table and write the procedure body as the rest of the table: <pre class="code">|define|changename|
+|set|name|Bob|</pre> We can also declare parameters in the first row. This uses the Do Fixture style, where alternating cells make up the procedure name and the parameter names: <pre class="code">|define|check field|fieldname|is|expected|
+|check|fieldname|expected|</pre> To invoke the procedure, we use the procedure name in any place where we'd use a fixture or domain method name. The test results include an expandable section showing the details of the procedure execution. This is what it looks like:<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>when test is</td><td><br>
@@ -37,8 +37,7 @@ To invoke the procedure, we use the procedure name in any place where we'd use a
 </table>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>do</td></tr>
-<tr><td>with</td><td>new</td><td>sample domain</td></tr>
+<tr><td>sample domain</td></tr>
 <tr><td>changename</td></tr>
 <tr><td>check field</td><td>name</td><td>is</td><td>Bob</td></tr>
 </table>
@@ -55,8 +54,7 @@ To invoke the procedure, we use the procedure name in any place where we'd use a
 </table>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>do</td></tr>
-<tr><td>with</td><td>new</td><td>sample domain</td></tr>
+<tr><td>sample domain</td></tr>
 <tr><td>changename<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>set</td><td>name</td><td>Bob</td></tr>
@@ -88,8 +86,7 @@ We can define a multi-table procedure body by placing nested tables in the first
 </table>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>do</td></tr>
-<tr><td>with</td><td>new</td><td>sample domain</td></tr>
+<tr><td>sample domain</td></tr>
 <tr><td>testname</td><td>Bob</td></tr>
 </table>
 </td><td>then result is</td><td><br>
@@ -108,8 +105,7 @@ We can define a multi-table procedure body by placing nested tables in the first
 </table>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>do</td></tr>
-<tr><td>with</td><td>new</td><td>sample domain</td></tr>
+<tr><td>sample domain</td></tr>
 <tr><td class="pass">testname<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>set</td><td>name</td><td>Bob</td></tr>
@@ -133,8 +129,7 @@ To return a value from a procedure, we use the return keyword.<br>
 </table>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>do</td></tr>
-<tr><td>with</td><td>new</td><td>sampledomain</td></tr>
+<tr><td>sampledomain</td></tr>
 <tr><td>show</td><td>changename</td><td>Bob</td></tr>
 </table>
 </td><td>then result is</td><td><br>
@@ -146,8 +141,7 @@ To return a value from a procedure, we use the return keyword.<br>
 </table>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>do</td></tr>
-<tr><td>with</td><td>new</td><td>sampledomain</td></tr>
+<tr><td>sampledomain</td></tr>
 <tr><td>show</td><td>changename<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>set</td><td>name</td><td>Bob</td></tr>

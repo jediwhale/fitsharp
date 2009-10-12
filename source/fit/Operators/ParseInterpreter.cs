@@ -18,7 +18,7 @@ namespace fit.Operators {
         }
 
         public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
-            string className = parameters.Branches[0].Branches[0].Value.Text.Trim();
+            string className = parameters.Branches[0].Value.Text.Trim();
             TypedValue result = Processor.Create(className);
 
             var fixture = result.Value as Fixture;
@@ -31,7 +31,7 @@ namespace fit.Operators {
                 fixture = new DoFixture(result.Value);
             }
             fixture.Processor = Processor;
-            fixture.GetArgsForTable(parameters);
+            fixture.GetArgsForRow(parameters);
             if (!instance.IsVoid) fixture.SetSystemUnderTest(instance.Value);
             return new TypedValue(fixture);
         }

@@ -121,7 +121,7 @@ namespace fit.Test.NUnit {
         }
 
         private static bool IsDoFixture(Tree<Cell> c) {
-            return c.Branches[0].Branches[0].Value.Text == "dofixture";
+            return c.Branches[0].Value.Text == "dofixture";
         }
     }
 }

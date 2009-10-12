@@ -69,7 +69,7 @@ namespace fitSharp.Test.NUnit.Fit {
         private void TestExecute(Tree<Cell> story) { TestExecute(story, TypedValue.Void); }
 
         private void SetUpParse(Tree<Cell> table, Interpreter fixture) {
-            processor.Setup(p => p.Parse(typeof (Interpreter), TypedValue.Void, table)).Returns(new TypedValue(fixture));
+            processor.Setup(p => p.Parse(typeof (Interpreter), TypedValue.Void, table.Branches[0])).Returns(new TypedValue(fixture));
         }
 
         private void SetUpSingleTableStory() {

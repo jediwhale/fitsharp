@@ -23,7 +23,7 @@ namespace fitSharp.Fit.Operators {
 
         private FlowInterpreter InterpretTable(FlowInterpreter flowInterpreter, Tree<Cell> table) {
             if (flowInterpreter == null) {
-                var interpreter = Processor.ParseTree<Cell, Interpreter>(table);
+                var interpreter = Processor.ParseTree<Cell, Interpreter>(table.Branches[0]);
                 interpreter.Interpret(table);
                 return interpreter as FlowInterpreter;
             }

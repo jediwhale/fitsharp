@@ -76,14 +76,8 @@ namespace fitlibrary {
 
                 }
                 if (!result.IsValid) {
-                    Fixture newFixture = null;
                     if (theCurrentRow.Parts.Text.Length > 0) {
-                        try {
-                            newFixture = LoadFixture(theCurrentRow.Parts.Text);
-                        }
-                        catch (Exception) {}
-                    }
-                    if (newFixture != null) {
+                        var newFixture = Processor.ParseTree<Cell, Interpreter>(theCurrentRow);
                         ProcessRestOfTable(newFixture, theCurrentRow);
                         IHaveFinishedTable = true;
                     }
@@ -161,9 +155,10 @@ namespace fitlibrary {
             }
         }
 
-        private void ProcessRestOfTable(Fixture theFixture, Parse theRestOfTheRows) {
+        private void ProcessRestOfTable(Interpreter theFixture, Parse theRestOfTheRows) {
             var restOfTable = new Parse("table", "", theRestOfTheRows, null);
-            theFixture.Prepare(this, restOfTable);
+            var fixture = theFixture as Fixture;
+            if (fixture != null) fixture.Prepare(this, restOfTable);
             try {
                 ExecuteStoryTest.DoTable(restOfTable, theFixture, false);
             }
