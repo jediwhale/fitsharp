@@ -53,7 +53,7 @@
     <Compile Include="NUnit\IO\SocketStreamTest.cs" />
     <Compile Include="Double\TestClock.cs" />
     <Compile Include="NUnit\Machine\ApplicationUnderTestTest.cs" />
-    <Compile Include="NUnit\Machine\ConfigurationTest.cs" />
+    <Compile Include="NUnit\Application\ConfigurationTest.cs" />
     <Compile Include="NUnit\Machine\ConverterTest.cs" />
     <Compile Include="NUnit\Machine\DefaultParseTest.cs" />
     <Compile Include="NUnit\Machine\DefaultRuntimeTest.cs" />

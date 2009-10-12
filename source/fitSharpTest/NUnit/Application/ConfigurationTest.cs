@@ -4,10 +4,11 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using fitSharp.Machine.Application;
+using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
 
-namespace fitSharp.Test.NUnit.Machine {
+namespace fitSharp.Test.NUnit.Application {
     [TestFixture] public class ConfigurationTest {
 
         private Configuration configuration;
@@ -17,18 +18,18 @@ namespace fitSharp.Test.NUnit.Machine {
         }
 
         [Test] public void MethodIsExecuted() {
-            configuration.LoadXml("<config><fitSharp.Test.NUnit.Machine.TestConfig><TestMethod>stuff</TestMethod></fitSharp.Test.NUnit.Machine.TestConfig></config>");
+            configuration.LoadXml("<config><fitSharp.Test.NUnit.Application.TestConfig><TestMethod>stuff</TestMethod></fitSharp.Test.NUnit.Application.TestConfig></config>");
             Assert.AreEqual("stuff", configuration.GetItem<TestConfig>().Data);
         }
 
         [Test] public void MethodWithTwoParametersIsExecuted() {
-            configuration.LoadXml("<config><fitSharp.Test.NUnit.Machine.TestConfig><TestMethod second=\"more\">stuff</TestMethod></fitSharp.Test.NUnit.Machine.TestConfig></config>");
+            configuration.LoadXml("<config><fitSharp.Test.NUnit.Application.TestConfig><TestMethod second=\"more\">stuff</TestMethod></fitSharp.Test.NUnit.Application.TestConfig></config>");
             Assert.AreEqual("more stuff", configuration.GetItem<TestConfig>().Data);
         }
 
         [Test] public void TwoFilesAreLoadedIncrementally() {
-            configuration.LoadXml("<config><fitSharp.Test.NUnit.Machine.TestConfig><TestMethod>stuff</TestMethod></fitSharp.Test.NUnit.Machine.TestConfig></config>");
-            configuration.LoadXml("<config><fitSharp.Test.NUnit.Machine.TestConfig><Append>more</Append></fitSharp.Test.NUnit.Machine.TestConfig></config>");
+            configuration.LoadXml("<config><fitSharp.Test.NUnit.Application.TestConfig><TestMethod>stuff</TestMethod></fitSharp.Test.NUnit.Application.TestConfig></config>");
+            configuration.LoadXml("<config><fitSharp.Test.NUnit.Application.TestConfig><Append>more</Append></fitSharp.Test.NUnit.Application.TestConfig></config>");
             Assert.AreEqual("stuffmore", configuration.GetItem<TestConfig>().Data);
         }
 
@@ -39,6 +40,16 @@ namespace fitSharp.Test.NUnit.Machine {
             configuration.GetItem<TestConfig>().Data = "other";
             Assert.AreEqual("stuff", copy.GetItem<TestConfig>().Data);
             Assert.AreEqual("other", configuration.GetItem<TestConfig>().Data);
+        }
+
+        [Test] public void AliasTypeIsUsed() {
+            configuration.LoadXml("<config><fit.Settings><inputFolder>stuff</inputFolder></fit.Settings></config>");
+            Assert.AreEqual("stuff", configuration.GetItem<Settings>().InputFolder);
+        }
+
+        [Test] public void AliasMethodIsUsed() {
+            configuration.LoadXml("<config><fit.Namespaces><add>fitSharp.Test.NUnit.Application</add></fit.Namespaces></config>");
+            Assert.IsNotNull(configuration.GetItem<ApplicationUnderTest>().FindType(new IdentifierName("ConfigurationTest")));
         }
     }
 

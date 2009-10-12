@@ -43,13 +43,49 @@ namespace fitSharp.Machine.Application {
             reader.Close();
         }
 
+
         private void LoadNode(string typeName, XmlNode methodNode) {
             try {
-                new BasicProcessor().Invoke(new TypedValue(GetItem(typeName)), methodNode.Name, NodeParameters(methodNode));
+                new BasicProcessor().Invoke(AliasType(typeName), AliasMethod(typeName, methodNode.Name), NodeParameters(methodNode));
             }
             catch (TargetInvocationException e) {
                 throw e.InnerException;
             }
+        }
+
+        private static readonly Dictionary<string, string> aliasTypes = new Dictionary<string, string> {
+            {"fit.Assemblies", "fitSharp.Machine.Engine.ApplicationUnderTest"},
+            {"fit.FileExclusions", "fitSharp.Fit.Application.FileExclusions"},
+            {"fit.Namespaces", "fitSharp.Machine.Engine.ApplicationUnderTest"},
+            {"fit.Settings", "fitSharp.Machine.Application.Settings"},
+            {"Settings", "fitSharp.Machine.Application.Settings"},
+            {"FileExclusions", "fitSharp.Fit.Application.FileExclusions"},
+            {"Slim.Service", "fitSharp.Slim.Service.Service"},
+            {"Fit.Service", "fit.Service.Service"},
+            {"fit.CellHandlers", "fit.Service.Service"},
+            {"fitlibrary.CellHandlers", "fit.Service.Service"}
+        };
+
+        private TypedValue AliasType(string originalType) {
+            return new TypedValue(GetItem(aliasTypes.ContainsKey(originalType) ? aliasTypes[originalType] : originalType));
+        }
+
+        private static string AliasMethod(string originalType, string originalMethod) {
+            switch (originalType) {
+                case "fit.Assemblies":
+                    if (originalMethod == "add") return "addAssembly";
+                    break;
+                case "fit.Namespaces":
+                    if (originalMethod == "add") return "addNamespace";
+                    if (originalMethod == "remove") return "removeNamespace";
+                    break;
+                case "fit.CellHandlers":
+                case "fitlibrary.CellHandlers":
+                    if (originalMethod == "add") return "addCellHandler";
+                    if (originalMethod == "remove") return "removeCellHandler";
+                    break;
+            }
+            return originalMethod;
         }
 
         private static Tree<string> NodeParameters(XmlNode node) {
@@ -69,7 +105,7 @@ namespace fitSharp.Machine.Application {
         }
 
         public Copyable GetItem(string typeName) {
-            var type = new BasicProcessor().Parse<string, RuntimeType>(typeName);
+            RuntimeType type = new ApplicationUnderTest().FindType(new IdentifierName(typeName));
             return GetItem(type.Type);
         }
 
