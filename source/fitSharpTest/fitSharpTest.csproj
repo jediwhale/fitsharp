@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Double\TestSocket.cs" />
     <Compile Include="NUnit\Fit\DefineTest.cs" />
     <Compile Include="NUnit\Fit\ExecuteDefaultTest.cs" />
     <Compile Include="NUnit\Fit\ExecuteInterpretTest.cs" />

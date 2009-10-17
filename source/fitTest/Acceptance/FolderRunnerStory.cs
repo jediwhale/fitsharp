@@ -17,7 +17,7 @@ namespace fit.Test.Acceptance {
         public object SystemUnderTest { get { return shell; } }
 
         public FolderRunnerStory() {
-            shell = new Shell(new NullProgressReporter());
+            shell = new Shell(new NullReporter());
         }
 
         public void Run(string[] theArguments) {
@@ -29,9 +29,5 @@ namespace fit.Test.Acceptance {
         }
 
         public string Results { get { return ((FolderRunner) shell.Runner).Results; }}
-
-        private class NullProgressReporter: ProgressReporter {
-            public void Write(string theMessage) {}
-        }
     }
 }

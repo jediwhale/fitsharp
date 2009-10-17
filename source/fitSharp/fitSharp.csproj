@@ -82,6 +82,7 @@
     <Compile Include="IO\ElapsedTime.cs" />
     <Compile Include="IO\FileSystemModel.cs" />
     <Compile Include="IO\FolderModel.cs" />
+    <Compile Include="IO\ProgressReporter.cs" />
     <Compile Include="IO\SocketModel.cs" />
     <Compile Include="IO\SocketStream.cs" />
     <Compile Include="IO\TimeKeeper.cs" />

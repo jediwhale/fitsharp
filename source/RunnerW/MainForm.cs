@@ -5,6 +5,7 @@
 
 using System;
 using System.Windows.Forms;
+using fitSharp.IO;
 using fitSharp.Machine.Application;
 
 namespace fitSharp.RunnerW {

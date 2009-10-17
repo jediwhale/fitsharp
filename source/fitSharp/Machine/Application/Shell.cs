@@ -6,14 +6,11 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using fitSharp.IO;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Application {
-    public interface ProgressReporter {
-        void Write(string theMessage);
-    }
-
     public interface Runnable {
         int Run(string[] commandLineArguments, Configuration configuration, ProgressReporter reporter);
     }
@@ -117,11 +114,4 @@ namespace fitSharp.Machine.Application {
             return Runner.Run(extraArguments.ToArray(), Context.Configuration, progressReporter);
         }
     }
-
-    public class ConsoleReporter: ProgressReporter {
-        public void Write(string theMessage) {
-            Console.Write(theMessage);
-        }
-    }
-
 }

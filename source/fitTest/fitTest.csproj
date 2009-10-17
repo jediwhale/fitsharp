@@ -143,7 +143,7 @@
     <Compile Include="NUnit\ErrorKeywordHandlerTest.cs" />
     <Compile Include="NUnit\ExceptionKeywordHandlerTest.cs" />
     <Compile Include="NUnit\FailKeywordHandlerTest.cs" />
-    <Compile Include="NUnit\FitServerTest.cs" />
+    <Compile Include="NUnit\ProtocolTest.cs" />
     <Compile Include="NUnit\FixtureNUnitTest.cs" />
     <Compile Include="NUnit\FixtureTableTest.cs" />
     <Compile Include="NUnit\FolderTestModel.cs" />
@@ -156,6 +156,7 @@
     <Compile Include="NUnit\ParseInterpreterTest.cs" />
     <Compile Include="NUnit\RuntimeProcedureTest.cs" />
     <Compile Include="NUnit\SetUpFixtureTest.cs" />
+    <Compile Include="NUnit\SocketServerTest.cs" />
     <Compile Include="NUnit\StoryTestStringOperatorsTest.cs" />
     <Compile Include="NUnit\ParseTest.cs" />
     <Compile Include="NUnit\PathParserTest.cs" />

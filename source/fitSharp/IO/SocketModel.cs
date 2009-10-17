@@ -15,6 +15,11 @@ namespace fitSharp.IO {
     public class SocketModelImpl: SocketModel {
         private readonly Socket socket;
 
+        public SocketModelImpl(string hostName, int port) {
+			socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+		    socket.Connect(hostName, port);
+        }
+
         public SocketModelImpl(Socket socket) {
             this.socket = socket;
         }

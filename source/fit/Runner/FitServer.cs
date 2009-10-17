@@ -4,65 +4,52 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System;
-using System.IO;
-using System.Net.Sockets;
-using System.Text;
-using fit;
+using fit.Runner;
 using fit.Service;
 using fitSharp.Fit.Model;
-using fitSharp.Fit.Service;
 using fitSharp.IO;
 using fitSharp.Machine.Application;
-using fitSharp.Machine.Engine;
-using fitSharp.Machine.Model;
 
 namespace fitnesse.fitserver
 {
 	public class FitServer: Runnable
 	{
-	    public TestCounts Counts { get; private set; }
-
-		private Socket clientSocket;
-	    private SocketStream socketStream;
+		private FitSocket clientSocket;
 		private bool verbose;
 		private string host;
 		private int port;
 		private string socketToken;
-	    private bool IMaybeProcessingSuiteSetup = true;
 	    private Configuration configuration;
+	    private ProgressReporter reporter;
+	    private readonly TestCounts totalCounts = new TestCounts();
 
 		private const int ASSEMBLYLIST = 0;
 		private const int HOST = 1;
 		private const int PORT = 2;
 		private const int SOCKET_TOKEN = 3;
 		private const int DONE = 4;
-	    private static readonly IdentifierName ourSuiteSetupIdentifier = new IdentifierName("suitesetup");
-
-		public static int Main(string[] CommandLineArguments)
-		{
-			var fitServer = new FitServer();
-			fitServer.Run(CommandLineArguments);
-			return fitServer.ExitCode();
-		}
-
-		public FitServer() {
-		    Counts = new TestCounts();
-		}
-
-	    public FitServer(Configuration configuration, string host, int port, bool verbose) : this()
-		{
-		    this.configuration = configuration;
-			this.host = host;
-			this.port = port;
-			this.verbose = verbose;
-		    IMaybeProcessingSuiteSetup = false;
-		}
 
 	    public int Run(string[] commandLineArguments, Configuration configuration, ProgressReporter reporter) {
 	        this.configuration = configuration;
 	        Run(commandLineArguments);
-	        return ExitCode();
+	        return totalCounts.FailCount;
 	    }
+
+	    public void Run(string[] CommandLineArguments)
+		{
+			ParseCommandLineArguments(CommandLineArguments);
+
+	        reporter = MakeReporter();
+
+			clientSocket = new FitSocket(new SocketModelImpl(host, port), reporter);
+			EstablishConnection();
+
+		    var server = new SocketServer(clientSocket, configuration.GetItem<Service>(), reporter, true);
+			server.ProcessTestDocuments(WriteResults);
+
+		    clientSocket.Close();
+		    Exit();
+		}
 
 		private void ParseCommandLineArguments(string[] args)
 		{
@@ -82,8 +69,8 @@ namespace fitnesse.fitserver
 					switch (argumentPosition)
 					{
 						case ASSEMBLYLIST:
-							ParseAssemblyList(args[i]);
-							break;
+					        new PathParser(args[i]).AddAssemblies(configuration);
+					        break;
 						case HOST:
 							host = args[i];
 							break;
@@ -109,194 +96,34 @@ namespace fitnesse.fitserver
 			Environment.Exit(1);
 		}
 
-		public void ParseAssemblyList(string path)
+
+	    private ProgressReporter MakeReporter() {
+            if (verbose) return new ConsoleReporter();
+            return new NullReporter();
+        }
+
+	    private void Exit()
 		{
-			var parser = new PathParser(path);
-			foreach (string assemblyPath in parser.AssemblyPaths) {
-                if (assemblyPath == "defaultPath") continue;
-                configuration.GetItem<ApplicationUnderTest>().AddAssembly(assemblyPath.Replace("\"", string.Empty));
-			}
-		    if (parser.HasConfigFilePath())
-				AppDomain.CurrentDomain.SetData("APP_CONFIG_FILE",parser.ConfigFilePath);
-		}
-
-		public int Run(string[] CommandLineArguments)
-		{
-			ParseCommandLineArguments(CommandLineArguments);
-
-			EstablishConnection();
-			ValidateConnection();
-
-			int errorCount = ProcessTestDocuments(WriteFitProtocol);
-			CloseConnection();
-			Exit();
-			return errorCount;
-		}
-
-		public void CloseConnection()
-		{
-			clientSocket.Close();
-		}
-
-		public void Exit()
-		{
-			WriteLogMessage("exiting...");
-			WriteLogMessage("End results: " + Counts.Description);
-		}
+	        reporter.WriteLine("exiting...");
+	        reporter.WriteLine("End results: " + totalCounts.Description);
+	    }
 
 		private void EstablishConnection()
 		{
-			WriteLogMessage("Host:Port:\t" + host + ":" + port);
-
-			string httpRequest = "GET /?responder=socketCatcher&ticket=" + socketToken + " HTTP/1.1\r\n\r\n";
-			EstablishConnection(httpRequest);
+		    reporter.WriteLine("Host:Port:\t" + host + ":" + port);
+		    clientSocket.EstablishConnection(Protocol.FormatRequest(socketToken));
 		}
 
-		public void EstablishConnection(string request)
-		{
-			WriteLogMessage("\tHTTP request: " + request);
-
-			clientSocket = SocketConnectionTo(host, port);
-            socketStream = new SocketStream(new SocketModelImpl(clientSocket));
-			Transmit(request);
-		}
-
-		public void ValidateConnection()
-		{
-			WriteLogMessage("Validating connection...");
-			int StatusSize = ReceiveInteger();
-			if (StatusSize == 0)
-				WriteLogMessage("\t...ok\n");
-			else
-			{
-				String errorMessage = socketStream.ReadBytes(StatusSize);
-				WriteLogMessage("\t...failed because: " + errorMessage);
-				Console.WriteLine("An error occured while connecting to client.");
-				Console.WriteLine(errorMessage);
-				Environment.Exit(-1);
-			}
-		}
-
-		public int ProcessTestDocuments(WriteTestResult writer)
-		{
-			string document;
-
-            while ((document = ReceiveDocument()).Length > 0)
-			{
-				WriteLogMessage("processing document of size: " + document.Length);
-				ProcessTestDocument(document, writer);
-		        IMaybeProcessingSuiteSetup = false;
-			}
-			WriteLogMessage("\ncompletion signal recieved");
-
-			return ExitCode();
-		}
-
-		public int ExitCode()
-		{
-			return Counts.FailCount;
-		}
-
-		private void ProcessTestDocument(string document, WriteTestResult writer)
-		{
-			try
-			{
-                Tree<Cell> result = configuration.GetItem<Service>().Compose(new TypedValue(new StoryTestString(document)));
-                var parse = result != null ? (Parse)result.Value : null;
-			    var storyTest = new StoryTest(parse, writer);
-			    WriteLogMessage(parse.Leader);
-                if (ourSuiteSetupIdentifier.IsStartOf(parse.Leader) || IMaybeProcessingSuiteSetup)
-                    storyTest.ExecuteOnConfiguration();
-                else
-				    storyTest.Execute();
-			}
-			catch (Exception e)
-			{
-			    var testStatus = new TestStatus();
-				var parse = new Parse("div", "Unable to parse input. Input ignored.", null, null);
-			    testStatus.MarkException(parse, e);
-                writer(parse, testStatus.Counts);
-			}
-		}
-
-		public string TablesToString(Parse tables)
-		{
-            return configuration.GetItem<Service>().ParseTree<Cell, StoryTestString>(tables).ToString();
-		}
-
-		public void WriteLogMessage(string logMessage)
-		{
-			if (verbose)
-				Console.WriteLine(logMessage);
-		}
-
-		private static Socket SocketConnectionTo(string hostName, int port)
-		{
-			var clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-		    clientSocket.Connect(hostName, port);
-			return clientSocket;
-		}
-
-		public string ReceiveDocument()
-		{
-			int documentLength = ReceiveInteger();
-			if (documentLength == 0)
-				return "";
-		    return socketStream.ReadBytes(documentLength);
-		}
-
-		public int ReceiveInteger()
-		{
-			return DecodeInteger(socketStream.ReadBytes(10));
-		}
-
-		public void Transmit(string message)
-		{
-            socketStream.Write(message);
-		}
-
-		public int DecodeInteger(string encodedInteger)
-		{
-			return Convert.ToInt32(encodedInteger);
-		}
-
-		private static string ReadFixedLengthString(TextReader reader, int stringLength)
-		{
-			var numberCharacters = new char[stringLength];
-			reader.Read(numberCharacters, 0, stringLength);
-
-			return new StringBuilder(stringLength).Append(numberCharacters).ToString();
-		}
-
-		public int ReadIntegerFrom(StreamReader reader)
-		{
-			return DecodeInteger(ReadFixedLengthString(reader, 10));
-		}
-
-		public void WriteTo(StreamWriter writer, string writeContent)
-		{
-			writer.Write(Protocol.FormatDocument(writeContent));
-			writer.Flush();
-		}
-
-		public string ReadFrom(StreamReader reader)
-		{
-			int contentLength = ReadIntegerFrom(reader);
-			return ReadFixedLengthString(reader, contentLength);
-		}
-
-	    private void WriteFitProtocol(Tree<Cell> theTables, TestCounts counts)
+	    private void WriteResults(string tables, TestCounts counts)
 	    {
-            var tables = (Parse) theTables.Value;
-		    string testResultDocument = TablesToString(tables);
-		    WriteLogMessage("\tTransmitting tables of length " + testResultDocument.Length);
-		    Transmit(Protocol.FormatDocument(testResultDocument));
+	        reporter.WriteLine("\tTransmitting tables of length " + tables.Length);
+	        clientSocket.SendDocument(tables);
 
-		    WriteLogMessage("\tTest Document finished");
-		    Transmit(Protocol.FormatCounts(counts));
+	        reporter.WriteLine("\tTest Document finished");
+	        clientSocket.SendCounts(counts);
 
-            Counts.TallyCounts(counts);
-			WriteLogMessage("\tresults: " + counts.Description);
-        }
+	        totalCounts.TallyCounts(counts);
+	        reporter.WriteLine("\tresults: " + counts.Description);
+	    }
 	}
 }

@@ -56,7 +56,9 @@
     <Compile Include="Operators\ParseInterpreter.cs" />
     <Compile Include="Operators\ParseStoryTestString.cs" />
     <Compile Include="Operators\RuntimeProcedure.cs" />
+    <Compile Include="Runner\FitSocket.cs" />
     <Compile Include="Runner\FolderRunner.cs" />
+    <Compile Include="Runner\SocketServer.cs" />
     <Compile Include="Runner\StoryTestFile.cs" />
     <Compile Include="Runner\StoryTestFolder.cs" />
     <Compile Include="Runner\SuiteRunner.cs" />

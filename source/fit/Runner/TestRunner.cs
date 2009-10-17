@@ -6,6 +6,7 @@
 using System;
 using System.IO;
 using fit;
+using fit.Runner;
 using fit.Service;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Service;
@@ -20,7 +21,6 @@ namespace fitnesse.fitserver
 	{
 		public string pageName;
 		public bool usingDownloadedPaths = true;
-		private FitServer fitServer;
 		public string host;
 		public int port;
 		public bool debug;
@@ -32,6 +32,9 @@ namespace fitnesse.fitserver
 		public string assemblyPath;
 	    public string suiteFilter;
 	    private Configuration configuration;
+	    private readonly TestCounts totalCounts = new TestCounts();
+	    private SocketServer server;
+	    private FitSocket clientSocket;
 
 	    public int Run(string[] commandLineArguments, Configuration configuration, ProgressReporter reporter) {
 	        this.configuration = configuration;
@@ -40,32 +43,50 @@ namespace fitnesse.fitserver
 				PrintUsage();
 				return ExitCode();
 			}
-			fitServer.EstablishConnection(MakeHttpRequest());
-			fitServer.ValidateConnection();
+	        clientSocket = new FitSocket(new SocketModelImpl(host, port), MakeReporter());
+		    server = new SocketServer(clientSocket, configuration.GetItem<Service>(), MakeReporter(), false);
+			clientSocket.EstablishConnection(Protocol.FormatRequest(pageName, usingDownloadedPaths, suiteFilter));
 			AddAssemblies();
-			fitServer.ProcessTestDocuments(WriteTestRunner);
-			HandleFinalCount(fitServer.Counts);
-			fitServer.CloseConnection();
-			fitServer.Exit();
+		    server.ProcessTestDocuments(WriteTestRunner);
+			HandleFinalCount(totalCounts);
+			clientSocket.Close();
+			Exit();
 			resultWriter.Close();
 	        return ExitCode();
 	    }
 
-		public void AddAssemblies()
+	    private void Exit()
+		{
+			WriteLogMessage("exiting...");
+			WriteLogMessage("End results: " + totalCounts.Description);
+		}
+
+		private void WriteLogMessage(string logMessage)
+		{
+			if (verbose)
+				Console.WriteLine(logMessage);
+		}
+
+        private ProgressReporter MakeReporter() {
+            if (verbose) return new ConsoleReporter();
+            return new NullReporter();
+        }
+
+		private void AddAssemblies()
 		{
 			if(usingDownloadedPaths)
-				assemblyPath += fitServer.ReceiveDocument();
+				assemblyPath += clientSocket.ReceiveDocument();
 			if(!string.IsNullOrEmpty(assemblyPath))
 			{
 				if(verbose)
 					output.WriteLine("Adding assemblies: " + assemblyPath);
-				fitServer.ParseAssemblyList(assemblyPath);	
+		        new PathParser(assemblyPath).AddAssemblies(configuration);
 			}
 		}
 
-		public int ExitCode()
+		private int ExitCode()
 		{
-			return fitServer == null ? -1 : fitServer.ExitCode();
+			return totalCounts.FailCount;
 		}
 
 		public bool ParseArgs(Configuration configuration, string[] args)
@@ -97,12 +118,11 @@ namespace fitnesse.fitserver
 				host = args[index++];
 				port = Int32.Parse(args[index++]);
 				pageName = args[index++];
-			    fitServer = new FitServer(configuration, host, port, debug);
 			    string assemblies = null;
 				while(args.Length > index)
 					assemblies = assemblies == null ? args[index++] : (assemblies + ";" + args[index++]);
                 if (assemblies != null) {
-                    fitServer.ParseAssemblyList(assemblies);
+		            new PathParser(assemblies).AddAssemblies(configuration);
                 }
 				return true;
 			}
@@ -124,21 +144,39 @@ namespace fitnesse.fitserver
 			Console.WriteLine("\t-suiteFilter <filter>\tonly run test pages with tag <filter>");
 		}
 
-		public string MakeHttpRequest()
+	    private void CreateResultWriter(string fileName, string outputType) {
+	        if (string.IsNullOrEmpty(fileName)) return;
+	        if (outputType == "xml")
+	            resultWriter = new XmlResultWriter(fileName, new FileSystemModel());
+	        else
+	            resultWriter = new TextResultWriter(fileName, new FileSystemModel());
+	    }
+
+	    public void HandleFinalCount(TestCounts summary)
 		{
-			string request = "GET /" + pageName + "?responder=fitClient";
-			if(usingDownloadedPaths)
-				request += "&includePaths=yes";
-            if (suiteFilter != null)
-                request += "&suiteFilter=" + suiteFilter;
-			return request + " HTTP/1.1\r\n\r\n";
+			if(verbose)
+			{
+				output.WriteLine();
+				output.WriteLine("Test Pages: " + pageCounts.Description);
+				output.WriteLine("Assertions: " + summary.Description);
+			}
+			resultWriter.WriteFinalCount(summary);
 		}
 
-		public void AcceptResults(PageResult results)
+		private void WriteTestRunner(string data, TestCounts counts)
+		{
+			int indexOfFirstLineBreak = data.IndexOf("\n");
+			string pageTitle = data.Substring(0, indexOfFirstLineBreak);
+			data = data.Substring(indexOfFirstLineBreak + 1);
+			AcceptResults(new PageResult(pageTitle, data, counts));
+		}
+
+		private void AcceptResults(PageResult results)
 		{
 			TestCounts counts = results.TestCounts;
 			pageCounts.TallyPageCounts(counts);
-			fitServer.Transmit(Protocol.FormatCounts(counts));
+            totalCounts.TallyCounts(counts);
+			clientSocket.SendCounts(counts);
 			if(verbose)
 			{
 				for(int i = 0; i < counts.GetCount(CellAttributes.RightStatus); i++)
@@ -164,35 +202,6 @@ namespace fitnesse.fitserver
 			if("".Equals(description))
 				description = "The test";
 			return description;
-		}
-
-	    private void CreateResultWriter(string fileName, string outputType) {
-	        if (string.IsNullOrEmpty(fileName)) return;
-	        if (outputType == "xml")
-	            resultWriter = new XmlResultWriter(fileName, new FileSystemModel());
-	        else
-	            resultWriter = new TextResultWriter(fileName, new FileSystemModel());
-	    }
-
-	    public void HandleFinalCount(TestCounts summary)
-		{
-			if(verbose)
-			{
-				output.WriteLine();
-				output.WriteLine("Test Pages: " + pageCounts.Description);
-				output.WriteLine("Assertions: " + summary.Description);
-			}
-			resultWriter.WriteFinalCount(summary);
-		}
-
-		private void WriteTestRunner(Tree<Cell> theTables, TestCounts counts)
-		{
-            var tables = (Parse) theTables.Value;
-            string data = configuration.GetItem<Service>().ParseTree<Cell, StoryTestString>(tables).ToString();
-			int indexOfFirstLineBreak = data.IndexOf("\n");
-			string pageTitle = data.Substring(0, indexOfFirstLineBreak);
-			data = data.Substring(indexOfFirstLineBreak + 1);
-			AcceptResults(new PageResult(pageTitle, data, counts));
 		}
 	}
 }

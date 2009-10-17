@@ -3,6 +3,8 @@
 // Released under the terms of the GNU General Public License version 2 or later.
 using System;
 using System.Collections;
+using fitSharp.Machine.Application;
+using fitSharp.Machine.Engine;
 
 namespace fitnesse.fitserver
 {
@@ -42,5 +44,14 @@ namespace fitnesse.fitserver
 		{
 			get { return configFilePath; }
 		}
+
+	    public void AddAssemblies(Configuration configuration) {
+	        foreach (string assemblyPath in AssemblyPaths) {
+	            if (assemblyPath == "defaultPath") continue;
+	            configuration.GetItem<ApplicationUnderTest>().AddAssembly(assemblyPath.Replace("\"", string.Empty));
+	        }
+	        if (HasConfigFilePath())
+	            AppDomain.CurrentDomain.SetData("APP_CONFIG_FILE", ConfigFilePath);
+	    }
 	}
 }

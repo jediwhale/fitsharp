@@ -3,8 +3,8 @@
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
-using System.Collections.Generic;
 using fitSharp.IO;
+using fitSharp.Test.Double;
 using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.IO {
@@ -46,34 +46,5 @@ namespace fitSharp.Test.NUnit.IO {
             Assert.AreEqual(new byte[] {55, 58, 104, 226, 128, 153, 108, 108, 111}, testSocket.GetBytes());
         }
 
-        private class TestSocket: SocketModel {
-            private readonly List<byte> buffer = new List<byte>();
-            private readonly List<int> lengths = new List<int>();
-
-            public int Receive(byte[] bytes, int offset, int bytesToRead) {
-                int length = lengths[0];
-                for (int i = 0; i < length; i++) {
-                    bytes[offset + i] = buffer[0];
-                    buffer.RemoveAt(0);
-                }
-                lengths.RemoveAt(0);
-                return length;
-            }
-
-            public void Send(byte[] buffer) {
-                PutBytes(buffer);
-            }
-
-            public void PutBytes(ICollection<byte> bytes) {
-                lengths.Add(bytes.Count);
-                foreach (byte b in bytes) buffer.Add(b);
-            }
-
-            public byte[] GetBytes() {
-                return buffer.ToArray();
-            }
-
-            public void Close() {}
-        }
     }
 }

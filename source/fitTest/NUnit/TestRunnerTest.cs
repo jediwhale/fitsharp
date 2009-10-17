@@ -35,24 +35,6 @@ namespace fit.Test.NUnit {
         }
 
         [Test]
-        public void TestMakeHttpRequest()
-        {
-            runner.usingDownloadedPaths = false;
-            runner.pageName = "SomePageName";
-            string request = runner.MakeHttpRequest();
-            Assert.AreEqual("GET /SomePageName?responder=fitClient HTTP/1.1\r\n\r\n", request);
-
-            runner.usingDownloadedPaths = true;
-            request = runner.MakeHttpRequest();
-            Assert.AreEqual("GET /SomePageName?responder=fitClient&includePaths=yes HTTP/1.1\r\n\r\n", request);
-
-            runner.usingDownloadedPaths = false;
-            runner.suiteFilter = "myfilter";
-            request = runner.MakeHttpRequest();
-            Assert.AreEqual("GET /SomePageName?responder=fitClient&suiteFilter=myfilter HTTP/1.1\r\n\r\n", request);
-        }
-
-        [Test]
         public void TestParseArgs()
         {
             bool result = runner.ParseArgs(configuration, new string[] {});

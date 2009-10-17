@@ -14,8 +14,8 @@ to be bound by the terms of this license. You must not remove this notice, or an
 <body>
 <div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
 <div class="pagename">Suite Configuration File</div>
-<div class="content">The execution environment for a suite of tests can be controlled by a suite configuration file. This is a way to consolidate configuration information into one place and to remove it from business-facing story tests. The file is specified in the command line for the <span style="font-family:verdana,sans-serif"><i>fit</i>Sharp</span> Runner with a -c switch:<br>
-<pre class="code">c:\program files\fitsharp\runner -c c:\myfolder\mysuite.config.xml -r ...</pre>To specify the file from FitNesse, include it in the COMMAND_PATTERN definition:<br>
+<div class="content">The execution environment for a suite of tests can be controlled by a suite configuration file. This is a way to consolidate configuration information into one place and to remove it from business-facing story tests. We specify the file in the command line for the <span style="font-family:verdana,sans-serif"><i>fit</i>Sharp</span> Runner with a -c switch:<br>
+<pre class="code">c:\program files\fitsharp\runner -c c:\myfolder\mysuite.config.xml -r ...</pre>To specify the file from FitNesse, we include it in the COMMAND_PATTERN definition:<br>
 <pre class="code">!define COMMAND_PATTERN {%m -c c:\myfolder\mysuite.config.xml -r ...}</pre>The execution environment is re-initialized at the beginning of each test, to preserve test independence. This means any changes made to configurable items during test execution will not be visible to other tests.<br>
 <br>
 The file format is XML. Here is a sample showing the configurable items:<br>
@@ -24,25 +24,29 @@ The file format is XML. Here is a sample showing the configurable items:<br>
         &lt;AddAssembly>myTests.dll&lt;/AddAssembly>
         &lt;AddNamespace>myTests&lt;/AddNamespace>
     &lt;/ApplicationUnderTest>
-    &lt;fitSharp.Machine.Application.Settings>
+    &lt;Settings>
         &lt;ApartmentState>STA&lt;/ApartmentState>
         &lt;CodePage>1200&lt;/CodePage>
         &lt;InputFolder>myInput&lt;/InputFolder>
         &lt;OutputFolder>myOutput&lt;/OutputFolder>
         &lt;Runner>fitSharp.Slim.Service.Runner&lt;/Runner>
         &lt;XmlOutput>myResult.xml&lt;/XmlOutput>
-    &lt;/fitSharp.Machine.Application.Settings>
-    &lt;fitSharp.Fit.Application.FileExclusions>
+    &lt;/Settings>
+    &lt;FileExclusions>
         &lt;Add>^\.svn$&lt;/Add>
-    &lt;/fitSharp.Fit.Application.FileExclusions>
-    &lt;fitSharp.Slim.Service.Service>
+    &lt;/FileExclusions>
+    &lt;Slim.Service>
         &lt;AddOperator>my.Custom.Operator&lt;/AddOperator>
-    &lt;/fitSharp.Slim.Service.Service>
-    &lt;fit.Service.Service>
+    &lt;/Slim.Service>
+    &lt;Fit.Service>
         &lt;AddOperator>my.Custom.Handler&lt;/AddOperator>
         &lt;RemoveOperator>fit.Operators.ExecuteError&lt;/RemoveOperator>
-    &lt;/fit.Service.Service>
-&lt;/suiteConfig></pre><span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">Apartment State</span><br>
+    &lt;/Fit.Service>
+&lt;/suiteConfig></pre> We can also include custom configuration set up by adding nodes in the format: <pre class="code">&lt;Our.Class>
+    &lt;aMethod>aParameterValue&lt;/aMethod>
+&lt;/Our.Class></pre> These are the standard configuration items.<br>
+<br>
+<span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">Apartment State</span><br>
 The default COM apartment state is MTA. It can be set to STA when testing with software that requires this.<br>
 <br>
 <span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">Application Under Test</span><br>
@@ -57,7 +61,7 @@ Regular expression patterns can be added to exclude files from Folder Runner pro
 <span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">Input Folder</span><br>
 The input folder for Folder Runner.<br>
  <br>
-<span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">Operators</span><br>
+<span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">Fit.Service/Slim.Service</span><br>
 Operators can be added or removed from the Operator List used by Fit and Slim.<br>
 <br>
 <span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">Output Folder</span><br>

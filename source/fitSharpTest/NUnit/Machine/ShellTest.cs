@@ -5,6 +5,7 @@
 
 using System;
 using System.Configuration;
+using fitSharp.IO;
 using fitSharp.Machine.Application;
 using NUnit.Framework;
 using Configuration=fitSharp.Machine.Application.Configuration;
