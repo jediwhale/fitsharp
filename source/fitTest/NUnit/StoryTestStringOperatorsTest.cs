@@ -4,6 +4,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using fitSharp.Fit.Model;
+using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
 
@@ -12,7 +13,7 @@ namespace fit.Test.NUnit {
 
         [Test] public void HtmlStringIsParsed() {
             var service = new Service.Service();
-            Tree<Cell> result = service.Compose(new TypedValue(new StoryTestString("<table><tr><td>hello</td></tr></table>")));
+            Tree<Cell> result = service.Compose(new StoryTestString("<table><tr><td>hello</td></tr></table>"));
             var table = (Parse)result.Value;
             Assert.AreEqual("<table>", table.Tag);
             Parse cell = table.Parts.Parts;
@@ -22,7 +23,7 @@ namespace fit.Test.NUnit {
 
         [Test] public void NoTablesReturnsNull() {
             var service = new Service.Service();
-            Tree<Cell> result = service.Compose(new TypedValue(new StoryTestString("<b>stuff</b>")));
+            Tree<Cell> result = service.Compose(new StoryTestString("<b>stuff</b>"));
             Assert.IsNull(result);
         }
 
@@ -40,7 +41,7 @@ namespace fit.Test.NUnit {
 
         private static void CheckRoundTrip(string input) {
             var service = new Service.Service();
-            var source = (Parse)service.Compose(new TypedValue(new StoryTestString(input))).Value;
+            var source = (Parse)service.Compose(new StoryTestString(input)).Value;
             var result = service.Parse(typeof(StoryTestString), TypedValue.Void, source);
             Assert.AreEqual(input, result.ValueString);
         }

@@ -58,7 +58,7 @@ namespace fitSharp.Slim.Operators {
         protected TypedValue InvokeMember(
             Tree<string> parameters, int memberIndex) {
             object target = Processor.Load(new SavedInstance(parameters.Branches[memberIndex].Value)).Instance;
-            TypedValue result = Processor.Invoke(new TypedValue(target), parameters.Branches[memberIndex + 1].Value, ParameterTree(parameters, memberIndex + 2));
+            TypedValue result = Processor.Invoke(target, parameters.Branches[memberIndex + 1].Value, ParameterTree(parameters, memberIndex + 2));
             result.ThrowExceptionIfNotValid();
             return result;
         }

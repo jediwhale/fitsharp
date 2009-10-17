@@ -28,7 +28,7 @@ namespace fitSharp.Machine.Engine {
 
     public static class ProcessorExtension {
 
-        public static Tree<T> Compose<T>(this Processor<T> processor, object instance)  {
+        public static Tree<T> Compose<T>(this Processor<T> processor, object instance) {
             return processor.Compose(new TypedValue(instance));
         }
 
@@ -45,6 +45,11 @@ namespace fitSharp.Machine.Engine {
             result.ThrowExceptionIfNotValid();
             return result;
         }
+
+        public static TypedValue Invoke<T>(this Processor<T> processor, object instance, string memberName, Tree<T> parameters) {
+            return processor.Invoke(new TypedValue(instance), memberName, parameters);
+        }
+
         public static TypedValue ParseTree<T>(this Processor<T> processor, Type type, Tree<T> parameters) {
             return processor.Parse(type, TypedValue.Void, parameters);
         }

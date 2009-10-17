@@ -10,6 +10,7 @@ using fitlibrary;
 using fitlibrary.exception;
 using fitSharp.Fit.Exception;
 using fitSharp.Machine.Exception;
+using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fit.Fixtures {
@@ -124,7 +125,7 @@ namespace fit.Fixtures {
         }
 
         private void AddCell(Parse theCells, object theNewValue) {
-            theCells.Last.More = (Parse)fixture.Processor.Compose(new TypedValue(theNewValue));
+            theCells.Last.More = (Parse)fixture.Processor.Compose(theNewValue);
         }
 
     }

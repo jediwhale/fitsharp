@@ -4,6 +4,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using fitlibrary.table;
+using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
 
@@ -11,13 +12,13 @@ namespace fit.Test.NUnit {
     [TestFixture] public class CellMaking {
         [Test] public void CellIsMadeWithSimpleString() {
             var service = new Service.Service();
-            var cell = (Parse) service.Compose(new TypedValue("something"));
+            var cell = (Parse) service.Compose("something");
             Assert.AreEqual("\n<td><span class=\"fit_grey\">something</span></td>", cell.ToString());
         }
 
         [Test] public void CellIsMadeWithArray() {
             var service = new Service.Service();
-            var cell = (Parse) service.Compose(new TypedValue(new [] {"something", "else"}));
+            var cell = (Parse) service.Compose(new [] {"something", "else"});
             Assert.AreEqual("\n<td><span class=\"fit_grey\">something, else</span></td>", cell.ToString());
         }
 
@@ -25,7 +26,7 @@ namespace fit.Test.NUnit {
             var service = new Service.Service();
             Parse table =
                 HtmlParser.Instance.Parse("<table><tr><td>11</td><td>12</td></tr><tr><td>21</td><td>22</td></tr></table>");
-            var cell = (Parse) service.Compose(new TypedValue(new ParseTable(table)));
+            var cell = (Parse) service.Compose(new ParseTable(table));
             Assert.AreEqual("\n<td>\n<table>\n<tr>\n<td><span class=\"fit_grey\">11</span></td>\n<td><span class=\"fit_grey\">12</span></td></tr>" +
             "\n<tr>\n<td><span class=\"fit_grey\">21</span></td>\n<td><span class=\"fit_grey\">22</span></td></tr></table></td>", cell.ToString());
         }

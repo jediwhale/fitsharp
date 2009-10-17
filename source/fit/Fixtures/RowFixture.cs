@@ -8,6 +8,7 @@ using System.Collections;
 using fit.Model;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Service;
+using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fit
@@ -75,7 +76,7 @@ namespace fit
             foreach (Parse headerCell in new CellRange(headerCells).Cells)
 			{
 		        TypedValue actual = CellOperation.Invoke(this, headerCell);
-                var newCell = (Parse)Processor.Compose(new TypedValue(actual.Value ?? "null"));
+                var newCell = (Parse)Processor.Compose(actual.Value ?? "null");
 				if (cell == null)
 					cell = newCell;
 				else

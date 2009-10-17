@@ -100,7 +100,7 @@ namespace fit.Runner {
         }
 
         private Parse Parse(string content) {
-            Tree<Cell> result = configuration.GetItem<Service.Service>().Compose(new TypedValue(new StoryTestString(content)));
+            Tree<Cell> result = configuration.GetItem<Service.Service>().Compose(new StoryTestString(content));
             return result != null ? (Parse)result.Value : null;
         }
 

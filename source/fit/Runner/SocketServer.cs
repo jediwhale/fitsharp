@@ -5,7 +5,6 @@
 
 using System;
 using fitSharp.Fit.Model;
-using fitSharp.Fit.Service;
 using fitSharp.IO;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Extension;
@@ -45,7 +44,7 @@ namespace fit.Runner {
 		{
 			try
 			{
-                Tree<Cell> result = service.Compose(new TypedValue(new StoryTestString(document)));
+                Tree<Cell> result = service.Compose(new StoryTestString(document));
                 var parse = result != null ? (Parse)result.Value : null;
 			    var storyTest = new StoryTest(parse, (tables, counts) => WriteResults(tables, counts, writer));
 			    reporter.WriteLine(parse.Leader);
