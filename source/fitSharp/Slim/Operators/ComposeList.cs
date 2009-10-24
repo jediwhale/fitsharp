@@ -6,6 +6,7 @@
 using System.Collections.Generic;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
+using fitSharp.Slim.Model;
 
 namespace fitSharp.Slim.Operators {
     public class ComposeList: SlimOperator, ComposeOperator<string> { //todo: handle any enumerable type
@@ -15,7 +16,7 @@ namespace fitSharp.Slim.Operators {
 
         public Tree<string> Compose(TypedValue instance) {
             var list = instance.Value as List<object> ?? new List<object>();
-            var tree = new TreeList<string>();
+            var tree = new SlimTree();
             foreach (object value in list) {
                 tree.AddBranch(Processor.Compose(value));
             }

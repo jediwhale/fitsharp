@@ -9,6 +9,7 @@ using fitSharp.Machine.Exception;
 using fitSharp.Machine.Extension;
 using fitSharp.Machine.Model;
 using fitSharp.Slim.Exception;
+using fitSharp.Slim.Model;
 
 namespace fitSharp.Slim.Operators {
     public class ComposeException: SlimOperator, ComposeOperator<string> {
@@ -70,7 +71,7 @@ namespace fitSharp.Slim.Operators {
         }
 
         private static Tree<string> MakeResult(string message) {
-            return new TreeList<string>(string.Format(ExceptionResult, message));
+            return new SlimLeaf(string.Format(ExceptionResult, message));
         }
 
         public static bool WasAborted(string result) {

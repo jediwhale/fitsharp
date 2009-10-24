@@ -5,6 +5,7 @@
 
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
+using fitSharp.Slim.Model;
 
 namespace fitSharp.Slim.Operators {
     public class ComposeDefault: SlimOperator, ComposeOperator<string> {
@@ -15,7 +16,7 @@ namespace fitSharp.Slim.Operators {
         }
 
         public Tree<string> Compose(TypedValue instance) {
-            return new TreeList<string>(instance.IsVoid ? voidResult : instance.ValueString);
+            return new SlimLeaf(instance.IsVoid ? voidResult : instance.ValueString);
         }
     }
 }

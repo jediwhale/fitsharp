@@ -5,6 +5,7 @@
 
 using System.Text;
 using fitSharp.Machine.Model;
+using fitSharp.Slim.Model;
 
 namespace fitSharp.Slim.Service {
     public class Document {
@@ -40,7 +41,7 @@ namespace fitSharp.Slim.Service {
 
         private static Tree<string> Read(string input) {
             if (IsList(input)) return ReadList(input.Substring(1, input.Length - 2));
-            return new TreeList<string>(input);
+            return new SlimLeaf(input);
         }
 
         private static bool IsList(string input) {
@@ -49,9 +50,9 @@ namespace fitSharp.Slim.Service {
                    int.TryParse(input.Substring(1, 6), out result);
         }
 
-        private static TreeList<string> ReadList(string input) {
+        private static SlimTree ReadList(string input) {
             int length = int.Parse(input.Substring(0, 6));
-            var result = new TreeList<string>();
+            var result = new SlimTree();
             int start = 7;
             for (int i = 0; i < length; i++) {
                 int itemLength = int.Parse(input.Substring(start, 6));

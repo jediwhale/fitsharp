@@ -9,6 +9,7 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
 using fitSharp.Slim.Exception;
+using fitSharp.Slim.Model;
 using fitSharp.Slim.Operators;
 using fitSharp.Slim.Service;
 using NUnit.Framework;
@@ -87,7 +88,7 @@ namespace fitSharp.Test.NUnit.Slim {
         }
 
         [Test] public void InstructionExceptionIsComposed() {
-            CheckExceptionCompose(new InstructionException(new TreeList<string>().AddBranchValue("stuff").AddBranchValue("nonsense")),
+            CheckExceptionCompose(new InstructionException(new SlimTree().AddBranchValue("stuff").AddBranchValue("nonsense")),
                                   "message:<<MALFORMED_INSTRUCTION stuff,nonsense>> ");
         }
 

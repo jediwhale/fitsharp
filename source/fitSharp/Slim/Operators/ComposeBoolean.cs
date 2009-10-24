@@ -5,6 +5,7 @@
 
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
+using fitSharp.Slim.Model;
 
 namespace fitSharp.Slim.Operators {
     public class ComposeBoolean: SlimOperator, ComposeOperator<string> {
@@ -13,7 +14,7 @@ namespace fitSharp.Slim.Operators {
         }
 
         public Tree<string> Compose(TypedValue instance) {
-            return new TreeList<string>((bool)instance.Value ? "true" : "false");
+            return new SlimLeaf((bool)instance.Value ? "true" : "false");
         }
     }
 }

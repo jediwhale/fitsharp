@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
+using fitSharp.Slim.Model;
 using fitSharp.Slim.Operators;
 using fitSharp.Slim.Service;
 using NUnit.Framework;
@@ -22,18 +23,18 @@ namespace fitSharp.Test.NUnit.Slim {
 
         [Test] public void ParseSymbolReplacesWithValue() {
             processor.Store(new Symbol("symbol", "testvalue"));
-            Assert.AreEqual("testvalue", Parse(new ParseSymbol { Processor = processor }, typeof(object), new TreeList<string>("$symbol")));
+            Assert.AreEqual("testvalue", Parse(new ParseSymbol { Processor = processor }, typeof(object), new SlimLeaf("$symbol")));
         }
 
         [Test] public void ParseSymbolReplacesEmbeddedValues() {
             processor.Store(new Symbol("symbol1", "test"));
             processor.Store(new Symbol("symbol2", "value"));
-            Assert.AreEqual("-testvalue-", Parse(new ParseSymbol { Processor = processor }, typeof(object), new TreeList<string>("-$symbol1$symbol2-")));
+            Assert.AreEqual("-testvalue-", Parse(new ParseSymbol { Processor = processor }, typeof(object), new SlimLeaf("-$symbol1$symbol2-")));
         }
 
         [Test] public void TreeIsParsedForList() {
             var list =
-                Parse(new ParseList{ Processor = processor }, typeof (List<int>), new TreeList<string>().AddBranchValue("5").AddBranchValue("4")) as List<int>;
+                Parse(new ParseList{ Processor = processor }, typeof (List<int>), new SlimTree().AddBranchValue("5").AddBranchValue("4")) as List<int>;
             Assert.IsNotNull(list);
             Assert.AreEqual(2, list.Count);
             Assert.AreEqual(5, list[0]);

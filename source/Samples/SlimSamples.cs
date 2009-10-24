@@ -184,4 +184,10 @@ namespace fitnesse.slim.test {
             }
         }
     }
+
+    public class SomeScript {
+        public void One(int i) {}
+        public void Two(string i) {}
+        public void Three(string i) {}
+    }
 }

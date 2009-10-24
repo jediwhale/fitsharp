@@ -7,13 +7,14 @@ using System;
 using System.Text;
 using fitSharp.IO;
 using fitSharp.Machine.Model;
+using fitSharp.Slim.Model;
 using fitSharp.Slim.Service;
 using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Slim {
     [TestFixture] public class InterpreterTest {
         [Test] public void MultipleStepsAreExecuted() {
-            var instructions = new TreeList<string>()
+            var instructions = new SlimTree()
                 .AddBranch(Instructions.MakeSampleClass())
                 .AddBranch(Instructions.ExecuteMethod("samplemethod"))
                 .AddBranch(Instructions.ExecuteMethod("samplemethod"));
@@ -23,7 +24,7 @@ namespace fitSharp.Test.NUnit.Slim {
         }
 
         [Test] public void StopTestExceptionSkipsRemainingSteps() {
-            var instructions = new TreeList<string>()
+            var instructions = new SlimTree()
                 .AddBranch(Instructions.MakeSampleClass())
                 .AddBranch(Instructions.ExecuteMethod("samplemethod"))
                 .AddBranch(Instructions.ExecuteAbortTest())
@@ -33,17 +34,27 @@ namespace fitSharp.Test.NUnit.Slim {
             Assert.AreEqual(1, SampleClass.MethodCount);
         }
 
+        [Test] public void EmptyInstructionReturnEmptyList() {
+            Assert.AreEqual("Slim -- V0.0\n000009:[000000:]", ExecuteInstructions("[000000:]"));
+        }
+
         private static void ExecuteInstructions(Tree<string> instructions) {
             string instructionString = new fitSharp.Slim.Service.Document(instructions).ToString();
+            ExecuteInstructions(instructionString);
+        }
+
+        private static string ExecuteInstructions(string instructionString) {
             var testSocket = new TestSocket(string.Format("{0:000000}:{1}", instructionString.Length, instructionString));
             var messenger = new Messenger(testSocket);
             var interpreter = new Interpreter(messenger, string.Empty, new Service());
             interpreter.ProcessInstructions();
+            return testSocket.Output;
         }
 
         private class TestSocket: SocketModel {
             private byte[] input;
             private int next;
+            public string Output = string.Empty;
 
             public TestSocket(string input) { this.input = Encoding.UTF8.GetBytes(input); }
 
@@ -58,7 +69,11 @@ namespace fitSharp.Test.NUnit.Slim {
                 return bytesRead;
             }
 
-            public void Send(byte[] buffer) {}
+            public void Send(byte[] buffer) {
+			    var characters = new char[buffer.Length];
+			    int charCount = Encoding.UTF8.GetDecoder().GetChars(buffer, 0, buffer.Length, characters, 0);
+			    Output += new StringBuilder(charCount).Append(characters, 0, charCount).ToString();
+            }
 
             public void Close() {}
         }

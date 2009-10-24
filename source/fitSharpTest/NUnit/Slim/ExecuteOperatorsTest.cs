@@ -5,6 +5,7 @@
 
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
+using fitSharp.Slim.Model;
 using fitSharp.Slim.Operators;
 using fitSharp.Slim.Service;
 using NUnit.Framework;
@@ -20,14 +21,14 @@ namespace fitSharp.Test.NUnit.Slim {
 
         [Test] public void ExecuteDefaultReturnsException() {
             var executeDefault = new ExecuteDefault { Processor = processor };
-            var input = new TreeList<string>().AddBranchValue("step").AddBranchValue("garbage");
+            var input = new SlimTree().AddBranchValue("step").AddBranchValue("garbage");
             ExecuteOperation(executeDefault, input, 2);
             CheckForException("message:<<MALFORMED_INSTRUCTION step,garbage>>");
         }
 
         [Test] public void ExecuteMakeBadClassReturnsException() {
             var executeMake = new ExecuteMake { Processor = processor };
-            var input = new TreeList<string>().AddBranchValue("step").AddBranchValue("make").AddBranchValue("variable").AddBranchValue("garbage");
+            var input = new SlimTree().AddBranchValue("step").AddBranchValue("make").AddBranchValue("variable").AddBranchValue("garbage");
             ExecuteOperation(executeMake, input, 2);
             CheckForException("message:<<NO_CLASS garbage>>");
         }
@@ -35,23 +36,23 @@ namespace fitSharp.Test.NUnit.Slim {
         [Test] public void ExecuteCallBadMethodReturnsException() {
             processor.Store(new SavedInstance("variable", new SampleClass()));
             var executeCall = new ExecuteCall { Processor = processor };
-            var input = new TreeList<string>().AddBranchValue("step").AddBranchValue("call").AddBranchValue("variable").AddBranchValue("garbage");
+            var input = new SlimTree().AddBranchValue("step").AddBranchValue("call").AddBranchValue("variable").AddBranchValue("garbage");
             ExecuteOperation(executeCall, input, 2);
             CheckForException("message:<<NO_METHOD_IN_CLASS garbage fitSharp.Test.NUnit.Slim.SampleClass>>");
         }
 
         [Test] public void ExecuteImportAddsNamespace() {
             var executeImport = new ExecuteImport { Processor = processor };
-            var input = new TreeList<string>().AddBranchValue("step").AddBranchValue("import").AddBranchValue("fitSharp.Test.NUnit.Slim");
+            var input = new SlimTree().AddBranchValue("step").AddBranchValue("import").AddBranchValue("fitSharp.Test.NUnit.Slim");
             ExecuteOperation(executeImport, input, 2);
-            Assert.IsTrue(processor.Create("SampleClass", new TreeList<string>()).Value is SampleClass);
+            Assert.IsTrue(processor.Create("SampleClass", new SlimTree()).Value is SampleClass);
         }
 
         [Test] public void ExecuteCallAndAssignSavesSymbol() {
             processor.Store(new SavedInstance("variable", new SampleClass()));
             var executeCallAndAssign = new ExecuteCallAndAssign { Processor = processor };
             var input =
-                new TreeList<string>().AddBranchValue("step").AddBranchValue("callAndAssign").AddBranchValue("symbol").AddBranchValue(
+                new SlimTree().AddBranchValue("step").AddBranchValue("callAndAssign").AddBranchValue("symbol").AddBranchValue(
                     "variable").AddBranchValue("sampleMethod");
             ExecuteOperation(executeCallAndAssign, input, 2);
             Assert.AreEqual("testresult", result.Branches[1].Value);

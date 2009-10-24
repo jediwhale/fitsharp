@@ -5,6 +5,7 @@
 
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
+using fitSharp.Slim.Model;
 using fitSharp.Slim.Operators;
 
 namespace fitSharp.Slim.Service {
@@ -61,7 +62,7 @@ namespace fitSharp.Slim.Service {
         }
 
         private Tree<string> ExecuteInstructions(Tree<string> instructions) {
-            var results = new TreeList<string>();
+            var results = new SlimTree();
             foreach (Tree<string> statement in instructions.Branches) {
                 var result = processor.Execute(statement).GetValue<Tree<string>>();
                 results.AddBranchValue(result);

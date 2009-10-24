@@ -5,6 +5,7 @@
 
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
+using fitSharp.Slim.Model;
 
 namespace fitSharp.Slim.Operators {
     public abstract class ExecuteBase: SlimOperator, ExecuteOperator<string> {
@@ -36,19 +37,19 @@ namespace fitSharp.Slim.Operators {
         }
 
         protected static Tree<string> Result(Tree<string> parameters, Tree<string> result) {
-            return new TreeList<string>()
+            return new SlimTree()
                 .AddBranchValue(parameters.Branches[0].Value)
                 .AddBranch(result);
         }
 
         protected static Tree<string> Result(Tree<string> parameters, string result) {
-            return new TreeList<string>()
+            return new SlimTree()
                 .AddBranchValue(parameters.Branches[0].Value)
                 .AddBranchValue(result);
         }
 
         protected static Tree<string> ParameterTree(Tree<string> input, int startingIndex) {
-            var result = new TreeList<string>(input.Value);
+            var result = new SlimTree();
             for (int i = startingIndex; i < input.Branches.Count; i++) {
                 result.AddBranch(input.Branches[i]);
             }

@@ -7,6 +7,7 @@ using System;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
+using fitSharp.Slim.Model;
 using fitSharp.Slim.Operators;
 using fitSharp.Slim.Service;
 using NUnit.Framework;
@@ -29,7 +30,7 @@ namespace fitSharp.Test.NUnit.Slim {
         [Test] public void OperatorIsAddedFromConfiguration() {
             var configuration = new Configuration();
             configuration.LoadXml("<config><fitSharp.Slim.Service.Service><addOperator>fitSharp.Test.NUnit.Slim.SampleOperator</addOperator></fitSharp.Slim.Service.Service></config>");
-            var statement = new TreeList<string>().AddBranchValue("step").AddBranchValue("sampleCommand");
+            var statement = new SlimTree().AddBranchValue("step").AddBranchValue("sampleCommand");
             var result = configuration.GetItem<Service>().Execute(TypedValue.Void, statement).GetValue<Tree<string>>();
             Assert.AreEqual("sampleResult", result.Branches[1].Value);
         }
@@ -37,7 +38,7 @@ namespace fitSharp.Test.NUnit.Slim {
         [Test] public void ParseSymbolIsDoneFirst() {
             service.Store(new Symbol("symbol", "testvalue"));
             service.AddOperator(new ParseUpperCase());
-            var value = service.Parse(typeof(string), TypedValue.Void, new TreeList<string>("$symbol")).Value;
+            var value = service.Parse(typeof(string), TypedValue.Void, new SlimLeaf("$symbol")).Value;
             Assert.AreEqual("TESTVALUE", value);
         }
 
