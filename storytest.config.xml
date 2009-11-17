@@ -15,6 +15,7 @@
         <addNamespace>fit.Runner</addNamespace>
         <addNamespace>fitSharp.Fit.Model</addNamespace>
         <addNamespace>fitlibrary</addNamespace>
+        <addNamespace>fitSharp.Test.Acceptance.Slim</addNamespace>
         <addAssembly>build\debug\fit.dll</addAssembly>
         <addAssembly>build\debug\fittest.dll</addAssembly>
     </ApplicationUnderTest>

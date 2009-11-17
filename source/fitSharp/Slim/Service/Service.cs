@@ -20,6 +20,8 @@ namespace fitSharp.Slim.Service {
             AddOperator(new ExecuteMake());
             AddOperator(new ExecuteCall());
             AddOperator(new ExecuteCallAndAssign());
+            AddOperator(new ParseDefault());
+            AddOperator(new ParseType<string, Processor<string>>());
             AddOperator(new ParseList());
             AddOperator(new ParseSymbol(), 1);
             AddOperator(new ComposeDefault());

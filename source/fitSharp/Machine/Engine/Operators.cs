@@ -16,8 +16,6 @@ namespace fitSharp.Machine.Engine {
 
         public Operators(P processor) {
             this.processor = processor;
-            Add(new DefaultParse<T,P>());
-            Add(new ParseType<T,P>());
             Add(new DefaultRuntime<T,P>());
         }
 

@@ -89,7 +89,6 @@
     <Compile Include="Machine\Application\Settings.cs" />
     <Compile Include="Fit\Model\Cell.cs" />
     <Compile Include="Fit\Operators\CompareFloatingPoint.cs" />
-    <Compile Include="Fit\Operators\ParseEnum.cs" />
     <Compile Include="Fit\Operators\ParseMemberName.cs" />
     <Compile Include="Fit\Operators\ParseMemberNameExtended.cs" />
     <Compile Include="Fit\Operators\ParseNullable.cs" />
@@ -113,6 +112,7 @@
     <Compile Include="Machine\Application\Shell.cs" />
     <Compile Include="Machine\Engine\ApplicationUnderTest.cs" />
     <Compile Include="Machine\Engine\BasicProcessor.cs" />
+    <Compile Include="Machine\Engine\ParseEnum.cs" />
     <Compile Include="Machine\Engine\Converter.cs" />
     <Compile Include="Machine\Engine\DefaultParse.cs" />
     <Compile Include="Machine\Engine\DefaultRuntime.cs" />
@@ -153,6 +153,7 @@
     <Compile Include="Slim\Operators\ExecuteDefault.cs" />
     <Compile Include="Slim\Operators\ExecuteImport.cs" />
     <Compile Include="Slim\Operators\ExecuteMake.cs" />
+    <Compile Include="Slim\Operators\ParseDefault.cs" />
     <Compile Include="Slim\Operators\ParseList.cs" />
     <Compile Include="Slim\Operators\ParseSymbol.cs" />
     <Compile Include="Slim\Operators\SavedInstance.cs" />

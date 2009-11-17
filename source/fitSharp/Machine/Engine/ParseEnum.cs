@@ -4,18 +4,16 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
-using fitSharp.Fit.Model;
-using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
-namespace fitSharp.Fit.Operators {
-    public class ParseDefault : CellOperator, ParseOperator<Cell> {
-        public bool CanParse(Type type, TypedValue instance, Tree<Cell> parameters) {
-            return true;
+namespace fitSharp.Machine.Engine {
+    class ParseEnum: Operator<string, BasicProcessor>, ParseOperator<string>{
+        public bool CanParse(Type type, TypedValue instance, Tree<string> parameters) {
+	        return type.IsEnum;
         }
 
-        public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
-            return new BasicProcessor().Parse(type, instance, new TreeList<string>(parameters.Value.Text));
+        public TypedValue Parse(Type type, TypedValue instance, Tree<string> parameters) {
+	        return new TypedValue(Enum.Parse(type, parameters.Value));
         }
     }
 }

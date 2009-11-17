@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using fitSharp.Slim.Model;
@@ -39,6 +40,12 @@ namespace fitSharp.Test.NUnit.Slim {
             Assert.AreEqual(2, list.Count);
             Assert.AreEqual(5, list[0]);
             Assert.AreEqual(4, list[1]);
+        }
+
+        [Test] public void ParsesEnumType() {
+            Assert.AreEqual(BindingFlags.Public,
+                            processor.Parse(typeof (BindingFlags), TypedValue.Void,
+                                                       new SlimLeaf("Public")).Value);
         }
 
         private static object Parse(ParseOperator<string> parseOperator, Type type, Tree<string> parameters) {

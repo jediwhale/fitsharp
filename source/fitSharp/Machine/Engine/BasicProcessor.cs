@@ -12,6 +12,9 @@ namespace fitSharp.Machine.Engine {
         public BasicProcessor() {
             operators = new Operators<string, BasicProcessor>(this);
             AddOperator(new DefaultCompose());
+            AddOperator(new DefaultParse<string, BasicProcessor>());
+            AddOperator(new ParseType<string, BasicProcessor>());
+            AddOperator(new ParseEnum());
         }
 
         public BasicProcessor(BasicProcessor other): base(other) {
@@ -33,7 +36,7 @@ namespace fitSharp.Machine.Engine {
             }
 
             public Tree<string> Compose(TypedValue instance) {
-                return new TreeList<string>(instance.Value.ToString());
+                return new TreeList<string>(instance.ValueString);
             }
         }
     }

@@ -14,8 +14,8 @@ namespace fitSharp.Fit.Service {
     public class CellProcessorBase: ProcessorBase<Cell, CellProcessor>, CellProcessor {
         private readonly Operators<Cell, CellProcessor> operators;
 	    public TestStatus TestStatus { get; set; }
-
-        public CellProcessorBase() {
+	    
+	            public CellProcessorBase() {
             TestStatus = new TestStatus();
             operators = new Operators<Cell, CellProcessor>(this);
 
@@ -28,7 +28,6 @@ namespace fitSharp.Fit.Service {
             AddOperator(new ExecuteSymbolSave());
             AddOperator(new CompareNumeric());
             AddOperator(new ParseMemberName());
-            AddOperator(new ParseEnum());
             AddOperator(new ParseNullable());
             AddOperator(new ParseBoolean());
             AddOperator(new ParseDate());
