@@ -21,8 +21,6 @@ namespace fitSharp.Fit.Operators {
         }
 
         private class TypeMatcher: NameMatcher {
-            private static readonly Regex fullyQualifiedRegex = new Regex(@"^([A-Za-z_][A-Za-z\d_]+\.)+[A-Za-z_][A-Za-z\d_]+$");
-
             public string MatchName { get; private set; }
 
             public TypeMatcher(string matchName) {
@@ -30,7 +28,7 @@ namespace fitSharp.Fit.Operators {
             }
 
             public bool Matches(string candidateName) {
-                string baseName = fullyQualifiedRegex.IsMatch(candidateName)
+                string baseName = candidateName.Contains(".")
                                       ? MatchName
                                       : new GracefulName(MatchName).IdentifierName.ToString();
                 var typeIdentifier = new IdentifierName(baseName);
