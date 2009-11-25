@@ -28,7 +28,6 @@ namespace fitSharp.Fit.Service {
             AddOperator(new ExecuteSymbolSave());
             AddOperator(new CompareNumeric());
             AddOperator(new ParseMemberName());
-            AddOperator(new ParseNullable());
             AddOperator(new ParseBoolean());
             AddOperator(new ParseDate());
             AddOperator(new ParseType());

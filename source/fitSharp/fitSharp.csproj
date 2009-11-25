@@ -91,7 +91,6 @@
     <Compile Include="Fit\Operators\CompareFloatingPoint.cs" />
     <Compile Include="Fit\Operators\ParseMemberName.cs" />
     <Compile Include="Fit\Operators\ParseMemberNameExtended.cs" />
-    <Compile Include="Fit\Operators\ParseNullable.cs" />
     <Compile Include="Machine\Application\Context.cs" />
     <Compile Include="Fit\Model\GracefulName.cs" />
     <Compile Include="Fit\Model\MemberName.cs" />
@@ -118,6 +117,7 @@
     <Compile Include="Machine\Engine\DefaultRuntime.cs" />
     <Compile Include="Machine\Engine\Operator.cs" />
     <Compile Include="Machine\Engine\Operators.cs" />
+    <Compile Include="Machine\Engine\ParseNullable.cs" />
     <Compile Include="Machine\Engine\ParseType.cs" />
     <Compile Include="Machine\Engine\Processor.cs" />
     <Compile Include="Machine\Engine\RuntimeMember.cs" />

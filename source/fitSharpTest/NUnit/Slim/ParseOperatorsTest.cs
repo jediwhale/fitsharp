@@ -48,6 +48,10 @@ namespace fitSharp.Test.NUnit.Slim {
                                                        new SlimLeaf("Public")).Value);
         }
 
+        [Test] public void ParsesIntegerForNullableInt() {
+            Assert.AreEqual(1, processor.Parse(typeof (int?), TypedValue.Void, new SlimLeaf("1")).Value);
+        }
+
         private static object Parse(ParseOperator<string> parseOperator, Type type, Tree<string> parameters) {
             Assert.IsTrue(parseOperator.CanParse(type, TypedValue.Void, parameters));
             TypedValue result = parseOperator.Parse(type, TypedValue.Void, parameters);

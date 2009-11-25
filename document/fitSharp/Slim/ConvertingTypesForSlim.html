@@ -19,14 +19,29 @@ to be bound by the terms of this license. You must not remove this notice, or an
 Here are some examples of Slim doing round-trip conversions from a string to a standard type back to a string.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>do</td></tr>
-<tr><td>with</td><td>new</td><td>slim domain</td></tr>
-<tr><td>calculate</td></tr>
-<tr><td>convert</td><td>type</td><td></td><td>round trip</td></tr>
-<tr><td>true</td><td>System.Boolean</td><td></td><td>true</td></tr>
-<tr><td>false</td><td>System.Boolean</td><td></td><td>false</td></tr>
-<tr><td>Public</td><td>System.Reflection.BindingFlags</td><td></td><td>Public</td></tr>
+<tr><td>slim domain</td></tr>
 </table>
+<br>
+Boolean:<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>check</td><td>round trip for type</td><td>System.Boolean</td><td>value</td><td>true</td><td>true</td></tr>
+<tr><td>check</td><td>round trip for type</td><td>System.Boolean</td><td>value</td><td>false</td><td>false</td></tr>
+</table>
+<br>
+Enumerations:<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>check</td><td>round trip for type</td><td>System.Reflection.BindingFlags</td><td>value</td><td>Public</td><td>Public</td></tr>
+<tr><td>check</td><td>round trip for type</td><td>System.Reflection.BindingFlags</td><td>value</td><td>Instance, Public</td><td>Instance, Public</td></tr>
+</table>
+<br>
+Nullable types:<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>check</td><td>round trip for nullable int</td><td>1</td><td>1</td></tr>
+<tr><td>check</td><td>round trip for nullable int</td><td>null</td><td>null</td></tr>
+</table>
+<br>
 </div>
 <div style="width:100%;text-align:right">
 <span class="footer">&copy; Copyright <a href="http://www.syterra.com">Syterra Software Inc.</a> All rights reserved.</span>

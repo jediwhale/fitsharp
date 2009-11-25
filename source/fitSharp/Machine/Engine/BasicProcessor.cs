@@ -15,6 +15,7 @@ namespace fitSharp.Machine.Engine {
             AddOperator(new DefaultParse<string, BasicProcessor>());
             AddOperator(new ParseType<string, BasicProcessor>());
             AddOperator(new ParseEnum());
+            AddOperator(new ParseNullable());
         }
 
         public BasicProcessor(BasicProcessor other): base(other) {

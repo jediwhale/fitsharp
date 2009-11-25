@@ -4,20 +4,18 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
-using fitSharp.Fit.Model;
-using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
-namespace fitSharp.Fit.Operators {
-    public class ParseNullable: CellOperator, ParseOperator<Cell> {
-        public bool CanParse(Type type, TypedValue instance, Tree<Cell> parameters) {
+namespace fitSharp.Machine.Engine {
+    public class ParseNullable: Operator<string, BasicProcessor>, ParseOperator<string> {
+        public bool CanParse(Type type, TypedValue instance, Tree<string> parameters) {
             return type.IsGenericType && type.GetGenericTypeDefinition().Equals(typeof(Nullable<>));
         }
 
-        public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
-            return parameters.Value.Text.Length > 0
-                ? Processor.ParseTree(type.GetGenericArguments()[0], parameters)
-                : new TypedValue(null, type);
+        public TypedValue Parse(Type type, TypedValue instance, Tree<string> parameters) {
+            return parameters.Value.Length > 0 && parameters.Value != "null"
+                       ? Processor.ParseTree(type.GetGenericArguments()[0], parameters)
+                       : new TypedValue(null, type);
         }
     }
 }
