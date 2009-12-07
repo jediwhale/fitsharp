@@ -139,6 +139,7 @@
     <Compile Include="Machine\Model\Tree.cs" />
     <Compile Include="Machine\Model\TreeList.cs" />
     <Compile Include="Machine\Model\TypedValue.cs" />
+    <Compile Include="Parser\HtmlTables.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Slim\Exception\InstructionException.cs" />
     <Compile Include="Fit\Operators\CellOperator.cs" />
@@ -154,6 +155,7 @@
     <Compile Include="Slim\Operators\ExecuteImport.cs" />
     <Compile Include="Slim\Operators\ExecuteMake.cs" />
     <Compile Include="Slim\Operators\ParseDefault.cs" />
+    <Compile Include="Slim\Operators\ParseDictionary.cs" />
     <Compile Include="Slim\Operators\ParseList.cs" />
     <Compile Include="Slim\Operators\ParseSymbol.cs" />
     <Compile Include="Slim\Operators\SavedInstance.cs" />

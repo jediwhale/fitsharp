@@ -52,6 +52,12 @@ namespace fitSharp.Test.NUnit.Slim {
             Assert.AreEqual(1, processor.Parse(typeof (int?), TypedValue.Void, new SlimLeaf("1")).Value);
         }
 
+        [Test] public void ParsesDictionary() {
+            var dictionary = processor.Parse(typeof (Dictionary<string, string>), TypedValue.Void,
+                    new SlimLeaf("<table><tr><td>key</td><td>value</td></tr></table>")).GetValue<Dictionary<string,string>>();
+            Assert.AreEqual("value", dictionary["key"]);
+        }
+
         private static object Parse(ParseOperator<string> parseOperator, Type type, Tree<string> parameters) {
             Assert.IsTrue(parseOperator.CanParse(type, TypedValue.Void, parameters));
             TypedValue result = parseOperator.Parse(type, TypedValue.Void, parameters);

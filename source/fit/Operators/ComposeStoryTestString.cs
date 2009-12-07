@@ -15,7 +15,7 @@ namespace fit.Operators {
         }
 
         public Tree<Cell> Compose(TypedValue instance) {
-            return HtmlParser.Instance.Parse(instance.ValueString);
+            return new HtmlParser().Parse(instance.ValueString);
         }
     }
 }

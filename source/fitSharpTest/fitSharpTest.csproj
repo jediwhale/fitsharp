@@ -74,6 +74,7 @@
     <Compile Include="NUnit\Slim\ParseOperatorsTest.cs" />
     <Compile Include="NUnit\Slim\SampleClass.cs" />
     <Compile Include="NUnit\Slim\ServiceTest.cs" />
+    <Compile Include="NUnit\Slim\TestInterpreter.cs" />
     <Compile Include="NUnit\Swim\ResultPageTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

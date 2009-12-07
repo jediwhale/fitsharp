@@ -36,7 +36,7 @@ namespace fit.Test.NUnit {
             processor.Setup(p => p.TestStatus).Returns(testStatus);
             processor.Setup(p => p.Create(fixtureName, It.IsAny<TreeList<Cell>>())).Returns(new TypedValue(fixtureObject));
             var parser = new ParseInterpreter { Processor = processor.Object };
-            Parse table = HtmlParser.Instance.Parse(inputTables);
+            Parse table = new HtmlParser().Parse(inputTables);
             return parser.Parse(typeof(Interpreter), target, table.Parts);
         }
 

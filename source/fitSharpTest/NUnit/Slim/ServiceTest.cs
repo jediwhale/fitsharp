@@ -22,8 +22,8 @@ namespace fitSharp.Test.NUnit.Slim {
 
         [Test] public void InstanceIsCreated() {
             SampleClass.Count = 0;
-            var statement = Instructions.MakeSampleClass();
-            service.Execute(TypedValue.Void, statement);
+            var statement = new Instructions().MakeSampleClass();
+            service.Execute(TypedValue.Void, statement.Tree.Branches[0]);
             Assert.AreEqual(1, SampleClass.Count);
         }
 

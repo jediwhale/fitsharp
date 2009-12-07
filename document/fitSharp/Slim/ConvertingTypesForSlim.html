@@ -37,11 +37,21 @@ Enumerations:<br>
 </table>
 <br>
 Nullable types:<br>
+<br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>check</td><td>round trip for nullable int</td><td>1</td><td>1</td></tr>
 <tr><td>check</td><td>round trip for nullable int</td><td>null</td><td>null</td></tr>
 </table>
 <br>
+Dictionaries:<br>
+<br>
+Slim converts a nested two-column table into a dictionary. There is new wiki markup for this: <pre class="code">|my method|!{name:bob, addr:here}|</pre> The method parameter can be any generic Dictionary and the nested cells will be parsed into the generic key and value types. <pre class="code">public void MyMethod(Dictionary&lt;string ,string> dictionary) ...</pre> <br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>check</td><td>lookup</td><td>key2</td><td>in</td><td>&lt;table>
+&lt;tr>&lt;td>key1&lt;/td>&lt;td>value1&lt;/td>&lt;/tr>
+&lt;tr>&lt;td>key2&lt;/td>&lt;td>value2&lt;/td>&lt;/tr>
+&lt;/table></td><td>value2</td></tr>
+</table>
 </div>
 <div style="width:100%;text-align:right">
 <span class="footer">&copy; Copyright <a href="http://www.syterra.com">Syterra Software Inc.</a> All rights reserved.</span>

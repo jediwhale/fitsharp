@@ -5,7 +5,6 @@
 
 using fitlibrary.table;
 using fitSharp.Machine.Engine;
-using fitSharp.Machine.Model;
 using NUnit.Framework;
 
 namespace fit.Test.NUnit {
@@ -25,7 +24,7 @@ namespace fit.Test.NUnit {
         [Test] public void CellIsMadeWithEmbeddedTable() {
             var service = new Service.Service();
             Parse table =
-                HtmlParser.Instance.Parse("<table><tr><td>11</td><td>12</td></tr><tr><td>21</td><td>22</td></tr></table>");
+                new HtmlParser().Parse("<table><tr><td>11</td><td>12</td></tr><tr><td>21</td><td>22</td></tr></table>");
             var cell = (Parse) service.Compose(new ParseTable(table));
             Assert.AreEqual("\n<td>\n<table>\n<tr>\n<td><span class=\"fit_grey\">11</span></td>\n<td><span class=\"fit_grey\">12</span></td></tr>" +
             "\n<tr>\n<td><span class=\"fit_grey\">21</span></td>\n<td><span class=\"fit_grey\">22</span></td></tr></table></td>", cell.ToString());

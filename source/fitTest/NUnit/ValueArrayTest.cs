@@ -12,7 +12,7 @@ namespace fit.Test.NUnit {
     [TestFixture] public class ValueArrayTest {
 
         [Test] public void SingleRowReturnsEachCell() {
-            Parse rows = HtmlParser.Instance.Parse("<table><tr><td>aaa</td><td>bb</td><td>c</td></tr></table>");
+            Parse rows = new HtmlParser().Parse("<table><tr><td>aaa</td><td>bb</td><td>c</td></tr></table>");
             ArrayList results = ProcessRows(rows.Parts);
             Assert.AreEqual(3, results.Count,  "count");
             Assert.AreEqual("aaa", results[0], "first");
@@ -21,7 +21,7 @@ namespace fit.Test.NUnit {
         }
     
         [Test] public void MultipleRowsReturnsEachCell() {
-            Parse rows = HtmlParser.Instance.Parse("<table><tr><td>xxx</td></tr><tr><td>aaa</td><td>bb</td><td>c</td></tr></table>");
+            Parse rows = new HtmlParser().Parse("<table><tr><td>xxx</td></tr><tr><td>aaa</td><td>bb</td><td>c</td></tr></table>");
             ArrayList results = ProcessRows(rows.Parts);
             Assert.AreEqual(3, results.Count,  "count");
             Assert.AreEqual("aaa", results[0], "first");
@@ -30,7 +30,7 @@ namespace fit.Test.NUnit {
         }
     
         [Test] public void RepeatKeywordReturnsPreviousValue() {
-            Parse rows = HtmlParser.Instance.Parse("<table><tr><td>xxx</td><td>yy</td></tr><tr><td>aaa</td><td>ditto</td><td>c</td></tr></table>");
+            Parse rows = new HtmlParser().Parse("<table><tr><td>xxx</td><td>yy</td></tr><tr><td>aaa</td><td>ditto</td><td>c</td></tr></table>");
             ArrayList results = ProcessRows(rows.Parts);
             Assert.AreEqual(3, results.Count,  "count");
             Assert.AreEqual("aaa", results[0], "first");
@@ -39,7 +39,7 @@ namespace fit.Test.NUnit {
         }
 
         [Test] public void RepeatKeywordWithNoPreviousValue() {
-            Parse rows = HtmlParser.Instance.Parse("<table><tr><td>xxx</td><td>yy</td></tr><tr><td>aaa</td><td>bb</td><td>ditto</td></tr></table>");
+            Parse rows = new HtmlParser().Parse("<table><tr><td>xxx</td><td>yy</td></tr><tr><td>aaa</td><td>bb</td><td>ditto</td></tr></table>");
             ArrayList results = ProcessRows(rows.Parts);
             Assert.AreEqual(3, results.Count,  "count");
             Assert.AreEqual("aaa", results[0], "first");
@@ -47,8 +47,8 @@ namespace fit.Test.NUnit {
             Assert.AreEqual("ditto", results[2], "third");
         }
     
-        private ArrayList ProcessRows(Parse theRows) {
-            ValueArray values = new ValueArray("ditto");
+        private static ArrayList ProcessRows(Parse theRows) {
+            var values = new ValueArray("ditto");
             ArrayList results = null;
             foreach (Parse row in new CellRange(theRows).Cells) {
                 results = new ArrayList();

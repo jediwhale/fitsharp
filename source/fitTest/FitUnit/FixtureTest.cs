@@ -12,7 +12,7 @@ namespace fit.Test.FitUnit {
 
         public void RunTestFixture(string theRows) {
             string html = string.Format("<table><tr><td>fit.Test.FitUnit.TestFixtureFixture</td></tr>{0}</table>", theRows);
-            Parse tables = HtmlParser.Instance.Parse(html);
+            Parse tables = new HtmlParser().Parse(html);
             new StoryTest(tables).Execute();
         }
 

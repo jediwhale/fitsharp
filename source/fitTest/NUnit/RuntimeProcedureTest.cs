@@ -71,7 +71,7 @@ namespace fit.Test.NUnit {
         }
 
         private void SetupSUT(string html) {
-            procedure = new Procedure("procedure", HtmlParser.Instance.Parse(html));
+            procedure = new Procedure("procedure", new HtmlParser().Parse(html));
 
             result = new TypedValue("result");
             target = new TypedValue("target");

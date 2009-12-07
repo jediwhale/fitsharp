@@ -14,7 +14,7 @@ namespace fit.Test.NUnit {
     [TestFixture] public class SetUpFixtureTest {
         [Test] public void MethodIsInvokedForEachRow() {
             Parse table =
-                HtmlParser.Instance.Parse("<table><tr><td></td></tr><tr><td>method</td></tr><tr><td>value</td></tr></table>");
+                new HtmlParser().Parse("<table><tr><td></td></tr><tr><td>method</td></tr><tr><td>value</td></tr></table>");
             var cellOperation = new Mock<CellOperation>();
             var setUp = new SetUpFixture {CellOperation = cellOperation.Object};
             setUp.DoTable(table);

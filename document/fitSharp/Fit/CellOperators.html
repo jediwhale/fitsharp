@@ -17,7 +17,13 @@ to be bound by the terms of this license. You must not remove this notice, or an
 <div class="content">An input value cell or an expected value cell is normally handled by parsing the cell contents based on the value type. Special processing of cell contents is implemented by a set of classes known as cell operators. There is a variety of cell operators provided (*list them*), and we can <a href="../Fit/WriteOurOwnCellOperator.html">Write Our Own Cell Operator</a>.<br>
 <br>
 New in <span style="font-family:verdana,sans-serif"><i>fit</i>Sharp</span>:<ul><li><a href="../Fit/ParseDateOperator.html">Parse Date Operator</a></li></ul><br>
-</div>
+There are three ways to add cell operators so they will used to process cell contents.<ul><li>In a <a href="../FitSharp/SuiteConfigurationFile.html">Suite Configuration File</a>: <pre class="code">&lt;suiteConfig>
+    &lt;Fit.Service>
+        &lt;AddOperator>My.Operator&lt;/AddOperator>
+    &lt;/Fit.Service>
+&lt;/suiteConfig></pre></li><li>In a story test: <pre class="code">|configuration setup|
+|service|
+|add operator|My.Operator|</pre></li><li>In fixture code: <pre class="code">Processor.AddOperator("My.Operator")</pre></li></ul></div>
 <div style="width:100%;text-align:right">
 <span class="footer">&copy; Copyright <a href="http://www.syterra.com">Syterra Software Inc.</a> All rights reserved.</span>
 </div>

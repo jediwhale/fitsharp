@@ -3,26 +3,40 @@
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
-using fitSharp.Machine.Model;
 using fitSharp.Slim.Model;
 
 namespace fitSharp.Test.NUnit.Slim
 {
     class Instructions
     {
-        public static Tree<string> MakeSampleClass() {
-            return new SlimTree().AddBranchValue("step1").AddBranchValue("make").AddBranchValue("variable").
-                AddBranchValue(typeof (SampleClass).FullName);
+        private readonly SlimTree instructionTree = new SlimTree();
+
+        public SlimTree Tree { get { return instructionTree; } }
+
+        public Instructions MakeSampleClass() {
+            instructionTree.AddBranch(
+                new SlimTree().AddBranchValue("step1").AddBranchValue("make").AddBranchValue("variable").
+                    AddBranchValue(typeof (SampleClass).FullName));
+            return this;
         }
 
-        public static Tree<string> ExecuteMethod(string methodName) {
-            return new SlimTree().AddBranchValue("step2").AddBranchValue("call").AddBranchValue("variable").
-                AddBranchValue(methodName);
+        public Instructions ExecuteMethod(string methodName) {
+            instructionTree.AddBranch(
+                new SlimTree().AddBranchValue("step2").AddBranchValue("call").AddBranchValue("variable").
+                    AddBranchValue(methodName));
+            return this;
         }
 
-        public static Tree<string> ExecuteAbortTest() {
-            return new SlimTree().AddBranchValue("step3").AddBranchValue("call").AddBranchValue("variable").
-                AddBranchValue("aborttest");
+        public Instructions ExecuteAbortTest() {
+            instructionTree.AddBranch(
+                new SlimTree().AddBranchValue("step3").AddBranchValue("call").AddBranchValue("variable").
+                    AddBranchValue("aborttest"));
+            return this;
+        }
+
+        public void Execute() {
+            string instructionString = new fitSharp.Slim.Service.Document(instructionTree).ToString();
+            TestInterpreter.ExecuteInstructions(instructionString);
         }
 
     }
