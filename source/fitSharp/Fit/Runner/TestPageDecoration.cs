@@ -1,13 +1,12 @@
-// FitNesse.NET
-// Copyright (c) 2006, 2008 Syterra Software Inc. This program is free software;
-// you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
-// This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+// Copyright © 2009 Syterra Software Inc. All rights reserved.
+// The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+// which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
+// to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
 using System.Text;
 
-namespace fit.Runner {
+namespace fitSharp.Fit.Runner {
     public class TestPageDecoration {
 	    
         public TestPageDecoration(string theSetUp, string theTearDown) {
@@ -17,19 +16,19 @@ namespace fit.Runner {
             myTearDownHead = string.Empty;
 
             if (theSetUp.Length > 0) {
-                HtmlString setUp = new HtmlString(theSetUp);
+                var setUp = new HtmlString(theSetUp);
                 mySetUp = setUp.Body;
                 mySetUpHead = setUp.Head;
             }
             if (theTearDown.Length > 0) {
-                HtmlString tearDown = new HtmlString(theTearDown);
+                var tearDown = new HtmlString(theTearDown);
                 myTearDown = tearDown.Body;
                 myTearDownHead = tearDown.Head;
             }
         }
 
         public TestPageDecoration MakeChild(string theSetUp, string theTearDown) {
-            TestPageDecoration child = new TestPageDecoration(theSetUp, theTearDown);
+            var child = new TestPageDecoration(theSetUp, theTearDown);
             child.mySetUpHead = mySetUpHead + child.mySetUpHead;
             child.mySetUp = mySetUp + child.mySetUp;
             child.myTearDownHead += myTearDownHead;
@@ -45,8 +44,8 @@ namespace fit.Runner {
         }
 	    
         public string Decorate(string theInput) {
-            StringBuilder result = new StringBuilder();
-            HtmlString input = new HtmlString(theInput);
+            var result = new StringBuilder();
+            var input = new HtmlString(theInput);
             result.Append(input.Leader);
             result.Append(mySetUpHead);
             result.Append(input.Head);
@@ -126,11 +125,11 @@ namespace fit.Runner {
                 }
             }
 	        
-            private string myContent;
-            private int myBodyStart;
-            private int myBodyEnd;
-            private int myHeadStart;
-            private int myHeadEnd;
+            private readonly string myContent;
+            private readonly int myBodyStart;
+            private readonly int myBodyEnd;
+            private readonly int myHeadStart;
+            private readonly int myHeadEnd;
         }
     }
 }

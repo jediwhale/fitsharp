@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using fitSharp.Fit.Application;
+using fitSharp.Fit.Runner;
 using fitSharp.IO;
 using fitSharp.Machine.Application;
 

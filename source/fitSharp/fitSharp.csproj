@@ -71,6 +71,9 @@
     <Compile Include="Fit\Operators\ExecuteParameters.cs" />
     <Compile Include="Fit\Operators\ExecuteSymbolSave.cs" />
     <Compile Include="Fit\Operators\ParseSymbol.cs" />
+    <Compile Include="Fit\Runner\StoryTestFile.cs" />
+    <Compile Include="Fit\Runner\StoryTestFolder.cs" />
+    <Compile Include="Fit\Runner\TestPageDecoration.cs" />
     <Compile Include="Fit\Service\CellOperation.cs" />
     <Compile Include="Fit\Service\CellProcessorBase.cs" />
     <Compile Include="Fit\Service\ExecuteStoryTest.cs" />
@@ -128,6 +131,7 @@
     <Compile Include="Machine\Exception\MemoryMissingException.cs" />
     <Compile Include="Machine\Exception\ParseException.cs" />
     <Compile Include="Machine\Exception\TypeMissingException.cs" />
+    <Compile Include="Machine\Extension\Delegate.cs" />
     <Compile Include="Machine\Extension\Enumerable.cs" />
     <Compile Include="Machine\Model\Copyable.cs" />
     <Compile Include="Machine\Model\DomainAdapter.cs" />

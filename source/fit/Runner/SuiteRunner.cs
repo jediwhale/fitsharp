@@ -6,29 +6,15 @@
 using System;
 using System.Collections.Generic;
 using fitSharp.Fit.Model;
+using fitSharp.Fit.Runner;
 using fitSharp.Fit.Service;
 using fitSharp.IO;
 using fitSharp.Machine.Application;
+using fitSharp.Machine.Engine;
+using fitSharp.Machine.Extension;
+using fitSharp.Machine.Model;
 
 namespace fit.Runner {
-    public interface StoryTestSuite {
-        string Name { get; }
-        void Select(string theTestPage);
-        IEnumerable<StoryTestPage> Pages { get; }
-        StoryTestPage SuiteSetUp { get; }
-        StoryTestPage SuiteTearDown { get; }
-        IEnumerable<StoryTestSuite> Suites { get; }
-        void Finish();
-    }
-
-    public delegate void TestCountsHandler(TestCounts counts);
-
-    public interface StoryTestPage {
-        string Name { get; }
-        void ExecuteStoryPage(ResultWriter resultWriter, TestCountsHandler handler);
-        bool IsTest { get; }
-    }
-    
 	public class SuiteRunner { //: Runnable {
 	    
 	    public TestCounts TestCounts { get; private set; }
@@ -57,6 +43,7 @@ namespace fit.Runner {
                 lastArgument = argument;
             }
         }
+
 	    public void Run(StoryTestSuite theSuite, string theSelectedFile) {
             resultWriter = CreateResultWriter();
             if (theSelectedFile.Length > 0) theSuite.Select(theSelectedFile);
@@ -91,7 +78,7 @@ namespace fit.Runner {
 
 	    private void ExecuteStoryPage(StoryTestPage page) {
 	        try {
-                page.ExecuteStoryPage(resultWriter, HandleTestStatus);
+                page.ExecuteStoryPage(ExecutePage, resultWriter, HandleTestStatus);
 	        }
 	        catch (Exception e) {
 	            myReporter.Write(e.ToString());
@@ -102,5 +89,19 @@ namespace fit.Runner {
 	        myReporter.Write(counts.Letter);
 	        TestCounts.TallyCounts(counts);
         }
+
+	    private void ExecutePage(StoryTestString input, Action<StoryTestString, TestCounts> handleResults,
+	                             Action handleNoTest) {
+	        var service = configuration.GetItem<Service.Service>();
+            FitVersionFixture.Reset();
+	        Tree<Cell> result = service.Compose(input);
+	        if (result == null) {
+	            handleNoTest();
+	            return;
+	        }
+	        new StoryTest((Parse) result.Value,
+	                      (tables, counts) => handleResults(service.ParseTree<Cell, StoryTestString>(tables), counts)).
+	            Execute();
+	    }
 	}
 }

@@ -1,7 +1,7 @@
-// Copyright © 2009 Syterra Software Inc.
-// This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
-// This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+// Copyright © 2009 Syterra Software Inc. All rights reserved.
+// The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+// which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
+// to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
 using System.Collections.Generic;
@@ -11,14 +11,24 @@ using fitSharp.Fit.Application;
 using fitSharp.IO;
 using fitSharp.Machine.Application;
 
-namespace fit.Runner {
+namespace fitSharp.Fit.Runner {
+    public interface StoryTestSuite {
+        string Name { get; }
+        void Select(string theTestPage);
+        IEnumerable<StoryTestPage> Pages { get; }
+        StoryTestPage SuiteSetUp { get; }
+        StoryTestPage SuiteTearDown { get; }
+        IEnumerable<StoryTestSuite> Suites { get; }
+        void Finish();
+    }
+
     public class StoryTestFolder: StoryTestSuite {
         private readonly Configuration configuration;
  
         public StoryTestFolder(Configuration configuration, FolderModel theFolderModel)
             : this(configuration, 
-                configuration.GetItem<Settings>().InputFolder,
-                configuration.GetItem<Settings>().OutputFolder, null, theFolderModel, null) {
+                   configuration.GetItem<Settings>().InputFolder,
+                   configuration.GetItem<Settings>().OutputFolder, null, theFolderModel, null) {
             myReport = new Report(OutputPath);
         }
 
@@ -45,7 +55,7 @@ namespace fit.Runner {
                     if (new StoryFileName(fileName).IsSuiteTearDown) continue;
                     if (configuration.GetItem<FileExclusions>().IsExcluded(fileName)) continue;
                     if (mySelection != null && !filePath.EndsWith(mySelection)) continue;
-                    var file = new StoryTestFile(configuration, filePath, this, myFolderModel);
+                    var file = new StoryTestFile(filePath, this, myFolderModel);
                     yield return file;
                 }
             }
@@ -112,7 +122,7 @@ namespace fit.Runner {
         private StoryTestFile FindFile(FileFilter filter) {
             foreach (string filePath in myFolderModel.GetFiles(Name)) {
                 if (filter(new StoryFileName(filePath))) {
-                    return new StoryTestFile(configuration, filePath, this, myFolderModel);
+                    return new StoryTestFile(/*configuration,*/ filePath, this, myFolderModel);
                 }
             }
             return null;

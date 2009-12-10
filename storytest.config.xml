@@ -13,6 +13,7 @@
         <addNamespace>fit.Test.Acceptance</addNamespace>
         <addNamespace>fit.Test.Double</addNamespace>
         <addNamespace>fit.Runner</addNamespace>
+        <addNamespace>fitSharp.Fit.Runner</addNamespace>
         <addNamespace>fitSharp.Fit.Model</addNamespace>
         <addNamespace>fitlibrary</addNamespace>
         <addNamespace>fitSharp.Test.Acceptance.Slim</addNamespace>

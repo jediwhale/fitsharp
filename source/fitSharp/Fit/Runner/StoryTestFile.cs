@@ -1,30 +1,32 @@
-// Copyright © 2009 Syterra Software Inc.
-// This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
-// This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+// Copyright © 2009 Syterra Software Inc. All rights reserved.
+// The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+// which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
+// to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System.IO;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Service;
 using fitSharp.IO;
-using fitSharp.Machine.Application;
-using fitSharp.Machine.Engine;
+using fitSharp.Machine.Extension;
 using fitSharp.Machine.Model;
 
-namespace fit.Runner {
+namespace fitSharp.Fit.Runner {
+
+    public interface StoryTestPage {
+        string Name { get; }
+        void ExecuteStoryPage(Action<StoryTestString, Action<StoryTestString, TestCounts>, Action> executor, ResultWriter resultWriter, Action<TestCounts> handler);
+    }
+
     public class StoryTestFile: StoryTestPage {
-        private readonly Configuration configuration;
         private readonly StoryFileName myPath;
         private readonly StoryTestFolder myFolder;
         private readonly FolderModel myFolderModel;
         private ElapsedTime elapsedTime;
         private ResultWriter resultWriter;
-        private TestCountsHandler handler;
+        private Action<TestCounts> handler;
         private string myContent;
-        private Parse myTables;
 
-        public StoryTestFile(Configuration configuration, string thePath, StoryTestFolder theFolder, FolderModel theFolderModel) {
-            this.configuration = configuration;
+        public StoryTestFile(string thePath, StoryTestFolder theFolder, FolderModel theFolderModel) {
             myPath = new StoryFileName(thePath);
             myFolder = theFolder;
             myFolderModel = theFolderModel;
@@ -32,32 +34,35 @@ namespace fit.Runner {
 
         public string Name { get { return Path.GetFileName(myPath.Name); }}
 
-        public void ExecuteStoryPage(ResultWriter resultWriter, TestCountsHandler handler) {
+        public void ExecuteStoryPage(Action<StoryTestString, Action<StoryTestString, TestCounts>, Action> executor, ResultWriter resultWriter, Action<TestCounts> handler) {
             elapsedTime = new ElapsedTime();
             this.resultWriter = resultWriter;
             this.handler = handler;
-            if (IsTest) {
-                new StoryTest(Tables, WriteFile).Execute();
+            if (HasTestName) {
+                executor(DecoratedContent, WriteFile, HandleNoTest);
                 return;
             }
             if (myPath.IsSuiteSetUp || myPath.IsSuiteTearDown) {
-                new StoryTest(RawTables, WriteFile).Execute();
+                executor(PlainContent, WriteFile, HandleNoTest);
                 return;
             }
-            CopyFile();
+            HandleNoTest();
+        }
+
+        public void HandleNoTest() {
+            myFolderModel.CopyFile(myPath.Name, OutputPath);
             handler(new TestCounts());
         }
 
-        private void WriteFile(Tree<Cell> theTables, TestCounts counts) {
-            WriteResult(theTables, counts, elapsedTime);
-            resultWriter.WritePageResult(new PageResult(myPath.Name, theTables.ToString(), counts)); // todo: use the processor parse result not tostring
+        private void WriteFile(StoryTestString testResult, TestCounts counts) {
+            WriteResult(testResult, counts, elapsedTime);
+            resultWriter.WritePageResult(new PageResult(myPath.Name, testResult.ToString(), counts));
             handler(counts);
         }
 
-        public bool IsTest {
+        private bool HasTestName {
             get {
-                if (myPath.IsSetUp || myPath.IsTearDown || myPath.IsSuiteSetUp || myPath.IsSuiteTearDown) return false;
-                return (RawTables != null);
+                return !(myPath.IsSetUp || myPath.IsTearDown || myPath.IsSuiteSetUp || myPath.IsSuiteTearDown);
             }
         }
 
@@ -68,40 +73,27 @@ namespace fit.Runner {
             }
         }
 
-        private void CopyFile() {
-            myFolderModel.CopyFile(myPath.Name, OutputPath);
+        private StoryTestString DecoratedContent {
+            get {
+                return new StoryTestString(myFolder.Decoration.IsEmpty
+                                               ? Content
+                                               : myFolder.Decoration.Decorate(Content));
+            }
         }
 
-        private void WriteResult(Tree<Cell> theTables, TestCounts counts, ElapsedTime elapsedTime) {
+        private StoryTestString PlainContent {
+            get {
+                return new StoryTestString(Content);
+            }
+        }
+
+        private void WriteResult(StoryTestString testResult, TestCounts counts, ElapsedTime elapsedTime) {
             string outputFile = OutputPath;
             var output = new StringWriter();
-            output.Write(configuration.GetItem<Service.Service>().ParseTree(typeof(StoryTestString), theTables).ValueString);
+            output.Write(testResult);
             output.Close();
             myFolderModel.MakeFile(outputFile, output.ToString());
             myFolder.ListFile(outputFile, counts, elapsedTime);
-        }
-
-        private Parse Tables {
-            get {
-                return myFolder.Decoration.IsEmpty
-                           ? RawTables
-                           : Parse(myFolder.Decoration.Decorate(Content));
-            }
-        }
-
-        private Parse RawTables {
-            get {
-                if (myTables == null) {
-                    FitVersionFixture.Reset();
-                    myTables = Parse(Content);
-                }
-                return myTables;
-            }
-        }
-
-        private Parse Parse(string content) {
-            Tree<Cell> result = configuration.GetItem<Service.Service>().Compose(new StoryTestString(content));
-            return result != null ? (Parse)result.Value : null;
         }
 
         private string OutputPath {
