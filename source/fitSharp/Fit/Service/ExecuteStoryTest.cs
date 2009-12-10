@@ -28,19 +28,21 @@ namespace fitSharp.Fit.Service
  			processor.TestStatus.Summary["run date"] = DateTime.Now;
 			processor.TestStatus.Summary["run elapsed time"] = new ElapsedTime();
             Cell heading = tables.Branches[0].Branches[0].Branches[0].Value;
+            Interpreter firstInterpreter;
             try {
-                processor.ParseTree<Cell, Interpreter>(tables.Branches[0].Branches[0]);
+                firstInterpreter = processor.ParseTree<Cell, Interpreter>(tables.Branches[0].Branches[0]);
             }
             catch (System.Exception e) {
                 processor.TestStatus.MarkException(heading, e);
                 writer(tables.Branches[0], processor.TestStatus.Counts);
                 return;
             }
-            InterpretTables(tables);
+            InterpretTables(firstInterpreter, tables);
         }
 
-		private void InterpretTables(Tree<Cell> theTables) {
+		private void InterpretTables(Interpreter firstInterpreter, Tree<Cell> theTables) {
             try {
+                Interpreter activeFixture = firstInterpreter;
                 FlowInterpreter flowFixture = null;
                 int tableCount = 1;
                 foreach (Tree<Cell> table in theTables.Branches) {
@@ -49,7 +51,7 @@ namespace fitSharp.Fit.Service
                             Cell heading = table.Branches[0].Branches[0].Value;
                             if (heading != null && !processor.TestStatus.IsAbandoned) {
                                 if (flowFixture == null) {
-                                    var activeFixture = processor.ParseTree<Cell, Interpreter>(table.Branches[0]);
+                                    if (activeFixture == null) activeFixture = processor.ParseTree<Cell, Interpreter>(table.Branches[0]);
                                     var activeFlowFixture = activeFixture as FlowInterpreter;
                                     if (activeFlowFixture != null && activeFlowFixture.IsInFlow(tableCount)) flowFixture = activeFlowFixture;
                                     if (!activeFixture.IsVisible) tableCount--;
@@ -67,6 +69,7 @@ namespace fitSharp.Fit.Service
                     catch (System.Exception e) {
                         if (!typeof(AbandonException).IsAssignableFrom(e.GetType())) throw;
                     }
+                    activeFixture = null;
                     tableCount++;
                 }
                 if (flowFixture != null) flowFixture.DoTearDown(theTables.Branches[0]);

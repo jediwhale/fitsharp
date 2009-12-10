@@ -103,6 +103,26 @@ This is a failing test.<br>
     </counts>
   </result>
   <result>
+    <relativePageName>document\fitSharp\Fit\SampleInputFiles\SampleSubFolder\SuiteTearDown.html</relativePageName>
+    <content><![CDATA[<html>
+<head>
+  <link href="fit.css" type="text/css" rel="stylesheet"></head>
+<body><br>
+This is a suite teardown test.<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>SampleDo</td></tr>
+<tr><td>check</td><td>one</td><td class="pass">1</td></tr>
+</table>
+</body>
+</html>]]></content>
+    <counts>
+      <right>1</right>
+      <wrong>0</wrong>
+      <ignores>0</ignores>
+      <exceptions>0</exceptions>
+    </counts>
+  </result>
+  <result>
     <relativePageName>document\fitSharp\Fit\SampleInputFiles\SampleSubWithStyle\SampleSimpleTest.html</relativePageName>
     <content><![CDATA[<html>
 <head>
@@ -123,7 +143,7 @@ This is a simple test.<br>
     </counts>
   </result>
   <finalCounts>
-    <right>5</right>
+    <right>6</right>
     <wrong>1</wrong>
     <ignores>0</ignores>
     <exceptions>0</exceptions>

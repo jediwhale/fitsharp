@@ -16,6 +16,7 @@ namespace fit.Runner {
         void Select(string theTestPage);
         IEnumerable<StoryTestPage> Pages { get; }
         StoryTestPage SuiteSetUp { get; }
+        StoryTestPage SuiteTearDown { get; }
         IEnumerable<StoryTestSuite> Suites { get; }
         void Finish();
     }
@@ -83,6 +84,8 @@ namespace fit.Runner {
 	        foreach (StoryTestSuite childSuite in theSuite.Suites) {
                 RunFolder(childSuite);
 	        }
+	        StoryTestPage suiteTearDown = theSuite.SuiteTearDown;
+            if (suiteTearDown != null) ExecuteStoryPage(suiteTearDown);
 	        theSuite.Finish();
 	    }
 

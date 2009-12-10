@@ -3,10 +3,10 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
+using System;
 using System.Collections;
 using System.IO;
 using fitSharp.IO;
-using fitSharp.Machine.Application;
 
 namespace fit.Test.NUnit {
     public class FolderTestModel: FolderModel, ProgressReporter {
@@ -38,7 +38,9 @@ namespace fit.Test.NUnit {
             foreach (string file in myFiles.Keys) {
                 if (file.StartsWith(thePath + "\\") && file.Substring(thePath.Length + 1).IndexOf("\\") < 0) result.Add(file);
             }
-            return (string[])result.ToArray(typeof(string));
+            var files = (string[])result.ToArray(typeof(string));
+            Array.Sort(files);
+            return files;
         }
 
         public string[] GetFolders(string thePath) {

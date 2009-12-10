@@ -40,7 +40,7 @@ namespace fit.Runner {
                 new StoryTest(Tables, WriteFile).Execute();
                 return;
             }
-            if (myPath.IsSuiteSetUp) {
+            if (myPath.IsSuiteSetUp || myPath.IsSuiteTearDown) {
                 new StoryTest(RawTables, WriteFile).Execute();
                 return;
             }
@@ -56,7 +56,7 @@ namespace fit.Runner {
 
         public bool IsTest {
             get {
-                if (myPath.IsSetUp || myPath.IsTearDown || myPath.IsSuiteSetUp) return false;
+                if (myPath.IsSetUp || myPath.IsTearDown || myPath.IsSuiteSetUp || myPath.IsSuiteTearDown) return false;
                 return (RawTables != null);
             }
         }
@@ -132,6 +132,13 @@ namespace fit.Runner {
             }
         }
 
+        public bool IsSuiteTearDown {
+            get {
+                string name = Path.GetFileName(myName);
+                return ourSuiteTearDownIdentifier1.Equals(name) || ourSuiteTearDownIdentifier2.Equals(name);
+            }
+        }
+
         public bool IsTearDown {
             get {
                 string name = Path.GetFileName(myName);
@@ -145,6 +152,8 @@ namespace fit.Runner {
         private static readonly IdentifierName ourTeardownIdentifier2 = new IdentifierName("teardown.htm");
         private static readonly IdentifierName ourSuiteSetupIdentifier1 = new IdentifierName("suitesetup.html");
         private static readonly IdentifierName ourSuiteSetupIdentifier2 = new IdentifierName("suitesetup.htm");
+        private static readonly IdentifierName ourSuiteTearDownIdentifier1 = new IdentifierName("suiteteardown.html");
+        private static readonly IdentifierName ourSuiteTearDownIdentifier2 = new IdentifierName("suiteteardown.htm");
         private readonly string myName;
     }
 }

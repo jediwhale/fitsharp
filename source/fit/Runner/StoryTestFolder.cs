@@ -42,6 +42,7 @@ namespace fit.Runner {
                 foreach (string filePath in myFolderModel.GetFiles(Name)) {
                     string fileName = Path.GetFileName(filePath);
                     if (new StoryFileName(fileName).IsSuiteSetUp) continue;
+                    if (new StoryFileName(fileName).IsSuiteTearDown) continue;
                     if (configuration.GetItem<FileExclusions>().IsExcluded(fileName)) continue;
                     if (mySelection != null && !filePath.EndsWith(mySelection)) continue;
                     var file = new StoryTestFile(configuration, filePath, this, myFolderModel);
@@ -53,6 +54,12 @@ namespace fit.Runner {
         public StoryTestPage SuiteSetUp {
             get {
                 return FindFile(name => name.IsSuiteSetUp);
+            }
+        }
+
+        public StoryTestPage SuiteTearDown {
+            get {
+                return FindFile(name => name.IsSuiteTearDown);
             }
         }
 

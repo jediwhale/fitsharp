@@ -43,7 +43,7 @@ The test files used in the following examples are from <a href="../Fit/SampleInp
 Test result counts are accumulated for all files processed.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>check</td><td>results</td><td>5 right, 1 wrong, 0 ignored, 0 exceptions</td></tr>
+<tr><td>check</td><td>results</td><td>6 right, 1 wrong, 0 ignored, 0 exceptions</td></tr>
 </table>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
@@ -57,10 +57,11 @@ Sub-directories are traversed and copied to a matching structure in the output d
 <tr><td>ensure</td><td>file</td><td>testoutput\SampleSubFolder\SampleFailingTest.html</td><td>same as</td><td>out\SampleFailingTest.html</td></tr>
 </table>
 <br>
-If a file SuiteSetUp.html exists in a folder, it is run before all other files in that folder.<br>
+If a file SuiteSetUp.html exists in a folder, it is run before all other files in that folder. SuiteTearDown.html is run after all other files in the folder.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>ensure</td><td>file</td><td>testoutput\SampleSubFolder\SuiteSetUp.html</td><td>same as</td><td>out\SampleSuiteSetUp.html</td></tr>
+<tr><td>ensure</td><td>file</td><td>testoutput\SampleSubFolder\SuiteTearDown.html</td><td>same as</td><td>out\SampleSuiteTearDown.html</td></tr>
 </table>
 <br>
 If a file does not contain any tables, the contents are copied without changes.<br>
