@@ -24,7 +24,9 @@ namespace fit.Runner {
         private int Run(Configuration configuration, ICollection<string> theArguments) {
             ParseArguments(configuration, theArguments);
             myRunner = new SuiteRunner(configuration, myProgressReporter);
-            myRunner.Run(new StoryTestFolder(configuration, new FileSystemModel()), string.Empty);
+            myRunner.Run(
+                new StoryTestFolder(configuration, new FileSystemModel(configuration.GetItem<Settings>().CodePageNumber)),
+                string.Empty);
             return myRunner.TestCounts.FailCount;
         }
 

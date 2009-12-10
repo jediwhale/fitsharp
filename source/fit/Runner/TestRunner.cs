@@ -5,15 +5,12 @@
 
 using System;
 using System.IO;
-using fit;
 using fit.Runner;
 using fit.Service;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Service;
 using fitSharp.IO;
 using fitSharp.Machine.Application;
-using fitSharp.Machine.Engine;
-using fitSharp.Machine.Model;
 
 namespace fitnesse.fitserver
 {
@@ -89,48 +86,45 @@ namespace fitnesse.fitserver
 			return totalCounts.FailCount;
 		}
 
-		public bool ParseArgs(Configuration configuration, string[] args)
-		{
-		    string resultsFile = null;
-		    string outputType = "text";
-			int index = 0;
-			try
-			{
-				while(args[index].StartsWith("-"))
-				{
-					string option = args[index++];
-					if("-results".Equals(option))
-					    resultsFile = args[index++];
-					else if("-v".Equals(option))
-						verbose = true;
-					else if("-debug".Equals(option))
-						debug = true;
-					else if("-nopaths".Equals(option))
-						usingDownloadedPaths = false;
-                    else if (option == "-suiteFilter")
-                        suiteFilter = args[index++];
-                    else if ("-format".Equals(option))
-                        outputType = args[index++];
-					else
-						throw new Exception("Bad option: " + option);
-				}
-			    CreateResultWriter(resultsFile, outputType);
-				host = args[index++];
-				port = Int32.Parse(args[index++]);
-				pageName = args[index++];
-			    string assemblies = null;
-				while(args.Length > index)
-					assemblies = assemblies == null ? args[index++] : (assemblies + ";" + args[index++]);
-                if (assemblies != null) {
-		            new PathParser(assemblies).AddAssemblies(configuration);
-                }
-				return true;
-			}
-			catch(Exception)
-			{
-				return false;
-			}
-		}
+	    public bool ParseArgs(Configuration configuration, string[] args) {
+	        string resultsFile = null;
+	        string outputType = "text";
+	        int index = 0;
+	        try {
+	            while (args[index].StartsWith("-")) {
+	                string option = args[index++];
+	                if ("-results".Equals(option))
+	                    resultsFile = args[index++];
+	                else if ("-v".Equals(option))
+	                    verbose = true;
+	                else if ("-debug".Equals(option))
+	                    debug = true;
+	                else if ("-nopaths".Equals(option))
+	                    usingDownloadedPaths = false;
+	                else if (option == "-suiteFilter")
+	                    suiteFilter = args[index++];
+	                else if ("-format".Equals(option))
+	                    outputType = args[index++];
+	                else
+	                    throw new Exception("Bad option: " + option);
+	            }
+	            CreateResultWriter(resultsFile, outputType,
+	                               new FileSystemModel(configuration.GetItem<Settings>().CodePageNumber));
+	            host = args[index++];
+	            port = Int32.Parse(args[index++]);
+	            pageName = args[index++];
+	            string assemblies = null;
+	            while (args.Length > index)
+	                assemblies = assemblies == null ? args[index++] : (assemblies + ";" + args[index++]);
+	            if (assemblies != null) {
+	                new PathParser(assemblies).AddAssemblies(configuration);
+	            }
+	            return true;
+	        }
+	        catch (Exception) {
+	            return false;
+	        }
+	    }
 
 		private static void PrintUsage()
 		{
@@ -144,12 +138,12 @@ namespace fitnesse.fitserver
 			Console.WriteLine("\t-suiteFilter <filter>\tonly run test pages with tag <filter>");
 		}
 
-	    private void CreateResultWriter(string fileName, string outputType) {
+	    private void CreateResultWriter(string fileName, string outputType, FolderModel folders) {
 	        if (string.IsNullOrEmpty(fileName)) return;
 	        if (outputType == "xml")
-	            resultWriter = new XmlResultWriter(fileName, new FileSystemModel());
+	            resultWriter = new XmlResultWriter(fileName, folders);
 	        else
-	            resultWriter = new TextResultWriter(fileName, new FileSystemModel());
+	            resultWriter = new TextResultWriter(fileName, folders);
 	    }
 
 	    public void HandleFinalCount(TestCounts summary)

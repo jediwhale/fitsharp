@@ -32,7 +32,8 @@ namespace fit.Runner {
 	    public int Run(Configuration configuration, IEnumerable<string> arguments, ProgressReporter reporter) {
 	        ParseArguments(arguments);
 	        myReporter = reporter;
-		    Run(new StoryTestFolder(configuration, new FileSystemModel()), mySelection);
+	        Run(new StoryTestFolder(configuration, new FileSystemModel(configuration.GetItem<Settings>().CodePageNumber)),
+	            mySelection);
 	        return 0; //todo: return counts exceptions + wrong or whatever
 	    }
 
@@ -56,7 +57,8 @@ namespace fit.Runner {
 
 	    private ResultWriter CreateResultWriter() {
 	        if (configuration.GetItem<Settings>().XmlOutput != null) {
-	            return new XmlResultWriter(configuration.GetItem<Settings>().XmlOutput, new FileSystemModel());
+	            return new XmlResultWriter(configuration.GetItem<Settings>().XmlOutput,
+	                                       new FileSystemModel(configuration.GetItem<Settings>().CodePageNumber));
 	        }
 	        return new NullResultWriter();
 	    }

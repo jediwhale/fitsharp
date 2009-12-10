@@ -6,25 +6,21 @@
 using System;
 using System.IO;
 using System.Text;
-using fitSharp.Machine.Application;
 
 namespace fitSharp.IO {
     public class FileSystemModel: FolderModel {
         
-        private const int ourDefaultCodePage = 1252;
+        private readonly int codePage;
 
-        public FileSystemModel() {
-            myCodePage = ourDefaultCodePage;
-            if (Context.Configuration == null) return;
-            string codePage = Context.Configuration.GetItem<Settings>().CodePage;
-            if (codePage != null) int.TryParse(codePage, out myCodePage);
+        public FileSystemModel(int codePage) {
+            this.codePage = codePage;
         }
 
         public void MakeFile(string thePath, string theContent) {
             if (!Directory.Exists(Path.GetDirectoryName(thePath))) {
                 Directory.CreateDirectory(Path.GetDirectoryName(thePath));
             }
-            TextWriter writer = new StreamWriter(thePath, false, Encoding.GetEncoding(myCodePage));
+            TextWriter writer = new StreamWriter(thePath, false, Encoding.GetEncoding(codePage));
             writer.Write(theContent);
             writer.Close();
         }
@@ -38,7 +34,7 @@ namespace fitSharp.IO {
             StreamReader reader;
             try {
                 var file = new FileStream(thePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-                reader = new StreamReader(file, Encoding.GetEncoding(myCodePage));
+                reader = new StreamReader(file, Encoding.GetEncoding(codePage));
             }
             catch (FileNotFoundException) {
                 return null;
@@ -71,7 +67,5 @@ namespace fitSharp.IO {
         public void WriteToConsole(string theMessage) {
             Console.Write(theMessage);
         }
-
-        private readonly int myCodePage;
     }
 }

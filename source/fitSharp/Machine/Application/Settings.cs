@@ -9,6 +9,8 @@ using fitSharp.Machine.Model;
 namespace fitSharp.Machine.Application {
     public class Settings: Copyable {
 
+        private const int DefaultCodePage = 1252;
+
         public string ApartmentState { get; set; }
         private string appConfigFile;
         public string CodePage { get; set; }
@@ -22,6 +24,14 @@ namespace fitSharp.Machine.Application {
             set {
                 appConfigFile = value;
                 AppDomain.CurrentDomain.SetData("APP_CONFIG_FILE", value);
+            }
+        }
+
+        public int CodePageNumber {
+            get {
+                int result = DefaultCodePage;
+                if (CodePage != null) int.TryParse(CodePage, out result);
+                return result;
             }
         }
 
