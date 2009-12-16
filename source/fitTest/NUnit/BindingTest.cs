@@ -4,6 +4,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System;
+using fitSharp.Fit.Service;
 using NUnit.Framework;
 
 namespace fit.Test.NUnit {
@@ -11,63 +12,48 @@ namespace fit.Test.NUnit {
     public class BindingTest
     {
         [Test]
-        public void TestIsQueryCell() 
-        {
-            ColumnFixture textFixture = new TestFixture();
-            Assert.IsTrue(textFixture.CheckIsImpliedBy("isQuery?"));
-            Assert.IsTrue(textFixture.CheckIsImpliedBy("isQuery!"));
-            Assert.IsTrue(textFixture.CheckIsImpliedBy("isQuery()"));
-            Assert.IsFalse(textFixture.CheckIsImpliedBy("isNotQuery+"));
-            Assert.IsFalse(textFixture.CheckIsImpliedBy("isNotQuery*"));
-            Assert.IsFalse(textFixture.CheckIsImpliedBy("isNotQuery<>"));
-        }
-
-        [Test]
         public void TestSetterBinding()
         {
-            TestFixture f = new TestFixture { Processor = new Service.Service()};
-			
-            Parse p;
-            Binding binding;
+            var f = new TestFixture { Processor = new Service.Service()};
 
-            binding = new Binding("sampleInt", TestUtils.CreateCell("sampleInt"), OperationType.Input);
-            p = new Parse("<table><tr><td>123456</td></tr></table>").Parts.Parts;
-            binding.HandleCell(f, p);
+            BindingOperation bindingOperation = new InputBinding(f.CellOperation, f, TestUtils.CreateCell("sampleInt"));
+            Parse p = new Parse("<table><tr><td>123456</td></tr></table>").Parts.Parts;
+            bindingOperation.Do(null, p);
             Assert.AreEqual(123456, f.sampleInt);
 
             p = new Parse("<table><tr><td>-234567</td></tr></table>").Parts.Parts;
-            binding.HandleCell(f, p);
+            bindingOperation.Do(null, p);
             Assert.AreEqual(-234567, f.sampleInt);
 			
-            binding = new Binding("sampleDouble", TestUtils.CreateCell("sampleDouble"), OperationType.Input);
+            bindingOperation = new InputBinding(f.CellOperation, f, TestUtils.CreateCell("sampleDouble"));
             p = new Parse("<table><tr><td>3.14159</td></tr></table>").Parts.Parts;
-            binding.HandleCell(f, p);
+            bindingOperation.Do(null, p);
             Assert.AreEqual(3.14159, f.sampleDouble);
 
-            binding = new Binding("sampleChar", TestUtils.CreateCell("sampleChar"), OperationType.Input);
+            bindingOperation = new InputBinding(f.CellOperation, f, TestUtils.CreateCell("sampleChar"));
             p = new Parse("<table><tr><td>a</td></tr></table>").Parts.Parts;
-            binding.HandleCell(f, p);
+            bindingOperation.Do(null, p);
             Assert.AreEqual('a', f.sampleChar);
 
-            binding = new Binding("sampleString", TestUtils.CreateCell("sampleString"), OperationType.Input);
+            bindingOperation = new InputBinding(f.CellOperation, f, TestUtils.CreateCell("sampleString"));
             p = new Parse("<table><tr><td>xyzzy</td></tr></table>").Parts.Parts;
-            binding.HandleCell(f, p);
+            bindingOperation.Do(null, p);
             Assert.AreEqual("xyzzy", f.sampleString);
 
-            binding = new Binding("sampleFloat", TestUtils.CreateCell("sampleFloat"), OperationType.Input);
+            bindingOperation = new InputBinding(f.CellOperation, f, TestUtils.CreateCell("sampleFloat"));
             p = new Parse("<table><tr><td>6.02e23</td></tr></table>").Parts.Parts;
-            binding.HandleCell(f, p);
+            bindingOperation.Do(null, p);
             Assert.AreEqual(6.02e23f, f.sampleFloat, 1e17f);
 
-            binding = new Binding("sampleByte", TestUtils.CreateCell("sampleByte"), OperationType.Input);
+            bindingOperation = new InputBinding(f.CellOperation, f, TestUtils.CreateCell("sampleByte"));
             p = new Parse("<table><tr><td>123</td></tr></table>").Parts.Parts;
-            binding.HandleCell(f, p);
-            Assert.AreEqual((byte)123, f.sampleByte);
+            bindingOperation.Do(null, p);
+            Assert.AreEqual(123, f.sampleByte);
 
-            binding = new Binding("sampleShort", TestUtils.CreateCell("sampleShort"), OperationType.Input);
+            bindingOperation = new InputBinding(f.CellOperation, f, TestUtils.CreateCell("sampleShort"));
             p = new Parse("<table><tr><td>12345</td></tr></table>").Parts.Parts;
-            binding.HandleCell(f, p);
-            Assert.AreEqual((short)12345, f.sampleShort);
+            bindingOperation.Do(null, p);
+            Assert.AreEqual(12345, f.sampleShort);
         }
 
         class TestFixture : ColumnFixture 

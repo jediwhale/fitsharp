@@ -74,6 +74,8 @@
     <Compile Include="Fit\Runner\StoryTestFile.cs" />
     <Compile Include="Fit\Runner\StoryTestFolder.cs" />
     <Compile Include="Fit\Runner\TestPageDecoration.cs" />
+    <Compile Include="Fit\Service\Binding.cs" />
+    <Compile Include="Fit\Service\BindingFactory.cs" />
     <Compile Include="Fit\Service\CellOperation.cs" />
     <Compile Include="Fit\Service\CellProcessorBase.cs" />
     <Compile Include="Fit\Service\ExecuteStoryTest.cs" />

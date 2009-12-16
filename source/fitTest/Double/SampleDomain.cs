@@ -19,6 +19,7 @@ namespace fit.Test.Double {
         public string StringField;
         public DateTime DateTimeField;
         public Person PersonField;
+        public string NewName;
 
         public static string StaticMethod() {
             return "hello";
@@ -27,7 +28,7 @@ namespace fit.Test.Double {
         public string ThrowException() {
             if (Message == "OK") return Message;
             if (Message == null) throw new NullReferenceException();
-            else throw new ApplicationException(Message);
+            throw new ApplicationException(Message);
         }
 
         public void AddDays(int days) { DateTimeField = DateTimeField.AddDays(days); }
