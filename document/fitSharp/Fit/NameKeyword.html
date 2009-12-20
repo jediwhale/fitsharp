@@ -14,7 +14,7 @@ to be bound by the terms of this license. You must not remove this notice, or an
 <body>
 <div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
 <div class="pagename">Name Keyword</div>
-<div class="content">The Name keyword is one of the <a href="../Fit/FlowFixtureKeywords.html">Flow Fixture Keywords</a>. It associates an object with a name, which can be used to retrieve the object later with the <a href="../Fit/UseFixture.html">Use Fixture</a> or <a href="../Fit/WithKeyword.html">With Keyword</a>.<ul><li>name fitSharp/Fit/variable fitSharp/Fit/variable fitSharp/Fit/variable</li><li>name fitSharp/Fit/variable <a href="../Fit/WithKeyword.html">with</a> fitSharp/Fit/variable</li></ul><br>
+<div class="content">The Name keyword is one of the <a href="../Fit/FlowFixtureKeywords.html">Flow Fixture Keywords</a>. It associates an object with a name, which can be used to retrieve the object later with the <a href="../Fit/UseFixture.html">Use Fixture</a> or <a href="../Fit/WithKeyword.html">With Keyword</a>.<ul><li>name <span style="font-style:italic">&lt;saved-name&gt;</span> <span style="font-style:italic">&lt;method&gt;</span> <span style="font-style:italic">&lt;parameters&gt;</span></li><li>name <span style="font-style:italic">&lt;saved-name&gt;</span> <a href="../Fit/WithKeyword.html">with</a> <span style="font-style:italic">&lt;with-phrase&gt;</span></li></ul><br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>do</td></tr>
 <tr><td>with</td><td>type</td><td>story test</td></tr>
@@ -55,7 +55,17 @@ A domain object can be saved, and is wrapped in a Do fixture when used.<br>
 <tr><td>use</td><td>savebob</td></tr>
 <tr><td>check</td><td>name</td><td>Bob</td></tr>
 </table>
-</td><td><br><table border="1" cellpadding="2" cellspacing="0"><tr><td>do</td></tr><tr><td>name</td><td class="pass">savebob</td><td>with</td><td>new</td><td>sample domain</td><td>Bob</td></tr></table><br><table border="1" cellpadding="2" cellspacing="0"><tr><td>use</td><td>savebob</td></tr><tr><td>check</td><td>name</td><td class="pass">Bob</td></tr></table></td></tr>
+</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>do</td></tr>
+<tr><td>name</td><td class="pass">savebob</td><td>with</td><td>new</td><td>sample domain</td><td>Bob</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>use</td><td>savebob</td></tr>
+<tr><td>check</td><td>name</td><td class="pass">Bob</td></tr>
+</table>
+</td></tr>
 </table>
 <br>
 Errors are reported when the method is invalid or cells are missing.<br>

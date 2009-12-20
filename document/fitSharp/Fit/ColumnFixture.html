@@ -14,28 +14,85 @@ to be bound by the terms of this license. You must not remove this notice, or an
 <body>
 <div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
 <div class="pagename">Column Fixture</div>
-<div class="content"><a href="../Fit/ColumnFixture.html">Column Fixture</a> can use a <a href="../Fit/DomainAdapter.html">Domain Adapter</a>.<br>
+<div class="content"><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>do</td></tr>
+</table>
 <br>
+Column fixtures have a virtual Execute() method which is called before the first check operation in a given row. We can override this method to handle some processing after input/before check. <pre class="code">public class ExecuteExampleFixture : ColumnFixture {
+    public int IntField;
+    public override void Execute() { IntField = IntField*2; }
+}</pre><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>when test is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>execute example</td></tr>
+<tr><td>int field</td><td>int field?</td></tr>
+<tr><td>1</td><td>2</td></tr>
+<tr><td>2</td><td>4</td></tr>
+</table>
+</td><td>then result is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>execute example</td></tr>
+<tr><td>int field</td><td>int field?</td></tr>
+<tr><td>1</td><td class="pass">2</td></tr>
+<tr><td>2</td><td class="pass">4</td></tr>
+</table>
+</td></tr>
+</table>
+<br>
+Column fixtures can use a <a href="../Fit/DomainAdapter.html">Domain Adapter</a>.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>when test is</td><td><br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>use</td><td>column</td><td>with</td><td>new</td><td>sampledomainadapter</td></tr>
 <tr><td>name</td><td>lower case name?</td></tr>
 <tr><td>Bill</td><td>bill</td></tr>
 </table>
+</td><td>then result is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>use</td><td>column</td><td>with</td><td>new</td><td>sampledomainadapter</td></tr>
+<tr><td>name</td><td>lower case name?</td></tr>
+<tr><td>Bill</td><td class="pass">bill</td></tr>
+</table>
+</td></tr>
+</table>
 <br>
 To create objects, a column heading uses a "new" prefix. An object is created using the data cell as a constructor parameter. The newly-created object becomes the System Under Test.<br>
 <br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>when test is</td><td><br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>column</td></tr>
 <tr><td>new sample domain</td><td>name?</td></tr>
 <tr><td>Bob</td><td>Bob</td></tr>
 </table>
+</td><td>then result is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>column</td></tr>
+<tr><td>new sample domain</td><td>name?</td></tr>
+<tr><td>Bob</td><td class="pass">Bob</td></tr>
+</table>
+</td></tr>
+</table>
 <br>
 A member name beginning with "new" does not create a new object.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
+<tr><td>when test is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
 <tr><td>use</td><td>column</td><td>with</td><td>new</td><td>sample domain</td></tr>
 <tr><td>new name</td><td>new name?</td></tr>
 <tr><td>Ted</td><td>Ted</td></tr>
+</table>
+</td><td>then result is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>use</td><td>column</td><td>with</td><td>new</td><td>sample domain</td></tr>
+<tr><td>new name</td><td>new name?</td></tr>
+<tr><td>Ted</td><td class="pass">Ted</td></tr>
+</table>
+</td></tr>
 </table>
 </div>
 <div style="width:100%;text-align:right">
