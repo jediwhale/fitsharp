@@ -5,7 +5,6 @@
 
 using fit;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using fit.Fixtures;
 using fit.Model;
@@ -22,11 +21,8 @@ namespace fitlibrary {
 	public abstract class FlowFixtureBase: Fixture, FlowInterpreter {
 
 	    protected bool IHaveFinishedTable;
-        protected Hashtable myNamedFixtures;
 
-	    protected FlowFixtureBase() {
-            myNamedFixtures = new Hashtable();
-        }
+	    protected FlowFixtureBase() {}
 
 	    protected FlowFixtureBase(object theSystemUnderTest): this() {
             mySystemUnderTest = theSystemUnderTest;
@@ -120,10 +116,11 @@ namespace fitlibrary {
         }
 
         public object NamedFixture(string theName) {
-            return myNamedFixtures[theName];
+            var symbol = new Symbol(theName);
+            return Processor.Contains(symbol) ? Processor.Load(symbol).Instance : null;
         }
 
-        public void AddNamedFixture(string name, object fixture) { myNamedFixtures.Add(name, fixture); }
+        public void AddNamedFixture(string name, object fixture) { Processor.Store(new Symbol(name, fixture)); }
 
         protected abstract IEnumerable<Parse> MethodCells(CellRange theCells);
         protected abstract IEnumerable<Parse> ParameterCells(CellRange theCells);

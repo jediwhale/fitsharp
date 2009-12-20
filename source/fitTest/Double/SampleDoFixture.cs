@@ -43,5 +43,7 @@ namespace fit.Test.Double {
         public SampleDoFixture MakeSampleDo(string theText) {
             return new SampleDoFixture(theText);
         }
+
+        public string GetName(SampleDomain sample) { return sample.Name; }
     }
 }
