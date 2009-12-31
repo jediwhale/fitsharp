@@ -3,33 +3,16 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-using System.Collections.Generic;
 using System.Reflection;
-using fit.Operators;
-using fitSharp.Fit.Operators;
+using fitSharp.Fit.Engine;
 using fitSharp.Fit.Service;
 using fitSharp.Machine.Application;
-using fitSharp.Machine.Engine;
-using fitSharp.Machine.Model;
 
 namespace fit.Service {
-    public class Service: CellProcessorBase, Copyable {
-        public Service() {
-            AddOperator(new RuntimeFlow());
-            AddOperator(new RuntimeProcedure());
+    public class Service: CellProcessorBase {
+        public Service(): this(new Configuration()) {}
 
-            AddOperator(new ComposeDefault());
-
-            AddOperator(new ComposeStoryTestString());
-            AddOperator(new ParseStoryTestString());
-
-            AddOperator(new ComposeTable());
-            AddOperator(new ExecuteList());
-            AddOperator(new ParseTable());
-            AddOperator(new ParseTree());
-            AddOperator(new ParseInterpreter());
-
-            ApplicationUnderTest = Context.Configuration.GetItem<ApplicationUnderTest>();
+        public Service(Configuration configuration): base(configuration, configuration.GetItem<Operators>()) {
             ApplicationUnderTest.AddNamespace("fit");
             ApplicationUnderTest.AddNamespace("fitnesse.handlers");
             ApplicationUnderTest.AddNamespace("fit.Operators");
@@ -38,40 +21,12 @@ namespace fit.Service {
             ApplicationUnderTest.AddAssembly(Assembly.GetExecutingAssembly().CodeBase);
         }
 
-        public Service(Service other): base(other) {}
-
         public void AddCellHandler(string handlerName) {
-            if (renames.ContainsKey(handlerName.ToLower())) AddOperator(renames[handlerName.ToLower()]);
+            ((CellOperators)Operators).AddCellHandler(handlerName);
         }
 
         public void RemoveCellHandler(string handlerName) {
-            if (renames.ContainsKey(handlerName.ToLower())) RemoveOperator(renames[handlerName.ToLower()]);
-        }
-
-        private static readonly Dictionary<string, string> renames = new Dictionary<string, string> {
-            {"boolhandler", typeof(ParseBoolean).FullName},
-            {"emptycellhandler", typeof(ExecuteEmpty).FullName},
-            {"exceptionkeywordhandler", typeof(ExecuteException).FullName},
-            {"nullkeywordhandler", typeof(ParseNull).FullName},
-            {"blankkeywordhandler", typeof(ParseBlank).FullName},
-            {"errorkeywordhandler", typeof(ExecuteError).FullName},
-            {"endswithhandler", typeof(CompareEndsWith).FullName},
-            {"failkeywordhandler", typeof(CompareFail).FullName},
-            {"startswithhandler", typeof(CompareStartsWith).FullName},
-            {"integralrangehandler", typeof(CompareIntegralRange).FullName},
-            {"listhandler", typeof(ExecuteList).FullName},
-            {"numericcomparehandler", typeof(CompareNumeric).FullName},
-            {"parsecellhandler", typeof(ExecuteParse).FullName},
-            {"stringhandler", typeof(CompareString).FullName},
-            {"substringhandler", typeof(CompareSubstring).FullName},
-            {"symbolsavehandler", typeof(ExecuteSymbolSave).FullName},
-            {"symbolrecallhandler", typeof(ParseSymbol).FullName},
-            {"tablehandler", typeof(ParseTable).FullName},
-            {"regexhandler", typeof(CompareRegEx).FullName}
-        };
-
-        Copyable Copyable.Copy() {
-            return new Service(this);
+            ((CellOperators)Operators).RemoveCellHandler(handlerName);
         }
     }
 }

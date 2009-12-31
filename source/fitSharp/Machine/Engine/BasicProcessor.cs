@@ -3,13 +3,14 @@
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
+using fitSharp.Machine.Application;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
-    public class BasicProcessor: ProcessorBase<string, BasicProcessor>, Copyable {
+    public class BasicProcessor: ProcessorBase<string, BasicProcessor> {
         private readonly Operators<string, BasicProcessor> operators;
 
-        public BasicProcessor() {
+        public BasicProcessor(): base(new Configuration()) {
             operators = new Operators<string, BasicProcessor>(this);
             AddOperator(new DefaultCompose());
             AddOperator(new DefaultParse<string, BasicProcessor>());
@@ -18,17 +19,8 @@ namespace fitSharp.Machine.Engine {
             AddOperator(new ParseNullable());
         }
 
-        public BasicProcessor(BasicProcessor other): base(other) {
-            operators = new Operators<string, BasicProcessor>(this);
-            operators.Copy(other.operators);
-        }
-
         protected override Operators<string, BasicProcessor> Operators {
             get { return operators; }
-        }
-
-        Copyable Copyable.Copy() {
-            return new BasicProcessor(this);
         }
 
         private class DefaultCompose: Operator<string, BasicProcessor>, ComposeOperator<string> {

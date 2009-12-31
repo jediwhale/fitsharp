@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Service;
-using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Extension;
 using fitSharp.Machine.Model;
@@ -17,9 +16,18 @@ namespace fit
 {
 	public class Fixture: MutableDomainAdapter, TargetObjectProvider, Interpreter
 	{
-	    private CellOperation cellOperation;
+	    private static CellProcessor symbolProcessor; // backwards compatibility with static symbol methods
 
-	    public CellProcessor Processor { get; set; }
+	    private CellOperation cellOperation;
+	    private CellProcessor processor;
+
+	    public CellProcessor Processor {
+	        get { return processor; }
+	        set {
+	            processor = value;
+	            symbolProcessor = value;
+	        }
+	    }
 
 	    public TestStatus TestStatus { get { return Processor.TestStatus; } }
 
@@ -142,19 +150,19 @@ namespace fit
 
 		public static object Recall(string key)
 		{
-		    return Context.Configuration.GetItem<Service.Service>().Contains(new Symbol(key))
-		               ? Context.Configuration.GetItem<Service.Service>().Load(new Symbol(key)).Instance
+		    return symbolProcessor.Contains(new Symbol(key))
+		               ? symbolProcessor.Load(new Symbol(key)).Instance
 		               : null;
 		}
 
 		public static void Save(string key, object value)
 		{
-			Context.Configuration.GetItem<Service.Service>().Store(new Symbol(key, value));
+			symbolProcessor.Store(new Symbol(key, value));
 		}
 
 		public static void ClearSaved()
 		{
-		    Context.Configuration.GetItem<Service.Service>().Clear<Symbol>();
+		    symbolProcessor.Clear<Symbol>();
 		}
 
 		public virtual object GetTargetObject()

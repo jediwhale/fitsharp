@@ -59,6 +59,7 @@
     <Compile Include="Runner\FolderRunner.cs" />
     <Compile Include="Runner\SocketServer.cs" />
     <Compile Include="Runner\SuiteRunner.cs" />
+    <Compile Include="Service\Operators.cs" />
     <Compile Include="Service\Service.cs" />
     <Compile Include="Exception\FitFailureException.cs" />
     <Compile Include="Exception\RowWidthException.cs" />

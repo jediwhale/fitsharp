@@ -5,7 +5,6 @@
 
 using fitSharp.IO;
 using fitSharp.Machine.Application;
-using fitSharp.Machine.Engine;
 
 namespace fitSharp.Slim.Service {
     public class Runner: Runnable {
@@ -14,8 +13,7 @@ namespace fitSharp.Slim.Service {
         private string assemblyPaths;
 
         public int Run(string[] commandLineArguments, Configuration configuration, ProgressReporter reporter) {
-            service = configuration.GetItem<Service>();
-            service.ApplicationUnderTest = configuration.GetItem<ApplicationUnderTest>();
+            service = new Service(configuration);
             ParseCommandLine(commandLineArguments);
             new Interpreter(messenger, assemblyPaths, service).ProcessInstructions();
             return 0;

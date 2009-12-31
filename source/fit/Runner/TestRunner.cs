@@ -41,7 +41,7 @@ namespace fitnesse.fitserver
 				return ExitCode();
 			}
 	        clientSocket = new FitSocket(new SocketModelImpl(host, port), MakeReporter());
-		    server = new SocketServer(clientSocket, configuration.GetItem<Service>(), MakeReporter(), false);
+		    server = new SocketServer(clientSocket, new Service(configuration), MakeReporter(), false);
 			clientSocket.EstablishConnection(Protocol.FormatRequest(pageName, usingDownloadedPaths, suiteFilter));
 			AddAssemblies();
 		    server.ProcessTestDocuments(WriteTestRunner);

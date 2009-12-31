@@ -18,6 +18,7 @@ namespace fitSharp.Machine.Application {
     public class Shell: MarshalByRefObject {
         private readonly List<string> extraArguments = new List<string>();
         private readonly ProgressReporter progressReporter;
+        private readonly Configuration configuration = new Configuration();
         public Runnable Runner { get; private set; }
 
         public Shell() { progressReporter = new ConsoleReporter(); }
@@ -76,7 +77,7 @@ namespace fitSharp.Machine.Application {
                 if (i < commandLineArguments.Length - 1) {
                     switch (commandLineArguments[i]) {
                         case "-c":
-                            Context.Configuration.LoadFile(commandLineArguments[i + 1]);
+                            configuration.LoadFile(commandLineArguments[i + 1]);
                             break;
                         case "-a":
                             break;
@@ -93,16 +94,16 @@ namespace fitSharp.Machine.Application {
             }
         }
 
-        private static void ParseRunnerArgument(string argument) {
+        private void ParseRunnerArgument(string argument) {
             string[] tokens = argument.Split(',');
-            Context.Configuration.GetItem<Settings>().Runner = tokens[0];
+            configuration.GetItem<Settings>().Runner = tokens[0];
             if (tokens.Length > 1) {
-                Context.Configuration.GetItem<ApplicationUnderTest>().AddAssembly(tokens[1]);
+                configuration.GetItem<ApplicationUnderTest>().AddAssembly(tokens[1]);
             }
         }
 
         private bool ValidateArguments() {
-            if (string.IsNullOrEmpty(Context.Configuration.GetItem<Settings>().Runner)) {
+            if (string.IsNullOrEmpty(configuration.GetItem<Settings>().Runner)) {
                 progressReporter.Write("Missing runner class\n");
                 return false;
             }
@@ -110,8 +111,8 @@ namespace fitSharp.Machine.Application {
         }
 
         private int ExecuteRunner() {
-            Runner = new BasicProcessor().Create(Context.Configuration.GetItem<Settings>().Runner, new TreeList<string>()).GetValue<Runnable>();
-            return Runner.Run(extraArguments.ToArray(), Context.Configuration, progressReporter);
+            Runner = new BasicProcessor().Create(configuration.GetItem<Settings>().Runner, new TreeList<string>()).GetValue<Runnable>();
+            return Runner.Run(extraArguments.ToArray(), configuration, progressReporter);
         }
     }
 }

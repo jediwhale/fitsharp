@@ -153,6 +153,7 @@ namespace fitlibrary {
 
         private void ProcessRestOfTable(Interpreter theFixture, Parse theRestOfTheRows) {
             var restOfTable = new Parse("table", "", theRestOfTheRows, null);
+            theFixture.Processor = Processor;
             var fixture = theFixture as Fixture;
             if (fixture != null) fixture.Prepare(this, restOfTable);
             try {

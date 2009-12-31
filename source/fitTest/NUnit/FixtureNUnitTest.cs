@@ -3,7 +3,7 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-using System;
+using fitSharp.Fit.Service;
 using NUnit.Framework;
 
 namespace fit.Test.NUnit {
@@ -13,7 +13,7 @@ namespace fit.Test.NUnit {
         [Test]
         public void NoParameterCellsShouldResultInNoArguments()
         {
-            string tableString = "<table><tr><td>StringFixture</td></tr><tr><td>field</td><td>field</td></tr></table>";
+            const string tableString = "<table><tr><td>StringFixture</td></tr><tr><td>field</td><td>field</td></tr></table>";
             Fixture stringFixture = new StringFixture();
             stringFixture.Prepare(stringFixture, new Parse(tableString));
             Assert.AreEqual(0, stringFixture.Args.Length);
@@ -22,8 +22,8 @@ namespace fit.Test.NUnit {
         [Test]
         public void OneParameterCellShouldResultInOneArgument()
         {
-            string arg = "I'd like to buy an argument";
-            string tableString = "<table><tr><td>StringFixture</td><td>" + arg + "</td></tr><tr><td>field</td><td>field</td></tr></table>";
+            const string arg = "I'd like to buy an argument";
+            const string tableString = "<table><tr><td>StringFixture</td><td>" + arg + "</td></tr><tr><td>field</td><td>field</td></tr></table>";
             Fixture stringFixture = new StringFixture();
             stringFixture.Prepare(stringFixture, new Parse(tableString));
             Assert.AreEqual(1, stringFixture.Args.Length);
@@ -33,9 +33,9 @@ namespace fit.Test.NUnit {
         [Test]
         public void TwoParameterCellShouldResultInTwoArguments()
         {
-            string arg1 = "I'd like to buy an argument";
-            string arg2 = "I'd like to buy another argument";
-            string tableString = "<table><tr><td>StringFixture</td><td>" + arg1 + "</td><td>" + arg2 + "</td></tr><tr><td>field</td><td>field</td></tr></table>";
+            const string arg1 = "I'd like to buy an argument";
+            const string arg2 = "I'd like to buy another argument";
+            const string tableString = "<table><tr><td>StringFixture</td><td>" + arg1 + "</td><td>" + arg2 + "</td></tr><tr><td>field</td><td>field</td></tr></table>";
             Fixture stringFixture = new StringFixture();
             stringFixture.Prepare(stringFixture, new Parse(tableString));
             Assert.AreEqual(2, stringFixture.Args.Length);
@@ -50,7 +50,7 @@ namespace fit.Test.NUnit {
         [Test]
         public void TestEscape()
         {
-            String junk = "!@#$%^*()_-+={}|[]\\:\";',./?`";
+            const string junk = "!@#$%^*()_-+={}|[]\\:\";',./?`";
             Assert.AreEqual(junk, Fixture.Escape(junk));
             Assert.AreEqual("", Fixture.Escape(""));
             Assert.AreEqual("&lt;", Fixture.Escape("<"));
@@ -66,17 +66,17 @@ namespace fit.Test.NUnit {
     [TestFixture]
     public class SaveAndRecallTest
     {
-        [TearDown]
-        public void TearDown()
-        {
-            Fixture.ClearSaved();
+        private Fixture fixture;
+
+        [SetUp] public void SetUp() {
+            fixture = new Fixture { Processor = new CellProcessorBase() };
         }
 
         [Test]
         public void TestSaveAndRecallValue()
         {
-            string key = "aVariable";
-            object value = "aValue";
+            const string key = "aVariable";
+            const string value = "aValue";
             Assert.IsNull(Fixture.Recall(key));
             Fixture.Save(key, value);
             Assert.AreEqual(value, Fixture.Recall(key));
@@ -85,10 +85,10 @@ namespace fit.Test.NUnit {
         [Test]
         public void TestSaveAndRecallTwoValues()
         {
-            string key = "aVariable";
-            object value = "aValue";
-            string otherKey = "anotherVariable";
-            object otherValue = "anotherValue";
+            const string key = "aVariable";
+            const string value = "aValue";
+            const string otherKey = "anotherVariable";
+            const string otherValue = "anotherValue";
             Assert.IsNull(Fixture.Recall(key));
             Fixture.Save(key, value);
             Fixture.Save(otherKey, otherValue);
@@ -99,9 +99,9 @@ namespace fit.Test.NUnit {
         [Test]
         public void TestSaveAndRecallChangedValue()
         {
-            string key = "aVariable";
-            object value = "aValue";
-            object otherValue = "anotherValue";
+            const string key = "aVariable";
+            const string value = "aValue";
+            const string otherValue = "anotherValue";
             Fixture.Save(key, value);
             Fixture.Save(key, otherValue);
             Assert.AreEqual(otherValue, Fixture.Recall(key));
@@ -110,7 +110,6 @@ namespace fit.Test.NUnit {
         [Test]
         public void TestGetTargetType()
         {
-            Fixture fixture = new Fixture();
             Assert.AreSame(fixture, fixture.GetTargetObject());
         }
     }

@@ -5,57 +5,28 @@
 
 using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
+using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
-using fitSharp.Fit.Operators;
-using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Service {
 
     public class CellProcessorBase: ProcessorBase<Cell, CellProcessor>, CellProcessor {
-        private readonly Operators<Cell, CellProcessor> operators;
+        protected readonly CellOperators operators;
 	    public TestStatus TestStatus { get; set; }
-	    
-	            public CellProcessorBase() {
+
+        public CellProcessorBase(): this(new Configuration(), new CellOperators()) {}
+
+        protected CellProcessorBase(Configuration configuration, CellOperators operators): base(configuration) {
             TestStatus = new TestStatus();
-            operators = new Operators<Cell, CellProcessor>(this);
-
-            AddOperator(new ParseDefault());
-            AddOperator(new ExecuteDefault());
-            AddOperator(new ExecuteInterpret());
-            AddOperator(new CompareDefault());
-            AddOperator(new CompareEmpty());
-            AddOperator(new ExecuteEmpty());
-            AddOperator(new ExecuteSymbolSave());
-            AddOperator(new CompareNumeric());
-            AddOperator(new ParseMemberName());
-            AddOperator(new ParseBoolean());
-            AddOperator(new ParseDate());
-            AddOperator(new ParseType());
-            AddOperator(new ParseBlank());
-            AddOperator(new ParseNull());
-            AddOperator(new ParseSymbol());
-
-            AddOperator(new ParseArray(), 1);
-            AddOperator(new ExecuteError(), 1);
-            AddOperator(new ExecuteException(), 1);
-            AddOperator(new CompareFail(), 1);
+	        this.operators = operators;
+	        operators.Processor = this;
 
             AddMemory<Symbol>();
             AddMemory<Procedure>();
         }
 
-        public CellProcessorBase(CellProcessorBase other): base(other) {
-            TestStatus = other.TestStatus;
-            operators = new Operators<Cell, CellProcessor>(this);
-            operators.Copy(other.operators);
-        }
-
         protected override Operators<Cell, CellProcessor> Operators {
             get { return operators; }
-        }
-
-        Copyable Copyable.Copy() {
-            return new CellProcessorBase(this);
         }
     }
 }

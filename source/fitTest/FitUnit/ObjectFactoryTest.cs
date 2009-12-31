@@ -5,10 +5,7 @@
 
 using System.IO;
 using fitlibrary;
-using fitSharp.Fit.Model;
-using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
-using fitSharp.Machine.Model;
 
 namespace fit.Test.FitUnit {
     public class ObjectFactoryTest: DoFixture {
@@ -17,11 +14,11 @@ namespace fit.Test.FitUnit {
             string copyPath = Path.Combine(Path.GetDirectoryName(thePath), "copy of " + Path.GetFileName(thePath));
             if (File.Exists(copyPath)) File.Delete(copyPath);
             File.Copy(thePath, copyPath);
-            Context.Configuration.GetItem<ApplicationUnderTest>().AddAssembly(copyPath);
+            Processor.Configuration.GetItem<ApplicationUnderTest>().AddAssembly(copyPath);
         }
 
         public string CreateInstance(string theFixture) {
-            return Context.Configuration.GetItem<Service.Service>().Create(theFixture, new TreeList<Cell>()).Type.FullName;
+            return Processor.Create(theFixture).Type.FullName;
         }
     }
 }

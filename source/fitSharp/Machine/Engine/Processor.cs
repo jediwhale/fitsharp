@@ -4,13 +4,13 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
-using System.Collections.Generic;
-using fitSharp.Machine.Exception;
+using fitSharp.Machine.Application;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
 
     public interface Processor<T> {
+        Configuration Configuration { get; }
         ApplicationUnderTest ApplicationUnderTest { get;}
         void AddNamespace(string namespaceName);
         void AddOperator(string operatorName);
@@ -24,6 +24,7 @@ namespace fitSharp.Machine.Engine {
         TypedValue Parse(Type type, TypedValue instance, Tree<T> parameters);
         void RemoveOperator(string operatorName);
         void Store<V>(V newItem);
+        void Clear<V>();
     }
 
     public static class ProcessorExtension {
@@ -75,20 +76,16 @@ namespace fitSharp.Machine.Engine {
         }
     }
 
-    public abstract class ProcessorBase<T, P>: Processor<T> where P: Processor<T> {
+    public abstract class ProcessorBase<T, P>: Processor<T> where P: class, Processor<T> {
         protected abstract Operators<T,P> Operators { get; }
 
-        public ApplicationUnderTest ApplicationUnderTest { get; set;}
-        private readonly Dictionary<Type, object> memoryBanks = new Dictionary<Type, object>();
+        public Configuration Configuration { get; protected set; }
 
-        protected ProcessorBase(ApplicationUnderTest applicationUnderTest) {
-            ApplicationUnderTest = applicationUnderTest;
-        }
+        public ApplicationUnderTest ApplicationUnderTest { get { return Configuration.GetItem<ApplicationUnderTest>(); } }
+        private Memory MemoryBanks { get { return Configuration.GetItem<Memory>(); } }
 
-        protected ProcessorBase(): this(new ApplicationUnderTest()) {}
-
-        protected ProcessorBase(ProcessorBase<T,P> other): this(new ApplicationUnderTest(other.ApplicationUnderTest)) {
-            memoryBanks = new Dictionary<Type, object>(other.memoryBanks);
+        protected ProcessorBase(Configuration configuration) {
+            Configuration = configuration;
         }
 
         public void AddOperator(string operatorName) { Operators.Add(operatorName); }
@@ -148,38 +145,14 @@ namespace fitSharp.Machine.Engine {
             return result;
         }
 
-        public void AddMemory<V>() {
-            memoryBanks[typeof (V)] = new List<V>();
-        }
+        public void AddMemory<V>() { MemoryBanks.Add<V>(); }
 
-        public void Store<V>(V newItem) {
-            List<V> memory = GetMemory<V>();
-            foreach (V item in memory) {
-                if (!newItem.Equals(item)) continue;
-                memory.Remove(item);
-                break;
-            }
-            memory.Add(newItem);
-        }
+        public void Store<V>(V newItem) { MemoryBanks.Store(newItem); }
 
-        public V Load<V>(V matchItem) {
-            foreach (V item in GetMemory<V>()) {
-                if (matchItem.Equals(item)) return item;
-            }
-            throw new MemoryMissingException<V>(matchItem);
-        }
+        public V Load<V>(V matchItem) { return MemoryBanks.Load(matchItem); }
 
-        public bool Contains<V>(V matchItem) {
-            foreach (V item in GetMemory<V>()) {
-                if (matchItem.Equals(item)) return true;
-            }
-            return false;
-        }
+        public bool Contains<V>(V matchItem) { return MemoryBanks.Contains(matchItem); }
 
-        public void Clear<V>() {
-            GetMemory<V>().Clear();
-        }
-
-        private List<V> GetMemory<V>() { return (List<V>) memoryBanks[typeof (V)];}
+        public void Clear<V>() { MemoryBanks.Clear<V>(); }
     }
 }

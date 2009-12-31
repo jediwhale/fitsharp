@@ -49,9 +49,9 @@ namespace fit.Runner {
 			    var storyTest = new StoryTest(parse, (tables, counts) => WriteResults(tables, counts, writer));
 			    reporter.WriteLine(parse.Leader);
 			    if (suiteSetupIdentifier.IsStartOf(parse.Leader) || IMaybeProcessingSuiteSetup)
-                    storyTest.ExecuteOnConfiguration();
+                    storyTest.ExecuteOnConfiguration(service.Configuration);
                 else
-				    storyTest.Execute();
+				    storyTest.Execute(service.Configuration);
 			}
 			catch (Exception e)
 			{

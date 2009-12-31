@@ -13,41 +13,35 @@ namespace fit.Test.NUnit {
     [TestFixture]
     public class CellHandlerLoaderTest
     {
-        [SetUp]
-        public void SetUp()
-        {
-            Context.Configuration.GetItem<Service.Service>().RemoveOperator(typeof (CompareSubstring).FullName);
-        }
-
         [Test]
         public void TestLoadHandler()
         {
-            TestUtils.InitAssembliesAndNamespaces();
-            StringBuilder builder = new StringBuilder();
+            Configuration configuration = TestUtils.InitAssembliesAndNamespaces();
+            var builder = new StringBuilder();
             builder.Append("<table>");
             builder.Append("<tr><td colspan=\"2\">cell handler loader</td></tr>");
             builder.Append("<tr><td>load</td><td>substring handler</td></tr>");
             builder.Append("</table>");
-            Assert.IsFalse(Context.Configuration.GetItem<Service.Service>().Compare(new TypedValue("abc"), TestUtils.CreateCell("..b..")));
-            StoryTest test = new StoryTest(new Parse(builder.ToString()));
-            test.ExecuteOnConfiguration();
-            Assert.IsTrue(Context.Configuration.GetItem<Service.Service>().Compare(new TypedValue("abc"), TestUtils.CreateCell("..b..")));
+            Assert.IsFalse(new Service.Service(configuration).Compare(new TypedValue("abc"), TestUtils.CreateCell("..b..")));
+            var test = new StoryTest(new Parse(builder.ToString()));
+            test.ExecuteOnConfiguration(configuration);
+            Assert.IsTrue(new Service.Service(configuration).Compare(new TypedValue("abc"), TestUtils.CreateCell("..b..")));
         }
 
         [Test]
         public void TestRemoveHandler()
         {
-            TestUtils.InitAssembliesAndNamespaces();
-            Context.Configuration.GetItem<Service.Service>().AddOperator(new CompareSubstring());
-            StringBuilder builder = new StringBuilder();
+            Configuration configuration = TestUtils.InitAssembliesAndNamespaces();
+            new Service.Service(configuration).AddOperator(new CompareSubstring());
+            var builder = new StringBuilder();
             builder.Append("<table>");
             builder.Append("<tr><td colspan=\"2\">CellHandlerLoader</td></tr>");
             builder.Append("<tr><td>remove</td><td>SubstringHandler</td></tr>");
             builder.Append("</table>");
-            Assert.IsTrue(Context.Configuration.GetItem<Service.Service>().Compare(new TypedValue("abc"), TestUtils.CreateCell("..b..")));
-            StoryTest test = new StoryTest(new Parse(builder.ToString()));
-            test.ExecuteOnConfiguration();
-            Assert.IsFalse(Context.Configuration.GetItem<Service.Service>().Compare(new TypedValue("abc"), TestUtils.CreateCell("..b..")));
+            Assert.IsTrue(new Service.Service(configuration).Compare(new TypedValue("abc"), TestUtils.CreateCell("..b..")));
+            var test = new StoryTest(new Parse(builder.ToString()));
+            test.ExecuteOnConfiguration(configuration);
+            Assert.IsFalse(new Service.Service(configuration).Compare(new TypedValue("abc"), TestUtils.CreateCell("..b..")));
         }
     }
 }

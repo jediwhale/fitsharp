@@ -12,15 +12,16 @@ using fitlibrary.tree;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
 using fitSharp.Fit.Service;
-using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fit.Test.Acceptance {
     public class CellParsing: SequenceFixture {
 
+        private readonly Service.Service service = new Service.Service();
+
         public string ParseWithCustomParser(string theSource) {
-            Context.Configuration.GetItem<Service.Service>().AddOperator(new SampleCustomParser());
+            service.AddOperator(new SampleCustomParser());
             var testClass = (CellParsingTestClass)
                                              InputValue(new Parse("td", theSource, null, null), typeof(CellParsingTestClass));
             string result =  QuotedString(testClass.ToString());
@@ -65,7 +66,7 @@ namespace fit.Test.Acceptance {
         }
 
         private object InputValue(Tree<Cell> cell, Type theType) {
-            return Context.Configuration.GetItem<Service.Service>().Parse(theType, new TypedValue(this), cell).Value;
+            return service.Parse(theType, new TypedValue(this), cell).Value;
         }
 
         private static string QuotedString(string theSourceString) {

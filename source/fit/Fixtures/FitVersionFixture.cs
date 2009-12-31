@@ -5,7 +5,6 @@
 
 using System.Configuration;
 using fitSharp.Fit.Operators;
-using fitSharp.Machine.Application;
 
 namespace fit {
     public class FitVersionFixture : Fixture {
@@ -22,8 +21,8 @@ namespace fit {
                 myVersion = Args[0].Trim().ToLower();
                 //todo: clean up
                 if (myVersion.ToLower().IndexOf("fitlibrary1") >= 0) {
-                    Context.Configuration.GetItem<Service.Service>().RemoveOperator(typeof (ParseMemberName).FullName);
-                    Context.Configuration.GetItem<Service.Service>().AddOperator(new ParseMemberNameExtended());
+                    Processor.RemoveOperator(typeof (ParseMemberName).FullName);
+                    Processor.AddOperator(typeof(ParseMemberNameExtended).FullName);
                 }
             }
         }

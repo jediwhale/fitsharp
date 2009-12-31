@@ -4,24 +4,17 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System.Collections.Generic;
-using fit.Test.NUnit;
 using fitlibrary;
 using fitSharp.Fit.Application;
 using fitSharp.Machine.Application;
-using fitSharp.Machine.Model;
 
 namespace fit.Test.FitUnit {
-    public class ConfigurationTest: DomainAdapter {
+    public class ConfigurationTest: DoFixture {
         
         public ConfigurationTest() {
-            myFolderTestModel = new FolderTestModel();
-            myFileTestFixture = new DoFixture(myFolderTestModel);
             myConfiguration = new Configuration();
             myConfiguration.SetItem(typeof(TestList), new TestList());
-        }
-
-        public DoFixture FileSetup() {
-            return myFileTestFixture;
+            SetSystemUnderTest(myConfiguration);
         }
 
         public DoFixture Settings() {
@@ -34,21 +27,17 @@ namespace fit.Test.FitUnit {
 
         public void RestoreCopy() {
             myConfiguration = mySavedCopy;
+            SetSystemUnderTest(myConfiguration);
         }
 
-        public IEnumerable<string> TestList() {
-            return myConfiguration.GetItem<TestList>();
+        public IEnumerable<string> TestList(string listName) {
+            return (TestList)myConfiguration.GetItem(listName);
         }
 
-        private readonly DoFixture myFileTestFixture;
-        private readonly FolderTestModel myFolderTestModel;
+        public DoFixture GetItem(string type) { return new DoFixture(Processor.Configuration.GetItem(type));}
+
         private Configuration mySavedCopy;
         private Configuration myConfiguration;
-
-        public object SystemUnderTest {
-            get { return myConfiguration; }
-        }
-
     }
 
     public class TestList: ConfigurationList<string> {

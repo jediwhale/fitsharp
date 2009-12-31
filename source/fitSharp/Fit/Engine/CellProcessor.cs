@@ -5,11 +5,10 @@
 
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Engine;
-using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Engine
 {
-    public interface CellProcessor: Processor<Cell>, Copyable {
+    public interface CellProcessor: Processor<Cell> {
 	    TestStatus TestStatus { get; set; }
     }
 }

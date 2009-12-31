@@ -6,6 +6,7 @@
 using System.Collections;
 using System.Text;
 using fitSharp.Fit.Model;
+using fitSharp.Machine.Application;
 using NUnit.Framework;
 
 namespace fit.Test.NUnit {
@@ -38,7 +39,7 @@ namespace fit.Test.NUnit {
 
         private void RunTest(Parse parse) {
             var test = new StoryTest(parse, (t,c) => { resultCounts = c;});
-            test.Execute();
+            test.Execute(new Configuration());
         }
 
         [Test]

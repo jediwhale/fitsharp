@@ -54,36 +54,45 @@ namespace fitSharp.Machine.Application {
         }
 
         private static readonly Dictionary<string, string> aliasTypes = new Dictionary<string, string> {
-            {"fit.Assemblies", "fitSharp.Machine.Engine.ApplicationUnderTest"},
-            {"fit.FileExclusions", "fitSharp.Fit.Application.FileExclusions"},
-            {"fit.Namespaces", "fitSharp.Machine.Engine.ApplicationUnderTest"},
-            {"fit.Settings", "fitSharp.Machine.Application.Settings"},
-            {"Settings", "fitSharp.Machine.Application.Settings"},
-            {"FileExclusions", "fitSharp.Fit.Application.FileExclusions"},
-            {"Slim.Service", "fitSharp.Slim.Service.Service"},
-            {"Fit.Service", "fit.Service.Service"},
-            {"fit.CellHandlers", "fit.Service.Service"},
-            {"fitlibrary.CellHandlers", "fit.Service.Service"}
+            {"fit.assemblies", "fitSharp.Machine.Engine.ApplicationUnderTest"},
+            {"fit.fileexclusions", "fitSharp.Fit.Application.FileExclusions"},
+            {"fit.namespaces", "fitSharp.Machine.Engine.ApplicationUnderTest"},
+            {"fit.settings", "fitSharp.Machine.Application.Settings"},
+            {"settings", "fitSharp.Machine.Application.Settings"},
+            {"fileexclusions", "fitSharp.Fit.Application.FileExclusions"},
+            {"slim.service", "fitSharp.Slim.Service.SlimOperators"},
+            {"fitsharp.slim.service.service", "fitSharp.Slim.Service.SlimOperators"},
+            {"fit.service", "fit.Service.Operators"},
+            {"fit.service.service", "fit.Service.Operators"},
+            {"fit.cellhandlers", "fit.Service.Operators"},
+            {"fitlibrary.cellhandlers", "fit.Service.Operators"}
         };
 
         private TypedValue AliasType(string originalType) {
-            return new TypedValue(GetItem(aliasTypes.ContainsKey(originalType) ? aliasTypes[originalType] : originalType));
+            string originalTypeLower = originalType.ToLowerInvariant();
+            return new TypedValue(GetItem(aliasTypes.ContainsKey(originalTypeLower) ? aliasTypes[originalTypeLower] : originalType));
         }
 
         private static string AliasMethod(string originalType, string originalMethod) {
-            switch (originalType) {
-                case "fit.Assemblies":
+            switch (originalType.ToLowerInvariant()) {
+                case "fit.assemblies":
                     if (originalMethod == "add") return "addAssembly";
                     break;
-                case "fit.Namespaces":
+                case "fit.namespaces":
                     if (originalMethod == "add") return "addNamespace";
                     if (originalMethod == "remove") return "removeNamespace";
                     break;
-                case "fit.CellHandlers":
-                case "fitlibrary.CellHandlers":
+                case "fit.cellhandlers":
+                case "fitlibrary.cellhandlers":
                     if (originalMethod == "add") return "addCellHandler";
                     if (originalMethod == "remove") return "removeCellHandler";
                     break;
+            }
+            switch (originalMethod) {
+                case "addOperator":
+                    return "add";
+                case "removeOperator":
+                    return "remove";
             }
             return originalMethod;
         }

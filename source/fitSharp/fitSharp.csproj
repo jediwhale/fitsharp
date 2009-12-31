@@ -43,6 +43,7 @@
     <Compile Include="Fit\Application\Configurable.cs" />
     <Compile Include="Fit\Application\ConfigurationList.cs" />
     <Compile Include="Fit\Application\FileExclusions.cs" />
+    <Compile Include="Fit\Engine\CellOperators.cs" />
     <Compile Include="Fit\Engine\CellProcessor.cs" />
     <Compile Include="Fit\Exception\IgnoredException.cs" />
     <Compile Include="Fit\Fixtures\Define.cs" />
@@ -71,6 +72,7 @@
     <Compile Include="Fit\Operators\ExecuteParameters.cs" />
     <Compile Include="Fit\Operators\ExecuteSymbolSave.cs" />
     <Compile Include="Fit\Operators\ParseSymbol.cs" />
+    <Compile Include="Fit\Runner\StoryFileName.cs" />
     <Compile Include="Fit\Runner\StoryTestFile.cs" />
     <Compile Include="Fit\Runner\StoryTestFolder.cs" />
     <Compile Include="Fit\Runner\TestPageDecoration.cs" />
@@ -96,7 +98,6 @@
     <Compile Include="Fit\Operators\CompareFloatingPoint.cs" />
     <Compile Include="Fit\Operators\ParseMemberName.cs" />
     <Compile Include="Fit\Operators\ParseMemberNameExtended.cs" />
-    <Compile Include="Machine\Application\Context.cs" />
     <Compile Include="Fit\Model\GracefulName.cs" />
     <Compile Include="Fit\Model\MemberName.cs" />
     <Compile Include="Fit\Model\StringCell.cs" />
@@ -116,6 +117,7 @@
     <Compile Include="Machine\Application\Shell.cs" />
     <Compile Include="Machine\Engine\ApplicationUnderTest.cs" />
     <Compile Include="Machine\Engine\BasicProcessor.cs" />
+    <Compile Include="Machine\Engine\Memory.cs" />
     <Compile Include="Machine\Engine\ParseEnum.cs" />
     <Compile Include="Machine\Engine\Converter.cs" />
     <Compile Include="Machine\Engine\DefaultParse.cs" />
@@ -173,6 +175,7 @@
     <Compile Include="Slim\Service\Runner.cs" />
     <Compile Include="Slim\Service\Service.cs" />
     <Compile Include="Document\Step.cs" />
+    <Compile Include="Slim\Service\SlimOperators.cs" />
     <Compile Include="Swim\ResultCell.cs" />
     <Compile Include="Swim\ResultPage.cs" />
   </ItemGroup>

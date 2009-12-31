@@ -98,6 +98,7 @@
     <Compile Include="Acceptance\PersonFixture.cs" />
     <Compile Include="Acceptance\Rectangle.cs" />
     <Compile Include="Acceptance\ResetNamespacesFixture.cs" />
+    <Compile Include="Acceptance\StoryTestFixture.cs" />
     <Compile Include="Double\SampleArrayFixture.cs" />
     <Compile Include="Double\SampleCalculateDomain.cs" />
     <Compile Include="Double\SampleColumnFixture.cs" />

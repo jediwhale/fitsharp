@@ -18,11 +18,13 @@ using NUnit.Framework;
 namespace fit.Test.NUnit {
     public class TestUtils
     {
-        public static void InitAssembliesAndNamespaces()
+        public static Configuration InitAssembliesAndNamespaces()
         {
-            Context.Configuration.GetItem<ApplicationUnderTest>().AddAssembly(Assembly.GetAssembly(typeof (TestUtils)).CodeBase);
-            Context.Configuration.GetItem<ApplicationUnderTest>().AddNamespace("fit.Test.NUnit");
-            Context.Configuration.GetItem<ApplicationUnderTest>().AddNamespace("fit.Test.Acceptance");
+            var configuration = new Configuration();
+            configuration.GetItem<ApplicationUnderTest>().AddAssembly(Assembly.GetAssembly(typeof (TestUtils)).CodeBase);
+            configuration.GetItem<ApplicationUnderTest>().AddNamespace("fit.Test.NUnit");
+            configuration.GetItem<ApplicationUnderTest>().AddNamespace("fit.Test.Acceptance");
+            return configuration;
         }
 
         public static Parse CreateCell(string value)

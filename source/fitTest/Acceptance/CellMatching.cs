@@ -11,8 +11,9 @@ using fitSharp.Machine.Model;
 namespace fit.Test.Acceptance {
     public class CellMatching : CalculateFixture {
 
-        public CellMatching() {
+        public override void DoTable(Parse table) {
             Save("four", 4);
+            base.DoTable(table);
         }
 
         public string MatchesActualTypeActualValueExpectedValue(

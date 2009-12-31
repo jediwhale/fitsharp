@@ -44,7 +44,7 @@ namespace fitnesse.fitserver
 			clientSocket = new FitSocket(new SocketModelImpl(host, port), reporter);
 			EstablishConnection();
 
-		    var server = new SocketServer(clientSocket, configuration.GetItem<Service>(), reporter, true);
+		    var server = new SocketServer(clientSocket, new Service(configuration), reporter, true);
 			server.ProcessTestDocuments(WriteResults);
 
 		    clientSocket.Close();

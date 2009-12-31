@@ -8,13 +8,13 @@ using fitSharp.Fit.Model;
 using fitSharp.Fit.Service;
 using fitSharp.IO;
 using fitSharp.Machine.Extension;
-using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Runner {
 
     public interface StoryTestPage {
-        string Name { get; }
-        void ExecuteStoryPage(Action<StoryTestString, Action<StoryTestString, TestCounts>, Action> executor, ResultWriter resultWriter, Action<TestCounts> handler);
+        StoryPageName Name { get; }
+        //todo: too many args
+        void ExecuteStoryPage(Action<StoryPageName, StoryTestString, Action<StoryTestString, TestCounts>, Action> executor, ResultWriter resultWriter, Action<TestCounts> handler);
     }
 
     public class StoryTestFile: StoryTestPage {
@@ -32,18 +32,18 @@ namespace fitSharp.Fit.Runner {
             myFolderModel = theFolderModel;
         }
 
-        public string Name { get { return Path.GetFileName(myPath.Name); }}
+        public StoryPageName Name { get { return myPath; } }
 
-        public void ExecuteStoryPage(Action<StoryTestString, Action<StoryTestString, TestCounts>, Action> executor, ResultWriter resultWriter, Action<TestCounts> handler) {
+        public void ExecuteStoryPage(Action<StoryPageName, StoryTestString, Action<StoryTestString, TestCounts>, Action> executor, ResultWriter resultWriter, Action<TestCounts> handler) {
             elapsedTime = new ElapsedTime();
             this.resultWriter = resultWriter;
             this.handler = handler;
             if (HasTestName) {
-                executor(DecoratedContent, WriteFile, HandleNoTest);
+                executor(myPath, DecoratedContent, WriteFile, HandleNoTest);
                 return;
             }
             if (myPath.IsSuiteSetUp || myPath.IsSuiteTearDown) {
-                executor(PlainContent, WriteFile, HandleNoTest);
+                executor(myPath, PlainContent, WriteFile, HandleNoTest);
                 return;
             }
             HandleNoTest();
@@ -103,49 +103,4 @@ namespace fitSharp.Fit.Runner {
         }
     }
 
-    public class StoryFileName {
-        public StoryFileName(string theName) {
-            myName = theName;
-        }
-
-        public string Name { get { return myName; }}
-
-        public bool IsSetUp {
-            get {
-                string name = Path.GetFileName(myName);
-                return ourSetupIdentifier1.Equals(name) || ourSetupIdentifier2.Equals(name);
-            }
-        }
-
-        public bool IsSuiteSetUp {
-            get {
-                string name = Path.GetFileName(myName);
-                return ourSuiteSetupIdentifier1.Equals(name) || ourSuiteSetupIdentifier2.Equals(name);
-            }
-        }
-
-        public bool IsSuiteTearDown {
-            get {
-                string name = Path.GetFileName(myName);
-                return ourSuiteTearDownIdentifier1.Equals(name) || ourSuiteTearDownIdentifier2.Equals(name);
-            }
-        }
-
-        public bool IsTearDown {
-            get {
-                string name = Path.GetFileName(myName);
-                return ourTeardownIdentifier1.Equals(name) || ourTeardownIdentifier2.Equals(name);
-            }
-        }
-
-        private static readonly IdentifierName ourSetupIdentifier1 = new IdentifierName("setup.html");
-        private static readonly IdentifierName ourSetupIdentifier2 = new IdentifierName("setup.htm");
-        private static readonly IdentifierName ourTeardownIdentifier1 = new IdentifierName("teardown.html");
-        private static readonly IdentifierName ourTeardownIdentifier2 = new IdentifierName("teardown.htm");
-        private static readonly IdentifierName ourSuiteSetupIdentifier1 = new IdentifierName("suitesetup.html");
-        private static readonly IdentifierName ourSuiteSetupIdentifier2 = new IdentifierName("suitesetup.htm");
-        private static readonly IdentifierName ourSuiteTearDownIdentifier1 = new IdentifierName("suiteteardown.html");
-        private static readonly IdentifierName ourSuiteTearDownIdentifier2 = new IdentifierName("suiteteardown.htm");
-        private readonly string myName;
-    }
 }

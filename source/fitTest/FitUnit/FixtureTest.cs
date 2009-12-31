@@ -13,7 +13,7 @@ namespace fit.Test.FitUnit {
         public void RunTestFixture(string theRows) {
             string html = string.Format("<table><tr><td>fit.Test.FitUnit.TestFixtureFixture</td></tr>{0}</table>", theRows);
             Parse tables = new HtmlParser().Parse(html);
-            new StoryTest(tables).Execute();
+            new StoryTest(tables).Execute(Processor.Configuration);
         }
 
         public ApartmentState ExecutionApartmentState { get { return TestFixtureFixture.State; }
@@ -30,7 +30,7 @@ namespace fit.Test.FitUnit {
         }
 
         public void SetState(string theValue) {
-            Context.Configuration.GetItem<Settings>().ApartmentState = theValue;    
+            Processor.Configuration.GetItem<Settings>().ApartmentState = theValue;    
         }
 
         private static ApartmentState myState;

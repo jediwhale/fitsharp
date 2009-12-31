@@ -7,6 +7,7 @@ using System.Text;
 using fit.Test.Acceptance;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Service;
+using fitSharp.Machine.Application;
 using fitSharp.Machine.Model;
 using Moq;
 using NUnit.Framework;
@@ -16,11 +17,12 @@ namespace fit.Test.NUnit {
     public class ActionFixtureTest
     {
         private Parse table;
+        private Configuration configuration;
 
         [SetUp]
         public void SetUp()
         {
-            TestUtils.InitAssembliesAndNamespaces();
+            configuration = TestUtils.InitAssembliesAndNamespaces();
         }
 
         private static string BuildTable(string name)
@@ -47,7 +49,7 @@ namespace fit.Test.NUnit {
         public void TestStart()
         {
             table = new Parse(BuildTable("ActionFixture"));
-            var fixture = new ActionFixture { Processor = new Service.Service() };
+            var fixture = new ActionFixture { Processor = new Service.Service(configuration) };
             fixture.DoTable(table);
             Assert.AreEqual(0, fixture.TestStatus.Counts.GetCount(CellAttributes.ExceptionStatus), table.ToString());
             Assert.IsNotNull(fixture.GetTargetObject());
@@ -57,7 +59,7 @@ namespace fit.Test.NUnit {
         public void TestCheck()
         {
             table = new Parse(BuildTable("ActionFixture"));
-            var fixture = new ActionFixture{ Processor = new Service.Service() };
+            var fixture = new ActionFixture{ Processor = new Service.Service(configuration) };
             fixture.DoTable(table);
             Assert.AreEqual(0, fixture.TestStatus.Counts.GetCount(CellAttributes.ExceptionStatus), table.ToString());
             var countFixture = (CountFixture)fixture.GetTargetObject();
@@ -70,7 +72,7 @@ namespace fit.Test.NUnit {
         public void TestCheckOnTimedActionFixture()
         {
             table = new Parse(BuildTable("TimedActionFixture"));
-            var fixture = new ActionFixture{ Processor = new Service.Service() };
+            var fixture = new ActionFixture{ Processor = new Service.Service(configuration) };
             fixture.DoTable(table);
             Assert.AreEqual(0, fixture.TestStatus.Counts.GetCount(CellAttributes.ExceptionStatus), table.ToString());
             var countFixture = (CountFixture)fixture.GetTargetObject();

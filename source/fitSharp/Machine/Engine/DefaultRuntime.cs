@@ -9,7 +9,7 @@ using fitSharp.Machine.Extension;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
-    public class DefaultRuntime<T,P>: Operator<T, P>, RuntimeOperator<T> where P: Processor<T> {
+    public class DefaultRuntime<T,P>: Operator<T, P>, RuntimeOperator<T> where P: class, Processor<T> {
         public bool CanCreate(string memberName, Tree<T> parameters) {
             return true;
         }

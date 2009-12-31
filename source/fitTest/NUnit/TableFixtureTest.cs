@@ -6,6 +6,7 @@
 using System.Text;
 using fitnesse.fixtures;
 using fitSharp.Fit.Model;
+using fitSharp.Machine.Application;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
 
@@ -30,7 +31,7 @@ namespace fit.Test.NUnit
 			builder.Append("</table>");
 			table = builder.ToString();
 		    myStoryTest = new StoryTest(new Parse(table), SimpleWriter);
-		    myStoryTest.Execute();
+		    myStoryTest.Execute(new Configuration());
 		}
 
 		[TearDown]

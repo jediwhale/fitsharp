@@ -4,20 +4,29 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
+using System.Collections.Generic;
 using System.Text;
-using fitSharp.Fit.Application;
 using fitSharp.Fit.Model;
-using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
-    public class CompareString: CellOperator, CompareOperator<Cell> {
+    public class CompareString: CellOperator, CompareOperator<Cell>, Copyable {
         private static readonly Options defaultOption = Options.Parse(",IgnoreWhitespace");
 
+        private readonly List<Options> list;
+
+        public CompareString() {
+            list = new List<Options>();
+        }
+
+        public CompareString(CompareString other) {
+            list = new List<Options>(other.list);
+        }
+
         public bool CanCompare(TypedValue actual, Tree<Cell> expected) {
-            var options = (OptionsList)Context.Configuration.GetItem(GetType().FullName);
-            if (!options.HasPrefix(expected.Value.Text)) return false;
+            var options = (CompareString)Processor.Configuration.GetItem(GetType().FullName);
+            if (!HasPrefix(options.list, expected.Value.Text)) return false;
             if (actual.Type != typeof(string)) return false;
 
             object actualValue = actual.Value;
@@ -25,37 +34,45 @@ namespace fitSharp.Fit.Operators {
         }
 
         public bool Compare(TypedValue actual, Tree<Cell> expected) {
-            var options = (OptionsList)Context.Configuration.GetItem(GetType().FullName);
-            return options.IsMatch(actual.ValueString, expected.Value.Text);
+            var options = (CompareString)Processor.Configuration.GetItem(GetType().FullName);
+            return IsMatch(options.list, actual.ValueString, expected.Value.Text);
         }
 
-        public CompareString() {
-            Context.Configuration.SetItem(GetType(), new OptionsList());
+        public void Add(string optionString) {
+            Remove(optionString);
+            list.Add(Options.Parse(optionString));
         }
 
-        private class OptionsList: ConfigurationList<Options> {
-            public bool HasPrefix(string cellValue) {
-                if (myList.Count == 0) return true;
-                foreach (Options option in myList) {
-                    if (option.MatchesPrefix(cellValue)) return true;
+        public void Remove(string optionString) {
+            Options input = Options.Parse(optionString);
+            foreach (Options option in list) {
+                if (option.ToString() == input.ToString()) {
+                    list.Remove(option);
+                    return;
                 }
-                return false;
             }
+        }
 
-            public bool IsMatch(string actual, string expected) {
-                if (myList.Count == 0) return defaultOption.MatchesValue(actual, expected);
-                foreach (Options option in myList) {
-                    if (option.MatchesPrefix(expected)) {
-                        return option.MatchesValue(actual, expected);
-                    }
+        private static bool HasPrefix(ICollection<Options> options, string cellValue) {
+            if (options.Count == 0) return true;
+            foreach (Options option in options) {
+                if (option.MatchesPrefix(cellValue)) return true;
+            }
+            return false;
+        }
+
+        private static bool IsMatch(ICollection<Options> options, string actual, string expected) {
+            if (options.Count == 0) return defaultOption.MatchesValue(actual, expected);
+            foreach (Options option in options) {
+                if (option.MatchesPrefix(expected)) {
+                    return option.MatchesValue(actual, expected);
                 }
-                return false;
             }
+            return false;
+        }
 
-            public override Options Parse(string theValue) { return Options.Parse(theValue); }
-
-            public override ConfigurationList<Options> Make() { return new OptionsList(); }
-
+        public Copyable Copy() {
+            return new CompareString(this);
         }
 
         private class Options {
@@ -106,6 +123,8 @@ namespace fitSharp.Fit.Operators {
 
             private IdentifierName prefix;
             private CompareOptions compareOptions;
+
+            public override string ToString() { return prefix.SourceName; }
         }
     }
 }

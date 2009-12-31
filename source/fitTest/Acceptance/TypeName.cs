@@ -3,22 +3,19 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-using System;
 using fitSharp.Fit.Model;
-using fitSharp.Machine.Application;
+using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fit.Test.Acceptance {
-    public class TypeName {
-        private readonly Type type;
+    public class TypeNameFixture: ColumnFixture {
 
-        public TypeName(string name) {
-            try {
-                type = Context.Configuration.GetItem<Service.Service>().Create(name, new TreeList<Cell>()).Type;
-            }
-            catch (Exception) {}
-        }
+        public string GracefulName;
 
-        public string FullName { get { return type.FullName; }}
+        public IdentifierName IdentifierName { get { return new GracefulName(GracefulName).IdentifierName; } }
+
+        public string TypeName;
+
+        public string FullName { get { return Processor.Create(TypeName).Type.FullName; } }
     }
 }

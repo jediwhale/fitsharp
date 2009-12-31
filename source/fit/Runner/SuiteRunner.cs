@@ -4,7 +4,6 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System;
-using System.Collections.Generic;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Runner;
 using fitSharp.Fit.Service;
@@ -15,11 +14,10 @@ using fitSharp.Machine.Extension;
 using fitSharp.Machine.Model;
 
 namespace fit.Runner {
-	public class SuiteRunner { //: Runnable {
+	public class SuiteRunner {
 	    
 	    public TestCounts TestCounts { get; private set; }
-        private string mySelection = string.Empty;
-	    private ProgressReporter myReporter;
+	    private readonly ProgressReporter myReporter;
 	    private ResultWriter resultWriter;
 	    private readonly Configuration configuration;
 
@@ -28,22 +26,6 @@ namespace fit.Runner {
 		    myReporter = theReporter;
 		    this.configuration = configuration;
 		}
-
-	    public int Run(Configuration configuration, IEnumerable<string> arguments, ProgressReporter reporter) {
-	        ParseArguments(arguments);
-	        myReporter = reporter;
-	        Run(new StoryTestFolder(configuration, new FileSystemModel(configuration.GetItem<Settings>().CodePageNumber)),
-	            mySelection);
-	        return 0; //todo: return counts exceptions + wrong or whatever
-	    }
-
-        private void ParseArguments(IEnumerable<string> arguments) { //todo: throw argumentexception
-            string lastArgument = string.Empty;
-            foreach (string argument in arguments) {
-                if (lastArgument == "-s") mySelection = argument;
-                lastArgument = argument;
-            }
-        }
 
 	    public void Run(StoryTestSuite theSuite, string theSelectedFile) {
             resultWriter = CreateResultWriter();
@@ -92,18 +74,24 @@ namespace fit.Runner {
 	        TestCounts.TallyCounts(counts);
         }
 
-	    private void ExecutePage(StoryTestString input, Action<StoryTestString, TestCounts> handleResults,
+	    private void ExecutePage(StoryPageName pageName, StoryTestString input, Action<StoryTestString, TestCounts> handleResults,
 	                             Action handleNoTest) {
-	        var service = configuration.GetItem<Service.Service>();
+	        var service = new Service.Service(configuration);
             FitVersionFixture.Reset();
 	        Tree<Cell> result = service.Compose(input);
 	        if (result == null) {
 	            handleNoTest();
 	            return;
 	        }
-	        new StoryTest((Parse) result.Value,
-	                      (tables, counts) => handleResults(service.ParseTree<Cell, StoryTestString>(tables), counts)).
-	            Execute();
+	        var storyTest = new StoryTest((Parse) result.Value,
+	                                      (tables, counts) =>
+	                                      handleResults(service.ParseTree<Cell, StoryTestString>(tables), counts));
+            if (pageName.IsSuitePage) {
+	            storyTest.ExecuteOnConfiguration(configuration);
+            }
+            else {
+	            storyTest.Execute(configuration);
+            }
 	    }
 	}
 }

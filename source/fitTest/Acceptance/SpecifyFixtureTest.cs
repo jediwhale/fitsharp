@@ -16,7 +16,7 @@ namespace fit.Test.Acceptance {
             myTestValue = string.Empty;
             myResult = null;
             try {
-                new SpecifyFixture{Processor = new Service.Service()}.DoTable(table);
+                new SpecifyFixture{Processor = new Service.Service(Processor.Configuration)}.DoTable(table);
                 myResult = table;
             }
             catch (Exception e) {
@@ -30,7 +30,7 @@ namespace fit.Test.Acceptance {
             return Trim(result) == Trim(expected);
         }
  
-        private string Trim(string theInput) {
+        private static string Trim(string theInput) {
             return theInput.Replace(" ", string.Empty).Replace("\r", string.Empty).Replace("\n", string.Empty);
         }
 

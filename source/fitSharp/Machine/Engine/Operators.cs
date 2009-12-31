@@ -5,28 +5,36 @@
 
 using System;
 using System.Collections.Generic;
-using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
     public delegate bool CanDoOperation<T>(T anOperator);
     public delegate void DoOperation<T>(T anOperator);
-    public class Operators<T, P> where P: Processor<T> {
-        private readonly P processor;
+    public class Operators<T, P> where P: class, Processor<T> {
         private readonly List<List<Operator<T, P>>> operators = new List<List<Operator<T, P>>>();
 
-        public Operators(P processor) {
-            this.processor = processor;
-            Add(new DefaultRuntime<T,P>());
+        public Operators() {
+            Add(new DefaultRuntime<T,P>(), 0);
         }
 
-        public void Add(string operatorName) { Add((Operator<T, P>)processor.Create(operatorName, new TreeList<T>()).Value); }
+        public Operators(P processor): this() {
+            Processor = processor;
+        }
 
-        public void Add(Operator<T, P> anOperator) { Add(anOperator, 0); }
+        public P Processor { private get; set; }
 
-        public void Add(Operator<T, P> anOperator, int priority) {
-            while (operators.Count <= priority) operators.Add(new List<Operator<T, P>>());
-            anOperator.Processor = processor;
+        public Operator<T, P> Add(string operatorName) {
+            return Add((Operator<T, P>)(Processor == null ? new BasicProcessor().Create(operatorName).Value : Processor.Create(operatorName).Value));
+        }
+        public Operator<T, P> Add(Operator<T, P> anOperator) { return Add(anOperator, 1); }
+
+        public Operator<T, P> Add(Operator<T, P> anOperator, int priority) {
+            AddPriorityList(priority);
             operators[priority].Add(anOperator);
+            return anOperator;
+        }
+
+        private void AddPriorityList(int priority) {
+            while (operators.Count <= priority) operators.Add(new List<Operator<T, P>>());
         }
 
         public void Copy(Operators<T,P> from) {
@@ -50,8 +58,11 @@ namespace fitSharp.Machine.Engine {
         public void Do<O>(CanDoOperation<O> canDoOperation, DoOperation<O> doOperation) where O: class {
             for (int priority = operators.Count - 1; priority >= 0; priority--) {
                 for (int i = operators[priority].Count - 1; i >= 0; i--) {
-                    var candidate = operators[priority][i] as O;
-                    if (candidate == null || !canDoOperation(candidate)) continue;
+                    Operator<T, P> anOperator = operators[priority][i];
+                    anOperator.Processor = Processor;
+                    var candidate = anOperator as O;
+                    if (candidate == null) continue;
+                    if (!canDoOperation(candidate)) continue;
                     doOperation(candidate);
                     return;
                 }

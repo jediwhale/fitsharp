@@ -2,6 +2,7 @@
 
     <ApplicationUnderTest>
         <addNamespace>fit.Test.Acceptance</addNamespace>
+        <addNamespace>fit.Test.Double</addNamespace>
     </ApplicationUnderTest>
 
     <fitSharp.Machine.Application.Settings>

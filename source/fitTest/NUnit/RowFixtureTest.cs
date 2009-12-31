@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Text;
 using fit.Test.Acceptance;
 using fitSharp.Fit.Model;
@@ -17,10 +18,10 @@ namespace fit.Test.NUnit {
     public class RowFixtureTest
     {
         private TestCounts resultCounts;
+        private Configuration configuration;
 
         public void TestExpectBlankOrNullAllCorrect()
         {
-            TestUtils.InitAssembliesAndNamespaces();
             DoTable(
                 BuildTable(new[] {"null", "blank", "joe"}),
                 BuildObjectArray(new[] {null, "", "joe"}),
@@ -49,9 +50,9 @@ namespace fit.Test.NUnit {
                 );
         }
 
-        private Parse BuildTable(string[] values)
+        private static Parse BuildTable(IEnumerable<string> values)
         {
-            StringBuilder builder = new StringBuilder();
+            var builder = new StringBuilder();
             builder.Append("<table>");
             builder.Append("<tr><td>BusinessObjectRowFixture</td></tr>");
             builder.Append("<tr><td>GetFirstString</td></tr>");
@@ -63,9 +64,9 @@ namespace fit.Test.NUnit {
             return new Parse(builder.ToString());
         }
 
-        private object[] BuildObjectArray(string[] values)
+        private static object[] BuildObjectArray(ICollection<string> values)
         {
-            object[] objects = new object[values.Length];
+            var objects = new object[values.Count];
             int count = 0;
             foreach (string value in values)
             {
@@ -83,21 +84,21 @@ namespace fit.Test.NUnit {
         }
 
         private void RunTest(Parse parse) {
-            StoryTest test = new StoryTest(parse, (t,c) => { resultCounts = c;});
-            test.Execute();
+            var test = new StoryTest(parse, (t,c) => { resultCounts = c;});
+            test.Execute(configuration);
         }
 
         [Test]
         public void TestSurplus()
         {
             TestUtils.InitAssembliesAndNamespaces();
-            StringBuilder builder = new StringBuilder();
+            var builder = new StringBuilder();
             builder.Append("<table>");
             builder.Append("<tr><td>BusinessObjectRowFixture</td></tr>");
             builder.Append("<tr><td>GetFirstString</td></tr>");
             builder.Append("<tr><td>number1</td></tr>");
             builder.Append("</table>");
-            Parse parse = new Parse(builder.ToString());
+            var parse = new Parse(builder.ToString());
 
             BusinessObjectRowFixture.objects = new object[]
                                                {
@@ -117,7 +118,7 @@ namespace fit.Test.NUnit {
         public void TestMissing()
         {
             TestUtils.InitAssembliesAndNamespaces();
-            StringBuilder builder = new StringBuilder();
+            var builder = new StringBuilder();
             builder.Append("<table>");
             builder.Append("<tr><td>BusinessObjectRowFixture</td></tr>");
             builder.Append("<tr><td>GetFirstString</td></tr>");
@@ -125,7 +126,7 @@ namespace fit.Test.NUnit {
             builder.Append("<tr><td>number2</td></tr>");
             builder.Append("<tr><td>number3</td></tr>");
             builder.Append("</table>");
-            Parse parse = new Parse(builder.ToString());
+            var parse = new Parse(builder.ToString());
 
             BusinessObjectRowFixture.objects = new object[]
                                                {
@@ -142,11 +143,10 @@ namespace fit.Test.NUnit {
         [Test]
         public void TestStartsWithHandlerInSecondColumn()
         {
-            TestUtils.InitAssembliesAndNamespaces();
             //???ObjectFactory.AddNamespace("fitnesse.Handlers");
            
-            Context.Configuration.GetItem<Service.Service>().AddOperator(typeof(CompareStartsWith).FullName);
-            StringBuilder builder = new StringBuilder();
+            new Service.Service(configuration).AddOperator(typeof(CompareStartsWith).FullName);
+            var builder = new StringBuilder();
             builder.Append("<table>");
             builder.Append("<tr><td>people row fixture</td></tr>");
             builder.Append("<tr><td>first name</td><td>last name</td></tr>");
@@ -154,21 +154,21 @@ namespace fit.Test.NUnit {
             builder.Append("</table>");
             PeopleLoaderFixture.people.Clear();
             PeopleLoaderFixture.people.Add(new Person("Nigel", "Tufnel"));
-            Parse tables = new Parse(builder.ToString());
+            var tables = new Parse(builder.ToString());
             RunTest(tables);
             Assert.IsTrue(tables.ToString().IndexOf("Tuf..") > -1);
             Assert.IsFalse(tables.ToString().IndexOf("Tufnel") > -1);
             TestUtils.CheckCounts(resultCounts, 2, 0, 0, 0);
         }
 
-        private string rowFixtureName = typeof (NewRowFixtureDerivative).Name;
+        private readonly string rowFixtureName = typeof (NewRowFixtureDerivative).Name;
         private Parse table;
         private StoryTest myStoryTest;
 
         [SetUp]
         public void SetUp()
         {
-            TestUtils.InitAssembliesAndNamespaces();
+            configuration = TestUtils.InitAssembliesAndNamespaces();
             table = new Parse("<table><tr><td>" + rowFixtureName + "</td></tr><tr><td>name</td></tr></table>");
             NewRowFixtureDerivative.QueryValues.Clear();
         }
@@ -181,15 +181,15 @@ namespace fit.Test.NUnit {
 
         private void RunTest() {
             myStoryTest = new StoryTest(table, (t,c) => { resultCounts = c;});
-            myStoryTest.Execute();
+            myStoryTest.Execute(configuration);
         }
 
         [Test]
         public void TestOneExpectedOneActualCorrect()
         {
-            string name = "Joe";
+            const string name = "Joe";
             AddQueryValue(new RowFixturePerson(name));
-            AddRow(new string[] {name});
+            AddRow(new[] {name});
             RunTest();
             VerifyCounts(1, 0, 0, 0);
             AssertTextInTag(table.At(0, 2, 0), CellAttributes.RightStatus);
@@ -199,8 +199,8 @@ namespace fit.Test.NUnit {
         public void TestOneExpectedOneActualCorrectTwoColumns()
         {
             AddColumn(table, "address");
-            string name = "Joe";
-            string address = "First Street";
+            const string name = "Joe";
+            const string address = "First Street";
             AddQueryValue(new RowFixturePerson(name, address));
             AddRow(new[] {name, address});
             RunTest();
@@ -239,7 +239,7 @@ namespace fit.Test.NUnit {
         public void TestOneExpectedOneActualCorrectTwoColumnsSecondColumnWrong()
         {
             AddColumn(table, "address?");
-            string name = "Joe";
+            const string name = "Joe";
             AddQueryValue(new RowFixturePerson(name, "First Street"));
             AddRow(new[] {name, "Second Street"});
             RunTest();
@@ -389,26 +389,26 @@ namespace fit.Test.NUnit {
         public void TestCorrectFormatForMissing()
         {
             PeopleLoaderFixture.people.Clear();
-            string loaderFixtureHtml = "<table>" +
-                                       "<tr><td colspan=\"3\">people loader fixture</td></tr>" +
-                                       "<tr><td>id</td><td>first name</td><td>last name</td></tr>" +
-                                       "<tr><td>1</td><td>null</td><td>Jones</td></tr>" +
-                                       "<tr><td>2</td><td>Phil</td><td>blank</td></tr>" +
-                                       "</table>";
-            string inspectorFixtureHtml = "<table>" +
-                                          "<tr><td colspan=\"3\">people row fixture</td></tr>" +
-                                          "<tr><td>id</td><td>first name</td><td>last name</td></tr>" +
-                                          "<tr><td>7</td><td>nullest</td><td>Jonesey</td></tr>" +
-                                          "<tr><td>2</td><td>Phil</td><td>blank</td></tr>" +
-                                          "</table>";
-            string processedInspectorFixtureHtml = "<table>" +
-                                                   "<tr><td colspan=\"3\">people row fixture</td></tr>" +
-                                                   "<tr><td>id</td><td>first name</td><td>last name</td></tr>" +
-                                                   "<tr><td class=\"fail\">7 <span class=\"fit_label\">missing</span></td><td>nullest</td><td>Jonesey</td></tr>" +
-                                                   "<tr><td class=\"pass\">2</td><td class=\"pass\">Phil</td><td class=\"pass\">blank</td></tr>" +
-                                                   "\n<tr>\n<td class=\"fail\"><span class=\"fit_grey\">1</span> <span class=\"fit_label\">surplus</span></td>\n<td><span class=\"fit_grey\">null</span></td>\n<td><span class=\"fit_grey\">Jones</span></td></tr>" +
-                                                   "</table>";
-            Parse tables = new Parse(loaderFixtureHtml + inspectorFixtureHtml);
+            const string loaderFixtureHtml = "<table>" +
+                                             "<tr><td colspan=\"3\">people loader fixture</td></tr>" +
+                                             "<tr><td>id</td><td>first name</td><td>last name</td></tr>" +
+                                             "<tr><td>1</td><td>null</td><td>Jones</td></tr>" +
+                                             "<tr><td>2</td><td>Phil</td><td>blank</td></tr>" +
+                                             "</table>";
+            const string inspectorFixtureHtml = "<table>" +
+                                                "<tr><td colspan=\"3\">people row fixture</td></tr>" +
+                                                "<tr><td>id</td><td>first name</td><td>last name</td></tr>" +
+                                                "<tr><td>7</td><td>nullest</td><td>Jonesey</td></tr>" +
+                                                "<tr><td>2</td><td>Phil</td><td>blank</td></tr>" +
+                                                "</table>";
+            const string processedInspectorFixtureHtml = "<table>" +
+                                                         "<tr><td colspan=\"3\">people row fixture</td></tr>" +
+                                                         "<tr><td>id</td><td>first name</td><td>last name</td></tr>" +
+                                                         "<tr><td class=\"fail\">7 <span class=\"fit_label\">missing</span></td><td>nullest</td><td>Jonesey</td></tr>" +
+                                                         "<tr><td class=\"pass\">2</td><td class=\"pass\">Phil</td><td class=\"pass\">blank</td></tr>" +
+                                                         "\n<tr>\n<td class=\"fail\"><span class=\"fit_grey\">1</span> <span class=\"fit_label\">surplus</span></td>\n<td><span class=\"fit_grey\">null</span></td>\n<td><span class=\"fit_grey\">Jones</span></td></tr>" +
+                                                         "</table>";
+            var tables = new Parse(loaderFixtureHtml + inspectorFixtureHtml);
             RunTest(tables);
             Assert.AreEqual(loaderFixtureHtml + processedInspectorFixtureHtml, tables.ToString());
         }
@@ -417,54 +417,41 @@ namespace fit.Test.NUnit {
         public void TestArrayOfStrings()
         {
             ArrayOfStringsRowFixture.items.Clear();
-            string setUpTableHtml =
-                //"<table>" +
-                //"<tr><td>configuration setup</td></tr>" +
-                //"<tr><td>service</td></tr>" +
-                //"<tr><td>add operator</td><td>fit.operators.executeempty</td></tr>" +
-                //"</table>" +
-                "<table>" +
-                "<tr><td colspan=\"3\">ArrayOfStringsFixture</td></tr>" +
-                "<tr><td>field</td><td>save!</td></tr>" +
-                "<tr><td>a,b,c</td><td></td></tr>" +
-                "</table>";
-            string processedSetUpTableHtml =
-                //"<table>" +
-                //"<tr><td>configuration setup</td></tr>" +
-                //"<tr><td>service</td></tr>" +
-                //"<tr><td>add operator</td><td>fit.operators.executeempty</td></tr>" +
-                //"</table>" +
-                "<table>" +
-                "<tr><td colspan=\"3\">ArrayOfStringsFixture</td></tr>" +
-                "<tr><td>field</td><td>save!</td></tr>" +
-                "<tr><td>a,b,c</td><td><span class=\"fit_grey\"> null</span></td></tr>" +
-                "</table>";
-            string tableHtml = "<table>" +
-                               "<tr><td colspan=\"3\">ArrayOfStringsRowFixture</td></tr>" +
-                               "<tr><td>field</td></tr>" +
-                               "<tr><td>a,b,c</td></tr>" +
-                               "</table>";
-            string expected = "<table>" +
-                              "<tr><td colspan=\"3\">ArrayOfStringsRowFixture</td></tr>" +
-                              "<tr><td>field</td></tr>" +
-                              "<tr><td class=\"pass\">a,b,c</td></tr>" +
-                              "</table>";
-            Parse tables = new Parse(setUpTableHtml + tableHtml);
+            const string setUpTableHtml = "<table>" +
+                                          "<tr><td colspan=\"3\">ArrayOfStringsFixture</td></tr>" +
+                                          "<tr><td>field</td><td>save!</td></tr>" +
+                                          "<tr><td>a,b,c</td><td></td></tr>" +
+                                          "</table>";
+            const string processedSetUpTableHtml = "<table>" +
+                                                   "<tr><td colspan=\"3\">ArrayOfStringsFixture</td></tr>" +
+                                                   "<tr><td>field</td><td>save!</td></tr>" +
+                                                   "<tr><td>a,b,c</td><td><span class=\"fit_grey\"> null</span></td></tr>" +
+                                                   "</table>";
+            const string tableHtml = "<table>" +
+                                     "<tr><td colspan=\"3\">ArrayOfStringsRowFixture</td></tr>" +
+                                     "<tr><td>field</td></tr>" +
+                                     "<tr><td>a,b,c</td></tr>" +
+                                     "</table>";
+            const string expected = "<table>" +
+                                    "<tr><td colspan=\"3\">ArrayOfStringsRowFixture</td></tr>" +
+                                    "<tr><td>field</td></tr>" +
+                                    "<tr><td class=\"pass\">a,b,c</td></tr>" +
+                                    "</table>";
+            var tables = new Parse(setUpTableHtml + tableHtml);
             RunTest(tables);
-            var x = tables.ToString();
             Assert.AreEqual(processedSetUpTableHtml + expected, tables.ToString());
         }
 
         [Test]
         public void TestEnum()
         {
-            string tableHtml = "<table><tr><td>ColorInspector</td></tr>" +
-                               "<tr><td>ToString()</td></tr>" +
-                               "<tr><td>Red</td></tr>" +
-                               "<tr><td>Blue</td></tr>" +
-                               "</table>";
+            const string tableHtml = "<table><tr><td>ColorInspector</td></tr>" +
+                                     "<tr><td>ToString()</td></tr>" +
+                                     "<tr><td>Red</td></tr>" +
+                                     "<tr><td>Blue</td></tr>" +
+                                     "</table>";
             Array colorsArray = Enum.GetValues(typeof (Color));
-            ArrayList colorsList = new ArrayList(colorsArray);
+            var colorsList = new ArrayList(colorsArray);
             DoTable(new Parse(tableHtml), colorsList.ToArray(), 2, 0, 0, 0);
         }
 
@@ -473,14 +460,14 @@ namespace fit.Test.NUnit {
             TestUtils.CheckCounts(resultCounts, right, wrong, exceptions, ignores);
         }
 
-        private void AddQueryValue(object obj)
+        private static void AddQueryValue(object obj)
         {
             NewRowFixtureDerivative.QueryValues.Add(obj);
         }
 
         private void AddRow(string[] strings)
         {
-            Parse lastCell = new Parse("td", strings[strings.Length - 1], null, null);
+            var lastCell = new Parse("td", strings[strings.Length - 1], null, null);
             for (int i = strings.Length - 1; i > 0; i--)
             {
                 lastCell = new Parse("td", strings[i - 1], null, lastCell);
@@ -488,22 +475,22 @@ namespace fit.Test.NUnit {
             table.Parts.Last.More = new Parse("tr", null, lastCell, null);
         }
 
-        private void AssertTextInTag(Parse cell, string text)
+        private static void AssertTextInTag(Cell cell, string text)
         {
             Assert.AreEqual(text, cell.GetAttribute(CellAttributes.StatusKey));
         }
 
-        private void AssertTextInBody(Parse cell, string text)
+        private static void AssertTextInBody(Parse cell, string text)
         {
             Assert.IsTrue(cell.Body.IndexOf(text) > -1);
         }
 
-        private void AssertTextNotInBody(Parse cell, string text)
+        private static void AssertTextNotInBody(Parse cell, string text)
         {
             Assert.IsFalse(cell.Body.IndexOf(text) > -1);
         }
 
-        private void AddColumn(Parse table, string name)
+        private static void AddColumn(Parse table, string name)
         {
             table.Parts.More.Parts.Last.More = new Parse("td", name, null, null);
         }
@@ -511,7 +498,7 @@ namespace fit.Test.NUnit {
 
     public class BusinessObject
     {
-        private string[] strs;
+        private readonly string[] strs;
 
         public BusinessObject(string[] strs)
         {
@@ -563,40 +550,27 @@ namespace fit.Test.NUnit {
     {
         public RowFixturePerson(string name)
         {
-            this.name = name;
+            Name = name;
         }
 
         public RowFixturePerson(string name, string address)
         {
-            this.name = name;
-            this.address = address;
+            Name = name;
+            Address = address;
         }
 
         public RowFixturePerson(string name, string address, string phone)
         {
-            this.name = name;
-            this.address = address;
-            this.phone = phone;
+            Name = name;
+            Address = address;
+            Phone = phone;
         }
 
-        public string Name
-        {
-            get { return name; }
-        }
+        public string Name { get; private set; }
 
-        public string Address
-        {
-            get { return address; }
-        }
+        public string Address { get; private set; }
 
-        public string Phone
-        {
-            get { return phone; }
-        }
-
-        private string name;
-        private string address;
-        private string phone;
+        public string Phone { get; private set; }
     }
 
 }

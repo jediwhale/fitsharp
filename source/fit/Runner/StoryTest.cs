@@ -6,29 +6,18 @@
 
 using System;
 using System.Threading;
-using fitSharp.Fit.Model;
 using fitSharp.Fit.Service;
 using fitSharp.Machine.Application;
-using fitSharp.Machine.Engine;
-using fitSharp.Machine.Model;
 
 namespace fit {
     public interface StoryCommand {
-        void Execute();
+        void Execute(Configuration configuration);
     }
 
     public class StoryTest: StoryCommand {
-        private WriteTestResult writer;
-        private Parse resultTables;
+        private readonly WriteTestResult writer;
 
         public Parse Tables { get; private set; }
-
-        public static Parse TestResult(Parse theTest) {
-            var story = new StoryTest(theTest);
-            story.writer = story.SaveTestResult;
-            story.Execute();
-            return story.resultTables;
-        }
 
         public StoryTest() {
             writer = (t, s) => {};
@@ -42,46 +31,29 @@ namespace fit {
             this.writer = writer;
         }
 
-        public void Execute() {
-            Configuration currentConfig = Context.Configuration;
-		    var newConfig = new Configuration(Context.Configuration);
-            newConfig.GetItem<Service.Service>().ApplicationUnderTest = newConfig.GetItem<ApplicationUnderTest>();
-            Context.Configuration = newConfig;
-            ExecuteOnConfiguration();
-		    Context.Configuration = currentConfig;
+        public void Execute(Configuration configuration) {
+		    var newConfig = new Configuration(configuration);
+            ExecuteOnConfiguration(newConfig);
         }
 
-        public void ExecuteOnConfiguration() {
-            string apartmentConfiguration = Context.Configuration.GetItem<Settings>().ApartmentState;
+        public void ExecuteOnConfiguration(Configuration configuration) {
+            string apartmentConfiguration = configuration.GetItem<Settings>().ApartmentState;
             if (apartmentConfiguration != null) {
                 var desiredState = (ApartmentState)Enum.Parse(typeof(ApartmentState), apartmentConfiguration);
                 if (Thread.CurrentThread.GetApartmentState() != desiredState) {
-                    var thread = new Thread(DoTables);
+                    var thread = new Thread(o => DoTables((Configuration)o));
                     thread.SetApartmentState(desiredState);
-                    thread.Start();
+                    thread.Start(configuration);
                     thread.Join();
                     return;
                 }
             }
-            DoTables();
+            DoTables(configuration);
         }
 
-        private void DoTables() {
-            new ExecuteStoryTest(Context.Configuration.GetItem<Service.Service>(), writer).DoTables(new Parse("div", string.Empty, Tables, null));
-        }
-
-        private void SaveTestResult(Tree<Cell> theTables, TestCounts counts) {
-            var tables = (Parse) theTables.Value;
-            for (Parse table = tables; table != null; table = table.More) {
-                Parse newTable = table.Copy();
-                if (resultTables == null) {
-                    resultTables = newTable;
-                }
-                else {
-                    resultTables.Last.More = newTable;
-                }
-            }
+        private void DoTables(Configuration configuration) {
+            new ExecuteStoryTest(new Service.Service(configuration), writer)
+                .DoTables(new Parse("div", string.Empty, Tables, null));
         }
     }
-
 }

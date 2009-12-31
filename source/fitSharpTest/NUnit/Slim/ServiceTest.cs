@@ -31,7 +31,7 @@ namespace fitSharp.Test.NUnit.Slim {
             var configuration = new Configuration();
             configuration.LoadXml("<config><fitSharp.Slim.Service.Service><addOperator>fitSharp.Test.NUnit.Slim.SampleOperator</addOperator></fitSharp.Slim.Service.Service></config>");
             var statement = new SlimTree().AddBranchValue("step").AddBranchValue("sampleCommand");
-            var result = configuration.GetItem<Service>().Execute(TypedValue.Void, statement).GetValue<Tree<string>>();
+            var result = new Service(configuration).Execute(TypedValue.Void, statement).GetValue<Tree<string>>();
             Assert.AreEqual("sampleResult", result.Branches[1].Value);
         }
 
