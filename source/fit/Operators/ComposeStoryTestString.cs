@@ -5,6 +5,7 @@
 
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
+using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
@@ -15,6 +16,7 @@ namespace fit.Operators {
         }
 
         public Tree<Cell> Compose(TypedValue instance) {
+            Parse.IsStandard = Processor.Configuration.GetItem<Settings>().IsStandard;
             return new HtmlParser().Parse(instance.ValueString);
         }
     }

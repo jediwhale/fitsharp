@@ -77,7 +77,6 @@ namespace fit.Runner {
 	    private void ExecutePage(StoryPageName pageName, StoryTestString input, Action<StoryTestString, TestCounts> handleResults,
 	                             Action handleNoTest) {
 	        var service = new Service.Service(configuration);
-            FitVersionFixture.Reset();
 	        Tree<Cell> result = service.Compose(input);
 	        if (result == null) {
 	            handleNoTest();

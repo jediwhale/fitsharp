@@ -6,11 +6,13 @@
 
 using System.Text;
 
-namespace fit {
+namespace fit.Parser {
+    public class HtmlString {
+        private readonly bool isStandard;
 
-	public class HtmlString {
-        public HtmlString(string theHtml) {
+        public HtmlString(string theHtml, bool isStandard) {
             myHtml = theHtml;
+            this.isStandard = isStandard;
         }
         
         public string ToPlainText() {
@@ -23,25 +25,25 @@ namespace fit {
         }
         
         private string UnFormat(string theInput) {
-            TextOutput result = new TextOutput();
-            Scanner scan = new Scanner(theInput);
+            var result = new TextOutput(isStandard);
+            var scan = new Scanner(theInput);
             while (true) {
                 scan.FindTokenPair("<", ">", ourValidTagFilter);
                 result.Append(scan.Leader);
                 if (scan.Body.Length == 0) break;
-                if (FitVersionFixture.IsStandard) result.AppendTag(GetTag(scan.Body));
+                if (isStandard) result.AppendTag(GetTag(scan.Body));
             }
             return result.ToString();
         }
 	    
-	    private static bool IsValidTag(Substring theBody) {
-	        return theBody[0] == '/' || char.IsLetter(theBody[0]);
-	    }
+        private static bool IsValidTag(Substring theBody) {
+            return theBody[0] == '/' || char.IsLetter(theBody[0]);
+        }
 	    
-        private static TokenBodyFilter ourValidTagFilter = new TokenBodyFilter(IsValidTag);
+        private static readonly TokenBodyFilter ourValidTagFilter = IsValidTag;
 	    
-        private string GetTag(Substring theInput) {
-            StringBuilder tag = new StringBuilder();
+        private static string GetTag(Substring theInput) {
+            var tag = new StringBuilder();
             int i = 0;
             if (theInput[0] == '/') tag.Append(theInput[i++]);
             while (i < theInput.Length && char.IsLetter(theInput[i])) {
@@ -50,9 +52,9 @@ namespace fit {
             return tag.ToString().ToLower();
         }
 	    
-        private string UnEscape(string theInput) {
-            Scanner scan = new Scanner(theInput);
-            StringBuilder result = new StringBuilder();
+        private static string UnEscape(string theInput) {
+            var scan = new Scanner(theInput);
+            var result = new StringBuilder();
             while (true) {
                 scan.FindTokenPair("&", ";");
                 result.Append(scan.Leader);
@@ -71,11 +73,14 @@ namespace fit {
             return result.ToString();
         }
 
-        private string myHtml;
+        private readonly string myHtml;
 	    
         private class TextOutput {
+
+            private readonly bool isStandard;
 	        
-            public TextOutput() {
+            public TextOutput(bool isStandard) {
+                this.isStandard = isStandard;
                 myText = new StringBuilder();
                 myLastTag = string.Empty;
                 myWhitespace = false;
@@ -84,7 +89,7 @@ namespace fit {
             public void Append(Substring theInput) {
                 for (int i = 0; i < theInput.Length; i++) {
                     char input = theInput[i];
-                    if (FitVersionFixture.IsStandard && input != '\u00a0' && char.IsWhiteSpace(input)) {
+                    if (isStandard && input != '\u00a0' && char.IsWhiteSpace(input)) {
                         if (!myWhitespace) {
                             myText.Append(' ');
                             myLastTag = myLastTag + " ";
@@ -131,10 +136,10 @@ namespace fit {
             }
 	        
             public override string ToString() {
-                return FitVersionFixture.IsStandard ? myText.ToString().Trim().Replace("<br>", "\n").Replace("<br />", "\n") : myText.ToString();
+                return isStandard ? myText.ToString().Trim().Replace("<br>", "\n").Replace("<br />", "\n") : myText.ToString();
             }
 	        
-            private StringBuilder myText;
+            private readonly StringBuilder myText;
             private string myLastTag;
             bool myWhitespace;
         }

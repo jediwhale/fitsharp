@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Web;
+using fit.Parser;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Extension;
 using fitSharp.Machine.Model;
@@ -17,6 +18,8 @@ namespace fit
 {
 	public class Parse: Tree<Cell>, Cell
 	{
+	    public static bool IsStandard;
+
 	    private readonly string tag;
 		private string body;
 	    private readonly string originalBody;
@@ -208,7 +211,7 @@ namespace fit
 		}
 
 	    public static string HtmlToText(string theHtml) {
-	        return new HtmlString(theHtml).ToPlainText();
+	        return new HtmlString(theHtml, IsStandard).ToPlainText();
         }
 
         public static string UnFormat(string s)

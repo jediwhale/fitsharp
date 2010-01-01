@@ -4,10 +4,15 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
+using System.Configuration;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Application {
     public class Settings: Copyable {
+        private static readonly string appSettingsBehavior;
+        static Settings() {
+            appSettingsBehavior = ConfigurationManager.AppSettings["fitVersion"];
+        }
 
         private const int DefaultCodePage = 1252;
 
@@ -18,6 +23,7 @@ namespace fitSharp.Machine.Application {
         public string OutputFolder { get; set; }
         public string Runner { get; set; }
         public string XmlOutput { get; set; }
+        public string Behavior { get; set; }
 
         public string AppConfigFile {
             get { return appConfigFile; }
@@ -35,16 +41,29 @@ namespace fitSharp.Machine.Application {
             }
         }
 
+        public bool IsStandard { get { return BehaviorHas("std"); } }
+
+        public bool BehaviorHas(string keyword) {
+            return Behavior != null && Behavior.ToLower().IndexOf(keyword) >= 0;
+        }
+
+        public Settings() {
+            Behavior = appSettingsBehavior;
+        }
+
+        public Settings(Settings other) {
+            ApartmentState = other.ApartmentState;
+            appConfigFile = other.appConfigFile;
+            Behavior = other.Behavior;
+            CodePage = other.CodePage;
+            InputFolder = other.InputFolder;
+            OutputFolder = other.OutputFolder;
+            Runner = other.Runner;
+            XmlOutput = other.XmlOutput;
+        }
+
         public Copyable Copy() {
-            return new Settings {
-                ApartmentState = ApartmentState,
-                appConfigFile = appConfigFile,
-                CodePage = CodePage,
-                InputFolder = InputFolder,
-                OutputFolder = OutputFolder,
-                Runner = Runner,
-                XmlOutput = XmlOutput
-            };
+            return new Settings(this);
         }
     }
 }

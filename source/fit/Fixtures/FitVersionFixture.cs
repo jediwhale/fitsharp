@@ -3,14 +3,10 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-using System.Configuration;
-using fitSharp.Fit.Operators;
+using fitSharp.Machine.Application;
 
 namespace fit {
     public class FitVersionFixture : Fixture {
-        static FitVersionFixture() {
-            Reset();
-        }
 
         public override bool IsVisible {
             get { return false; }
@@ -18,27 +14,9 @@ namespace fit {
 
         public override void DoTable(Parse theTable) {
             if (Args.Length > 0) {
-                myVersion = Args[0].Trim().ToLower();
-                //todo: clean up
-                if (myVersion.ToLower().IndexOf("fitlibrary1") >= 0) {
-                    Processor.RemoveOperator(typeof (ParseMemberName).FullName);
-                    Processor.AddOperator(typeof(ParseMemberNameExtended).FullName);
-                }
+                string behavior = Args[0].Trim().ToLower();
+                Processor.Configuration.GetItem<Settings>().Behavior = behavior;
             }
         }
-
-        public static bool IsStandard {
-            get { return myVersion.IndexOf("std") >= 0; }
-        }
-
-        public static void Set(string theVersion) {
-            myVersion = (theVersion == null ? string.Empty : theVersion.Trim().ToLower());
-        }
-
-        public static void Reset() {
-            Set(ConfigurationManager.AppSettings["fitVersion"]);
-        }
-
-        private static string myVersion;
     }
 }
