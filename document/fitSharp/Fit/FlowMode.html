@@ -28,7 +28,7 @@ to be bound by the terms of this license. You must not remove this notice, or an
 |xxx|xxx|
 
 |FixtureC|
-|xxx|xxx|</pre> A fixture can "hide" itself, so that a subsequent flow fixture will appear to be in the first table, and thus operate in flow mode. <a href="../Fit/ImportFixture.html">Import Fixture</a> and Fit Version Fixture are examples of hidden fixtures. The hidden fixture overrides the IsVisible property: <pre class="code">public class MyHiddenFixture: Fixture {
+|xxx|xxx|</pre> A fixture can "hide" itself, so that a subsequent flow fixture will appear to be in the first table, and thus operate in flow mode. <a href="../Fit/ImportFixture.html">Import Fixture</a> and <a href="../Fit/FitVersionFixture.html">Fit Version Fixture</a> are examples of hidden fixtures. The hidden fixture overrides the IsVisible property: <pre class="code">public class MyHiddenFixture: Fixture {
     public override bool IsVisible { get { return false; } }
 ...}</pre><pre class="test">|MyHiddenFixture|
 |xxx|xxx|
