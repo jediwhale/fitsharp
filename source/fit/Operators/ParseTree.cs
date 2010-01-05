@@ -18,7 +18,9 @@ namespace fit.Operators {
 
         public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
             var cell = (Parse)parameters.Value;
-            return new TypedValue(new fitlibrary.tree.ParseTree(cell.Parts ?? new Parse("ul", cell.Text, null, null)));
+            return new TypedValue(new fitlibrary.tree.ParseTree(
+                cell.Parts
+                ?? new Parse("ul", Processor.Parse<Cell, string>(cell), null, null)));
         }
     }
 }

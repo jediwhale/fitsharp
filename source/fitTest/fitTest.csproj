@@ -125,6 +125,7 @@
     <Compile Include="Acceptance\XmlFixtureUnderTest.cs" />
     <Compile Include="Double\SampleRowDomain.cs" />
     <Compile Include="Double\SampleSetUpDomainFixture.cs" />
+    <Compile Include="Double\SampleTree.cs" />
     <Compile Include="FitUnit\ConfigurationTest.cs" />
     <Compile Include="FitUnit\FixtureTest.cs" />
     <Compile Include="FitUnit\ObjectFactoryTest.cs" />
@@ -145,6 +146,7 @@
     <Compile Include="NUnit\ExceptionKeywordHandlerTest.cs" />
     <Compile Include="NUnit\FailKeywordHandlerTest.cs" />
     <Compile Include="NUnit\FlowKeywordsTest.cs" />
+    <Compile Include="NUnit\ParseTreeTest.cs" />
     <Compile Include="NUnit\ProtocolTest.cs" />
     <Compile Include="NUnit\FixtureNUnitTest.cs" />
     <Compile Include="NUnit\FixtureTableTest.cs" />

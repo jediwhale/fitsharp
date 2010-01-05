@@ -1,13 +1,14 @@
 <suiteConfig>
 
-    <fitSharp.Machine.Application.Settings>
+    <Settings>
         <inputFolder>document\fitSharp</inputFolder>
         <outputFolder>site</outputFolder>
-    </fitSharp.Machine.Application.Settings>
+        <runner>fit.Runner.FolderRunner</runner>
+    </Settings>
 
-    <fitSharp.Fit.Application.FileExclusions>
+    <Fit.FileExclusions>
         <add>^Sample</add>
-    </fitSharp.Fit.Application.FileExclusions>
+    </Fit.FileExclusions>
     
     <ApplicationUnderTest>
         <addNamespace>fit.Test.Acceptance</addNamespace>
@@ -21,8 +22,8 @@
         <addAssembly>build\debug\fittest.dll</addAssembly>
     </ApplicationUnderTest>
     
-    <fit.Service.Service>
-        <addOperator>fit.Operators.ExecuteParse</addOperator>
-    </fit.Service.Service>
+    <Fit.Operators>
+        <add>fit.Operators.ExecuteParse</add>
+    </Fit.Operators>
     
 </suiteConfig>

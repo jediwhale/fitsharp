@@ -59,6 +59,14 @@ namespace fitSharp.Test.NUnit.Slim {
             Assert.AreEqual("testresult", processor.Load(new Symbol("symbol")).Instance);
         }
 
+        [Test] public void ExecuteCallUsesDomainAdapter() {
+            processor.Store(new SavedInstance("variable", new SampleClass()));
+            var executeCall = new ExecuteCall { Processor = processor };
+            var input = new SlimTree().AddBranchValue("step").AddBranchValue("call").AddBranchValue("variable").AddBranchValue("DomainMethod");
+            ExecuteOperation(executeCall, input, 2);
+            Assert.AreEqual("domainstuff", result.Branches[1].Value);
+        }
+
         private void ExecuteOperation(ExecuteOperator<string> executeOperator, Tree<string> input, int branchCount) {
             TypedValue executeResult = TypedValue.Void;
             if (executeOperator.CanExecute(TypedValue.Void, input)) {

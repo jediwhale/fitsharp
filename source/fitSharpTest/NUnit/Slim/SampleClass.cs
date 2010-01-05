@@ -4,9 +4,15 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
+using fitSharp.Machine.Model;
 
 namespace fitSharp.Test.NUnit.Slim {
-    public class SampleClass {
+    public class SampleClass: DomainAdapter {
+
+        private readonly SampleDomain systemUnderTest = new SampleDomain();
+
+        public object SystemUnderTest { get { return systemUnderTest; } }
+
         public static int Count;
         public static int MethodCount;
 
@@ -27,6 +33,10 @@ namespace fitSharp.Test.NUnit.Slim {
 
         public void AbortTest() {
             throw new SampleStopTest();
+        }
+
+        private class SampleDomain {
+            public string DomainMethod() { return "domainstuff"; }
         }
     }
 

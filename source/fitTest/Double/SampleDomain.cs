@@ -5,6 +5,7 @@
 
 using System;
 using fit.Test.NUnit;
+using fitlibrary.tree;
 
 namespace fit.Test.Double {
     public class SampleDomain {
@@ -32,6 +33,10 @@ namespace fit.Test.Double {
         }
 
         public void AddDays(int days) { DateTimeField = DateTimeField.AddDays(days); }
+
+        public Tree MakeTree(string[] leaves) {
+            return new SampleTree(string.Empty, leaves.Length == 1 && leaves[0].Length == 0 ? new string[] {} : leaves);
+        }
     }
 
     public class another_sample_domain {}

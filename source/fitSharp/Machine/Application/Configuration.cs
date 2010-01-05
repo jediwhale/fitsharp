@@ -61,9 +61,10 @@ namespace fitSharp.Machine.Application {
             {"settings", "fitSharp.Machine.Application.Settings"},
             {"fileexclusions", "fitSharp.Fit.Application.FileExclusions"},
             {"slim.service", "fitSharp.Slim.Service.SlimOperators"},
+            {"slim.operators", "fitSharp.Slim.Service.SlimOperators"},
             {"fitsharp.slim.service.service", "fitSharp.Slim.Service.SlimOperators"},
             {"fit.service", "fit.Service.Operators"},
-            {"fit.service.service", "fit.Service.Operators"},
+            {"fit.operators", "fit.Service.Operators"},
             {"fit.cellhandlers", "fit.Service.Operators"},
             {"fitlibrary.cellhandlers", "fit.Service.Operators"}
         };
