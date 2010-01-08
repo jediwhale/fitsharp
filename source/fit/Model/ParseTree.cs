@@ -1,9 +1,9 @@
-// FitNesse.NET
-// Copyright © 2006, 2008 Syterra Software Inc.
+// Copyright © 2006,2008,2010 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
+using System;
 using System.Collections;
 using System.Text;
 using fit;
@@ -11,10 +11,10 @@ using fitSharp.Machine.Model;
 
 namespace fitlibrary.tree {
 
-    public class ParseTree: Tree {
+    [Serializable] public class ParseTree: Tree {
 
         public static string ToParseString(Tree theTree) {
-            StringBuilder result = new StringBuilder();
+            var result = new StringBuilder();
             if (theTree.Title != null) result.Append(theTree.Title);
             int childCount = 0;
             foreach (Tree child in theTree.GetChildren()) {
@@ -26,35 +26,39 @@ namespace fitlibrary.tree {
             return result.ToString();
         }
 
+        private readonly ListTree tree;
+
         public ParseTree(Parse theParse) {
-            myParse = theParse;
-            myHashCode = myParse.ToString().GetHashCode();
+            tree = new ListTree(GetTitle(theParse));
+            for (Parse child = Root(theParse).Parts; child != null; child = child.More) {
+                tree.AddChild(new ParseTree(child));
+            }
+            myHashCode = theParse.ToString().GetHashCode();
         }
 
-        public string Title {get {return GetTitle(myParse);}}
-        public IEnumerable GetChildren() {
-            return new ChildEnumerator(Root(myParse).Parts);
-        }
+        public string Title { get { return tree.Title; } }
+        public IEnumerable GetChildren() { return tree.GetChildren(); }
 
         public override int GetHashCode() {return myHashCode;}
-        public override string ToString() {return myParse.ToString();}
+        public override string ToString() {return tree.ToString();}
 
         public override bool Equals(object theOther) {
-            Tree other = theOther as Tree;
+            var other = theOther as Tree;
             if (other == null) return false;
-            return Equals(myParse, other);
+            return Equals(tree, other);
         }
 
-        private bool Equals(Parse theParse, Tree theTree) {
-            if (theParse == null && theTree == null) return true;
-            if (theParse == null || theTree == null) return false;
-            if (GetTitle(theParse) != theTree.Title) return false;
-            Parse parseChild = Root(theParse).Parts;
-            foreach (Tree treeChild in theTree.GetChildren()) {
-                if (!Equals(parseChild, treeChild)) return false;
-                parseChild = parseChild.More;
+        private static bool Equals(Tree thisTree, Tree otherTree) {
+            if (thisTree == null && otherTree == null) return true;
+            if (thisTree == null || otherTree == null) return false;
+            if (thisTree.Title != otherTree.Title) return false;
+
+            IEnumerator theseChildren = thisTree.GetChildren().GetEnumerator();
+            foreach (Tree treeChild in otherTree.GetChildren()) {
+                theseChildren.MoveNext();
+                if (!Equals(theseChildren.Current, treeChild)) return false;
             }
-            return (parseChild == null);
+            return !theseChildren.MoveNext();
         }
 
         private static string GetTitle(Parse theParse) {
@@ -68,33 +72,6 @@ namespace fitlibrary.tree {
 
         private static readonly IdentifierName ourListIdentifier = new IdentifierName("<li");
 
-        private Parse myParse;
-        private int myHashCode;
-
-        private class ChildEnumerator: IEnumerable, IEnumerator {
-
-            public ChildEnumerator(Parse theChildren) {
-                myChildren = theChildren;
-            }
-
-            public IEnumerator GetEnumerator() {return this;}
-
-            public bool MoveNext() {
-                if (myCurrent == null) {
-                    myCurrent = myChildren;
-                }
-                else {
-                    myCurrent = myCurrent.More;
-                }
-                return (myCurrent != null);
-            }
-
-            public void Reset() {myCurrent = null;}
-            public object Current {get {return (myCurrent == null ? null : new ParseTree(myCurrent));}}
-
-            private Parse myChildren;
-            private Parse myCurrent;
-        }
+        private readonly int myHashCode;
     }
-
 }

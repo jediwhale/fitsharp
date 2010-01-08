@@ -1,38 +1,40 @@
-// FitLibrary for FitNesse .NET.
-// Copyright (c) 2006 Syterra Software Inc. Released under the terms of the GNU General Public License version 2 or later.
-// Based on designs from Fit (c) 2002 Cunningham & Cunningham, Inc., FitNesse by Object Mentor Inc., FitLibrary (c) 2003-2006 Rick Mugridge, University of Auckland, New Zealand.
+// Copyright © 2006,2010 Syterra Software Inc. Includes work © 2003-2006 Rick Mugridge, University of Auckland, New Zealand.
+// This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
+// This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
+using System;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace fitlibrary.tree {
 
-	public class ListTree: Tree {
+	[Serializable] public class ListTree: Tree {
 
         public ListTree(string theTitle) {
-            myTitle = theTitle;
-            myChildren = new ArrayList();
+            Title = theTitle;
+            children = new List<Tree>();
         }
 
-        public ListTree(string theTitle, IEnumerable theChildren) {
-            myTitle = theTitle;
-            myChildren = new ArrayList();
+        public ListTree(string theTitle, IEnumerable<Tree> theChildren) {
+            Title = theTitle;
+            children = new List<Tree>();
             foreach (Tree child in theChildren) {
                 AddChild(child);
             }
         }
 
         public void AddChild(Tree theChild) {
-            myChildren.Add(theChild);
+            children.Add(theChild);
         }
 
         public override string ToString() {
             return ParseTree.ToParseString(this);
         }
 
-        public string Title {get {return myTitle;}}
-        public IEnumerable GetChildren() {return myChildren;}
+	    public string Title { get; private set; }
+	    public IEnumerable GetChildren() { return children; }
 
-        private string myTitle;
-        private ArrayList myChildren;
+	    private readonly List<Tree> children;
     }
 }
