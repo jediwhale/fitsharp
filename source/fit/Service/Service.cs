@@ -1,4 +1,4 @@
-﻿// Copyright © 2009 Syterra Software Inc.
+﻿// Copyright © 2009,2010 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -14,11 +14,9 @@ namespace fit.Service {
 
         public Service(Configuration configuration): base(configuration, configuration.GetItem<Operators>()) {
             ApplicationUnderTest.AddNamespace("fit");
-            ApplicationUnderTest.AddNamespace("fitnesse.handlers");
-            ApplicationUnderTest.AddNamespace("fit.Operators");
             ApplicationUnderTest.AddNamespace("fitSharp.Fit.Fixtures");
-            ApplicationUnderTest.AddNamespace("fitSharp.Fit.Operators");
             ApplicationUnderTest.AddAssembly(Assembly.GetExecutingAssembly().CodeBase);
+            configuration.GetItem<Operators>().AddNamespaces(ApplicationUnderTest);
         }
 
         public void AddCellHandler(string handlerName) {

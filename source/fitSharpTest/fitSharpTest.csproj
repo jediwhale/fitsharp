@@ -48,6 +48,7 @@
     <Compile Include="Acceptance\Slim\SlimDomain.cs" />
     <Compile Include="Double\TestSocket.cs" />
     <Compile Include="NUnit\Fit\BindingFactoryTest.cs" />
+    <Compile Include="NUnit\Fit\CellOperatorsTest.cs" />
     <Compile Include="NUnit\Fit\DefineTest.cs" />
     <Compile Include="NUnit\Fit\ExecuteDefaultTest.cs" />
     <Compile Include="NUnit\Fit\ExecuteInterpretTest.cs" />

@@ -1,13 +1,11 @@
-// Copyright © 2009 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+// Copyright © 2009,2010 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-using fit;
-using fit.Service;
 using fitSharp.Fit.Model;
 
-namespace fitnesse.handlers
+namespace fit
 {
 	public class CellHandlerLoaderFixture : Fixture
 	{
@@ -31,12 +29,12 @@ namespace fitnesse.handlers
 
 	    private void Load(Parse row) {
 	        string handler = new GracefulName(row.Parts.More.Text).IdentifierName.ToString();
-	        ((Service)Processor).AddCellHandler(handler);
+	        ((Service.Service)Processor).AddCellHandler(handler);
 	    }
 
 	    private void Remove(Parse row) {
 	        string handler = new GracefulName(row.Parts.More.Text).IdentifierName.ToString();
-	        ((Service)Processor).RemoveCellHandler(handler);
+	        ((Service.Service)Processor).RemoveCellHandler(handler);
 	    }
 
 	    private static void Reset(Parse row) {}
