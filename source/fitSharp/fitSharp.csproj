@@ -166,6 +166,7 @@
     <Compile Include="Slim\Operators\ParseDictionary.cs" />
     <Compile Include="Slim\Operators\ParseList.cs" />
     <Compile Include="Slim\Operators\ParseSymbol.cs" />
+    <Compile Include="Slim\Operators\RuntimeLibrary.cs" />
     <Compile Include="Slim\Operators\SavedInstance.cs" />
     <Compile Include="Slim\Operators\SlimOperator.cs" />
     <Compile Include="Slim\Operators\Symbol.cs" />

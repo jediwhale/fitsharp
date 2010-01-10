@@ -75,6 +75,7 @@
     <Compile Include="NUnit\Slim\Instructions.cs" />
     <Compile Include="NUnit\Slim\InterpreterTest.cs" />
     <Compile Include="NUnit\Slim\ParseOperatorsTest.cs" />
+    <Compile Include="NUnit\Slim\RuntimeLibraryTest.cs" />
     <Compile Include="NUnit\Slim\SampleClass.cs" />
     <Compile Include="NUnit\Slim\ServiceTest.cs" />
     <Compile Include="NUnit\Slim\TestInterpreter.cs" />

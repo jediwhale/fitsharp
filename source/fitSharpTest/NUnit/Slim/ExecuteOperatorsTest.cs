@@ -1,4 +1,4 @@
-﻿// Copyright © 2009 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2009,2010 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -31,6 +31,17 @@ namespace fitSharp.Test.NUnit.Slim {
             var input = new SlimTree().AddBranchValue("step").AddBranchValue("make").AddBranchValue("variable").AddBranchValue("garbage");
             ExecuteOperation(executeMake, input, 2);
             CheckForException("message:<<NO_CLASS garbage>>");
+        }
+
+        [Test] public void ExecuteMakeLibraryIsStacked() {
+            var executeMake = new ExecuteMake { Processor = processor };
+            var input = new SlimTree().AddBranchValue("step").AddBranchValue("make").AddBranchValue("librarystuff").AddBranchValue("fitSharp.Test.NUnit.Slim.SampleClass");
+            ExecuteOperation(executeMake, input, 2);
+            foreach (TypedValue libraryInstance in processor.LibraryInstances) {
+                Assert.IsTrue(libraryInstance.Value is SampleClass);
+                return;
+            }
+            Assert.Fail();
         }
 
         [Test] public void ExecuteCallBadMethodReturnsException() {
