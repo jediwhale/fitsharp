@@ -4,8 +4,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("GUI Runner for fitSharp")]
 [assembly: AssemblyDescription("fitSharp. The use and distribution terms for this software are covered by the Common Public License 1.0.")]
 [assembly: AssemblyProduct("fitSharp")]
-[assembly: AssemblyCopyright("Copyright © 2009 Syterra Software Inc. All rights reserved.")]
+[assembly: AssemblyCopyright("Copyright © 2010 Syterra Software Inc. All rights reserved.")]
 
 [assembly: ComVisible(false)]
 
-[assembly: AssemblyVersion("1.4.*")]
+[assembly: AssemblyVersion("1.5.*")]
