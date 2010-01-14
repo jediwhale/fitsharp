@@ -78,6 +78,17 @@ namespace fitSharp.Test.NUnit.Slim {
             Assert.AreEqual("domainstuff", result.Branches[1].Value);
         }
 
+        [Test] public void ExecuteCallOnMissingInstanceUsesLibrary() {
+            var executeMake = new ExecuteMake { Processor = processor };
+            var input = new SlimTree().AddBranchValue("step").AddBranchValue("make").AddBranchValue("librarystuff").AddBranchValue("fitSharp.Test.NUnit.Slim.SampleClass");
+            ExecuteOperation(executeMake, input, 2);
+            var executeCall = new ExecuteCall { Processor = processor };
+            input = new SlimTree().AddBranchValue("step").AddBranchValue("call").AddBranchValue("garbage").AddBranchValue("SampleMethod");
+            SampleClass.MethodCount = 0;
+            ExecuteOperation(executeCall, input, 2);
+            Assert.AreEqual(1, SampleClass.MethodCount);
+        }
+
         private void ExecuteOperation(ExecuteOperator<string> executeOperator, Tree<string> input, int branchCount) {
             TypedValue executeResult = TypedValue.Void;
             if (executeOperator.CanExecute(TypedValue.Void, input)) {

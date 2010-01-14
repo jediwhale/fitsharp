@@ -1,4 +1,4 @@
-﻿// Copyright © 2009 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2009,2010 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -56,12 +56,14 @@ namespace fitSharp.Slim.Operators {
             return result;
         }
 
-        protected TypedValue InvokeMember(
-            Tree<string> parameters, int memberIndex) {
-            object target = Processor.Load(new SavedInstance(parameters.Branches[memberIndex].Value)).Instance;
+        protected TypedValue InvokeMember(Tree<string> parameters, int memberIndex) {
+            var instance = new SavedInstance(parameters.Branches[memberIndex].Value);
+            object target = Processor.Contains(instance) ? Processor.Load(instance).Instance : new NullInstance();
             TypedValue result = Processor.Invoke(target, parameters.Branches[memberIndex + 1].Value, ParameterTree(parameters, memberIndex + 2));
             result.ThrowExceptionIfNotValid();
             return result;
         }
+
+        private class NullInstance {}
     }
 }

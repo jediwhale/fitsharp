@@ -3,6 +3,40 @@ using System.Collections.Generic;
 using fitSharp.Machine.Model;
 
 namespace fitnesse.slim.test {
+    public class SampleClass: DomainAdapter {
+
+        private readonly SampleDomain systemUnderTest = new SampleDomain();
+
+        public object SystemUnderTest { get { return systemUnderTest; } }
+
+        public static int Count;
+        public static int MethodCount;
+
+        public SampleClass() {
+            Count++;
+        }
+
+        public string SampleMethod() {
+            MethodCount++;
+            return "testresult";
+        }
+
+        public string SampleMethodWithParm(string parameter) {
+            return "with " + parameter;
+        }
+
+        public void SampleVoidMethod() {}
+
+        public void AbortTest() {
+            throw new SampleStopTest();
+        }
+
+        private class SampleDomain {
+            public string DomainMethod() { return "domainstuff"; }
+        }
+    }
+
+    public class SampleStopTest: ApplicationException {}
 
     public class ShouldIBuyMilk {
         public int CashInWallet;
