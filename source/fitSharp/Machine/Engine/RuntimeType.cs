@@ -1,4 +1,4 @@
-﻿// Copyright © 2009 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2010 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -9,6 +9,10 @@ using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
+    public interface MemberQueryable {
+        RuntimeMember Find(IdentifierName memberName, int parameterCount, Type[] parameterTypes);
+    }
+
     public class RuntimeType {
 
         public Type Type { get; private set; }
@@ -73,10 +77,18 @@ namespace fitSharp.Machine.Engine {
             public RuntimeMember Find(object instance) {
                 object target = instance;
                 while (target != null) {
+                    var queryable = target as MemberQueryable;
+                    if (queryable != null) {
+                        RuntimeMember queryableMember = queryable.Find(memberName, parameterCount, parameterTypes);
+                        if (queryableMember != null) return queryableMember;
+                    }
+
                     RuntimeMember member = FindMember(target);
                     if (member != null) return member;
+
                     var adapter = target as DomainAdapter;
                     if (adapter == null) break;
+
                     target = adapter.SystemUnderTest;
                     if (target == adapter) break;
                 }

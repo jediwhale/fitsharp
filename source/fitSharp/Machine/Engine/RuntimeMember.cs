@@ -1,4 +1,4 @@
-﻿// Copyright © 2009 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2010 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -8,11 +8,19 @@ using System.Reflection;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
-    public abstract class RuntimeMember {
+    public interface RuntimeMember {
+        TypedValue Invoke(object[] parameters);
+        bool MatchesParameterCount(int count);
+        Type GetParameterType(int index);
+        Type ReturnType { get; }
+        string Name { get; }
+    }
+
+    public abstract class ReflectionMember: RuntimeMember {
         protected object instance;
         protected readonly MemberInfo info;
 
-        protected RuntimeMember(MemberInfo info, object instance) {
+        protected ReflectionMember(MemberInfo info, object instance) {
             this.instance = instance;
             this.info = info;
         } 
@@ -25,7 +33,7 @@ namespace fitSharp.Machine.Engine {
         public abstract Type ReturnType { get; }
     }
 
-    class MethodMember: RuntimeMember {
+    class MethodMember: ReflectionMember {
         public MethodMember(MemberInfo memberInfo, object instance): base(memberInfo, instance) {}
 
         private MethodInfo Info { get { return (MethodInfo) info; } }
@@ -43,7 +51,7 @@ namespace fitSharp.Machine.Engine {
                                               | BindingFlags.InvokeMethod | BindingFlags.Static,
                                               null, instance, parameters);
 
-            return new TypedValue(result, Info.ReturnType);
+            return new TypedValue(result, Info.ReturnType != typeof(void) && result != null ? result.GetType() : Info.ReturnType); //todo: push this into TypedValue
         }
 
         public override Type ReturnType { get { return Info.ReturnType; } }
@@ -61,7 +69,7 @@ namespace fitSharp.Machine.Engine {
         }
     }
 
-    class FieldMember: RuntimeMember {
+    class FieldMember: ReflectionMember {
         public FieldMember(MemberInfo memberInfo, object instance): base(memberInfo, instance) {}
 
         private FieldInfo Info { get { return (FieldInfo) info; } }
@@ -86,7 +94,7 @@ namespace fitSharp.Machine.Engine {
         public override Type ReturnType { get { return Info.FieldType; } }
     }
 
-    class PropertyMember: RuntimeMember {
+    class PropertyMember: ReflectionMember {
         public PropertyMember(MemberInfo memberInfo, object instance): base(memberInfo, instance) {}
 
         private PropertyInfo Info { get { return (PropertyInfo) info; } }
@@ -111,7 +119,7 @@ namespace fitSharp.Machine.Engine {
         public override Type ReturnType { get { return Info.PropertyType; } }
     }
 
-    class ConstructorMember: RuntimeMember {
+    class ConstructorMember: ReflectionMember {
         public ConstructorMember(MemberInfo memberInfo, object instance): base(memberInfo, instance) {}
 
         private ConstructorInfo Info { get { return (ConstructorInfo) info; } }

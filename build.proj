@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
-        DefaultTargets="solution;unittests;storytests" >
+        DefaultTargets="solution;unittests;storytests;dbfittests" >
 
 <PropertyGroup>
     <Config>Debug</Config>
@@ -18,6 +18,11 @@
 
 <Target Name="storytests">
     <Exec Command=".\build\debug\runner -c storytest.config.xml" />
+</Target>
+
+<Target Name="dbfittests">
+    <Exec Command="&quot;C:\Program Files\NUnit 2.4.8\bin\nunit-console&quot; -nologo .\build\$(Config)\dbfitTest.dll" />
+    <Exec Command="java -jar \apps\fitnesse\fitnesse.jar -o -d .\document -r FitNesseRoot -c &quot;DbFitTests?suite&amp;format=text&quot;" />
 </Target>
 
 </Project>

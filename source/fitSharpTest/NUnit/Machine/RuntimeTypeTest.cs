@@ -1,8 +1,9 @@
-﻿// Copyright © 2009 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2010 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
+using System;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using fitSharp.Test.Double;
@@ -103,6 +104,44 @@ namespace fitSharp.Test.NUnit.Machine {
             method = RuntimeType.GetInstance(new TypedValue(instance), "duplicate", 0);
             TypedValue result = method.Invoke(new object[] {});
             Assert.AreEqual("stuff", result.ToString());
+        }
+
+        [Test] public void QueryableMemberIsInvoked() {
+            var queryable = new QueryableClass();
+            RuntimeMember method = RuntimeType.GetInstance(new TypedValue(queryable), "dynamic", 1);
+            TypedValue result = method.Invoke(new object[] {"stuff"});
+            Assert.AreEqual("dynamicstuff", result.Value);
+        }
+
+        private class QueryableClass: MemberQueryable {
+            public RuntimeMember Find(IdentifierName memberName, int parameterCount, Type[] parameterTypes) {
+                return new QueryableMember(memberName.ToString());
+            }
+
+            private class QueryableMember: RuntimeMember {
+                public QueryableMember(string memberName) {
+                    Name = memberName;
+                }
+
+                public TypedValue Invoke(object[] parameters) {
+                    return new TypedValue(Name + parameters[0]);
+                }
+
+                public bool MatchesParameterCount(int count) {
+                    throw new NotImplementedException();
+                }
+
+                public Type GetParameterType(int index) {
+                    throw new NotImplementedException();
+                }
+
+                public Type ReturnType {
+                    get { throw new NotImplementedException(); }
+                }
+
+                public string Name { get; private set; }
+            }
+
         }
 
     }

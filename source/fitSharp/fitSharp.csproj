@@ -12,6 +12,8 @@
     <AssemblyName>fitSharp</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkSubset>
+    </TargetFrameworkSubset>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -62,6 +64,7 @@
     <Compile Include="Fit\Operators\CompareRegEx.cs" />
     <Compile Include="Fit\Operators\ExecuteEmpty.cs" />
     <Compile Include="Fit\Operators\ExecuteInterpret.cs" />
+    <Compile Include="Fit\Operators\ParseByteArray.cs" />
     <Compile Include="Fit\Operators\ParseDate.cs" />
     <Compile Include="Fit\Operators\CompareNumeric.cs" />
     <Compile Include="Fit\Operators\CompareString.cs" />
@@ -72,6 +75,7 @@
     <Compile Include="Fit\Operators\ExecuteException.cs" />
     <Compile Include="Fit\Operators\ExecuteParameters.cs" />
     <Compile Include="Fit\Operators\ExecuteSymbolSave.cs" />
+    <Compile Include="Fit\Operators\ParseQuotedString.cs" />
     <Compile Include="Fit\Operators\ParseSymbol.cs" />
     <Compile Include="Fit\Runner\StoryFileName.cs" />
     <Compile Include="Fit\Runner\StoryTestFile.cs" />

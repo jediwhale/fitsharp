@@ -1,4 +1,4 @@
-// Copyright © 2009 Syterra Software Inc.
+// Copyright © 2010 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -15,10 +15,23 @@ using fitSharp.Machine.Model;
 namespace fit.Operators {
     public interface ListMatchStrategy {
         bool IsOrdered { get; }
-        TypedValue[] ActualValues(CellProcessor processor, object theActualRow);
+        TypedValue[] ActualValues(object theActualRow);
         bool IsExpectedSize(Parse theExpectedCells, object theActualRow);
         bool FinalCheck(TestStatus testStatus);
         bool SurplusAllowed {get;}
+        bool CellMatches(TypedValue actualValue, Parse expectedCell, int columnNumber);
+    }
+
+    public class CellMatcher {
+        public CellProcessor Processor { get; private set; }
+
+        public CellMatcher(CellProcessor processor) {
+            Processor = processor;
+        }
+
+        public virtual bool CellMatches(TypedValue actualValue, Parse expectedCell, int columnNumber) {
+            return new CellOperationImpl(Processor).Compare(actualValue, expectedCell);
+        }
     }
 
     public class ListMatcher {
@@ -74,7 +87,7 @@ namespace fit.Operators {
                     result = false;
                 }
                 else if (actuals.Match(row) != null) {
-                    TypedValue[] actualValues = strategy.ActualValues(processor, actuals.Match(row));
+                    TypedValue[] actualValues = strategy.ActualValues(actuals.Match(row));
                     int i = 0;
                     foreach (Parse cell in new CellRange(markRow.Parts).Cells) {
                         if (actualValues[i].Type != typeof(void) || cell.Text.Length > 0) {
@@ -100,11 +113,16 @@ namespace fit.Operators {
         private bool RowMatches(Parse theExpectedCells, object theActualRow) {
             if (!strategy.IsExpectedSize(theExpectedCells, theActualRow)) return false;
             Parse expectedCell = theExpectedCells;
-            foreach (TypedValue actualValue in strategy.ActualValues(processor, theActualRow)) {
+            int i = 0;
+            foreach (TypedValue actualValue in strategy.ActualValues(theActualRow)) {
                 if (actualValue.Type != typeof(void) || expectedCell.Text.Length > 0) {
-                    if (!new CellOperationImpl(processor).Compare(actualValue, expectedCell)) return false;
+                    //>>>>>>>>>>>>>>>>>>
+                    if (!strategy.CellMatches(actualValue, expectedCell, i)) return false;
+                    //if (!new CellOperationImpl(processor).Compare(actualValue, expectedCell)) return false;
+                    //>>>>>>>>>>>>>>>>>>
                 }
                 expectedCell = expectedCell.More;
+                i++;
             }
             return true;
         }
@@ -174,7 +192,7 @@ namespace fit.Operators {
 
             private Parse MakeSurplusRow(CellProcessor processor, object theSurplusRow) {
                 Parse cells = null;
-                foreach (TypedValue actualValue in myStrategy.ActualValues(processor, theSurplusRow)) {
+                foreach (TypedValue actualValue in myStrategy.ActualValues(theSurplusRow)) {
                     var cell = (Parse) processor.Compose(actualValue);
                     if (cells == null) {
                         cell.SetAttribute(CellAttributes.LabelKey, "surplus");

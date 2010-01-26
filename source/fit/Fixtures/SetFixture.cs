@@ -7,6 +7,7 @@ using System.Collections;
 using System.Data;
 using fit;
 using fit.Operators;
+using fitSharp.Fit.Engine;
 
 namespace fitlibrary {
 
@@ -22,12 +23,12 @@ namespace fitlibrary {
 
         protected override ListMatchStrategy MatchStrategy {
             get {
-                return new SetMatchStrategy(myHeaderRow);
+                return new SetMatchStrategy(Processor, myHeaderRow);
             }
         }
 
         private class SetMatchStrategy: NamedMatchStrategy {
-            public SetMatchStrategy(Parse theHeaderRow): base(theHeaderRow) {}
+            public SetMatchStrategy(CellProcessor processor, Parse theHeaderRow): base(processor, theHeaderRow) {}
             public override bool IsOrdered {get { return false; }}
             public override bool SurplusAllowed {get {return false;}}
         }

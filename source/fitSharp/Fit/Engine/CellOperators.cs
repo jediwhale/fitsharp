@@ -31,6 +31,7 @@ namespace fitSharp.Fit.Engine {
             Add(new CompareNumeric(), 0);
 
             Add(new ParseArray(), 2);
+            Add(new ParseByteArray(), 2);
             Add(new ExecuteError(), 2);
             Add(new ExecuteException(), 2);
             Add(new CompareFail(), 2);

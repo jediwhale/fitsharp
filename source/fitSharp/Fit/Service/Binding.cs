@@ -1,4 +1,4 @@
-// Copyright © 2009 Syterra Software Inc. All rights reserved.
+// Copyright © 2010 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -17,7 +17,8 @@ namespace fitSharp.Fit.Service {
         }
 
         public void Do(Tree<Cell> cell) {
-            operation.Do(this, cell);
+            if (operation.IsCheck) beforeAction();
+            operation.Do(cell);
         }
 
         public Binding BeforeCheck(Action beforeAction) {
@@ -25,13 +26,12 @@ namespace fitSharp.Fit.Service {
             return this;
         }
 
-        public void DoBeforeCheck() {
-            beforeAction();
-        }
+        public bool IsCheck { get { return operation.IsCheck;} }
     }
 
     public interface BindingOperation {
-        void Do(Binding binding, Tree<Cell> cell);
+        void Do(Tree<Cell> cell);
+        bool IsCheck { get; }
     }
 
     public class InputBinding: BindingOperation {
@@ -45,9 +45,11 @@ namespace fitSharp.Fit.Service {
             this.memberCell = memberCell;
             this.target = target;
         }
-        public void Do(Binding binding, Tree<Cell> cell) {
+        public void Do(Tree<Cell> cell) {
             operation.Input(target, memberCell, cell);
         }
+
+        public bool IsCheck { get { return false; } }
     }
 
     public class CheckBinding: BindingOperation {
@@ -61,10 +63,11 @@ namespace fitSharp.Fit.Service {
             this.target = target;
         }
 
-        public void Do(Binding binding, Tree<Cell> cell) {
-            binding.DoBeforeCheck();
+        public void Do(Tree<Cell> cell) {
             operation.Check(target, memberCell, cell);
         }
+
+        public bool IsCheck { get { return true; } }
     }
 
     public class CreateBinding: BindingOperation {
@@ -78,12 +81,15 @@ namespace fitSharp.Fit.Service {
             this.memberName = memberName;
         }
 
-        public void Do(Binding binding, Tree<Cell> cell) {
+        public void Do(Tree<Cell> cell) {
             operation.Create(adapter, memberName, new TreeList<Cell>().AddBranch(cell));
         }
+
+        public bool IsCheck { get { return false; } }
     }
 
     public class NoBinding: BindingOperation {
-        public void Do(Binding binding, Tree<Cell> cell) {}
+        public void Do(Tree<Cell> cell) {}
+        public bool IsCheck { get { return false; } }
     }
 }

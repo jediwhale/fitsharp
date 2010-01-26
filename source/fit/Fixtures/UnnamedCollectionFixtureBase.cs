@@ -1,4 +1,4 @@
-// Copyright © 2009 Syterra Software Inc.
+// Copyright © 2010 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -23,13 +23,14 @@ namespace fitlibrary {
         }
 
         protected override ListMatchStrategy MatchStrategy {
-            get {return new UnnamedCollectionMatchStrategy();}
+            get {return new UnnamedCollectionMatchStrategy(Processor);}
         }
 
-        private class UnnamedCollectionMatchStrategy: ListMatchStrategy {
+        private class UnnamedCollectionMatchStrategy: CellMatcher, ListMatchStrategy {
+            public UnnamedCollectionMatchStrategy(CellProcessor processor) : base(processor) {}
             public bool IsOrdered {get { return true; }}
             public bool SurplusAllowed {get {return false;}}
-            public TypedValue[] ActualValues(CellProcessor processor, object theActualRow) {
+            public TypedValue[] ActualValues(object theActualRow) {
                 var actuals = (object[]) theActualRow;
                 var result = new TypedValue[actuals.Length];
                 for (int i = 0; i < actuals.Length; i++) result[i] = new TypedValue(actuals[i]);

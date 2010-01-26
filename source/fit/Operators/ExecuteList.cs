@@ -1,4 +1,4 @@
-// Copyright © 2009 Syterra Software Inc.
+// Copyright © 2010 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -43,13 +43,13 @@ namespace fit.Operators {
 
         private TypedValue ExecuteEvaluate(ExecuteContext context, ExecuteParameters parameters) {
             var cell = (Parse)parameters.Cell;
-            var matcher = new ListMatcher(Processor, new ArrayMatchStrategy(cell.Parts.Parts));
+            var matcher = new ListMatcher(Processor, new ArrayMatchStrategy(Processor, cell.Parts.Parts));
             return new TypedValue(matcher.IsEqual(context.Target.Value.Value, cell));
         }
 
         private void ExecuteCheck(ExecuteContext context, ExecuteParameters parameters) {
             var cell = (Parse)parameters.Cell;
-            var matcher = new ListMatcher(Processor, new ArrayMatchStrategy(cell.Parts.Parts));
+            var matcher = new ListMatcher(Processor, new ArrayMatchStrategy(Processor, cell.Parts.Parts));
             matcher.MarkCell(context.SystemUnderTest.Value, GetActual(context, parameters), cell.Parts.Parts);
         }
 

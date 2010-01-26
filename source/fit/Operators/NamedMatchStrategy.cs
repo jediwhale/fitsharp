@@ -1,4 +1,4 @@
-﻿// Copyright © 2009 Syterra Software Inc.
+﻿// Copyright © 2010 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -12,8 +12,8 @@ using fitSharp.Fit.Service;
 using fitSharp.Machine.Model;
 
 namespace fit.Operators {
-    public abstract class NamedMatchStrategy: ListMatchStrategy {
-        protected NamedMatchStrategy(Parse theHeaderRow) {
+    public abstract class NamedMatchStrategy: CellMatcher, ListMatchStrategy {
+        protected NamedMatchStrategy(CellProcessor processor, Parse theHeaderRow): base(processor) {
             myHeaderRow = theHeaderRow;
         }
 
@@ -21,18 +21,18 @@ namespace fit.Operators {
 
         public abstract bool IsOrdered { get;}
 
-        public TypedValue[] ActualValues(CellProcessor processor, object theActualRow) {
+        public TypedValue[] ActualValues(object theActualRow) {
             if (myColumnsUsed == null) myColumnsUsed = new bool[myHeaderRow.Parts.Size];
             var result = new TypedValue[myHeaderRow.Parts.Size];
             int column = 0;
             foreach (Parse headerCell in new CellRange(myHeaderRow.Parts).Cells) {
-                TypedValue memberResult = new CellOperationImpl(processor).TryInvoke(theActualRow, headerCell);
+                TypedValue memberResult = new CellOperationImpl(Processor).TryInvoke(theActualRow, headerCell);
                 if (memberResult.IsValid) {
                     result[column] = memberResult;
                     myColumnsUsed[column] = true;
                 }
                 else {
-                    TypedValue itemResult = new CellOperationImpl(processor).TryInvoke(theActualRow,
+                    TypedValue itemResult = new CellOperationImpl(Processor).TryInvoke(theActualRow, //todo: no need, Invoke already looks for this
                                                                  new StringCellLeaf("getitem"),
                                                                  new CellRange(headerCell, 1));
                     if (itemResult.IsValid) {
@@ -65,7 +65,7 @@ namespace fit.Operators {
             return true;
         }
 
-        private readonly Parse myHeaderRow;
+        protected readonly Parse myHeaderRow;
         private bool[] myColumnsUsed;
     }
 }
