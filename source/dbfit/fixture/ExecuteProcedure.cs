@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using System.Text.RegularExpressions;
 
 using fit;
 using dbfit.util;
@@ -20,8 +19,6 @@ namespace dbfit.fixture
 {
     public class ExecuteProcedure : ColumnFixture, MemberQueryable
     {
-        private static readonly Regex checkIsImpliedByRegex = new Regex("(\\?|!|\\(\\))$");
-
         private readonly IDbEnvironment dbEnvironment;
         private readonly bool expectException;
         private readonly List<DbParameterAccessor> accessors = new List<DbParameterAccessor>();
@@ -154,7 +151,7 @@ namespace dbfit.fixture
                 try
                 {
                     DbParameterAccessor accessor = DbParameterAccessor.CloneWithSameParameter(allParams[paramName]);
-                    accessor.IsBoundToCheckOperation = checkIsImpliedByRegex.IsMatch(headerCells.Text);
+                    accessor.IsBoundToCheckOperation = BindingFactory.CheckIsImpliedBy(headerCells.Text);
                     // sql server quirk. if output parameter is used in an input column, then 
                     // the param should be remapped to IN/OUT
                     if ((!accessor.IsBoundToCheckOperation) &&

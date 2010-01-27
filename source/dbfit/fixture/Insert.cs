@@ -7,16 +7,15 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using System.Text.RegularExpressions;
 
 using fit;
 using dbfit.util;
+using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace dbfit.fixture {
 	public class Insert: ColumnFixture, MemberQueryable {
-		private static readonly Regex checkIsImpliedByRegex = new Regex("(\\?|!|\\(\\))$");
 
 		private readonly IDbEnvironment dbEnvironment;
 		private DbCommand command;
@@ -88,7 +87,7 @@ namespace dbfit.fixture {
                     Wrong(headerCells);
                     throw new ApplicationException("Cannot find column " + paramName);
                 }
-                isOutputColumn[i] = checkIsImpliedByRegex.IsMatch(headerCells.Text);
+                isOutputColumn[i] = BindingFactory.CheckIsImpliedBy(headerCells.Text);
                 currentColumn.IsBoundToCheckOperation = isOutputColumn[i];
                 columnAccessors.Assign(paramName, currentColumn);
                 if (isOutputColumn[i])
