@@ -1,4 +1,4 @@
-﻿// Copyright © 2009 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2010 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -8,15 +8,19 @@ using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
 using fitSharp.IO;
 using fitSharp.Machine.Engine;
+using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
 
-namespace fitSharp.Fit.Service
-{
+namespace fitSharp.Fit.Service {
     public delegate void WriteTestResult(Tree<Cell> tables, TestCounts counts);
 
     public class ExecuteStoryTest {
-        private readonly CellProcessor processor;
-        private readonly WriteTestResult writer;
+        readonly CellProcessor processor;
+        readonly WriteTestResult writer;
+
+        Interpreter activeFixture;
+        FlowInterpreter flowFixture;
+        int tableCount;
 
         public ExecuteStoryTest(CellProcessor processor, WriteTestResult writer) {
             this.writer = writer;
@@ -28,57 +32,61 @@ namespace fitSharp.Fit.Service
  			processor.TestStatus.Summary["run date"] = DateTime.Now;
 			processor.TestStatus.Summary["run elapsed time"] = new ElapsedTime();
             Cell heading = tables.Branches[0].Branches[0].Branches[0].Value;
-            Interpreter firstInterpreter;
             try {
-                firstInterpreter = processor.ParseTree<Cell, Interpreter>(tables.Branches[0].Branches[0]);
+                GetStartingFixture(tables);
+                InterpretTables(tables);
             }
             catch (System.Exception e) {
                 processor.TestStatus.MarkException(heading, e);
-                writer(tables.Branches[0], processor.TestStatus.Counts);
-                return;
             }
-            InterpretTables(firstInterpreter, tables);
+			writer(tables.Branches[0], processor.TestStatus.Counts);
         }
 
-		private void InterpretTables(Interpreter firstInterpreter, Tree<Cell> theTables) {
+        void GetStartingFixture(Tree<Cell> tables) {
             try {
-                Interpreter activeFixture = firstInterpreter;
-                FlowInterpreter flowFixture = null;
-                int tableCount = 1;
-                foreach (Tree<Cell> table in theTables.Branches) {
+                activeFixture = processor.ParseTree<Cell, Interpreter>(tables.Branches[0].Branches[0]);
+                flowFixture = null;
+            }
+            catch (TypeMissingException) {
+                activeFixture = processor.ParseTree<Cell, Interpreter>(new CellTree("DoFixture"));
+                flowFixture = (FlowInterpreter) activeFixture;
+            }
+        }
+
+		void InterpretTables(Tree<Cell> theTables) {
+            tableCount = 1;
+            foreach (Tree<Cell> table in theTables.Branches) {
+                try {
                     try {
-                        try {
-                            Cell heading = table.Branches[0].Branches[0].Value;
-                            if (heading != null && !processor.TestStatus.IsAbandoned) {
-                                if (flowFixture == null) {
-                                    if (activeFixture == null) activeFixture = processor.ParseTree<Cell, Interpreter>(table.Branches[0]);
-                                    var activeFlowFixture = activeFixture as FlowInterpreter;
-                                    if (activeFlowFixture != null && activeFlowFixture.IsInFlow(tableCount)) flowFixture = activeFlowFixture;
-                                    if (!activeFixture.IsVisible) tableCount--;
-                                    DoTable(table, activeFixture, flowFixture != null);
-                                }
-                                else {
-                                    flowFixture.InterpretFlow(table);
-                                }
-                            }
-                        }
-                        catch (System.Exception e) {
-                            processor.TestStatus.MarkException(table.Branches[0].Branches[0].Value, e);
-                        }
+                        InterpretTable(table);
                     }
                     catch (System.Exception e) {
-                        if (!typeof(AbandonException).IsAssignableFrom(e.GetType())) throw;
+                        processor.TestStatus.MarkException(table.Branches[0].Branches[0].Value, e);
                     }
-                    activeFixture = null;
-                    tableCount++;
                 }
-                if (flowFixture != null) flowFixture.DoTearDown(theTables.Branches[0]);
+                catch (System.Exception e) {
+                    if (!typeof(AbandonException).IsAssignableFrom(e.GetType())) throw;
+                }
+                activeFixture = null;
+                tableCount++;
             }
-            catch (System.Exception e) {
-                processor.TestStatus.MarkException(theTables.Branches[0].Branches[0].Branches[0].Value, e);
-            }
-			writer(theTables.Branches[0], processor.TestStatus.Counts);
+            if (flowFixture != null) flowFixture.DoTearDown(theTables.Branches[0]);
 		}
+
+        void InterpretTable(Tree<Cell> table) {
+            Cell heading = table.Branches[0].Branches[0].Value;
+            if (heading == null || processor.TestStatus.IsAbandoned) return;
+            if (flowFixture == null) {
+                if (activeFixture == null) activeFixture = processor.ParseTree<Cell, Interpreter>(table.Branches[0]);
+                var activeFlowFixture = activeFixture as FlowInterpreter;
+                if (activeFlowFixture != null && activeFlowFixture.IsInFlow(tableCount)) flowFixture = activeFlowFixture;
+                if (!activeFixture.IsVisible) tableCount--;
+                DoTable(table, activeFixture, flowFixture != null);
+            }
+            else {
+                flowFixture.InterpretFlow(table);
+            }
+        }
 
         public static void DoTable(Tree<Cell> table, Interpreter activeFixture, bool inFlow) {
             var activeFlowFixture = activeFixture as FlowInterpreter;

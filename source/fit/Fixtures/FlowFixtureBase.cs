@@ -1,4 +1,4 @@
-// Copyright © 2009 Syterra Software Inc.
+// Copyright © 2010 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -100,13 +100,15 @@ namespace fitlibrary {
             catch (IgnoredException) {}
 	        catch (ParseException<Cell> e) {
 	            TestStatus.MarkException(e.Subject, e);
+                IHaveFinishedTable = true;
 	        }
             catch (Exception e) {
                 TestStatus.MarkException(theCurrentRow.Parts, e);
+                IHaveFinishedTable = true;
             }
         }
 
-        private void ExecuteOptionalMethod(string theMethodName, Parse theCell) {
+        void ExecuteOptionalMethod(string theMethodName, Parse theCell) {
             try {
                 Processor.Invoke(this, theMethodName, theCell);
             }
@@ -125,7 +127,7 @@ namespace fitlibrary {
         protected abstract IEnumerable<Parse> MethodCells(CellRange theCells);
         protected abstract IEnumerable<Parse> ParameterCells(CellRange theCells);
 
-        private void ColorMethodName(Parse theCells, bool thisIsRight) {
+        void ColorMethodName(Parse theCells, bool thisIsRight) {
             foreach (Parse nameCell in MethodCells(new CellRange(theCells))) {
                 TestStatus.ColorCell(nameCell, thisIsRight);
             }
@@ -151,7 +153,7 @@ namespace fitlibrary {
             }
         }
 
-        private void ProcessRestOfTable(Interpreter theFixture, Parse theRestOfTheRows) {
+        void ProcessRestOfTable(Interpreter theFixture, Parse theRestOfTheRows) {
             var restOfTable = new Parse("table", "", theRestOfTheRows, null);
             theFixture.Processor = Processor;
             var fixture = theFixture as Fixture;

@@ -1,10 +1,12 @@
 <?xml version="1.0"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
-        DefaultTargets="solution;unittests;storytests;dbfittests" >
+        DefaultTargets="solution;unittests;storytests" >
 
 <PropertyGroup>
     <Config>Debug</Config>
 </PropertyGroup>
+
+<Target Name="all" DependsOnTargets="solution;unittests;storytests;dbfittests" />
 
 <Target Name="solution">
     <MSBuild Projects="fitsharp.sln" 
