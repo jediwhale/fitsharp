@@ -1,4 +1,4 @@
-﻿// Copyright © 2009 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2010 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -17,8 +17,8 @@ namespace fitSharp.Slim.Service {
 
         public override string ToString() { return Content.Serialize(new SlimWriter()).ToString(); }
 
-        private class SlimWriter: TreeWriter<string> {
-            private readonly StringBuilder output = new StringBuilder();
+        class SlimWriter: TreeWriter<string> {
+            readonly StringBuilder output = new StringBuilder();
 
             public void WritePrefix(Tree<string> tree) {
                 if (!tree.IsLeaf) output.AppendFormat("[{0:000000}:", tree.Branches.Count);
@@ -39,18 +39,21 @@ namespace fitSharp.Slim.Service {
 
         public static Document Parse(string input) { return new Document(Read(input)); }
 
-        private static Tree<string> Read(string input) {
+        static Tree<string> Read(string input) {
             if (IsList(input)) return ReadList(input.Substring(1, input.Length - 2));
             return new SlimLeaf(input);
         }
 
-        private static bool IsList(string input) {
+        static bool IsList(string input) {
             int result;
-            return input.StartsWith("[") && input.Substring(7, 1) == ":" && input.EndsWith("]") &&
-                   int.TryParse(input.Substring(1, 6), out result);
+            return input.StartsWith("[")
+                && input.Length > 8
+                && input.Substring(7, 1) == ":"
+                && input.EndsWith("]")
+                && int.TryParse(input.Substring(1, 6), out result);
         }
 
-        private static SlimTree ReadList(string input) {
+        static SlimTree ReadList(string input) {
             int length = int.Parse(input.Substring(0, 6));
             var result = new SlimTree();
             int start = 7;
