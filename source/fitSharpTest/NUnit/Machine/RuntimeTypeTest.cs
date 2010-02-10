@@ -11,22 +11,26 @@ using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Machine {
     [TestFixture] public class RuntimeTypeTest {
-        private SampleClass instance;
+        SampleClass instance;
 
         [SetUp] public void SetUp() {
             instance = new SampleClass();
         }
 
         [Test] public void VoidMethodIsInvoked() {
-            RuntimeMember method = RuntimeType.GetInstance(new TypedValue(instance), "voidmethod", 0);
+            RuntimeMember method = GetMethod("voidmethod", 0);
             Assert.IsNotNull(method);
             TypedValue result = method.Invoke(new object[] {});
             Assert.AreEqual(null, result.Value);
             Assert.AreEqual(typeof(void), result.Type);
         }
 
+        RuntimeMember GetMethod(string memberName, int count) {
+            return RuntimeType.GetInstance(new TypedValue(instance), new IdentifierName(memberName), count);
+        }
+
         [Test] public void MethodWithReturnIsInvoked() {
-            RuntimeMember method = RuntimeType.GetInstance(new TypedValue(instance), "methodnoparms", 0);
+            RuntimeMember method = GetMethod("methodnoparms", 0);
             Assert.IsNotNull(method);
             TypedValue result = method.Invoke(new object[] {});
             Assert.AreEqual("samplereturn", result.Value.ToString());
@@ -34,21 +38,21 @@ namespace fitSharp.Test.NUnit.Machine {
         }
 
         [Test] public void MethodWithUnderscoresIsInvoked() {
-            RuntimeMember method = RuntimeType.GetInstance(new TypedValue(instance), "methodwithunderscores", 0);
+            RuntimeMember method = GetMethod("methodwithunderscores", 0);
             Assert.IsNotNull(method);
             TypedValue result = method.Invoke(new object[] {});
             Assert.AreEqual("samplereturn", result.Value.ToString());
         }
 
         [Test] public void MethodWithParmsIsInvoked() {
-            RuntimeMember method = RuntimeType.GetInstance(new TypedValue(instance), "methodwithparms", 1);
+            RuntimeMember method = GetMethod("methodwithparms", 1);
             Assert.IsNotNull(method);
             TypedValue result = method.Invoke(new object[] {"input"});
             Assert.AreEqual("sampleinput", result.Value.ToString());
         }
 
         [Test] public void StaticMethodWithParmsIsInvoked() {
-            RuntimeMember method = new RuntimeType(instance.GetType()).FindStatic("parse", new [] {typeof(string)});
+            RuntimeMember method = new RuntimeType(instance.GetType()).FindStatic(new IdentifierName("parse"), new [] {typeof(string)});
             Assert.IsNotNull(method);
             TypedValue result = method.Invoke(new object[] {"input"});
             Assert.AreEqual(typeof(SampleClass), result.Type);
@@ -62,13 +66,13 @@ namespace fitSharp.Test.NUnit.Machine {
         }
 
         [Test] public void PropertySetAndGetIsInvoked() {
-            RuntimeMember method = RuntimeType.GetInstance(new TypedValue(instance), "property", 1);
+            RuntimeMember method = GetMethod("property", 1);
             Assert.IsNotNull(method);
             TypedValue result = method.Invoke(new object[] {"stuff"});
             Assert.AreEqual(null, result.Value);
             Assert.AreEqual(typeof(void), result.Type);
 
-            method = RuntimeType.GetInstance(new TypedValue(instance), "property", 0);
+            method = GetMethod("property", 0);
             Assert.IsNotNull(method);
             result = method.Invoke(new object[] {});
             Assert.AreEqual("stuff", result.Value.ToString());
@@ -76,7 +80,7 @@ namespace fitSharp.Test.NUnit.Machine {
         }
 
         [Test] public void IndexerIsInvoked() {
-            RuntimeMember method = RuntimeType.GetInstance(new TypedValue(instance), "anything", 0);
+            RuntimeMember method = GetMethod("anything", 0);
             Assert.IsNotNull(method);
             TypedValue result = method.Invoke(new object[] {});
             Assert.AreEqual("indexanything", result.Value);
@@ -84,13 +88,13 @@ namespace fitSharp.Test.NUnit.Machine {
         }
 
         [Test] public void FieldIsInvokedWithGetAndSet() {
-            RuntimeMember method = RuntimeType.GetInstance(new TypedValue(instance), "setfield", 1);
+            RuntimeMember method = GetMethod("setfield", 1);
             Assert.IsNotNull(method);
             TypedValue result = method.Invoke(new object[] {"stuff"});
             Assert.AreEqual(null, result.Value);
             Assert.AreEqual(typeof(void), result.Type);
 
-            method = RuntimeType.GetInstance(new TypedValue(instance), "getfield", 0);
+            method = GetMethod("getfield", 0);
             Assert.IsNotNull(method);
             result = method.Invoke(new object[] {});
             Assert.AreEqual("stuff", result.Value.ToString());
@@ -98,27 +102,27 @@ namespace fitSharp.Test.NUnit.Machine {
         }
 
         [Test] public void DuplicateIsInvoked() {
-            RuntimeMember method = RuntimeType.GetInstance(new TypedValue(instance), "duplicate", 1);
+            RuntimeMember method = GetMethod("duplicate", 1);
             method.Invoke(new object[] {"stuff"});
 
-            method = RuntimeType.GetInstance(new TypedValue(instance), "duplicate", 0);
+            method = GetMethod("duplicate", 0);
             TypedValue result = method.Invoke(new object[] {});
             Assert.AreEqual("stuff", result.ToString());
         }
 
         [Test] public void QueryableMemberIsInvoked() {
             var queryable = new QueryableClass();
-            RuntimeMember method = RuntimeType.GetInstance(new TypedValue(queryable), "dynamic", 1);
+            RuntimeMember method = RuntimeType.GetInstance(new TypedValue(queryable), new IdentifierName("dynamic"), 1);
             TypedValue result = method.Invoke(new object[] {"stuff"});
             Assert.AreEqual("dynamicstuff", result.Value);
         }
 
-        private class QueryableClass: MemberQueryable {
+        class QueryableClass: MemberQueryable {
             public RuntimeMember Find(IdentifierName memberName, int parameterCount, Type[] parameterTypes) {
                 return new QueryableMember(memberName.ToString());
             }
 
-            private class QueryableMember: RuntimeMember {
+            class QueryableMember: RuntimeMember {
                 public QueryableMember(string memberName) {
                     Name = memberName;
                 }

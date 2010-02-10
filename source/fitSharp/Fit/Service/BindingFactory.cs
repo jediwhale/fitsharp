@@ -10,11 +10,11 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Service {
     public class BindingFactory {
-	    private static readonly IdentifierName newIdentifier = new IdentifierName("new ");
+	    static readonly IdentifierName newIdentifier = new IdentifierName("new ");
 
-        private readonly CellProcessor processor;
-        private readonly object target;
-        private readonly MutableDomainAdapter adapter;
+        readonly CellProcessor processor;
+        readonly object target;
+        readonly MutableDomainAdapter adapter;
 
         public BindingFactory(CellProcessor processor, MutableDomainAdapter adapter, object target) {
             this.processor = processor;
@@ -35,7 +35,7 @@ namespace fitSharp.Fit.Service {
 
             string memberName =  processor.ParseTree<Cell, MemberName>(nameCell).ToString();
 
-            RuntimeMember member = RuntimeType.FindInstance(target, memberName, 1);
+            RuntimeMember member = RuntimeType.FindInstance(target, new IdentifierName(memberName), 1);
 
 		    if (member == null && newIdentifier.IsStartOf(name)) {
 		        string newMemberName = name.Substring(4);
@@ -45,13 +45,9 @@ namespace fitSharp.Fit.Service {
 		    return new InputBinding(cellOperation, target, nameCell);
 		}
 
-		private static bool NoOperationIsImpliedBy(string name)
-		{
-		    return name.Length == 0;
-		}
+		static bool NoOperationIsImpliedBy(string name) { return name.Length == 0; }
 
-		public static bool CheckIsImpliedBy(string name)
-		{
+		public static bool CheckIsImpliedBy(string name) {
 		    return name.EndsWith("?") || name.EndsWith("!") || name.EndsWith("()");
 		}
     }

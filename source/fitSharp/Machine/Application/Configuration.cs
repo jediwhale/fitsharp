@@ -1,4 +1,4 @@
-﻿// Copyright © 2009 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2010 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -14,7 +14,7 @@ using fitSharp.Machine.Model;
 namespace fitSharp.Machine.Application {
     public class Configuration {
 
-        private readonly Dictionary<Type, Copyable> items = new Dictionary<Type, Copyable>();
+        readonly Dictionary<Type, Copyable> items = new Dictionary<Type, Copyable>();
 
         public Configuration() {}
 
@@ -44,7 +44,7 @@ namespace fitSharp.Machine.Application {
         }
 
 
-        private void LoadNode(string typeName, XmlNode methodNode) {
+        void LoadNode(string typeName, XmlNode methodNode) {
             try {
                 new BasicProcessor().Invoke(AliasType(typeName), AliasMethod(typeName, methodNode.Name), NodeParameters(methodNode));
             }
@@ -53,7 +53,7 @@ namespace fitSharp.Machine.Application {
             }
         }
 
-        private static readonly Dictionary<string, string> aliasTypes = new Dictionary<string, string> {
+        static readonly Dictionary<string, string> aliasTypes = new Dictionary<string, string> {
             {"fit.assemblies", "fitSharp.Machine.Engine.ApplicationUnderTest"},
             {"fit.fileexclusions", "fitSharp.Fit.Application.FileExclusions"},
             {"fit.namespaces", "fitSharp.Machine.Engine.ApplicationUnderTest"},
@@ -69,12 +69,12 @@ namespace fitSharp.Machine.Application {
             {"fitlibrary.cellhandlers", "fit.Service.Operators"}
         };
 
-        private TypedValue AliasType(string originalType) {
+        TypedValue AliasType(string originalType) {
             string originalTypeLower = originalType.ToLowerInvariant();
             return new TypedValue(GetItem(aliasTypes.ContainsKey(originalTypeLower) ? aliasTypes[originalTypeLower] : originalType));
         }
 
-        private static string AliasMethod(string originalType, string originalMethod) {
+        static string AliasMethod(string originalType, string originalMethod) {
             switch (originalType.ToLowerInvariant()) {
                 case "fit.assemblies":
                     if (originalMethod == "add") return "addAssembly";
@@ -98,7 +98,7 @@ namespace fitSharp.Machine.Application {
             return originalMethod;
         }
 
-        private static Tree<string> NodeParameters(XmlNode node) {
+        static Tree<string> NodeParameters(XmlNode node) {
             var result = new TreeList<string>()
                 .AddBranchValue(node.InnerText);
             foreach (XmlAttribute attribute in node.Attributes) {
@@ -121,7 +121,7 @@ namespace fitSharp.Machine.Application {
 
         public Copyable GetItem(Type type) {
             if (!items.ContainsKey(type)) {
-                items[type] = new BasicProcessor().Create(type.AssemblyQualifiedName, new TreeList<string>()).GetValue<Copyable>();
+                items[type] = new BasicProcessor().Create(type.AssemblyQualifiedName).GetValue<Copyable>();
             }
             return items[type];
         }

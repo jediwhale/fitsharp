@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using fit.Fixtures;
 using fit.Model;
+using fit.Operators;
 using fitSharp.Fit.Engine;
 using fitSharp.Fit.Exception;
 using fitSharp.Fit.Model;
@@ -37,12 +38,12 @@ namespace fitlibrary {
 
 	    public void DoSetUp(Tree<Cell> table) {
 	        var tableCell = (Parse) table.Value;
-            ExecuteOptionalMethod(":setup", tableCell.Parts.Parts);
+            ExecuteOptionalMethod(RuntimeDirect.SetUpMethod, tableCell.Parts.Parts);
 	    }
 
 	    public void DoTearDown(Tree<Cell> table) {
 	        var tableCell = (Parse) table.Value;
-            ExecuteOptionalMethod(":teardown", tableCell.Parts.Parts);
+            ExecuteOptionalMethod(RuntimeDirect.TearDownMethod, tableCell.Parts.Parts);
 	    }
         
         protected void ProcessFlowRows(Parse theRows) {
@@ -57,8 +58,8 @@ namespace fitlibrary {
 
         protected void ProcessFlowRow(Parse theCurrentRow) {
             try {
-                string specialActionName = ":" +
-                    Processor.ParseTree<Cell, MemberName>(new CellRange(theCurrentRow.Parts, 1));
+                string specialActionName = RuntimeDirect.MakeDirect(
+                    Processor.ParseTree<Cell, MemberName>(new CellRange(theCurrentRow.Parts, 1)).ToString());
                 TypedValue result = Processor.Invoke(new FlowKeywords(this), specialActionName, theCurrentRow.Parts);
                 if (!result.IsValid) {
                     result = Processor.Invoke(this, specialActionName, theCurrentRow.Parts);

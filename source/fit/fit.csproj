@@ -108,7 +108,7 @@
     <Compile Include="Model\Tree.cs" />
     <Compile Include="Model\CellRange.cs" />
     <Compile Include="Operators\ComposeDefault.cs" />
-    <Compile Include="Operators\RuntimeFlow.cs" />
+    <Compile Include="Operators\RuntimeDirect.cs" />
     <Compile Include="Operators\ComposeTable.cs" />
     <Compile Include="Parser\HtmlParser.cs" />
     <Compile Include="Fixtures\FitVersionFixture.cs" />

@@ -1,4 +1,4 @@
-﻿// Copyright © 2009 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2010 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -21,7 +21,7 @@ namespace fitSharp.Machine.Engine {
                          : CreateWithParameters(parameters, runtimeType);
         }
 
-        private static TypedValue CreateWithoutParameters(RuntimeType runtimeType) {
+        static TypedValue CreateWithoutParameters(RuntimeType runtimeType) {
             try {
                 return runtimeType.CreateInstance();
             }
@@ -30,7 +30,7 @@ namespace fitSharp.Machine.Engine {
             }
         }
 
-        private TypedValue CreateWithParameters(Tree<T> parameters, RuntimeType runtimeType) {
+        TypedValue CreateWithParameters(Tree<T> parameters, RuntimeType runtimeType) {
             RuntimeMember member = runtimeType.GetConstructor(parameters.Branches.Count);
             object[] parameterList = GetParameterList(TypedValue.Void, parameters, member);
             try {
@@ -46,14 +46,15 @@ namespace fitSharp.Machine.Engine {
         }
 
         public TypedValue Invoke(TypedValue instance, string memberName, Tree<T> parameters) {
-            RuntimeMember member = RuntimeType.FindInstance(instance.Value, memberName, parameters.Branches.Count);
+            var memberIdentifier = new IdentifierName(memberName);
+            RuntimeMember member = RuntimeType.FindInstance(instance.Value, memberIdentifier, parameters.Branches.Count);
             return member != null
-                         ? member.Invoke(GetParameterList(instance, parameters, member))
-                         : TypedValue.MakeInvalid(new MemberMissingException(instance.Type, memberName,
-                                                                             parameters.Branches.Count));
+                       ? member.Invoke(GetParameterList(instance, parameters, member))
+                       : TypedValue.MakeInvalid(new MemberMissingException(instance.Type, memberIdentifier.SourceName,
+                                                                           parameters.Branches.Count));
         }
 
-        private object[] GetParameterList(TypedValue instance, Tree<T> parameters, RuntimeMember member) {
+        object[] GetParameterList(TypedValue instance, Tree<T> parameters, RuntimeMember member) {
             return parameters.Branches.Aggregate((List<object> parameterList, Tree<T> parameter) => {
                 TypedValue parameterValue;
                 int i = parameterList.Count;

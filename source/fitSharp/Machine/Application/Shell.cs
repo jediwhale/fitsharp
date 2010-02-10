@@ -1,4 +1,4 @@
-﻿// Copyright © 2009 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2010 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.Reflection;
 using fitSharp.IO;
 using fitSharp.Machine.Engine;
-using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Application {
     public interface Runnable {
@@ -16,9 +15,9 @@ namespace fitSharp.Machine.Application {
     }
 
     public class Shell: MarshalByRefObject {
-        private readonly List<string> extraArguments = new List<string>();
-        private readonly ProgressReporter progressReporter;
-        private readonly Configuration configuration = new Configuration();
+        readonly List<string> extraArguments = new List<string>();
+        readonly ProgressReporter progressReporter;
+        readonly Configuration configuration = new Configuration();
         public Runnable Runner { get; private set; }
 
         public Shell() { progressReporter = new ConsoleReporter(); }
@@ -37,14 +36,14 @@ namespace fitSharp.Machine.Application {
             }
         }
 
-        private static string LookForAppConfig(string[] commandLineArguments) {
+        static string LookForAppConfig(string[] commandLineArguments) {
             for (int i = 0; i < commandLineArguments.Length - 1; i++) {
                 if (commandLineArguments[i] == "-a") return commandLineArguments[i + 1];
             }
             return string.Empty;
         }
 
-        private int RunInCurrentDomain(string[] commandLineArguments) {
+        int RunInCurrentDomain(string[] commandLineArguments) {
             ParseArguments(commandLineArguments);
             if (!ValidateArguments()) {
                 progressReporter.Write("\nUsage:\n\tRunner -r runnerClass [ -a appConfigFile ][ -c runnerConfigFile ] ...\n");
@@ -53,7 +52,7 @@ namespace fitSharp.Machine.Application {
             return ExecuteRunner();
         }
 
-        private static int RunInNewDomain(string appConfigName, string[] commandLineArguments) {
+        static int RunInNewDomain(string appConfigName, string[] commandLineArguments) {
             var appDomainSetup = new AppDomainSetup {
                 ApplicationBase = AppDomain.CurrentDomain.BaseDirectory,
                 ConfigurationFile = appConfigName
@@ -72,7 +71,7 @@ namespace fitSharp.Machine.Application {
             return result;
         }
 
-        private void ParseArguments(string[] commandLineArguments) {
+        void ParseArguments(string[] commandLineArguments) {
             for (int i = 0; i < commandLineArguments.Length; i++) {
                 if (i < commandLineArguments.Length - 1) {
                     switch (commandLineArguments[i]) {
@@ -94,7 +93,7 @@ namespace fitSharp.Machine.Application {
             }
         }
 
-        private void ParseRunnerArgument(string argument) {
+        void ParseRunnerArgument(string argument) {
             string[] tokens = argument.Split(',');
             configuration.GetItem<Settings>().Runner = tokens[0];
             if (tokens.Length > 1) {
@@ -102,7 +101,7 @@ namespace fitSharp.Machine.Application {
             }
         }
 
-        private bool ValidateArguments() {
+        bool ValidateArguments() {
             if (string.IsNullOrEmpty(configuration.GetItem<Settings>().Runner)) {
                 progressReporter.Write("Missing runner class\n");
                 return false;
@@ -110,8 +109,8 @@ namespace fitSharp.Machine.Application {
             return true;
         }
 
-        private int ExecuteRunner() {
-            Runner = new BasicProcessor().Create(configuration.GetItem<Settings>().Runner, new TreeList<string>()).GetValue<Runnable>();
+        int ExecuteRunner() {
+            Runner = new BasicProcessor().Create(configuration.GetItem<Settings>().Runner).GetValue<Runnable>();
             return Runner.Run(extraArguments.ToArray(), configuration, progressReporter);
         }
     }
