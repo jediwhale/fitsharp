@@ -1,4 +1,4 @@
-// Copyright © 2009 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+// Copyright © 2010 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Service;
-using fitSharp.Machine.Engine;
 using fitSharp.Machine.Extension;
 using fitSharp.Machine.Model;
 
@@ -16,10 +15,10 @@ namespace fit
 {
 	public class Fixture: MutableDomainAdapter, TargetObjectProvider, Interpreter
 	{
-	    private static CellProcessor symbolProcessor; // backwards compatibility with static symbol methods
+	    static CellProcessor symbolProcessor; // backwards compatibility with static symbol methods
 
-	    private CellOperation cellOperation;
-	    private CellProcessor processor;
+	    CellOperation cellOperation;
+	    CellProcessor processor;
 
 	    public CellProcessor Processor {
 	        get { return processor; }
@@ -132,20 +131,6 @@ namespace fit
 					text = text.Substring(0, i) + to + text.Substring(i + 1);
 			}
 			return text;
-		}
-
-        private object LoadClass(string theClassName) {
-            return Processor.Create(theClassName.Trim()).Value;
-        }
-
-		public Fixture LoadFixture(string theClassName)
-		{
-			var result = LoadClass(theClassName) as Fixture;
-            if (result == null) {
-				throw new ApplicationException("Couldn't cast " + theClassName + " to Fixture.  Did you remember to extend Fixture?");
-			}
-		    result.Processor = Processor;
-			return result;
 		}
 
 		public static object Recall(string key)

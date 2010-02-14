@@ -84,7 +84,6 @@
     <Compile Include="Acceptance\DoTable.cs" />
     <Compile Include="Acceptance\ExecuteExampleFixture.cs" />
     <Compile Include="Acceptance\FailConstraint.cs" />
-    <Compile Include="Acceptance\FixtureFixture.cs" />
     <Compile Include="Acceptance\FixtureWithNoNullaryConstructor.cs" />
     <Compile Include="Acceptance\FolderRunnerStory.cs" />
     <Compile Include="Acceptance\GridFixtureUnderTest.cs" />

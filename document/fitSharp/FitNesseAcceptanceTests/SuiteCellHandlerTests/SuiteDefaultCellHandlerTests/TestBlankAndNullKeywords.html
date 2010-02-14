@@ -3,62 +3,91 @@
 <link href="fit.css" type="text/css" rel="stylesheet">
 </head>
 <body>
-<div class="setup">
-	<div style="float: right;" class="meta"><a href="javascript:expandAll();">Expand All</a> | <a href="javascript:collapseAll();">Collapse All</a></div>
-	<a href="javascript:toggleCollapsable('-2647899861951677242');">
-		<img src="/files/images/collapsableOpen.gif" class="left" id="img-2647899861951677242"/>
-	</a>
-&nbsp;<span class="meta">Set Up: <a href="../../../FitNesseAcceptanceTests/SetUp.html">Fit Nesse Acceptance Tests. Set Up</a></span>
-	<div class="collapsable" id="-2647899861951677242"><table border="1" cellspacing="0">
-<tr><td>Import</td>
-</tr>
-<tr><td>fitnesse.acceptanceTests</td>
-</tr>
-</table>
-</div>
-</div>
-<h3>Empty cells should display the value of a field or property. If a cell contains <i>"blank"</i> or <i>"null"</i> then treat it as blank ("") or truly null.</h3><br>Empty cells are automatically filled with the value of the field or property, and no check is performed. To explicitly set a value to empty string ("") or null, or to check for empty string or null, use the "blank" and "null" keywords.<br><br>This works in column fixtures...<br><table border="1" cellspacing="0">
-<tr><td colspan="6">FixtureFixture</td>
-</tr>
-<tr><td>fixture</td>
+
+<h3>Empty cells should display the value of a field or property. If a cell contains <i>"blank"</i> or <i>"null"</i> then treat it as blank ("") or truly null.</h3>
+<br>Empty cells are automatically filled with the value of the field or property, and no check is performed. To explicitly set a value to empty string ("") or null, or to check for empty string or null, use the "blank" and "null" keywords.<br><br>This works in column fixtures...
+<br><table border="1" cellspacing="0">
+<tr><td>when test is</td>
+<td><table border="1" cellspacing="0">
+<tr>
 <td colspan="5">string fixture</td>
 </tr>
-<tr><td>&nbsp;</td>
+<tr>
 <td>field</td>
 <td>field</td>
 <td>field?</td>
 <td>field?</td>
 <td>field?</td>
 </tr>
-<tr><td>--rww</td>
+<tr>
 <td>null</td>
 <td>&nbsp;</td>
 <td>null</td>
 <td>blank</td>
 <td>joe</td>
 </tr>
-<tr><td>--wrw</td>
+<tr>
 <td>blank</td>
 <td>&nbsp;</td>
 <td>null</td>
 <td>blank</td>
 <td>joe</td>
 </tr>
-<tr><td>--wwr</td>
+<tr>
 <td>joe</td>
 <td>&nbsp;</td>
 <td>null</td>
 <td>blank</td>
 <td>joe</td>
 </tr>
-</table>
-<br>...row fixtures...<br><table border="1" cellspacing="0">
-<tr><td colspan="10">FixtureFixture</td>
+</table></td>
+<td>then result is</td>
+<td><table border="1" cellspacing="0">
+<tr>
+<td colspan="5">string fixture</td>
 </tr>
-<tr><td>fixture</td>
+<tr>
+<td>field</td>
+<td>field</td>
+<td>field?</td>
+<td>field?</td>
+<td>field?</td>
+</tr>
+
+<tr>
+<td>null</td>
+<td>&nbsp;<span class="fit_grey"> null</span></td>
+<td class="pass">null</td>
+<td class="fail">blank <span class="fit_label">expected</span><hr />null <span class="fit_label">actual</span></td>
+<td class="fail">joe <span class="fit_label">expected</span><hr />null <span class="fit_label">actual</span></td>
+
+</tr>
+<tr>
+<td>blank</td>
+<td>&nbsp;<span class="fit_grey"> blank</span></td>
+<td class="fail">null <span class="fit_label">expected</span><hr /> <span class="fit_label">actual</span></td>
+<td class="pass">blank</td>
+<td class="fail">joe <span class="fit_label">expected</span><hr /> <span class="fit_label">actual</span></td>
+
+</tr>
+<tr>
+<td>joe</td>
+<td>&nbsp;<span class="fit_grey"> joe</span></td>
+<td class="fail">null <span class="fit_label">expected</span><hr />joe <span class="fit_label">actual</span></td>
+<td class="fail">blank <span class="fit_label">expected</span><hr />joe <span class="fit_label">actual</span></td>
+
+<td class="pass">joe</td>
+</tr>
+</table></td>
+</tr></table>
+<br>...row fixtures...
+<br><table border="1" cellspacing="0">
+<tr><td>when test is</td>
+<td><table border="1" cellspacing="0">
+<tr>
 <td colspan="9">blank and null keyword row fixture</td>
 </tr>
-<tr><td>&nbsp;</td>
+<tr>
 <td>field</td>
 <td>property</td>
 <td>get</td>
@@ -69,7 +98,7 @@
 <td>property</td>
 <td>get</td>
 </tr>
-<tr><td>rrrwwwwww</td>
+<tr>
 <td>null</td>
 <td>null</td>
 <td>null</td>
@@ -80,7 +109,7 @@
 <td>Joe</td>
 <td>Joe</td>
 </tr>
-<tr><td>rrrwwwwww</td>
+<tr>
 <td>blank</td>
 <td>blank</td>
 <td>blank</td>
@@ -91,7 +120,7 @@
 <td>null</td>
 <td>null</td>
 </tr>
-<tr><td>rrrwwwwww</td>
+<tr>
 <td>Joe</td>
 <td>Joe</td>
 <td>Joe</td>
@@ -101,8 +130,66 @@
 <td>blank</td>
 <td>blank</td>
 <td>blank</td>
+</tr>
+</table></td>
+<td>then result is</td>
+<td><table border="1" cellspacing="0">
+<tr>
+<td colspan="9">blank and null keyword row fixture</td>
+</tr>
+<tr>
+<td>field</td>
+<td>property</td>
+
+<td>get</td>
+<td>field</td>
+<td>property</td>
+<td>get</td>
+<td>field</td>
+<td>property</td>
+<td>get</td>
+</tr>
+<tr>
+<td class="pass">null</td>
+
+<td class="pass">null</td>
+<td class="pass">null</td>
+<td class="fail">blank <span class="fit_label">expected</span><hr />null <span class="fit_label">actual</span></td>
+<td class="fail">blank <span class="fit_label">expected</span><hr />null <span class="fit_label">actual</span></td>
+<td class="fail">blank <span class="fit_label">expected</span><hr />null <span class="fit_label">actual</span></td>
+
+<td class="fail">Joe <span class="fit_label">expected</span><hr />null <span class="fit_label">actual</span></td>
+<td class="fail">Joe <span class="fit_label">expected</span><hr />null <span class="fit_label">actual</span></td>
+<td class="fail">Joe <span class="fit_label">expected</span><hr />null <span class="fit_label">actual</span></td>
+</tr>
+<tr>
+
+<td class="pass">blank</td>
+<td class="pass">blank</td>
+<td class="pass">blank</td>
+<td class="fail">Joe <span class="fit_label">expected</span><hr /> <span class="fit_label">actual</span></td>
+<td class="fail">Joe <span class="fit_label">expected</span><hr /> <span class="fit_label">actual</span></td>
+<td class="fail">Joe <span class="fit_label">expected</span><hr /> <span class="fit_label">actual</span></td>
+
+<td class="fail">null <span class="fit_label">expected</span><hr /> <span class="fit_label">actual</span></td>
+<td class="fail">null <span class="fit_label">expected</span><hr /> <span class="fit_label">actual</span></td>
+<td class="fail">null <span class="fit_label">expected</span><hr /> <span class="fit_label">actual</span></td>
+</tr>
+<tr>
+
+<td class="pass">Joe</td>
+<td class="pass">Joe</td>
+<td class="pass">Joe</td>
+<td class="fail">null <span class="fit_label">expected</span><hr />Joe <span class="fit_label">actual</span></td>
+<td class="fail">null <span class="fit_label">expected</span><hr />Joe <span class="fit_label">actual</span></td>
+<td class="fail">null <span class="fit_label">expected</span><hr />Joe <span class="fit_label">actual</span></td>
+
+<td class="fail">blank <span class="fit_label">expected</span><hr />Joe <span class="fit_label">actual</span></td>
+<td class="fail">blank <span class="fit_label">expected</span><hr />Joe <span class="fit_label">actual</span></td>
+<td class="fail">blank <span class="fit_label">expected</span><hr />Joe <span class="fit_label">actual</span></td>
 </tr>
 </table>
+</td></tr></table>
 <br><pre>
 public class BlankAndNullKeywordRowFixture : RowFixture
 {
@@ -128,125 +215,221 @@ public class BlankAndNullKeywordRowFixture : RowFixture
 		return typeof(StringFixture);
 	}
 }
-</pre><br><br>...and action fixtures...<br><table border="1" cellspacing="0">
-<tr><td colspan="4">FixtureFixture</td>
-</tr>
-<tr><td>fixture</td>
+</pre><br><br>...and action fixtures...<br>
+<table border="1" cellspacing="0">
+<tr><td>when test is</td>
+<td><table border="1" cellspacing="0">
+<tr>
 <td colspan="3">action fixture</td>
 </tr>
-<tr><td>&nbsp;</td>
+<tr>
 <td>start</td>
 <td colspan="2">string fixture</td>
 </tr>
-<tr><td>&nbsp;</td>
+<tr>
 <td>enter</td>
 <td>field</td>
 <td>null</td>
 </tr>
-<tr><td>---</td>
+<tr>
 <td>check</td>
 <td>field</td>
 <td>&nbsp;</td>
 </tr>
-<tr><td>--r</td>
+<tr>
 <td>check</td>
 <td>field</td>
 <td>null</td>
 </tr>
-<tr><td>--w</td>
+<tr>
 <td>check</td>
 <td>field</td>
 <td>blank</td>
 </tr>
-<tr><td>--w</td>
+<tr>
 <td>check</td>
 <td>field</td>
 <td>Joe</td>
 </tr>
-</table>
-<br><br><table border="1" cellspacing="0">
-<tr><td colspan="4">FixtureFixture</td>
-</tr>
-<tr><td>fixture</td>
+</table></td>
+<td>then result is</td>
+<td><table border="1" cellspacing="0">
+<tr>
 <td colspan="3">action fixture</td>
 </tr>
-<tr><td>&nbsp;</td>
+<tr>
 <td>start</td>
 <td colspan="2">string fixture</td>
 </tr>
-<tr><td>&nbsp;</td>
+<tr>
+<td>enter</td>
+<td>field</td>
+<td>null</td>
+</tr>
+<tr>
+<td>check</td>
+<td>field</td>
+<td>&nbsp;<span class="fit_grey"> null</span></td>
+</tr>
+<tr>
+<td>check</td>
+<td>field</td>
+<td class="pass">null</td>
+</tr>
+<tr>
+<td>check</td>
+<td>field</td>
+<td class="fail">blank <span class="fit_label">expected</span><hr />null <span class="fit_label">actual</span></td>
+</tr>
+<tr>
+<td>check</td>
+<td>field</td>
+<td class="fail">Joe <span class="fit_label">expected</span><hr />null <span class="fit_label">actual</span></td>
+</tr>
+</table></td></tr></table>
+<br><br>
+<table border="1" cellspacing="0">
+<tr><td>when test is</td>
+<td><table border="1" cellspacing="0">
+<tr>
+<td colspan="3">action fixture</td>
+</tr>
+<tr>
+<td>start</td>
+<td colspan="2">string fixture</td>
+</tr>
+<tr>
 <td>enter</td>
 <td>field</td>
 <td>blank</td>
 </tr>
-<tr><td>---</td>
+<tr>
 <td>check</td>
 <td>field</td>
 <td>&nbsp;</td>
 </tr>
-<tr><td>--w</td>
+<tr>
 <td>check</td>
 <td>field</td>
 <td>null</td>
 </tr>
-<tr><td>--r</td>
+<tr>
 <td>check</td>
 <td>field</td>
 <td>blank</td>
 </tr>
-<tr><td>--w</td>
+<tr>
 <td>check</td>
 <td>field</td>
 <td>Joe</td>
 </tr>
-</table>
-<br><br><table border="1" cellspacing="0">
-<tr><td colspan="4">FixtureFixture</td>
-</tr>
-<tr><td>fixture</td>
+</table></td>
+<td>then result is</td>
+<td><table border="1" cellspacing="0">
+<tr>
 <td colspan="3">action fixture</td>
 </tr>
-<tr><td>&nbsp;</td>
+<tr>
 <td>start</td>
 <td colspan="2">string fixture</td>
 </tr>
-<tr><td>&nbsp;</td>
+<tr>
+<td>enter</td>
+<td>field</td>
+<td>blank</td>
+</tr>
+<tr>
+<td>check</td>
+<td>field</td>
+<td>&nbsp;<span class="fit_grey"> blank</span></td>
+</tr>
+<tr>
+<td>check</td>
+<td>field</td>
+<td class="fail">null <span class="fit_label">expected</span><hr /> <span class="fit_label">actual</span></td>
+</tr>
+<tr>
+<td>check</td>
+<td>field</td>
+<td class="pass">blank</td>
+</tr>
+<tr>
+<td>check</td>
+<td>field</td>
+<td class="fail">Joe <span class="fit_label">expected</span><hr /> <span class="fit_label">actual</span></td>
+</tr>
+</table></td></tr></table>
+<br><br>
+<table border="1" cellspacing="0">
+<tr><td>when test is</td>
+<td><table border="1" cellspacing="0">
+<tr>
+<td colspan="3">action fixture</td>
+</tr>
+<tr>
+<td>start</td>
+<td colspan="2">string fixture</td>
+</tr>
+<tr>
 <td>enter</td>
 <td>field</td>
 <td>Joe</td>
 </tr>
-<tr><td>---</td>
+<tr>
 <td>check</td>
 <td>field</td>
 <td>&nbsp;</td>
 </tr>
-<tr><td>--w</td>
+<tr>
 <td>check</td>
 <td>field</td>
 <td>null</td>
 </tr>
-<tr><td>--w</td>
+<tr>
 <td>check</td>
 <td>field</td>
 <td>blank</td>
 </tr>
-<tr><td>--r</td>
+<tr>
 <td>check</td>
 <td>field</td>
 <td>Joe</td>
 </tr>
-</table>
-<br><br><div class="teardown">
-	<div style="float: right;" class="meta"><a href="javascript:expandAll();">Expand All</a> | <a href="javascript:collapseAll();">Collapse All</a></div>
-	<a href="javascript:toggleCollapsable('1969312459572022551');">
-		<img src="/files/images/collapsableOpen.gif" class="left" id="img1969312459572022551"/>
-	</a>
-&nbsp;<span class="meta">Tear Down: <a href="../../../FitNesseAcceptanceTests/TearDown.html">Fit Nesse Acceptance Tests. Tear Down</a></span>
-	<div class="collapsable" id="1969312459572022551"><table border="1" cellspacing="0">
-<tr><td>ResetNamespacesFixture</td>
+</table></td>
+<td>then result is</td>
+<td><table border="1" cellspacing="0">
+<tr>
+<td colspan="3">action fixture</td>
+</tr>
+<tr>
+<td>start</td>
+<td colspan="2">string fixture</td>
+</tr>
+<tr>
+<td>enter</td>
+<td>field</td>
+<td>Joe</td>
+</tr>
+<tr>
+<td>check</td>
+<td>field</td>
+<td>&nbsp;<span class="fit_grey"> Joe</span></td>
+</tr>
+<tr>
+<td>check</td>
+<td>field</td>
+<td class="fail">null <span class="fit_label">expected</span><hr />Joe <span class="fit_label">actual</span></td>
+</tr>
+<tr>
+<td>check</td>
+<td>field</td>
+<td class="fail">blank <span class="fit_label">expected</span><hr />Joe <span class="fit_label">actual</span></td>
+</tr>
+<tr>
+<td>check</td>
+<td>field</td>
+<td class="pass">Joe</td>
 </tr>
 </table>
-</div>
-</div>
-<hr><br>[<a href="../../../FrontPage.html">Front Page</a>] [<a href="../../../RecentChanges.html">Recent Changes</a>]
+</td></tr></table>
 </body></html>

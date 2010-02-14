@@ -3,27 +3,14 @@
 <link href="fit.css" type="text/css" rel="stylesheet">
 </head>
 <body>
-<div class="setup">
-	<div style="float: right;" class="meta"><a href="javascript:expandAll();">Expand All</a> | <a href="javascript:collapseAll();">Collapse All</a></div>
-	<a href="javascript:toggleCollapsable('3855165683257545523');">
-		<img src="/files/images/collapsableOpen.gif" class="left" id="img3855165683257545523"/>
-	</a>
-&nbsp;<span class="meta">Set Up: <a href="../../../FitNesseAcceptanceTests/SetUp.html">Fit Nesse Acceptance Tests. Set Up</a></span>
-	<div class="collapsable" id="3855165683257545523"><table border="1" cellspacing="0">
-<tr><td>Import</td>
+<h3>FitNesse treats "y" or "yes" (case insensitive) as true and "n" or "no" as false for bools.</h3><br>This works with fields...<br>
+<table border="1" cellspacing="0">
+<tr><td>when test is</td><td>
+<table border="1" cellspacing="0">
+<tr>
+<td colspan="7">bool fixture</td>
 </tr>
-<tr><td>fitnesse.acceptanceTests</td>
-</tr>
-</table>
-</div>
-</div>
-<h3>FitNesse treats "y" or "yes" (case insensitive) as true and "n" or "no" as false for bools.</h3><br>This works with fields...<br><table border="1" cellspacing="0">
-<tr><td colspan="14">FixtureFixture</td>
-</tr>
-<tr><td>fixture</td>
-<td colspan="13">bool fixture</td>
-</tr>
-<tr><td>&nbsp;</td>
+<tr>
 <td>field</td>
 <td>field?</td>
 <td>field?</td>
@@ -31,14 +18,8 @@
 <td>field?</td>
 <td>field?</td>
 <td>field?</td>
-<td>field?</td>
-<td>field?</td>
-<td>field?</td>
-<td>field?</td>
-<td>field?</td>
-<td>field?</td>
 </tr>
-<tr><td>-rrrrrrwwwwww</td>
+<tr>
 <td>true</td>
 <td>true</td>
 <td>True</td>
@@ -46,6 +27,9 @@
 <td>y</td>
 <td>Yes</td>
 <td>yes</td>
+</tr>
+<tr>
+<td>true</td>
 <td>false</td>
 <td>False</td>
 <td>N</td>
@@ -53,7 +37,7 @@
 <td>No</td>
 <td>no</td>
 </tr>
-<tr><td>-rrrrrrwwwwww</td>
+<tr>
 <td>false</td>
 <td>false</td>
 <td>False</td>
@@ -61,21 +45,77 @@
 <td>n</td>
 <td>No</td>
 <td>no</td>
+</tr>
+<tr>
+<td>false</td>
 <td>true</td>
 <td>True</td>
 <td>Y</td>
 <td>y</td>
 <td>Yes</td>
 <td>yes</td>
+</tr>
+</table></td>
+<td>then result is</td>
+<td><table border="1" cellspacing="0">
+<tr>
+<td colspan="7">bool fixture</td>
+</tr>
+<tr>
+<td>field</td>
+<td>field?</td>
+<td>field?</td>
+<td>field?</td>
+<td>field?</td>
+<td>field?</td>
+<td>field?</td>
+</tr>
+<tr>
+<td>true</td>
+<td class="pass">true</td>
+<td class="pass">True</td>
+<td class="pass">Y</td>
+<td class="pass">y</td>
+<td class="pass">Yes</td>
+<td class="pass">yes</td>
+</tr>
+<tr>
+<td>true</td>
+<td class="fail">false <span class="fit_label">expected</span><hr />True <span class="fit_label">actual</span></td>
+<td class="fail">False <span class="fit_label">expected</span><hr />True <span class="fit_label">actual</span></td>
+<td class="fail">N <span class="fit_label">expected</span><hr />True <span class="fit_label">actual</span></td>
+<td class="fail">n <span class="fit_label">expected</span><hr />True <span class="fit_label">actual</span></td>
+<td class="fail">No <span class="fit_label">expected</span><hr />True <span class="fit_label">actual</span></td>
+<td class="fail">no <span class="fit_label">expected</span><hr />True <span class="fit_label">actual</span></td>
+</tr>
+<tr>
+<td>false</td>
+<td class="pass">false</td>
+<td class="pass">False</td>
+<td class="pass">N</td>
+<td class="pass">n</td>
+<td class="pass">No</td>
+<td class="pass">no</td>
+</tr>
+<tr>
+<td>false</td>
+<td class="fail">true <span class="fit_label">expected</span><hr />False <span class="fit_label">actual</span></td>
+<td class="fail">True <span class="fit_label">expected</span><hr />False <span class="fit_label">actual</span></td>
+<td class="fail">Y <span class="fit_label">expected</span><hr />False <span class="fit_label">actual</span></td>
+<td class="fail">y <span class="fit_label">expected</span><hr />False <span class="fit_label">actual</span></td>
+<td class="fail">Yes <span class="fit_label">expected</span><hr />False <span class="fit_label">actual</span></td>
+<td class="fail">yes <span class="fit_label">expected</span><hr />False <span class="fit_label">actual</span></td>
 </tr>
 </table>
-<br>...properties...<br><table border="1" cellspacing="0">
-<tr><td colspan="14">FixtureFixture</td>
+</td></tr></table>
+<br>...properties...<br>
+<table border="1" cellspacing="0">
+<tr><td>when test is</td><td>
+<table border="1" cellspacing="0">
+<tr>
+<td colspan="7">bool fixture</td>
 </tr>
-<tr><td>fixture</td>
-<td colspan="13">bool fixture</td>
-</tr>
-<tr><td>&nbsp;</td>
+<tr>
 <td>property</td>
 <td>property?</td>
 <td>property?</td>
@@ -83,14 +123,8 @@
 <td>property?</td>
 <td>property?</td>
 <td>property?</td>
-<td>property?</td>
-<td>property?</td>
-<td>property?</td>
-<td>property?</td>
-<td>property?</td>
-<td>property?</td>
 </tr>
-<tr><td>-rrrrrrwwwwww</td>
+<tr>
 <td>true</td>
 <td>true</td>
 <td>True</td>
@@ -98,6 +132,9 @@
 <td>y</td>
 <td>Yes</td>
 <td>yes</td>
+</tr>
+<tr>
+<td>true</td>
 <td>false</td>
 <td>False</td>
 <td>N</td>
@@ -105,7 +142,7 @@
 <td>No</td>
 <td>no</td>
 </tr>
-<tr><td>-rrrrrrwwwwww</td>
+<tr>
 <td>false</td>
 <td>false</td>
 <td>False</td>
@@ -113,21 +150,77 @@
 <td>n</td>
 <td>No</td>
 <td>no</td>
+</tr>
+<tr>
+<td>false</td>
 <td>true</td>
 <td>True</td>
 <td>Y</td>
 <td>y</td>
 <td>Yes</td>
 <td>yes</td>
+</tr>
+</table></td>
+<td>then result is</td>
+<td><table border="1" cellspacing="0">
+<tr>
+<td colspan="7">bool fixture</td>
+</tr>
+<tr>
+<td>property</td>
+<td>property?</td>
+<td>property?</td>
+<td>property?</td>
+<td>property?</td>
+<td>property?</td>
+<td>property?</td>
+</tr>
+<tr>
+<td>true</td>
+<td class="pass">true</td>
+<td class="pass">True</td>
+<td class="pass">Y</td>
+<td class="pass">y</td>
+<td class="pass">Yes</td>
+<td class="pass">yes</td>
+</tr>
+<tr>
+<td>true</td>
+<td class="fail">false <span class="fit_label">expected</span><hr />True <span class="fit_label">actual</span></td>
+<td class="fail">False <span class="fit_label">expected</span><hr />True <span class="fit_label">actual</span></td>
+<td class="fail">N <span class="fit_label">expected</span><hr />True <span class="fit_label">actual</span></td>
+<td class="fail">n <span class="fit_label">expected</span><hr />True <span class="fit_label">actual</span></td>
+<td class="fail">No <span class="fit_label">expected</span><hr />True <span class="fit_label">actual</span></td>
+<td class="fail">no <span class="fit_label">expected</span><hr />True <span class="fit_label">actual</span></td>
+</tr>
+<tr>
+<td>false</td>
+<td class="pass">false</td>
+<td class="pass">False</td>
+<td class="pass">N</td>
+<td class="pass">n</td>
+<td class="pass">No</td>
+<td class="pass">no</td>
+</tr>
+<tr>
+<td>false</td>
+<td class="fail">true <span class="fit_label">expected</span><hr />False <span class="fit_label">actual</span></td>
+<td class="fail">True <span class="fit_label">expected</span><hr />False <span class="fit_label">actual</span></td>
+<td class="fail">Y <span class="fit_label">expected</span><hr />False <span class="fit_label">actual</span></td>
+<td class="fail">y <span class="fit_label">expected</span><hr />False <span class="fit_label">actual</span></td>
+<td class="fail">Yes <span class="fit_label">expected</span><hr />False <span class="fit_label">actual</span></td>
+<td class="fail">yes <span class="fit_label">expected</span><hr />False <span class="fit_label">actual</span></td>
 </tr>
 </table>
-<br>..and methods...<br><table border="1" cellspacing="0">
-<tr><td colspan="14">FixtureFixture</td>
+</td></tr></table>
+<br>..and methods...<br>
+<table border="1" cellspacing="0">
+<tr><td>when test is</td><td>
+<table border="1" cellspacing="0">
+<tr>
+<td colspan="7">bool fixture</td>
 </tr>
-<tr><td>fixture</td>
-<td colspan="13">bool fixture</td>
-</tr>
-<tr><td>&nbsp;</td>
+<tr>
 <td>set</td>
 <td>get?</td>
 <td>get?</td>
@@ -135,14 +228,8 @@
 <td>get?</td>
 <td>get?</td>
 <td>get?</td>
-<td>get?</td>
-<td>get?</td>
-<td>get?</td>
-<td>get?</td>
-<td>get?</td>
-<td>get?</td>
 </tr>
-<tr><td>-rrrrrrwwwwww</td>
+<tr>
 <td>true</td>
 <td>true</td>
 <td>True</td>
@@ -150,6 +237,9 @@
 <td>y</td>
 <td>Yes</td>
 <td>yes</td>
+</tr>
+<tr>
+<td>true</td>
 <td>false</td>
 <td>False</td>
 <td>N</td>
@@ -157,7 +247,7 @@
 <td>No</td>
 <td>no</td>
 </tr>
-<tr><td>-rrrrrrwwwwww</td>
+<tr>
 <td>false</td>
 <td>false</td>
 <td>False</td>
@@ -165,6 +255,9 @@
 <td>n</td>
 <td>No</td>
 <td>no</td>
+</tr>
+<tr>
+<td>false</td>
 <td>true</td>
 <td>True</td>
 <td>Y</td>
@@ -172,18 +265,57 @@
 <td>Yes</td>
 <td>yes</td>
 </tr>
-</table>
-<br><br><div class="teardown">
-	<div style="float: right;" class="meta"><a href="javascript:expandAll();">Expand All</a> | <a href="javascript:collapseAll();">Collapse All</a></div>
-	<a href="javascript:toggleCollapsable('461482954078813778');">
-		<img src="/files/images/collapsableOpen.gif" class="left" id="img461482954078813778"/>
-	</a>
-&nbsp;<span class="meta">Tear Down: <a href="../../../FitNesseAcceptanceTests/TearDown.html">Fit Nesse Acceptance Tests. Tear Down</a></span>
-	<div class="collapsable" id="461482954078813778"><table border="1" cellspacing="0">
-<tr><td>ResetNamespacesFixture</td>
+</table></td>
+<td>then result is</td>
+<td><table border="1" cellspacing="0">
+<tr>
+<td colspan="7">bool fixture</td>
+</tr>
+<tr>
+<td>set</td>
+<td>get?</td>
+<td>get?</td>
+<td>get?</td>
+<td>get?</td>
+<td>get?</td>
+<td>get?</td>
+</tr>
+<tr>
+<td>true</td>
+<td class="pass">true</td>
+<td class="pass">True</td>
+<td class="pass">Y</td>
+<td class="pass">y</td>
+<td class="pass">Yes</td>
+<td class="pass">yes</td>
+</tr>
+<tr>
+<td>true</td>
+<td class="fail">false <span class="fit_label">expected</span><hr />True <span class="fit_label">actual</span></td>
+<td class="fail">False <span class="fit_label">expected</span><hr />True <span class="fit_label">actual</span></td>
+<td class="fail">N <span class="fit_label">expected</span><hr />True <span class="fit_label">actual</span></td>
+<td class="fail">n <span class="fit_label">expected</span><hr />True <span class="fit_label">actual</span></td>
+<td class="fail">No <span class="fit_label">expected</span><hr />True <span class="fit_label">actual</span></td>
+<td class="fail">no <span class="fit_label">expected</span><hr />True <span class="fit_label">actual</span></td>
+</tr>
+<tr>
+<td>false</td>
+<td class="pass">false</td>
+<td class="pass">False</td>
+<td class="pass">N</td>
+<td class="pass">n</td>
+<td class="pass">No</td>
+<td class="pass">no</td>
+</tr>
+<tr>
+<td>false</td>
+<td class="fail">true <span class="fit_label">expected</span><hr />False <span class="fit_label">actual</span></td>
+<td class="fail">True <span class="fit_label">expected</span><hr />False <span class="fit_label">actual</span></td>
+<td class="fail">Y <span class="fit_label">expected</span><hr />False <span class="fit_label">actual</span></td>
+<td class="fail">y <span class="fit_label">expected</span><hr />False <span class="fit_label">actual</span></td>
+<td class="fail">Yes <span class="fit_label">expected</span><hr />False <span class="fit_label">actual</span></td>
+<td class="fail">yes <span class="fit_label">expected</span><hr />False <span class="fit_label">actual</span></td>
 </tr>
 </table>
-</div>
-</div>
-<hr><br>[<a href="../../../FrontPage.html">Front Page</a>] [<a href="../../../RecentChanges.html">Recent Changes</a>]
+</td></tr></table>
 </body></html>

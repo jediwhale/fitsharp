@@ -1,4 +1,4 @@
-﻿// Copyright © 2009 Syterra Software Inc.
+﻿// Copyright © 2010 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -9,6 +9,7 @@ using fit.Model;
 using fitlibrary;
 using fitlibrary.exception;
 using fitSharp.Fit.Exception;
+using fitSharp.Fit.Model;
 using fitSharp.Machine.Exception;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
@@ -89,11 +90,11 @@ namespace fit.Fixtures {
             Parse restOfTheCells = theCells.More;
             if (restOfTheCells == null || restOfTheCells.More == null)
                 throw new TableStructureException("missing cells for name.");
-            fixture.AddNamedFixture(
-                restOfTheCells.Text,
-                ourWithIdentifier.Equals(restOfTheCells.More.Text)
-                    ? new WithPhrase(restOfTheCells.More).Evaluate(fixture)
-                    : fixture.ExecuteEmbeddedMethod(restOfTheCells));
+
+            object namedValue = ourWithIdentifier.Equals(restOfTheCells.More.Text)
+                                    ? new WithPhrase(restOfTheCells.More).Evaluate(fixture)
+                                    : fixture.ExecuteEmbeddedMethod(restOfTheCells);
+            fixture.Processor.Store(new Symbol(restOfTheCells.Text, namedValue));
 
             fixture.TestStatus.MarkRight(restOfTheCells);
         }
@@ -124,7 +125,7 @@ namespace fit.Fixtures {
             fixture.SetSystemUnderTest(new WithPhrase(theCells).Evaluate(fixture));
         }
 
-        private void AddCell(Parse theCells, object theNewValue) {
+        void AddCell(Parse theCells, object theNewValue) {
             theCells.Last.More = (Parse)fixture.Processor.Compose(theNewValue);
         }
 
