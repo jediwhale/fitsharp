@@ -1,4 +1,4 @@
-// Copyright © 2009 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+// Copyright © 2010 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -15,7 +15,8 @@ namespace fit
 {
 	public abstract class RowFixture : BoundFixture
 	{
-	    private Parse headerCells;
+	    Parse headerCells;
+		object targetObject;
 
 	    public override void DoTable(Parse theTable) {
             if (theTable.Parts.More == null) TestStatus.MarkException(theTable.Parts.Parts, new ApplicationException("Header row missing."));
@@ -43,7 +44,7 @@ namespace fit
 			AddSurplusRows(rows, queryResults);
 		}
 
-		private void EvaluateCellsInMatchingRow(Parse row, object match)
+		void EvaluateCellsInMatchingRow(Parse row, object match)
 		{
 			SetTargetObject(match);
 			Parse cell = row.Parts;
@@ -63,13 +64,13 @@ namespace fit
 			}
 		}
 
-		private void AddSurplusRows(Parse rows, ArrayList remaining)
+		void AddSurplusRows(Parse rows, ArrayList remaining)
 		{
 			foreach (object obj in remaining)
 				AddSurplusRow(rows, obj);
 		}
 
-		private void AddSurplusRow(Parse rows, object extraObject)
+		void AddSurplusRow(Parse rows, object extraObject)
 		{
 			Parse cell = null;
 			SetTargetObject(extraObject);
@@ -86,17 +87,17 @@ namespace fit
 			MarkRowAsSurplus(rows.Last);
 		}
 
-		private static void AddRowToTable(Parse cells, Parse rows)
+		static void AddRowToTable(Parse cells, Parse rows)
 		{
 			rows.Last.More = new Parse("tr", null, cells, null);
 		}
 
-		private object FindMatchingObject(ArrayList queryItems, Parse row)
+		object FindMatchingObject(ArrayList queryItems, Parse row)
 		{
 			return FindMatchingObject(queryItems, row, 0);
 		}
 
-		private object FindMatchingObject(ArrayList queryItems, Parse row, int col)
+		object FindMatchingObject(ArrayList queryItems, Parse row, int col)
 		{
 			if (!ColumnHasBinding(col))
 				return null;
@@ -114,14 +115,13 @@ namespace fit
 		    return FindMatchingObject(matches, row, col + 1);
 		}
 
-		private bool IsMatch(Parse row, int col)
+		bool IsMatch(Parse row, int col)
 		{
 		    TypedValue actual = CellOperation.Invoke(this, headerCells.At(col));
 		    return CellOperation.Compare(actual, GetCellForColumn(row, col));
-		    //return new ExpectedValueCell(GetCellForColumn(row, col)).IsEqual(actual);
 		}
 
-		private static Parse GetCellForColumn(Parse row, int col)
+		static Parse GetCellForColumn(Parse row, int col)
 		{
 			Parse cell = row.Parts;
 			for (int i = 0; i < col; i++)
@@ -129,32 +129,32 @@ namespace fit
 			return cell;
 		}
 
-		private bool ColumnHasBinding(int col)
+		bool ColumnHasBinding(int col)
 		{
 			return col < headerCells.Size;
 		}
 
-		private static bool UniqueMatchFound(ICollection matches)
+		static bool UniqueMatchFound(ICollection matches)
 		{
 			return matches.Count == 1;
 		}
 
-		private static object UniqueMatch(IList matches)
+		static object UniqueMatch(IList matches)
 		{
 			return matches[0];
 		}
 
-		private void MarkRowAsMissing(Parse row)
+		void MarkRowAsMissing(Parse row)
 		{
 			Parse cell = row.Parts;
-			cell.SetAttribute(CellAttributes.LabelKey, "missing");
+			cell.SetAttribute(CellAttribute.Label, "missing");
 			TestStatus.MarkWrong(cell);
 		}
 
-		private void MarkRowAsSurplus(Parse row)
+		void MarkRowAsSurplus(Parse row)
 		{
 			TestStatus.MarkWrong(row.Parts);
-			row.Parts.SetAttribute(CellAttributes.LabelKey, "surplus");
+			row.Parts.SetAttribute(CellAttribute.Label, "surplus");
 		}
 
 		public override object GetTargetObject()
@@ -162,7 +162,7 @@ namespace fit
 			return targetObject;
 		}
 
-		private void SetTargetObject(object obj)
+		void SetTargetObject(object obj)
 		{
 			targetObject = obj;
 		}
@@ -170,6 +170,5 @@ namespace fit
 		public abstract object[] Query(); // get rows to be compared
 		public abstract Type GetTargetClass(); // get expected type of row
 
-		private object targetObject;
 	}
 }

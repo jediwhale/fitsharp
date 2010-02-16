@@ -1,4 +1,4 @@
-// Copyright © 2009 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+// Copyright © 2010 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -17,8 +17,11 @@ namespace fit.Test.NUnit {
     [TestFixture]
     public class RowFixtureTest
     {
-        private TestCounts resultCounts;
-        private Configuration configuration;
+        readonly string rowFixtureName = typeof (NewRowFixtureDerivative).Name;
+        Parse table;
+        StoryTest myStoryTest;
+        TestCounts resultCounts;
+        Configuration configuration;
 
         public void TestExpectBlankOrNullAllCorrect()
         {
@@ -50,7 +53,7 @@ namespace fit.Test.NUnit {
                 );
         }
 
-        private static Parse BuildTable(IEnumerable<string> values)
+        static Parse BuildTable(IEnumerable<string> values)
         {
             var builder = new StringBuilder();
             builder.Append("<table>");
@@ -64,7 +67,7 @@ namespace fit.Test.NUnit {
             return new Parse(builder.ToString());
         }
 
-        private static object[] BuildObjectArray(ICollection<string> values)
+        static object[] BuildObjectArray(ICollection<string> values)
         {
             var objects = new object[values.Count];
             int count = 0;
@@ -83,7 +86,7 @@ namespace fit.Test.NUnit {
             TestUtils.CheckCounts(resultCounts, right, wrong, ignores, exceptions);
         }
 
-        private void RunTest(Parse parse) {
+        void RunTest(Parse parse) {
             var test = new StoryTest(parse, (t,c) => { resultCounts = c;});
             test.Execute(configuration);
         }
@@ -143,8 +146,6 @@ namespace fit.Test.NUnit {
         [Test]
         public void TestStartsWithHandlerInSecondColumn()
         {
-            //???ObjectFactory.AddNamespace("fitnesse.Handlers");
-           
             new Service.Service(configuration).AddOperator(typeof(CompareStartsWith).FullName);
             var builder = new StringBuilder();
             builder.Append("<table>");
@@ -161,10 +162,6 @@ namespace fit.Test.NUnit {
             TestUtils.CheckCounts(resultCounts, 2, 0, 0, 0);
         }
 
-        private readonly string rowFixtureName = typeof (NewRowFixtureDerivative).Name;
-        private Parse table;
-        private StoryTest myStoryTest;
-
         [SetUp]
         public void SetUp()
         {
@@ -179,7 +176,7 @@ namespace fit.Test.NUnit {
             VerifyCounts(0, 0, 0, 0);
         }
 
-        private void RunTest() {
+        void RunTest() {
             myStoryTest = new StoryTest(table, (t,c) => { resultCounts = c;});
             myStoryTest.Execute(configuration);
         }
@@ -455,17 +452,17 @@ namespace fit.Test.NUnit {
             DoTable(new Parse(tableHtml), colorsList.ToArray(), 2, 0, 0, 0);
         }
 
-        private void VerifyCounts(int right, int wrong, int exceptions, int ignores)
+        void VerifyCounts(int right, int wrong, int exceptions, int ignores)
         {
             TestUtils.CheckCounts(resultCounts, right, wrong, exceptions, ignores);
         }
 
-        private static void AddQueryValue(object obj)
+        static void AddQueryValue(object obj)
         {
             NewRowFixtureDerivative.QueryValues.Add(obj);
         }
 
-        private void AddRow(string[] strings)
+        void AddRow(string[] strings)
         {
             var lastCell = new Parse("td", strings[strings.Length - 1], null, null);
             for (int i = strings.Length - 1; i > 0; i--)
@@ -475,22 +472,22 @@ namespace fit.Test.NUnit {
             table.Parts.Last.More = new Parse("tr", null, lastCell, null);
         }
 
-        private static void AssertTextInTag(Cell cell, string text)
+        static void AssertTextInTag(Cell cell, string text)
         {
-            Assert.AreEqual(text, cell.GetAttribute(CellAttributes.StatusKey));
+            Assert.AreEqual(text, cell.GetAttribute(CellAttribute.Status));
         }
 
-        private static void AssertTextInBody(Parse cell, string text)
+        static void AssertTextInBody(Parse cell, string text)
         {
             Assert.IsTrue(cell.Body.IndexOf(text) > -1);
         }
 
-        private static void AssertTextNotInBody(Parse cell, string text)
+        static void AssertTextNotInBody(Parse cell, string text)
         {
             Assert.IsFalse(cell.Body.IndexOf(text) > -1);
         }
 
-        private static void AddColumn(Parse table, string name)
+        static void AddColumn(Parse table, string name)
         {
             table.Parts.More.Parts.Last.More = new Parse("td", name, null, null);
         }
@@ -498,7 +495,7 @@ namespace fit.Test.NUnit {
 
     public class BusinessObject
     {
-        private readonly string[] strs;
+        readonly string[] strs;
 
         public BusinessObject(string[] strs)
         {
@@ -572,5 +569,4 @@ namespace fit.Test.NUnit {
 
         public string Phone { get; private set; }
     }
-
 }

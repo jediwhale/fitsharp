@@ -1,4 +1,4 @@
-﻿// Copyright © 2009 Syterra Software Inc.
+﻿// Copyright © 2010 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -19,11 +19,11 @@ namespace fit.Operators {
 
         public Tree<Cell> Compose(TypedValue instance) {
             var newCell = new Parse("td", GetValueString(instance), null, null);
-            newCell.SetAttribute(CellAttributes.AddKey, string.Empty);
+            newCell.SetAttribute(CellAttribute.Add, string.Empty);
             return newCell;
         }
 
-        private static string GetValueString(TypedValue instance) {
+        static string GetValueString(TypedValue instance) {
             string valueString = string.Empty;
             if (!instance.IsNullOrEmpty) {
                 if (instance.Value is Array) {

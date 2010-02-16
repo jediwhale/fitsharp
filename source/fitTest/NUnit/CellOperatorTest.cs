@@ -1,4 +1,4 @@
-﻿// Copyright © 2009 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+﻿// Copyright © 2010 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -56,12 +56,12 @@ namespace fit.Test.NUnit {
 
         public static void AssertCellPasses(Parse cell)
         {
-            Assert.AreEqual(CellAttributes.RightStatus, cell.GetAttribute(CellAttributes.StatusKey));
+            Assert.AreEqual(CellAttributes.RightStatus, cell.GetAttribute(CellAttribute.Status));
         }
 
         public static void AssertCellFails(Parse cell)
         {
-            Assert.AreEqual(CellAttributes.WrongStatus, cell.GetAttribute(CellAttributes.StatusKey));
+            Assert.AreEqual(CellAttributes.WrongStatus, cell.GetAttribute(CellAttribute.Status));
         }
 
         public static void AssertValueInBody(Parse cell, string value)

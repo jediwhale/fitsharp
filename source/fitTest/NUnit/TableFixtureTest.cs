@@ -1,4 +1,4 @@
-// Copyright © 2009 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+// Copyright © 2010 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -15,10 +15,10 @@ namespace fit.Test.NUnit
 	[TestFixture]
 	public class TableFixtureTest
 	{
-		private string table;
-	    private StoryTest myStoryTest;
-	    private Parse finishedTable;
-	    private TestCounts resultCounts;
+		string table;
+	    StoryTest myStoryTest;
+	    Parse finishedTable;
+	    TestCounts resultCounts;
 
 		[SetUp]
 		public void SetUp()
@@ -40,7 +40,7 @@ namespace fit.Test.NUnit
 			ExampleTableFixture.ResetStatics();
 		}
 
-		private void SimpleWriter(Tree<Cell> theTables, TestCounts counts) {
+		void SimpleWriter(Tree<Cell> theTables, TestCounts counts) {
             finishedTable = (Parse) theTables.Value;
 		    resultCounts = counts;
 		}
@@ -79,15 +79,15 @@ namespace fit.Test.NUnit
 		public void TestRight()
 		{
 			Assert.AreEqual(1, resultCounts.GetCount(CellAttributes.RightStatus));
-            Assert.AreEqual(CellAttributes.RightStatus, finishedTable.At(0,1,0).GetAttribute(CellAttributes.StatusKey));
+            Assert.AreEqual(CellAttributes.RightStatus, finishedTable.At(0,1,0).GetAttribute(CellAttribute.Status));
 		}
 
 		[Test]
 		public void TestWrong()
 		{
 			Assert.AreEqual(2, resultCounts.GetCount(CellAttributes.WrongStatus));
-            Assert.AreEqual(CellAttributes.WrongStatus, finishedTable.At(0,1,1).GetAttribute(CellAttributes.StatusKey));
-            Assert.AreEqual(CellAttributes.WrongStatus, finishedTable.At(0,1,2).GetAttribute(CellAttributes.StatusKey));
+            Assert.AreEqual(CellAttributes.WrongStatus, finishedTable.At(0,1,1).GetAttribute(CellAttribute.Status));
+            Assert.AreEqual(CellAttributes.WrongStatus, finishedTable.At(0,1,2).GetAttribute(CellAttribute.Status));
 			Assert.IsTrue(finishedTable.At(0,1,2).Body.IndexOf("actual") > 0);
 		}
 
@@ -95,7 +95,7 @@ namespace fit.Test.NUnit
 		public void TestIgnore()
 		{
 			Assert.AreEqual(1, resultCounts.GetCount(CellAttributes.IgnoreStatus));
-            Assert.AreEqual(CellAttributes.IgnoreStatus, finishedTable.At(0,1,3).GetAttribute(CellAttributes.StatusKey));
+            Assert.AreEqual(CellAttributes.IgnoreStatus, finishedTable.At(0,1,3).GetAttribute(CellAttribute.Status));
 		}
 
 		[Test]

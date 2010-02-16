@@ -1,4 +1,4 @@
-﻿// Copyright © 2009 Syterra Software Inc.
+﻿// Copyright © 2010 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -12,19 +12,19 @@ using NUnit.Framework;
 
 namespace fit.Test.NUnit {
     [TestFixture] public class RuntimeProcedureTest {
-        private const string simpleProcedureHtml = "<table><tr><td>define</td><td>procedure</td></tr><tr><td>verb</td></tr></table>";
-        private const string parameterProcedureHtml =
+        const string simpleProcedureHtml = "<table><tr><td>define</td><td>procedure</td></tr><tr><td>verb</td></tr></table>";
+        const string parameterProcedureHtml =
             "<table><tr><td>define</td><td>procedure</td><td>parm</td></tr><tr><td>verb</td><td>parm</td></tr></table>";
-        private const string twoParameterProcedureHtml =
+        const string twoParameterProcedureHtml =
             "<table><tr><td>define</td><td>procedure</td><td>parm1</td><td></td><td>parm2</td></tr><tr><td>verb</td><td>parm1</td><td>parm2</td></tr></table>";
 
-        private Mock<CellProcessor> processor;
-        private RuntimeProcedure runtime;
-        private Procedure procedure;
-        private TypedValue result;
-        private TypedValue target;
-        private TypedValue fixture;
-        private TestStatus testStatus;
+        Mock<CellProcessor> processor;
+        RuntimeProcedure runtime;
+        Procedure procedure;
+        TypedValue result;
+        TypedValue target;
+        TypedValue fixture;
+        TestStatus testStatus;
 
         [Test] public void CreateIsntHandled() {
             SetupSUT(simpleProcedureHtml);
@@ -55,7 +55,7 @@ namespace fit.Test.NUnit {
         [Test] public void ProcedureIsExecutedOnACopyOfBody() {
             SetupSUT(simpleProcedureHtml);
             runtime.Invoke(target, "procedure", new CellTree());
-            Assert.AreEqual(string.Empty, procedure.Instance.Branches[1].Branches[0].Value.GetAttribute("some"));
+            Assert.AreEqual(string.Empty, procedure.Instance.Branches[1].Branches[0].Value.GetAttribute(CellAttribute.Label));
         }
 
         [Test] public void ParameterValueIsSubstituted() {
@@ -70,7 +70,7 @@ namespace fit.Test.NUnit {
                 null)));
         }
 
-        private void SetupSUT(string html) {
+        void SetupSUT(string html) {
             procedure = new Procedure("procedure", new HtmlParser().Parse(html));
 
             result = new TypedValue("result");
@@ -92,7 +92,7 @@ namespace fit.Test.NUnit {
 
             processor.Setup(p => p.Execute(fixture, It.Is<Tree<Cell>>(t => IsTablesWithVerb(t))))
                 .Returns((TypedValue f, Tree<Cell> t) => {
-                    t.Branches[0].Branches[0].Branches[0].Value.SetAttribute("some", "stuff");
+                    t.Branches[0].Branches[0].Branches[0].Value.SetAttribute(CellAttribute.Label, "stuff");
                     testStatus.PopReturn();
                     testStatus.PushReturn(result);
                     return TypedValue.Void;
@@ -103,11 +103,11 @@ namespace fit.Test.NUnit {
                 .Returns(new TypedValue("procedure log"));
         }
 
-        private static bool IsTableWithVerb(Tree<Cell> t) {
+        static bool IsTableWithVerb(Tree<Cell> t) {
             return t.Branches[0].Branches.Count == 1 && t.Branches[0].Branches[0].Value.Text == "verb";
         }
 
-        private static bool IsTablesWithVerb(Tree<Cell> t) {
+        static bool IsTablesWithVerb(Tree<Cell> t) {
             if (t.Branches[0].Branches[0].Branches.Count == 1
                 && t.Branches[0].Branches[0].Branches[0].Value.Text == "verb") return true;
             if (t.Branches[0].Branches[0].Branches.Count == 2
@@ -120,7 +120,7 @@ namespace fit.Test.NUnit {
             return false;
         }
 
-        private static bool IsDoFixture(Tree<Cell> c) {
+        static bool IsDoFixture(Tree<Cell> c) {
             return c.Branches[0].Value.Text == "dofixture";
         }
     }

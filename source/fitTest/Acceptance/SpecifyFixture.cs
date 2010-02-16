@@ -1,4 +1,4 @@
-// Copyright © 2009 Syterra Software Inc. Includes work © 2003-2006 Rick Mugridge, University of Auckland, New Zealand.
+// Copyright © 2010 Syterra Software Inc. Includes work © 2003-2006 Rick Mugridge, University of Auckland, New Zealand.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -11,7 +11,7 @@ using fitSharp.Machine.Model;
 
 namespace fit.Test.Acceptance {
     public class SpecifyFixture: Fixture {
-        private Parse resultTables;
+        Parse resultTables;
 
         public override void DoTable(Parse theTable) {
             Parse embeddedTables = GetEmbeddedTables(theTable);
@@ -32,12 +32,12 @@ namespace fit.Test.Acceptance {
                 else {
                     Wrong(expectedCell);
                     expectedCell.More = ParseNode.MakeCells(Escape(differences));
-                    expectedCell.More.SetAttribute(CellAttributes.StatusKey, CellAttributes.WrongStatus);
+                    expectedCell.More.SetAttribute(CellAttribute.Status, CellAttributes.WrongStatus);
                 }
             }
         }
 
-        private static Parse GetEmbeddedTables(Parse theTable) {
+        static Parse GetEmbeddedTables(Parse theTable) {
             Parse secondRow = theTable.Parts.More;
             if (secondRow == null)
                 throw new FitFailureException("No second row.");
@@ -47,12 +47,12 @@ namespace fit.Test.Acceptance {
             return embeddedTable;
         }
 
-        private static void SetEmbeddedTables(Parse theParentTable, Parse theTables) {
+        static void SetEmbeddedTables(Parse theParentTable, Parse theTables) {
             Parse secondRow = theParentTable.Parts.More;
             secondRow.Parts.Parts = theTables;
         }
 
-        private static Parse GetExpectedCell(Parse theTable) {
+        static Parse GetExpectedCell(Parse theTable) {
             Parse secondRow = theTable.Parts.More;
             Parse expectedCell = secondRow.Parts.More;
             if (expectedCell == null && secondRow.More != null) {
@@ -65,7 +65,7 @@ namespace fit.Test.Acceptance {
             return expectedCell;
         }
 
-        private void SpecifyWriter(Tree<Cell> theTables, TestCounts counts) {
+        void SpecifyWriter(Tree<Cell> theTables, TestCounts counts) {
             var tables = (Parse) theTables.Value;
             for (Parse table = tables; table != null; table = table.More) {
                 Parse newTable = table.Copy();

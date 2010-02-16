@@ -1,4 +1,4 @@
-// Copyright © 2009 Syterra Software Inc.
+// Copyright © 2010 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -8,7 +8,7 @@ using fitSharp.Fit.Model;
 namespace fit.Operators {
     public class FixtureTable {
 
-        private readonly Parse myTable;
+        readonly Parse myTable;
 
         public FixtureTable(Parse theTable) {
             myTable = theTable;
@@ -18,7 +18,7 @@ namespace fit.Operators {
             return Differences(myTable, theExpected.myTable);
         }
 
-        private static string Differences(Parse theActual, Parse theExpected) {
+        static string Differences(Parse theActual, Parse theExpected) {
             if (theActual == null) {
                 return (theExpected != null ? FormatNodeDifference(theActual, theExpected) : string.Empty);
             }
@@ -44,23 +44,23 @@ namespace fit.Operators {
             return Differences(theActual.More, theExpected.More);
         }
 
-        private static string FormatNodeDifference(Parse actualNode, Parse expectedNode) {
+        static string FormatNodeDifference(Parse actualNode, Parse expectedNode) {
             return FormatDifference(TagString(actualNode),  TagString(expectedNode));
         }
 
-        private static string FormatDifference(string actual, string expected) {
+        static string FormatDifference(string actual, string expected) {
             return string.Format("expected: {1}, was {0}", FormatText(actual), FormatText(expected));
         }
 
-        private static string FormatText(string text) {
+        static string FormatText(string text) {
             return text == null ? "null" : string.Format("'{0}'", text);
         }
 
-        private static string TagString(Parse node) {
+        static string TagString(Parse node) {
             return node == null ? null : node.Tag;
         }
 
-        private static string BodyDifferences(string theActual, string theExpected) {
+        static string BodyDifferences(string theActual, string theExpected) {
             if (theExpected != null && theExpected == "IGNORE") return string.Empty;
             if (theActual == null) {
                 return (!string.IsNullOrEmpty(theExpected) ? FormatDifference(null, theExpected) : string.Empty);
@@ -82,11 +82,11 @@ namespace fit.Operators {
             return ContainsText(actual[1], expected[1]) ? string.Empty : FormatDifference(actual[1], expected[1]);
         }
 
-        private static bool ContainsText(string actual, string expected) {
+        static bool ContainsText(string actual, string expected) {
             return actual.Replace("\r\n", "\n").IndexOf(expected.Replace("\r\n", "\n")) >= 0;
         }
 
-        private static string[] SplitBody(string theSource) {
+        static string[] SplitBody(string theSource) {
             var result = new string[2];
             int marker = theSource.IndexOf("fit_stacktrace");
             if (marker < 0) marker = theSource.IndexOf("fit_label");
@@ -102,38 +102,38 @@ namespace fit.Operators {
             return result;
         }
 
-        private class Expected {
+        class Expected {
             public Parse Node { get; private set;}
-            private readonly Parse originalNode;
+            readonly Parse originalNode;
 
             public Expected(Parse node) {
                 originalNode = node;
                 Node = node.Copy();
                 if (HasKeyword("right")) {
-                    Node.SetAttribute(CellAttributes.StatusKey, CellAttributes.RightStatus);
+                    Node.SetAttribute(CellAttribute.Status, CellAttributes.RightStatus);
                     if (BodyStartsWith("right")) Node.SetBody(Node.Body.Substring(7));
                 }
                 else if (HasKeyword("wrong")) {
-                    Node.SetAttribute(CellAttributes.StatusKey, CellAttributes.WrongStatus);
+                    Node.SetAttribute(CellAttribute.Status, CellAttributes.WrongStatus);
                     if (BodyStartsWith("wrong")) Node.SetBody(Node.Body.Substring(7));
                     else Node.SetBody("IGNORE");
                 }
                 if (Node.Body.StartsWith("/")) Node.SetBody(Node.Body.Substring(1));
             }
 
-            private bool HasKeyword(string keyword) {
+            bool HasKeyword(string keyword) {
                 return BodyStartsWith(keyword) || EmbeddedLeaderStartsWith(keyword);
             }
 
-            private bool EmbeddedLeaderStartsWith(string keyword) {
+            bool EmbeddedLeaderStartsWith(string keyword) {
                 return (originalNode.Parts != null && originalNode.Parts.Leader.StartsWith(KeywordMarker(keyword)));
             }
 
-            private bool BodyStartsWith(string keyword) {
+            bool BodyStartsWith(string keyword) {
                 return originalNode.Body.StartsWith(KeywordMarker(keyword));
             }
 
-            private static string KeywordMarker(string keyword) {
+            static string KeywordMarker(string keyword) {
                 return string.Format("[{0}]", keyword);
             }
         }

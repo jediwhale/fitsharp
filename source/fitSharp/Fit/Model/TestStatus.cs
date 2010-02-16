@@ -1,4 +1,4 @@
-﻿// Copyright © 2009 Syterra Software Inc.
+﻿// Copyright © 2010 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -18,7 +18,7 @@ namespace fitSharp.Fit.Model {
         public Hashtable Summary { get; private set; }
         public TestCounts Counts { get; private set; }
 
-        private readonly Stack<TypedValue> returnValues = new Stack<TypedValue>();
+        readonly Stack<TypedValue> returnValues = new Stack<TypedValue>();
         
         public TestStatus() {
             Summary = new Hashtable();
@@ -35,22 +35,22 @@ namespace fitSharp.Fit.Model {
         }
 
         public void MarkRight(Cell cell) {
-            cell.SetAttribute(CellAttributes.StatusKey, CellAttributes.RightStatus);
+            cell.SetAttribute(CellAttribute.Status, CellAttributes.RightStatus);
             AddCount(CellAttributes.RightStatus);
         }
 
         public void MarkWrong(Cell cell) {
-            cell.SetAttribute(CellAttributes.StatusKey, CellAttributes.WrongStatus);
+            cell.SetAttribute(CellAttribute.Status, CellAttributes.WrongStatus);
             AddCount(CellAttributes.WrongStatus);
         }
 
         public void MarkWrong(Cell cell, string actual) {
-            cell.SetAttribute(CellAttributes.ActualKey, actual);
+            cell.SetAttribute(CellAttribute.Actual, actual);
             MarkWrong(cell);
         }
 
         public void MarkIgnore(Cell cell) {
-            cell.SetAttribute(CellAttributes.StatusKey, CellAttributes.IgnoreStatus);
+            cell.SetAttribute(CellAttribute.Status, CellAttributes.IgnoreStatus);
             AddCount(CellAttributes.IgnoreStatus);
         }
 
@@ -61,9 +61,9 @@ namespace fitSharp.Fit.Model {
 
             if (abandonException != null && IsAbandoned) throw abandonException;
 
-            if (cell.GetAttribute(CellAttributes.StatusKey) != CellAttributes.ExceptionStatus) {
-                cell.SetAttribute(CellAttributes.ExceptionKey, exception.ToString());
-                cell.SetAttribute(CellAttributes.StatusKey, CellAttributes.ExceptionStatus);
+            if (cell.GetAttribute(CellAttribute.Status) != CellAttributes.ExceptionStatus) {
+                cell.SetAttribute(CellAttribute.Exception, exception.ToString());
+                cell.SetAttribute(CellAttribute.Status, CellAttributes.ExceptionStatus);
                 AddCount(CellAttributes.ExceptionStatus);
             }
 
@@ -73,11 +73,11 @@ namespace fitSharp.Fit.Model {
             throw abandonException;
         }
 
-        private void AddCount(string cellStatus) {
+        void AddCount(string cellStatus) {
             Counts.AddCount(cellStatus);
         }
 
-        private static System.Exception GetAbandonStoryTestException(System.Exception exception) {
+        static System.Exception GetAbandonStoryTestException(System.Exception exception) {
             for (System.Exception e = exception; e != null; e = e.InnerException) {
                 if (typeof(AbandonException).IsAssignableFrom(e.GetType())) return e;
             }

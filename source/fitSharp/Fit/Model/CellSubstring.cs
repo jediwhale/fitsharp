@@ -1,11 +1,12 @@
-﻿// Copyright © 2009 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2010 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 namespace fitSharp.Fit.Model {
     public class CellSubstring: Cell {
-        private readonly Cell baseCell;
+        readonly Cell baseCell;
+
         public string Text { get; private set; }
 
         public CellSubstring(Cell baseCell, string text) {
@@ -13,9 +14,9 @@ namespace fitSharp.Fit.Model {
             Text = text;
         }
 
-        public string GetAttribute(string key) { return baseCell.GetAttribute(key); }
-        public void SetAttribute(string key, string value) { baseCell.SetAttribute(key, value); }
-        public void AddToAttribute(string key, string value, string format) { baseCell.AddToAttribute(key, value, format); }
+        public string GetAttribute(CellAttribute key) { return baseCell.GetAttribute(key); }
+        public void SetAttribute(CellAttribute key, string value) { baseCell.SetAttribute(key, value); }
+        public void AddToAttribute(CellAttribute key, string value, string format) { baseCell.AddToAttribute(key, value, format); }
 
     }
 }

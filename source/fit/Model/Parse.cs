@@ -1,4 +1,4 @@
-// Copyright © 2009 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+// Copyright © 2010 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -20,11 +20,13 @@ namespace fit
 	{
 	    public static bool IsStandard;
 
-	    private readonly string tag;
-		private string body;
-	    private readonly string originalBody;
+		static readonly string[] Tags = {"table", "tr", "td"};
 
-        private CellAttributes Attributes { get; set; }
+	    readonly string tag;
+	    readonly string originalBody;
+
+		string body;
+        CellAttributes Attributes { get; set; }
 
 	    public Parse More { get; set; }
 	    public Parse Parts { get; set; }
@@ -36,36 +38,36 @@ namespace fit
             get {
 	            int space = tag.IndexOf(' ');
 	            if (space < 0) space = tag.Length - 1;
-	            return !Attributes.HasAttribute(CellAttributes.StatusKey) ? tag : string.Format("{0} class=\"{1}\"{2}", tag.Substring(0, space), GetAttribute(CellAttributes.StatusKey), tag.Substring(space));
+	            return !Attributes.HasAttribute(CellAttribute.Status) ? tag : string.Format("{0} class=\"{1}\"{2}", tag.Substring(0, space), GetAttribute(CellAttribute.Status), tag.Substring(space));
             }
         }
 
 	    public string Body {
             get {
                 string result = body;
-                if (Attributes.HasAttribute(CellAttributes.AddKey)) {
+                if (Attributes.HasAttribute(CellAttribute.Add)) {
                     result = string.Format("<span class=\"fit_grey\">{0}</span>", HttpUtility.HtmlEncode(result));
                 }
-                if (Attributes.HasAttribute(CellAttributes.InformationPrefixKey)) {
-                    result = string.Format("<span class=\"fit_grey\">{0}</span>{1}", GetAttribute(CellAttributes.InformationPrefixKey), result);
+                if (Attributes.HasAttribute(CellAttribute.InformationPrefix)) {
+                    result = string.Format("<span class=\"fit_grey\">{0}</span>{1}", GetAttribute(CellAttribute.InformationPrefix), result);
                 }
-                if (Attributes.HasAttribute(CellAttributes.InformationSuffixKey)) {
-                    result = string.Format("{0}<span class=\"fit_grey\">{1}</span>", result, GetAttribute(CellAttributes.InformationSuffixKey));
+                if (Attributes.HasAttribute(CellAttribute.InformationSuffix)) {
+                    result = string.Format("{0}<span class=\"fit_grey\">{1}</span>", result, GetAttribute(CellAttribute.InformationSuffix));
                 }
-                if (Attributes.HasAttribute(CellAttributes.ActualKey)) {
-                    result += Label("expected") + "<hr />" + HttpUtility.HtmlEncode(GetAttribute(CellAttributes.ActualKey)) + Label("actual");
+                if (Attributes.HasAttribute(CellAttribute.Actual)) {
+                    result += Label("expected") + "<hr />" + HttpUtility.HtmlEncode(GetAttribute(CellAttribute.Actual)) + Label("actual");
                 }
-                if (Attributes.HasAttribute(CellAttributes.ExceptionKey)) {
-                    result += "<hr /><pre><div class=\"fit_stacktrace\">" + GetAttribute(CellAttributes.ExceptionKey) + "</div></pre>";
+                if (Attributes.HasAttribute(CellAttribute.Exception)) {
+                    result += "<hr /><pre><div class=\"fit_stacktrace\">" + GetAttribute(CellAttribute.Exception) + "</div></pre>";
                 }
-                if (Attributes.HasAttribute(CellAttributes.LabelKey)) {
-                    result += Label(GetAttribute(CellAttributes.LabelKey));
+                if (Attributes.HasAttribute(CellAttribute.Label)) {
+                    result += Label(GetAttribute(CellAttribute.Label));
                 }
-                if (Attributes.HasAttribute(CellAttributes.ExtensionKey)) {
+                if (Attributes.HasAttribute(CellAttribute.Extension)) {
                     result += string.Format(
                         "<span><a href=\"javascript:void(0)\" onclick=\"this.parentNode.nextSibling.style.display="
                         + "this.parentNode.nextSibling.style.display=='none'?'':'none'\">&#8659;</a></span><div style=\"display:none\">{0}</div>",
-                        GetAttribute(CellAttributes.ExtensionKey));
+                        GetAttribute(CellAttribute.Extension));
                 }
                 return result;
             }
@@ -78,12 +80,11 @@ namespace fit
 
 		public virtual void AddToBody(string text)
 		{
-		    AddToAttribute(CellAttributes.InformationSuffixKey, text, CellAttributes.SuffixFormat);
+		    AddToAttribute(CellAttribute.InformationSuffix, text, CellAttributes.SuffixFormat);
 		}
 
-	    private Parse() { Attributes = new CellAttributes(); }
+	    Parse() { Attributes = new CellAttributes(); }
 
-        //added
         public Parse(string theTag, string theEnd, string theLeader, string theBody, Parse theParts): this() {
             tag = theTag;
             End = theEnd;
@@ -105,36 +106,34 @@ namespace fit
 			More = more;
 		}
 
-		public static string[] Tags = {"table", "tr", "td"};
-
 		public Parse(string text) : this(text, Tags, 0, 0)
 		{}
 
 		public Parse(string text, string[] tags) : this(text, tags, 0, 0)
 		{}
 
-	    public void SetAttribute(string key, string value) {
+	    public void SetAttribute(CellAttribute key, string value) {
             Attributes.SetAttribute(key, value);
         }
 
-	    public void AddToAttribute(string key, string value, string format) {
+	    public void AddToAttribute(CellAttribute key, string value, string format) {
 	        Attributes.AddToAttribute(key, value, format);
 	    }
 
-	    public string GetAttribute(string key) {
+	    public string GetAttribute(CellAttribute key) {
             return Attributes.GetAttribute(key);
         }
 
-	    private static string Label(string text) {
+	    static string Label(string text) {
 			return " <span class=\"fit_label\">" + text + "</span>";
 		}
 
-		private static string Substring(string text, int startIndexInclusive, int endIndexExclusive)
+		static string Substring(string text, int startIndexInclusive, int endIndexExclusive)
 		{
 			return text.Substring(startIndexInclusive, endIndexExclusive - startIndexInclusive);
 		}
 
-		private static int ProtectedIndexOf(string text, string searchValue, int offset, string tag)
+		static int ProtectedIndexOf(string text, string searchValue, int offset, string tag)
 		{
 			int result = text.IndexOf(searchValue, offset);
 			if (result < 0)
@@ -219,7 +218,7 @@ namespace fit
             return StripMarkup(s);
         }
 
-        private static string StripMarkup(string s)
+        static string StripMarkup(string s)
         {
             int i = 0;
             while ((i = s.IndexOf('<', i)) >= 0)
@@ -269,13 +268,7 @@ namespace fit
 			return BuildString(new StringBuilder(), More).ToString();
 		}
 
-	    /*public string BranchString {
-	        get {
-	            return BuildString(new StringBuilder(), null).ToString();
-	        }
-	    }*/
-
-		private StringBuilder BuildString(StringBuilder builder, Parse moreNodes)
+		StringBuilder BuildString(StringBuilder builder, Parse moreNodes)
 		{
 			builder.Append(Leader);
 			builder.Append(Tag);
