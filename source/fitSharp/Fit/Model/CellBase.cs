@@ -8,6 +8,7 @@ namespace fitSharp.Fit.Model {
         CellAttributes Attributes { get; set; }
 
         protected CellBase() { Attributes = new CellAttributes(); }
+        protected CellBase(CellBase other) { Attributes = other.Attributes; }
 
         public abstract string Text { get; }
 
@@ -21,6 +22,10 @@ namespace fitSharp.Fit.Model {
 
 	    public string GetAttribute(CellAttribute key) {
             return Attributes.GetAttribute(key);
+        }
+
+        public bool HasAttribute(CellAttribute key) {
+            return Attributes.HasAttribute(key);
         }
     }
 }

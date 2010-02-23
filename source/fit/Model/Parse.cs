@@ -16,7 +16,7 @@ using fitSharp.Machine.Model;
 
 namespace fit
 {
-	public class Parse: Tree<Cell>, Cell
+	public class Parse: CellBase, Tree<Cell>
 	{
 	    public static bool IsStandard;
 
@@ -26,7 +26,6 @@ namespace fit
 	    readonly string originalBody;
 
 		string body;
-        CellAttributes Attributes { get; set; }
 
 	    public Parse More { get; set; }
 	    public Parse Parts { get; set; }
@@ -38,32 +37,32 @@ namespace fit
             get {
 	            int space = tag.IndexOf(' ');
 	            if (space < 0) space = tag.Length - 1;
-	            return !Attributes.HasAttribute(CellAttribute.Status) ? tag : string.Format("{0} class=\"{1}\"{2}", tag.Substring(0, space), GetAttribute(CellAttribute.Status), tag.Substring(space));
+	            return !HasAttribute(CellAttribute.Status) ? tag : string.Format("{0} class=\"{1}\"{2}", tag.Substring(0, space), GetAttribute(CellAttribute.Status), tag.Substring(space));
             }
         }
 
 	    public string Body {
             get {
                 string result = body;
-                if (Attributes.HasAttribute(CellAttribute.Add)) {
+                if (HasAttribute(CellAttribute.Add)) {
                     result = string.Format("<span class=\"fit_grey\">{0}</span>", HttpUtility.HtmlEncode(result));
                 }
-                if (Attributes.HasAttribute(CellAttribute.InformationPrefix)) {
+                if (HasAttribute(CellAttribute.InformationPrefix)) {
                     result = string.Format("<span class=\"fit_grey\">{0}</span>{1}", GetAttribute(CellAttribute.InformationPrefix), result);
                 }
-                if (Attributes.HasAttribute(CellAttribute.InformationSuffix)) {
+                if (HasAttribute(CellAttribute.InformationSuffix)) {
                     result = string.Format("{0}<span class=\"fit_grey\">{1}</span>", result, GetAttribute(CellAttribute.InformationSuffix));
                 }
-                if (Attributes.HasAttribute(CellAttribute.Actual)) {
+                if (HasAttribute(CellAttribute.Actual)) {
                     result += Label("expected") + "<hr />" + HttpUtility.HtmlEncode(GetAttribute(CellAttribute.Actual)) + Label("actual");
                 }
-                if (Attributes.HasAttribute(CellAttribute.Exception)) {
+                if (HasAttribute(CellAttribute.Exception)) {
                     result += "<hr /><pre><div class=\"fit_stacktrace\">" + GetAttribute(CellAttribute.Exception) + "</div></pre>";
                 }
-                if (Attributes.HasAttribute(CellAttribute.Label)) {
+                if (HasAttribute(CellAttribute.Label)) {
                     result += Label(GetAttribute(CellAttribute.Label));
                 }
-                if (Attributes.HasAttribute(CellAttribute.Extension)) {
+                if (HasAttribute(CellAttribute.Extension)) {
                     result += string.Format(
                         "<span><a href=\"javascript:void(0)\" onclick=\"this.parentNode.nextSibling.style.display="
                         + "this.parentNode.nextSibling.style.display=='none'?'':'none'\">&#8659;</a></span><div style=\"display:none\">{0}</div>",
@@ -83,7 +82,18 @@ namespace fit
 		    AddToAttribute(CellAttribute.InformationSuffix, text, CellAttributes.SuffixFormat);
 		}
 
-	    Parse() { Attributes = new CellAttributes(); }
+	    Parse() {}
+
+        Parse(Parse other)
+            : base(other) {
+            tag = other.tag;
+            End = other.End;
+            Leader = other.Leader;
+            body = other.body;
+            originalBody = other.body;
+            Parts = other.Parts;
+            Trailer = other.Trailer;
+        }
 
         public Parse(string theTag, string theEnd, string theLeader, string theBody, Parse theParts): this() {
             tag = theTag;
@@ -111,18 +121,6 @@ namespace fit
 
 		public Parse(string text, string[] tags) : this(text, tags, 0, 0)
 		{}
-
-	    public void SetAttribute(CellAttribute key, string value) {
-            Attributes.SetAttribute(key, value);
-        }
-
-	    public void AddToAttribute(CellAttribute key, string value, string format) {
-	        Attributes.AddToAttribute(key, value, format);
-	    }
-
-	    public string GetAttribute(CellAttribute key) {
-            return Attributes.GetAttribute(key);
-        }
 
 	    static string Label(string text) {
 			return " <span class=\"fit_label\">" + text + "</span>";
@@ -201,7 +199,7 @@ namespace fit
 			return At(i, j).Parts.At(k);
 		}
 
-		public virtual string Text
+		public override string Text
 		{
 			get
 			{
@@ -327,14 +325,13 @@ namespace fit
                 return sub;
             }
             return new Parse(tag, End, Leader, body, (parts(this) == null ? null : parts(this).DeepCopy(substitute, more, parts))) {
-                Attributes = new CellAttributes(Attributes),
                 Trailer = Trailer,
                 More = more(this) == null ? null : more(this).DeepCopy(substitute, more, parts)
             };
         }
 
         public Parse Copy() {
-            return new Parse(tag, End, Leader, body, Parts) {Trailer = Trailer, Attributes = new CellAttributes(Attributes)};
+            return new Parse(this);
         }
 
         public IEnumerable<Parse> Siblings {
