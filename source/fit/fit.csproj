@@ -114,9 +114,6 @@
     <Compile Include="Fixtures\FitVersionFixture.cs" />
     <Compile Include="Fixtures\Fixture.cs" />
     <Compile Include="Model\Parse.cs" />
-    <Compile Include="Parser\HtmlString.cs" />
-    <Compile Include="Parser\Scanner.cs" />
-    <Compile Include="Parser\Substring.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Runner\TestRunner.cs" />
     <Compile Include="Runner\TextResultWriter.cs" />

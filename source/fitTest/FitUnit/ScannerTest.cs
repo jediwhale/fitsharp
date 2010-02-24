@@ -1,9 +1,10 @@
-// Copyright © 2009 Syterra Software Inc.
+// Copyright © 2010 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using fitSharp.Machine.Model;
+using fitSharp.Parser;
 
 namespace fit.Test.FitUnit {
     public class ScannerTest: DomainAdapter {
@@ -17,14 +18,14 @@ namespace fit.Test.FitUnit {
             myScanner.FindTokenPair(theFirstToken, theSecondToken, ourFilter);
         }
 	    
-        private static bool FilterString(Substring theTokenBody) {
+        static bool FilterString(Substring theTokenBody) {
             return !ourFilterString.Equals(theTokenBody);
         }
 
-        private Scanner myScanner;
+        Scanner myScanner;
 	    
-        private static Substring ourFilterString;
-        private static TokenBodyFilter ourFilter = new TokenBodyFilter(FilterString);
+        static Substring ourFilterString;
+        static readonly TokenBodyFilter ourFilter = FilterString;
 
         public object SystemUnderTest {
             get { return myScanner; }

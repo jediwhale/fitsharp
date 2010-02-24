@@ -1,9 +1,10 @@
-// Copyright © 2009 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+// Copyright © 2010 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System;
+using fitSharp.Parser;
 using NUnit.Framework;
 
 namespace fit.Test.NUnit {
@@ -14,31 +15,30 @@ namespace fit.Test.NUnit {
         [Test]
         public void UnEscapeShouldRemoveHtmlEscapes() 
         {
-            Assert.AreEqual("a<b", Parse.UnEscape("a&lt;b"));
-            Assert.AreEqual("a>b & b>c &&", Parse.UnEscape("a&gt;b&nbsp;&amp;&nbsp;b>c &&"));
-            Assert.AreEqual("&amp;&amp;", Parse.UnEscape("&amp;amp;&amp;amp;"));
-            Assert.AreEqual("a>b & b>c &&", Parse.UnEscape("a&gt;b&nbsp;&amp;&nbsp;b>c &&"));
+            Assert.AreEqual("a<b", new HtmlString("a&lt;b").ToPlainText());
+            Assert.AreEqual("a>b & b>c &&", new HtmlString("a&gt;b&nbsp;&amp;&nbsp;b>c &&").ToPlainText());
+            Assert.AreEqual("&amp;&amp;", new HtmlString("&amp;amp;&amp;amp;").ToPlainText());
+            Assert.AreEqual("a>b & b>c &&", new HtmlString("a&gt;b&nbsp;&amp;&nbsp;b>c &&").ToPlainText());
         }
 
         [Test]
         public void UnFormatShouldRemoveHtmlFormattingCodeIfPresent() 
         {
-            Assert.AreEqual("ab",Parse.UnFormat("<font size=+1>a</font>b"));
-            Assert.AreEqual("ab",Parse.UnFormat("a<font size=+1>b</font>"));
-            Assert.AreEqual("a<b",Parse.UnFormat("a<b"));
+            Assert.AreEqual("ab",new HtmlString("<font size=+1>a</font>b").ToPlainText());
+            Assert.AreEqual("ab",new HtmlString("a<font size=+1>b</font>").ToPlainText());
+            Assert.AreEqual("a<b",new HtmlString("a<b").ToPlainText());
         }
 
         [Test]
         public void LeaderShouldReturnAllHtmlTextBeforeTheParse()
         {
-            Parse p = new Parse("<html><head></head><body><Table foo=2>body</table></body></html>", new string[] {"table"});
+            var p = new Parse("<html><head></head><body><Table foo=2><tr><td>body</td></tr></table></body></html>");
             Assert.AreEqual("<html><head></head><body>", p.Leader);
             Assert.AreEqual("<Table foo=2>", p.Tag);
-            Assert.AreEqual("body", p.Body);
             Assert.AreEqual("</body></html>", p.Trailer);
         }
 
-        private Parse SimpleTableParse
+        static Parse SimpleTableParse
         {
             get { return new Parse("leader<table><tr><td>body</td></tr></table>trailer"); }
         }
@@ -47,14 +47,14 @@ namespace fit.Test.NUnit {
         public void BodyShouldReturnNullForTables() 
         {
             Parse parse = SimpleTableParse;
-            Assert.AreEqual(null, parse.Body);
+            Assert.IsTrue(string.IsNullOrEmpty(parse.Body));
         }
 
         [Test]
         public void BodyShouldReturnNullForRows() 
         {
             Parse parse = SimpleTableParse;
-            Assert.AreEqual(null, parse.Parts.Body);
+            Assert.IsTrue(string.IsNullOrEmpty(parse.Parts.Body));
         }
 
         [Test]
@@ -67,7 +67,7 @@ namespace fit.Test.NUnit {
         [Test]
         public void PartsShouldReturnCellsWhenTheParseRepresentsARow()
         {
-            Parse row = new Parse("<tr><td>one</td><td>two</td><td>three</td></tr>", new string[]{"tr", "td"});
+            Parse row = new Parse("<table><tr><td>one</td><td>two</td><td>three</td></tr></table>").Parts;
             Assert.AreEqual("one", row.Parts.Body);
             Assert.AreEqual("two", row.Parts.More.Body);
             Assert.AreEqual("three", row.Parts.More.More.Body);
@@ -76,7 +76,7 @@ namespace fit.Test.NUnit {
         [Test]
         public void PartsShouldReturnRowsWhenTheParseRepresentsATable()
         {
-            Parse table = new Parse("<table><tr><td>row one</td></tr><tr><td>row two</td></tr></table>", new string[] {"table", "tr", "td"});
+            var table = new Parse("<table><tr><td>row one</td></tr><tr><td>row two</td></tr></table>");
             Assert.AreEqual("row one", table.Parts.Parts.Body);
             Assert.AreEqual("row two", table.Parts.More.Parts.Body);
         }
@@ -84,7 +84,7 @@ namespace fit.Test.NUnit {
         [Test]
         public void TestIndexingPage() 
         {
-            Parse p = new Parse(
+            var p = new Parse(
                 @"leader
 					<table>
 						<tr>
@@ -128,15 +128,14 @@ namespace fit.Test.NUnit {
         [Test]
         public void TestText() 
         {
-            string[] tags ={"td"};
-            Parse p = new Parse("<td>a&lt;b</td>", tags);
+            Parse p = new Parse("<table><tr><td>a&lt;b</td></tr></table>").Parts.Parts;
             Assert.AreEqual("a&lt;b", p.Body);
             Assert.AreEqual("a<b", p.Text);
-            p = new Parse("<td>\ta&gt;b&nbsp;&amp;&nbsp;b>c &&&nbsp;</td>", tags);
+            p = new Parse("<table><tr><td>\ta&gt;b&nbsp;&amp;&nbsp;b>c &&&nbsp;</td></tr></table>").Parts.Parts;
             Assert.AreEqual("\ta>b & b>c && ", p.Text);
-            p = new Parse("<td>\ta&gt;b&nbsp;&amp;&nbsp;b>c &&nbsp;</td>", tags);
+            p = new Parse("<table><tr><td>\ta&gt;b&nbsp;&amp;&nbsp;b>c &&nbsp;</td></tr></table>").Parts.Parts;
             Assert.AreEqual("\ta>b & b>c & ", p.Text);
-            p = new Parse("<TD><P><FONT FACE=\"Arial\" SIZE=2>GroupTestFixture</FONT></TD>", tags);
+            p = new Parse("<table><tr><TD><P><FONT FACE=\"Arial\" SIZE=2>GroupTestFixture</FONT></TD></tr></table>").Parts.Parts;
             Assert.AreEqual("GroupTestFixture",p.Text);
         }
     }

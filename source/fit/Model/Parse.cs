@@ -3,13 +3,11 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Web;
-using fit.Parser;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Extension;
 using fitSharp.Machine.Model;
@@ -18,12 +16,8 @@ namespace fit
 {
 	public class Parse: CellBase, Tree<Cell>
 	{
-	    public static bool IsStandard;
-
-		static readonly string[] Tags = {"table", "tr", "td"};
-
 	    readonly string tag;
-	    readonly string originalBody;
+	    private readonly string text;
 
 		string body;
 
@@ -82,91 +76,52 @@ namespace fit
 		    AddToAttribute(CellAttribute.InformationSuffix, text, CellAttributes.SuffixFormat);
 		}
 
-	    Parse() {}
-
         Parse(Parse other)
             : base(other) {
             tag = other.tag;
             End = other.End;
             Leader = other.Leader;
             body = other.body;
-            originalBody = other.body;
             Parts = other.Parts;
             Trailer = other.Trailer;
+            text = other.text;
         }
 
-        public Parse(string theTag, string theEnd, string theLeader, string theBody, Parse theParts): this() {
+        public Parse(string text, string theTag, string theEnd, string theLeader, string theBody, Parse theParts) {
+            this.text = text;
             tag = theTag;
             End = theEnd;
             Leader = theLeader;
             body = theBody;
-            originalBody = theBody;
             Parts = theParts;
         }
 
-		public Parse(string tag, string body, Parse parts, Parse more): this()
+		public Parse(string tag, string body, Parse parts, Parse more)
 		{
 			Leader = "\n";
 			this.tag = "<" + tag + ">";
 			this.body = body;
-			originalBody = body;
 			End = "</" + tag + ">";
 			Trailer = "";
 			Parts = parts;
 			More = more;
+		    text = string.IsNullOrEmpty(body) ? string.Empty : body.Trim();
 		}
 
-		public Parse(string text) : this(text, Tags, 0, 0)
-		{}
-
-		public Parse(string text, string[] tags) : this(text, tags, 0, 0)
-		{}
+        public Parse(string input) {
+            Parse other = new HtmlParser().Parse(input);
+            tag = other.tag;
+            End = other.End;
+            Leader = other.Leader;
+            body = other.body;
+            Parts = other.Parts;
+            Trailer = other.Trailer;
+            text = other.text;
+            More = other.More;
+        }
 
 	    static string Label(string text) {
 			return " <span class=\"fit_label\">" + text + "</span>";
-		}
-
-		static string Substring(string text, int startIndexInclusive, int endIndexExclusive)
-		{
-			return text.Substring(startIndexInclusive, endIndexExclusive - startIndexInclusive);
-		}
-
-		static int ProtectedIndexOf(string text, string searchValue, int offset, string tag)
-		{
-			int result = text.IndexOf(searchValue, offset);
-			if (result < 0)
-				throw new ApplicationException("Can't find tag: " + tag);
-			return result;
-		}
-
-		public Parse(string text, string[] tags, int level, int offset): this()
-		{
-			string lc = text.ToLower();
-			string target = tags[level].ToLower();
-
-			int startTag = ProtectedIndexOf(lc, "<" + target, 0, target);
-			int endTag = ProtectedIndexOf(lc, ">", startTag, target) + 1;
-			int startEnd = ProtectedIndexOf(lc, "</" + target, endTag, target);
-			int endEnd = ProtectedIndexOf(lc, ">", startEnd, target) + 1;
-			int startMore = lc.IndexOf("<" + target, endEnd);
-
-			Leader = Substring(text, 0, startTag);
-			tag = Substring(text, startTag, endTag);
-			body = Substring(text, endTag, startEnd);
-			originalBody = body;
-			End = Substring(text, startEnd, endEnd);
-			Trailer = text.Substring(endEnd);
-
-			if (level + 1 < tags.Length)
-			{
-				Parts = new Parse(body, tags, level + 1, offset + endTag);
-				body = null;
-			    originalBody = null;
-			}
-
-		    if (startMore < 0) return;
-		    More = new Parse(Trailer, tags, level, offset + endEnd);
-		    Trailer = null;
 		}
 
 		public virtual int Size
@@ -203,57 +158,8 @@ namespace fit
 		{
 			get
 			{
-				return HtmlToText(originalBody);
+				return text;
 			}
-		}
-
-	    public static string HtmlToText(string theHtml) {
-	        return new HtmlString(theHtml, IsStandard).ToPlainText();
-        }
-
-        public static string UnFormat(string s)
-        {
-            return StripMarkup(s);
-        }
-
-        static string StripMarkup(string s)
-        {
-            int i = 0;
-            while ((i = s.IndexOf('<', i)) >= 0)
-            {
-                int j;
-                if ((j = s.IndexOf('>', i + 1)) > 0)
-                    s = Substring(s, 0, i) + s.Substring(j + 1);
-                else
-                    break;
-            }
-            return s;
-        }
-	    
-	    public static string UnEscape(string s)
-		{
-			int i = -1;
-			while ((i = s.IndexOf('&', i + 1)) >= 0)
-			{
-			    int j;
-			    if ((j = s.IndexOf(';', i + 1)) <= 0) continue;
-			    string from = Substring(s, i + 1, j).ToLower();
-			    string to;
-			    if ((to = Replacement(from)) != null)
-			        s = Substring(s, 0, i) + to + s.Substring(j + 1);
-			}
-			return s;
-		}
-
-		public static string Replacement(string from)
-		{
-			if (from == "lt")
-				return "<";
-			if (from == "gt")
-				return ">";
-			if (from == "amp")
-				return "&";
-            return from == "nbsp" ? " " : null;
 		}
 
 		public virtual void Print(TextWriter output)
@@ -324,7 +230,7 @@ namespace fit
                 sub.More = more(this) == null ? null : more(this).DeepCopy(substitute, more, parts);
                 return sub;
             }
-            return new Parse(tag, End, Leader, body, (parts(this) == null ? null : parts(this).DeepCopy(substitute, more, parts))) {
+            return new Parse(text, tag, End, Leader, body, (parts(this) == null ? null : parts(this).DeepCopy(substitute, more, parts))) {
                 Trailer = Trailer,
                 More = more(this) == null ? null : more(this).DeepCopy(substitute, more, parts)
             };

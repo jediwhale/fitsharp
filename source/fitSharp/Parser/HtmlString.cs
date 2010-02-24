@@ -1,18 +1,16 @@
-// FitNesse.NET
-// Copyright © 2007 Syterra Software Inc.
-// This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
-// This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+// Copyright © 2010 Syterra Software Inc. All rights reserved.
+// The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+// which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
+// to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System.Text;
 
-namespace fit.Parser {
+namespace fitSharp.Parser {
     public class HtmlString {
-        private readonly bool isStandard;
+	    public static bool IsStandard;
 
-        public HtmlString(string theHtml, bool isStandard) {
+        public HtmlString(string theHtml) {
             myHtml = theHtml;
-            this.isStandard = isStandard;
         }
         
         public string ToPlainText() {
@@ -24,25 +22,25 @@ namespace fit.Parser {
             return string.Empty;
         }
         
-        private string UnFormat(string theInput) {
-            var result = new TextOutput(isStandard);
+        static string UnFormat(string theInput) {
+            var result = new TextOutput(IsStandard);
             var scan = new Scanner(theInput);
             while (true) {
                 scan.FindTokenPair("<", ">", ourValidTagFilter);
                 result.Append(scan.Leader);
                 if (scan.Body.Length == 0) break;
-                if (isStandard) result.AppendTag(GetTag(scan.Body));
+                if (IsStandard) result.AppendTag(GetTag(scan.Body));
             }
             return result.ToString();
         }
 	    
-        private static bool IsValidTag(Substring theBody) {
+        static bool IsValidTag(Substring theBody) {
             return theBody[0] == '/' || char.IsLetter(theBody[0]);
         }
 	    
-        private static readonly TokenBodyFilter ourValidTagFilter = IsValidTag;
+        static readonly TokenBodyFilter ourValidTagFilter = IsValidTag;
 	    
-        private static string GetTag(Substring theInput) {
+        static string GetTag(Substring theInput) {
             var tag = new StringBuilder();
             int i = 0;
             if (theInput[0] == '/') tag.Append(theInput[i++]);
@@ -52,7 +50,7 @@ namespace fit.Parser {
             return tag.ToString().ToLower();
         }
 	    
-        private static string UnEscape(string theInput) {
+        static string UnEscape(string theInput) {
             var scan = new Scanner(theInput);
             var result = new StringBuilder();
             while (true) {
@@ -73,11 +71,11 @@ namespace fit.Parser {
             return result.ToString();
         }
 
-        private readonly string myHtml;
+        readonly string myHtml;
 	    
-        private class TextOutput {
+        class TextOutput {
 
-            private readonly bool isStandard;
+            readonly bool isStandard;
 	        
             public TextOutput(bool isStandard) {
                 this.isStandard = isStandard;
@@ -139,8 +137,8 @@ namespace fit.Parser {
                 return isStandard ? myText.ToString().Trim().Replace("<br>", "\n").Replace("<br />", "\n") : myText.ToString();
             }
 	        
-            private readonly StringBuilder myText;
-            private string myLastTag;
+            readonly StringBuilder myText;
+            string myLastTag;
             bool myWhitespace;
         }
     }

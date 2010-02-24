@@ -1,4 +1,4 @@
-﻿// Copyright © 2009 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2010 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -9,7 +9,7 @@ using System.Collections.Generic;
 namespace fitSharp.Parser {
 
     public interface ParseTreeNodeFactory<T> {
-        T MakeNode(string startTag, string endTag, string leader, string body, T firstChild);
+        T MakeNode(string text, string startTag, string endTag, string leader, string body, T firstChild);
         void AddTrailer(T node, string trailer);
         void AddSibling(T node, T sibling);
     }
@@ -18,7 +18,7 @@ namespace fitSharp.Parser {
     // Uses a recursive descent parsing approach.
     // The lexical analyzer is unusual - it skips everything until it finds the next expected token.
     public class HtmlTables<T> where T: class {
-        private readonly ParseTreeNodeFactory<T> factory;
+        readonly ParseTreeNodeFactory<T> factory;
 
         public HtmlTables(ParseTreeNodeFactory<T> factory) {
             this.factory = factory;
@@ -35,17 +35,17 @@ namespace fitSharp.Parser {
             return tables.Parse(new LexicalAnalyzer(input));
         }
 
-        private interface ElementParser {
+        interface ElementParser {
             T Parse(LexicalAnalyzer theAnalyzer);
             string Keyword {get;}
         }
 
-        private class ListParser: ElementParser {
+        class ListParser: ElementParser {
 
-            private readonly ElementParser myChildParser;
-            private readonly string myKeyword;
-            private readonly bool IRequireChildren;
-            private readonly ParseTreeNodeFactory<T> factory;
+            readonly ElementParser myChildParser;
+            readonly string myKeyword;
+            readonly bool IRequireChildren;
+            readonly ParseTreeNodeFactory<T> factory;
             
             public ListParser(ParseTreeNodeFactory<T> factory, string theKeyword, ElementParser theChildParser, bool thisRequiresChildren) {
                 this.factory = factory;
@@ -73,7 +73,7 @@ namespace fitSharp.Parser {
                 return ParseElement(theAnalyzer);
             }
 
-            private T ParseElement(LexicalAnalyzer theAnalyzer) {
+            T ParseElement(LexicalAnalyzer theAnalyzer) {
                 string tag = theAnalyzer.Token;
                 string leader = theAnalyzer.Leader;
                 theAnalyzer.PushEnd("/" + myKeyword);
@@ -84,12 +84,16 @@ namespace fitSharp.Parser {
                 theAnalyzer.PopEnd();
                 theAnalyzer.GoToNextToken("/" + myKeyword);
                 if (theAnalyzer.Token.Length == 0) throw new ApplicationException("expected /" + myKeyword + " tag");
-                return factory.MakeNode(tag, theAnalyzer.Token, leader, theAnalyzer.Leader, children);
+                return factory.MakeNode(HtmlToText(theAnalyzer.Leader), tag, theAnalyzer.Token, leader, theAnalyzer.Leader, children);
             }
         }
 
-        private class AlternationParser: ElementParser {
-            private readonly ParseTreeNodeFactory<T> factory;
+	    static string HtmlToText(string theHtml) {
+	        return new HtmlString(theHtml).ToPlainText();
+        }
+
+        class AlternationParser: ElementParser {
+            readonly ParseTreeNodeFactory<T> factory;
 
             public AlternationParser(ParseTreeNodeFactory<T> factory) {
                 this.factory = factory;
@@ -118,14 +122,14 @@ namespace fitSharp.Parser {
 
             public ListParser[] ChildParsers {set {myChildParsers = value;}}
 
-            private ListParser[] myChildParsers;
+            ListParser[] myChildParsers;
         }
 
-        private class LexicalAnalyzer {
+        class LexicalAnalyzer {
 
-            private readonly string myInput;
-            private int myPosition;
-            private readonly Stack<string> myEndTokens;
+            readonly string myInput;
+            int myPosition;
+            readonly Stack<string> myEndTokens;
 
             public LexicalAnalyzer(string theInput) {
                 myInput = theInput;
@@ -181,7 +185,7 @@ namespace fitSharp.Parser {
             public string Leader { get; private set; }
             public string Token { get; private set; }
 
-            private int EndPosition {
+            int EndPosition {
                 get {
                     int endInput = -1;
                     string endToken = PeekEnd();

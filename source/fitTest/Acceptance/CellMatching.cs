@@ -1,4 +1,4 @@
-// Copyright © 2009 Syterra Software Inc.
+// Copyright © 2010 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -22,7 +22,8 @@ namespace fit.Test.Acceptance {
                                        ? theExpectedValue.Substring(1, theExpectedValue.Length - 2)
                                        : theExpectedValue;
             try {
-                myCell = new Parse("td", HttpUtility.HtmlEncode(expectedValue), null, null);
+                string html = "<table><tr><td>" + HttpUtility.HtmlEncode(expectedValue) + "</td></tr></table>";
+                myCell = new Parse(html).Parts.Parts;
                 return
                     CellOperation.Compare(MakeTypedValue(theActualValue, theActualType), myCell).ToString();
             }
@@ -31,7 +32,7 @@ namespace fit.Test.Acceptance {
             }
         }
 
-        private static TypedValue MakeTypedValue(string value, string type) {
+        static TypedValue MakeTypedValue(string value, string type) {
             switch (type.ToLower()) {
                 case "string": return new TypedValue(value, typeof(string));
                 case "int": return new TypedValue(int.Parse(value), typeof(int));
@@ -59,6 +60,6 @@ namespace fit.Test.Acceptance {
             return MatchesActualTypeActualValueExpectedValue(theActualType, theActualValue, theExpectedValue);
         }
 
-        private Parse myCell;
+        Parse myCell;
     }
 }
