@@ -20,6 +20,9 @@ namespace fit
 	    CellOperation cellOperation;
 	    CellProcessor processor;
 
+	    protected object mySystemUnderTest;
+	    protected Fixture myParentFixture;
+
 	    public CellProcessor Processor {
 	        get { return processor; }
 	        set {
@@ -39,6 +42,7 @@ namespace fit
 	    }
 
         public Fixture() {}
+
         public Fixture(object systemUnderTest): this() { mySystemUnderTest = systemUnderTest; }
 
         public virtual bool IsVisible { get { return true; } }
@@ -163,7 +167,7 @@ namespace fit
 		}
 
         public object GetArgumentInput(int theIndex, Type theType) {
-            return Processor.Parse(theType, new TypedValue(this), new StringCellLeaf(Args[theIndex])).Value;
+            return Processor.Parse(theType, new TypedValue(this), new CellTreeLeaf(Args[theIndex])).Value;
         }
 
 	    public object SystemUnderTest {
@@ -173,8 +177,5 @@ namespace fit
         public void SetSystemUnderTest(object theSystemUnderTest) {
             mySystemUnderTest = theSystemUnderTest;
         }
-
-	    protected object mySystemUnderTest;
-	    protected Fixture myParentFixture;
 	}
 }

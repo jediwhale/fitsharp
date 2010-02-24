@@ -1,4 +1,4 @@
-// Copyright © 2009 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+// Copyright © 2010 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -71,9 +71,9 @@ namespace fit.Test.NUnit {
             Assert.IsFalse(AreEqual(array1, "6,7,8"));
         }
 
-        private static bool AreEqual(object o1, string o2) {
+        static bool AreEqual(object o1, string o2) {
             var compare = new CompareDefault {Processor = new Service.Service()};
-            return compare.Compare(new TypedValue(o1), new StringCellLeaf(o2));
+            return compare.Compare(new TypedValue(o1), new CellTreeLeaf(o2));
         }
     }
 }

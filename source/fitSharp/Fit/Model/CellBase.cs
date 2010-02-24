@@ -4,13 +4,21 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 namespace fitSharp.Fit.Model {
-    public abstract class CellBase: Cell {
+    public class CellBase: Cell {
         CellAttributes Attributes { get; set; }
+        readonly string text;
 
-        protected CellBase() { Attributes = new CellAttributes(); }
-        protected CellBase(CellBase other) { Attributes = other.Attributes; }
+        public CellBase(string text) {
+            this.text = text;
+            Attributes = new CellAttributes();
+        }
 
-        public abstract string Text { get; }
+        public CellBase(CellBase other) {
+            Attributes = other.Attributes;
+            text = other.text;
+        }
+
+        public string Text { get { return text; } }
 
 	    public void SetAttribute(CellAttribute key, string value) {
             Attributes.SetAttribute(key, value);

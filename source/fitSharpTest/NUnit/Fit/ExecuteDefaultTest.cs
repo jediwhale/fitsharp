@@ -17,7 +17,7 @@ namespace fitSharp.Test.NUnit.Fit {
         TypedValue target;
         TypedValue result;
         TestStatus testStatus;
-        StringCellLeaf targetCell;
+        CellTreeLeaf targetCell;
         string memberName;
 
         [Test] public void MethodIsInvoked() {
@@ -55,7 +55,7 @@ namespace fitSharp.Test.NUnit.Fit {
         [Test] public void LastActionIsSetAsInputCellAttribute() {
             SetUpSUT("procedure");
             var parameters = new ExecuteParameters(
-                ExecuteParameters.MakeMemberCell(new StringCellLeaf("procedure"), targetCell));
+                ExecuteParameters.MakeMemberCell(new CellTreeLeaf("procedure"), targetCell));
             execute.Execute(new ExecuteContext(ExecuteCommand.Input, target.Value), parameters);
             Assert.AreEqual("blah blah", targetCell.Value.GetAttribute(CellAttribute.Extension));
         }
@@ -63,7 +63,7 @@ namespace fitSharp.Test.NUnit.Fit {
         [Test] public void LastActionIsSetAsExpectedCellAttribute() {
             SetUpSUT("procedure");
             var parameters = new ExecuteParameters(
-                ExecuteParameters.Make(new StringCellLeaf("procedure"), new CellTree(), targetCell));
+                ExecuteParameters.Make(new CellTreeLeaf("procedure"), new CellTree(), targetCell));
             execute.Execute(new ExecuteContext(ExecuteCommand.Check, target.Value), parameters);
             Assert.AreEqual("blah blah", targetCell.Value.GetAttribute(CellAttribute.Extension));
         }
@@ -74,7 +74,7 @@ namespace fitSharp.Test.NUnit.Fit {
 
         TypedValue Execute(Tree<Cell> targetCell) {
             var parameters = new ExecuteParameters(
-                ExecuteParameters.Make(new StringCellLeaf(memberName), new CellTree(), targetCell));
+                ExecuteParameters.Make(new CellTreeLeaf(memberName), new CellTree(), targetCell));
             return execute.Execute(new ExecuteContext(ExecuteCommand.Invoke, target), parameters);
         }
 
@@ -87,10 +87,10 @@ namespace fitSharp.Test.NUnit.Fit {
             target = new TypedValue("target");
             result = new TypedValue("result");
 
-            targetCell = new StringCellLeaf("stuff");
+            targetCell = new CellTreeLeaf("stuff");
 
             processor
-                .Setup(p => p.Parse(typeof (MemberName), It.IsAny<TypedValue>(), It.Is<StringCellLeaf>(c => c.Text == memberName)))
+                .Setup(p => p.Parse(typeof (MemberName), It.IsAny<TypedValue>(), It.Is<CellTreeLeaf>(c => c.Text == memberName)))
                 .Returns(new TypedValue(new MemberName(memberName)));
             processor
                 .Setup(p => p.Invoke(target, "member", It.Is<Tree<Cell>>(c => c.Branches.Count == 0)))

@@ -104,7 +104,6 @@
     <Compile Include="Fit\Operators\ParseMemberName.cs" />
     <Compile Include="Fit\Model\GracefulName.cs" />
     <Compile Include="Fit\Model\MemberName.cs" />
-    <Compile Include="Fit\Model\StringCell.cs" />
     <Compile Include="Fit\Operators\CompareDefault.cs" />
     <Compile Include="Fit\Operators\CompareEndsWith.cs" />
     <Compile Include="Fit\Operators\CompareIntegralRange.cs" />

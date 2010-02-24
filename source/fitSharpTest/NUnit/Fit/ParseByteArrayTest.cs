@@ -20,10 +20,10 @@ namespace fitSharp.Test.NUnit.Fit {
             CheckParse("0x 10 20 31", new byte[] {16, 32, 49});
         }
 
-        private static void CheckParse(string input, byte[] expected) {
+        static void CheckParse(string input, byte[] expected) {
             var parser = new ParseByteArray { Processor =  new CellProcessorBase() };
-            Assert.IsTrue(parser.CanParse(typeof (byte[]), TypedValue.Void, new StringCellLeaf(input)));
-            TypedValue result = parser.Parse(typeof (byte[]), TypedValue.Void, new StringCellLeaf(input));
+            Assert.IsTrue(parser.CanParse(typeof (byte[]), TypedValue.Void, new CellTreeLeaf(input)));
+            TypedValue result = parser.Parse(typeof (byte[]), TypedValue.Void, new CellTreeLeaf(input));
             Assert.AreEqual(expected, result.Value);
         }
     }

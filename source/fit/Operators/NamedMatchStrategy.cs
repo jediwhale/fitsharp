@@ -13,6 +13,9 @@ using fitSharp.Machine.Model;
 
 namespace fit.Operators {
     public abstract class NamedMatchStrategy: CellMatcher, ListMatchStrategy {
+        protected readonly Parse myHeaderRow;
+        bool[] myColumnsUsed;
+
         protected NamedMatchStrategy(CellProcessor processor, Parse theHeaderRow): base(processor) {
             myHeaderRow = theHeaderRow;
         }
@@ -26,26 +29,30 @@ namespace fit.Operators {
             var result = new TypedValue[myHeaderRow.Parts.Size];
             int column = 0;
             foreach (Parse headerCell in new CellRange(myHeaderRow.Parts).Cells) {
-                TypedValue memberResult = new CellOperationImpl(Processor).TryInvoke(theActualRow, headerCell);
-                if (memberResult.IsValid) {
-                    result[column] = memberResult;
+                TypedValue actual = InvokeMethod(theActualRow, headerCell);
+                if (!actual.IsValid) {
+                    actual = InvokeIndexerWithRawHeaderValue(theActualRow, headerCell);
+                }
+                if (actual.IsValid) {
+                    result[column] = actual;
                     myColumnsUsed[column] = true;
                 }
                 else {
-                    TypedValue itemResult = new CellOperationImpl(Processor).TryInvoke(theActualRow, //todo: no need, Invoke already looks for this
-                                                                 new StringCellLeaf("getitem"),
-                                                                 new CellRange(headerCell, 1));
-                    if (itemResult.IsValid) {
-                        result[column] = itemResult;
-                        myColumnsUsed[column] = true;
-                    }
-                    else {
-                        result[column] = TypedValue.Void;
-                    }
+                    result[column] = TypedValue.Void;
                 }
                 column++;
             }
             return result;
+        }
+
+        TypedValue InvokeMethod(object theActualRow, Tree<Cell> headerCell) {
+            return new CellOperationImpl(Processor).TryInvoke(theActualRow, headerCell);
+        }
+
+        TypedValue InvokeIndexerWithRawHeaderValue(object theActualRow, Parse headerCell) {
+            return new CellOperationImpl(Processor).TryInvoke(theActualRow,
+                                                              new CellTreeLeaf("getitem"),
+                                                              new CellRange(headerCell, 1));
         }
 
         public bool IsExpectedSize(Parse theExpectedCells, object theActualRow) {
@@ -56,16 +63,12 @@ namespace fit.Operators {
         public bool FinalCheck(TestStatus testStatus) {
             if (myColumnsUsed == null) return true;
             for (int column = 0; column < myHeaderRow.Parts.Size; column++) {
-                if (!myColumnsUsed[column]) {
-                    testStatus.MarkException(myHeaderRow.Parts.At(column),
-                        new FitFailureException(String.Format("Column '{0}' not used.", myHeaderRow.Parts.At(column).Text)));
-                    return false;
-                }
+                if (myColumnsUsed[column]) continue;
+                testStatus.MarkException(myHeaderRow.Parts.At(column),
+                                         new FitFailureException(String.Format("Column '{0}' not used.", myHeaderRow.Parts.At(column).Text)));
+                return false;
             }
             return true;
         }
-
-        protected readonly Parse myHeaderRow;
-        private bool[] myColumnsUsed;
     }
 }

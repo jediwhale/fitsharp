@@ -16,8 +16,9 @@ namespace fit
 {
 	public class Parse: CellBase, Tree<Cell>
 	{
+		public static int FootnoteFiles;
+
 	    readonly string tag;
-	    private readonly string text;
 
 		string body;
 
@@ -84,11 +85,9 @@ namespace fit
             body = other.body;
             Parts = other.Parts;
             Trailer = other.Trailer;
-            text = other.text;
         }
 
-        public Parse(string text, string theTag, string theEnd, string theLeader, string theBody, Parse theParts) {
-            this.text = text;
+        public Parse(string text, string theTag, string theEnd, string theLeader, string theBody, Parse theParts): base(text) {
             tag = theTag;
             End = theEnd;
             Leader = theLeader;
@@ -96,7 +95,7 @@ namespace fit
             Parts = theParts;
         }
 
-		public Parse(string tag, string body, Parse parts, Parse more)
+		public Parse(string tag, string body, Parse parts, Parse more): base(string.IsNullOrEmpty(body) ? string.Empty : body.Trim())
 		{
 			Leader = "\n";
 			this.tag = "<" + tag + ">";
@@ -105,10 +104,9 @@ namespace fit
 			Trailer = "";
 			Parts = parts;
 			More = more;
-		    text = string.IsNullOrEmpty(body) ? string.Empty : body.Trim();
 		}
 
-        public Parse(string input) {
+        public Parse(string input): base(new HtmlParser().Parse(input)) {
             Parse other = new HtmlParser().Parse(input);
             tag = other.tag;
             End = other.End;
@@ -116,7 +114,6 @@ namespace fit
             body = other.body;
             Parts = other.Parts;
             Trailer = other.Trailer;
-            text = other.text;
             More = other.More;
         }
 
@@ -154,14 +151,6 @@ namespace fit
 			return At(i, j).Parts.At(k);
 		}
 
-		public override string Text
-		{
-			get
-			{
-				return text;
-			}
-		}
-
 		public virtual void Print(TextWriter output)
 		{
 			output.Write(ToString());
@@ -186,8 +175,6 @@ namespace fit
 			builder.Append(Trailer);
 			return builder;
 		}
-
-		public static int FootnoteFiles;
 
 		public virtual string Footnote
 		{
@@ -230,7 +217,7 @@ namespace fit
                 sub.More = more(this) == null ? null : more(this).DeepCopy(substitute, more, parts);
                 return sub;
             }
-            return new Parse(text, tag, End, Leader, body, (parts(this) == null ? null : parts(this).DeepCopy(substitute, more, parts))) {
+            return new Parse(Text, tag, End, Leader, body, (parts(this) == null ? null : parts(this).DeepCopy(substitute, more, parts))) {
                 Trailer = Trailer,
                 More = more(this) == null ? null : more(this).DeepCopy(substitute, more, parts)
             };

@@ -1,4 +1,4 @@
-﻿// Copyright © 2009 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2010 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -15,7 +15,7 @@ namespace fitSharp.Fit.Model {
         public CellTree(Cell value): base(value) {}
 
         public CellTree(params string[] cells) {
-            foreach (var cell in cells) AddBranch(new StringCellLeaf(cell));
+            foreach (var cell in cells) AddBranch(new CellTreeLeaf(cell));
         }
 
         public CellTree(params Tree<Cell>[] lists) {
@@ -30,5 +30,11 @@ namespace fitSharp.Fit.Model {
             var branches = Branches.Aggregate((StringBuilder t, Tree<Cell> u) => t.Append(u)).ToString();
             return string.Format(Value == null || string.IsNullOrEmpty(Value.Text) ? "{0}" : Value.Text, branches);
         }
+    }
+
+    public class CellTreeLeaf: CellTree {
+        public CellTreeLeaf(string text): base(new CellBase(text)) {}
+
+        public string Text { get { return Value.Text; } }
     }
 }
