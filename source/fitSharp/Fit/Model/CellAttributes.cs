@@ -14,7 +14,12 @@ namespace fitSharp.Fit.Model {
 	    Label,
 	    Add,
 	    Extension,
-	    Status
+	    Status,
+        Leader,
+        Trailer,
+        StartTag,
+        EndTag,
+        Body
     }
 
     public class CellAttributes {

@@ -23,7 +23,7 @@ namespace fit.Test.Acceptance {
                                        : theExpectedValue;
             try {
                 string html = "<table><tr><td>" + HttpUtility.HtmlEncode(expectedValue) + "</td></tr></table>";
-                myCell = new Parse(html).Parts.Parts;
+                myCell = Parse.ParseFrom(html).Parts.Parts;
                 return
                     CellOperation.Compare(MakeTypedValue(theActualValue, theActualType), myCell).ToString();
             }

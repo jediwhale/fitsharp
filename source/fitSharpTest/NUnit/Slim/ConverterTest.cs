@@ -1,16 +1,16 @@
-﻿// Copyright © 2009 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2010 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
-using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
+using fitSharp.Slim.Operators;
 using fitSharp.Slim.Service;
 using NUnit.Framework;
 
-namespace fitSharp.Test.NUnit.Machine {
+namespace fitSharp.Test.NUnit.Slim {
     [TestFixture] public class ConverterTest {
-        private readonly Service processor = new Service();
+        readonly Service processor = new Service();
 
         [Test] public void CustomTypeIsParsed() {
             var converter = new CustomConverter {Processor = processor};
@@ -30,7 +30,7 @@ namespace fitSharp.Test.NUnit.Machine {
             Assert.AreEqual("mystuff", result);
         }
 
-        private class CustomConverter: Converter<CustomClass> {
+        class CustomConverter: Converter<CustomClass> {
             protected override CustomClass Parse(string input) {
                 return new CustomClass {Info = ("custom" + input)};
             }
@@ -40,7 +40,7 @@ namespace fitSharp.Test.NUnit.Machine {
             }
         }
 
-        private class CustomClass {
+        class CustomClass {
             public string Info;
         }
     }

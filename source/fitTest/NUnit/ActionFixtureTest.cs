@@ -1,4 +1,4 @@
-// Copyright © 2009 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+// Copyright © 2010 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -16,8 +16,8 @@ namespace fit.Test.NUnit {
     [TestFixture]
     public class ActionFixtureTest
     {
-        private Parse table;
-        private Configuration configuration;
+        Parse table;
+        Configuration configuration;
 
         [SetUp]
         public void SetUp()
@@ -25,7 +25,7 @@ namespace fit.Test.NUnit {
             configuration = TestUtils.InitAssembliesAndNamespaces();
         }
 
-        private static string BuildTable(string name)
+        static Parse BuildTable(string name)
         {
             var builder = new StringBuilder();
             builder.Append("<table border=\"1\" cellspacing=\"0\">");
@@ -42,13 +42,13 @@ namespace fit.Test.NUnit {
             builder.Append("<tr><td>press</td><td colspan=\"2\">Count</td></tr>");
             builder.Append("<tr><td>check</td><td>Counter</td><td>6</td></tr>");
             builder.Append("</table>");
-            return builder.ToString();
+            return Parse.ParseFrom(builder.ToString());
         }
 
         [Test]
         public void TestStart()
         {
-            table = new Parse(BuildTable("ActionFixture"));
+            table = BuildTable("ActionFixture");
             var fixture = new ActionFixture { Processor = new Service.Service(configuration) };
             fixture.DoTable(table);
             Assert.AreEqual(0, fixture.TestStatus.Counts.GetCount(CellAttributes.ExceptionStatus), table.ToString());
@@ -58,7 +58,7 @@ namespace fit.Test.NUnit {
         [Test]
         public void TestCheck()
         {
-            table = new Parse(BuildTable("ActionFixture"));
+            table = BuildTable("ActionFixture");
             var fixture = new ActionFixture{ Processor = new Service.Service(configuration) };
             fixture.DoTable(table);
             Assert.AreEqual(0, fixture.TestStatus.Counts.GetCount(CellAttributes.ExceptionStatus), table.ToString());
@@ -71,7 +71,7 @@ namespace fit.Test.NUnit {
         [Test]
         public void TestCheckOnTimedActionFixture()
         {
-            table = new Parse(BuildTable("TimedActionFixture"));
+            table = BuildTable("TimedActionFixture");
             var fixture = new ActionFixture{ Processor = new Service.Service(configuration) };
             fixture.DoTable(table);
             Assert.AreEqual(0, fixture.TestStatus.Counts.GetCount(CellAttributes.ExceptionStatus), table.ToString());
@@ -91,7 +91,7 @@ namespace fit.Test.NUnit {
             cellOperation.Verify(o => o.TryInvoke(actor, method, It.Is<Tree<Cell>>(t => t.IsLeaf), method));
         }
 
-        private class MyActionFixture: ActionFixture {
+        class MyActionFixture: ActionFixture {
             public MyActionFixture(Fixture actor, Parse cells) {
                 ActionFixture.actor = actor;
                 this.cells = cells;

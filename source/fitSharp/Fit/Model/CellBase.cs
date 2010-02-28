@@ -14,7 +14,7 @@ namespace fitSharp.Fit.Model {
         }
 
         public CellBase(CellBase other) {
-            Attributes = other.Attributes;
+            Attributes = new CellAttributes(other.Attributes);
             text = other.text;
         }
 

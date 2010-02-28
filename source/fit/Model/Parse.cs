@@ -18,21 +18,45 @@ namespace fit
 	{
 		public static int FootnoteFiles;
 
-	    readonly string tag;
-
-		string body;
+        public static Parse ParseFrom(string input) {
+            return new HtmlParser().Parse(input);
+        }
 
 	    public Parse More { get; set; }
 	    public Parse Parts { get; set; }
-	    public string Leader { get; private set; }
-	    public string Trailer { get; set; }
-	    public string End { get; private set; }
+
+	    string body {
+	        get { return GetAttribute(CellAttribute.Body); }
+            set { SetAttribute(CellAttribute.Body, value); }
+	    }
+
+	    string tag {
+	        get { return GetAttribute(CellAttribute.StartTag); }
+            set { SetAttribute(CellAttribute.StartTag, value); }
+	    }
+
+	    public string End {
+	        get { return GetAttribute(CellAttribute.EndTag); }
+            private set { SetAttribute(CellAttribute.EndTag, value); }
+	    }
+
+	    public string Leader {
+	        get { return GetAttribute(CellAttribute.Leader); }
+            private set { SetAttribute(CellAttribute.Leader, value); }
+	    }
+
+	    public string Trailer {
+	        get { return GetAttribute(CellAttribute.Trailer); }
+            set { SetAttribute(CellAttribute.Trailer, value); }
+	    }
 
 	    public string Tag {
             get {
 	            int space = tag.IndexOf(' ');
 	            if (space < 0) space = tag.Length - 1;
-	            return !HasAttribute(CellAttribute.Status) ? tag : string.Format("{0} class=\"{1}\"{2}", tag.Substring(0, space), GetAttribute(CellAttribute.Status), tag.Substring(space));
+	            return !HasAttribute(CellAttribute.Status)
+                    ? tag
+                    : string.Format("{0} class=\"{1}\"{2}", tag.Substring(0, space), GetAttribute(CellAttribute.Status), tag.Substring(space));
             }
         }
 
@@ -79,12 +103,7 @@ namespace fit
 
         Parse(Parse other)
             : base(other) {
-            tag = other.tag;
-            End = other.End;
-            Leader = other.Leader;
-            body = other.body;
             Parts = other.Parts;
-            Trailer = other.Trailer;
         }
 
         public Parse(string text, string theTag, string theEnd, string theLeader, string theBody, Parse theParts): base(text) {
@@ -106,14 +125,9 @@ namespace fit
 			More = more;
 		}
 
-        public Parse(string input): base(new HtmlParser().Parse(input)) {
-            Parse other = new HtmlParser().Parse(input);
-            tag = other.tag;
-            End = other.End;
-            Leader = other.Leader;
-            body = other.body;
+        public Parse(string input): base(ParseFrom(input)) {
+            Parse other = ParseFrom(input);
             Parts = other.Parts;
-            Trailer = other.Trailer;
             More = other.More;
         }
 

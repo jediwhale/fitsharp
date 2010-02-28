@@ -64,7 +64,7 @@ namespace fit.Test.NUnit {
                 builder.Append("<tr><td>" + value + "</td></tr>");
             }
             builder.Append("</table>");
-            return new Parse(builder.ToString());
+            return Parse.ParseFrom(builder.ToString());
         }
 
         static object[] BuildObjectArray(ICollection<string> values)
@@ -101,7 +101,7 @@ namespace fit.Test.NUnit {
             builder.Append("<tr><td>GetFirstString</td></tr>");
             builder.Append("<tr><td>number1</td></tr>");
             builder.Append("</table>");
-            var parse = new Parse(builder.ToString());
+            var parse = Parse.ParseFrom(builder.ToString());
 
             BusinessObjectRowFixture.objects = new object[]
                                                {
@@ -129,7 +129,7 @@ namespace fit.Test.NUnit {
             builder.Append("<tr><td>number2</td></tr>");
             builder.Append("<tr><td>number3</td></tr>");
             builder.Append("</table>");
-            var parse = new Parse(builder.ToString());
+            var parse = Parse.ParseFrom(builder.ToString());
 
             BusinessObjectRowFixture.objects = new object[]
                                                {
@@ -155,7 +155,7 @@ namespace fit.Test.NUnit {
             builder.Append("</table>");
             PeopleLoaderFixture.people.Clear();
             PeopleLoaderFixture.people.Add(new Person("Nigel", "Tufnel"));
-            var tables = new Parse(builder.ToString());
+            var tables = Parse.ParseFrom(builder.ToString());
             RunTest(tables);
             Assert.IsTrue(tables.ToString().IndexOf("Tuf..") > -1);
             Assert.IsFalse(tables.ToString().IndexOf("Tufnel") > -1);
@@ -166,7 +166,7 @@ namespace fit.Test.NUnit {
         public void SetUp()
         {
             configuration = TestUtils.InitAssembliesAndNamespaces();
-            table = new Parse("<table><tr><td>" + rowFixtureName + "</td></tr><tr><td>name</td></tr></table>");
+            table = Parse.ParseFrom("<table><tr><td>" + rowFixtureName + "</td></tr><tr><td>name</td></tr></table>");
             NewRowFixtureDerivative.QueryValues.Clear();
         }
 
@@ -405,7 +405,7 @@ namespace fit.Test.NUnit {
                                                          "<tr><td class=\"pass\">2</td><td class=\"pass\">Phil</td><td class=\"pass\">blank</td></tr>" +
                                                          "\n<tr>\n<td class=\"fail\"><span class=\"fit_grey\">1</span> <span class=\"fit_label\">surplus</span></td>\n<td><span class=\"fit_grey\">null</span></td>\n<td><span class=\"fit_grey\">Jones</span></td></tr>" +
                                                          "</table>";
-            var tables = new Parse(loaderFixtureHtml + inspectorFixtureHtml);
+            var tables = Parse.ParseFrom(loaderFixtureHtml + inspectorFixtureHtml);
             RunTest(tables);
             Assert.AreEqual(loaderFixtureHtml + processedInspectorFixtureHtml, tables.ToString());
         }
@@ -434,7 +434,7 @@ namespace fit.Test.NUnit {
                                     "<tr><td>field</td></tr>" +
                                     "<tr><td class=\"pass\">a,b,c</td></tr>" +
                                     "</table>";
-            var tables = new Parse(setUpTableHtml + tableHtml);
+            var tables = Parse.ParseFrom(setUpTableHtml + tableHtml);
             RunTest(tables);
             Assert.AreEqual(processedSetUpTableHtml + expected, tables.ToString());
         }
@@ -449,7 +449,7 @@ namespace fit.Test.NUnit {
                                      "</table>";
             Array colorsArray = Enum.GetValues(typeof (Color));
             var colorsList = new ArrayList(colorsArray);
-            DoTable(new Parse(tableHtml), colorsList.ToArray(), 2, 0, 0, 0);
+            DoTable(Parse.ParseFrom(tableHtml), colorsList.ToArray(), 2, 0, 0, 0);
         }
 
         void VerifyCounts(int right, int wrong, int exceptions, int ignores)

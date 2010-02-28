@@ -1,4 +1,4 @@
-// Copyright © 2009 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+// Copyright © 2010 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -13,7 +13,7 @@ namespace fit.Test.NUnit {
     [TestFixture]
     public class ColumnFixtureTests
     {
-        private TestCounts resultCounts;
+        TestCounts resultCounts;
 
         [Test]
         public void TestNullCell()
@@ -30,14 +30,14 @@ namespace fit.Test.NUnit {
             builder.Append("<tr><td></td><td>null</td></tr>");
             builder.Append("</table>");
 
-            var parse = new Parse(builder.ToString());
+            var parse = Parse.ParseFrom(builder.ToString());
 
             TestUtils.InitAssembliesAndNamespaces();
             RunTest(parse);
             TestUtils.CheckCounts(resultCounts, 1, 0, 0, 0);
         }
 
-        private void RunTest(Parse parse) {
+        void RunTest(Parse parse) {
             var test = new StoryTest(parse, (t,c) => { resultCounts = c;});
             test.Execute(new Configuration());
         }
@@ -52,7 +52,7 @@ namespace fit.Test.NUnit {
             builder.Append("<tr><td>blank</td><td>blank</td><td>blank</td><td>blank</td><td>blank</td><td>blank</td></tr>");
             builder.Append("</table>");
 
-            var parse = new Parse(builder.ToString());
+            var parse = Parse.ParseFrom(builder.ToString());
 
             TestUtils.InitAssembliesAndNamespaces();
             RunTest(parse);
@@ -69,7 +69,7 @@ namespace fit.Test.NUnit {
             builder.Append("<tr><td>Property</td><td>Property</td></tr>");
             builder.Append("<tr><td>first call</td><td>second call</td></tr>");
             builder.Append("</table>");
-            var table = new Parse(builder.ToString());
+            var table = Parse.ParseFrom(builder.ToString());
             var testFixture = new ExecuteTestFixture { Processor = new Service.Service()};
             testFixture.DoTable(table);
             Assert.AreEqual(3, testFixture.Values.Count);
@@ -88,7 +88,7 @@ namespace fit.Test.NUnit {
             builder.Append("<tr><td>Property</td><td>Property?</td><td>Property</td></tr>");
             builder.Append("<tr><td>first call</td><td>null</td><td>second call</td></tr>");
             builder.Append("</table>");
-            var table = new Parse(builder.ToString());
+            var table = Parse.ParseFrom(builder.ToString());
             var testFixture = new ExecuteTestFixture { Processor = new Service.Service()};
             testFixture.DoTable(table);
             Assert.AreEqual(3, testFixture.Values.Count);
@@ -107,7 +107,7 @@ namespace fit.Test.NUnit {
             builder.Append("<tr><td>Property</td><td>BoolMethod?</td></tr>");
             builder.Append("<tr><td>first call</td><td>true</td></tr>");
             builder.Append("</table>");
-            var table = new Parse(builder.ToString());
+            var table = Parse.ParseFrom(builder.ToString());
             var testFixture = new ExecuteTestFixture { Processor = new Service.Service()};
             testFixture.DoTable(table);
             Assert.AreEqual(3, testFixture.Values.Count);
@@ -132,7 +132,7 @@ namespace fit.Test.NUnit {
             builder.Append("<tr><td>field</td><td></td></tr>");
             builder.Append("<tr><td>some value</td><td>this is a comment</td></tr>");
             builder.Append("</table>");
-            var table = new Parse(builder.ToString());
+            var table = Parse.ParseFrom(builder.ToString());
             RunTest(table);
             TestUtils.CheckCounts(resultCounts, 0, 0, 0, 0);
         }
@@ -148,7 +148,7 @@ namespace fit.Test.NUnit {
             builder.Append("<tr><td>1</td></tr>");
             builder.Append("<tr><td>2</td></tr>");
             builder.Append("</table>");
-            var table = new Parse(builder.ToString());
+            var table = Parse.ParseFrom(builder.ToString());
             var testFixture = new ExecuteTestFixture { Processor = new Service.Service()};
             testFixture.DoTable(table);
             Assert.AreEqual(4, testFixture.Values.Count);
@@ -176,7 +176,7 @@ namespace fit.Test.NUnit {
             set { Values.Add(value); }
         }
 
-        private int callsToMethod = 1;
+        int callsToMethod = 1;
 
         public int Method()
         {

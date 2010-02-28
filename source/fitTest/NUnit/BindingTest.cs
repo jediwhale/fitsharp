@@ -17,43 +17,39 @@ namespace fit.Test.NUnit {
             var f = new TestFixture { Processor = new Service.Service()};
 
             BindingOperation bindingOperation = new InputBinding(f.CellOperation, f, TestUtils.CreateCell("sampleInt"));
-            Parse p = new Parse("<table><tr><td>123456</td></tr></table>").Parts.Parts;
-            bindingOperation.Do(p);
+            bindingOperation.Do(MakeCell("123456"));
             Assert.AreEqual(123456, f.sampleInt);
 
-            p = new Parse("<table><tr><td>-234567</td></tr></table>").Parts.Parts;
-            bindingOperation.Do(p);
+            bindingOperation.Do(MakeCell("-234567"));
             Assert.AreEqual(-234567, f.sampleInt);
 			
             bindingOperation = new InputBinding(f.CellOperation, f, TestUtils.CreateCell("sampleDouble"));
-            p = new Parse("<table><tr><td>3.14159</td></tr></table>").Parts.Parts;
-            bindingOperation.Do(p);
+            bindingOperation.Do(MakeCell("3.14159"));
             Assert.AreEqual(3.14159, f.sampleDouble);
 
             bindingOperation = new InputBinding(f.CellOperation, f, TestUtils.CreateCell("sampleChar"));
-            p = new Parse("<table><tr><td>a</td></tr></table>").Parts.Parts;
-            bindingOperation.Do(p);
+            bindingOperation.Do(MakeCell("a"));
             Assert.AreEqual('a', f.sampleChar);
 
             bindingOperation = new InputBinding(f.CellOperation, f, TestUtils.CreateCell("sampleString"));
-            p = new Parse("<table><tr><td>xyzzy</td></tr></table>").Parts.Parts;
-            bindingOperation.Do(p);
+            bindingOperation.Do(MakeCell("xyzzy"));
             Assert.AreEqual("xyzzy", f.sampleString);
 
             bindingOperation = new InputBinding(f.CellOperation, f, TestUtils.CreateCell("sampleFloat"));
-            p = new Parse("<table><tr><td>6.02e23</td></tr></table>").Parts.Parts;
-            bindingOperation.Do(p);
+            bindingOperation.Do(MakeCell("6.02e23"));
             Assert.AreEqual(6.02e23f, f.sampleFloat, 1e17f);
 
             bindingOperation = new InputBinding(f.CellOperation, f, TestUtils.CreateCell("sampleByte"));
-            p = new Parse("<table><tr><td>123</td></tr></table>").Parts.Parts;
-            bindingOperation.Do(p);
+            bindingOperation.Do(MakeCell("123"));
             Assert.AreEqual(123, f.sampleByte);
 
             bindingOperation = new InputBinding(f.CellOperation, f, TestUtils.CreateCell("sampleShort"));
-            p = new Parse("<table><tr><td>12345</td></tr></table>").Parts.Parts;
-            bindingOperation.Do(p);
+            bindingOperation.Do(MakeCell("12345"));
             Assert.AreEqual(12345, f.sampleShort);
+        }
+
+        static Parse MakeCell(string cellContent) {
+            return Parse.ParseFrom("<table><tr><td>" + cellContent + "</td></tr></table>").Parts.Parts;
         }
 
         class TestFixture : ColumnFixture 

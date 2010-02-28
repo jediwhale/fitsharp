@@ -32,7 +32,7 @@ namespace fit.Test.NUnit {
         [Test]
         public void LeaderShouldReturnAllHtmlTextBeforeTheParse()
         {
-            var p = new Parse("<html><head></head><body><Table foo=2><tr><td>body</td></tr></table></body></html>");
+            var p = Parse.ParseFrom("<html><head></head><body><Table foo=2><tr><td>body</td></tr></table></body></html>");
             Assert.AreEqual("<html><head></head><body>", p.Leader);
             Assert.AreEqual("<Table foo=2>", p.Tag);
             Assert.AreEqual("</body></html>", p.Trailer);
@@ -40,7 +40,7 @@ namespace fit.Test.NUnit {
 
         static Parse SimpleTableParse
         {
-            get { return new Parse("leader<table><tr><td>body</td></tr></table>trailer"); }
+            get { return Parse.ParseFrom("leader<table><tr><td>body</td></tr></table>trailer"); }
         }
 
         [Test]
@@ -67,7 +67,7 @@ namespace fit.Test.NUnit {
         [Test]
         public void PartsShouldReturnCellsWhenTheParseRepresentsARow()
         {
-            Parse row = new Parse("<table><tr><td>one</td><td>two</td><td>three</td></tr></table>").Parts;
+            Parse row = Parse.ParseFrom("<table><tr><td>one</td><td>two</td><td>three</td></tr></table>").Parts;
             Assert.AreEqual("one", row.Parts.Body);
             Assert.AreEqual("two", row.Parts.More.Body);
             Assert.AreEqual("three", row.Parts.More.More.Body);
@@ -76,7 +76,7 @@ namespace fit.Test.NUnit {
         [Test]
         public void PartsShouldReturnRowsWhenTheParseRepresentsATable()
         {
-            var table = new Parse("<table><tr><td>row one</td></tr><tr><td>row two</td></tr></table>");
+            var table = Parse.ParseFrom("<table><tr><td>row one</td></tr><tr><td>row two</td></tr></table>");
             Assert.AreEqual("row one", table.Parts.Parts.Body);
             Assert.AreEqual("row two", table.Parts.More.Parts.Body);
         }
@@ -84,7 +84,7 @@ namespace fit.Test.NUnit {
         [Test]
         public void TestIndexingPage() 
         {
-            var p = new Parse(
+            var p = Parse.ParseFrom(
                 @"leader
 					<table>
 						<tr>
@@ -115,7 +115,7 @@ namespace fit.Test.NUnit {
         {
             try 
             {
-                new Parse("leader<table><tr><th>one</th><th>two</th><th>three</th></tr><tr><td>four</td></tr></table>trailer");
+                Parse.ParseFrom("leader<table><tr><th>one</th><th>two</th><th>three</th></tr><tr><td>four</td></tr></table>trailer");
                 Assert.Fail("expected Exception not thrown");
             } 
             catch (ApplicationException e) 
@@ -128,14 +128,14 @@ namespace fit.Test.NUnit {
         [Test]
         public void TestText() 
         {
-            Parse p = new Parse("<table><tr><td>a&lt;b</td></tr></table>").Parts.Parts;
+            Parse p = Parse.ParseFrom("<table><tr><td>a&lt;b</td></tr></table>").Parts.Parts;
             Assert.AreEqual("a&lt;b", p.Body);
             Assert.AreEqual("a<b", p.Text);
-            p = new Parse("<table><tr><td>\ta&gt;b&nbsp;&amp;&nbsp;b>c &&&nbsp;</td></tr></table>").Parts.Parts;
+            p = Parse.ParseFrom("<table><tr><td>\ta&gt;b&nbsp;&amp;&nbsp;b>c &&&nbsp;</td></tr></table>").Parts.Parts;
             Assert.AreEqual("\ta>b & b>c && ", p.Text);
-            p = new Parse("<table><tr><td>\ta&gt;b&nbsp;&amp;&nbsp;b>c &&nbsp;</td></tr></table>").Parts.Parts;
+            p = Parse.ParseFrom("<table><tr><td>\ta&gt;b&nbsp;&amp;&nbsp;b>c &&nbsp;</td></tr></table>").Parts.Parts;
             Assert.AreEqual("\ta>b & b>c & ", p.Text);
-            p = new Parse("<table><tr><TD><P><FONT FACE=\"Arial\" SIZE=2>GroupTestFixture</FONT></TD></tr></table>").Parts.Parts;
+            p = Parse.ParseFrom("<table><tr><TD><P><FONT FACE=\"Arial\" SIZE=2>GroupTestFixture</FONT></TD></tr></table>").Parts.Parts;
             Assert.AreEqual("GroupTestFixture",p.Text);
         }
     }

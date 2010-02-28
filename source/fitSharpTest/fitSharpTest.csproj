@@ -60,7 +60,7 @@
     <Compile Include="Double\TestClock.cs" />
     <Compile Include="NUnit\Machine\ApplicationUnderTestTest.cs" />
     <Compile Include="NUnit\Application\ConfigurationTest.cs" />
-    <Compile Include="NUnit\Machine\ConverterTest.cs" />
+    <Compile Include="NUnit\Slim\ConverterTest.cs" />
     <Compile Include="NUnit\Machine\DefaultParseTest.cs" />
     <Compile Include="NUnit\Machine\DefaultRuntimeTest.cs" />
     <Compile Include="NUnit\Machine\IdentifierNameTest.cs" />

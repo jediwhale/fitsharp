@@ -1,4 +1,4 @@
-// Copyright © 2009 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+// Copyright © 2010 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -23,7 +23,7 @@ namespace fit.Test.NUnit {
             builder.Append("<tr><td>load</td><td>substring handler</td></tr>");
             builder.Append("</table>");
             Assert.IsFalse(new Service.Service(configuration).Compare(new TypedValue("abc"), TestUtils.CreateCell("..b..")));
-            var test = new StoryTest(new Parse(builder.ToString()));
+            var test = new StoryTest(Parse.ParseFrom(builder.ToString()));
             test.ExecuteOnConfiguration(configuration);
             Assert.IsTrue(new Service.Service(configuration).Compare(new TypedValue("abc"), TestUtils.CreateCell("..b..")));
         }
@@ -39,7 +39,7 @@ namespace fit.Test.NUnit {
             builder.Append("<tr><td>remove</td><td>SubstringHandler</td></tr>");
             builder.Append("</table>");
             Assert.IsTrue(new Service.Service(configuration).Compare(new TypedValue("abc"), TestUtils.CreateCell("..b..")));
-            var test = new StoryTest(new Parse(builder.ToString()));
+            var test = new StoryTest(Parse.ParseFrom(builder.ToString()));
             test.ExecuteOnConfiguration(configuration);
             Assert.IsFalse(new Service.Service(configuration).Compare(new TypedValue("abc"), TestUtils.CreateCell("..b..")));
         }

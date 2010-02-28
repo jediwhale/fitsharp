@@ -122,7 +122,7 @@
     <Compile Include="Machine\Engine\BasicProcessor.cs" />
     <Compile Include="Machine\Engine\Memory.cs" />
     <Compile Include="Machine\Engine\ParseEnum.cs" />
-    <Compile Include="Machine\Engine\Converter.cs" />
+    <Compile Include="Slim\Operators\Converter.cs" />
     <Compile Include="Machine\Engine\DefaultParse.cs" />
     <Compile Include="Machine\Engine\DefaultRuntime.cs" />
     <Compile Include="Machine\Engine\Operator.cs" />
