@@ -5,6 +5,7 @@
 
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Engine;
+using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Engine
 {

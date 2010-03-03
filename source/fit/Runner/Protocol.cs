@@ -26,10 +26,10 @@ namespace fitnesse.fitserver
 		{
 			var builder = new StringBuilder();
 			builder.Append(FormatInteger(0));
-			builder.Append(FormatInteger(status.GetCount(CellAttributes.RightStatus)));
-			builder.Append(FormatInteger(status.GetCount(CellAttributes.WrongStatus)));
-			builder.Append(FormatInteger(status.GetCount(CellAttributes.IgnoreStatus)));
-			builder.Append(FormatInteger(status.GetCount(CellAttributes.ExceptionStatus)));
+			builder.Append(FormatInteger(status.GetCount(TestStatus.Right)));
+			builder.Append(FormatInteger(status.GetCount(TestStatus.Wrong)));
+			builder.Append(FormatInteger(status.GetCount(TestStatus.Ignore)));
+			builder.Append(FormatInteger(status.GetCount(TestStatus.Exception)));
 			return builder.ToString();
 		}
 

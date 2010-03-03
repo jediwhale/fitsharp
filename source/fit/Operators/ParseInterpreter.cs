@@ -6,7 +6,6 @@
 using System;
 using fitlibrary;
 using fitSharp.Fit.Engine;
-using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;

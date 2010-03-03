@@ -11,6 +11,7 @@ using fit.Test.Acceptance;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
 using fitSharp.Machine.Application;
+using fitSharp.Machine.Model;
 using NUnit.Framework;
 
 namespace fit.Test.NUnit {
@@ -189,7 +190,7 @@ namespace fit.Test.NUnit {
             AddRow(new[] {name});
             RunTest();
             VerifyCounts(1, 0, 0, 0);
-            AssertTextInTag(table.At(0, 2, 0), CellAttributes.RightStatus);
+            AssertTextInTag(table.At(0, 2, 0), TestStatus.Right);
         }
 
         [Test]
@@ -202,8 +203,8 @@ namespace fit.Test.NUnit {
             AddRow(new[] {name, address});
             RunTest();
             VerifyCounts(2, 0, 0, 0);
-            AssertTextInTag(table.At(0, 2, 0), CellAttributes.RightStatus);
-            AssertTextInTag(table.At(0, 2, 1), CellAttributes.RightStatus);
+            AssertTextInTag(table.At(0, 2, 0), TestStatus.Right);
+            AssertTextInTag(table.At(0, 2, 1), TestStatus.Right);
         }
 
         [Test]
@@ -241,8 +242,8 @@ namespace fit.Test.NUnit {
             AddRow(new[] {name, "Second Street"});
             RunTest();
             VerifyCounts(1, 1, 0, 0);
-            AssertTextInTag(table.At(0, 2, 0), CellAttributes.RightStatus);
-            AssertTextInTag(table.At(0, 2, 1), CellAttributes.WrongStatus);
+            AssertTextInTag(table.At(0, 2, 0), TestStatus.Right);
+            AssertTextInTag(table.At(0, 2, 1), TestStatus.Wrong);
         }
 
         [Test]
@@ -252,9 +253,9 @@ namespace fit.Test.NUnit {
             AddRow(new[] {"John"});
             RunTest();
             VerifyCounts(0, 2, 0, 0);
-            AssertTextInTag(table.At(0, 2, 0), CellAttributes.WrongStatus);
+            AssertTextInTag(table.At(0, 2, 0), TestStatus.Wrong);
             AssertTextInBody(table.At(0, 2, 0), "missing");
-            AssertTextInTag(table.At(0, 3, 0), CellAttributes.WrongStatus);
+            AssertTextInTag(table.At(0, 3, 0), TestStatus.Wrong);
             AssertTextInBody(table.At(0, 3, 0), "surplus");
         }
 
@@ -333,7 +334,7 @@ namespace fit.Test.NUnit {
             AddRow(new[] {"Joe"});
             RunTest();
             VerifyCounts(0, 1, 0, 0);
-            AssertTextInTag(table.At(0, 2, 0), CellAttributes.WrongStatus);
+            AssertTextInTag(table.At(0, 2, 0), TestStatus.Wrong);
             AssertTextInBody(table.At(0, 2, 0), "missing");
         }
 
@@ -344,7 +345,7 @@ namespace fit.Test.NUnit {
             AddRow(new[] {"Joe", "First Street"});
             RunTest();
             VerifyCounts(0, 1, 0, 0);
-            AssertTextInTag(table.At(0, 2, 0), CellAttributes.WrongStatus);
+            AssertTextInTag(table.At(0, 2, 0), TestStatus.Wrong);
             AssertTextInBody(table.At(0, 2, 0), "missing");
         }
 
@@ -357,10 +358,10 @@ namespace fit.Test.NUnit {
             AddQueryValue(new RowFixturePerson("Lilian", "First Street"));
             RunTest();
             VerifyCounts(2, 1, 0, 0);
-            AssertTextInTag(table.At(0, 2, 0), CellAttributes.RightStatus);
-            AssertTextInTag(table.At(0, 2, 1), CellAttributes.RightStatus);
+            AssertTextInTag(table.At(0, 2, 0), TestStatus.Right);
+            AssertTextInTag(table.At(0, 2, 1), TestStatus.Right);
             AssertTextNotInBody(table.At(0, 2, 0), "missing");
-            AssertTextInTag(table.At(0, 3, 0), CellAttributes.WrongStatus);
+            AssertTextInTag(table.At(0, 3, 0), TestStatus.Wrong);
             AssertTextInBody(table.At(0, 3, 0), "missing");
         }
 
@@ -373,11 +374,11 @@ namespace fit.Test.NUnit {
             AddQueryValue(new RowFixturePerson("Lilian", "First Street"));
             RunTest();
             VerifyCounts(2, 1, 0, 0);
-            AssertTextInTag(table.At(0, 2, 0), CellAttributes.WrongStatus);
+            AssertTextInTag(table.At(0, 2, 0), TestStatus.Wrong);
             AssertTextInBody(table.At(0, 2, 0), "missing");
             AssertTextNotInBody(table.At(0, 2, 1), "missing");
-            AssertTextInTag(table.At(0, 3, 0), CellAttributes.RightStatus);
-            AssertTextInTag(table.At(0, 3, 1), CellAttributes.RightStatus);
+            AssertTextInTag(table.At(0, 3, 0), TestStatus.Right);
+            AssertTextInTag(table.At(0, 3, 1), TestStatus.Right);
             AssertTextNotInBody(table.At(0, 3, 0), "missing");
             AssertTextNotInBody(table.At(0, 3, 1), "missing");
         }

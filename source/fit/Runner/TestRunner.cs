@@ -173,14 +173,14 @@ namespace fitnesse.fitserver
 			clientSocket.SendCounts(counts);
 			if(verbose)
 			{
-				for(int i = 0; i < counts.GetCount(CellAttributes.RightStatus); i++)
+				for(int i = 0; i < counts.GetCount(TestStatus.Right); i++)
 					output.Write(".");
-				if(counts.GetCount(CellAttributes.WrongStatus) > 0)
+				if(counts.GetCount(TestStatus.Wrong) > 0)
 				{
 					output.WriteLine();
 					output.WriteLine(PageDescription(results) + " has failures");
 				}
-				if(counts.GetCount(CellAttributes.ExceptionStatus) > 0)
+				if(counts.GetCount(TestStatus.Exception) > 0)
 				{
 					output.WriteLine();
 					output.WriteLine(PageDescription(results) + " has errors");

@@ -77,7 +77,7 @@ namespace fit.Test.NUnit {
             MakeStringFixture();
             stringFixture.Field = "abc";
             Assert.IsFalse(stringFixture.CellOperation.Compare(new TypedValue("abc"), cell));
-            Assert.AreNotEqual(CellAttributes.WrongStatus, cell.GetAttribute(CellAttribute.Status));
+            Assert.AreNotEqual(TestStatus.Wrong, cell.GetAttribute(CellAttribute.Status));
             Assert.IsFalse(cell.Body.IndexOf("abc") > -1);
             Assert.IsTrue(cell.Body.IndexOf("xyz") > -1);
             TestUtils.VerifyCounts(stringFixture, 0, 0, 0, 0);
@@ -90,7 +90,7 @@ namespace fit.Test.NUnit {
             MakeStringFixture();
             stringFixture.Field = "xyz";
             Assert.IsTrue(stringFixture.CellOperation.Compare(new TypedValue("xyz"), cell));
-            Assert.AreNotEqual(CellAttributes.RightStatus, cell.GetAttribute(CellAttribute.Status));
+            Assert.AreNotEqual(TestStatus.Right, cell.GetAttribute(CellAttribute.Status));
             TestUtils.VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
 

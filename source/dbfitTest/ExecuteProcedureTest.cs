@@ -11,7 +11,7 @@ using fitSharp.Fit.Model;
 using Moq;
 using NUnit.Framework;
 
-namespace dbfitTest.fixture {
+namespace dbfitTest {
     [TestFixture] public class ExecuteProcedureTest {
         private ExecuteProcedure fixture;
         private Mock<IDbEnvironment> db;
@@ -52,7 +52,7 @@ namespace dbfitTest.fixture {
             };
 
             RunTest(command, MakeParameters("inparm", ParameterDirection.Input),
-                "<tr><td>inparm</td></tr><tr><td>invalue</td></tr>");
+                    "<tr><td>inparm</td></tr><tr><td>invalue</td></tr>");
 
             Assert.AreEqual(1, command.ExecuteNonQueryCalls);
         }
@@ -63,10 +63,10 @@ namespace dbfitTest.fixture {
             };
 
             RunTest(command, MakeParameters("outparm", ParameterDirection.Output),
-                "<tr><td>outparm?</td></tr><tr><td>outvalue</td></tr>");
+                    "<tr><td>outparm?</td></tr><tr><td>outvalue</td></tr>");
 
             Assert.AreEqual(1, command.ExecuteNonQueryCalls);
-            Assert.AreEqual(1, fixture.TestStatus.Counts.GetCount(CellAttributes.RightStatus));
+            Assert.AreEqual(1, fixture.TestStatus.Counts.GetCount(TestStatus.Right));
         }
 
         [Test] public void ExecutesProcedureWithInOutParameter() {
@@ -78,10 +78,10 @@ namespace dbfitTest.fixture {
             };
 
             RunTest(command, MakeParameters("ioparm", ParameterDirection.InputOutput),
-                "<tr><td>ioparm</td><td>ioparm?</td></tr><tr><td>invalue</td><td>outvalue</td></tr>");
+                    "<tr><td>ioparm</td><td>ioparm?</td></tr><tr><td>invalue</td><td>outvalue</td></tr>");
 
             Assert.AreEqual(1, command.ExecuteNonQueryCalls);
-            Assert.AreEqual(1, fixture.TestStatus.Counts.GetCount(CellAttributes.RightStatus));
+            Assert.AreEqual(1, fixture.TestStatus.Counts.GetCount(TestStatus.Right));
         }
 
         [Test] public void MarksWrongIfNoExpectedException() {
@@ -89,10 +89,10 @@ namespace dbfitTest.fixture {
             var command = new TestCommand();
 
             RunTest(command, MakeParameters("inparm", ParameterDirection.Input),
-                "<tr><td>inparm</td></tr><tr><td>invalue</td></tr>");
+                    "<tr><td>inparm</td></tr><tr><td>invalue</td></tr>");
 
             Assert.AreEqual(1, command.ExecuteNonQueryCalls);
-            Assert.AreEqual(1, fixture.TestStatus.Counts.GetCount(CellAttributes.WrongStatus));
+            Assert.AreEqual(1, fixture.TestStatus.Counts.GetCount(TestStatus.Wrong));
         }
 
         [Test] public void MarksRightIfExpectedException() {
@@ -102,10 +102,10 @@ namespace dbfitTest.fixture {
             };
 
             RunTest(command, MakeParameters("inparm", ParameterDirection.Input),
-                "<tr><td>inparm</td></tr><tr><td>invalue</td></tr>");
+                    "<tr><td>inparm</td></tr><tr><td>invalue</td></tr>");
 
             Assert.AreEqual(1, command.ExecuteNonQueryCalls);
-            Assert.AreEqual(1, fixture.TestStatus.Counts.GetCount(CellAttributes.RightStatus));
+            Assert.AreEqual(1, fixture.TestStatus.Counts.GetCount(TestStatus.Right));
         }
 
         private static Dictionary<string, DbParameterAccessor> MakeParameters(string parameterName, ParameterDirection direction) {
@@ -119,7 +119,7 @@ namespace dbfitTest.fixture {
                 .Returns(command);
             db.Setup(d => d.GetAllProcedureParameters("myproc"))
                 .Returns(parameters);
-            Parse table = new HtmlParser().Parse(string.Format("<table><tr><td>executeprocedure</td><td>myproc</td></tr>{0}</table>", html));
+            Parse table = Parse.ParseFrom(string.Format("<table><tr><td>executeprocedure</td><td>myproc</td></tr>{0}</table>", html));
             fixture.DoTable(table);
         }
     }
@@ -130,32 +130,32 @@ namespace dbfitTest.fixture {
         public fitSharp.Machine.Extension.Action<TestCommand> NonQueryAction;
 
         public override void Prepare() {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public override string CommandText {
-            get { throw new System.NotImplementedException(); }
-            set { throw new System.NotImplementedException(); }
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
         }
 
         public override int CommandTimeout {
-            get { throw new System.NotImplementedException(); }
-            set { throw new System.NotImplementedException(); }
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
         }
 
         public override CommandType CommandType {
-            get { throw new System.NotImplementedException(); }
-            set { throw new System.NotImplementedException(); }
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
         }
 
         public override UpdateRowSource UpdatedRowSource {
-            get { throw new System.NotImplementedException(); }
-            set { throw new System.NotImplementedException(); }
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
         }
 
         protected override DbConnection DbConnection {
-            get { throw new System.NotImplementedException(); }
-            set { throw new System.NotImplementedException(); }
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
         }
 
         protected override DbParameterCollection DbParameterCollection {
@@ -163,25 +163,25 @@ namespace dbfitTest.fixture {
         }
 
         protected override DbTransaction DbTransaction {
-            get { throw new System.NotImplementedException(); }
-            set { throw new System.NotImplementedException(); }
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
         }
 
         public override bool DesignTimeVisible {
-            get { throw new System.NotImplementedException(); }
-            set { throw new System.NotImplementedException(); }
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
         }
 
         public override void Cancel() {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         protected override DbParameter CreateDbParameter() {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         protected override DbDataReader ExecuteDbDataReader(CommandBehavior behavior) {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public override int ExecuteNonQuery() {
@@ -191,7 +191,7 @@ namespace dbfitTest.fixture {
         }
 
         public override object ExecuteScalar() {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

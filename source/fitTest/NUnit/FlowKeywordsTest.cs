@@ -14,7 +14,7 @@ namespace fit.Test.NUnit {
         [Test] public void NameKeywordAssignsASymbol() {
             var fixture = new TestDoFixture { Processor = new CellProcessorBase() };
             var keywords = new FlowKeywords(fixture);
-            Parse table = new HtmlParser().Parse("<table><tr><td>name</td><td>symbol</td><td>stuff</td></tr></table>");
+            Parse table = Parse.ParseFrom("<table><tr><td>name</td><td>symbol</td><td>stuff</td></tr></table>");
             keywords.Name(table.Parts.Parts);
             Assert.AreEqual("some stuff", fixture.NamedFixture("symbol"));
             Assert.AreEqual("some stuff", fixture.Processor.Load(new Symbol("symbol")).Instance);

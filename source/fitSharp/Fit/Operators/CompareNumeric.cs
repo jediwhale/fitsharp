@@ -33,7 +33,7 @@ namespace fitSharp.Fit.Operators {
 
             var rest = new CellSubstring(cell, cell.Text.Substring(comparison.Operator.Length));
             object expectedValue = Processor.Parse(actual.Type, rest).Value;
-            expected.Value.AddToAttribute(CellAttribute.InformationPrefix, actualValue.ToString(), CellAttributes.PrefixFormat);
+            expected.Value.AddToAttribute(CellAttribute.InformationPrefix, actualValue.ToString());
 
             int compare = actualValue is float || actualValue is double
                               ? (Convert.ToDouble(actualValue) < Convert.ToDouble(expectedValue)

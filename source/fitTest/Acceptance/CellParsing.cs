@@ -9,7 +9,6 @@ using System.Text;
 using fitlibrary;
 using fitlibrary.table;
 using fitlibrary.tree;
-using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
 using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;

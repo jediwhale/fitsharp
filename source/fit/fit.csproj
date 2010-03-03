@@ -110,7 +110,6 @@
     <Compile Include="Operators\ComposeDefault.cs" />
     <Compile Include="Operators\RuntimeDirect.cs" />
     <Compile Include="Operators\ComposeTable.cs" />
-    <Compile Include="Parser\HtmlParser.cs" />
     <Compile Include="Fixtures\FitVersionFixture.cs" />
     <Compile Include="Fixtures\Fixture.cs" />
     <Compile Include="Model\Parse.cs" />

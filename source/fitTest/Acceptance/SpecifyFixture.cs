@@ -32,7 +32,7 @@ namespace fit.Test.Acceptance {
                 else {
                     Wrong(expectedCell);
                     expectedCell.More = ParseNode.MakeCells(Escape(differences));
-                    expectedCell.More.SetAttribute(CellAttribute.Status, CellAttributes.WrongStatus);
+                    expectedCell.More.SetAttribute(CellAttribute.Status, TestStatus.Wrong);
                 }
             }
         }

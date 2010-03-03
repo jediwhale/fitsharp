@@ -18,7 +18,7 @@ namespace fit.Operators {
 
         public Tree<Cell> Compose(TypedValue instance) {
             HtmlString.IsStandard = Processor.Configuration.GetItem<Settings>().IsStandard;
-            return new HtmlParser().Parse(instance.ValueString);
+            return Parse.ParseFrom(instance.ValueString);
         }
     }
 }

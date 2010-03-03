@@ -4,6 +4,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System;
+using fitSharp.Machine.Model;
 using fitSharp.Parser;
 using NUnit.Framework;
 
@@ -137,6 +138,45 @@ namespace fit.Test.NUnit {
             Assert.AreEqual("\ta>b & b>c & ", p.Text);
             p = Parse.ParseFrom("<table><tr><TD><P><FONT FACE=\"Arial\" SIZE=2>GroupTestFixture</FONT></TD></tr></table>").Parts.Parts;
             Assert.AreEqual("GroupTestFixture",p.Text);
+        }
+
+        [Test] public void CopyFromLeaf() {
+            TreeList<CellBase> source = MakeRootNode();
+            source.Value.SetAttribute(CellAttribute.Body, "body");
+            AssertCopyFromResult(source, "leader<tag stuff>body</tag>trailer");
+        }
+
+        static void AssertCopyFromResult(Tree<CellBase> source, string expected) {
+            Assert.AreEqual(expected, Parse.CopyFrom(source).ToString());
+        }
+
+        static TreeList<CellBase> MakeRootNode() {
+            var sourceNode = new CellBase("text");
+            sourceNode.SetAttribute(CellAttribute.EndTag, "</tag>");
+            sourceNode.SetAttribute(CellAttribute.Leader, "leader");
+            sourceNode.SetAttribute(CellAttribute.StartTag, "<tag stuff>");
+            sourceNode.SetAttribute(CellAttribute.Trailer, "trailer");
+            return new TreeList<CellBase>(sourceNode);
+        }
+
+        [Test] public void CopyFromWithBranch() {
+            TreeList<CellBase> source = MakeRootNode();
+            AddBranch(source, "leaf");
+            AssertCopyFromResult(source, "leader<tag stuff><leaftag>leaf</leaftag></tag>trailer");
+        }
+
+        static void AddBranch(TreeList<CellBase> source, string body) {
+            var branchNode = new CellBase("text");
+            branchNode.SetAttribute(CellAttribute.Body, body);
+            branchNode.SetAttribute(CellAttribute.EndTag, "</leaftag>");
+            branchNode.SetAttribute(CellAttribute.StartTag, "<leaftag>");
+            source.AddBranchValue(branchNode);
+        }
+
+        [Test] public void CopyFromWithBranches() {
+            TreeList<CellBase> source = MakeRootNode();
+            for (int i = 0; i < 2; i++) AddBranch(source, "leaf" + i);
+            AssertCopyFromResult(source, "leader<tag stuff><leaftag>leaf0</leaftag><leaftag>leaf1</leaftag></tag>trailer");
         }
     }
 }

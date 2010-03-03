@@ -58,10 +58,10 @@ namespace fitSharp.Fit.Service {
 
         private void WriteCounts(TestCounts summary, string tag) {
             writer.WriteStartElement(tag);
-            writer.WriteElementString("right", summary.GetCount(CellAttributes.RightStatus).ToString());
-            writer.WriteElementString("wrong", summary.GetCount(CellAttributes.WrongStatus).ToString());
-            writer.WriteElementString("ignores", summary.GetCount(CellAttributes.IgnoreStatus).ToString());
-            writer.WriteElementString("exceptions", summary.GetCount(CellAttributes.ExceptionStatus).ToString());
+            writer.WriteElementString("right", summary.GetCount(TestStatus.Right).ToString());
+            writer.WriteElementString("wrong", summary.GetCount(TestStatus.Wrong).ToString());
+            writer.WriteElementString("ignores", summary.GetCount(TestStatus.Ignore).ToString());
+            writer.WriteElementString("exceptions", summary.GetCount(TestStatus.Exception).ToString());
             writer.WriteEndElement();
         }
     }

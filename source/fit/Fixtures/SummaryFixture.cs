@@ -5,7 +5,7 @@
 
 using System;
 using System.Collections;
-using fitSharp.Fit.Model;
+using fitSharp.Machine.Model;
 
 namespace fit
 {
@@ -51,11 +51,11 @@ namespace fit
 			Parse cell = row.Parts.More;
 			if (TestStatus.Counts.FailCount > 0)
 			{
-			    cell.SetAttribute(CellAttribute.Status, CellAttributes.WrongStatus);
+			    cell.SetAttribute(CellAttribute.Status, fitSharp.Fit.Model.TestStatus.Wrong);
 			}
 			else
 			{
-			    cell.SetAttribute(CellAttribute.Status, CellAttributes.RightStatus);
+			    cell.SetAttribute(CellAttribute.Status, fitSharp.Fit.Model.TestStatus.Right);
 			}
 		}
 	}

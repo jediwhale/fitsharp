@@ -6,7 +6,6 @@
 
 using System.Collections.Generic;
 using fitlibrary.exception;
-using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
 
 namespace fit.Model {

@@ -15,7 +15,7 @@ namespace fit.Test.NUnit {
     [TestFixture] public class ConstraintFixtureTest {
         [Test] public void MethodIsInvokedForEachRow() {
             Parse table =
-                new HtmlParser().Parse("<table><tr><td></td></tr><tr><td>method</td></tr><tr><td>value</td></tr></table>");
+                Parse.ParseFrom("<table><tr><td></td></tr><tr><td>method</td></tr><tr><td>value</td></tr></table>");
             var cellOperation = new Mock<CellOperation>();
             var processor = new Mock<CellProcessor>();
             var constraint = new ConstraintFixture {CellOperation = cellOperation.Object, Processor = processor.Object};

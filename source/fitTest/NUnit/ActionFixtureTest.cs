@@ -51,7 +51,7 @@ namespace fit.Test.NUnit {
             table = BuildTable("ActionFixture");
             var fixture = new ActionFixture { Processor = new Service.Service(configuration) };
             fixture.DoTable(table);
-            Assert.AreEqual(0, fixture.TestStatus.Counts.GetCount(CellAttributes.ExceptionStatus), table.ToString());
+            Assert.AreEqual(0, fixture.TestStatus.Counts.GetCount(TestStatus.Exception), table.ToString());
             Assert.IsNotNull(fixture.GetTargetObject());
         }
 
@@ -61,11 +61,11 @@ namespace fit.Test.NUnit {
             table = BuildTable("ActionFixture");
             var fixture = new ActionFixture{ Processor = new Service.Service(configuration) };
             fixture.DoTable(table);
-            Assert.AreEqual(0, fixture.TestStatus.Counts.GetCount(CellAttributes.ExceptionStatus), table.ToString());
+            Assert.AreEqual(0, fixture.TestStatus.Counts.GetCount(TestStatus.Exception), table.ToString());
             var countFixture = (CountFixture)fixture.GetTargetObject();
             int actualCount = countFixture.Counter;
             Assert.AreEqual(6, actualCount);
-            Assert.AreEqual(4, fixture.TestStatus.Counts.GetCount(CellAttributes.RightStatus));
+            Assert.AreEqual(4, fixture.TestStatus.Counts.GetCount(TestStatus.Right));
         }
 
         [Test]
@@ -74,11 +74,11 @@ namespace fit.Test.NUnit {
             table = BuildTable("TimedActionFixture");
             var fixture = new ActionFixture{ Processor = new Service.Service(configuration) };
             fixture.DoTable(table);
-            Assert.AreEqual(0, fixture.TestStatus.Counts.GetCount(CellAttributes.ExceptionStatus), table.ToString());
+            Assert.AreEqual(0, fixture.TestStatus.Counts.GetCount(TestStatus.Exception), table.ToString());
             var countFixture = (CountFixture)fixture.GetTargetObject();
             int actualCount = countFixture.Counter;
             Assert.AreEqual(6, actualCount);
-            Assert.AreEqual(4, countFixture.TestStatus.Counts.GetCount(CellAttributes.RightStatus));
+            Assert.AreEqual(4, countFixture.TestStatus.Counts.GetCount(TestStatus.Right));
         }
 
         [Test] public void PressInvokesMethodOnActor() {

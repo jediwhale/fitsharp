@@ -5,7 +5,6 @@
 
 using System;
 using System.Text.RegularExpressions;
-using fitSharp.Fit.Model;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 

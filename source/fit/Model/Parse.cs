@@ -8,9 +8,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Web;
-using fitSharp.Fit.Model;
 using fitSharp.Machine.Extension;
 using fitSharp.Machine.Model;
+using fitSharp.Parser;
 
 namespace fit
 {
@@ -19,7 +19,7 @@ namespace fit
 		public static int FootnoteFiles;
 
         public static Parse ParseFrom(string input) {
-            return new HtmlParser().Parse(input);
+            return CopyFrom(new HtmlTables().Parse(input)).Parts;
         }
 
 	    public Parse More { get; set; }
@@ -98,8 +98,10 @@ namespace fit
 
 		public virtual void AddToBody(string text)
 		{
-		    AddToAttribute(CellAttribute.InformationSuffix, text, CellAttributes.SuffixFormat);
+		    AddToAttribute(CellAttribute.InformationSuffix, text);
 		}
+
+        Parse(CellBase source): base(source) {}
 
         Parse(Parse other)
             : base(other) {
@@ -239,6 +241,20 @@ namespace fit
 
         public Parse Copy() {
             return new Parse(this);
+        }
+
+        public static Parse CopyFrom(Tree<CellBase> source) {
+            var result = new Parse(source.Value);
+            foreach (Tree<CellBase> branch in source.Branches) {
+                Parse newBranch = CopyFrom(branch);
+                if (result.Parts == null) {
+                    result.Parts = newBranch; 
+                }
+                else {
+                    result.Parts.Last.More = newBranch;
+                }
+            }
+            return result;
         }
 
         public IEnumerable<Parse> Siblings {

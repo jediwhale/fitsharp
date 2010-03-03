@@ -56,12 +56,12 @@ namespace fit.Test.NUnit {
 
         public static void AssertCellPasses(Parse cell)
         {
-            Assert.AreEqual(CellAttributes.RightStatus, cell.GetAttribute(CellAttribute.Status));
+            Assert.AreEqual(TestStatus.Right, cell.GetAttribute(CellAttribute.Status));
         }
 
         public static void AssertCellFails(Parse cell)
         {
-            Assert.AreEqual(CellAttributes.WrongStatus, cell.GetAttribute(CellAttribute.Status));
+            Assert.AreEqual(TestStatus.Wrong, cell.GetAttribute(CellAttribute.Status));
         }
 
         public static void AssertValueInBody(Parse cell, string value)

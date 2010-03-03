@@ -5,38 +5,30 @@
 
 using System;
 using System.Collections.Generic;
+using fitSharp.Machine.Model;
 
 namespace fitSharp.Parser {
-
-    public interface ParseTreeNodeFactory<T> {
-        T MakeNode(string text, string startTag, string endTag, string leader, string body, T firstChild);
-        void AddTrailer(T node, string trailer);
-        void AddSibling(T node, T sibling);
-    }
 
     // Parses a HTML string, recognizing tables with embedded lists and tables.
     // Uses a recursive descent parsing approach.
     // The lexical analyzer is unusual - it skips everything until it finds the next expected token.
-    public class HtmlTables<T> where T: class {
-        readonly ParseTreeNodeFactory<T> factory;
+    public class HtmlTables {
 
-        public HtmlTables(ParseTreeNodeFactory<T> factory) {
-            this.factory = factory;
-        }
-
-        public T Parse(string input) {
-            var alternationParser = new AlternationParser(factory);
-            var cells = new ListParser(factory, "td", alternationParser, false);
-            var rows = new ListParser(factory, "tr", cells, true);
-            var tables = new ListParser(factory, "table", rows, true);
-            var items = new ListParser(factory, "li", alternationParser, false);
-            var lists = new ListParser(factory, "ul", items, true);
+        public Tree<CellBase> Parse(string input) {
+            var alternationParser = new AlternationParser();
+            var cells = new ListParser("td", alternationParser, false);
+            var rows = new ListParser("tr", cells, true);
+            var tables = new ListParser("table", rows, true);
+            var items = new ListParser("li", alternationParser, false);
+            var lists = new ListParser("ul", items, true);
             alternationParser.ChildParsers = new [] {tables, lists};
-            return tables.Parse(new LexicalAnalyzer(input));
+            var result = new TreeList<CellBase>(new CellBase("root"));
+            foreach (Tree<CellBase> branch in tables.Parse(new LexicalAnalyzer(input))) result.AddBranch(branch);
+            return result;
         }
 
         interface ElementParser {
-            T Parse(LexicalAnalyzer theAnalyzer);
+            List<Tree<CellBase>> Parse(LexicalAnalyzer theAnalyzer);
             string Keyword {get;}
         }
 
@@ -45,10 +37,8 @@ namespace fitSharp.Parser {
             readonly ElementParser myChildParser;
             readonly string myKeyword;
             readonly bool IRequireChildren;
-            readonly ParseTreeNodeFactory<T> factory;
             
-            public ListParser(ParseTreeNodeFactory<T> factory, string theKeyword, ElementParser theChildParser, bool thisRequiresChildren) {
-                this.factory = factory;
+            public ListParser(string theKeyword, ElementParser theChildParser, bool thisRequiresChildren) {
                 myChildParser = theChildParser;
                 myKeyword = theKeyword;
                 IRequireChildren = thisRequiresChildren;
@@ -56,35 +46,42 @@ namespace fitSharp.Parser {
 
             public string Keyword {get {return myKeyword;}}
 
-            public T Parse(LexicalAnalyzer theAnalyzer) {
-                T list = ParseOne(theAnalyzer);
-                if (list != null) {
-                    T next = Parse(theAnalyzer);
-                    factory.AddSibling(list, next);
-                    //list.Next = next;
-                    if (next == null) /*list.Trailer = theAnalyzer.Trailer*/ factory.AddTrailer(list, theAnalyzer.Trailer);
+            public List<Tree<CellBase>> Parse(LexicalAnalyzer theAnalyzer) {
+                var list = new List<Tree<CellBase>>();
+                Tree<CellBase> first = ParseOne(theAnalyzer);
+                if (first != null) {
+                    list.Add(first);
+                    List<Tree<CellBase>> rest = Parse(theAnalyzer);
+                    list.AddRange(rest);
+                    if (rest.Count == 0) first.Value.SetAttribute(CellAttribute.Trailer, theAnalyzer.Trailer);
                 }
                 return list;
             }
 
-            public T ParseOne(LexicalAnalyzer theAnalyzer) {
+            public Tree<CellBase> ParseOne(LexicalAnalyzer theAnalyzer) {
                 theAnalyzer.GoToNextToken(myKeyword);
                 if (theAnalyzer.Token.Length == 0) return null;
                 return ParseElement(theAnalyzer);
             }
 
-            T ParseElement(LexicalAnalyzer theAnalyzer) {
+            Tree<CellBase> ParseElement(LexicalAnalyzer theAnalyzer) {
                 string tag = theAnalyzer.Token;
                 string leader = theAnalyzer.Leader;
                 theAnalyzer.PushEnd("/" + myKeyword);
-                T children = myChildParser.Parse(theAnalyzer);
-                if (IRequireChildren && children == null) {
+                List<Tree<CellBase>> children = myChildParser.Parse(theAnalyzer);
+                if (IRequireChildren && children.Count == 0) {
                     throw new ApplicationException(string.Format("Can't find tag: {0}", myChildParser.Keyword));
                 }
                 theAnalyzer.PopEnd();
                 theAnalyzer.GoToNextToken("/" + myKeyword);
                 if (theAnalyzer.Token.Length == 0) throw new ApplicationException("expected /" + myKeyword + " tag");
-                return factory.MakeNode(HtmlToText(theAnalyzer.Leader), tag, theAnalyzer.Token, leader, theAnalyzer.Leader, children);
+                var result = new TreeList<CellBase>(new CellBase(HtmlToText(theAnalyzer.Leader)));
+                result.Value.SetAttribute(CellAttribute.Body, theAnalyzer.Leader);
+                result.Value.SetAttribute(CellAttribute.EndTag, theAnalyzer.Token);
+                result.Value.SetAttribute(CellAttribute.Leader, leader);
+                result.Value.SetAttribute(CellAttribute.StartTag, tag);
+                foreach (Tree<CellBase> child in children) result.AddBranch(child);
+                return result;
             }
         }
 
@@ -93,14 +90,8 @@ namespace fitSharp.Parser {
         }
 
         class AlternationParser: ElementParser {
-            readonly ParseTreeNodeFactory<T> factory;
-
-            public AlternationParser(ParseTreeNodeFactory<T> factory) {
-                this.factory = factory;
-            }
-
-            public T Parse(LexicalAnalyzer theAnalyzer) {
-                T result = null;
+            public List<Tree<CellBase>> Parse(LexicalAnalyzer theAnalyzer) {
+                var result = new List<Tree<CellBase>>();
                 ListParser firstChildParser = null;
                 int firstPosition = int.MaxValue;
                 foreach (ListParser childParser in myChildParsers) {
@@ -111,9 +102,8 @@ namespace fitSharp.Parser {
                     }
                 }
                 if (firstChildParser != null) {
-                    result = firstChildParser.ParseOne(theAnalyzer);
-                    //result.Next = Parse(theAnalyzer);
-                    factory.AddSibling(result, Parse(theAnalyzer));
+                    result.Add(firstChildParser.ParseOne(theAnalyzer));
+                    result.AddRange(Parse(theAnalyzer));
                 }
                 return result;
             }

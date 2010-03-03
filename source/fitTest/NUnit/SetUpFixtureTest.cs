@@ -4,7 +4,6 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using fitlibrary;
-using fitSharp.Fit.Model;
 using fitSharp.Fit.Service;
 using fitSharp.Machine.Model;
 using Moq;
@@ -14,7 +13,7 @@ namespace fit.Test.NUnit {
     [TestFixture] public class SetUpFixtureTest {
         [Test] public void MethodIsInvokedForEachRow() {
             Parse table =
-                new HtmlParser().Parse("<table><tr><td></td></tr><tr><td>method</td></tr><tr><td>value</td></tr></table>");
+                Parse.ParseFrom("<table><tr><td></td></tr><tr><td>method</td></tr><tr><td>value</td></tr></table>");
             var cellOperation = new Mock<CellOperation>();
             var setUp = new SetUpFixture {CellOperation = cellOperation.Object};
             setUp.DoTable(table);

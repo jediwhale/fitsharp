@@ -7,6 +7,7 @@ using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
+using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Service {
 

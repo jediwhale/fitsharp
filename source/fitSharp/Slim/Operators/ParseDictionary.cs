@@ -18,40 +18,12 @@ namespace fitSharp.Slim.Operators {
         }
 
         public TypedValue Parse(Type type, TypedValue instance, Tree<string> parameters) {
-            StringNode table = new HtmlTables<StringNode>(new StringNodeFactory()).Parse(parameters.Value);
-            return new TypedValue(table.Node.Branches.AggregateTo(
+            Tree<CellBase> table = new HtmlTables().Parse(parameters.Value);
+            return new TypedValue(table.Branches[0].Branches.AggregateTo(
                 (IDictionary) Activator.CreateInstance(type),
                 (dictionary, row) => dictionary.Add(
-                    Processor.ParseTree(type.GetGenericArguments()[0], row.Branches[0]).Value,
-                    Processor.ParseTree(type.GetGenericArguments()[1], row.Branches[1]).Value)));
-        }
-
-        class StringNodeFactory: ParseTreeNodeFactory<StringNode> {
-            public StringNode MakeNode(string text, string startTag, string endTag, string leader, string body, StringNode firstChild) {
-                return new StringNode(body, firstChild);
-            }
-
-            public void AddTrailer(StringNode node, string trailer) {}
-
-            public void AddSibling(StringNode node, StringNode sibling) {
-                node.AddSibling(sibling);
-            }
-        }
-
-        class StringNode {
-            private readonly List<StringNode> siblings = new List<StringNode>();
-
-            public TreeList<string> Node { get; private set; }
-
-            public StringNode(string body, StringNode firstChild) {
-                Node = new TreeList<string>(body ?? string.Empty);
-                if (firstChild != null) foreach (StringNode child in firstChild.siblings) Node.AddBranch(child.Node);
-                siblings.Add(this);
-            }
-
-            public void AddSibling(StringNode sibling) {
-                if (sibling != null) siblings.Add(sibling);
-            }
+                    Processor.Parse(type.GetGenericArguments()[0], row.Branches[0].Value.Text).Value,
+                    Processor.Parse(type.GetGenericArguments()[1], row.Branches[1].Value.Text).Value)));
         }
     }
 }

@@ -41,28 +41,28 @@ namespace fitSharp.Fit.Model {
         public string Description {
             get {
                 return string.Format("{0} right, {1} wrong, {2} ignored, {3} exceptions",
-                                     GetCount(CellAttributes.RightStatus),
-                                     GetCount(CellAttributes.WrongStatus),
-                                     GetCount(CellAttributes.IgnoreStatus),
-                                     GetCount(CellAttributes.ExceptionStatus));
+                                     GetCount(TestStatus.Right),
+                                     GetCount(TestStatus.Wrong),
+                                     GetCount(TestStatus.Ignore),
+                                     GetCount(TestStatus.Exception));
             }
         }
 
-        public int FailCount { get { return GetCount(CellAttributes.WrongStatus) + GetCount(CellAttributes.ExceptionStatus); } }
+        public int FailCount { get { return GetCount(TestStatus.Wrong) + GetCount(TestStatus.Exception); } }
 
         public string Letter {
             get {
-                return GetCount(CellAttributes.ExceptionStatus) > 0 ? "E"
-                           : (GetCount(CellAttributes.WrongStatus) > 0 ? "F" : ".");
+                return GetCount(TestStatus.Exception) > 0 ? "E"
+                           : (GetCount(TestStatus.Wrong) > 0 ? "F" : ".");
             }
         }
 
         public string Style {
             get {
-                if (GetCount(CellAttributes.ExceptionStatus) > 0) return CellAttributes.ExceptionStatus;
-                if (GetCount(CellAttributes.WrongStatus) > 0) return CellAttributes.WrongStatus;
-                if (GetCount(CellAttributes.RightStatus) > 0 ) return CellAttributes.RightStatus;
-                if (GetCount(CellAttributes.IgnoreStatus) > 0) return CellAttributes.IgnoreStatus;
+                if (GetCount(TestStatus.Exception) > 0) return TestStatus.Exception;
+                if (GetCount(TestStatus.Wrong) > 0) return TestStatus.Wrong;
+                if (GetCount(TestStatus.Right) > 0 ) return TestStatus.Right;
+                if (GetCount(TestStatus.Ignore) > 0) return TestStatus.Ignore;
                 return string.Empty;
             }
         }

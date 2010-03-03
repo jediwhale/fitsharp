@@ -78,24 +78,24 @@ namespace fit.Test.NUnit
 		[Test]
 		public void TestRight()
 		{
-			Assert.AreEqual(1, resultCounts.GetCount(CellAttributes.RightStatus));
-            Assert.AreEqual(CellAttributes.RightStatus, finishedTable.At(0,1,0).GetAttribute(CellAttribute.Status));
+			Assert.AreEqual(1, resultCounts.GetCount(TestStatus.Right));
+            Assert.AreEqual(TestStatus.Right, finishedTable.At(0,1,0).GetAttribute(CellAttribute.Status));
 		}
 
 		[Test]
 		public void TestWrong()
 		{
-			Assert.AreEqual(2, resultCounts.GetCount(CellAttributes.WrongStatus));
-            Assert.AreEqual(CellAttributes.WrongStatus, finishedTable.At(0,1,1).GetAttribute(CellAttribute.Status));
-            Assert.AreEqual(CellAttributes.WrongStatus, finishedTable.At(0,1,2).GetAttribute(CellAttribute.Status));
+			Assert.AreEqual(2, resultCounts.GetCount(TestStatus.Wrong));
+            Assert.AreEqual(TestStatus.Wrong, finishedTable.At(0,1,1).GetAttribute(CellAttribute.Status));
+            Assert.AreEqual(TestStatus.Wrong, finishedTable.At(0,1,2).GetAttribute(CellAttribute.Status));
 			Assert.IsTrue(finishedTable.At(0,1,2).Body.IndexOf("actual") > 0);
 		}
 
 		[Test]
 		public void TestIgnore()
 		{
-			Assert.AreEqual(1, resultCounts.GetCount(CellAttributes.IgnoreStatus));
-            Assert.AreEqual(CellAttributes.IgnoreStatus, finishedTable.At(0,1,3).GetAttribute(CellAttribute.Status));
+			Assert.AreEqual(1, resultCounts.GetCount(TestStatus.Ignore));
+            Assert.AreEqual(TestStatus.Ignore, finishedTable.At(0,1,3).GetAttribute(CellAttribute.Status));
 		}
 
 		[Test]

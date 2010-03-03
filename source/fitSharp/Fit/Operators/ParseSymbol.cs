@@ -19,8 +19,7 @@ namespace fitSharp.Fit.Operators {
             var result = new TypedValue(Processor.Contains(symbol) ? Processor.Load(symbol).Instance : null, type);
             parameters.Value.AddToAttribute(
                 CellAttribute.InformationSuffix,
-                result.Value == null ? "null" : result.Value.ToString(),
-                CellAttributes.SuffixFormat);
+                result.Value == null ? "null" : result.Value.ToString());
             return result;
         }
     }

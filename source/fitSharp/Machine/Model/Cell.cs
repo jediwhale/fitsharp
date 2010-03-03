@@ -3,11 +3,27 @@
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
-namespace fitSharp.Fit.Model {
+namespace fitSharp.Machine.Model {
+    public enum CellAttribute {
+        Actual,
+        Exception,
+        InformationPrefix,
+        InformationSuffix,
+        Label,
+        Add,
+        Extension,
+        Status,
+        Leader,
+        Trailer,
+        StartTag,
+        EndTag,
+        Body
+    }
+
     public interface Cell {
         string Text { get; }
         string GetAttribute(CellAttribute key);
         void SetAttribute(CellAttribute key, string value);
-        void AddToAttribute(CellAttribute key, string value, string format);
+        void AddToAttribute(CellAttribute key, string value);
     }
 }

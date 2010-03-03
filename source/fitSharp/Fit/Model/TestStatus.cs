@@ -13,6 +13,11 @@ namespace fitSharp.Fit.Model {
     public interface AbandonException {}
 
     public class TestStatus {
+        public const string Exception = "error";
+        public const string Wrong = "fail";
+        public const string Ignore = "ignore";
+        public const string Right = "pass";
+
         public bool IsAbandoned { get; set; }
         public string LastAction { get; set; }
         public Hashtable Summary { get; private set; }
@@ -35,13 +40,13 @@ namespace fitSharp.Fit.Model {
         }
 
         public void MarkRight(Cell cell) {
-            cell.SetAttribute(CellAttribute.Status, CellAttributes.RightStatus);
-            AddCount(CellAttributes.RightStatus);
+            cell.SetAttribute(CellAttribute.Status, Right);
+            AddCount(Right);
         }
 
         public void MarkWrong(Cell cell) {
-            cell.SetAttribute(CellAttribute.Status, CellAttributes.WrongStatus);
-            AddCount(CellAttributes.WrongStatus);
+            cell.SetAttribute(CellAttribute.Status, Wrong);
+            AddCount(Wrong);
         }
 
         public void MarkWrong(Cell cell, string actual) {
@@ -50,8 +55,8 @@ namespace fitSharp.Fit.Model {
         }
 
         public void MarkIgnore(Cell cell) {
-            cell.SetAttribute(CellAttribute.Status, CellAttributes.IgnoreStatus);
-            AddCount(CellAttributes.IgnoreStatus);
+            cell.SetAttribute(CellAttribute.Status, Ignore);
+            AddCount(Ignore);
         }
 
         public void MarkException(Cell cell, System.Exception exception) {
@@ -61,10 +66,10 @@ namespace fitSharp.Fit.Model {
 
             if (abandonException != null && IsAbandoned) throw abandonException;
 
-            if (cell.GetAttribute(CellAttribute.Status) != CellAttributes.ExceptionStatus) {
+            if (cell.GetAttribute(CellAttribute.Status) != Exception) {
                 cell.SetAttribute(CellAttribute.Exception, exception.ToString());
-                cell.SetAttribute(CellAttribute.Status, CellAttributes.ExceptionStatus);
-                AddCount(CellAttributes.ExceptionStatus);
+                cell.SetAttribute(CellAttribute.Status, Exception);
+                AddCount(Exception);
             }
 
             if (abandonException == null) return;

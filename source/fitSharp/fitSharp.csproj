@@ -50,8 +50,7 @@
     <Compile Include="Fit\Engine\CellProcessor.cs" />
     <Compile Include="Fit\Exception\IgnoredException.cs" />
     <Compile Include="Fit\Fixtures\Define.cs" />
-    <Compile Include="Fit\Model\CellAttributes.cs" />
-    <Compile Include="Fit\Model\CellBase.cs" />
+    <Compile Include="Machine\Model\CellBase.cs" />
     <Compile Include="Fit\Model\CellSubstring.cs" />
     <Compile Include="Fit\Model\CellTree.cs" />
     <Compile Include="Fit\Model\PageResult.cs" />
@@ -99,7 +98,7 @@
     <Compile Include="IO\SocketStream.cs" />
     <Compile Include="IO\TimeKeeper.cs" />
     <Compile Include="Machine\Application\Settings.cs" />
-    <Compile Include="Fit\Model\Cell.cs" />
+    <Compile Include="Machine\Model\Cell.cs" />
     <Compile Include="Fit\Operators\CompareFloatingPoint.cs" />
     <Compile Include="Fit\Operators\ParseMemberName.cs" />
     <Compile Include="Fit\Model\GracefulName.cs" />
@@ -185,6 +184,9 @@
     <Compile Include="Slim\Service\SlimOperators.cs" />
     <Compile Include="Swim\ResultCell.cs" />
     <Compile Include="Swim\ResultPage.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Parser\Model\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

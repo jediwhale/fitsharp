@@ -3,6 +3,8 @@
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
+using fitSharp.Machine.Model;
+
 namespace fitSharp.Fit.Model {
     public class CellSubstring: Cell {
         readonly Cell baseCell;
@@ -16,7 +18,6 @@ namespace fitSharp.Fit.Model {
 
         public string GetAttribute(CellAttribute key) { return baseCell.GetAttribute(key); }
         public void SetAttribute(CellAttribute key, string value) { baseCell.SetAttribute(key, value); }
-        public void AddToAttribute(CellAttribute key, string value, string format) { baseCell.AddToAttribute(key, value, format); }
-
+        public void AddToAttribute(CellAttribute key, string value) { baseCell.AddToAttribute(key, value); }
     }
 }

@@ -18,7 +18,7 @@ namespace fit.Test.Acceptance {
         }
 
         public Table aTable() {
-            return new ParseTable(new HtmlParser().Parse("<html><table><tr><td>one</td><td>two</td><td>three</td></tr></table></html>"));
+            return new ParseTable(Parse.ParseFrom("<html><table><tr><td>one</td><td>two</td><td>three</td></tr></table></html>"));
         }
         public Table nullTable() {
             return null;

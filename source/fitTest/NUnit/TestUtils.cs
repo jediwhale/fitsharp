@@ -58,31 +58,31 @@ namespace fit.Test.NUnit {
 
         public static TestCounts MakeTestCounts() {
             var counts = new TestCounts();
-            counts.AddCount(CellAttributes.RightStatus);
-            counts.AddCount(CellAttributes.WrongStatus);
-            counts.AddCount(CellAttributes.WrongStatus);
-            counts.AddCount(CellAttributes.IgnoreStatus);
-            counts.AddCount(CellAttributes.IgnoreStatus);
-            counts.AddCount(CellAttributes.IgnoreStatus);
-            counts.AddCount(CellAttributes.ExceptionStatus);
-            counts.AddCount(CellAttributes.ExceptionStatus);
-            counts.AddCount(CellAttributes.ExceptionStatus);
-            counts.AddCount(CellAttributes.ExceptionStatus);
+            counts.AddCount(TestStatus.Right);
+            counts.AddCount(TestStatus.Wrong);
+            counts.AddCount(TestStatus.Wrong);
+            counts.AddCount(TestStatus.Ignore);
+            counts.AddCount(TestStatus.Ignore);
+            counts.AddCount(TestStatus.Ignore);
+            counts.AddCount(TestStatus.Exception);
+            counts.AddCount(TestStatus.Exception);
+            counts.AddCount(TestStatus.Exception);
+            counts.AddCount(TestStatus.Exception);
             return counts;
         }
 
         public static void CheckCounts(TestCounts counts, int right, int wrong, int ignore, int exception) {
-            Assert.AreEqual(right, counts.GetCount(CellAttributes.RightStatus));
-            Assert.AreEqual(wrong, counts.GetCount(CellAttributes.WrongStatus));
-            Assert.AreEqual(ignore, counts.GetCount(CellAttributes.IgnoreStatus));
-            Assert.AreEqual(exception, counts.GetCount(CellAttributes.ExceptionStatus));
+            Assert.AreEqual(right, counts.GetCount(TestStatus.Right));
+            Assert.AreEqual(wrong, counts.GetCount(TestStatus.Wrong));
+            Assert.AreEqual(ignore, counts.GetCount(TestStatus.Ignore));
+            Assert.AreEqual(exception, counts.GetCount(TestStatus.Exception));
         }
 
         public static void VerifyCounts(Fixture fixture, int right, int wrong, int ignores, int exceptions) {
-            Assert.AreEqual(right, fixture.TestStatus.Counts.GetCount(CellAttributes.RightStatus));
-            Assert.AreEqual(wrong, fixture.TestStatus.Counts.GetCount(CellAttributes.WrongStatus));
-            Assert.AreEqual(ignores, fixture.TestStatus.Counts.GetCount(CellAttributes.IgnoreStatus));
-            Assert.AreEqual(exceptions, fixture.TestStatus.Counts.GetCount(CellAttributes.ExceptionStatus));
+            Assert.AreEqual(right, fixture.TestStatus.Counts.GetCount(TestStatus.Right));
+            Assert.AreEqual(wrong, fixture.TestStatus.Counts.GetCount(TestStatus.Wrong));
+            Assert.AreEqual(ignores, fixture.TestStatus.Counts.GetCount(TestStatus.Ignore));
+            Assert.AreEqual(exceptions, fixture.TestStatus.Counts.GetCount(TestStatus.Exception));
         }
     }
 

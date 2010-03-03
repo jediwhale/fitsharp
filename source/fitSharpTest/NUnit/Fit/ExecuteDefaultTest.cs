@@ -40,16 +40,16 @@ namespace fitSharp.Test.NUnit.Fit {
 
         [Test] public void CellIsMarkedWithInvokeStatus() {
             SetUpSUT("procedure");
-            testStatus.Counts.AddCount(CellAttributes.WrongStatus);
+            testStatus.Counts.AddCount(TestStatus.Wrong);
             Execute(targetCell);
-            Assert.AreEqual(CellAttributes.RightStatus, targetCell.Value.GetAttribute(CellAttribute.Status));
+            Assert.AreEqual(TestStatus.Right, targetCell.Value.GetAttribute(CellAttribute.Status));
         }
 
         [Test] public void CellIsNotMarkedIfAlreadyMarked() {
             SetUpSUT("procedure");
-            targetCell.Value.SetAttribute(CellAttribute.Status, CellAttributes.WrongStatus);
+            targetCell.Value.SetAttribute(CellAttribute.Status, TestStatus.Wrong);
             Execute(targetCell);
-            Assert.AreEqual(CellAttributes.WrongStatus, targetCell.Value.GetAttribute(CellAttribute.Status));
+            Assert.AreEqual(TestStatus.Wrong, targetCell.Value.GetAttribute(CellAttribute.Status));
         }
 
         [Test] public void LastActionIsSetAsInputCellAttribute() {
@@ -98,7 +98,7 @@ namespace fitSharp.Test.NUnit.Fit {
             processor
                 .Setup(p => p.Invoke(It.Is<TypedValue>(v => v.ValueString == "target"), "procedure", It.IsAny<Tree<Cell>>()))
                 .Returns((TypedValue t, string s, Tree<Cell> c) => {
-                    testStatus.Counts.AddCount(CellAttributes.RightStatus);
+                    testStatus.Counts.AddCount(TestStatus.Right);
                     testStatus.LastAction = "blah blah";
                     return result;
                 });

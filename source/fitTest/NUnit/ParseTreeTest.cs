@@ -11,7 +11,7 @@ namespace fit.Test.NUnit {
     [TestFixture] public class ParseTreeTest {
 
         [Test] public void MatchesTreeObject() {
-            Parse table = new HtmlParser().Parse("<table><tr><td><ul><li>a</li><li>b</li></ul></td></tr></table>");
+            Parse table = Parse.ParseFrom("<table><tr><td><ul><li>a</li><li>b</li></ul></td></tr></table>");
             var tree = new ParseTree(table.Parts.Parts.Parts);
             Assert.IsTrue(tree.Equals(new SampleTree(string.Empty, "a", "b")));
         }

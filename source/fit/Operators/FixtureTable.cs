@@ -4,6 +4,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using fitSharp.Fit.Model;
+using fitSharp.Machine.Model;
 
 namespace fit.Operators {
     public class FixtureTable {
@@ -110,11 +111,11 @@ namespace fit.Operators {
                 originalNode = node;
                 Node = node.Copy();
                 if (HasKeyword("right")) {
-                    Node.SetAttribute(CellAttribute.Status, CellAttributes.RightStatus);
+                    Node.SetAttribute(CellAttribute.Status, TestStatus.Right);
                     if (BodyStartsWith("right")) Node.SetBody(Node.Body.Substring(7));
                 }
                 else if (HasKeyword("wrong")) {
-                    Node.SetAttribute(CellAttribute.Status, CellAttributes.WrongStatus);
+                    Node.SetAttribute(CellAttribute.Status, TestStatus.Wrong);
                     if (BodyStartsWith("wrong")) Node.SetBody(Node.Body.Substring(7));
                     else Node.SetBody("IGNORE");
                 }
