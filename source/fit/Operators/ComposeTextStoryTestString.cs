@@ -5,20 +5,18 @@
 
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
-using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using fitSharp.Parser;
 
 namespace fit.Operators {
-    public class ComposeStoryTestString: CellOperator, ComposeOperator<Cell> {
+    public class ComposeTextStoryTestString: CellOperator, ComposeOperator<Cell> {
         public bool CanCompose(TypedValue instance) {
             return instance.Type == typeof(StoryTestString);
         }
 
         public Tree<Cell> Compose(TypedValue instance) {
-            HtmlString.IsStandard = Processor.Configuration.GetItem<Settings>().IsStandard;
-            return Parse.ParseFrom(instance.ValueString);
+            return Parse.CopyFrom(new TextTables().Parse(instance.ValueString)).Parts;
         }
     }
 }

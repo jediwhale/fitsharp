@@ -50,10 +50,10 @@
     <Compile Include="Fixtures\FixtureResult.cs" />
     <Compile Include="Fixtures\FlowKeywords.cs" />
     <Compile Include="Operators\ArrayMatchStrategy.cs" />
-    <Compile Include="Operators\ComposeStoryTestString.cs" />
+    <Compile Include="Operators\ComposeHtmlStoryTestString.cs" />
+    <Compile Include="Operators\ComposeTextStoryTestString.cs" />
     <Compile Include="Operators\NamedMatchStrategy.cs" />
     <Compile Include="Operators\ParseInterpreter.cs" />
-    <Compile Include="Operators\ParseStoryTestString.cs" />
     <Compile Include="Operators\RuntimeProcedure.cs" />
     <Compile Include="Runner\FitSocket.cs" />
     <Compile Include="Runner\FolderRunner.cs" />

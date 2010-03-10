@@ -19,6 +19,8 @@
 </Target>
 
 <Target Name="storytests">
+    <Exec Command=".\build\debug\runner -c textstorytest.config.xml" />
+    <Copy SourceFiles=".\site\reportindex.html" DestinationFiles=".\site\textreportindex.html"/>
     <Exec Command=".\build\debug\runner -c storytest.config.xml" />
 </Target>
 
