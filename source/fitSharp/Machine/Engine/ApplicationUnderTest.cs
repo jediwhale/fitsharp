@@ -1,4 +1,4 @@
-﻿// Copyright © 2009 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2010 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -13,20 +13,22 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
     public class ApplicationUnderTest: Copyable {
-        private readonly List<Assembly> assemblies;
-        private readonly List<LanguageName> namespaces;
-        private const int cacheSize = 50;
-        private readonly List<Type> cache = new List<Type>(cacheSize);
+        readonly List<Assembly> assemblies;
+        readonly Namespaces namespaces;
+        const int cacheSize = 50;
+        readonly List<Type> cache = new List<Type>(cacheSize);
 
         public ApplicationUnderTest() {
             assemblies = new List<Assembly>();
-            namespaces = new List<LanguageName>();
+            //namespaces = new List<IdentifierName>();
+            namespaces = new Namespaces();
             AddNamespace(GetType().Namespace);
         }
 
         public ApplicationUnderTest(ApplicationUnderTest other) {
             assemblies = new List<Assembly>(other.assemblies);
-            namespaces = new List<LanguageName>(other.namespaces);
+            //namespaces = new List<IdentifierName>(other.namespaces);
+            namespaces = new Namespaces(other.namespaces);
         }
 
         public void AddAssembly(string assemblyName) {
@@ -36,18 +38,16 @@ namespace fitSharp.Machine.Engine {
             assemblies.Add(assembly);
         }
 
-        private static bool IsIgnored(string assemblyName) {
+        static bool IsIgnored(string assemblyName) {
             return string.Equals(".jar", Path.GetExtension(assemblyName), StringComparison.OrdinalIgnoreCase);
         }
 
         public void AddNamespace(string namespaceName) {
-            var newNamespace = new LanguageName(namespaceName);
-            if (!namespaces.Contains(newNamespace)) namespaces.Add(newNamespace);
+            namespaces.Add(namespaceName.Trim());
         }
 
         public void RemoveNamespace(string namespaceName) {
-            var existingNamespace = new LanguageName(namespaceName);
-            if (namespaces.Contains(existingNamespace)) namespaces.Remove(existingNamespace);
+            namespaces.Remove(namespaceName.Trim());
         }
 
         public RuntimeType FindType(NameMatcher typeName) {
@@ -62,7 +62,7 @@ namespace fitSharp.Machine.Engine {
             return new RuntimeType(type);
         }
 
-        private static string TypeNotFoundMessage() {
+        static string TypeNotFoundMessage() {
             var result = new StringBuilder();
             foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies()) {
                 if (IsDynamic(assembly)) continue;
@@ -71,39 +71,65 @@ namespace fitSharp.Machine.Engine {
             return result.ToString();
         }
 
-        private void UpdateCache(Type type) {
+        void UpdateCache(Type type) {
             if (cache.Contains(type)) cache.Remove(type);
             cache.Add(type);
             if (cache.Count > cacheSize) cache.RemoveAt(0);
         }
 
-        private Type SearchForType(NameMatcher typeName, IEnumerable<Type> types) {
+        Type SearchForType(NameMatcher typeName, IEnumerable<Type> types) {
             foreach (Type type in types) {
                 if (typeName.Matches(type.FullName)) return type;
-                if (type.Namespace == null || !IsRegistered(type.Namespace)) continue;
+                if (type.Namespace == null || !namespaces.IsRegistered(type.Namespace)) continue;
                 if (typeName.Matches(type.Name)) return type;
             }
             return null;
         }
 
-        private static IEnumerable<Type> AssemblyTypes(IEnumerable<Assembly> assemblies) {
+        static IEnumerable<Type> AssemblyTypes(IEnumerable<Assembly> assemblies) {
             foreach (Assembly assembly in assemblies) {
                 if (IsDynamic(assembly)) continue;
                 foreach (Type type in assembly.GetExportedTypes()) yield return type;
             }
         }
 
-        private static bool IsDynamic(Assembly assembly) {
+        static bool IsDynamic(Assembly assembly) {
             return assembly.ManifestModule is System.Reflection.Emit.ModuleBuilder;
-        }
-
-        private bool IsRegistered(string namespaceString) {
-            var existingNamespace = new LanguageName(namespaceString);
-            return namespaces.Contains(existingNamespace);
         }
 
         public Copyable Copy() {
             return new ApplicationUnderTest(this);
+        }
+
+        class Namespaces {
+            readonly List<string> namespaces;
+
+            public Namespaces() {
+                namespaces = new List<string>();
+            }
+
+            public Namespaces(Namespaces other) {
+                namespaces = new List<string>(other.namespaces);
+            }
+
+            public void Add(string namespaceName) {
+                if (!namespaces.Contains(namespaceName)) {
+                    namespaces.Add(namespaceName);
+                }
+            }
+
+            public void Remove(string namespaceName) {
+                if (namespaces.Contains(namespaceName)) {
+                    namespaces.Remove(namespaceName);
+                }
+            }
+
+            public bool IsRegistered(string namespaceName) {
+                foreach (string name in namespaces) {
+                    if (string.Compare(name, namespaceName, StringComparison.OrdinalIgnoreCase) == 0) return true;
+                }
+                return false;
+            }
         }
     }
 }
