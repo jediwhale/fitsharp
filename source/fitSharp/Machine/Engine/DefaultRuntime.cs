@@ -26,7 +26,7 @@ namespace fitSharp.Machine.Engine {
                 return runtimeType.CreateInstance();
             }
             catch (System.Exception e) {
-                throw new CreateException(runtimeType.Type, 0, e);
+                throw new CreateException(runtimeType.Type, 0, e.InnerException ?? e);
             }
         }
 
@@ -37,7 +37,7 @@ namespace fitSharp.Machine.Engine {
                 return member.Invoke(parameterList);
             }
             catch (System.Exception e) {
-                throw new CreateException(runtimeType.Type, parameterList.Length, e);
+                throw new CreateException(runtimeType.Type, parameterList.Length, e.InnerException ?? e);
             }
         }
 

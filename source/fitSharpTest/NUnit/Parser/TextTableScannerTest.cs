@@ -60,8 +60,16 @@ namespace fitSharp.Test.NUnit.Parser {
             AssertScan("'more'\"stuff\"", "Word=more,Word=stuff");
         }
 
+        [Test] public void ScansEmptyDelimitedTextAsWord() {
+            AssertScan("''\"stuff\"", "Word,Word=stuff");
+        }
+
         [Test] public void RetainsWhitespaceInDelimitedText() {
             AssertScan("'more '\" stuff\"", "Word=more ,Word= stuff");
+        }
+
+        [Test] public void RetainsSpecialCharactersInDelimitedText() {
+            AssertScan("'more|stuff'", "Word=more|stuff");
         }
 
         [Test] public void ScansFreeAndDelimitedTextAsWords() {

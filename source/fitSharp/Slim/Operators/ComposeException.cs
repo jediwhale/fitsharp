@@ -27,8 +27,8 @@ namespace fitSharp.Slim.Operators {
             if (TryResult<ConstructorMissingException>(instance,
                                                        e => string.Format("NO_CONSTRUCTOR {0}", e.Type), ref result)) return result;
 
-            if (TryResult<CreateException>(instance,
-                                           e => string.Format("COULD_NOT_INVOKE_CONSTRUCTOR {0}", e.Type), ref result)) return result;
+            //if (TryResult<CreateException>(instance,
+            //                               e => string.Format("COULD_NOT_INVOKE_CONSTRUCTOR {0}", e.Type), ref result)) return result;
 
             if (TryResult<ParseException<string>>(instance,
                                                   e => string.Format("NO_CONVERTER_FOR_ARGUMENT_NUMBER {0}", e.Type), ref result)) return result;

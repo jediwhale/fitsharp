@@ -11,7 +11,7 @@ namespace fitSharp.Machine.Exception {
         public int ParameterCount { get; private set; }
 
         public CreateException(Type type, int parameterCount, System.Exception exception)
-            : base(string.Format("Constructor with {1} parameter(s) not found for type '{0}'.", type.FullName, parameterCount), exception) {
+            : base(string.Format("Constructor with {1} parameter(s) failed for type '{0}'.", type.FullName, parameterCount), exception) {
             Type = type;
             ParameterCount = parameterCount;
         }

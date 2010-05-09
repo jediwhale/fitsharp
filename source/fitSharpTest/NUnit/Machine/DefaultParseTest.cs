@@ -39,8 +39,20 @@ namespace fitSharp.Test.NUnit.Machine {
             Assert.IsTrue(result.Value is ClassFromString);
         }
 
+        [Test] public void StructWithParseAndConstructorIsParsed() {
+            TypedValue result = parse.Parse(typeof(StructWithParseAndConstructor), TypedValue.Void, new TreeList<string>("stuff"));
+            Assert.IsTrue(result.Value is StructWithParseAndConstructor);
+            Assert.AreEqual("stuffparsector", result.GetValue<StructWithParseAndConstructor>().stuff);
+        }
+
         private class ClassFromString {
             public ClassFromString(string stuff) {}
+        }
+
+        private struct StructWithParseAndConstructor {
+            public readonly string stuff;
+            public static StructWithParseAndConstructor Parse(string stuff) { return new StructWithParseAndConstructor(stuff + "parse"); }
+            public StructWithParseAndConstructor(string stuff) { this.stuff = stuff + "ctor"; }
         }
     }
 }

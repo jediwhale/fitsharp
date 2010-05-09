@@ -79,9 +79,9 @@ namespace fitSharp.Test.NUnit.Slim {
             CheckExceptionCompose(new ConstructorMissingException(typeof(string), 0), "message:<<NO_CONSTRUCTOR System.String>> ");
         }
 
-        [Test] public void CreateExceptionIsComposed() {
-            CheckExceptionCompose(new CreateException(typeof(string), 0, new ApplicationException("blah")), "message:<<COULD_NOT_INVOKE_CONSTRUCTOR System.String>> ");
-        }
+        //[Test] public void CreateExceptionIsComposed() {
+        //    CheckExceptionCompose(new CreateException(typeof(string), 0, new ApplicationException("blah")), "message:<<COULD_NOT_INVOKE_CONSTRUCTOR System.String>> ");
+        //}
 
         [Test] public void MemoryExceptionIsComposed() {
             CheckExceptionCompose(new MemoryMissingException<SavedInstance>(new SavedInstance("stuff")), "message:<<NO_INSTANCE stuff>> ");
