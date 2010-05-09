@@ -1,14 +1,14 @@
-// Copyright © 2009 Syterra Software Inc.
-// This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
-// This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+// Copyright © 2010 Syterra Software Inc. All rights reserved.
+// The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+// which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
+// to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System.Text;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Service;
 using NUnit.Framework;
 
-namespace fit.Test.NUnit {
+namespace fitSharp.Test.NUnit.Fit {
     [TestFixture]
     public class XmlResultWriterTest
     {
@@ -43,7 +43,7 @@ namespace fit.Test.NUnit {
         public void TestWriteResults()
         {
             const string pageName = "Test Page";
-            var pageResult = new PageResult(pageName, "<table border=\"1\" cellspacing=\"0\">\r\n<tr><td>Text</td>\r\n</tr>\r\n</table>", TestUtils.MakeTestCounts());
+            var pageResult = new PageResult(pageName, "<table border=\"1\" cellspacing=\"0\">\r\n<tr><td>Text</td>\r\n</tr>\r\n</table>", MakeTestCounts());
             _strategy = new XmlResultWriter(TEST_RESULT_FILE_NAME, _folderModel);
             _strategy.WritePageResult(pageResult);
             _strategy.Close();
@@ -56,11 +56,28 @@ namespace fit.Test.NUnit {
         public void TestWriteFinalCounts()
         {
             _strategy = new XmlResultWriter(TEST_RESULT_FILE_NAME, _folderModel);
-            _strategy.WriteFinalCount(TestUtils.MakeTestCounts());
+            _strategy.WriteFinalCount(MakeTestCounts());
             _strategy.Close();
             Assert.AreEqual(BuildFinalCountsString(1, 2, 3, 4),
                             _folderModel.FileContent(TEST_RESULT_FILE_NAME));
         }
+
+        /*[Test] public void Stress() {
+            var writer = new XmlResultWriter(TEST_RESULT_FILE_NAME, new FileSystemModel(1252));
+            var summary = new TestCounts();
+            var data = new StringBuilder();
+            for (int i = 0; i < 1000; i++) {
+                data.Append(
+                    "<div>**************************************************************************************************************************************************************************************************************************</div>");
+            }
+            for (int i = 0; i < 1000; i++) {
+                var pageResult = new PageResult("TestPage" + i, data.ToString(), MakeTestCounts());
+                writer.WritePageResult(pageResult);
+                summary.TallyCounts(MakeTestCounts());
+            }
+            writer.WriteFinalCount(summary);
+            writer.Close();
+        }*/
 
         private static string BuildPageResultString(string pageName, string content, int right, int wrong, int ignores, int exceptions)
         {
@@ -94,6 +111,21 @@ namespace fit.Test.NUnit {
             builder.AppendLine("  </finalCounts>");
             builder.Append("</testResults>");
             return builder.ToString();
+        }
+
+        private static TestCounts MakeTestCounts() {
+            var counts = new TestCounts();
+            counts.AddCount(TestStatus.Right);
+            counts.AddCount(TestStatus.Wrong);
+            counts.AddCount(TestStatus.Wrong);
+            counts.AddCount(TestStatus.Ignore);
+            counts.AddCount(TestStatus.Ignore);
+            counts.AddCount(TestStatus.Ignore);
+            counts.AddCount(TestStatus.Exception);
+            counts.AddCount(TestStatus.Exception);
+            counts.AddCount(TestStatus.Exception);
+            counts.AddCount(TestStatus.Exception);
+            return counts;
         }
     }
 }

@@ -7,6 +7,7 @@ using fit.Runner;
 using fitSharp.Fit.Runner;
 using fitSharp.IO;
 using fitSharp.Machine.Application;
+using fitSharp.Test.NUnit.Fit;
 using NUnit.Framework;
 
 namespace fit.Test.NUnit {

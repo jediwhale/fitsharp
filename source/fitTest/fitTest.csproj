@@ -150,7 +150,6 @@
     <Compile Include="NUnit\ProtocolTest.cs" />
     <Compile Include="NUnit\FixtureNUnitTest.cs" />
     <Compile Include="NUnit\FixtureTableTest.cs" />
-    <Compile Include="NUnit\FolderTestModel.cs" />
     <Compile Include="NUnit\GracefulNameConverterTest.cs" />
     <Compile Include="NUnit\IntegralRangeHandlerTest.cs" />
     <Compile Include="NUnit\NullKeywordHandlerTest.cs" />
@@ -174,7 +173,6 @@
     <Compile Include="NUnit\TestUtils.cs" />
     <Compile Include="NUnit\TextResultWriterTest.cs" />
     <Compile Include="NUnit\ValueArrayTest.cs" />
-    <Compile Include="NUnit\XmlResultWriterTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
