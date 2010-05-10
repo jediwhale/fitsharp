@@ -1,4 +1,4 @@
-﻿// Copyright © 2009 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2010 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -38,6 +38,15 @@ namespace fitSharp.Test.NUnit.Slim {
                 Parse(new ParseList{ Processor = processor }, typeof (List<int>), new SlimTree().AddBranchValue("5").AddBranchValue("4")) as List<int>;
             Assert.IsNotNull(list);
             Assert.AreEqual(2, list.Count);
+            Assert.AreEqual(5, list[0]);
+            Assert.AreEqual(4, list[1]);
+        }
+
+        [Test] public void TreeIsParsedForArray() {
+            var list =
+                Parse(new ParseList{ Processor = processor }, typeof (int[]), new SlimTree().AddBranchValue("5").AddBranchValue("4")) as int[];
+            Assert.IsNotNull(list);
+            Assert.AreEqual(2, list.Length);
             Assert.AreEqual(5, list[0]);
             Assert.AreEqual(4, list[1]);
         }
