@@ -14,16 +14,22 @@ namespace fit.Test.NUnit {
         [Test] public void GetsDataRowActuals() {
             var table = new DataTable();
             table.Columns.Add("test", typeof (bool));
+            table.Columns.Add("other_test", typeof (string));
             DataRow row = table.NewRow();
             row["test"] = true;
-            var strategy = new TestStrategy(new Parse("tr", string.Empty, new Parse("td", "test", null, null), null));
+            row["other_test"] = "hi";
+            var strategy = new TestStrategy(new Parse("tr", string.Empty,
+                new Parse("td", "test", null,
+                    new Parse("td", "\"other_test\"", null, null)), null));
             TypedValue[] values = strategy.ActualValues(row);
-            Assert.AreEqual(1, values.Length);
+            Assert.AreEqual(2, values.Length);
             Assert.AreEqual(typeof(bool), values[0].Type);
             Assert.AreEqual(true, values[0].Value);
+            Assert.AreEqual(typeof(string), values[1].Type);
+            Assert.AreEqual("hi", values[1].Value);
         }
 
-        private class TestStrategy: NamedMatchStrategy {
+        class TestStrategy: NamedMatchStrategy {
             public TestStrategy(Parse headerRow): base(new Service.Service(), headerRow) {}
             public override bool SurplusAllowed { get { return true; } }
             public override bool IsOrdered { get { return true; } }
