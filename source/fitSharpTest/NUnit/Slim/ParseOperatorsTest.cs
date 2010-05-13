@@ -5,7 +5,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Reflection;
+using System.Threading;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using fitSharp.Slim.Model;
@@ -15,7 +17,7 @@ using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Slim {
     [TestFixture] public class ParseOperatorsTest {
-        private Service processor;
+        Service processor;
 
         [SetUp] public void SetUp() {
             processor = new Service();
@@ -67,7 +69,14 @@ namespace fitSharp.Test.NUnit.Slim {
             Assert.AreEqual("value", dictionary["key"]);
         }
 
-        private static object Parse(ParseOperator<string> parseOperator, Type type, Tree<string> parameters) {
+        [Test] public void ParsesWithInvariantCulture() {
+            CultureInfo current = CultureInfo.CurrentCulture;
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("es-ES", false);
+            Assert.AreEqual(1.001, processor.Parse(typeof (double), TypedValue.Void, new SlimLeaf("1.001")).Value);
+            Thread.CurrentThread.CurrentCulture = current;
+        }
+
+        static object Parse(ParseOperator<string> parseOperator, Type type, Tree<string> parameters) {
             Assert.IsTrue(parseOperator.CanParse(type, TypedValue.Void, parameters));
             TypedValue result = parseOperator.Parse(type, TypedValue.Void, parameters);
             return result.Value;

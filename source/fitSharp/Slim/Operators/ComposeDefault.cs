@@ -9,7 +9,7 @@ using fitSharp.Slim.Model;
 
 namespace fitSharp.Slim.Operators {
     public class ComposeDefault: SlimOperator, ComposeOperator<string> {
-        private const string voidResult = "/__VOID__/";
+        const string voidResult = "/__VOID__/";
 
         public bool CanCompose(TypedValue instance) {
             return true;

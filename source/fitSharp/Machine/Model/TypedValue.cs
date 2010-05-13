@@ -1,9 +1,10 @@
-﻿// Copyright © 2009 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2010 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
+using System.Globalization;
 
 namespace fitSharp.Machine.Model {
     public struct TypedValue {
@@ -25,7 +26,14 @@ namespace fitSharp.Machine.Model {
         public bool IsVoid { get { return Type == typeof (void) && Value == null; } }
         public bool IsValid { get { return Type != typeof (void) || Value == null; } }
         public bool IsNullOrEmpty { get { return Value == null || Type == typeof(DBNull) || Value.ToString().Length == 0; } }
-        public string ValueString { get { return (IsVoid ? "void" : Value ?? "null").ToString(); } }
+        public string ValueString {
+            get {
+                if (IsVoid) return "void";
+                if (Value == null) return "null";
+                var convertibleValue = Value as IConvertible;
+                return convertibleValue == null ? Value.ToString() : convertibleValue.ToString(CultureInfo.InvariantCulture);
+            }
+        }
 
         public void ThrowExceptionIfNotValid() {
             if (!IsValid) throw (System.Exception) Value;

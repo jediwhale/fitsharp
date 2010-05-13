@@ -5,6 +5,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Threading;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
@@ -17,7 +19,7 @@ using NUnit.Framework;
 namespace fitSharp.Test.NUnit.Slim {
     [TestFixture] public class ComposeOperatorsTest {
 
-        private Service processor;
+        Service processor;
 
         [SetUp] public void SetUp() {
             processor = new Service();
@@ -33,6 +35,13 @@ namespace fitSharp.Test.NUnit.Slim {
         
         [Test] public void DefaultComposeIsString() {
             CheckCompose(new ComposeDefault(), 1.23, typeof (double), "1.23");
+        }
+        
+        [Test] public void ComposesWithInvariantCulture() {
+            CultureInfo current = CultureInfo.CurrentCulture;
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("es-ES", false);
+            CheckCompose(new ComposeDefault(), 1.23, typeof (double), "1.23");
+            Thread.CurrentThread.CurrentCulture = current;
         }
         
         [Test] public void BooleanTrueIsComposed() {
@@ -88,10 +97,6 @@ namespace fitSharp.Test.NUnit.Slim {
             CheckExceptionCompose(new ConstructorMissingException(typeof(string), 0), "message:<<NO_CONSTRUCTOR System.String>> ");
         }
 
-        //[Test] public void CreateExceptionIsComposed() {
-        //    CheckExceptionCompose(new CreateException(typeof(string), 0, new ApplicationException("blah")), "message:<<COULD_NOT_INVOKE_CONSTRUCTOR System.String>> ");
-        //}
-
         [Test] public void MemoryExceptionIsComposed() {
             CheckExceptionCompose(new MemoryMissingException<SavedInstance>(new SavedInstance("stuff")), "message:<<NO_INSTANCE stuff>> ");
         }
@@ -106,18 +111,18 @@ namespace fitSharp.Test.NUnit.Slim {
                                   "message:<<NO_CONVERTER_FOR_ARGUMENT_NUMBER System.String>> ");
         }
 
-        private Tree<string> Compose(ComposeOperator<string> composeOperator, object instance, Type type) {
+        Tree<string> Compose(ComposeOperator<string> composeOperator, object instance, Type type) {
             var compose = (SlimOperator)composeOperator;
             compose.Processor = processor;
             Assert.IsTrue(composeOperator.CanCompose(new TypedValue(instance, type)));
             return composeOperator.Compose(new TypedValue(instance, type));
         }
 
-        private void CheckExceptionCompose(Exception exception, string expected) {
+        void CheckExceptionCompose(Exception exception, string expected) {
             CheckCompose(new ComposeException(), exception, exception.GetType(), string.Format("__EXCEPTION__:{0}{1}", expected, exception));
         }
 
-        private void CheckCompose(ComposeOperator<string> composeOperator, object instance, Type type, object expected) {
+        void CheckCompose(ComposeOperator<string> composeOperator, object instance, Type type, object expected) {
             var compose = (SlimOperator)composeOperator;
             compose.Processor = processor;
             Assert.IsTrue(composeOperator.CanCompose(new TypedValue(instance, type)));
