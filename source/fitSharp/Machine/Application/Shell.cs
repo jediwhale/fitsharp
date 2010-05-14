@@ -24,6 +24,10 @@ namespace fitSharp.Machine.Application {
         public Shell(ProgressReporter progressReporter) { this.progressReporter = progressReporter; }
 
         public int Run(string[] commandLineArguments) {
+#if DEBUG
+            if (FindDebugArg(commandLineArguments))
+                System.Diagnostics.Debugger.Break();
+#endif
             try {
                 string appConfigName = LookForAppConfig(commandLineArguments);
                 return appConfigName.Length == 0
@@ -36,7 +40,19 @@ namespace fitSharp.Machine.Application {
             }
         }
 
-        static string LookForAppConfig(string[] commandLineArguments) {
+        private bool FindDebugArg(string[] commandLineArguments)
+        {
+            for (int i = 0; i < commandLineArguments.Length; i++)
+            {
+                string arg = commandLineArguments[i];
+                if (arg != null && arg.ToLower().Equals("-debug"))
+                    return true;
+            }
+            return false;
+        }
+
+        static string LookForAppConfig(string[] commandLineArguments)
+        {
             for (int i = 0; i < commandLineArguments.Length - 1; i++) {
                 if (commandLineArguments[i] == "-a") return commandLineArguments[i + 1];
             }
@@ -46,7 +62,11 @@ namespace fitSharp.Machine.Application {
         int RunInCurrentDomain(string[] commandLineArguments) {
             ParseArguments(commandLineArguments);
             if (!ValidateArguments()) {
+#if DEBUG
+                progressReporter.Write("\nUsage:\n\tRunner -r runnerClass [-debug] [ -a appConfigFile ][ -c runnerConfigFile ] ...\n");
+#else
                 progressReporter.Write("\nUsage:\n\tRunner -r runnerClass [ -a appConfigFile ][ -c runnerConfigFile ] ...\n");
+#endif
                 return 1;
             }
             return ExecuteRunner();

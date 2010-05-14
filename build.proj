@@ -4,6 +4,7 @@
 
 <PropertyGroup>
     <Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
+    <!-- the NUNIT_HOME will default to the value of the NUNIT_HOME environment variable if defined -->
     <NUNIT_HOME Condition="'$(NUNIT_HOME)' == ''">C:\Program Files\NUnit 2.4.8</NUNIT_HOME>
 </PropertyGroup>
 
@@ -11,7 +12,7 @@
 
 <Target Name="solution">
     <MSBuild Projects="fitsharp.sln" 
-        Properties="Configuration=$(Configuration)" />
+        Properties="Configuration=$(Configuration);OutDir=$(MSBuildProjectDirectory)\build\$(Configuration)\" />
 </Target>
 
 <Target Name="unittests">
@@ -20,11 +21,11 @@
 </Target>
 
 <Target Name="storytests">
-    <Exec Command=".\build\debug\runner -c storytest.config.xml" />
-    <Copy SourceFiles=".\site\reportindex.html" DestinationFiles=".\site\part1.html"/>
-    <Exec Command=".\build\debug\runner -c textstorytest.config.xml" />
-    <Copy SourceFiles=".\site\reportindex.html" DestinationFiles=".\site\part2.html"/>
-    <Exec Command="copy /y .\site\part1.html + .\site\part2.html .\site\reportindex.html"/>
+    <Exec Command="$(MSBuildProjectDirectory)\build\debug\runner -c storytest.config.xml" />
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\site\reportindex.html" DestinationFiles="$(MSBuildProjectDirectory)\site\part1.html"/>
+    <Exec Command="$(MSBuildProjectDirectory)\build\debug\runner -c textstorytest.config.xml" />
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\site\reportindex.html" DestinationFiles="$(MSBuildProjectDirectory)\site\part2.html"/>
+    <Exec Command="copy /y $(MSBuildProjectDirectory)\site\part1.html + $(MSBuildProjectDirectory)\site\part2.html $(MSBuildProjectDirectory)\site\reportindex.html"/>
 </Target>
 
 <Target Name="dbfittests">
