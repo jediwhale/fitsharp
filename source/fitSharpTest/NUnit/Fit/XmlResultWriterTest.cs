@@ -12,9 +12,9 @@ namespace fitSharp.Test.NUnit.Fit {
     [TestFixture]
     public class XmlResultWriterTest
     {
-        private const string TEST_RESULT_FILE_NAME = "Test.xml";
-        private XmlResultWriter _strategy;
-        private FolderTestModel _folderModel;
+        const string TEST_RESULT_FILE_NAME = "Test.xml";
+        XmlResultWriter _strategy;
+        FolderTestModel _folderModel;
 
         [SetUp]
         public void SetUp()
@@ -53,6 +53,19 @@ namespace fitSharp.Test.NUnit.Fit {
         }
 
         [Test]
+        public void TestWriteIllegalCharacters()
+        {
+            const string pageName = "Test Page";
+            var pageResult = new PageResult(pageName, "<table><tr><td>Text</td></tr>\x02</table>", MakeTestCounts());
+            _strategy = new XmlResultWriter(TEST_RESULT_FILE_NAME, _folderModel);
+            _strategy.WritePageResult(pageResult);
+            _strategy.Close();
+            Assert.AreEqual(
+                BuildPageResultString(pageName, "<![CDATA[<table><tr><td>Text</td></tr>&#2;</table>]]>", 1, 2, 3, 4),
+                _folderModel.FileContent(TEST_RESULT_FILE_NAME));
+        }
+
+        [Test]
         public void TestWriteFinalCounts()
         {
             _strategy = new XmlResultWriter(TEST_RESULT_FILE_NAME, _folderModel);
@@ -62,24 +75,7 @@ namespace fitSharp.Test.NUnit.Fit {
                             _folderModel.FileContent(TEST_RESULT_FILE_NAME));
         }
 
-        /*[Test] public void Stress() {
-            var writer = new XmlResultWriter(TEST_RESULT_FILE_NAME, new FileSystemModel(1252));
-            var summary = new TestCounts();
-            var data = new StringBuilder();
-            for (int i = 0; i < 1000; i++) {
-                data.Append(
-                    "<div>**************************************************************************************************************************************************************************************************************************</div>");
-            }
-            for (int i = 0; i < 1000; i++) {
-                var pageResult = new PageResult("TestPage" + i, data.ToString(), MakeTestCounts());
-                writer.WritePageResult(pageResult);
-                summary.TallyCounts(MakeTestCounts());
-            }
-            writer.WriteFinalCount(summary);
-            writer.Close();
-        }*/
-
-        private static string BuildPageResultString(string pageName, string content, int right, int wrong, int ignores, int exceptions)
+        static string BuildPageResultString(string pageName, string content, int right, int wrong, int ignores, int exceptions)
         {
             var builder = new StringBuilder();
             builder.AppendLine("<?xml version=\"1.0\" encoding=\"utf-16\"?>");
@@ -98,7 +94,7 @@ namespace fitSharp.Test.NUnit.Fit {
             return builder.ToString();
         }
 
-        private static string BuildFinalCountsString(int right, int wrong, int ignores, int exceptions)
+        static string BuildFinalCountsString(int right, int wrong, int ignores, int exceptions)
         {
             var builder = new StringBuilder();
             builder.AppendLine("<?xml version=\"1.0\" encoding=\"utf-16\"?>");
@@ -113,7 +109,7 @@ namespace fitSharp.Test.NUnit.Fit {
             return builder.ToString();
         }
 
-        private static TestCounts MakeTestCounts() {
+        static TestCounts MakeTestCounts() {
             var counts = new TestCounts();
             counts.AddCount(TestStatus.Right);
             counts.AddCount(TestStatus.Wrong);

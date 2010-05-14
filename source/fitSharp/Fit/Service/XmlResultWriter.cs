@@ -1,10 +1,11 @@
-// Copyright © 2009 Syterra Software Inc. All rights reserved.
+// Copyright © 2010 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
 using System.IO;
+using System.Text;
 using System.Xml;
 using fitSharp.Fit.Model;
 using fitSharp.IO;
@@ -12,9 +13,9 @@ using fitSharp.IO;
 namespace fitSharp.Fit.Service {
     public class XmlResultWriter: ResultWriter {
 
-        private readonly XmlWriter writer;
-        private readonly FolderModel folderModel;
-        private readonly TextWriter file;
+        readonly XmlWriter writer;
+        readonly FolderModel folderModel;
+        readonly TextWriter file;
 
         public XmlResultWriter(string outputFileName, FolderModel theFolderModel) {
             folderModel = theFolderModel;
@@ -46,7 +47,7 @@ namespace fitSharp.Fit.Service {
             writer.WriteStartElement("result");
             writer.WriteElementString("relativePageName", results.Title);
             writer.WriteStartElement("content");
-            writer.WriteCData(results.Content);
+            writer.WriteCData(EncodeForXml(results.Content));
             writer.WriteEndElement();
             WriteCounts(results.TestCounts, "counts");
             writer.WriteEndElement();
@@ -56,7 +57,20 @@ namespace fitSharp.Fit.Service {
             WriteCounts(summary, "finalCounts");
         }
 
-        private void WriteCounts(TestCounts summary, string tag) {
+        static string EncodeForXml(string input) {
+            var output = new StringBuilder(input.Length);
+            foreach (char c in input) {
+                if (c < 32 && !char.IsWhiteSpace(c)) {
+                    output.AppendFormat("&#{0};", (int) c);
+                }
+                else {
+                    output.Append(c);
+                }
+            }
+            return output.ToString();
+        }
+
+        void WriteCounts(TestCounts summary, string tag) {
             writer.WriteStartElement(tag);
             writer.WriteElementString("right", summary.GetCount(TestStatus.Right).ToString());
             writer.WriteElementString("wrong", summary.GetCount(TestStatus.Wrong).ToString());
