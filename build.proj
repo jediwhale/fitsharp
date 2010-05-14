@@ -3,19 +3,20 @@
         DefaultTargets="solution;unittests;storytests" >
 
 <PropertyGroup>
-    <Config>Debug</Config>
+    <Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
+    <NUNIT_HOME Condition="'$(NUNIT_HOME)' == ''">C:\Program Files\NUnit 2.4.8</NUNIT_HOME>
 </PropertyGroup>
 
 <Target Name="all" DependsOnTargets="solution;unittests;storytests;dbfittests" />
 
 <Target Name="solution">
     <MSBuild Projects="fitsharp.sln" 
-        Properties="Configuration=$(Config)" />
+        Properties="Configuration=$(Configuration)" />
 </Target>
 
 <Target Name="unittests">
-    <Exec Command="&quot;C:\Program Files\NUnit 2.4.8\bin\nunit-console&quot; -nologo .\build\$(Config)\fitSharpTest.dll" />
-    <Exec Command="&quot;C:\Program Files\NUnit 2.4.8\bin\nunit-console&quot; -nologo .\build\$(Config)\fitTest.dll" />
+    <Exec Command="&quot;$(NUNIT_HOME)\bin\net-2.0\nunit-console.exe&quot; -nologo .\build\$(Configuration)\fitSharpTest.dll" />
+    <Exec Command="&quot;$(NUNIT_HOME)\bin\net-2.0\nunit-console.exe&quot; -nologo .\build\$(Configuration)\fitTest.dll" />
 </Target>
 
 <Target Name="storytests">
@@ -27,7 +28,7 @@
 </Target>
 
 <Target Name="dbfittests">
-    <Exec Command="&quot;C:\Program Files\NUnit 2.4.8\bin\nunit-console&quot; -nologo .\build\$(Config)\dbfitTest.dll" />
+    <Exec Command="&quot;$(NUNIT_HOME)\bin\net-2.0\nunit-console.exe&quot; -nologo .\build\$(Configuration)\dbfitTest.dll" />
     <Exec Command="java -jar \apps\fitnesse\fitnesse.jar -o -d .\document -r FitNesseRoot -c &quot;DbFitTests?suite&amp;format=text&quot;" />
 </Target>
 
