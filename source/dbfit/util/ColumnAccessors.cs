@@ -6,7 +6,6 @@
 using System;
 using System.Collections.Generic;
 using fitSharp.Machine.Engine;
-using fitSharp.Machine.Extension;
 using fitSharp.Machine.Model;
 
 namespace dbfit.util {

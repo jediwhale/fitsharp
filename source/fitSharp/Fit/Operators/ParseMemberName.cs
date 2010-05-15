@@ -5,11 +5,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
-using fitSharp.Machine.Extension;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
@@ -23,8 +23,8 @@ namespace fitSharp.Fit.Operators {
 
         public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
             StringBuilder nameParts = Processor.Configuration.GetItem<Settings>().BehaviorHas("fitlibrary1")
-                ? parameters.Leaves().Aggregate((StringBuilder t, Cell cell) => AppendWithConversion(t, cell.Text))
-                : parameters.Leaves().Aggregate((StringBuilder t, Cell cell) => Append(t, cell.Text));
+                ? parameters.Leaves().Aggregate(new StringBuilder(), (t, cell) => AppendWithConversion(t, cell.Text))
+                : parameters.Leaves().Aggregate(new StringBuilder(), (t, cell) => Append(t, cell.Text));
 
             if (nameParts.Length == 0) nameParts.Append("blank");
             string name = nameParts.ToString();
@@ -38,10 +38,10 @@ namespace fitSharp.Fit.Operators {
             return nameParts.Append(name);
         }
 
-        private static StringBuilder AppendWithConversion(StringBuilder nameParts, string name) {
+        private static StringBuilder AppendWithConversion(StringBuilder nameParts, IEnumerable<char> name) {
             return nameParts.Append(
-                             name.Aggregate(
-                                 (StringBuilder t, char character) => !specialCharacterConversion.ContainsKey(character)
+                             name.Aggregate(new StringBuilder(), 
+                                 (t, character) => !specialCharacterConversion.ContainsKey(character)
                                                                           ? t.Append(character)
                                                                           : t.Append(specialCharacterConversion[character])));
         }

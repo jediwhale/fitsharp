@@ -5,12 +5,12 @@
 
 using System;
 using System.Collections;
+using System.Linq;
 using fit.Model;
 using fitlibrary.exception;
 using fitSharp.Fit.Operators;
 using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
-using fitSharp.Machine.Extension;
 using fitSharp.Machine.Model;
 
 namespace fit.Operators {
@@ -62,8 +62,12 @@ namespace fit.Operators {
             Parse headerCells = cell.Parts.Parts.Parts;
             Parse dataRows = cell.Parts.Parts.More;
             return new TypedValue(
-                new CellRange(dataRows).Cells.Aggregate((ArrayList list, Parse row) =>
-                    list.Add(new CellOperationImpl(Processor).Invoke(instance.Value, new CellRange(headerCells), new CellRange(row.Parts), row.Parts).Value)));
+                new CellRange(dataRows).Cells.Aggregate(new ArrayList(), (list, row) => {
+                    list.Add(
+                        new CellOperationImpl(Processor).Invoke(instance.Value, new CellRange(headerCells),
+                                                                new CellRange(row.Parts), row.Parts).Value);
+                    return list;
+                }));
         }
     }
 }

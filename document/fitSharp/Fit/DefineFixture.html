@@ -16,10 +16,6 @@ to be bound by the terms of this license. You must not remove this notice, or an
 <div class="pagename">Define Fixture</div>
 <div class="content">The Define fixture creates reusable test procedures that can be run by other fixtures. See <a href="../Fit/FixturesUsingProcedures.html">Fixtures Using Procedures</a>.<br>
 <br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>do</td></tr>
-</table>
-<br>
 We declare the procedure name in the first row of the Define table and write the procedure body as the rest of the table: <pre class="code">|define|changename|
 |set|name|Bob|</pre> We can also declare parameters in the first row. This uses the Do Fixture style, where alternating cells make up the procedure name and the parameter names: <pre class="code">|define|check field|fieldname|is|expected|
 |check|fieldname|expected|</pre> To invoke the procedure, we use the procedure name in any place where we'd use a fixture or domain method name. The test results include an expandable section showing the details of the procedure execution. This is what it looks like:<br>

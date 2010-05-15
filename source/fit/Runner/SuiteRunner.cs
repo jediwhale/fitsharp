@@ -10,7 +10,6 @@ using fitSharp.Fit.Service;
 using fitSharp.IO;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
-using fitSharp.Machine.Extension;
 using fitSharp.Machine.Model;
 
 namespace fit.Runner {

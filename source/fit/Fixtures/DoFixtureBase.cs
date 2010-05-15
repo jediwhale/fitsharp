@@ -4,9 +4,10 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System.Collections.Generic;
+using System.Linq;
 using fit;
 using fit.Model;
-using fitSharp.Machine.Extension;
+using fitSharp.Machine.Model;
 
 namespace fitlibrary {
 
@@ -20,7 +21,7 @@ namespace fitlibrary {
         }
 
         protected override IEnumerable<Parse> ParameterCells(CellRange theCells) {
-            return theCells.Cells.From(1).Alternate();
+            return theCells.Cells.Skip(1).Alternate();
         }
     }
 }

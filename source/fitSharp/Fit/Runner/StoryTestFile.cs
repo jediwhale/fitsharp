@@ -3,11 +3,11 @@
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
+using System;
 using System.IO;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Service;
 using fitSharp.IO;
-using fitSharp.Machine.Extension;
 
 namespace fitSharp.Fit.Runner {
 

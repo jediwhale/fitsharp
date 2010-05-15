@@ -143,8 +143,7 @@
     <Compile Include="Machine\Exception\MemoryMissingException.cs" />
     <Compile Include="Machine\Exception\ParseException.cs" />
     <Compile Include="Machine\Exception\TypeMissingException.cs" />
-    <Compile Include="Machine\Extension\Delegate.cs" />
-    <Compile Include="Machine\Extension\Enumerable.cs" />
+    <Compile Include="Machine\Model\Enumerable.cs" />
     <Compile Include="Machine\Model\Copyable.cs" />
     <Compile Include="Machine\Model\DomainAdapter.cs" />
     <Compile Include="Machine\Model\EnumeratedTree.cs" />

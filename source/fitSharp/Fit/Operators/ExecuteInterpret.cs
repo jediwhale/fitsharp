@@ -5,7 +5,6 @@
 
 using fitSharp.Fit.Engine;
 using fitSharp.Machine.Engine;
-using fitSharp.Machine.Extension;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
@@ -16,7 +15,7 @@ namespace fitSharp.Fit.Operators {
 
         public TypedValue Execute(TypedValue instance, Tree<Cell> parameters) {
             var flowInterpreter = instance.Value as FlowInterpreter;
-            parameters.Branches.ForEach(table => { flowInterpreter = InterpretTable(flowInterpreter, table); });
+            foreach (var table in parameters.Branches) flowInterpreter = InterpretTable(flowInterpreter, table);
             return TypedValue.Void;
         }
 

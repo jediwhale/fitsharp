@@ -3,10 +3,10 @@
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
+using System.Linq;
 using System.Text;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Exception;
-using fitSharp.Machine.Extension;
 using fitSharp.Machine.Model;
 using fitSharp.Slim.Exception;
 using fitSharp.Slim.Model;
@@ -55,7 +55,7 @@ namespace fitSharp.Slim.Operators {
         }
 
         private static string List(Tree<string> list) {
-            return list.Branches.Aggregate((StringBuilder result, Tree<string> branch) => {
+            return list.Branches.Aggregate(new StringBuilder(), (result, branch) => {
                 if (result.Length > 0) result.Append(",");
                 return result.Append(branch.Value ?? "null");
             }).ToString();

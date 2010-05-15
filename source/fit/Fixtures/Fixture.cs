@@ -5,10 +5,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Service;
-using fitSharp.Machine.Extension;
 using fitSharp.Machine.Model;
 
 namespace fit
@@ -162,8 +162,11 @@ namespace fit
 	    public string[] Args { get; private set; }
 
 	    public void GetArgsForRow(Tree<Cell> row) {
-	        Args = row.Branches.From(1).Aggregate<List<string>, Tree<Cell>>(
-                (list, cell) => list.Add(cell.Value.Text)).ToArray();
+	        Args = row.Branches.Skip(1).Aggregate(new List<string>(),
+                (list, cell) => {
+                    list.Add(cell.Value.Text);
+                    return list;
+                }).ToArray();
 		}
 
         public object GetArgumentInput(int theIndex, Type theType) {

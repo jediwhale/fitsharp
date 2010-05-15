@@ -4,8 +4,8 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System.Collections.Generic;
+using System.Linq;
 using fitSharp.Machine.Exception;
-using fitSharp.Machine.Extension;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
@@ -55,7 +55,7 @@ namespace fitSharp.Machine.Engine {
         }
 
         object[] GetParameterList(TypedValue instance, Tree<T> parameters, RuntimeMember member) {
-            return parameters.Branches.Aggregate((List<object> parameterList, Tree<T> parameter) => {
+            return parameters.Branches.Aggregate(new List<object>(), (parameterList, parameter) => {
                 TypedValue parameterValue;
                 int i = parameterList.Count;
                 try {
@@ -65,6 +65,7 @@ namespace fitSharp.Machine.Engine {
                     throw new ParseException<T>(member.Name, member.GetParameterType(i), i+1, parameter.Value, e);
                 }
                 parameterList.Add(parameterValue.Value);
+                return parameterList;
             }).ToArray();
         }
     }

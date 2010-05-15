@@ -12,7 +12,6 @@ using fit;
 using dbfit.util;
 using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
-using fitSharp.Machine.Extension;
 using fitSharp.Machine.Model;
 
 namespace dbfit.fixture

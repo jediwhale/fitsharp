@@ -4,8 +4,8 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
-using fitSharp.Machine.Extension;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Model {
@@ -27,7 +27,7 @@ namespace fitSharp.Fit.Model {
         }
 
         public override string ToString() {
-            var branches = Branches.Aggregate((StringBuilder t, Tree<Cell> u) => t.Append(u)).ToString();
+            var branches = Branches.Aggregate(new StringBuilder(), (t, u) => t.Append(u)).ToString();
             return string.Format(Value == null || string.IsNullOrEmpty(Value.Text) ? "{0}" : Value.Text, branches);
         }
     }

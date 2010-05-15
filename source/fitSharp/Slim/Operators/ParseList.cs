@@ -5,8 +5,8 @@
 
 using System;
 using System.Collections;
+using System.Linq;
 using fitSharp.Machine.Engine;
-using fitSharp.Machine.Extension;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Slim.Operators {
@@ -26,9 +26,12 @@ namespace fitSharp.Slim.Operators {
                 return new TypedValue(array);
             }
             return new TypedValue(
-                parameters.Branches.AggregateTo(
+                parameters.Branches.Aggregate(
                     (IList) Activator.CreateInstance(type),
-                    (list, branch) => list.Add(Processor.ParseTree(type.GetGenericArguments()[0], branch).Value)));
+                    (list, branch) => {
+                        list.Add(Processor.ParseTree(type.GetGenericArguments()[0], branch).Value);
+                        return list;
+                    }));
         }
     }
 }

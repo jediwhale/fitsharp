@@ -6,8 +6,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using fitSharp.Machine.Engine;
-using fitSharp.Machine.Extension;
 using fitSharp.Machine.Model;
 using fitSharp.Parser;
 
@@ -19,11 +19,16 @@ namespace fitSharp.Slim.Operators {
 
         public TypedValue Parse(Type type, TypedValue instance, Tree<string> parameters) {
             Tree<CellBase> table = new HtmlTables().Parse(parameters.Value);
-            return new TypedValue(table.Branches[0].Branches.AggregateTo(
-                (IDictionary) Activator.CreateInstance(type),
-                (dictionary, row) => dictionary.Add(
-                    Processor.Parse(type.GetGenericArguments()[0], row.Branches[0].Value.Text).Value,
-                    Processor.Parse(type.GetGenericArguments()[1], row.Branches[1].Value.Text).Value)));
+            return new TypedValue(table.Branches[0].Branches.Aggregate(
+                                      (IDictionary) Activator.CreateInstance(type),
+                                      (dictionary, row) => {
+                                          dictionary.Add(
+                                              Processor.Parse(type.GetGenericArguments()[0], row.Branches[0].Value.Text)
+                                                  .Value,
+                                              Processor.Parse(type.GetGenericArguments()[1], row.Branches[1].Value.Text)
+                                                  .Value);
+                                          return dictionary;
+                                      }));
         }
     }
 }

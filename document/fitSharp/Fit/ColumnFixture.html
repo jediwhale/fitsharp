@@ -14,12 +14,7 @@ to be bound by the terms of this license. You must not remove this notice, or an
 <body>
 <div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
 <div class="pagename">Column Fixture</div>
-<div class="content"><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>do</td></tr>
-</table>
-<br>
-Column fixtures have a virtual Execute() method which is called before the first check operation in a given row. We can override this method to handle some processing after input/before check. <pre class="code">public class ExecuteExampleFixture : ColumnFixture {
+<div class="content">Column fixtures have a virtual Execute() method which is called before the first check operation in a given row. We can override this method to handle some processing after input/before check. <pre class="code">public class ExecuteExampleFixture : ColumnFixture {
     public int IntField;
     public override void Execute() { IntField = IntField*2; }
 }</pre><br>

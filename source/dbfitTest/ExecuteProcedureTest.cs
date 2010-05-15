@@ -127,7 +127,7 @@ namespace dbfitTest {
     public class TestCommand: DbCommand {
         public readonly SqlCommand Command = new SqlCommand();
         public int ExecuteNonQueryCalls;
-        public fitSharp.Machine.Extension.Action<TestCommand> NonQueryAction;
+        public Action<TestCommand> NonQueryAction;
 
         public override void Prepare() {
             throw new NotImplementedException();
