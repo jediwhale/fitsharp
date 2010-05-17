@@ -10,7 +10,7 @@
 </PropertyGroup>
 
 <Target Name="all" DependsOnTargets="solution;unittests;storytests;dbfittests" />
-  <Target Name="solution" DependsOnTargets="copy-solution;build-solution" />
+  <Target Name="solution" DependsOnTargets="copy-outputs;build-solution" />
 
   <Target Name="copy-outputs"
           DependsOnTargets="build-solution"
