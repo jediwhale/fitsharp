@@ -32,6 +32,7 @@
 </Target>
 
 <Target Name="storytests">
+    <!-- TODO: These don't pass in release config (even if you fix the cast exceptions). -->
     <Exec Command="$(MSBuildProjectDirectory)\build\$(Configuration)\runner -c storytest.config.xml" />
     <Copy SourceFiles="$(MSBuildProjectDirectory)\site\reportindex.html" DestinationFiles="$(MSBuildProjectDirectory)\site\part1.html"/>
     <Exec Command="$(MSBuildProjectDirectory)\build\$(Configuration)\runner -c textstorytest.config.xml" />
