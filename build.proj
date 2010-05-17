@@ -1,36 +1,47 @@
 <?xml version="1.0"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
-        DefaultTargets="solution;unittests;storytests" >
+        DefaultTargets="build-solution;unittests;storytests;copy-outputs" >
 
 <PropertyGroup>
     <Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
     <!-- the NUNIT_HOME will default to the value of the NUNIT_HOME environment variable if defined -->
     <NUNIT_HOME Condition="'$(NUNIT_HOME)' == ''">C:\Program Files\NUnit 2.4.8</NUNIT_HOME>
+    <OutDir Condition="'$(OutDir)' == ''">$(MSBuildProjectDirectory)\build\$(Configuration)\</OutDir>
 </PropertyGroup>
 
 <Target Name="all" DependsOnTargets="solution;unittests;storytests;dbfittests" />
+  <Target Name="solution" DependsOnTargets="copy-solution;build-solution" />
 
-<Target Name="solution">
+  <Target Name="copy-outputs"
+          DependsOnTargets="build-solution"
+          Condition="'$(OutDir)' != '$(MSBuildProjectDirectory)\build\$(Configuration)\'">
+    <ItemGroup>
+      <Outputs Include="$(MSBuildProjectDirectory)\build\$(Configuration)\*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(Outputs)" DestinationFiles="$(OutDir)%(Outputs.RecursiveDir)%(Outputs.Filename)%(Outputs.Extension)" />
+  </Target>
+  
+  <Target Name="build-solution">
     <MSBuild Projects="fitsharp.sln" 
         Properties="Configuration=$(Configuration);OutDir=$(MSBuildProjectDirectory)\build\$(Configuration)\" />
 </Target>
 
 <Target Name="unittests">
-    <Exec Command="&quot;$(NUNIT_HOME)\bin\net-2.0\nunit-console.exe&quot; -nologo .\build\$(Configuration)\fitSharpTest.dll" />
-    <Exec Command="&quot;$(NUNIT_HOME)\bin\net-2.0\nunit-console.exe&quot; -nologo .\build\$(Configuration)\fitTest.dll" />
+    <Exec Command="&quot;$(NUNIT_HOME)\bin\net-2.0\nunit-console.exe&quot; -nologo &quot;$(MSBuildProjectDirectory)\build\$(Configuration)\fitSharpTest.dll&quot;" />
+    <Exec Command="&quot;$(NUNIT_HOME)\bin\net-2.0\nunit-console.exe&quot; -nologo &quot;$(MSBuildProjectDirectory)\build\$(Configuration)\fitTest.dll&quot;" />
 </Target>
 
 <Target Name="storytests">
-    <Exec Command="$(MSBuildProjectDirectory)\build\debug\runner -c storytest.config.xml" />
+    <Exec Command="$(MSBuildProjectDirectory)\build\$(Configuration)\runner -c storytest.config.xml" />
     <Copy SourceFiles="$(MSBuildProjectDirectory)\site\reportindex.html" DestinationFiles="$(MSBuildProjectDirectory)\site\part1.html"/>
-    <Exec Command="$(MSBuildProjectDirectory)\build\debug\runner -c textstorytest.config.xml" />
+    <Exec Command="$(MSBuildProjectDirectory)\build\$(Configuration)\runner -c textstorytest.config.xml" />
     <Copy SourceFiles="$(MSBuildProjectDirectory)\site\reportindex.html" DestinationFiles="$(MSBuildProjectDirectory)\site\part2.html"/>
     <Exec Command="copy /y $(MSBuildProjectDirectory)\site\part1.html + $(MSBuildProjectDirectory)\site\part2.html $(MSBuildProjectDirectory)\site\reportindex.html"/>
 </Target>
 
 <Target Name="dbfittests">
-    <Exec Command="&quot;$(NUNIT_HOME)\bin\net-2.0\nunit-console.exe&quot; -nologo .\build\$(Configuration)\dbfitTest.dll" />
-    <Exec Command="java -jar \apps\fitnesse\fitnesse.jar -o -d .\document -r FitNesseRoot -c &quot;DbFitTests?suite&amp;format=text&quot;" />
+    <Exec Command="&quot;$(NUNIT_HOME)\bin\net-2.0\nunit-console.exe&quot; -nologo &quot;$(MSBuildProjectDirectory)\build\$(Configuration)\dbfitTest.dll&quot;" />
+    <Exec Command="java -jar \apps\fitnesse\fitnesse.jar -o -d &quot;$(MSBuildProjectDirectory)\document&quot; -r FitNesseRoot -c &quot;DbFitTests?suite&amp;format=text&quot;" />
 </Target>
 
 </Project>
