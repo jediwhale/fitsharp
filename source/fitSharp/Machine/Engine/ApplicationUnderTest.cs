@@ -20,14 +20,12 @@ namespace fitSharp.Machine.Engine {
 
         public ApplicationUnderTest() {
             assemblies = new List<Assembly>();
-            //namespaces = new List<IdentifierName>();
             namespaces = new Namespaces();
             AddNamespace(GetType().Namespace);
         }
 
         public ApplicationUnderTest(ApplicationUnderTest other) {
             assemblies = new List<Assembly>(other.assemblies);
-            //namespaces = new List<IdentifierName>(other.namespaces);
             namespaces = new Namespaces(other.namespaces);
         }
 
@@ -94,7 +92,7 @@ namespace fitSharp.Machine.Engine {
         }
 
         static bool IsDynamic(Assembly assembly) {
-            return assembly.ManifestModule is System.Reflection.Emit.ModuleBuilder;
+            return assembly.ManifestModule.GetType().Namespace == "System.Reflection.Emit";
         }
 
         public Copyable Copy() {
