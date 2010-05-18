@@ -61,7 +61,7 @@ namespace fitnesse.fitserver
 				{
 					if ("-v".Equals(args[i]))
 						verbose = true;
-                    else if (!args[i].ToLower().Equals("-debug"))
+                    else
 						PrintUsageAndExit();
 				}
 				else

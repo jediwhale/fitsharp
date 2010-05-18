@@ -30,9 +30,15 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_misc", "_misc", "{B6C0694C-E00E-4854-BDB9-BF2E03750AB5}"
 	ProjectSection(SolutionItems) = preProject
 		build.proj = build.proj
+		dbfit.config.xml = dbfit.config.xml
+		storytest.config.xml = storytest.config.xml
+		textstorytest.config.xml = textstorytest.config.xml
 	EndProjectSection
 EndProject
 Global
+	GlobalSection(DPCodeReviewSolutionGUID) = preSolution
+		DPCodeReviewSolutionGUID = {00000000-0000-0000-0000-000000000000}
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU

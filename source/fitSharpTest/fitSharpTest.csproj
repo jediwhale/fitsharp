@@ -24,7 +24,6 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
-
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
@@ -51,6 +50,7 @@
   <ItemGroup>
     <Compile Include="Acceptance\Slim\SlimDomain.cs" />
     <Compile Include="Double\TestSocket.cs" />
+    <Compile Include="NUnit\Application\AppDomainParametersTest.cs" />
     <Compile Include="NUnit\Fit\BindingFactoryTest.cs" />
     <Compile Include="NUnit\Fit\CellOperatorsTest.cs" />
     <Compile Include="NUnit\Fit\DefineTest.cs" />
