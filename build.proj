@@ -15,12 +15,14 @@
   <Target Name="copy-outputs"
           DependsOnTargets="build-solution"
           Condition="'$(OutDir)' != '$(MSBuildProjectDirectory)\build\$(Configuration)\'">
+    <Error Condition="'$(OutDir)' != '' and !HasTrailingSlash('$(OutDir)')"
+           Text="The OutDir property must end with a trailing slash." />
     <ItemGroup>
       <Outputs Include="$(MSBuildProjectDirectory)\build\$(Configuration)\*" />
     </ItemGroup>
     <Copy SourceFiles="@(Outputs)" DestinationFiles="$(OutDir)%(Outputs.RecursiveDir)%(Outputs.Filename)%(Outputs.Extension)" />
   </Target>
-  
+
   <Target Name="build-solution">
     <MSBuild Projects="fitsharp.sln" 
         Properties="Configuration=$(Configuration);OutDir=$(MSBuildProjectDirectory)\build\$(Configuration)\" />

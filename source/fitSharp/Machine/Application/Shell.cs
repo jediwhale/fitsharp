@@ -103,6 +103,8 @@ namespace fitSharp.Machine.Application {
                         case "-r":
                             ParseRunnerArgument(commandLineArguments[i + 1]);
                             break;
+                        case "-debug":
+                            continue;
                         default:
                             extraArguments.Add(commandLineArguments[i]);
                             continue;
