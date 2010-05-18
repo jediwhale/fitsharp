@@ -12,6 +12,7 @@ using Configuration=fitSharp.Machine.Application.Configuration;
 using System.IO;
 using System.Xml;
 using NUnit.Framework.SyntaxHelpers;
+using System.Diagnostics;
 
 namespace fitSharp.Test.NUnit.Machine {
     [TestFixture] public class ShellTest {
@@ -43,7 +44,7 @@ namespace fitSharp.Test.NUnit.Machine {
             parms.ConfigurationFile = Path.Combine(baseDir, "fitSharpTest.dll.alt.config");
             parms.DynamicBase = Path.Combine(baseDir, "dynamic-tmp");
             parms.PrivateBinPath = Path.GetFileName(baseDir);
-            parms.PrivateBinPathProbe = "-foo";
+            parms.PrivateBinPathProbe = "foo";
             using (XmlWriter writer = XmlWriter.Create("domainSetup.xml")) {
                 parms.Write(writer);
                 writer.Flush();
@@ -85,7 +86,7 @@ namespace fitSharp.Test.NUnit.Machine {
             string baseDir = typeof(VerifyAppDomainRunner).Assembly.CodeBase.Substring(8);
             baseDir = Path.GetDirectoryName(Path.GetFullPath(baseDir));
 
-            if (setup.ApplicationBase != baseDir)
+            if (setup.ApplicationBase != Path.GetDirectoryName(baseDir))
                 return 1;
             else if (setup.ApplicationName != "CustomAppDomainSetupIsUsed-test-domain")
                 return 2;

@@ -3,27 +3,7 @@ Authorunknown fork notes:
     This was originally a fork of the excellent fitsharp library written by
     Mike Stockdale (git://github.com/jediwhale/fitsharp.git).
 
-    The reason I created my own fork was to fix a nagging issue that my team
-    encountered while using FitNesse and FitSharp:  It was counter-intuitive and
-    awkward to get the test runner to locate the correct test assemblies and
-    libs for the source branch we were currently testing.
-
-    So, I decided to do a bit of work on the test runner.  Instead of relying on
-    fitnesse's classpath to load fixture assemblies, we will use the equivalent
-    .NET functionality.  Classpath is a java idiom.  Every java programmer knows
-    how the runtime uses it and it makes sense.
-
-    It doesn't make as much sense for a .NET application because the runtime
-    does not respect directories listed there.  FitNesse will expand wild cards
-    in the classpath and the test runner can explicitly load assemblies, but
-    that still has problems.
-
-    Therefore, this fork adds another parameter to the test runner, which allows
-    you to specify all the relevant probing paths for the app domain in which tests
-    run.  This allows .NET projects to use familiar and _unsurprising_ means of
-    resolving dependencies.
-
-    It also gives you the ability to fully specify how the app domain that hosts
+    My changes give you the ability to fully specify how the app domain that hosts
     your test code gets created.
 
     Whether or not this ever gets merged into the original project is up to Mr.
