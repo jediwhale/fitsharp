@@ -68,18 +68,17 @@ namespace fitSharp.Machine.Application {
         int RunInCurrentDomain(string[] commandLineArguments) {
             ParseArguments(commandLineArguments);
             if (!ValidateArguments()) {
-                progressReporter.WriteLine("");
                 progressReporter.WriteLine("Usage:");
 #if DEBUG
                 progressReporter.WriteLine("\tRunner -r runnerClass [-debug] [ -d domainSetupFile ][ -a appConfigFile ][ -c runnerConfigFile ] ...\n");
-                progressReporter.WriteLine("\t\t-debug\t\tcauses you to be prompted to attach with a debugger before the runner does anything");
+                progressReporter.WriteLine("\t-debug\tcauses you to be prompted to attach with a debugger before the runner does anything");
 #else
-                progressReporter.Write("\nUsage:\n\tRunner -r runnerClass [ -d domainSetupFile ][ -a appConfigFile ][ -c runnerConfigFile ][ -d domainSetupFile ] ...\n");
+                progressReporter.WriteLine("\tRunner -r runnerClass [ -d domainSetupFile ][ -a appConfigFile ][ -c runnerConfigFile ][ -d domainSetupFile ] ...\n");
 #endif
-                progressReporter.WriteLine("\t\t-r\t\tclass used to run tests.  this will usually be either 'fitnesse.fitserver.FitServer,fit.dll' or 'fitSharp.Slim.Service.Runner,fitSharp.dll'");
-                progressReporter.WriteLine("\t\t-d\t\tallows you to specify most settings used to create the AppDomain your tests will run in.  useful if you are having trouble getting the runner to load assemblies referenced by your fixtures or if you need to specify other domain setup items.  see fitSharp.Machine.Application.AppDomainParameters for more info.");
-                progressReporter.WriteLine("\t\t-a\t\tallows you to specify the application config file used when running tests.  ignored if -d is given");
-                progressReporter.WriteLine("\t\t-c\t\tallows you to specify a runner specific configuration file.  this is not the same as the .NET framework config file, but is passed as a parameter to the runner class specified with -r");
+                progressReporter.WriteLine("\t\r\tclass used to run tests.  this will usually be either 'fitnesse.fitserver.FitServer,fit.dll' or 'fitSharp.Slim.Service.Runner,fitSharp.dll'");
+                progressReporter.WriteLine("\t-d\tallows you to specify most settings used to create the AppDomain your tests will run in.  useful if you are having trouble getting the runner to load assemblies referenced by your fixtures or if you need to specify other domain setup items.  see fitSharp.Machine.Application.AppDomainParameters for more info.");
+                progressReporter.WriteLine("\t-a\tallows you to specify the application config file used when running tests.  ignored if -d is given");
+                progressReporter.WriteLine("\t-c\tallows you to specify a runner specific configuration file.  this is not the same as the .NET framework config file, but is passed as a parameter to the runner class specified with -r");
                 return 1;
             }
             return ExecuteRunner();
