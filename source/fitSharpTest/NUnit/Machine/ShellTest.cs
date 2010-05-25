@@ -43,8 +43,8 @@ namespace fitSharp.Test.NUnit.Machine {
             parms.CachePath = Path.Combine(baseDir, "cache-tmp");
             parms.ConfigurationFile = Path.Combine(baseDir, "fitSharpTest.dll.alt.config");
             parms.DynamicBase = Path.Combine(baseDir, "dynamic-tmp");
-            parms.PrivateBinPath = Path.GetFileName(baseDir);
-            parms.PrivateBinPathProbe = "foo";
+            parms.PrivateBinPath = ".";
+            parms.ShouldExcludeApplicationBaseFromAssemblyProbe = false;
             using (XmlWriter writer = XmlWriter.Create("domainSetup.xml")) {
                 parms.Write(writer);
                 writer.Flush();
@@ -96,9 +96,9 @@ namespace fitSharp.Test.NUnit.Machine {
                 return 4;
             else if (!setup.DynamicBase.StartsWith(Path.Combine(baseDir, "dynamic-tmp")))
                 return 5;
-            else if (setup.PrivateBinPath != Path.GetFileName(baseDir))
+            else if (setup.PrivateBinPath != baseDir)
                 return 6;
-            else if (setup.PrivateBinPathProbe != "foo")
+            else if (setup.PrivateBinPathProbe != "")
                 return 7;
             else
                 return 0;

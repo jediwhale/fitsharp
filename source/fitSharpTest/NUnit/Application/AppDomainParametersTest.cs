@@ -21,24 +21,53 @@ namespace fitSharp.Test.NUnit.Application {
 
             //AppDomainSetup does its own thing with the values that are copied and we don't control
             //that (or even want to try to control it; not our responsiblity), which is why the 
-            //result is not verified. because they use the same interface, the first assert ensures
-            //that the values get copied.
+            //result of copying to System.AppDomainSetup is not verified. The first assertion ensures
+            //that the correct values are set.
         }
 
         [Test]
-        public void WriteTo_then_Read_is_identity_transform() {
+        public void Write_then_Read_is_identity_transform() {
             AppDomainParameters parms = CreateParameters();
             AppDomainParameters newInstance = null;
 
             StringWriter textWriter = new StringWriter();
-            using (XmlWriter writer = XmlWriter.Create(textWriter)) {
+            using (XmlWriter writer = XmlWriter.Create(textWriter, new XmlWriterSettings { Indent = true })) {
                 parms.Write(writer);
             }
-            using (XmlReader reader = XmlReader.Create(new StringReader(textWriter.ToString()))) {
+            string xml = textWriter.ToString();
+            using (XmlReader reader = XmlReader.Create(new StringReader(xml))) {
                 newInstance = AppDomainParameters.Read(reader);
             }
 
             AssertAllPropertiesAreEqual(parms, newInstance);
+        }
+
+        [Test]
+        public void Read_throws_when_unrecognized_element_name() {
+            AppDomainParameters parms = CreateParameters();
+
+            StringWriter textWriter = new StringWriter();
+            using (XmlWriter writer = XmlWriter.Create(textWriter, new XmlWriterSettings { Indent = true })) {
+                parms.Write(writer);
+            }
+            string xml = textWriter.ToString();
+            XmlDocument xd = new XmlDocument();
+            using (XmlReader reader = XmlReader.Create(new StringReader(xml))) {
+                xd.Load(reader);
+            }
+
+            XmlElement el = xd.CreateElement("gobbldey-gook");
+            el.InnerText = "asdfas";
+            xd.DocumentElement.AppendChild(el);
+            textWriter = new StringWriter();
+            using (XmlWriter writer = XmlWriter.Create(textWriter, new XmlWriterSettings { Indent = true })) {
+                xd.WriteContentTo(writer);
+            }
+            xml = textWriter.ToString();
+
+            using (XmlReader reader = XmlReader.Create(new StringReader(xml))) {
+                Error.Expect<InvalidOperationException>(() => AppDomainParameters.Read(reader));
+            }
         }
 
         [Test]
@@ -57,29 +86,66 @@ namespace fitSharp.Test.NUnit.Application {
                 new AppDomainParameters {
                     ApplicationBase = @"..",
                     ApplicationName = "foo",
-                    CachePath = @"C:\cache\path",
+                    CachePath = @"cache",
                     ConfigurationFile = @".\fitnesse.config",
-                    DynamicBase = @"C:\dir\to\store\dynamic-proxies",
+                    DynamicBase = @"dynamic-proxies",
                     LicenseFile = "yuck",
-                    PrivateBinPath = @".\bin",
-                    PrivateBinPathProbe = @".\lib;tools\fitsharp",
-                    ShadowCopyDirectories = @"fitnesse\shadow-copies",
+                    PrivateBinPath = @"..\lib;tools\fitsharp",
+                    ShouldExcludeApplicationBaseFromAssemblyProbe = true,
+                    ShadowCopyDirectories = @".\shadow-copies",
                     ShadowCopyFiles = "true"
                 }.Write(writer);
             }
 
             string xml = textWriter.ToString();
             using (XmlReader reader = XmlReader.Create(new StringReader(xml))) {
-                parms = AppDomainParameters.Read(reader, @"C:\projects\project\main\fitnesse\app-domain.xml");
+                parms = AppDomainParameters.Read(reader, @"C:\projects\project\trunk\fitnesse\app-domain.xml");
             }
 
-            Assert.That(parms.ApplicationBase, Is.EqualTo(@"C:\projects\project\main"));
-            Assert.That(parms.ConfigurationFile, Is.EqualTo(@"C:\projects\project\main\fitnesse\fitnesse.config"));
-            Assert.That(parms.CachePath, Is.EqualTo(@"C:\cache\path"));
-            Assert.That(parms.DynamicBase, Is.EqualTo(@"C:\dir\to\store\dynamic-proxies"));
-            Assert.That(parms.PrivateBinPath, Is.EqualTo(@".\bin"));
-            Assert.That(parms.PrivateBinPathProbe, Is.EqualTo(@".\lib;tools\fitsharp"));
-            Assert.That(parms.ShadowCopyDirectories, Is.EqualTo(@"fitnesse\shadow-copies"));
+            Assert.That(parms.ApplicationBase, Is.EqualTo(@"C:\projects\project\trunk"));
+            Assert.That(parms.ConfigurationFile, Is.EqualTo(@"C:\projects\project\trunk\fitnesse\fitnesse.config"));
+            Assert.That(parms.CachePath, Is.EqualTo(@"C:\projects\project\trunk\fitnesse\cache"));
+            Assert.That(parms.DynamicBase, Is.EqualTo(@"C:\projects\project\trunk\fitnesse\dynamic-proxies"));
+            Assert.That(parms.PrivateBinPath, Is.EqualTo(@"C:\projects\project\trunk\lib;C:\projects\project\trunk\fitnesse\tools\fitsharp"));
+            Assert.That(parms.ShouldExcludeApplicationBaseFromAssemblyProbe, Is.True);
+            Assert.That(parms.ShadowCopyDirectories, Is.EqualTo(@"C:\projects\project\trunk\fitnesse\shadow-copies"));
+        }
+
+        [Test]
+        public void setter_throws_when_PrivateBinPath_contains_dirs_not_under_ApplicationBase() {
+            AppDomainParameters parms = new AppDomainParameters();
+            parms.ApplicationBase = @"C:\foo";
+            Error.Expect<InvalidOperationException>(() => parms.PrivateBinPath = @"bin;C:\bar\bin");
+        }
+
+        [Test]
+        public void Read_throws_when_PrivateBinPath_contains_dirs_not_under_ApplicationBase() {
+            using (StringReader sr = new StringReader("<app><ApplicationBase>C:\\foo</ApplicationBase><PrivateBinPath>bin;C:\\bar\\bin</PrivateBinPath></app>"))
+            using (XmlReader reader = XmlReader.Create(sr)) {
+                Error.Expect<InvalidOperationException>(() => AppDomainParameters.Read(reader));
+            }
+            using (StringReader sr = new StringReader("<app><PrivateBinPath>bin;C:\\bar\\bin</PrivateBinPath><ApplicationBase>C:\\foo</ApplicationBase></app>"))
+            using (XmlReader reader = XmlReader.Create(sr)) {
+                Error.Expect<InvalidOperationException>(() => AppDomainParameters.Read(reader));
+            }
+        }
+
+        [Test]
+        public void PrivateBinPathProbe_is_empty_string_when_ShouldExcludeApplicationBaseFromAssemblyProbe_is_false() {
+            AppDomainParameters parms = CreateParameters();
+            parms.ShouldExcludeApplicationBaseFromAssemblyProbe = false;
+
+            string actual = ((IAppDomainSetup)parms).PrivateBinPathProbe;
+            Assert.That(actual, Is.EqualTo(""));
+        }
+
+        [Test]
+        public void PrivateBinPathProbe_is_non_empty_string_when_ShouldExcludeApplicationBaseFromAssemblyProbe_is_true() {
+            AppDomainParameters parms = CreateParameters();
+            parms.ShouldExcludeApplicationBaseFromAssemblyProbe = true;
+
+            string actual = ((IAppDomainSetup)parms).PrivateBinPathProbe;
+            Assert.That(actual.Length, Is.GreaterThan(0));
         }
 
         [Test]
@@ -104,21 +170,21 @@ namespace fitSharp.Test.NUnit.Application {
             Assert.That(actual.DynamicBase, Is.EqualTo(expected.DynamicBase));
             Assert.That(actual.LicenseFile, Is.EqualTo(expected.LicenseFile));
             Assert.That(actual.PrivateBinPath, Is.EqualTo(expected.PrivateBinPath));
-            Assert.That(actual.PrivateBinPathProbe, Is.EqualTo(expected.PrivateBinPathProbe));
+            Assert.That(actual.ShouldExcludeApplicationBaseFromAssemblyProbe, Is.EqualTo(expected.ShouldExcludeApplicationBaseFromAssemblyProbe));
             Assert.That(actual.ShadowCopyDirectories, Is.EqualTo(expected.ShadowCopyDirectories));
             Assert.That(actual.ShadowCopyFiles, Is.EqualTo(expected.ShadowCopyFiles));
         }
 
         private AppDomainParameters CreateParameters() {
             return new AppDomainParameters {
-                ApplicationBase = @"C:\my\project\main",
+                ApplicationBase = @"C:\my\project\trunk",
                 ApplicationName = "foo",
                 CachePath = @"C:\cache\path",
-                ConfigurationFile = @"C:\my\project\main\fitnesse\fitnesse.config",
+                ConfigurationFile = @"C:\my\project\trunk\fitnesse\fitnesse.config",
                 DynamicBase = @"C:\dir\to\store\dynamic-proxies",
                 LicenseFile = "yuck",
-                PrivateBinPath = @"C:\my\project\main\bin",
-                PrivateBinPathProbe = @"C:\my\project\main\lib;C:\my\project\main\tools\fitsharp",
+                PrivateBinPath = @"C:\my\project\trunk\bin",
+                ShouldExcludeApplicationBaseFromAssemblyProbe = true,
                 ShadowCopyDirectories = @"C:\temp\project-shadow",
                 ShadowCopyFiles = "true"
             };
