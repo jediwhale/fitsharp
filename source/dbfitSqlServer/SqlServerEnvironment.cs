@@ -123,6 +123,7 @@ namespace dbfit
         private static string[] StringTypes = new string[] { "VARCHAR", "NVARCHAR", "CHAR", "NCHAR","TEXT","NTEXT","XML"};
         private static string[] DecimalTypes = new string[] { "DECIMAL", "NUMERIC", "MONEY", "SMALLMONEY" };
         private static string[] DateTypes = new string[] { "SMALLDATETIME","DATETIME","TIMESTAMP" };
+        private static string[] DateTypes2008 = new string[] { "DATETIME2" };
         private static string[] RefCursorTypes = new string[] { "REF" };
         private static string[] Int32Types=new string[] {"INT"};
         private static string[] Int16Types = new string[] { "TINYINT", "SMALLINT"};
@@ -151,6 +152,7 @@ namespace dbfit
             if (Array.IndexOf(StringTypes, dataType) >= 0) return SqlDbType.VarChar;
             if (Array.IndexOf(DecimalTypes, dataType) >= 0) return SqlDbType.Decimal;
             if (Array.IndexOf(DateTypes, dataType) >= 0) return SqlDbType.DateTime;
+            if (Array.IndexOf(DateTypes2008, dataType) >= 0) return SqlDbType.DateTime2;
             if (Array.IndexOf(Int32Types, dataType) >= 0) return SqlDbType.Int;
             if (Array.IndexOf(Int16Types, dataType) >= 0) return SqlDbType.Int;
             if (Array.IndexOf(Int64Types, dataType) >= 0) return SqlDbType.Int;
@@ -172,6 +174,7 @@ namespace dbfit
             if (Array.IndexOf(Int16Types, dataType) >= 0) return typeof(Int16);
             if (Array.IndexOf(Int64Types, dataType) >= 0) return typeof(Int64);
             if (Array.IndexOf(DateTypes, dataType) >= 0) return typeof(DateTime);
+            if (Array.IndexOf(DateTypes2008, dataType) >= 0) return typeof(DateTime);
             if (Array.IndexOf(RefCursorTypes, dataType) >= 0) return typeof(DataTable);
             if (Array.IndexOf(BooleanTypes, dataType) >= 0) return typeof(bool);
 			if (Array.IndexOf(BinaryTypes, dataType) >= 0) return typeof(byte[]);
