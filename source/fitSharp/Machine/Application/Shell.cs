@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using fitSharp.IO;
 using fitSharp.Machine.Engine;
@@ -17,17 +18,27 @@ namespace fitSharp.Machine.Application {
     public class Shell: MarshalByRefObject {
         readonly List<string> extraArguments = new List<string>();
         readonly ProgressReporter progressReporter;
+        readonly FolderModel folderModel;
         readonly Configuration configuration = new Configuration();
+        string appConfigArgument;
         public Runnable Runner { get; private set; }
 
-        public Shell() { progressReporter = new ConsoleReporter(); }
-        public Shell(ProgressReporter progressReporter) { this.progressReporter = progressReporter; }
+        public Shell() {
+            progressReporter = new ConsoleReporter();
+            folderModel = new FileSystemModel();
+        }
+
+        public Shell(ProgressReporter progressReporter, FolderModel folderModel) {
+            this.progressReporter = progressReporter;
+            this.folderModel = folderModel;
+        }
 
         public int Run(string[] commandLineArguments) {
             try {
-                string appConfigName = LookForAppConfig(commandLineArguments);
+                ParseArguments(commandLineArguments);
+                string appConfigName = LookForAppConfig();
                 return appConfigName.Length == 0
-                           ? RunInCurrentDomain(commandLineArguments)
+                           ? RunInCurrentDomain()
                            : RunInNewDomain(appConfigName, commandLineArguments);
             }
             catch (System.Exception e) {
@@ -36,15 +47,19 @@ namespace fitSharp.Machine.Application {
             }
         }
 
-        static string LookForAppConfig(string[] commandLineArguments) {
-            for (int i = 0; i < commandLineArguments.Length - 1; i++) {
-                if (commandLineArguments[i] == "-a") return commandLineArguments[i + 1];
-            }
+        string LookForAppConfig() {
+            if (!string.IsNullOrEmpty(appConfigArgument)) return Path.GetFullPath(appConfigArgument);
+            string appConfigSettings = configuration.GetItem<Settings>().AppConfigFile;
+            if (!string.IsNullOrEmpty(appConfigSettings)) return appConfigSettings;
             return string.Empty;
         }
 
         int RunInCurrentDomain(string[] commandLineArguments) {
             ParseArguments(commandLineArguments);
+            return RunInCurrentDomain();
+        }
+
+        int RunInCurrentDomain() {
             if (!ValidateArguments()) {
                 progressReporter.Write("\nUsage:\n\tRunner -r runnerClass [ -a appConfigFile ][ -c runnerConfigFile ] ...\n");
                 return 1;
@@ -76,12 +91,13 @@ namespace fitSharp.Machine.Application {
                 if (i < commandLineArguments.Length - 1) {
                     switch (commandLineArguments[i]) {
                         case "-c":
-                            configuration.LoadFile(commandLineArguments[i + 1]);
+                            configuration.LoadXml(folderModel.FileContent(commandLineArguments[i + 1]));
                             break;
                         case "-a":
+                            appConfigArgument = commandLineArguments[i + 1];
                             break;
                         case "-r":
-                            ParseRunnerArgument(commandLineArguments[i + 1]);
+                            configuration.GetItem<Settings>().Runner = commandLineArguments[i + 1];
                             break;
                         default:
                             extraArguments.Add(commandLineArguments[i]);
@@ -93,13 +109,6 @@ namespace fitSharp.Machine.Application {
             }
         }
 
-        void ParseRunnerArgument(string argument) {
-            string[] tokens = argument.Split(',');
-            configuration.GetItem<Settings>().Runner = tokens[0];
-            if (tokens.Length > 1) {
-                configuration.GetItem<ApplicationUnderTest>().AddAssembly(tokens[1]);
-            }
-        }
 
         bool ValidateArguments() {
             if (string.IsNullOrEmpty(configuration.GetItem<Settings>().Runner)) {
@@ -110,7 +119,11 @@ namespace fitSharp.Machine.Application {
         }
 
         int ExecuteRunner() {
-            Runner = new BasicProcessor().Create(configuration.GetItem<Settings>().Runner).GetValue<Runnable>();
+            string[] tokens = configuration.GetItem<Settings>().Runner.Split(',');
+            if (tokens.Length > 1) {
+                configuration.GetItem<ApplicationUnderTest>().AddAssembly(tokens[1]);
+            }
+            Runner = new BasicProcessor().Create(tokens[0]).GetValue<Runnable>();
             return Runner.Run(extraArguments.ToArray(), configuration, progressReporter);
         }
     }

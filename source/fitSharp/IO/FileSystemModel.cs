@@ -1,4 +1,4 @@
-// Copyright © 2009 Syterra Software Inc. All rights reserved.
+// Copyright © 2010 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -10,17 +10,21 @@ using System.Text;
 namespace fitSharp.IO {
     public class FileSystemModel: FolderModel {
         
-        private readonly int codePage;
+        private readonly Encoding encoding;
+
+        public FileSystemModel() {
+            encoding = Encoding.UTF8;
+        }
 
         public FileSystemModel(int codePage) {
-            this.codePage = codePage;
+            encoding = Encoding.GetEncoding(codePage);
         }
 
         public void MakeFile(string thePath, string theContent) {
             if (!Directory.Exists(Path.GetDirectoryName(thePath))) {
                 Directory.CreateDirectory(Path.GetDirectoryName(thePath));
             }
-            TextWriter writer = new StreamWriter(thePath, false, Encoding.GetEncoding(codePage));
+            TextWriter writer = new StreamWriter(thePath, false, encoding);
             writer.Write(theContent);
             writer.Close();
         }
@@ -30,11 +34,10 @@ namespace fitSharp.IO {
         }
 
         public string FileContent(string thePath) {
-            
             StreamReader reader;
             try {
                 var file = new FileStream(thePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-                reader = new StreamReader(file, Encoding.GetEncoding(codePage));
+                reader = new StreamReader(file, encoding);
             }
             catch (FileNotFoundException) {
                 return null;

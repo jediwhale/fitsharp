@@ -8,7 +8,8 @@ using System.Collections;
 using System.IO;
 using fitSharp.IO;
 
-namespace fitSharp.Test.NUnit.Fit {
+namespace fitSharp.Test.Double
+{
     public class FolderTestModel: FolderModel, ProgressReporter {
         public FolderTestModel() {
             myFiles = new Hashtable();

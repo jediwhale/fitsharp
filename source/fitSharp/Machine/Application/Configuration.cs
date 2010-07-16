@@ -5,7 +5,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Reflection;
 using System.Xml;
 using fitSharp.Machine.Engine;
@@ -25,6 +24,7 @@ namespace fitSharp.Machine.Application {
         }
 
         public void LoadXml(string configXml) {
+            if (string.IsNullOrEmpty(configXml)) return;
             var document = new XmlDocument();
             document.LoadXml(configXml);
             if (document.DocumentElement == null) return;
@@ -36,13 +36,6 @@ namespace fitSharp.Machine.Application {
                 }
             }
         }
-
-        public void LoadFile(string filePath) {
-            var reader = new StreamReader(filePath);
-            LoadXml(reader.ReadToEnd());
-            reader.Close();
-        }
-
 
         void LoadNode(string typeName, XmlNode methodNode) {
             try {
