@@ -5,7 +5,7 @@
 
 using fitnesse.fitserver;
 using fitSharp.Fit.Model;
-using fitSharp.Test.NUnit.Fit;
+using fitSharp.Test.Double;
 using NUnit.Framework;
 
 namespace fit.Test.NUnit {

@@ -79,7 +79,7 @@
     <Compile Include="NUnit\Fit\ExecuteDefaultTest.cs" />
     <Compile Include="NUnit\Fit\ExecuteInterpretTest.cs" />
     <Compile Include="NUnit\Fit\ExecuteStoryTestTest.cs" />
-    <Compile Include="NUnit\Fit\FolderTestModel.cs" />
+    <Compile Include="Double\FolderTestModel.cs" />
     <Compile Include="NUnit\Fit\GracefulNameTest.cs" />
     <Compile Include="NUnit\Fit\ParseByteArrayTest.cs" />
     <Compile Include="NUnit\Fit\ParseDateTest.cs" />
