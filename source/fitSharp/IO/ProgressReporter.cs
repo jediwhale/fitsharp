@@ -15,6 +15,33 @@ namespace fitSharp.IO {
             reporter.Write(message);
             reporter.Write(Environment.NewLine);
         }
+        public static void Write(this ProgressReporter reporter, Exception ex) {
+            while (ex != null) {
+                reporter.Write(ex.GetType().FullName);
+                reporter.Write(": ");
+                reporter.Write(ex.Message);
+                reporter.Write(Environment.NewLine);
+                reporter.Write(ex.StackTrace);
+                reporter.Write(Environment.NewLine);
+                var context = ex.Data;
+                if (context != null && context.Count > 0) {
+                    reporter.Write("Exception Context:");
+                    foreach (object key in context.Keys) {
+                        reporter.Write("  ");
+                        reporter.Write(key.ToString());
+                        reporter.Write(" := ");
+                        object value = context[key];
+                        reporter.Write(value == null ? "(null)" : value.ToString());
+                        reporter.Write(Environment.NewLine);
+                    }
+                }
+                ex = ex.InnerException;
+                if (ex != null) {
+                    reporter.Write("-- INNER EXCEPTION: ");
+                    reporter.Write(Environment.NewLine);
+                }
+            }
+        }
     }
 
     public class ConsoleReporter: ProgressReporter {

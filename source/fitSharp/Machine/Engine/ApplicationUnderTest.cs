@@ -30,10 +30,15 @@ namespace fitSharp.Machine.Engine {
         }
 
         public void AddAssembly(string assemblyName) {
-            if (IsIgnored(assemblyName)) return;
-            Assembly assembly = Assembly.LoadFrom(assemblyName);
-            if (assemblies.Contains(assembly)) return;
-            assemblies.Add(assembly);
+            try {
+                if (IsIgnored(assemblyName)) return;
+                Assembly assembly = Assembly.LoadFrom(assemblyName);
+                if (assemblies.Contains(assembly)) return;
+                assemblies.Add(assembly);
+            } catch (System.Exception ex) {
+                ex.Data.Add("assemblyName", assemblyName);
+                throw;
+            }
         }
 
         static bool IsIgnored(string assemblyName) {

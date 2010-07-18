@@ -21,6 +21,7 @@ namespace fitSharp.Machine.Application {
         readonly FolderModel folderModel;
         readonly Configuration configuration = new Configuration();
         string appConfigArgument;
+        string appDomainSetupArgument;
         public Runnable Runner { get; private set; }
 
         public Shell() {
@@ -40,23 +41,20 @@ namespace fitSharp.Machine.Application {
 #endif
             try {
                 ParseArguments(commandLineArguments);
-                string appConfigName = LookForAppConfig();
-                return appConfigName.Length == 0
-                           ? RunInCurrentDomain()
-                           : RunInNewDomain(appConfigName, commandLineArguments);
-                string domainSetupFile = LookForSwitchValue("-d", commandLineArguments);
-                string appConfigName = LookForSwitchValue("-a", commandLineArguments);
+                string appConfigName = GetAppConfigPath();
+                string domainSetupFile = GetAppDomainSetupPath();
+
                 if (domainSetupFile.Length > 0) {
                     AppDomainParameters parms = AppDomainParameters.Read(domainSetupFile);
                     return RunInNewDomain(parms, commandLineArguments);
                 } else if (appConfigName.Length > 0) {
                     return RunInNewDomain(appConfigName, commandLineArguments);
                 } else {
-                    return RunInCurrentDomain(commandLineArguments);
+                    return RunInCurrentDomain();
                 }
             }
             catch (System.Exception e) {
-                progressReporter.Write(string.Format("{0}\n", e));
+                progressReporter.Write(e);
                 return 1;
             }
         }
@@ -72,15 +70,15 @@ namespace fitSharp.Machine.Application {
             return false;
         }
 
-        static string LookForSwitchValue(string switchName, string[] commandLineArguments)
-        {
-            for (int i = 0; i < commandLineArguments.Length - 1; i++) {
-                if (commandLineArguments[i] == switchName) return commandLineArguments[i + 1];
-            }
-        string LookForAppConfig() {
+        string GetAppConfigPath() {
             if (!string.IsNullOrEmpty(appConfigArgument)) return Path.GetFullPath(appConfigArgument);
             string appConfigSettings = configuration.GetItem<Settings>().AppConfigFile;
             if (!string.IsNullOrEmpty(appConfigSettings)) return appConfigSettings;
+            return string.Empty;
+        }
+
+        string GetAppDomainSetupPath() {
+            if (!string.IsNullOrEmpty(appDomainSetupArgument)) return Path.GetFullPath(appDomainSetupArgument);
             return string.Empty;
         }
 
@@ -149,6 +147,7 @@ namespace fitSharp.Machine.Application {
                             configuration.GetItem<Settings>().Runner = commandLineArguments[i + 1];
                             break;
                         case "-d":
+                            appDomainSetupArgument = commandLineArguments[i + 1];
                             break;
                         case "-debug":
                             continue;

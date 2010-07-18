@@ -8,6 +8,7 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using fitSharp.Test.Double;
 using NUnit.Framework;
+using NUnit.Framework.SyntaxHelpers;
 
 namespace fitSharp.Test.NUnit.Machine {
     [TestFixture] public class ApplicationUnderTestTest {
@@ -76,6 +77,12 @@ namespace fitSharp.Test.NUnit.Machine {
             applicationUnderTest.AddNamespace("fitnesse.unitTest.engine");
             applicationUnderTest = copy;
             CheckTypeNotFound("SampleClass");
+        }
+
+        [Test]
+        public void AddAssemblyNameToExceptionContext() {
+            ArgumentException ex = Error.Expect<ArgumentException>(() => applicationUnderTest.AddAssembly("<span"));
+            Assert.That(ex.Data.Values, Has.Member("<span"));
         }
 
         void CheckTypeFound<T>(string typeName) {
