@@ -1,6 +1,14 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_misc", "_misc", "{B6C0694C-E00E-4854-BDB9-BF2E03750AB5}"
+	ProjectSection(SolutionItems) = preProject
+		build.proj = build.proj
+		dbfit.config.xml = dbfit.config.xml
+		storytest.config.xml = storytest.config.xml
+		textstorytest.config.xml = textstorytest.config.xml
+	EndProjectSection
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "fitSharp", "source\fitSharp\fitSharp.csproj", "{204FF2CD-475F-4C6E-A6B5-6779364B33F8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "fitSharpTest", "source\fitSharpTest\fitSharpTest.csproj", "{8C5E0127-E52C-46B7-B253-BD88F5F29034}"
@@ -27,18 +35,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dbfitSqlServer", "source\db
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dbfitOracle", "source\dbfitOracle\dbfitOracle.csproj", "{E60C59D8-84BC-4C69-802F-26C62A0CF0F4}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_misc", "_misc", "{B6C0694C-E00E-4854-BDB9-BF2E03750AB5}"
-	ProjectSection(SolutionItems) = preProject
-		build.proj = build.proj
-		dbfit.config.xml = dbfit.config.xml
-		storytest.config.xml = storytest.config.xml
-		textstorytest.config.xml = textstorytest.config.xml
-	EndProjectSection
-EndProject
 Global
-	GlobalSection(DPCodeReviewSolutionGUID) = preSolution
-		DPCodeReviewSolutionGUID = {00000000-0000-0000-0000-000000000000}
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -99,5 +96,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(DPCodeReviewSolutionGUID) = preSolution
+		DPCodeReviewSolutionGUID = {00000000-0000-0000-0000-000000000000}
 	EndGlobalSection
 EndGlobal
