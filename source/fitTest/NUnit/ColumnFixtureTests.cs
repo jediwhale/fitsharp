@@ -19,11 +19,6 @@ namespace fit.Test.NUnit {
         public void TestNullCell()
         {
             var builder = new StringBuilder();
-            //builder.Append("<table>");
-            //builder.Append("<tr><td>configuration setup</td></tr>");
-            //builder.Append("<tr><td>service</td></tr>");
-            //builder.Append("<tr><td>add operator</td><td>fit.operators.executeempty</td></tr>");
-            //builder.Append("</table>");
             builder.Append("<table>");
             builder.Append("<tr><td colspan=\"2\">string fixture</td></tr>");
             builder.Append("<tr><td>Field</td><td>Field?</td></tr>");
@@ -158,6 +153,21 @@ namespace fit.Test.NUnit {
             Assert.AreEqual("Method()", testFixture.Values[3]);
             TestUtils.VerifyCounts(testFixture, 2, 0, 0, 0);
         }
+
+        [Test] public void UsesDynamicTarget() {
+            TestUtils.InitAssembliesAndNamespaces();
+            var builder = new StringBuilder();
+            builder.Append("<table>");
+            builder.Append("<tr><td>dynamic target fixture</td></tr>");
+            builder.Append("<tr><td>count?</td></tr>");
+            builder.Append("<tr><td>0</td></tr>");
+            builder.Append("<tr><td>1</td></tr>");
+            builder.Append("</table>");
+            var table = Parse.ParseFrom(builder.ToString());
+            var testFixture = new DynamicTargetFixture{ Processor = new Service.Service()};
+            testFixture.DoTable(table);
+            TestUtils.VerifyCounts(testFixture, 2, 0, 0, 0);
+        }
     }
 
     public class ExecuteTestFixture : ColumnFixture
@@ -188,5 +198,19 @@ namespace fit.Test.NUnit {
         {
             Values.Add("Execute()");
         }
+    }
+
+    public class DynamicTargetFixture: ColumnFixture {
+        private object target;
+        private int count;
+
+        public override void DoRow(Parse row) {
+            target = new Target { Count = count++ };
+            base.DoRow(row);
+        }
+
+        public override object GetTargetObject() { return target; }
+
+        private class Target { public int Count; }
     }
 }
