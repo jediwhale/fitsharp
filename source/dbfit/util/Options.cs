@@ -13,11 +13,13 @@ namespace dbfit.util
     {
         private static bool fixedLengthStringParsing;
         private static bool bindSymbols = true;
+        private static int commandTimeOut = 30;
 
         public static void reset()
         {
             fixedLengthStringParsing = false;
             bindSymbols = true;
+            commandTimeOut = 30;
         }
         public static bool IsFixedLengthStringParsing()
         {
@@ -27,6 +29,7 @@ namespace dbfit.util
         {
             return bindSymbols;
         }
+        public static int CommandTimeOut { get { return commandTimeOut; } }
 
         public static void SetOption(CellProcessor processor, String name, String value)
         {
@@ -42,6 +45,10 @@ namespace dbfit.util
             else if ("bindsymbols".Equals(normalname))
             {
                 bindSymbols = Boolean.Parse(value);
+            }
+            else if (normalname == "commandtimeout")
+            {
+                commandTimeOut = int.Parse(value);
             }
             else throw new ApplicationException("Unsupported option" + name);
         }

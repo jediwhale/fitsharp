@@ -7,6 +7,8 @@ using System.Data.Common;
 using System.Data;
 using System.Text.RegularExpressions;
 using System.Text;
+using dbfit.util;
+
 namespace dbfit
 {
     /// <summary>
@@ -88,6 +90,7 @@ namespace dbfit
             dc.CommandText = statement.Replace("\r", " ").Replace("\n", " ");
             dc.CommandType = commandType;
             dc.Transaction = CurrentTransaction;
+            dc.CommandTimeout = Options.CommandTimeOut;
             return dc;
         }
         public void BindFixtureSymbols(DbCommand dc)
