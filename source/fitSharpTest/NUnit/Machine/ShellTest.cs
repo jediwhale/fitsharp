@@ -5,6 +5,7 @@
 
 using System;
 using System.Configuration;
+using System.Threading;
 using fitSharp.IO;
 using fitSharp.Machine.Application;
 using fitSharp.Test.Double;
@@ -48,13 +49,18 @@ namespace fitSharp.Test.NUnit.Machine {
             Assert.AreEqual(SampleRunner.Result, result);
         }
 
-        private static int RunShell(string[] arguments)
-        {
+        [Test] public void ApartmentStateFromSuiteConfigIsUsed() {
+            var folders = new FolderTestModel();
+            folders.MakeFile("suite.config.xml", "<config><Settings><ApartmentState>STA</ApartmentState></Settings></config>");
+            RunShell(new[] {"-r", typeof(SampleRunner).FullName, "-c", "suite.config.xml"}, folders );
+            Assert.AreEqual(ApartmentState.STA, SampleRunner.ApartmentState);
+        }
+
+        private static int RunShell(string[] arguments) {
             return RunShell(arguments, new FolderTestModel());
         }
 
-        private static int RunShell(string[] arguments, FolderModel model)
-        {
+        private static int RunShell(string[] arguments, FolderModel model) {
             return new Shell(new ConsoleReporter(), model).Run(arguments);
         }
     }
@@ -63,6 +69,7 @@ namespace fitSharp.Test.NUnit.Machine {
         public const int Result = 707;
 
         public static string[] LastArguments;
+        public static ApartmentState ApartmentState;
 
         public SampleRunner() {
             LastArguments = new string[] {};
@@ -70,6 +77,7 @@ namespace fitSharp.Test.NUnit.Machine {
 
         public int Run(string[] arguments, Configuration configuration, ProgressReporter reporter) {
             LastArguments = arguments;
+            ApartmentState = Thread.CurrentThread.GetApartmentState();
             try {
                 return int.Parse(ConfigurationManager.AppSettings.Get("returnCode"));
             }
@@ -78,5 +86,4 @@ namespace fitSharp.Test.NUnit.Machine {
             }
         }
     }
-
 }
