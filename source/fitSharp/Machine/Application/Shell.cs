@@ -7,20 +7,21 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Threading;
 using fitSharp.IO;
 using fitSharp.Machine.Engine;
 
 namespace fitSharp.Machine.Application {
-    public interface Runnable {
-        int Run(string[] commandLineArguments, Configuration configuration, ProgressReporter reporter);
-    }
 
     public class Shell: MarshalByRefObject {
         readonly List<string> extraArguments = new List<string>();
         readonly ProgressReporter progressReporter;
         readonly FolderModel folderModel;
         readonly Configuration configuration = new Configuration();
+
         string appConfigArgument;
+        private int result;
+
         public Runnable Runner { get; private set; }
 
         public Shell() {
@@ -64,10 +65,11 @@ namespace fitSharp.Machine.Application {
                 progressReporter.Write("\nUsage:\n\tRunner -r runnerClass [ -a appConfigFile ][ -c runnerConfigFile ] ...\n");
                 return 1;
             }
-            return ExecuteRunner();
+            return Execute();
         }
 
         static int RunInNewDomain(string appConfigName, string[] commandLineArguments) {
+            //todo: can we specify apppath for the new domain?
             var appDomainSetup = new AppDomainSetup {
                 ApplicationBase = AppDomain.CurrentDomain.BaseDirectory,
                 ConfigurationFile = appConfigName
@@ -109,7 +111,6 @@ namespace fitSharp.Machine.Application {
             }
         }
 
-
         bool ValidateArguments() {
             if (string.IsNullOrEmpty(configuration.GetItem<Settings>().Runner)) {
                 progressReporter.Write("Missing runner class\n");
@@ -118,13 +119,33 @@ namespace fitSharp.Machine.Application {
             return true;
         }
 
-        int ExecuteRunner() {
+        private int Execute() {
             string[] tokens = configuration.GetItem<Settings>().Runner.Split(',');
             if (tokens.Length > 1) {
                 configuration.GetItem<ApplicationUnderTest>().AddAssembly(tokens[1]);
             }
             Runner = new BasicProcessor().Create(tokens[0]).GetValue<Runnable>();
-            return Runner.Run(extraArguments.ToArray(), configuration, progressReporter);
+            ExecuteInApartment();
+            return result;
+        }
+
+        private void ExecuteInApartment() {
+            string apartmentConfiguration = configuration.GetItem<Settings>().ApartmentState;
+            if (apartmentConfiguration != null) {
+                var desiredState = (ApartmentState)Enum.Parse(typeof(ApartmentState), apartmentConfiguration);
+                if (Thread.CurrentThread.GetApartmentState() != desiredState) {
+                    var thread = new Thread(Run);
+                    thread.SetApartmentState(desiredState);
+                    thread.Start();
+                    thread.Join();
+                    return;
+                }
+            }
+            Run();
+        }
+
+        private void Run() {
+            result = Runner.Run(extraArguments.ToArray(), configuration, progressReporter);
         }
     }
 }
