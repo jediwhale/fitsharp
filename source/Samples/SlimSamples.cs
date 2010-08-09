@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using fitSharp.Machine.Model;
 
 namespace fitnesse.slim.test {
@@ -223,5 +224,9 @@ namespace fitnesse.slim.test {
         public void One(int i) {}
         public void Two(string i) {}
         public void Three(string i) {}
+
+        public string FirstHash(Dictionary<string, string> hash) {
+          return hash.Keys.ElementAt(0);
+        }
     }
 }
