@@ -51,6 +51,7 @@
     <Compile Include="Double\TestSocket.cs" />
     <Compile Include="NUnit\Fit\BindingFactoryTest.cs" />
     <Compile Include="NUnit\Fit\CellOperatorsTest.cs" />
+    <Compile Include="NUnit\Fit\CellProcessorBaseTest.cs" />
     <Compile Include="NUnit\Fit\DefineTest.cs" />
     <Compile Include="NUnit\Fit\ExecuteDefaultTest.cs" />
     <Compile Include="NUnit\Fit\ExecuteInterpretTest.cs" />
@@ -59,6 +60,7 @@
     <Compile Include="NUnit\Fit\GracefulNameTest.cs" />
     <Compile Include="NUnit\Fit\ParseByteArrayTest.cs" />
     <Compile Include="NUnit\Fit\ParseDateTest.cs" />
+    <Compile Include="NUnit\Fit\ParseSymbolTest.cs" />
     <Compile Include="NUnit\Fit\XmlResultWriterTest.cs" />
     <Compile Include="NUnit\IO\ElapsedTimeTest.cs" />
     <Compile Include="NUnit\IO\SocketStreamTest.cs" />
