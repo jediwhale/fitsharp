@@ -1,8 +1,7 @@
 /// Copyright (C) Gojko Adzic 2006-2008 http://gojko.net
 /// Released under GNU GPL 2.0
 using System;
-using System.Collections.Generic;
-using System.Text;
+using fitSharp.Machine.Model;
 
 namespace dbfit.fixture
 {
@@ -23,36 +22,41 @@ namespace dbfit.fixture
     public class DatabaseEnvironment : fitlibrary.SequenceFixture
     {
 		 public DatabaseEnvironment(){
-			this.mySystemUnderTest=DbEnvironmentFactory.DefaultEnvironment;
+			mySystemUnderTest=DbEnvironmentFactory.DefaultEnvironment;
 	     }
 		 public override void DoTable(fit.Parse theTable)
 		 {
 			if (Args.Length>0){
 				String requestedEnv=Args[0].ToUpper().Trim();
-/*                if ("ORACLE".Equals(requestedEnv))
-                    env = new OracleEnvironment();
-                else if ("SQLSERVER".Equals(requestedEnv))
-                    env = new SqlServerEnvironment();
-                else if ("SQLSERVER2000".Equals(requestedEnv))
-                    env = new SqlServer2000Environment();
-                else if ("DB2".Equals(requestedEnv))
-                    env = new DB2Environment();
- */ 
-                throw new ApplicationException("DB Environment not supported " + requestedEnv);
-				//DbEnvironmentFactory.DefaultEnvironment=env;
-				//this.mySystemUnderTest=env;
+        IDbEnvironment env; 
+        if ("ORACLE".Equals(requestedEnv))
+          env = MakeEnvironment("OracleEnvironment");
+        else if ("SQLSERVER".Equals(requestedEnv))
+          env = MakeEnvironment("SqlServerEnvironment");
+        else if ("SQLSERVER2000".Equals(requestedEnv))
+          env = MakeEnvironment("SqlServer2000Environment");
+        /*  else if ("DB2".Equals(requestedEnv))
+          env = Processor.Create("DB2Environment", new TreeList<Cell>()); */
+        else
+          throw new ApplicationException("DB Environment not supported " + requestedEnv);
+				DbEnvironmentFactory.DefaultEnvironment=env;
+				mySystemUnderTest=DbEnvironmentFactory.DefaultEnvironment;
 			}
 			base.DoTable(theTable);
-		 }        
-		 
-        /// <summary>
+		 }
+
+      private IDbEnvironment MakeEnvironment(string name) {
+        return Processor.Create(name, new TreeList<Cell>()).GetValue<IDbEnvironment>();
+      }
+
+      /// <summary>
         /// set the value of DbFit options. See dbfit.util.options for more information
         /// </summary>
         /// <param name="option">option name</param>
         /// <param name="value">option vaue</param>
         public void SetOption(String option, String value)
         {
-            dbfit.util.Options.SetOption(Processor, option, value);
+            util.Options.SetOption(Processor, option, value);
         }
     }
 }
