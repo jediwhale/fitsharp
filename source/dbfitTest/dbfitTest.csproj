@@ -53,6 +53,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DbConnectionPropertiesTest.cs" />
     <Compile Include="NameNormaliserTest.cs" />
+    <Compile Include="QueryTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\dbfitOracle\dbfitOracle.csproj">
