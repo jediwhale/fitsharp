@@ -14,8 +14,8 @@
 </Target>
 
 <Target Name="unittests">
-    <Exec Command="&quot;C:\Program Files\NUnit 2.4.8\bin\nunit-console&quot; -nologo .\build\$(Config)\fitSharpTest.dll" />
-    <Exec Command="&quot;C:\Program Files\NUnit 2.4.8\bin\nunit-console&quot; -nologo .\build\$(Config)\fitTest.dll" />
+    <Exec Command="binary\tools\nunit-console -nologo .\build\$(Config)\fitSharpTest.dll" />
+    <Exec Command="binary\tools\nunit-console -nologo .\build\$(Config)\fitTest.dll" />
 </Target>
 
 <Target Name="storytests">
@@ -27,7 +27,7 @@
 </Target>
 
 <Target Name="dbfittests">
-    <Exec Command="&quot;C:\Program Files\NUnit 2.4.8\bin\nunit-console&quot; -nologo .\build\$(Config)\dbfitTest.dll" />
+    <Exec Command="binary\tools\nunit-console -nologo .\build\$(Config)\dbfitTest.dll" />
     <Exec Command="java -jar \apps\fitnesse\fitnesse.jar -o -d .\document -r FitNesseRoot -c &quot;DbFitTests?suite&amp;format=text&quot;" />
 </Target>
 
