@@ -10,7 +10,7 @@ using fitSharp.IO;
 using fitSharp.Machine.Application;
 using fitSharp.Test.Double;
 using NUnit.Framework;
-using Configuration=fitSharp.Machine.Application.Configuration;
+using Configuration=fitSharp.Machine.Engine.Configuration;
 
 namespace fitSharp.Test.NUnit.Machine {
     [TestFixture] public class ShellTest {

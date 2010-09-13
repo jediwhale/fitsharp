@@ -6,7 +6,7 @@
 using System.Collections;
 using System.Text;
 using fitSharp.Fit.Model;
-using fitSharp.Machine.Application;
+using fitSharp.Machine.Engine;
 using NUnit.Framework;
 
 namespace fit.Test.NUnit {

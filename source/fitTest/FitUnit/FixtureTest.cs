@@ -7,6 +7,7 @@ using System.Threading;
 using fitlibrary;
 using fitSharp.IO;
 using fitSharp.Machine.Application;
+using fitSharp.Machine.Engine;
 
 namespace fit.Test.FitUnit {
     public class FixtureTest: DoFixture {

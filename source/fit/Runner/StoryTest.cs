@@ -5,7 +5,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using fitSharp.Fit.Service;
-using fitSharp.Machine.Application;
+using fitSharp.Machine.Engine;
 
 namespace fit {
     public interface StoryCommand {

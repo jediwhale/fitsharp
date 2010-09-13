@@ -8,7 +8,7 @@ using fitSharp.Machine.Model;
 using fitSharp.Slim.Operators;
 
 namespace fitSharp.Slim.Service {
-    public class SlimOperators: Operators<string, Service>, Copyable {
+    public class SlimOperators: Operators<string, SlimProcessor>, Copyable {
 
         public SlimOperators() {
             Add(new ComposeDefault(), 0);
@@ -21,7 +21,7 @@ namespace fitSharp.Slim.Service {
             Add(new ExecuteCall(), 0);
             Add(new ExecuteCallAndAssign(), 0);
 
-            Add(new ParseType<string, Service>(), 0);
+            Add(new ParseType<string, SlimProcessor>(), 0);
             Add(new ParseList(), 0);
             Add(new ParseDictionary(), 0);
             Add(new ParseSymbol(), 2);
@@ -31,7 +31,7 @@ namespace fitSharp.Slim.Service {
             Add(new ComposeList(), 0);
         }
 
-        public SlimOperators(Operators<string, Service> other): this() {
+        public SlimOperators(Operators<string, SlimProcessor> other): this() {
             Copy(other);
         }
 

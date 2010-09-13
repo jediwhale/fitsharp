@@ -7,10 +7,9 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Xml;
-using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
-namespace fitSharp.Machine.Application {
+namespace fitSharp.Machine.Engine {
     public class Configuration {
 
         readonly Dictionary<Type, Copyable> items = new Dictionary<Type, Copyable>();
@@ -47,20 +46,20 @@ namespace fitSharp.Machine.Application {
         }
 
         static readonly Dictionary<string, string> aliasTypes = new Dictionary<string, string> {
-            {"fit.assemblies", "fitSharp.Machine.Engine.ApplicationUnderTest"},
-            {"fit.fileexclusions", "fitSharp.Fit.Application.FileExclusions"},
-            {"fit.namespaces", "fitSharp.Machine.Engine.ApplicationUnderTest"},
-            {"fit.settings", "fitSharp.Machine.Application.Settings"},
-            {"settings", "fitSharp.Machine.Application.Settings"},
-            {"fileexclusions", "fitSharp.Fit.Application.FileExclusions"},
-            {"slim.service", "fitSharp.Slim.Service.SlimOperators"},
-            {"slim.operators", "fitSharp.Slim.Service.SlimOperators"},
-            {"fitsharp.slim.service.service", "fitSharp.Slim.Service.SlimOperators"},
-            {"fit.service", "fit.Service.Operators"},
-            {"fit.operators", "fit.Service.Operators"},
-            {"fit.cellhandlers", "fit.Service.Operators"},
-            {"fitlibrary.cellhandlers", "fit.Service.Operators"}
-        };
+           {"fit.assemblies", "fitSharp.Machine.Engine.ApplicationUnderTest"},
+           {"fit.fileexclusions", "fitSharp.Fit.Application.FileExclusions"},
+           {"fit.namespaces", "fitSharp.Machine.Engine.ApplicationUnderTest"},
+           {"fit.settings", "fitSharp.Machine.Application.Settings"},
+           {"settings", "fitSharp.Machine.Application.Settings"},
+           {"fileexclusions", "fitSharp.Fit.Application.FileExclusions"},
+           {"slim.service", "fitSharp.Slim.Service.SlimOperators"},
+           {"slim.operators", "fitSharp.Slim.Service.SlimOperators"},
+           {"fitsharp.slim.service.service", "fitSharp.Slim.Service.SlimOperators"},
+           {"fit.service", "fit.Service.Operators"},
+           {"fit.operators", "fit.Service.Operators"},
+           {"fit.cellhandlers", "fit.Service.Operators"},
+           {"fitlibrary.cellhandlers", "fit.Service.Operators"}
+       };
 
         TypedValue AliasType(string originalType) {
             string originalTypeLower = originalType.ToLowerInvariant();

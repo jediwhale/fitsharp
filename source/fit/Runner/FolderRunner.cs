@@ -9,6 +9,7 @@ using fitSharp.Fit.Application;
 using fitSharp.Fit.Runner;
 using fitSharp.IO;
 using fitSharp.Machine.Application;
+using fitSharp.Machine.Engine;
 
 namespace fit.Runner {
     public class FolderRunner: Runnable {

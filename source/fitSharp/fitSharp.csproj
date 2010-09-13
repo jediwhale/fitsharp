@@ -48,7 +48,7 @@
     <Compile Include="Fit\Application\Configurable.cs" />
     <Compile Include="Fit\Application\ConfigurationList.cs" />
     <Compile Include="Fit\Application\FileExclusions.cs" />
-    <Compile Include="Fit\Engine\CellOperators.cs" />
+    <Compile Include="Fit\Operators\CellOperators.cs" />
     <Compile Include="Fit\Engine\CellProcessor.cs" />
     <Compile Include="Fit\Exception\IgnoredException.cs" />
     <Compile Include="Fit\Fixtures\Define.cs" />
@@ -122,7 +122,7 @@
     <Compile Include="Fit\Model\Symbol.cs" />
     <Compile Include="Fit\Operators\ParseNull.cs" />
     <Compile Include="Fit\Operators\ParseType.cs" />
-    <Compile Include="Machine\Application\Configuration.cs" />
+    <Compile Include="Machine\Engine\Configuration.cs" />
     <Compile Include="Machine\Application\Shell.cs" />
     <Compile Include="Machine\Engine\ApplicationUnderTest.cs" />
     <Compile Include="Machine\Engine\BasicProcessor.cs" />
@@ -183,6 +183,7 @@
     <Compile Include="Slim\Operators\RuntimeLibrary.cs" />
     <Compile Include="Slim\Operators\SavedInstance.cs" />
     <Compile Include="Slim\Operators\SlimOperator.cs" />
+    <Compile Include="Slim\Operators\SlimProcessor.cs" />
     <Compile Include="Slim\Operators\Symbol.cs" />
     <Compile Include="Slim\Service\Document.cs" />
     <Compile Include="Slim\Service\Interpreter.cs" />
