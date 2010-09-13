@@ -12,6 +12,7 @@ namespace fitSharp.Fit.Engine {
     public class CellOperators: Operators<Cell, CellProcessor> {
 
         public CellOperators() {
+            Add(new DataRowRuntime<Cell, CellProcessor>(), 0);
             Add(new ParseDefault(), 0);
             Add(new ParseMemberName(), 0);
             Add(new ParseBoolean(), 0);
@@ -32,6 +33,7 @@ namespace fitSharp.Fit.Engine {
 
             Add(new ParseArray(), 2);
             Add(new ParseByteArray(), 2);
+            Add(new ParseNullArray(), 2);
             Add(new ExecuteError(), 2);
             Add(new ExecuteException(), 2);
             Add(new CompareFail(), 2);

@@ -52,9 +52,11 @@
     <Compile Include="Fit\Engine\CellProcessor.cs" />
     <Compile Include="Fit\Exception\IgnoredException.cs" />
     <Compile Include="Fit\Fixtures\Define.cs" />
+    <Compile Include="Fit\Operators\ParseNullArray.cs" />
     <Compile Include="Fit\Operators\ParseStoryTestString.cs" />
     <Compile Include="Machine\Application\Runnable.cs" />
     <Compile Include="Machine\Application\Runner.cs" />
+    <Compile Include="Machine\Engine\DataRowRuntime.cs" />
     <Compile Include="Machine\Model\CellBase.cs" />
     <Compile Include="Fit\Model\CellSubstring.cs" />
     <Compile Include="Fit\Model\CellTree.cs" />
