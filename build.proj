@@ -2,11 +2,14 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
         DefaultTargets="solution;unittests;storytests" >
 
+<Import Project="binary\tools\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
+
 <PropertyGroup>
     <Config>Debug</Config>
 </PropertyGroup>
 
 <Target Name="all" DependsOnTargets="solution;unittests;storytests;dbfittests" />
+<Target Name="deploy" DependsOnTargets="releasesolution;zip" />
 
 <Target Name="solution">
     <MSBuild Projects="fitsharp.sln" 
@@ -29,6 +32,20 @@
 <Target Name="dbfittests">
     <Exec Command="binary\tools\nunit-console -nologo .\build\$(Config)\dbfitTest.dll" />
     <Exec Command="java -jar \apps\fitnesse\fitnesse.jar -o -d .\document -r FitNesseRoot -c &quot;DbFitTests?suite&amp;format=text&quot;" />
+</Target>
+
+<Target Name="releasesolution">
+    <MSBuild Projects="fitsharp.sln" 
+        Properties="Configuration=Release" />
+</Target>
+
+<ItemGroup>
+  <ZipFiles Include="build\release\fit.dll;build\release\fitSharp.dll;build\release\dbfit.dll;build\release\dbfit.oracle.dll;build\release\dbfit.sqlserver.dll;build\release\Runner*.exe;*License.txt" />
+</ItemGroup>
+
+<Target Name="zip">
+  <Zip Files="@(ZipFiles)" Flatten="Yes"
+   ZipFileName="binary\mylatest.zip" />
 </Target>
 
 </Project>
