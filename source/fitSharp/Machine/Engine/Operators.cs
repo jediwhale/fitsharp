@@ -5,7 +5,6 @@
 
 using System;
 using System.Collections.Generic;
-using fitSharp.Machine.Application;
 
 namespace fitSharp.Machine.Engine {
     public delegate bool CanDoOperation<T>(T anOperator);

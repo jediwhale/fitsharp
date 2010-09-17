@@ -6,6 +6,7 @@
 using System.Text;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Service;
+using fitSharp.Test.Double;
 using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Fit {

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using fitlibrary;
 using fitSharp.Fit.Application;
 using fitSharp.Machine.Application;
+using fitSharp.Machine.Engine;
 
 namespace fit.Test.FitUnit {
     public class ConfigurationTest: DoFixture {

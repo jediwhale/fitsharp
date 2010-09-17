@@ -5,6 +5,7 @@
 
 using fitSharp.IO;
 using fitSharp.Machine.Application;
+using fitSharp.Machine.Engine;
 
 namespace fitSharp.Slim.Service {
     public class Runner: Runnable {

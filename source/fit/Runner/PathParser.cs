@@ -3,7 +3,6 @@
 // Released under the terms of the GNU General Public License version 2 or later.
 using System;
 using System.Collections;
-using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
 
 namespace fitnesse.fitserver

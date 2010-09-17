@@ -1,4 +1,4 @@
-// Copyright © 2009 Syterra Software Inc.
+// Copyright © 2010 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -17,7 +17,7 @@ namespace fit.Test.Acceptance {
         public object SystemUnderTest { get { return shell; } }
 
         public FolderRunnerStory() {
-            shell = new Shell(new NullReporter());
+            shell = new Shell(new NullReporter(), new FileSystemModel());
         }
 
         public void Run(string[] theArguments) {

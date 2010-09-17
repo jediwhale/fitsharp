@@ -32,6 +32,29 @@ namespace fitSharp.Fit.Model {
         }
     }
 
+    public class CellBaseTree: TreeList<CellBase> {
+        public CellBaseTree(): base(new CellBase(string.Empty)) {}
+
+        public CellBaseTree(CellBase value): base(value) {}
+
+        public CellBaseTree(params string[] cells): this() {
+            foreach (var cell in cells) AddBranch(new CellBaseTree(new CellBase(cell)));
+        }
+
+        public CellBaseTree(params Tree<CellBase>[] lists): this() {
+            foreach (var list in lists) AddBranch(list);
+        }
+
+        public CellBaseTree(IEnumerable<Tree<CellBase>> trees): this() {
+            foreach (var tree in trees) AddBranch(tree);
+        }
+
+        public override string ToString() {
+            var branches = Branches.Aggregate(new StringBuilder(), (t, u) => t.Append(u)).ToString();
+            return string.Format(Value == null || string.IsNullOrEmpty(Value.Text) ? "{0}" : Value.Text, branches);
+        }
+    }
+
     public class CellTreeLeaf: CellTree {
         public CellTreeLeaf(string text): base(new CellBase(text)) {}
 

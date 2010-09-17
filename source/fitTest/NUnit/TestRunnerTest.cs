@@ -7,7 +7,7 @@ using System;
 using System.IO;
 using fitnesse.fitserver;
 using fitSharp.Fit.Service;
-using fitSharp.Machine.Application;
+using fitSharp.Machine.Engine;
 using NUnit.Framework;
 
 namespace fit.Test.NUnit {

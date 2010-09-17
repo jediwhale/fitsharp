@@ -4,6 +4,7 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
+using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Service {
@@ -35,17 +36,17 @@ namespace fitSharp.Fit.Service {
 
     public class InputBinding: BindingOperation {
         private readonly CellOperation operation;
-        private readonly object target;
+        private readonly TargetObjectProvider targetProvider;
         private readonly Tree<Cell> memberCell;
 
 
-        public InputBinding(CellOperation operation, object target, Tree<Cell> memberCell) {
+        public InputBinding(CellOperation operation, TargetObjectProvider targetProvider, Tree<Cell> memberCell) {
             this.operation = operation;
             this.memberCell = memberCell;
-            this.target = target;
+            this.targetProvider = targetProvider;
         }
         public void Do(Tree<Cell> cell) {
-            operation.Input(target, memberCell, cell);
+            operation.Input(targetProvider.GetTargetObject(), memberCell, cell);
         }
 
         public bool IsCheck { get { return false; } }
@@ -53,17 +54,17 @@ namespace fitSharp.Fit.Service {
 
     public class CheckBinding: BindingOperation {
         private readonly CellOperation operation;
-        private readonly object target;
+        private readonly TargetObjectProvider targetProvider;
         private readonly Tree<Cell> memberCell;
 
-        public CheckBinding(CellOperation operation, object target, Tree<Cell> memberCell) {
+        public CheckBinding(CellOperation operation, TargetObjectProvider targetProvider, Tree<Cell> memberCell) {
             this.operation = operation;
             this.memberCell = memberCell;
-            this.target = target;
+            this.targetProvider = targetProvider;
         }
 
         public void Do(Tree<Cell> cell) {
-            operation.Check(target, memberCell, cell);
+            operation.Check(targetProvider.GetTargetObject(), memberCell, cell);
         }
 
         public bool IsCheck { get { return true; } }

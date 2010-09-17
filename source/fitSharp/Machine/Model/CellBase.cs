@@ -11,18 +11,20 @@ namespace fitSharp.Machine.Model {
         const string SuffixFormat = "{0} {1}";
 
         Dictionary<CellAttribute, string> attributes;
-        readonly string text;
 
-        public CellBase(string text) {
-            this.text = text;
+        public string Text { get; private set; }
+        public TypedValue Value { get; set; }
+
+        public CellBase(string text)
+        {
+            Text = text;
         }
 
         public CellBase(CellBase other) {
             if (other.attributes != null) attributes = new Dictionary<CellAttribute, string>(other.attributes);
-            text = other.text;
+            Text = other.Text;
         }
 
-        public string Text { get { return text; } }
 
         public void SetAttribute(CellAttribute key, string value) {
             if (attributes == null) attributes = new Dictionary<CellAttribute, string>();

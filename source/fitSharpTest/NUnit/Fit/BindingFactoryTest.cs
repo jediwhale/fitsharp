@@ -46,8 +46,9 @@ namespace fitSharp.Test.NUnit.Fit {
             Assert.IsTrue(Bind("new member") is InputBinding);
         }
 
-        class TestTarget {
+        class TestTarget: TargetObjectProvider {
             public string NewMember;
+            public object GetTargetObject() { return this; }
         }
     }
 }

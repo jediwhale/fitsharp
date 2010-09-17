@@ -6,5 +6,5 @@
 using fitSharp.Machine.Engine;
 
 namespace fitSharp.Slim.Operators {
-    public abstract class SlimOperator: Operator<string, Service.Service> {}
+    public abstract class SlimOperator: Operator<string, SlimProcessor> {}
 }

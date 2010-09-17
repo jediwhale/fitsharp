@@ -26,7 +26,7 @@ namespace fit.Operators {
         }
 
         private TypedValue Invoke(Parse procedure, TypedValue target, Tree<Cell> parameterValues) {
-            var doFixture = new CellTree("dofixture");
+            var doFixture = new CellTree("fitlibrary.DoFixture");
             var fixture = Processor.Parse(typeof (Interpreter), target, doFixture);
 
             var parameters = new Parameters(procedure.Parts, parameterValues);
