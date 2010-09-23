@@ -7,9 +7,9 @@ using dbfit;
 using dbfit.fixture;
 using fit;
 using fit.Service;
-using fitSharp.Fit.Model;
 using Moq;
 using NUnit.Framework;
+using TestStatus=fitSharp.Fit.Model.TestStatus;
 
 namespace dbfitTest {
     [TestFixture] public class ExecuteProcedureTest {

@@ -9,6 +9,7 @@ using fitSharp.Fit.Operators;
 using fitSharp.Machine.Model;
 using Moq;
 using NUnit.Framework;
+using TestStatus=fitSharp.Fit.Model.TestStatus;
 
 namespace fitSharp.Test.NUnit.Fit {
     [TestFixture] public class ExecuteDefaultTest {

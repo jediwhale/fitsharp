@@ -5,11 +5,11 @@
 
 using fitlibrary;
 using fitSharp.Fit.Engine;
-using fitSharp.Fit.Model;
 using fitSharp.Fit.Service;
 using fitSharp.Machine.Model;
 using Moq;
 using NUnit.Framework;
+using TestStatus=fitSharp.Fit.Model.TestStatus;
 
 namespace fit.Test.NUnit {
     [TestFixture] public class ConstraintFixtureTest {

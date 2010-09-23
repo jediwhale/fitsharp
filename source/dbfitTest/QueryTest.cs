@@ -10,6 +10,7 @@ using fit.Service;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
+using TestStatus=fitSharp.Fit.Model.TestStatus;
 
 namespace dbfitTest {
     [TestFixture]
