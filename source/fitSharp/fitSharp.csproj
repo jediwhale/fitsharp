@@ -54,6 +54,7 @@
     <Compile Include="Fit\Fixtures\Define.cs" />
     <Compile Include="Fit\Operators\ParseNullArray.cs" />
     <Compile Include="Fit\Operators\ParseStoryTestString.cs" />
+    <Compile Include="Fit\Operators\ParseTextStoryTestString.cs" />
     <Compile Include="Machine\Application\Runnable.cs" />
     <Compile Include="Machine\Application\Runner.cs" />
     <Compile Include="Machine\Engine\DataRowRuntime.cs" />
@@ -128,6 +129,8 @@
     <Compile Include="Machine\Engine\BasicProcessor.cs" />
     <Compile Include="Machine\Engine\Memory.cs" />
     <Compile Include="Machine\Engine\ParseEnum.cs" />
+    <Compile Include="Parser\Characters.cs" />
+    <Compile Include="Parser\CharacterType.cs" />
     <Compile Include="Parser\TextTables.cs" />
     <Compile Include="Parser\TextTableScanner.cs" />
     <Compile Include="Parser\Token.cs" />

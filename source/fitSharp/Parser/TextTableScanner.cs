@@ -10,10 +10,12 @@ namespace fitSharp.Parser {
     public class TextTableScanner {
         readonly IEnumerator<Token> enumerator;
         readonly Characters source;
+        readonly Func<Characters, bool> isWordContent;
 
-        public TextTableScanner(string input) {
+        public TextTableScanner(string input, Func<Characters, bool> isWordContent) {
             enumerator = Tokens.GetEnumerator();
             source = new Characters(input);
+            this.isWordContent = isWordContent;
         }
 
         public void MoveNext() { enumerator.MoveNext(); }
@@ -59,7 +61,7 @@ namespace fitSharp.Parser {
             string quote = source.Content;
             source.MoveNext();
             source.Start();
-            source.MoveWhile(() => source.Content != quote);
+            source.MoveWhile(() => source.Content != quote && source.Type != CharacterType.End);
             var result = new Token(TokenType.Word, source.FromStart);
             source.MoveNext();
             return result;
@@ -67,74 +69,10 @@ namespace fitSharp.Parser {
 
         Token MakeDelimitedWord() {
             source.Start();
-            source.MoveWhile(() => source.Type == CharacterType.Letter || source.Type == CharacterType.WhiteSpace);
+            source.MoveWhile(() => isWordContent(source));
             var result = new Token(TokenType.Word, source.FromStart.TrimEnd());
             if (source.Type == CharacterType.Separator) source.MoveNext();
             return result;
-        }
-
-        enum CharacterType {
-            End,
-            Newline,
-            WhiteSpace,
-            Quote,
-            Separator,
-            BeginTest,
-            EndTest,
-            Letter
-        }
-
-        class Characters {
-            readonly string input;
-            int next;
-            int length;
-            int start;
-
-            public CharacterType Type { get; private set; }
-            public string Content { get { return length == 0 ? string.Empty : input.Substring(next, length); } }
-            public string FromStart { get { return next > start ? input.Substring(start, next - start) : string.Empty; } }
-
-            public Characters(string input) {
-                this.input = input;
-                next = -1;
-                length = 1;
-                MoveNext();
-            }
-
-            public void Start() {
-                start = next;
-            }
-
-            public void MoveNext() {
-                next += length;
-                if (next >= input.Length) {
-                    length = 0;
-                    Type = CharacterType.End;
-                }
-                else {
-                    length = 1;
-                    if (input[next] == '\n') Type = CharacterType.Newline;
-                    else if (char.IsWhiteSpace(input[next])) Type = CharacterType.WhiteSpace;
-                    else if (input[next] == '"' || input[next] == '\'') Type = CharacterType.Quote;
-                    else if (input[next] == '|') Type = CharacterType.Separator;
-                    else if (string.Compare("<br", 0, input, next, 3, StringComparison.OrdinalIgnoreCase) == 0
-                        && input.IndexOf(">", next + 3, StringComparison.Ordinal) >= 0) {
-                        Type = CharacterType.Newline;
-                        length = input.IndexOf(">", next + 3, StringComparison.Ordinal) - next + 1;
-                    }
-                    else if (string.Compare("test@", 0, input, next, 5, StringComparison.OrdinalIgnoreCase) == 0) {
-                        Type = CharacterType.BeginTest;
-                        length = 5;
-                    }
-                    else if (string.Compare("@test", 0, input, next, 5, StringComparison.OrdinalIgnoreCase) == 0) {
-                        Type = CharacterType.EndTest;
-                        length = 5;
-                    }
-                    else Type = CharacterType.Letter;
-                }
-            }
-
-            public void MoveWhile(Func<bool> condition) { while (condition()) MoveNext(); }
         }
     }
 }

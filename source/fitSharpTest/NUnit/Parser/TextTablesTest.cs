@@ -66,12 +66,13 @@ namespace fitSharp.Test.NUnit.Parser {
         }
 
         static Tree<CellBase> ParseRaw(string input) {
-            return new TextTables().Parse(input);
+            return new TextTables(new TextTableScanner(input, c => c.IsLetterOrWhitespace)).Parse();
         }
 
         static string Format(Tree<CellBase> tree) {
             return Format(tree, " ");
-        }
+        }
+
         static string Format(Tree<CellBase> tree, string separator) {
             var result = new StringBuilder();
             if (!string.IsNullOrEmpty(tree.Value.GetAttribute(CellAttribute.Leader)))

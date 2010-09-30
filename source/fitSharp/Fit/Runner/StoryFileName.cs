@@ -13,11 +13,15 @@ namespace fitSharp.Fit.Runner {
     }
 
     public class StoryFileName: StoryPageName {
+        private const string outputExtension = ".html";
+
         public StoryFileName(string theName) {
             myName = theName;
         }
 
         public string Name { get { return myName; } }
+        public string OutputFileName { get { return Path.GetFileNameWithoutExtension(myName) + outputExtension; } }
+        public string CopyFileName { get { return Path.GetFileName(myName); } }
 
         public bool IsSuitePage { get { return IsSuiteSetUp || IsSuiteTearDown; } }
 
@@ -30,15 +34,13 @@ namespace fitSharp.Fit.Runner {
 
         public bool IsSuiteSetUp {
             get {
-                string name = Path.GetFileName(myName);
-                return ourSuiteSetupIdentifier1.Equals(name) || ourSuiteSetupIdentifier2.Equals(name);
+                return ourSuiteSetupIdentifier.Equals(OutputFileName);
             }
         }
 
         public bool IsSuiteTearDown {
             get {
-                string name = Path.GetFileName(myName);
-                return ourSuiteTearDownIdentifier1.Equals(name) || ourSuiteTearDownIdentifier2.Equals(name);
+                return ourSuiteTearDownIdentifier.Equals(OutputFileName);
             }
         }
 
@@ -53,10 +55,8 @@ namespace fitSharp.Fit.Runner {
         private static readonly IdentifierName ourSetupIdentifier2 = new IdentifierName("setup.htm");
         private static readonly IdentifierName ourTeardownIdentifier1 = new IdentifierName("teardown.html");
         private static readonly IdentifierName ourTeardownIdentifier2 = new IdentifierName("teardown.htm");
-        private static readonly IdentifierName ourSuiteSetupIdentifier1 = new IdentifierName("suitesetup.html");
-        private static readonly IdentifierName ourSuiteSetupIdentifier2 = new IdentifierName("suitesetup.htm");
-        private static readonly IdentifierName ourSuiteTearDownIdentifier1 = new IdentifierName("suiteteardown.html");
-        private static readonly IdentifierName ourSuiteTearDownIdentifier2 = new IdentifierName("suiteteardown.htm");
+        private static readonly IdentifierName ourSuiteSetupIdentifier = new IdentifierName("suitesetup.html");
+        private static readonly IdentifierName ourSuiteTearDownIdentifier = new IdentifierName("suiteteardown.html");
         private readonly string myName;
     }
 }

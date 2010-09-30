@@ -7,10 +7,13 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Parser {
     public class TextTables {
-        TextTableScanner scanner;
+        readonly TextTableScanner scanner;
 
-        public Tree<CellBase> Parse(string input) {
-            scanner = new TextTableScanner(input);
+        public TextTables(TextTableScanner scanner) {
+            this.scanner = scanner;
+        }
+
+        public Tree<CellBase> Parse() {
             var result = new TreeList<CellBase>(new CellBase(string.Empty));
             MakeTables(result);
             return result;

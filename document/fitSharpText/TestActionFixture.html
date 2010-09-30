@@ -8,7 +8,7 @@
 <b>check</b> in the left most cell will test the value of the field named in the second cell with the value in the third cell<br>
 <b>press</b> will execute the method named in the second cell<br>
 <b>enter</b> will assign the value of the third cell to the the field or property named in the second cell<br>
-<hr><br>
+<hr><br><pre>
 test@
 Action Fixture
 start 'Count Fixture'
@@ -20,7 +20,7 @@ check 'Counter' 2
 enter 'Counter' 5
 press 'Count'
 check 'Counter' 6
-@test<br><br><pre>
+@test</pre><br><br><pre>
 public class CountFixture : Fixture {
 	private int counter = 0;
 
