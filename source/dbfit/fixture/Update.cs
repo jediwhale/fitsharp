@@ -110,7 +110,7 @@ namespace dbfit.fixture {
 			updateAccList.CopyTo(updateAccessors, 0);			
 		}
 
-	    public RuntimeMember Find(IdentifierName memberName, int parameterCount, Type[] parameterTypes) {
+	    public RuntimeMember Find(IdentifierName memberName, int parameterCount, IList<Type> parameterTypes) {
 	        return columnAccessors.Find(memberName, parameterCount, accessor => {
 	            string accessorName = accessor.Key.EndsWith("=")
 	                                      ? accessor.Key.Substring(0, accessor.Key.Length - 1)

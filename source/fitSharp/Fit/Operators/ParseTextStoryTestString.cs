@@ -15,11 +15,14 @@ namespace fitSharp.Fit.Operators {
         }
 
         public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
-            return new TypedValue(new StoryTestString(
-                "<html><head><link href=\"fit.css\" type=\"text/css\" rel=\"stylesheet\"></head><body>" + Environment.NewLine +
-                parameters + Environment.NewLine
-                +"</body></html>" + Environment.NewLine
-                ));
+            string content = parameters.ToString();
+            if (!string.IsNullOrEmpty(parameters.Value.GetAttribute(CellAttribute.Leader))) {
+                content = "<html><head><link href=\"fit.css\" type=\"text/css\" rel=\"stylesheet\"></head><body>" +
+                          Environment.NewLine +
+                          content + Environment.NewLine
+                          + "</body></html>" + Environment.NewLine;
+            }
+            return new TypedValue(new StoryTestString(content));
         }
     }
 }

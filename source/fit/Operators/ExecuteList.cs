@@ -53,12 +53,12 @@ namespace fit.Operators {
         }
 
         public bool CanParse(Type type, TypedValue instance, Tree<Cell> parameters) {
-            return typeof(IList).IsAssignableFrom(type);
+            return typeof(IList).IsAssignableFrom(type) && parameters.Branches.Count > 0;
         }
 
         public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
             var cell = (Parse) parameters;
-            if (cell.Parts == null) throw new FitFailureException("No embedded table.");
+            //if (cell.Parts == null) throw new FitFailureException("No embedded table.");
             Parse headerCells = cell.Parts.Parts.Parts;
             Parse dataRows = cell.Parts.Parts.More;
             return new TypedValue(

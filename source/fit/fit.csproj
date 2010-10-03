@@ -91,7 +91,7 @@
     <Compile Include="Fixtures\TableFixture.cs" />
     <Compile Include="Fixtures\UnnamedCollectionFixtureBase.cs" />
     <Compile Include="Fixtures\UseFixture.cs" />
-    <Compile Include="Fixtures\WithPhrase.cs" />
+    <Compile Include="Fixtures\MethodPhrase.cs" />
     <Compile Include="Fixtures\XmlFixture.cs" />
     <Compile Include="Model\ParseTable.cs" />
     <Compile Include="Model\ScientificDouble.cs" />

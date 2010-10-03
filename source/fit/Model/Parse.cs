@@ -84,7 +84,7 @@ namespace fit
                 if (HasAttribute(CellAttribute.Extension)) {
                     result += string.Format(
                         "<span><a href=\"javascript:void(0)\" onclick=\"this.parentNode.nextSibling.style.display="
-                        + "this.parentNode.nextSibling.style.display=='none'?'':'none'\">&#8659;</a></span><div style=\"display:none\">{0}</div>",
+                        + "this.parentNode.nextSibling.style.display=='none'?'':'none'\">&#8659;</a></span><div style=\"display:none\"><div class=\"fit_extension\">{0}</div></div>",
                         GetAttribute(CellAttribute.Extension));
                 }
                 return result;
@@ -292,7 +292,7 @@ namespace fit
         }
 
         public int Count {
-            get { return parse.Parts.Size; }
+            get { return parse.Parts == null ? 0 : parse.Parts.Size; }
         }
     }
 }

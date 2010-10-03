@@ -45,6 +45,10 @@ namespace dbfit.util {
                 return accessor.DotNetType;
             }
 
+            public string GetParameterName(int index) {
+                return accessor.Name;
+            }
+
             public Type ReturnType {
                 get { return typeof(void); }
             }
@@ -71,6 +75,10 @@ namespace dbfit.util {
 
             public Type GetParameterType(int index) {
                 return typeof(void);
+            }
+
+            public string GetParameterName(int index) {
+                return accessor.Name;
             }
 
             public Type ReturnType {

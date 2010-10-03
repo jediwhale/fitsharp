@@ -167,7 +167,7 @@ namespace dbfit.fixture
             }
         }
 
-        public RuntimeMember Find(IdentifierName memberName, int parameterCount, Type[] parameterTypes) {
+        public RuntimeMember Find(IdentifierName memberName, int parameterCount, IList<Type> parameterTypes) {
 	        return columnAccessors.Find(memberName, parameterCount, accessor => memberName.Matches(accessor.Key));
         }
     }

@@ -4,6 +4,7 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
+using System.Collections.Generic;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using fitSharp.Test.Double;
@@ -118,7 +119,7 @@ namespace fitSharp.Test.NUnit.Machine {
         }
 
         class QueryableClass: MemberQueryable {
-            public RuntimeMember Find(IdentifierName memberName, int parameterCount, Type[] parameterTypes) {
+            public RuntimeMember Find(IdentifierName memberName, int parameterCount, IList<Type> parameterTypes) {
                 return new QueryableMember(memberName.ToString());
             }
 
@@ -139,14 +140,24 @@ namespace fitSharp.Test.NUnit.Machine {
                     throw new NotImplementedException();
                 }
 
+                public string GetParameterName(int index) {
+                  throw new NotImplementedException();
+                }
+
                 public Type ReturnType {
                     get { throw new NotImplementedException(); }
                 }
 
                 public string Name { get; private set; }
             }
-
         }
 
+        [Test] public void MethodwithMisMatchedParameterNamesIsNotFound() {
+            Assert.IsNull(RuntimeType.FindInstance(instance, new IdentifierName("methodwithparms"), new [] {"garbage"}));
+        }
+
+        [Test] public void MethodwithMatchedParameterNamesIsFound() {
+            Assert.IsNotNull(RuntimeType.FindInstance(instance, new IdentifierName("methodwithparms"), new [] {"input"}));
+        }
     }
 }

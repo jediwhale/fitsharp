@@ -33,7 +33,6 @@ namespace fitSharp.Fit.Service {
 			processor.TestStatus.Summary["run elapsed time"] = new ElapsedTime();
             Cell heading = tables.Branches[0].Branches[0].Branches[0].Value;
             try {
-                //GetStartingFixture(tables.Branches[0]);
                 InterpretTables(tables);
             }
             catch (System.Exception e) {

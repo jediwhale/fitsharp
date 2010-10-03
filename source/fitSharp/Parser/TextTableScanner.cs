@@ -11,11 +11,13 @@ namespace fitSharp.Parser {
         readonly IEnumerator<Token> enumerator;
         readonly Characters source;
         readonly Func<Characters, bool> isWordContent;
+        public CharacterType StartOfLine { get; private set;}
 
         public TextTableScanner(string input, Func<Characters, bool> isWordContent) {
             enumerator = Tokens.GetEnumerator();
             source = new Characters(input);
             this.isWordContent = isWordContent;
+            StartOfLine = source.Type;
         }
 
         public void MoveNext() { enumerator.MoveNext(); }
@@ -54,6 +56,8 @@ namespace fitSharp.Parser {
 
         Token MakeNewline() {
             source.MoveNext();
+            StartOfLine = source.Type;
+            if (source.Type == CharacterType.Separator) source.MoveNext();
             return new Token(TokenType.Newline);
         }
 
