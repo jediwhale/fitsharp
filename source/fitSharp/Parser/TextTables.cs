@@ -56,7 +56,7 @@ namespace fitSharp.Parser {
 
         void SetTags() {
             if (scanner.StartOfLine == CharacterType.Separator) {
-                startTags = new [] {"<table>", "<tr>", "<td>"};
+                startTags = new [] {"<table class=\"fit_table\">", "<tr>", "<td>"};
                 endTags = new [] {"</table>", "</tr>", "</td> "};
             }
             else {

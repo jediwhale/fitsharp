@@ -27,5 +27,9 @@ namespace fitSharp.Fit.Model {
                                                     .ToString());
             }
         }
+
+        public override string ToString() {
+            return IdentifierName.ToString();
+        }
     }
 }

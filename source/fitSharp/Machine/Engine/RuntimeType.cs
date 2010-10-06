@@ -79,7 +79,7 @@ namespace fitSharp.Machine.Engine {
             private readonly int parameterCount;
             private readonly BindingFlags flags;
             private IList<Type> parameterTypes;
-            private IList<string> parameterNames;
+            private IList<IdentifierName> parameterIdNames;
 
             public MemberQuery(IdentifierName memberName, int parameterCount, BindingFlags flags) {
                 this.memberName = memberName;
@@ -88,13 +88,16 @@ namespace fitSharp.Machine.Engine {
             }
 
             public MemberQuery WithParameterTypes(IList<Type> parameterTypes) {
-              this.parameterTypes = parameterTypes;
-              return this;
+                this.parameterTypes = parameterTypes;
+                return this;
             }
 
-            public MemberQuery WithParameterNames(IList<string> parameterNames) {
-              this.parameterNames = parameterNames;
-              return this;
+            public MemberQuery WithParameterNames(IEnumerable<string> parameterNames) {
+                parameterIdNames = new List<IdentifierName>();
+                foreach (string name in parameterNames) {
+                    parameterIdNames.Add(new IdentifierName(name));
+                }
+                return this;
             }
 
             public RuntimeMember Find(object instance) {
@@ -166,17 +169,17 @@ namespace fitSharp.Machine.Engine {
                         if (runtimeMember.GetParameterType(i) != parameterTypes[i]) return false;
                     }
                 }
-                if (parameterNames != null) {
-                    foreach (string name in parameterNames) {
+                if (parameterIdNames != null) {
+                    foreach (var name in parameterIdNames) {
                         if (!HasMatchingParameter(runtimeMember, name)) return false;
                     }
                 }
                 return true;
             }
 
-            bool HasMatchingParameter(RuntimeMember runtimeMember, string name) {
+            bool HasMatchingParameter(RuntimeMember runtimeMember, NameMatcher name) {
                 for (int i = 0; i < parameterCount; i++) {
-                  if (runtimeMember.GetParameterName(i) == name) return true;
+                  if (name.Matches(runtimeMember.GetParameterName(i))) return true;
                 }
                 return false;
             }

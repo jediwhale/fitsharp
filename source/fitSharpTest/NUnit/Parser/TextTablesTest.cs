@@ -19,7 +19,7 @@ namespace fitSharp.Test.NUnit.Parser {
         }
 
         [Test] public void GeneratesTableForLineStartingWithSeparator() {
-            AssertParse("\n|stuff", " <table> <tr> <td> stuff</td> </tr></table>");
+            AssertParse("\n|stuff", " <table class=\"fit_table\"> <tr> <td> stuff</td> </tr></table>");
         }
 
         [Test] public void EncodesCellContent() {

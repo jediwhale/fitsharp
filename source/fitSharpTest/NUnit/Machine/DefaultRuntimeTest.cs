@@ -37,6 +37,13 @@ namespace fitSharp.Test.NUnit.Machine {
             CheckInvokeMethod(new SampleDomainAdapter(new SampleClass()));
         }
 
+        [Test]
+        public void MethodIsInvokedWithParameterName() {
+          TypedValue result = runtime.Invoke(new TypedValue(new SampleClass()), "!methodwithparms", new TreeList<string>().AddBranchValue("input").AddBranchValue("stuff"));
+          Assert.AreEqual(typeof (string), result.Type);
+          Assert.AreEqual("samplestuff", result.Value);
+        }
+
         private void CheckInvokeMethod(object instance) {
             TypedValue result = runtime.Invoke(new TypedValue(instance), "methodwithparms", new TreeList<string>().AddBranchValue("stuff"));
             Assert.AreEqual(typeof (string), result.Type);
