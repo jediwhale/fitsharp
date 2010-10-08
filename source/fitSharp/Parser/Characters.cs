@@ -8,6 +8,7 @@ using System.Text;
 
 namespace fitSharp.Parser {
     public class Characters {
+        public const string TextStoryTestBegin = "test@";
         readonly string input;
         int next;
         int length;
@@ -28,7 +29,7 @@ namespace fitSharp.Parser {
         }
 
         public Characters(string input) {
-            this.input = input;
+            this.input = input.Replace("\r", string.Empty);
             next = -1;
             length = 1;
             MoveNext();
@@ -50,6 +51,14 @@ namespace fitSharp.Parser {
                     next++;
                     Type = CharacterType.Letter;
                 }
+                else if (input[next] == '[' && next + 1 < input.Length && input[next+1] == '\n') {
+                    Type = CharacterType.BeginCell;
+                    length = 2;
+                }
+                else if (input[next] == '\n' && next + 1 < input.Length && input[next+1] == ']') {
+                    Type = CharacterType.EndCell;
+                    length = 2;
+                }
                 else if (input[next] == '\n') Type = CharacterType.Newline;
                 else if (char.IsWhiteSpace(input[next])) Type = CharacterType.WhiteSpace;
                 else if (input[next] == '"' || input[next] == '\'') Type = CharacterType.Quote;
@@ -59,7 +68,7 @@ namespace fitSharp.Parser {
                     Type = CharacterType.Newline;
                     length = input.IndexOf(">", next + 3, StringComparison.Ordinal) - next + 1;
                 }
-                else if (string.Compare("test@", 0, input, next, 5, StringComparison.OrdinalIgnoreCase) == 0) {
+                else if (string.Compare(TextStoryTestBegin, 0, input, next, 5, StringComparison.OrdinalIgnoreCase) == 0) {
                     Type = CharacterType.BeginTest;
                     length = 5;
                 }

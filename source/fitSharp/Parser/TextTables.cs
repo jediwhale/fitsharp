@@ -47,7 +47,7 @@ namespace fitSharp.Parser {
                 else {
                     scanner.MoveNext();
                 }
-            } while (scanner.Current.Type != TokenType.End);
+            } while (scanner.Current.Type != TokenType.End && scanner.Current.Type != TokenType.EndCell);
         
             if (table != null && scanner.Current.Content.Length > 0) {
                  table.Value.SetAttribute(CellAttribute.Trailer, scanner.Current.Content);
@@ -77,11 +77,16 @@ namespace fitSharp.Parser {
         }
 
         void MakeCells(TreeList<CellBase> row) {
-            while (scanner.Current.Type == TokenType.Word) {
+            while (scanner.Current.Type == TokenType.BeginCell || scanner.Current.Type == TokenType.Word) {
                 var cell = new TreeList<CellBase>(new CellBase(scanner.Current.Content));
-                cell.Value.SetAttribute(CellAttribute.Body, HttpUtility.HtmlEncode(scanner.Current.Content));
                 cell.Value.SetAttribute(CellAttribute.StartTag, startTags[2]);
                 cell.Value.SetAttribute(CellAttribute.EndTag, endTags[2]);
+                if (scanner.Current.Type == TokenType.BeginCell) {
+                    MakeTables(cell);
+                }
+                else if (scanner.Current.Type == TokenType.Word) {
+                    cell.Value.SetAttribute(CellAttribute.Body, HttpUtility.HtmlEncode(scanner.Current.Content));
+                }
                 row.AddBranch(cell);
                 scanner.MoveNext();
             }

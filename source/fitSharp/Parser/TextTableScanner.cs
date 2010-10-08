@@ -42,6 +42,8 @@ namespace fitSharp.Parser {
             return
                 source.Type == CharacterType.End || source.Type == CharacterType.EndTest ? MakeEndOfTest() :
                 source.Type == CharacterType.Newline ? MakeNewline() :
+                source.Type == CharacterType.BeginCell ? MakeToken(TokenType.BeginCell) :
+                source.Type == CharacterType.EndCell ? MakeToken(TokenType.EndCell) :
                 source.Type == CharacterType.Quote ? MakeQuotedWord() :
                 MakeDelimitedWord();
         }
@@ -59,6 +61,11 @@ namespace fitSharp.Parser {
             StartOfLine = source.Type;
             if (source.Type == CharacterType.Separator) source.MoveNext();
             return new Token(TokenType.Newline);
+        }
+
+        Token MakeToken(TokenType tokenType) {
+            source.MoveNext();
+            return new Token(tokenType);
         }
 
         Token MakeQuotedWord() {

@@ -30,12 +30,6 @@ namespace fitSharp.Test.NUnit.Parser {
             AssertParse("\n\n\nstuff", " <p> <table><tr> <td> stuff</td> </tr></table></p>");
         }
 
-        static void AssertParse(string input, string expected) {
-            Assert.AreEqual(
-                " test@" + expected,
-                Format(Parse(input)));
-        }
-
         [Test] public void ParsesWordsAsSeparateCells() {
             AssertParse("more|stuff",
                 " <p> <table><tr> <td> more</td>  <td> stuff</td> </tr></table></p>");
@@ -44,6 +38,10 @@ namespace fitSharp.Test.NUnit.Parser {
         [Test] public void ParsesLinesAsSeparateRows() {
             AssertParse("more 'good'\nstuff",
                 " <p> <table><tr> <td> more</td>  <td> good</td> </tr></table> <table><tr> <td> stuff</td> </tr></table></p>");
+        }
+
+        [Test] public void ParsesNestedTable() {
+            AssertParse("one [\n two\n] three", " <p> <table><tr> <td> one</td>  <td> <p> <table><tr> <td> two</td> </tr></table></p></td>  <td> three</td> </tr></table></p>");
         }
 
         [Test] public void ParsesBlankLinesAsSeparateTables() {
@@ -69,12 +67,18 @@ namespace fitSharp.Test.NUnit.Parser {
                 Format(ParseRaw("test@stuff@test and test@more")));
         }
 
+        static void AssertParse(string input, string expected) {
+            Assert.AreEqual(
+                " test@" + expected,
+                Format(Parse(input)));
+        }
+
         static Tree<CellBase> Parse(string input) {
             return ParseRaw("test@" + input);
         }
 
         static Tree<CellBase> ParseRaw(string input) {
-            return new TextTables(new TextTableScanner(input, c => c.IsLetterOrWhitespace)).Parse();
+            return new TextTables(new TextTableScanner(input, c => c.IsLetter)).Parse();
         }
 
         static string Format(Tree<CellBase> tree) {

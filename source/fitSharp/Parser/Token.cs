@@ -8,7 +8,9 @@ namespace fitSharp.Parser {
         End,
         Leader,
         Newline,
-        Word
+        Word,
+        BeginCell,
+        EndCell
     }
 
     public class Token {

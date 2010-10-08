@@ -12,6 +12,8 @@ namespace fitSharp.Parser {
         Separator,
         BeginTest,
         EndTest,
-        Letter
+        Letter,
+        BeginCell,
+        EndCell
     }
 }
