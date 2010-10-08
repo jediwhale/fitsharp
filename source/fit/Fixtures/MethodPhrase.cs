@@ -12,41 +12,47 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fit.Fixtures {
-    public class WithPhrase {
+    public class MethodPhrase {
         static readonly IdentifierName ourNewIdentifier = new IdentifierName("new"); 
         static readonly IdentifierName ourTypeIdentifier = new IdentifierName("type"); 
         static readonly IdentifierName ourCurrentIdentifier = new IdentifierName("current"); 
 
         readonly Parse myCells;
+        readonly string keyword;
 
-        public WithPhrase(Parse theCells) {
+        public MethodPhrase(Parse theCells) {
             myCells = theCells;
+            keyword = myCells.Text;
         }
 
         public object Evaluate(Fixture theFixture) {
-            if (myCells.More == null) throw new TableStructureException("missing cells for with.");
+            if (myCells.More == null) throw MakeException("missing cells");
             Parse restOfCells = myCells.More;
             if (ourNewIdentifier.Equals(restOfCells.Text)) {
-                return new WithPhrase(restOfCells).EvaluateNew(theFixture);
+                return new MethodPhrase(restOfCells).EvaluateNew(theFixture);
             }
             if (ourTypeIdentifier.Equals(restOfCells.Text)) {
-                if (restOfCells.More == null) throw new TableStructureException("missing cells for with.");
+                if (restOfCells.More == null) throw MakeException("missing cells");
                 return theFixture.Processor.ParseTree(typeof (Type), restOfCells.More).Value;
             }
             if (ourCurrentIdentifier.Equals(restOfCells.Text)) {
                 return theFixture.SystemUnderTest;
             }
             var fixture = theFixture as FlowFixtureBase;
-            if (fixture == null) throw new TableStructureException("flow fixture required.");
+            if (fixture == null) throw MakeException("flow fixture required");
             var symbol = new Symbol(restOfCells.Text);
             return fixture.Processor.Contains(symbol)
                 ? fixture.Processor.Load(symbol).Instance
                 : fixture.ExecuteEmbeddedMethod(myCells);
         }
 
+        TableStructureException MakeException(string reason) {
+            return new TableStructureException(string.Format("{0} for {1}.", reason, keyword));
+        }
+
         public object EvaluateNew(Fixture theFixture) {
             Parse restOfCells = myCells.More;
-            if (restOfCells == null) throw new TableStructureException("missing cells for with.");
+            if (restOfCells == null) throw MakeException("missing cells");
             return theFixture.Processor.Create(restOfCells.Text, new CellRange(restOfCells.More)).Value;
         }
     }

@@ -4,9 +4,9 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System.Reflection;
-using fitSharp.Fit.Engine;
+using fitSharp.Fit.Operators;
 using fitSharp.Fit.Service;
-using fitSharp.Machine.Application;
+using fitSharp.Machine.Engine;
 
 namespace fit.Service {
     public class Service: CellProcessorBase {

@@ -17,6 +17,7 @@ using fitSharp.Machine.Model;
 namespace fit.Fixtures {
     public class FlowKeywords {
         private static readonly IdentifierName ourWithIdentifier = new IdentifierName("with");
+ 
         private readonly FlowFixtureBase fixture;
 
         public FlowKeywords(FlowFixtureBase fixture) {
@@ -50,7 +51,7 @@ namespace fit.Fixtures {
         }
 
         public void Return(Parse cells) {
-            var result = fixture.ExecuteEmbeddedMethod(cells);
+            var result = new MethodPhrase(cells).Evaluate(fixture);
             fixture.Processor.TestStatus.SetReturn(new TypedValue(result));
         }
 
@@ -92,7 +93,7 @@ namespace fit.Fixtures {
                 throw new TableStructureException("missing cells for name.");
 
             object namedValue = ourWithIdentifier.Equals(restOfTheCells.More.Text)
-                                    ? new WithPhrase(restOfTheCells.More).Evaluate(fixture)
+                                    ? new MethodPhrase(restOfTheCells.More).Evaluate(fixture)
                                     : fixture.ExecuteEmbeddedMethod(restOfTheCells);
             fixture.Processor.Store(new Symbol(restOfTheCells.Text, namedValue));
 
@@ -114,7 +115,7 @@ namespace fit.Fixtures {
 
         public void Start(Parse theCells) {
             try {
-                fixture.SetSystemUnderTest(new WithPhrase(theCells).EvaluateNew(fixture));
+                fixture.SetSystemUnderTest(new MethodPhrase(theCells).EvaluateNew(fixture));
             }
             catch (Exception e) {
                 fixture.TestStatus.MarkException(theCells, e);
@@ -122,7 +123,7 @@ namespace fit.Fixtures {
         }
 
         public void With(Parse theCells) {
-            fixture.SetSystemUnderTest(new WithPhrase(theCells).Evaluate(fixture));
+            fixture.SetSystemUnderTest(new MethodPhrase(theCells).Evaluate(fixture));
         }
 
         void AddCell(Parse theCells, object theNewValue) {

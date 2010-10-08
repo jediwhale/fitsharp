@@ -18,7 +18,7 @@ namespace fit.Service {
             Add(new RuntimeDirect(), 0);
             Add(new RuntimeProcedure(), 0);
 
-            Add(new ComposeHtmlStoryTestString(), 0);
+            Add(new ComposeStoryTestString(), 0);
             Add(new ParseStoryTestString(), 0);
 
             Add(new ComposeTable(), 0);

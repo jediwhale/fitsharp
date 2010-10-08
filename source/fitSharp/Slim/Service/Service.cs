@@ -4,13 +4,12 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System.Collections.Generic;
-using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using fitSharp.Slim.Operators;
 
 namespace fitSharp.Slim.Service {
-    public class Service: ProcessorBase<string, Service> {
+    public class Service: ProcessorBase<string, SlimProcessor>, SlimProcessor {
         private readonly SlimOperators operators;
         private readonly Stack<TypedValue> libraryInstances = new Stack<TypedValue>();
 
@@ -30,7 +29,7 @@ namespace fitSharp.Slim.Service {
 
         public IEnumerable<TypedValue> LibraryInstances { get { return libraryInstances; } }
 
-        protected override Operators<string, Service> Operators {
+        protected override Operators<string, SlimProcessor> Operators {
             get { return operators; }
         }
     }

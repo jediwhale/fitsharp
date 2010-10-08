@@ -1,5 +1,6 @@
 *.suo
 *.user
+*.ReSharper
 _ReSharper*/
 desktop.ini
 build/

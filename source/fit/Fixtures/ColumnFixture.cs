@@ -1,4 +1,4 @@
-// Copyright © 2009 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+// Copyright © 2010 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -48,7 +48,7 @@ namespace fit
 
 		protected void Bind(Parse headerCells)
 		{
-		    var factory = new BindingFactory(Processor, this, GetTargetObject());
+		    var factory = new BindingFactory(Processor, this, this);
 			ColumnBindings = new Binding[headerCells.Size];
 			for (int i = 0; headerCells != null; i++, headerCells = headerCells.More)
 			{

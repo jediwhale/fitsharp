@@ -14,7 +14,7 @@ namespace fitSharp.Test.NUnit.Parser {
         }
 
         static void AssertRawScan(string input, string expected) {
-            var scanner = new TextTableScanner(input);
+            var scanner = new TextTableScanner(input, c => c.IsLetterOrWhitespace);
             var result = new StringBuilder();
             foreach (Token token in scanner.Tokens) {
                 if (result.Length > 0) result.Append(",");
@@ -95,5 +95,10 @@ namespace fitSharp.Test.NUnit.Parser {
         [Test] public void ScansBreakAsNewline() {
             AssertScan("more<br>stuff", "Word=more,Newline,Word=stuff");
         }
+
+        [Test] public void IgnoresEscapedQuote() {
+            AssertScan("I\\'m\nstuff", "Word=I'm,Newline,Word=stuff");
+        }
+
     }
 }

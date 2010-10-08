@@ -78,7 +78,7 @@ namespace dbfit.fixture
 
         private void ProcessCells(Parse cells, Func<Binding, bool> bindingFilter) {
             int i = 0;
-            for (Parse cell = cells; cell != null; cell = cell.More, i++) {
+            for (Parse cell = cells; cell != null && i < ColumnBindings.Length; cell = cell.More, i++) {
                 if (!bindingFilter(ColumnBindings[i])) continue;
                 try {
                     DoCell(cell, i);
@@ -167,7 +167,7 @@ namespace dbfit.fixture
             }
         }
 
-        public RuntimeMember Find(IdentifierName memberName, int parameterCount, Type[] parameterTypes) {
+        public RuntimeMember Find(IdentifierName memberName, int parameterCount, IList<Type> parameterTypes) {
 	        return columnAccessors.Find(memberName, parameterCount, accessor => memberName.Matches(accessor.Key));
         }
     }

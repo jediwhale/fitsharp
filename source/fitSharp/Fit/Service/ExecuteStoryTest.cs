@@ -33,7 +33,6 @@ namespace fitSharp.Fit.Service {
 			processor.TestStatus.Summary["run elapsed time"] = new ElapsedTime();
             Cell heading = tables.Branches[0].Branches[0].Branches[0].Value;
             try {
-                GetStartingFixture(tables);
                 InterpretTables(tables);
             }
             catch (System.Exception e) {
@@ -42,13 +41,13 @@ namespace fitSharp.Fit.Service {
 			writer(tables.Branches[0], processor.TestStatus.Counts);
         }
 
-        void GetStartingFixture(Tree<Cell> tables) {
+        void GetStartingFixture(Tree<Cell> table) {
             try {
-                activeFixture = processor.ParseTree<Cell, Interpreter>(tables.Branches[0].Branches[0]);
+                activeFixture = processor.ParseTree<Cell, Interpreter>(table.Branches[0]);
                 flowFixture = null;
             }
             catch (TypeMissingException) {
-                activeFixture = processor.ParseTree<Cell, Interpreter>(new CellTree("DoFixture"));
+                activeFixture = processor.ParseTree<Cell, Interpreter>(new CellTree("fitlibrary.DoFixture"));
                 flowFixture = (FlowInterpreter) activeFixture;
             }
         }
@@ -76,6 +75,7 @@ namespace fitSharp.Fit.Service {
         void InterpretTable(Tree<Cell> table) {
             Cell heading = table.Branches[0].Branches[0].Value;
             if (heading == null || processor.TestStatus.IsAbandoned) return;
+            if (flowFixture == null && tableCount == 1) GetStartingFixture(table);
             if (flowFixture == null) {
                 if (activeFixture == null) activeFixture = processor.ParseTree<Cell, Interpreter>(table.Branches[0]);
                 var activeFlowFixture = activeFixture as FlowInterpreter;

@@ -13,13 +13,13 @@ namespace fitSharp.Fit.Service {
 	    static readonly IdentifierName newIdentifier = new IdentifierName("new ");
 
         readonly CellProcessor processor;
-        readonly object target;
+        readonly TargetObjectProvider targetProvider;
         readonly MutableDomainAdapter adapter;
 
-        public BindingFactory(CellProcessor processor, MutableDomainAdapter adapter, object target) {
+        public BindingFactory(CellProcessor processor, MutableDomainAdapter adapter, TargetObjectProvider targetProvider) {
             this.processor = processor;
             this.adapter = adapter;
-            this.target = target;
+            this.targetProvider = targetProvider;
         }
 
 		public BindingOperation Make(Tree<Cell> nameCell) {
@@ -31,18 +31,18 @@ namespace fitSharp.Fit.Service {
 		    var cellOperation = new CellOperationImpl(processor);
 
 			if (CheckIsImpliedBy(name))
-			    return new CheckBinding(cellOperation, target, nameCell);
+			    return new CheckBinding(cellOperation, targetProvider, nameCell);
 
             string memberName =  processor.ParseTree<Cell, MemberName>(nameCell).ToString();
 
-            RuntimeMember member = RuntimeType.FindInstance(target, new IdentifierName(memberName), 1);
+            RuntimeMember member = RuntimeType.FindInstance(targetProvider, new IdentifierName(memberName), 1);
 
 		    if (member == null && newIdentifier.IsStartOf(name)) {
 		        string newMemberName = name.Substring(4);
                 return new CreateBinding(cellOperation, adapter, newMemberName);
 		    }
 
-		    return new InputBinding(cellOperation, target, nameCell);
+		    return new InputBinding(cellOperation, targetProvider, nameCell);
 		}
 
 		static bool NoOperationIsImpliedBy(string name) { return name.Length == 0; }

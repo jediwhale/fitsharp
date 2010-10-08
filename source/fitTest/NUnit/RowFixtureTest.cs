@@ -10,9 +10,10 @@ using System.Text;
 using fit.Test.Acceptance;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
-using fitSharp.Machine.Application;
+using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
+using TestStatus=fitSharp.Fit.Model.TestStatus;
 
 namespace fit.Test.NUnit {
     [TestFixture]

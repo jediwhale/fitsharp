@@ -74,6 +74,8 @@ namespace fitlibrary {
                 if (!result.IsValid) {
                     if (theCurrentRow.Parts.Text.Length > 0) {
                         var newFixture = Processor.ParseTree<Cell, Interpreter>(theCurrentRow);
+                        var adapter = newFixture as MutableDomainAdapter;
+                        if (adapter != null) adapter.SetSystemUnderTest(SystemUnderTest);
                         ProcessRestOfTable(newFixture, theCurrentRow);
                         IHaveFinishedTable = true;
                     }

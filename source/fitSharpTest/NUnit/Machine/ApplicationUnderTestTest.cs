@@ -8,7 +8,6 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using fitSharp.Test.Double;
 using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
 
 namespace fitSharp.Test.NUnit.Machine {
     [TestFixture] public class ApplicationUnderTestTest {

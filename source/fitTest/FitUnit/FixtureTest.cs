@@ -5,20 +5,33 @@
 
 using System.Threading;
 using fitlibrary;
+using fitSharp.IO;
 using fitSharp.Machine.Application;
+using fitSharp.Machine.Engine;
 
 namespace fit.Test.FitUnit {
     public class FixtureTest: DoFixture {
 
+        public static Parse Tables;
+
         public void RunTestFixture(string theRows) {
             string html = string.Format("<table><tr><td>fit.Test.FitUnit.TestFixtureFixture</td></tr>{0}</table>", theRows);
-            Parse tables = Parse.ParseFrom(html);
-            new StoryTest(tables).Execute(Processor.Configuration);
+            Tables = Parse.ParseFrom(html);
+            var configuration = new Configuration(Processor.Configuration);
+            configuration.GetItem<Settings>().Runner = "fit.Test.FitUnit.MyRunner";
+            new fitSharp.Machine.Application.Runner(new string[] {}, Processor.Configuration, new NullReporter());
         }
 
         public ApartmentState ExecutionApartmentState { get { return TestFixtureFixture.State; }
         }
 
+        private class MyRunner: Runnable {
+            public int Run(string[] commandLineArguments, Configuration configuration, ProgressReporter reporter)
+            {
+                new StoryTest(Tables).Execute(configuration);
+                return 0;
+            }
+        }
     }
 
     public class TestFixtureFixture: DoFixture {

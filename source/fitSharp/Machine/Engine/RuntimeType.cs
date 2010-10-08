@@ -4,13 +4,14 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
     public interface MemberQueryable {
-        RuntimeMember Find(IdentifierName memberName, int parameterCount, Type[] parameterTypes);
+        RuntimeMember Find(IdentifierName memberName, int parameterCount, IList<Type> parameterTypes);
     }
 
     public class RuntimeType {
@@ -22,7 +23,9 @@ namespace fitSharp.Machine.Engine {
         }
 
         public RuntimeMember FindStatic(IdentifierName memberName, Type[] parameterTypes) {
-            return new MemberQuery(memberName, parameterTypes.Length, BindingFlags.Static, parameterTypes).Find(Type);
+            return new MemberQuery(memberName, parameterTypes.Length, BindingFlags.Static)
+                .WithParameterTypes(parameterTypes)
+                .Find(Type);
         }
 
         public static RuntimeMember GetInstance(TypedValue instance, IdentifierName memberName, int parameterCount) {
@@ -42,19 +45,29 @@ namespace fitSharp.Machine.Engine {
         }
 
         public static RuntimeMember FindInstance(object instance, IdentifierName memberName, int parameterCount) {
-            return new MemberQuery(memberName, parameterCount, BindingFlags.Instance | BindingFlags.Static, null).Find(instance);
+            return new MemberQuery(memberName, parameterCount, BindingFlags.Instance | BindingFlags.Static).Find(instance);
+        }
+
+        public static RuntimeMember FindInstance(object instance, IdentifierName memberName, IList<string> parameterNames) {
+            return new MemberQuery(memberName, parameterNames.Count, BindingFlags.Instance | BindingFlags.Static)
+                .WithParameterNames(parameterNames)
+                .Find(instance);
         }
 
         public static RuntimeMember FindDirectInstance(object instance, IdentifierName memberName, int parameterCount) {
-            return new MemberQuery(memberName, parameterCount, BindingFlags.Instance | BindingFlags.Static, null).FindMember(instance);
+            return new MemberQuery(memberName, parameterCount, BindingFlags.Instance | BindingFlags.Static).FindMember(instance);
         }
 
         public static RuntimeMember FindInstance(object instance, IdentifierName memberName, Type[] parameterTypes) {
-            return new MemberQuery(memberName, parameterTypes.Length, BindingFlags.Instance | BindingFlags.Static, parameterTypes).Find(instance);
+            return new MemberQuery(memberName, parameterTypes.Length, BindingFlags.Instance | BindingFlags.Static)
+                .WithParameterTypes(parameterTypes)
+                .Find(instance);
         }
 
         public static RuntimeMember FindDirectInstance(object instance, IdentifierName memberName, Type[] parameterTypes) {
-            return new MemberQuery(memberName, parameterTypes.Length, BindingFlags.Instance | BindingFlags.Static, parameterTypes).FindMember(instance);
+            return new MemberQuery(memberName, parameterTypes.Length, BindingFlags.Instance | BindingFlags.Static)
+                .WithParameterTypes(parameterTypes)
+                .FindMember(instance);
         }
 
         public TypedValue CreateInstance() {
@@ -65,13 +78,26 @@ namespace fitSharp.Machine.Engine {
             private readonly IdentifierName memberName;
             private readonly int parameterCount;
             private readonly BindingFlags flags;
-            private readonly Type[] parameterTypes;
+            private IList<Type> parameterTypes;
+            private IList<IdentifierName> parameterIdNames;
 
-            public MemberQuery(IdentifierName memberName, int parameterCount, BindingFlags flags, Type[] parameterTypes) {
+            public MemberQuery(IdentifierName memberName, int parameterCount, BindingFlags flags) {
                 this.memberName = memberName;
                 this.parameterCount = parameterCount;
                 this.flags = flags;
+            }
+
+            public MemberQuery WithParameterTypes(IList<Type> parameterTypes) {
                 this.parameterTypes = parameterTypes;
+                return this;
+            }
+
+            public MemberQuery WithParameterNames(IEnumerable<string> parameterNames) {
+                parameterIdNames = new List<IdentifierName>();
+                foreach (string name in parameterNames) {
+                    parameterIdNames.Add(new IdentifierName(name));
+                }
+                return this;
             }
 
             public RuntimeMember Find(object instance) {
@@ -138,11 +164,24 @@ namespace fitSharp.Machine.Engine {
 
             bool Matches(RuntimeMember runtimeMember) {
                 if (!runtimeMember.MatchesParameterCount(parameterCount)) return false;
-                if (parameterTypes == null) return true;
-                for (int i = 0; i < parameterCount; i++) {
-                    if (runtimeMember.GetParameterType(i) != parameterTypes[i]) return false;
+                if (parameterTypes != null) {
+                    for (int i = 0; i < parameterCount; i++) {
+                        if (runtimeMember.GetParameterType(i) != parameterTypes[i]) return false;
+                    }
+                }
+                if (parameterIdNames != null) {
+                    foreach (var name in parameterIdNames) {
+                        if (!HasMatchingParameter(runtimeMember, name)) return false;
+                    }
                 }
                 return true;
+            }
+
+            bool HasMatchingParameter(RuntimeMember runtimeMember, NameMatcher name) {
+                for (int i = 0; i < parameterCount; i++) {
+                  if (name.Matches(runtimeMember.GetParameterName(i))) return true;
+                }
+                return false;
             }
 
             RuntimeMember FindIndexerMember(object instance, Type targetType) {

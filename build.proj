@@ -1,50 +1,47 @@
 <?xml version="1.0"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
-        DefaultTargets="build-solution;unittests;storytests;copy-outputs" >
+        DefaultTargets="solution;unittests;storytests" >
+
+<Import Project="binary\tools\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
 
 <PropertyGroup>
-    <Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
-    <!-- the NUNIT_HOME will default to the value of the NUNIT_HOME environment variable if defined -->
-    <NUNIT_HOME Condition="'$(NUNIT_HOME)' == ''">C:\Program Files\NUnit 2.4.8</NUNIT_HOME>
-    <OutDir Condition="'$(OutDir)' == ''">$(MSBuildProjectDirectory)\build\$(Configuration)\</OutDir>
+    <Config>Debug</Config>
 </PropertyGroup>
 
 <Target Name="all" DependsOnTargets="solution;unittests;storytests;dbfittests" />
-  <Target Name="solution" DependsOnTargets="copy-outputs;build-solution" />
+<Target Name="deploy" DependsOnTargets="releasesolution;zip" />
 
-  <Target Name="copy-outputs"
-          DependsOnTargets="build-solution"
-          Condition="'$(OutDir)' != '$(MSBuildProjectDirectory)\build\$(Configuration)\'">
-    <Error Condition="'$(OutDir)' != '' and !HasTrailingSlash('$(OutDir)')"
-           Text="The OutDir property must end with a trailing slash." />
-    <ItemGroup>
-      <Outputs Include="$(MSBuildProjectDirectory)\build\$(Configuration)\*" />
-    </ItemGroup>
-    <Copy SourceFiles="@(Outputs)" DestinationFiles="$(OutDir)%(Outputs.RecursiveDir)%(Outputs.Filename)%(Outputs.Extension)" />
-  </Target>
-
-  <Target Name="build-solution">
+<Target Name="solution">
     <MSBuild Projects="fitsharp.sln" 
-        Properties="Configuration=$(Configuration);OutDir=$(MSBuildProjectDirectory)\build\$(Configuration)\" />
+        Properties="Configuration=$(Config)" />
 </Target>
 
 <Target Name="unittests">
-    <Exec Command="&quot;$(NUNIT_HOME)\bin\net-2.0\nunit-console.exe&quot; -nologo &quot;$(MSBuildProjectDirectory)\build\$(Configuration)\fitSharpTest.dll&quot;" />
-    <Exec Command="&quot;$(NUNIT_HOME)\bin\net-2.0\nunit-console.exe&quot; -nologo &quot;$(MSBuildProjectDirectory)\build\$(Configuration)\fitTest.dll&quot;" />
+    <Exec Command="binary\tools\nunit\nunit-console -nologo .\build\$(Config)\fitSharpTest.dll" />
+    <Exec Command="binary\tools\nunit\nunit-console -nologo .\build\$(Config)\fitTest.dll" />
 </Target>
 
 <Target Name="storytests">
-    <!-- TODO: These don't pass in release config (even if you fix the cast exceptions). -->
-    <Exec Command="$(MSBuildProjectDirectory)\build\$(Configuration)\runner -c storytest.config.xml" />
-    <Copy SourceFiles="$(MSBuildProjectDirectory)\site\reportindex.html" DestinationFiles="$(MSBuildProjectDirectory)\site\part1.html"/>
-    <Exec Command="$(MSBuildProjectDirectory)\build\$(Configuration)\runner -c textstorytest.config.xml" />
-    <Copy SourceFiles="$(MSBuildProjectDirectory)\site\reportindex.html" DestinationFiles="$(MSBuildProjectDirectory)\site\part2.html"/>
-    <Exec Command="copy /y $(MSBuildProjectDirectory)\site\part1.html + $(MSBuildProjectDirectory)\site\part2.html $(MSBuildProjectDirectory)\site\reportindex.html"/>
+    <Exec Command=".\build\debug\runner -c storytest.config.xml" />
 </Target>
 
 <Target Name="dbfittests">
-    <Exec Command="&quot;$(NUNIT_HOME)\bin\net-2.0\nunit-console.exe&quot; -nologo &quot;$(MSBuildProjectDirectory)\build\$(Configuration)\dbfitTest.dll&quot;" />
-    <Exec Command="java -jar \apps\fitnesse\fitnesse.jar -o -d &quot;$(MSBuildProjectDirectory)\document&quot; -r FitNesseRoot -c &quot;DbFitTests?suite&amp;format=text&quot;" />
+    <Exec Command="binary\tools\nunit\nunit-console -nologo .\build\$(Config)\dbfitTest.dll" />
+    <Exec Command="java -jar \apps\fitnesse\fitnesse.jar -o -d .\document -r FitNesseRoot -c &quot;DbFitTests?suite&amp;format=text&quot;" />
+</Target>
+
+<Target Name="releasesolution">
+    <MSBuild Projects="fitsharp.sln" 
+        Properties="Configuration=Release" />
+</Target>
+
+<ItemGroup>
+  <ZipFiles Include="build\release\fit.dll;build\release\fitSharp.dll;build\release\dbfit.dll;build\release\dbfit.oracle.dll;build\release\dbfit.sqlserver.dll;build\release\Runner*.exe;*License.txt" />
+</ItemGroup>
+
+<Target Name="zip">
+  <Zip Files="@(ZipFiles)" Flatten="Yes"
+   ZipFileName="binary\mylatest.zip" />
 </Target>
 
 </Project>

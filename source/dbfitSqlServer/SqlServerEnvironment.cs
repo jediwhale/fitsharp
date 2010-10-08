@@ -124,15 +124,17 @@ namespace dbfit
         private static string[] DecimalTypes = new string[] { "DECIMAL", "NUMERIC", "MONEY", "SMALLMONEY" };
         private static string[] DateTypes = new string[] { "SMALLDATETIME","DATETIME","TIMESTAMP" };
         private static string[] RefCursorTypes = new string[] { "REF" };
+        private static string[] Int8Types = new string[] { "TINYINT" };
+        private static string[] Int16Types = new string[] { "SMALLINT" };
         private static string[] Int32Types=new string[] {"INT"};
-        private static string[] Int16Types = new string[] { "TINYINT", "SMALLINT"};
         private static string[] Int64Types = new string[] { "BIGINT"};
 
         private static string[] BooleanTypes = new string[] { "BIT" };
 		private static string[] BinaryTypes=new string[] {"BINARY","VARBINARY","IMAGE"};
         private static string[] GuidTypes = new string[] { "UNIQUEIDENTIFIER" };
         private static string[] VariantTypes = new string[] { "SQL_VARIANT" };
-        private static string[] FloatTypes = new String[] { "REAL", "FLOAT" };
+        private static string[] FloatTypes = new String[] { "FLOAT" };
+        private static string[] RealTypes = new String[] { "REAL" };
         private static string NormaliseTypeName(string dataType)
         {
             dataType = dataType.ToUpper().Trim();
@@ -151,15 +153,17 @@ namespace dbfit
             if (Array.IndexOf(StringTypes, dataType) >= 0) return SqlDbType.VarChar;
             if (Array.IndexOf(DecimalTypes, dataType) >= 0) return SqlDbType.Decimal;
             if (Array.IndexOf(DateTypes, dataType) >= 0) return SqlDbType.DateTime;
+            if (Array.IndexOf(Int8Types, dataType) >= 0) return SqlDbType.TinyInt;
+            if (Array.IndexOf(Int16Types, dataType) >= 0) return SqlDbType.SmallInt;
             if (Array.IndexOf(Int32Types, dataType) >= 0) return SqlDbType.Int;
-            if (Array.IndexOf(Int16Types, dataType) >= 0) return SqlDbType.Int;
-            if (Array.IndexOf(Int64Types, dataType) >= 0) return SqlDbType.Int;
+            if (Array.IndexOf(Int64Types, dataType) >= 0) return SqlDbType.BigInt;
             if (Array.IndexOf(BooleanTypes, dataType) >= 0) return SqlDbType.Bit;
 			if (Array.IndexOf(BinaryTypes,dataType)>=0) return SqlDbType.VarBinary;
             //if (Array.IndexOf(RefCursorTypes, dataType) >= 0) return OracleType.Cursor;
             if (Array.IndexOf(GuidTypes, dataType) >= 0) return SqlDbType.UniqueIdentifier;
             if (Array.IndexOf(VariantTypes, dataType) >= 0) return SqlDbType.Variant;
             if (Array.IndexOf(FloatTypes, dataType) >= 0) return SqlDbType.Float;
+            if (Array.IndexOf(RealTypes, dataType) >= 0) return SqlDbType.Real;
 
             throw new NotSupportedException("Type " + dataType + " is not supported");
         }
@@ -168,8 +172,9 @@ namespace dbfit
             dataType = NormaliseTypeName(dataType);
             if (Array.IndexOf(StringTypes, dataType) >= 0) return typeof(string);
             if (Array.IndexOf(DecimalTypes, dataType) >= 0) return typeof(decimal);
-            if (Array.IndexOf(Int32Types, dataType) >= 0) return typeof(Int32);
+            if (Array.IndexOf(Int8Types, dataType) >= 0) return typeof(byte);
             if (Array.IndexOf(Int16Types, dataType) >= 0) return typeof(Int16);
+            if (Array.IndexOf(Int32Types, dataType) >= 0) return typeof(Int32);
             if (Array.IndexOf(Int64Types, dataType) >= 0) return typeof(Int64);
             if (Array.IndexOf(DateTypes, dataType) >= 0) return typeof(DateTime);
             if (Array.IndexOf(RefCursorTypes, dataType) >= 0) return typeof(DataTable);
@@ -178,6 +183,7 @@ namespace dbfit
             if (Array.IndexOf(GuidTypes, dataType) >= 0) return typeof(System.Guid);
             if (Array.IndexOf(VariantTypes, dataType) >= 0) return typeof(string);
             if (Array.IndexOf(FloatTypes, dataType) >= 0) return typeof(double);
+            if (Array.IndexOf(RealTypes, dataType) >= 0) return typeof(float);
 
             throw new NotSupportedException("Type " + dataType + " is not supported");
         }

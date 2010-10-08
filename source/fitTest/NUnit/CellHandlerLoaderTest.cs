@@ -5,7 +5,7 @@
 
 using System.Text;
 using fitSharp.Fit.Operators;
-using fitSharp.Machine.Application;
+using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
 

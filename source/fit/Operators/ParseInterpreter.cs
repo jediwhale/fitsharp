@@ -18,6 +18,7 @@ namespace fit.Operators {
 
         public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
             string className = parameters.Branches[0].Value.Text.Trim();
+            if (className.Length == 0 || !char.IsLetter(className[0])) return new TypedValue(new CommentFixture());
             TypedValue result = Processor.Create(className);
 
             var fixture = result.Value as Fixture;
