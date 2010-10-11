@@ -20,7 +20,7 @@
     <Exec Command="binary\tools\nunit\nunit-console -nologo .\build\$(Config)\fitSharpTest.dll" />
     <Exec Command="binary\tools\nunit\nunit-console -nologo .\build\$(Config)\fitTest.dll" />
 </Target>
-
+ 
 <Target Name="storytests">
     <Exec Command=".\build\debug\runner -c storytest.config.xml" />
 </Target>
