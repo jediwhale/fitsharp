@@ -54,5 +54,11 @@ namespace fitSharp.RunnerW {
             }
         }
 
+        private void debugButton_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Debugger.Break();
+            goButton_Click(sender, e);
+        }
+
     }
 }
