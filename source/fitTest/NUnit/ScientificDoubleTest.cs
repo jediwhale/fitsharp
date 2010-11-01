@@ -7,6 +7,7 @@ using NUnit.Framework;
 
 namespace fit.Test.NUnit {
     [TestFixture]
+    [SetCulture("en-US")]
     public class ScientificDoubleTest
     {
         [Test]
