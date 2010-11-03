@@ -4,6 +4,7 @@
         <inputFolder>document\fitSharp</inputFolder>
         <outputFolder>site</outputFolder>
         <runner>fit.Runner.FolderRunner</runner>
+        <culture>en-US</culture>
     </Settings>
 
     <Fit.FileExclusions>

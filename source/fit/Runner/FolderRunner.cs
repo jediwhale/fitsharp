@@ -15,11 +15,14 @@ namespace fit.Runner {
     public class FolderRunner: Runnable {
 
         public int Run(string[] commandLineArguments, Configuration configuration, ProgressReporter reporter) {
-            DateTime now = DateTime.Now;
-            myProgressReporter = reporter;
-            int result = Run(configuration, commandLineArguments);
-            reporter.Write(string.Format("\n{0}, time: {1}\n", Results, DateTime.Now - now));
-            return result;
+            using (AutoSetThreadCulture setCulture = new AutoSetThreadCulture(configuration.GetItem<Settings>().CultureInfo))
+            {
+              DateTime now = DateTime.Now;
+              myProgressReporter = reporter;
+              int result = Run(configuration, commandLineArguments);
+              reporter.Write(string.Format("\n{0}, time: {1}\n", Results, DateTime.Now - now));
+              return result;
+            }
         }
 
         private int Run(Configuration configuration, ICollection<string> theArguments) {

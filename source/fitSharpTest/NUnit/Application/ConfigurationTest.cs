@@ -7,6 +7,8 @@ using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
+using System.Threading;
+using System.Globalization;
 
 namespace fitSharp.Test.NUnit.Application {
     [TestFixture] public class ConfigurationTest {
@@ -50,6 +52,43 @@ namespace fitSharp.Test.NUnit.Application {
         [Test] public void AliasMethodIsUsed() {
             configuration.LoadXml("<config><fit.Namespaces><add>fitSharp.Test.NUnit.Application</add></fit.Namespaces></config>");
             Assert.IsNotNull(configuration.GetItem<ApplicationUnderTest>().FindType(new IdentifierName("ConfigurationTest")));
+        }
+
+        [Test] public void DefaultCultureIfNoneIsSpecified()
+        {
+          const string configWithoutCulture = "<config><fit.Settings/></config>";
+          configuration.LoadXml(configWithoutCulture);
+          Assert.AreEqual(Settings.DefaultCulture, configuration.GetItem<Settings>().CultureInfo);
+        }
+
+        [Test] public void DefaultCultureIfEmptyIsSpecified()
+        {
+          const string configWithEmptyCulture = "<config><fit.Settings><culture/></fit.Settings></config>";
+          configuration.LoadXml(configWithEmptyCulture);
+          Assert.AreEqual(Settings.DefaultCulture, configuration.GetItem<Settings>().CultureInfo);
+        }
+
+        [Test] public void DefaultCultureIfInvalidIsSpecified()
+        {
+          const string configWithInvalidCulture = "<config><fit.Settings><culture>xx-xx</culture></fit.Settings></config>";
+          configuration.LoadXml(configWithInvalidCulture);
+          Assert.AreEqual(Settings.DefaultCulture, configuration.GetItem<Settings>().CultureInfo);
+        }
+      
+        [Test] public void ValidCultureIsAccepted()
+        {
+          const string configWithValidCulture = "<config><fit.Settings><culture>af-ZA</culture></fit.Settings></config>";
+          configuration.LoadXml(configWithValidCulture);
+          Assert.AreEqual(CultureInfo.GetCultureInfo("af-ZA"), configuration.GetItem<Settings>().CultureInfo);
+        }
+
+        [Test] public void InvariantCultureIsAccepted()
+        {
+          configuration.LoadXml("<config><fit.Settings><culture>invariant</culture></fit.Settings></config>");
+          Assert.AreEqual(CultureInfo.InvariantCulture, configuration.GetItem<Settings>().CultureInfo);
+
+          configuration.LoadXml("<config><fit.Settings><culture>iNVarIaNt</culture></fit.Settings></config>");
+          Assert.AreEqual(CultureInfo.InvariantCulture, configuration.GetItem<Settings>().CultureInfo);        
         }
     }
 
