@@ -57,7 +57,7 @@ namespace fit.Runner {
                             configuration.GetItem<Settings>().InputFolder = argument;
                             break;
                         case "o":
-                            //Configuration.Instance.Settings.OutputFolder = argument;
+                            configuration.GetItem<Settings>().OutputFolder = argument;
                             break;
                         case "x":
                             foreach (string pattern in argument.Split(';')) {
