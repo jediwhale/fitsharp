@@ -12,8 +12,10 @@
 <Target Name="deploy" DependsOnTargets="releasesolution;zip" />
 
 <Target Name="solution">
-    <MSBuild Projects="fitsharp.sln" 
-        Properties="Configuration=$(Config)" />
+    <MSBuild
+        Projects="fitsharp.sln" 
+        Properties="Configuration=$(Config)"
+        Targets="Rebuild" />
 </Target>
 
 <Target Name="unittests">
@@ -31,8 +33,10 @@
 </Target>
 
 <Target Name="releasesolution">
-    <MSBuild Projects="fitsharp.sln" 
-        Properties="Configuration=Release" />
+    <MSBuild
+        Projects="fitsharp.sln" 
+        Properties="Configuration=Release" 
+        Targets="Rebuild" />
 </Target>
 
 <ItemGroup>
