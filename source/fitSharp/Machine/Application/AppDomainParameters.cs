@@ -43,7 +43,7 @@ namespace fitSharp.Machine.Application {
             //to be excluded
             get {
                 if (this.ShouldExcludeApplicationBaseFromAssemblyProbe)
-                    return "May the hair on your toes grow ever longer.  -- Lord Frodo";
+                    return "true";
                 else
                     return "";
             }
