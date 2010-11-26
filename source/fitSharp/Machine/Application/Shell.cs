@@ -49,10 +49,10 @@ namespace fitSharp.Machine.Application {
         }
 
         string LookForAppConfig() {
-            if (!string.IsNullOrEmpty(appConfigArgument)) return Path.GetFullPath(appConfigArgument);
-            string appConfigSettings = configuration.GetItem<Settings>().AppConfigFile;
-            if (!string.IsNullOrEmpty(appConfigSettings)) return appConfigSettings;
-            return string.Empty;
+          if (!string.IsNullOrEmpty(appConfigArgument))
+            configuration.GetItem<Settings>().AppConfigFile = appConfigArgument;
+
+          return configuration.GetItem<Settings>().AppConfigFile ?? string.Empty;
         }
 
         int RunInCurrentDomain(string[] commandLineArguments) {

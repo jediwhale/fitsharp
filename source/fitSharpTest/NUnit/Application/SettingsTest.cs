@@ -35,5 +35,20 @@ namespace fitSharp.Test.NUnit.Application
       Assert.AreEqual(s1.Runner, s2.Runner);
       Assert.AreEqual(s1.XmlOutput, s2.XmlOutput);
     }
+
+    [Test]
+    public void AppConfigFileIsMaintainedAsSpecified()
+    {
+      var s = new Settings();
+
+      s.AppConfigFile = "bob.config";
+      Assert.AreEqual("bob.config", s.AppConfigFile);
+
+      s.AppConfigFile = @"..\..\bob.config";
+      Assert.AreEqual(@"..\..\bob.config", s.AppConfigFile);
+
+      s.AppConfigFile = @"C:\bob.config";
+      Assert.AreEqual(@"C:\bob.config", s.AppConfigFile);
+    }
   }
 }

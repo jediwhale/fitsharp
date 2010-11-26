@@ -21,7 +21,6 @@ namespace fitSharp.Machine.Application {
         private const int DefaultCodePage = 1252;
 
         public string ApartmentState { get; set; }
-        private string appConfigFile;
         public string CodePage { get; set; }
         public string InputFolder { get; set; }
         public string OutputFolder { get; set; }
@@ -29,14 +28,7 @@ namespace fitSharp.Machine.Application {
         public string XmlOutput { get; set; }
         public string Behavior { get; set; }
         public string Culture { get; set; }
-
-        public string AppConfigFile {
-            get { return appConfigFile; }
-            set {
-                appConfigFile = Path.GetFullPath(value);
-                AppDomain.CurrentDomain.SetData("APP_CONFIG_FILE", value);
-            }
-        }
+        public string AppConfigFile { get; set; }
 
         public CultureInfo CultureInfo
         {
@@ -80,7 +72,7 @@ namespace fitSharp.Machine.Application {
 
         public Settings(Settings other) {
             ApartmentState = other.ApartmentState;
-            appConfigFile = other.appConfigFile;
+            AppConfigFile = other.AppConfigFile;
             Behavior = other.Behavior;
             CodePage = other.CodePage;
             InputFolder = other.InputFolder;
