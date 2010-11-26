@@ -31,9 +31,15 @@ namespace fitSharp.Machine.Engine {
 
         public void AddAssembly(string assemblyName) {
             if (IsIgnored(assemblyName)) return;
-            Assembly assembly = Assembly.LoadFrom(assemblyName);
-            if (assemblies.Contains(assembly)) return;
-            assemblies.Add(assembly);
+            
+            try {
+              Assembly assembly = Assembly.LoadFrom(assemblyName);
+              if (assemblies.Contains(assembly)) return;
+              assemblies.Add(assembly);
+            }
+            catch (FileNotFoundException) {
+              // Nothing should happen if file does not exist. 
+            }
         }
 
         static bool IsIgnored(string assemblyName) {
