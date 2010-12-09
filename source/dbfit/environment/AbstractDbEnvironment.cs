@@ -201,8 +201,7 @@ namespace dbfit
         public abstract Dictionary<string, DbParameterAccessor> GetAllColumns(string tableOrViewName);
 
         public abstract bool SupportsReturnOnInsert { get;}
-        public abstract String IdentitySelectStatement { get;}
-
+        public abstract String IdentitySelectStatement(String tableName);
 #endregion
 
     }

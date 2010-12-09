@@ -38,31 +38,39 @@ namespace dbfit
         }
         public override Dictionary<String, DbParameterAccessor> GetAllProcedureParameters(String procName)
         {
-            
-            return ReadIntoParams(procName,
-               @"select p.[name], TYPE_NAME(p.system_type_id) as [Type], 
-			   p.max_length, p.is_output, p.is_cursor_ref, p.precision, p.scale from sys.parameters p 
-				where p.object_id = OBJECT_ID(@objname) order by parameter_id"
-               );
+            string dbName = GetDbName(procName);
+            string retString = "select p.[name], TYPE_NAME(p.system_type_id) as [Type], p.max_length, p.is_output, p.is_cursor_ref, p.precision, p.scale from ";
+            retString += dbName + "sys.parameters p where p.object_id = OBJECT_ID(@objname) ";
+            retString += "UNION ALL select '','int',4,1,0,10,0 where EXISTS (SELECT * FROM ";
+            retString += dbName + "sys.objects WHERE object_id = OBJECT_ID(@objname) AND type in (N'P', N'PC'))";
+
+            return ReadIntoParams(procName, retString);
+        }
+
+        private static string GetDbName(String objectName)
+        {
+            String[] objNameArr = objectName.Split(new char[] { '.' });
+            if (objNameArr.Length == 3)
+            {
+                //the table is in another database
+                return objNameArr[0] + ".";
+            }
+            return "";
         }
         public override Dictionary<String, DbParameterAccessor> GetAllColumns(String tableOrViewName)
         {
-
+            string dbName = GetDbName(tableOrViewName);
             return ReadIntoParams(tableOrViewName,
             @"select c.[name], TYPE_NAME(c.system_type_id) as [Type], c.max_length, 
             0 As is_output, 0 As is_cursor_ref, c.precision, c.scale
-            from sys.columns c
-            where c.object_id = OBJECT_ID(@objname)
-            order by column_id
-            " );
+            from " + dbName + " sys.columns c where c.object_id = OBJECT_ID(@objname) order by column_id" );
         }
 
         private  Dictionary<string, DbParameterAccessor> ReadIntoParams(String objname, String query)
         {
             if (objname.Contains("."))
             {
-                String[] schemaAndName = objname.Split(new char[] { '.' }, 2);
-                objname = "[" + schemaAndName[0] + "].[" + schemaAndName[1] + "]";
+                // The object name is multi-part an will not be amended
             }
             else
             {
@@ -193,7 +201,17 @@ namespace dbfit
             else return ParameterDirection.Input;
         }
         public override bool SupportsReturnOnInsert { get { return false; } }
-        public override String IdentitySelectStatement { get { return "select @@identity"; } }
+        public override String IdentitySelectStatement(string tableName)
+        {
+            if (tableName == null)
+            {
+                return "select @@identity";
+            }
+            else
+            {
+                return "select IDENT_CURRENT('" + tableName + "')";
+            }
+        }
 
         public override int GetExceptionCode(Exception dbException)
         {
