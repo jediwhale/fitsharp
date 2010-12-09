@@ -78,6 +78,11 @@ namespace fitSharp.Test.NUnit.Machine {
             CheckTypeNotFound("SampleClass");
         }
 
+        [Test] public void MissingAssembliesAreIgnored() {
+          applicationUnderTest.AddAssembly("I_do_not_exist.dll");
+          Assert.Pass("AddAssembly should not throw if file does not exist.");
+        }
+
         void CheckTypeFound<T>(string typeName) {
             RuntimeType sample = GetType(typeName);
             Assert.AreEqual(typeof(T), sample.Type);
