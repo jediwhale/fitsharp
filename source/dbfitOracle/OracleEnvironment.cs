@@ -210,7 +210,7 @@ namespace dbfit {
 				get { return ":"; }
 		}
         public override bool SupportsReturnOnInsert { get { return true; } }
-        public override String IdentitySelectStatement { get { throw new ApplicationException("Oracle supports return on insert"); } }
+        public override String IdentitySelectStatement (string tableName){ throw new ApplicationException("Oracle supports return on insert"); }
 
 	}
 }

@@ -99,7 +99,8 @@ namespace dbfit.fixture {
                     }
                     else // don't add to paramAccessors
                     {
-                        columnAccessors.Assign(paramName, new IdRetrievalAccessor(dbEnvironment, currentColumn.DotNetType));
+                        //columnAccessors.Assign(paramName, new IdRetrievalAccessor(dbEnvironment, currentColumn.DotNetType));
+                        columnAccessors.Assign(paramName, new IdRetrievalAccessor(dbEnvironment, currentColumn.DotNetType,tableName));
                     }
                 }
                 else // not output
