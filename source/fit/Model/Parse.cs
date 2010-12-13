@@ -19,8 +19,12 @@ namespace fit
 		public static int FootnoteFiles;
 
         public static Parse ParseFrom(string input) {
-            return CopyFrom(new HtmlTables().Parse(input)).Parts;
+            return ParseRootFrom(input).Parts;
         }
+
+	    public static Parse ParseRootFrom(string input) {
+	        return CopyFrom(new HtmlTables().Parse(input));
+	    }
 
 	    public Parse More { get; set; }
 	    public Parse Parts { get; set; }

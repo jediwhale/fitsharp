@@ -38,7 +38,7 @@ namespace fitSharp.Fit.Service {
             catch (System.Exception e) {
                 processor.TestStatus.MarkException(heading, e);
             }
-			writer(tables.Branches[0], processor.TestStatus.Counts);
+			writer(tables, processor.TestStatus.Counts);
         }
 
         void GetStartingFixture(Tree<Cell> table) {

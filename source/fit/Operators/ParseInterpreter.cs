@@ -1,4 +1,4 @@
-﻿// Copyright © 2009 Syterra Software Inc.
+﻿// Copyright © 2010 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -17,8 +17,14 @@ namespace fit.Operators {
         }
 
         public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
-            string className = parameters.Branches[0].Value.Text.Trim();
-            if (className.Length == 0 || !char.IsLetter(className[0])) return new TypedValue(new CommentFixture());
+            Cell classCell = parameters.Branches[0].Value;
+            object interpreter = CreateInterpreter(parameters, classCell, instance);
+            return new TypedValue(interpreter);
+        }
+
+        private object CreateInterpreter(Tree<Cell> parameters, Cell classCell, TypedValue instance) {
+            string className = classCell.Text.Trim();
+            if (className.Length == 0 || !char.IsLetter(className[0])) return new CommentFixture();
             TypedValue result = Processor.Create(className);
 
             var fixture = result.Value as Fixture;
@@ -26,14 +32,14 @@ namespace fit.Operators {
                 var interpreter = result.Value as Interpreter;
                 if (interpreter != null) {
                     interpreter.Processor = Processor;
-                    return new TypedValue(interpreter);
+                    return interpreter;
                 }
                 fixture = new DoFixture(result.Value);
             }
             fixture.Processor = Processor;
             fixture.GetArgsForRow(parameters);
             if (!instance.IsVoid) fixture.SetSystemUnderTest(instance.Value);
-            return new TypedValue(fixture);
+            return fixture;
         }
     }
 }

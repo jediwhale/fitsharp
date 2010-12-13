@@ -3,6 +3,7 @@
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
+using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
@@ -17,7 +18,7 @@ namespace fitSharp.Fit.Operators {
 	        switch (context.Command) {
 	            case ExecuteCommand.Input:
 	                TypedValue actual = Processor.Invoke(context.SystemUnderTest, GetMemberName(parameters.Members),
-	                                                     new TreeList<Cell>());
+	                                                     new CellTree());
 	                if (actual.IsValid) ShowActual(parameters, actual.Value);
 	                break;
 

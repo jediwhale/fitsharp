@@ -25,11 +25,6 @@ namespace fitSharp.Fit.Model {
         public CellTree(IEnumerable<Tree<Cell>> trees) {
             foreach (var tree in trees) AddBranch(tree);
         }
-
-        public override string ToString() {
-            var branches = Branches.Aggregate(new StringBuilder(), (t, u) => t.Append(u)).ToString();
-            return string.Format(Value == null || string.IsNullOrEmpty(Value.Text) ? "{0}" : Value.Text, branches);
-        }
     }
 
     public class CellBaseTree: TreeList<CellBase> {

@@ -1,8 +1,9 @@
-﻿// Copyright © 2009 Syterra Software Inc.
+﻿// Copyright © 2010 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
+using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
@@ -17,21 +18,15 @@ namespace fitSharp.Fit.Operators {
         public Tree<Cell> Parameters { get { return tree.Branches[2]; } }
 
         public static Tree<Cell> Make(Tree<Cell> cell) {
-            return new TreeList<Cell>()
-                .AddBranch(cell);
+            return new CellTree(cell);
         }
 
         public static Tree<Cell> Make(Tree<Cell> member, Tree<Cell> parameters, Tree<Cell> expectedCell) {
-            return new TreeList<Cell>()
-                .AddBranch(expectedCell)
-                .AddBranch(member)
-                .AddBranch(parameters);
+            return new CellTree(expectedCell, member, parameters);
         }
 
         public static Tree<Cell> MakeMemberCell(Tree<Cell> member, Tree<Cell> inputCell) {
-            return new TreeList<Cell>()
-                .AddBranch(inputCell)
-                .AddBranch(member);
+            return new CellTree(inputCell, member);
         }
 
         public ExecuteParameters(Tree<Cell> tree) {

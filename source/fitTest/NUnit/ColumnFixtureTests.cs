@@ -4,7 +4,6 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System.Collections;
-using System.Text;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Engine;
 using NUnit.Framework;
@@ -18,14 +17,14 @@ namespace fit.Test.NUnit {
         [Test]
         public void TestNullCell()
         {
-            var builder = new StringBuilder();
+            var builder = new TestBuilder();
             builder.Append("<table>");
             builder.Append("<tr><td colspan=\"2\">string fixture</td></tr>");
             builder.Append("<tr><td>Field</td><td>Field?</td></tr>");
             builder.Append("<tr><td></td><td>null</td></tr>");
             builder.Append("</table>");
 
-            var parse = Parse.ParseFrom(builder.ToString());
+            var parse = builder.Parse;
 
             TestUtils.InitAssembliesAndNamespaces();
             RunTest(parse);
@@ -40,14 +39,14 @@ namespace fit.Test.NUnit {
         [Test]
         public void TestBlankCell()
         {
-            var builder = new StringBuilder();
+            var builder = new TestBuilder();
             builder.Append("<table>");
             builder.Append("<tr><td colspan=\"6\">string fixture</td></tr>");
             builder.Append("<tr><td>field</td><td>field?</td><td>property</td><td>property?</td><td>set</td><td>get?</td></tr>");
             builder.Append("<tr><td>blank</td><td>blank</td><td>blank</td><td>blank</td><td>blank</td><td>blank</td></tr>");
             builder.Append("</table>");
 
-            var parse = Parse.ParseFrom(builder.ToString());
+            var parse = builder.Parse;
 
             TestUtils.InitAssembliesAndNamespaces();
             RunTest(parse);
@@ -58,13 +57,13 @@ namespace fit.Test.NUnit {
         public void TestExecuteAtEnd()
         {
             TestUtils.InitAssembliesAndNamespaces();
-            var builder = new StringBuilder();
+            var builder = new TestBuilder();
             builder.Append("<table>");
             builder.Append("<tr><td colspan=\"2\">ExecuteTestFixture</td></tr>");
             builder.Append("<tr><td>Property</td><td>Property</td></tr>");
             builder.Append("<tr><td>first call</td><td>second call</td></tr>");
             builder.Append("</table>");
-            var table = Parse.ParseFrom(builder.ToString());
+            var table = builder.Parse.Parts;
             var testFixture = new ExecuteTestFixture { Processor = new Service.Service()};
             testFixture.DoTable(table);
             Assert.AreEqual(3, testFixture.Values.Count);
@@ -77,13 +76,13 @@ namespace fit.Test.NUnit {
         public void TestExecuteInMiddle()
         {
             TestUtils.InitAssembliesAndNamespaces();
-            var builder = new StringBuilder();
+            var builder = new TestBuilder();
             builder.Append("<table>");
             builder.Append("<tr><td colspan=\"2\">ExecuteTestFixture</td></tr>");
             builder.Append("<tr><td>Property</td><td>Property?</td><td>Property</td></tr>");
             builder.Append("<tr><td>first call</td><td>null</td><td>second call</td></tr>");
             builder.Append("</table>");
-            var table = Parse.ParseFrom(builder.ToString());
+            var table = builder.Parse.Parts;
             var testFixture = new ExecuteTestFixture { Processor = new Service.Service()};
             testFixture.DoTable(table);
             Assert.AreEqual(3, testFixture.Values.Count);
@@ -96,13 +95,13 @@ namespace fit.Test.NUnit {
         public void TestExecuteWithMethod()
         {
             TestUtils.InitAssembliesAndNamespaces();
-            var builder = new StringBuilder();
+            var builder = new TestBuilder();
             builder.Append("<table>");
             builder.Append("<tr><td colspan=\"2\">ExecuteTestFixture</td></tr>");
             builder.Append("<tr><td>Property</td><td>BoolMethod?</td></tr>");
             builder.Append("<tr><td>first call</td><td>true</td></tr>");
             builder.Append("</table>");
-            var table = Parse.ParseFrom(builder.ToString());
+            var table = builder.Parse.Parts;
             var testFixture = new ExecuteTestFixture { Processor = new Service.Service()};
             testFixture.DoTable(table);
             Assert.AreEqual(3, testFixture.Values.Count);
@@ -121,13 +120,13 @@ namespace fit.Test.NUnit {
         public void TestEmptyHeaderCell()
         {
             TestUtils.InitAssembliesAndNamespaces();
-            var builder = new StringBuilder();
+            var builder = new TestBuilder();
             builder.Append("<table>");
             builder.Append("<tr><td colspan=\"2\">string fixture</td></tr>");
             builder.Append("<tr><td>field</td><td></td></tr>");
             builder.Append("<tr><td>some value</td><td>this is a comment</td></tr>");
             builder.Append("</table>");
-            var table = Parse.ParseFrom(builder.ToString());
+            var table = builder.Parse;
             RunTest(table);
             TestUtils.CheckCounts(resultCounts, 0, 0, 0, 0);
         }
@@ -136,14 +135,14 @@ namespace fit.Test.NUnit {
         public void TestExecuteDoesNotCauseMethodsToGetCalledThrice()
         {
             TestUtils.InitAssembliesAndNamespaces();
-            var builder = new StringBuilder();
+            var builder = new TestBuilder();
             builder.Append("<table>");
             builder.Append("<tr><td colspan=\"2\">ExecuteTestFixture</td></tr>");
             builder.Append("<tr><td>Method()</td></tr>");
             builder.Append("<tr><td>1</td></tr>");
             builder.Append("<tr><td>2</td></tr>");
             builder.Append("</table>");
-            var table = Parse.ParseFrom(builder.ToString());
+            var table = builder.Parse.Parts;
             var testFixture = new ExecuteTestFixture { Processor = new Service.Service()};
             testFixture.DoTable(table);
             Assert.AreEqual(4, testFixture.Values.Count);
@@ -156,14 +155,14 @@ namespace fit.Test.NUnit {
 
         [Test] public void UsesDynamicTarget() {
             TestUtils.InitAssembliesAndNamespaces();
-            var builder = new StringBuilder();
+            var builder = new TestBuilder();
             builder.Append("<table>");
             builder.Append("<tr><td>dynamic target fixture</td></tr>");
             builder.Append("<tr><td>count?</td></tr>");
             builder.Append("<tr><td>0</td></tr>");
             builder.Append("<tr><td>1</td></tr>");
             builder.Append("</table>");
-            var table = Parse.ParseFrom(builder.ToString());
+            var table = builder.Parse.Parts;
             var testFixture = new DynamicTargetFixture{ Processor = new Service.Service()};
             testFixture.DoTable(table);
             TestUtils.VerifyCounts(testFixture, 2, 0, 0, 0);

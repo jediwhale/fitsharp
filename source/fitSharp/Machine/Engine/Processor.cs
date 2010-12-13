@@ -7,10 +7,9 @@ using System;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
-
     public interface Processor<T> {
         Configuration Configuration { get; }
-        ApplicationUnderTest ApplicationUnderTest { get;}
+        ApplicationUnderTest ApplicationUnderTest { get; }
         void AddNamespace(string namespaceName);
         void AddOperator(string operatorName);
         TypedValue Create(string memberName, Tree<T> parameters);
@@ -27,7 +26,6 @@ namespace fitSharp.Machine.Engine {
     }
 
     public static class ProcessorExtension {
-
         public static Tree<T> Compose<T>(this Processor<T> processor, object instance) {
             return processor.Compose(new TypedValue(instance));
         }
@@ -40,13 +38,15 @@ namespace fitSharp.Machine.Engine {
             return processor.Execute(TypedValue.Void, parameters);
         }
 
-        public static TypedValue InvokeWithThrow<T>(this Processor<T> processor, TypedValue instance, string memberName, Tree<T> parameters) {
+        public static TypedValue InvokeWithThrow<T>(this Processor<T> processor, TypedValue instance, string memberName,
+                                                    Tree<T> parameters) {
             TypedValue result = processor.Invoke(instance, memberName, parameters);
             result.ThrowExceptionIfNotValid();
             return result;
         }
 
-        public static TypedValue Invoke<T>(this Processor<T> processor, object instance, string memberName, Tree<T> parameters) {
+        public static TypedValue Invoke<T>(this Processor<T> processor, object instance, string memberName,
+                                           Tree<T> parameters) {
             return processor.Invoke(new TypedValue(instance), memberName, parameters);
         }
 
@@ -67,7 +67,7 @@ namespace fitSharp.Machine.Engine {
         }
 
         public static TypedValue ParseString<T>(this Processor<T> processor, Type type, string input) {
-            return processor.ParseTree(type, processor.Compose(new TypedValue(input, typeof(string))));
+            return processor.ParseTree(type, processor.Compose(new TypedValue(input, typeof (string))));
         }
 
         public static V ParseString<T, V>(this Processor<T> processor, string input) {
@@ -75,83 +75,171 @@ namespace fitSharp.Machine.Engine {
         }
     }
 
-    public abstract class ProcessorBase<T, P>: Processor<T> where P: class, Processor<T> {
-        protected abstract Operators<T,P> Operators { get; }
+    public abstract class ProcessorBase<T, P> : Processor<T> where P : class, Processor<T> {
+        protected abstract Operators<T, P> Operators { get; }
 
         public Configuration Configuration { get; protected set; }
 
-        public ApplicationUnderTest ApplicationUnderTest { get { return Configuration.GetItem<ApplicationUnderTest>(); } }
-        private Memory MemoryBanks { get { return Configuration.GetItem<Memory>(); } }
+        public ApplicationUnderTest ApplicationUnderTest {
+            get { return Configuration.GetItem<ApplicationUnderTest>(); }
+        }
+
+        private Memory MemoryBanks {
+            get { return Configuration.GetItem<Memory>(); }
+        }
 
         protected ProcessorBase(Configuration configuration) {
             Configuration = configuration;
         }
 
-        public void AddOperator(string operatorName) { Operators.Add(operatorName); }
-        public void AddOperator(Operator<T, P> anOperator) { Operators.Add(anOperator); }
-        public void AddOperator(Operator<T, P> anOperator, int priority) { Operators.Add(anOperator, priority); }
-        public void RemoveOperator(string operatorName) { Operators.Remove(operatorName); }
+        public void AddOperator(string operatorName) {
+            Operators.Add(operatorName);
+        }
+
+        public void AddOperator(Operator<T, P> anOperator) {
+            Operators.Add(anOperator);
+        }
+
+        public void AddOperator(Operator<T, P> anOperator, int priority) {
+            Operators.Add(anOperator, priority);
+        }
+
+        public void RemoveOperator(string operatorName) {
+            Operators.Remove(operatorName);
+        }
 
         public void AddNamespace(string namespaceName) {
             ApplicationUnderTest.AddNamespace(namespaceName);
         }
 
         public bool Compare(TypedValue instance, Tree<T> parameters) {
-            bool result = false;
-            Operators.Do<CompareOperator<T>>(
-                o => o.CanCompare(instance, parameters),
-                o => result = o.Compare(instance, parameters));
-            return result;
+            try {
+                Configuration.GetItem<Logging>().StartWrite(string.Format("compare {0}", instance.ValueString));
+                bool result = false;
+                Operators.Do<CompareOperator<T>>(
+                    o => o.CanCompare(instance, parameters),
+                    o => {
+                        result = o.Compare(instance, parameters);
+                        Configuration.GetItem<Logging>().Write(string.Format(" by {0} = {1}", o.GetType(), result));
+                    });
+                return result;
+            }
+            finally {
+                Configuration.GetItem<Logging>().EndWrite(string.Empty);
+            }
         }
 
         public Tree<T> Compose(TypedValue instance) {
-            Tree<T> result = null;
-            Operators.Do<ComposeOperator<T>>(
-                o => o.CanCompose(instance),
-                o => result = o.Compose(instance));
-            return result;
+            try {
+                Configuration.GetItem<Logging>().StartWrite(string.Format("compose {0}", instance.ValueString));
+                Tree<T> result = null;
+                Operators.Do<ComposeOperator<T>>(
+                    o => o.CanCompose(instance),
+                    o => {
+                        result = o.Compose(instance);
+                        Configuration.GetItem<Logging>().Write(string.Format(" by {0}", o.GetType()));
+                    });
+                return result;
+            }
+            finally {
+                Configuration.GetItem<Logging>().EndWrite(string.Empty);
+            }
         }
 
         public TypedValue Execute(TypedValue instance, Tree<T> parameters) {
-            TypedValue result = TypedValue.Void;
-            Operators.Do<ExecuteOperator<T>>(
-                o => o.CanExecute(instance, parameters),
-                o => result = o.Execute(instance, parameters));
-            return result;
+            try {
+                Configuration.GetItem<Logging>().StartWrite(string.Format("execute {0}", instance.ValueString));
+                TypedValue result = TypedValue.Void;
+                Operators.Do<ExecuteOperator<T>>(
+                    o => o.CanExecute(instance, parameters),
+                    o => {
+                        result = o.Execute(instance, parameters);
+                        LogResult(o, result);
+                    });
+                return result;
+            }
+            finally {
+                Configuration.GetItem<Logging>().EndWrite(string.Empty);
+            }
+        }
+
+        private void LogResult(object o, TypedValue result) {
+            Configuration.GetItem<Logging>().Write(string.Format(" by {0} = {1}", o.GetType(), result.ValueString));
         }
 
         public virtual TypedValue Parse(Type type, TypedValue instance, Tree<T> parameters) {
-            TypedValue result = TypedValue.Void;
-            Operators.Do<ParseOperator<T>>(
-                o => o.CanParse(type, instance, parameters),
-                o => result = o.Parse(type, instance, parameters));
-            return result;
+            try {
+                Configuration.GetItem<Logging>().StartWrite(string.Format("parse {0}", type));
+                TypedValue result = TypedValue.Void;
+                Operators.Do<ParseOperator<T>>(
+                    o => o.CanParse(type, instance, parameters),
+                    o => {
+                        result = o.Parse(type, instance, parameters);
+                        LogResult(o, result);
+                    });
+                return result;
+            }
+            finally {
+                Configuration.GetItem<Logging>().EndWrite(string.Empty);
+            }
         }
 
         public TypedValue Create(string memberName, Tree<T> parameters) {
-            TypedValue result = TypedValue.Void;
-            Operators.Do<RuntimeOperator<T>>(
-                o => o.CanCreate(memberName, parameters),
-                o => result = o.Create(memberName, parameters));
-            return result;
+            try {
+                Configuration.GetItem<Logging>().StartWrite(string.Format("create {0}", memberName));
+                TypedValue result = TypedValue.Void;
+                Operators.Do<RuntimeOperator<T>>(
+                    o => o.CanCreate(memberName, parameters),
+                    o => {
+                        result = o.Create(memberName, parameters);
+                        LogResult(o, result);
+                    });
+                return result;
+            }
+            finally {
+                Configuration.GetItem<Logging>().EndWrite(string.Empty);
+            }
         }
 
         public TypedValue Invoke(TypedValue instance, string memberName, Tree<T> parameters) {
-            TypedValue result = TypedValue.Void;
-            Operators.Do<RuntimeOperator<T>>(
-                o => o.CanInvoke(instance, memberName, parameters),
-                o => result = o.Invoke(instance, memberName, parameters));
-            return result;
+            try {
+                if (instance.Type != typeof (Logging))
+                    Configuration.GetItem<Logging>().StartWrite(string.Format("invoke {0} {1}", instance.ValueString,
+                                                                              memberName));
+                TypedValue result = TypedValue.Void;
+                Operators.Do<RuntimeOperator<T>>(
+                    o => o.CanInvoke(instance, memberName, parameters),
+                    o => {
+                        result = o.Invoke(instance, memberName, parameters);
+                        if (instance.Type != typeof (Logging)) {
+                            LogResult(o, result);
+                        }
+                    });
+                return result;
+            }
+            finally {
+                if (instance.Type != typeof (Logging)) Configuration.GetItem<Logging>().EndWrite(string.Empty);
+            }
         }
 
-        public void AddMemory<V>() { MemoryBanks.Add<V>(); }
+        public void AddMemory<V>() {
+            MemoryBanks.Add<V>();
+        }
 
-        public void Store<V>(V newItem) { MemoryBanks.Store(newItem); }
+        public void Store<V>(V newItem) {
+            MemoryBanks.Store(newItem);
+        }
 
-        public V Load<V>(V matchItem) { return MemoryBanks.Load(matchItem); }
+        public V Load<V>(V matchItem) {
+            return MemoryBanks.Load(matchItem);
+        }
 
-        public bool Contains<V>(V matchItem) { return MemoryBanks.Contains(matchItem); }
+        public bool Contains<V>(V matchItem) {
+            return MemoryBanks.Contains(matchItem);
+        }
 
-        public void Clear<V>() { MemoryBanks.Clear<V>(); }
+        public void Clear<V>() {
+            MemoryBanks.Clear<V>();
+        }
     }
 }

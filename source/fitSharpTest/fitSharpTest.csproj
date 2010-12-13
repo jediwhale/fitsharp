@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Acceptance\Slim\SlimDomain.cs" />
+    <Compile Include="Double\SampleClassTwo.cs" />
     <Compile Include="Double\TestSocket.cs" />
     <Compile Include="NUnit\Fit\BindingFactoryTest.cs" />
     <Compile Include="NUnit\Fit\CellOperatorsTest.cs" />
@@ -59,6 +60,7 @@
     <Compile Include="NUnit\Fit\ExecuteStoryTestTest.cs" />
     <Compile Include="Double\FolderTestModel.cs" />
     <Compile Include="NUnit\Fit\GracefulNameTest.cs" />
+    <Compile Include="NUnit\Fit\ConfigureFixtureTest.cs" />
     <Compile Include="NUnit\Fit\ParseByteArrayTest.cs" />
     <Compile Include="NUnit\Fit\ParseDateTest.cs" />
     <Compile Include="NUnit\Fit\ParseSymbolTest.cs" />
@@ -68,6 +70,7 @@
     <Compile Include="Double\TestClock.cs" />
     <Compile Include="NUnit\Machine\ApplicationUnderTestTest.cs" />
     <Compile Include="NUnit\Application\ConfigurationTest.cs" />
+    <Compile Include="NUnit\Machine\LoggingTest.cs" />
     <Compile Include="NUnit\Parser\HtmlTablesTest.cs" />
     <Compile Include="NUnit\Parser\TextTableScannerTest.cs" />
     <Compile Include="NUnit\Parser\TextTablesTest.cs" />

@@ -17,6 +17,7 @@ namespace fitSharp.Fit.Model {
             Text = text;
         }
 
+        public bool HasAttribute(CellAttribute key) { return baseCell.HasAttribute(key); }
         public string GetAttribute(CellAttribute key) { return baseCell.GetAttribute(key); }
         public void SetAttribute(CellAttribute key, string value) { baseCell.SetAttribute(key, value); }
         public void AddToAttribute(CellAttribute key, string value) { baseCell.AddToAttribute(key, value); }
