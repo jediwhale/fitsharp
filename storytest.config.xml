@@ -20,7 +20,6 @@
         <addNamespace>fitlibrary</addNamespace>
         <addNamespace>fit.Fixtures</addNamespace>
         <addNamespace>fitSharp.Test.Acceptance.Slim</addNamespace>
-        <addAssembly>build\debug\fit.dll</addAssembly>
         <addAssembly>build\debug\fittest.dll</addAssembly>
         <addAssembly>build\debug\fitsharptest.dll</addAssembly>
     </ApplicationUnderTest>

@@ -78,6 +78,11 @@ namespace fitSharp.Test.NUnit.Machine {
             CheckTypeNotFound("SampleClass");
         }
 
+        [Test] public void FitAssemblyIsLoadedForFitClass() {
+            Assert.AreEqual("fit.Fixture",
+                            applicationUnderTest.FindType(new IdentifierName("fit.Fixture")).Type.FullName);
+        }
+
         void CheckTypeFound<T>(string typeName) {
             RuntimeType sample = GetType(typeName);
             Assert.AreEqual(typeof(T), sample.Type);
