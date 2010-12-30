@@ -1,7 +1,6 @@
 <suiteConfig>
 
     <ApplicationUnderTest>
-        <addAssembly>build\debug\fit.dll</addAssembly>
         <addAssembly>build\debug\dbfit.dll</addAssembly>
         <addAssembly>build\debug\dbfit.sqlserver.dll</addAssembly>
     </ApplicationUnderTest>

@@ -13,13 +13,15 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
     public class ApplicationUnderTest: Copyable {
+        const int cacheSize = 50;
         readonly Assemblies assemblies;
         readonly Namespaces namespaces;
-        const int cacheSize = 50;
-        readonly List<Type> cache = new List<Type>(cacheSize);
+        readonly List<Type> cache = new List<Type>();
 
-        public ApplicationUnderTest() {
-            assemblies = new Assemblies();
+        public ApplicationUnderTest(): this(new CurrentDomain()) {}
+
+        public ApplicationUnderTest(ApplicationDomain appDomain) {
+            assemblies = new Assemblies(appDomain);
             namespaces = new Namespaces();
             AddNamespace(GetType().Namespace);
         }
@@ -33,6 +35,7 @@ namespace fitSharp.Machine.Engine {
 
         public void AddNamespace(string namespaceName) {
             namespaces.Add(namespaceName.Trim());
+            assemblies.LoadWellKnownAssemblies(namespaceName.Trim() + ".");
         }
 
         public void RemoveNamespace(string namespaceName) {
@@ -47,17 +50,12 @@ namespace fitSharp.Machine.Engine {
                     assemblies.LoadWellKnownAssemblies(typeName.MatchName);
                     type = SearchForType(typeName, assemblies.Types);
                 }
-                if (type == null) throw new TypeMissingException(typeName.MatchName, Assemblies.Report);
+                if (type == null) throw new TypeMissingException(typeName.MatchName, assemblies.Report);
                 UpdateCache(type);
             }
             return new RuntimeType(type);
         }
 
-        void UpdateCache(Type type) {
-            if (cache.Contains(type)) cache.Remove(type);
-            cache.Add(type);
-            if (cache.Count > cacheSize) cache.RemoveAt(0);
-        }
 
         Type SearchForType(NameMatcher typeName, IEnumerable<Type> types) {
             foreach (Type type in types) {
@@ -68,65 +66,68 @@ namespace fitSharp.Machine.Engine {
             return null;
         }
 
+        void UpdateCache(Type type) {
+            if (cache.Contains(type)) cache.Remove(type);
+            cache.Add(type);
+            if (cache.Count > cacheSize) cache.RemoveAt(0);
+        }
+
         public Copyable Copy() {
             return new ApplicationUnderTest(this);
         }
 
         class Assemblies {
-            public readonly List<Assembly> assemblies;
-            public Assemblies() { assemblies = new List<Assembly>(); }
-            public Assemblies(Assemblies other) { assemblies = new List<Assembly>(other.assemblies); }
+            readonly ApplicationDomain appDomain;
+            readonly List<Types> assemblies;
+
+            public Assemblies(ApplicationDomain appDomain) {
+                this.appDomain = appDomain;
+                assemblies = new List<Types>();
+            }
+            public Assemblies(Assemblies other) {
+                appDomain = other.appDomain;
+                assemblies = new List<Types>(other.assemblies);
+            }
 
             public void LoadWellKnownAssemblies(string typeName) {
-                if (!typeName.StartsWith("fit.")) return;
-                if (!assemblies.Exists(a => a.CodeBase.EndsWith("/fit.dll", StringComparison.OrdinalIgnoreCase))) {
+                if (!typeName.StartsWith("fit.") && !typeName.StartsWith("fitnesse.")) return;
+                if (!assemblies.Exists(a => a.Name.EndsWith("/fit.dll", StringComparison.OrdinalIgnoreCase))) {
                     AddAssembly(Assembly.GetExecutingAssembly().CodeBase.Replace("/fitSharp.", "/fit."));
                 }
             }
 
             public void AddAssembly(string assemblyName) {
                 if (IsIgnored(assemblyName)) return;
-                if (assemblies.Exists(a => a.CodeBase == assemblyName)) return;
-                var assembly = Assembly.LoadFrom(assemblyName);
-                if (assemblies.Contains(assembly)) return;
+                if (assemblies.Exists(a => a.Name == assemblyName)) return;
+                var assembly = appDomain.LoadAssembly(assemblyName);
+                if (assemblies.Exists(a => a.Name == assembly.Name)) return;
                 assemblies.Add(assembly);
-                EnsureAllReferencedAssembliesAreLoaded(assembly);
             }
 
             static bool IsIgnored(string assemblyName) {
                 return string.Equals(".jar", Path.GetExtension(assemblyName), StringComparison.OrdinalIgnoreCase);
             }
 
-            static void EnsureAllReferencedAssembliesAreLoaded(Assembly assembly) {
-                assembly.GetExportedTypes();
-            }
-
             public IEnumerable<Type> Types {
                 get {
-                    foreach (Assembly assembly in assemblies) {
-                        if (IsDynamic(assembly)) continue;
-                        foreach (Type type in assembly.GetExportedTypes()) yield return type;
+                    foreach (var assembly in assemblies) {
+                        foreach (var type in assembly.Types) yield return type;
                     }
-                    foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies()) {
-                        if (IsDynamic(assembly)) continue;
-                        foreach (Type type in assembly.GetExportedTypes()) yield return type;
+                    foreach (var assembly in appDomain.LoadedAssemblies) {
+                        if (assemblies.Exists(a => a.Name == assembly.Name)) continue;
+                        foreach (var type in assembly.Types) yield return type;
                     }
                 }
             }
 
-            public static string Report {
+            public string Report {
                 get {
                     var result = new StringBuilder();
-                    foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies()) {
-                        if (IsDynamic(assembly)) continue;
-                        result.AppendFormat("    {0}{1}", assembly.CodeBase, Environment.NewLine);
+                    foreach (var assembly in appDomain.LoadedAssemblies) {
+                        result.AppendFormat("    {0}{1}", assembly.Name, Environment.NewLine);
                     }
                     return result.ToString();
                 }
-            }
-
-            static bool IsDynamic(Assembly assembly) {
-                return assembly.ManifestModule.GetType().Namespace == "System.Reflection.Emit";
             }
         }
 

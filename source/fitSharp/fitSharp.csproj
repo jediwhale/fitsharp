@@ -59,8 +59,11 @@
     <Compile Include="Fit\Operators\ParseTextStoryTestString.cs" />
     <Compile Include="Machine\Application\Runnable.cs" />
     <Compile Include="Machine\Application\Runner.cs" />
+    <Compile Include="Machine\Engine\CurrentDomain.cs" />
     <Compile Include="Machine\Engine\DataRowRuntime.cs" />
     <Compile Include="Machine\Engine\Logging.cs" />
+    <Compile Include="Machine\Engine\ApplicationDomain.cs" />
+    <Compile Include="Machine\Engine\Types.cs" />
     <Compile Include="Machine\Model\CellBase.cs" />
     <Compile Include="Fit\Model\CellSubstring.cs" />
     <Compile Include="Fit\Model\CellTree.cs" />

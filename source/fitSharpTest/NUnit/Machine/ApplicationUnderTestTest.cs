@@ -7,11 +7,13 @@ using System;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using fitSharp.Test.Double;
+using Moq;
 using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Machine {
     [TestFixture] public class ApplicationUnderTestTest {
-        private ApplicationUnderTest applicationUnderTest;
+        ApplicationUnderTest applicationUnderTest;
+        Mock<ApplicationDomain> domain;
 
         [SetUp] public void SetUp() {
             applicationUnderTest = new ApplicationUnderTest();
@@ -42,10 +44,29 @@ namespace fitSharp.Test.NUnit.Machine {
             CheckTypeFound<SampleClass>("SampleClass");
         }
 
+        [Test] public void NamespaceIsRemoved() {
+            applicationUnderTest.AddNamespace(typeof(SampleClass).Namespace);
+            CheckTypeFound<SampleClass>("SampleClass");
+            applicationUnderTest.RemoveNamespace(typeof(SampleClass).Namespace);
+            CheckTypeNotFound("SampleClass");
+        }
+
         [Test] public void TypeIsFoundInLoadedAssembly() {
             applicationUnderTest.AddAssembly("testtarget.dll");
             RuntimeType sample = GetType("fitSharp.TestTarget.SampleDomain");
             Assert.AreEqual("fitSharp.TestTarget.SampleDomain", sample.Type.FullName);
+        }
+
+        [Test] public void TypeIsFoundInDefaultNamespace() {
+            CheckTypeFound<ApplicationUnderTest>("ApplicationUnderTest");
+        }
+
+        [Test] public void ChangesNotMadeInCopy() {
+            var copy = (ApplicationUnderTest)applicationUnderTest.Copy();
+            applicationUnderTest.AddNamespace(typeof(SampleClass).Namespace);
+            CheckTypeFound<SampleClass>("SampleClass");
+            applicationUnderTest = copy;
+            CheckTypeNotFound("SampleClass");
         }
 
         [Test] public void ReloadingAssemblyIsIgnored() {
@@ -56,31 +77,36 @@ namespace fitSharp.Test.NUnit.Machine {
         }
 
         [Test] public void JarFilesAreIgnored() {
+            SetUpMockDomain();
             applicationUnderTest.AddAssembly("testtarget.jAr");
+            domain.Verify(d => d.LoadAssembly(It.IsAny<string>()), Times.Never());
             Assert.IsTrue(true);
         }
 
-        [Test] public void TypeIsFoundInDefaultNamespace() {
-            CheckTypeFound<ApplicationUnderTest>("ApplicationUnderTest");
-        }
-
-        [Test] public void NamespaceIsRemoved() {
-            applicationUnderTest.AddNamespace(typeof(SampleClass).Namespace);
-            CheckTypeFound<SampleClass>("SampleClass");
-            applicationUnderTest.RemoveNamespace(typeof(SampleClass).Namespace);
-            CheckTypeNotFound("SampleClass");
-        }
-
-        [Test] public void ChangesNotMadeInCopy() {
-            var copy = (ApplicationUnderTest)applicationUnderTest.Copy();
-            applicationUnderTest.AddNamespace("fitnesse.unitTest.engine");
-            applicationUnderTest = copy;
-            CheckTypeNotFound("SampleClass");
+        void SetUpMockDomain() {
+            domain = new Mock<ApplicationDomain>();
+            applicationUnderTest = new ApplicationUnderTest(domain.Object);
         }
 
         [Test] public void FitAssemblyIsLoadedForFitClass() {
-            Assert.AreEqual("fit.Fixture",
-                            applicationUnderTest.FindType(new IdentifierName("fit.Fixture")).Type.FullName);
+            ExpectFitAssemblyIsLoaded();
+            applicationUnderTest.FindType(new IdentifierName("fit.FitSample"));
+            domain.VerifyAll();
+        }
+
+        void ExpectFitAssemblyIsLoaded() {
+            SetUpMockDomain();
+            var types = new Mock<Types>();
+            types.Setup(t => t.Types).Returns(new [] {typeof (fit.FitSample)});
+            domain
+                .Setup(a => a.LoadAssembly(It.Is<string>(s => s.EndsWith("/fit.dll", StringComparison.OrdinalIgnoreCase))))
+                .Returns(types.Object);
+        }
+
+        [Test] public void FitAssemblyIsLoadedForFitNamespace() {
+            ExpectFitAssemblyIsLoaded();
+            applicationUnderTest.AddNamespace("fit");
+            domain.VerifyAll();
         }
 
         void CheckTypeFound<T>(string typeName) {
@@ -106,3 +132,6 @@ namespace fitSharp.Test.NUnit.Machine {
 }
 
 public class AnotherSampleClass {}
+
+namespace fit { public class FitSample {} }
+
