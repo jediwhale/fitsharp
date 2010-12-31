@@ -44,6 +44,11 @@ namespace fitSharp.Test.NUnit.Slim {
             Assert.AreEqual("$symbol", processor.Parse(typeof(object), TypedValue.Void, new SlimLeaf("$$symbol")).ValueString);
         }
 
+        [Test] public void ParseSymbolEmbeddedWithEScaped() {
+            processor.Store(new Symbol("symbol", "testvalue"));
+            Assert.AreEqual("-$symboltestvalue-", processor.Parse(typeof(object), TypedValue.Void, new SlimLeaf("-$$symbol$symbol-")).ValueString);
+        }
+
         [Test] public void TreeIsParsedForList() {
             var list =
                 Parse(new ParseList{ Processor = processor }, typeof (List<int>), new SlimTree().AddBranchValue("5").AddBranchValue("4")) as List<int>;
