@@ -130,8 +130,8 @@ namespace dbfit
         }
         private static string[] StringTypes = new string[] { "VARCHAR", "NVARCHAR", "CHAR", "NCHAR","TEXT","NTEXT","XML"};
         private static string[] DecimalTypes = new string[] { "DECIMAL", "NUMERIC", "MONEY", "SMALLMONEY" };
-        private static string[] DateTypes = new string[] { "SMALLDATETIME", "DATETIME", "TIMESTAMP" };
-        private static string[] DateTypes2008 = new string[] { "DATETIME2", "DATE", "DATETIMEOFFSET" };
+        private static string[] DateTypes = new string[] { "SMALLDATETIME", "DATETIME", "TIMESTAMP" "DATE", "DATETIMEOFFSET" };
+        private static string[] DateTypes2008 = new string[] { "DATETIME2", };
         private static string[] RefCursorTypes = new string[] { "REF" };
         private static string[] Int8Types = new string[] { "TINYINT" };
         private static string[] Int16Types = new string[] { "SMALLINT" };
