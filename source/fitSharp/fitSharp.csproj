@@ -59,6 +59,7 @@
     <Compile Include="Fit\Operators\ParseTextStoryTestString.cs" />
     <Compile Include="Machine\Application\Runnable.cs" />
     <Compile Include="Machine\Application\Runner.cs" />
+    <Compile Include="Machine\Engine\Culture.cs" />
     <Compile Include="Machine\Engine\CurrentDomain.cs" />
     <Compile Include="Machine\Engine\DataRowRuntime.cs" />
     <Compile Include="Machine\Engine\Logging.cs" />
@@ -135,6 +136,7 @@
     <Compile Include="Machine\Engine\BasicProcessor.cs" />
     <Compile Include="Machine\Engine\Memory.cs" />
     <Compile Include="Machine\Engine\ParseEnum.cs" />
+    <Compile Include="Machine\Model\SetUp.cs" />
     <Compile Include="Parser\Characters.cs" />
     <Compile Include="Parser\CharacterType.cs" />
     <Compile Include="Parser\TextTables.cs" />

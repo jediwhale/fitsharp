@@ -24,6 +24,10 @@
         <addAssembly>build\debug\fitsharptest.dll</addAssembly>
     </ApplicationUnderTest>
     
+    <Culture>
+        <Name>en-US</Name>
+    </Culture>
+    
     <Fit.Operators>
         <add>fit.Operators.ExecuteParse</add>
     </Fit.Operators>
