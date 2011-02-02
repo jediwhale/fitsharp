@@ -3,6 +3,7 @@
     <ApplicationUnderTest>
         <addAssembly>build\debug\dbfit.dll</addAssembly>
         <addAssembly>build\debug\dbfit.sqlserver.dll</addAssembly>
+        <addNamespace>dbfit.fixture</addNamespace>
     </ApplicationUnderTest>
     
 </suiteConfig>

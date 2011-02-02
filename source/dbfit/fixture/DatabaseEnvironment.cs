@@ -33,11 +33,11 @@ namespace dbfit.fixture
 				String requestedEnv=Args[0].ToUpper().Trim();
         IDbEnvironment env; 
         if ("ORACLE".Equals(requestedEnv))
-          env = MakeEnvironment("OracleEnvironment");
+          env = MakeEnvironment("dbfit.OracleEnvironment");
         else if ("SQLSERVER".Equals(requestedEnv))
-          env = MakeEnvironment("SqlServerEnvironment");
+          env = MakeEnvironment("dbfit.SqlServerEnvironment");
         else if ("SQLSERVER2000".Equals(requestedEnv))
-          env = MakeEnvironment("SqlServer2000Environment");
+          env = MakeEnvironment("dbfit.SqlServer2000Environment");
         /*  else if ("DB2".Equals(requestedEnv))
           env = Processor.Create("DB2Environment", new TreeList<Cell>()); */
         else

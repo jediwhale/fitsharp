@@ -19,6 +19,10 @@ namespace dbfit.fixture
     {
         private readonly bool isOrdered;
 
+        public Query(): base(new object[] {}) {
+            myArray = null;
+        }
+
         public Query(IDbEnvironment environment, String query, bool isOrdered): base(GetDataTable(query, environment).Rows.GetEnumerator())
         {
             this.isOrdered = isOrdered;
@@ -26,6 +30,12 @@ namespace dbfit.fixture
         public Query(DataTable queryTable, bool isOrdered): base(queryTable.Rows.GetEnumerator())
         {
             this.isOrdered = isOrdered;
+        }
+
+        public override void DoTable(Parse table)
+        {
+            if (myArray == null) SetCollection(GetDataTable(GetArgumentInput<String>(0), DbEnvironmentFactory.DefaultEnvironment).Rows.GetEnumerator());
+            base.DoTable(table);
         }
 
         public static DataTable GetDataTable(String query,IDbEnvironment environment)
