@@ -140,10 +140,10 @@ namespace dbfit
         private static string[] Int16Types = new string[] { "SMALLINT" };
         private static string[] Int32Types=new string[] {"INT"};
         private static string[] Int64Types = new string[] { "BIGINT"};
-        //private static string[] TimestampTypes = new string[] {"ROWVERSION","TIMESTAMP" };
+        private static string[] TimestampTypes = new string[] { "ROWVERSION", "TIMESTAMP" };
 
         private static string[] BooleanTypes = new string[] { "BIT" };
-        private static string[] BinaryTypes = new string[] { "BINARY", "VARBINARY", "IMAGE", "ROWVERSION", "TIMESTAMP" };
+        private static string[] BinaryTypes = new string[] { "BINARY", "VARBINARY", "IMAGE"};//,  };
         private static string[] GuidTypes = new string[] { "UNIQUEIDENTIFIER" };
         private static string[] VariantTypes = new string[] { "SQL_VARIANT" };
         private static string[] FloatTypes = new String[] { "FLOAT" };
@@ -176,14 +176,14 @@ namespace dbfit
             if (Array.IndexOf(Int64Types, dataType) >= 0) return SqlDbType.BigInt;
             if (Array.IndexOf(BooleanTypes, dataType) >= 0) return SqlDbType.Bit;
 			if (Array.IndexOf(BinaryTypes,dataType)>=0) return SqlDbType.VarBinary;
-            //if (Array.IndexOf(TimestampTypes, dataType) >= 0) return SqlDbType.VarBinary;
+            if (Array.IndexOf(TimestampTypes, dataType) >= 0) return SqlDbType.Timestamp;
             //if (Array.IndexOf(RefCursorTypes, dataType) >= 0) return OracleType.Cursor;
             if (Array.IndexOf(GuidTypes, dataType) >= 0) return SqlDbType.UniqueIdentifier;
             if (Array.IndexOf(VariantTypes, dataType) >= 0) return SqlDbType.Variant;
             if (Array.IndexOf(FloatTypes, dataType) >= 0) return SqlDbType.Float;
             if (Array.IndexOf(RealTypes, dataType) >= 0) return SqlDbType.Real;
 
-            throw new NotSupportedException("Type " + dataType + " is not supported");
+            throw new NotSupportedException("SQL Type " + dataType + " is not supported");
         }
         protected static Type GetDotNetType(String dataType)
         {
@@ -202,13 +202,13 @@ namespace dbfit
             if (Array.IndexOf(RefCursorTypes, dataType) >= 0) return typeof(DataTable);
             if (Array.IndexOf(BooleanTypes, dataType) >= 0) return typeof(bool);
 			if (Array.IndexOf(BinaryTypes, dataType) >= 0) return typeof(byte[]);
-            //if (Array.IndexOf(TimestampTypes, dataType) >= 0) return typeof(byte[]);
+            if (Array.IndexOf(TimestampTypes, dataType) >= 0) return typeof(byte[]);
             if (Array.IndexOf(GuidTypes, dataType) >= 0) return typeof(System.Guid);
             if (Array.IndexOf(VariantTypes, dataType) >= 0) return typeof(string);
             if (Array.IndexOf(FloatTypes, dataType) >= 0) return typeof(double);
             if (Array.IndexOf(RealTypes, dataType) >= 0) return typeof(float);
 
-            throw new NotSupportedException("Type " + dataType + " is not supported");
+            throw new NotSupportedException(".net Type " + dataType + " is not supported");
         }
         private static ParameterDirection GetParameterDirection(int isOutput)
         {
