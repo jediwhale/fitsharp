@@ -36,7 +36,7 @@ namespace fitlibrary {
 	        foreach (Parse expectedValueCell in new CellRange(theRow.Parts.More).Cells) {
 	            try {
 	                CellOperation.Check(GetTargetObject(), combineMember,
-	                                    new TreeList<Cell>().AddBranch(theRow.Parts).AddBranch(headerCell),
+	                                    new CellTree(theRow.Parts, headerCell),
 	                                    expectedValueCell);
 	            }
 	            catch (IgnoredException) {

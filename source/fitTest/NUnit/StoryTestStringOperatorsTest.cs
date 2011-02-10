@@ -1,4 +1,4 @@
-﻿// Copyright © 2009 Syterra Software Inc.
+﻿// Copyright © 2010 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -14,17 +14,17 @@ namespace fit.Test.NUnit {
         [Test] public void HtmlStringIsParsed() {
             var service = new Service.Service();
             Tree<Cell> result = service.Compose(new StoryTestString("<table><tr><td>hello</td></tr></table>"));
-            var table = (Parse)result.Value;
+            var table = ((Parse)result).Parts;
             Assert.AreEqual("<table>", table.Tag);
             Parse cell = table.Parts.Parts;
             Assert.AreEqual("<td>", cell.Tag);
             Assert.AreEqual("hello", cell.Body);
         }
 
-        [Test] public void NoTablesReturnsNull() {
+        [Test] public void NoTablesReturnsEmptyTree() {
             var service = new Service.Service();
             Tree<Cell> result = service.Compose(new StoryTestString("<b>stuff</b>"));
-            Assert.IsNull(result);
+            Assert.AreEqual(0, result.Branches.Count);
         }
 
         [Test] public void SimpleHtmlStringIsGenerated() {
@@ -41,7 +41,7 @@ namespace fit.Test.NUnit {
 
         private static void CheckRoundTrip(string input) {
             var service = new Service.Service();
-            var source = (Parse)service.Compose(new StoryTestString(input)).Value;
+            var source = (Parse)service.Compose(new StoryTestString(input));
             var result = service.Parse(typeof(StoryTestString), TypedValue.Void, source);
             Assert.AreEqual(input, result.ValueString);
         }

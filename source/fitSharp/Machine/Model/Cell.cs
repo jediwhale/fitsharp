@@ -22,6 +22,7 @@ namespace fitSharp.Machine.Model {
 
     public interface Cell {
         string Text { get; }
+        bool HasAttribute(CellAttribute key);
         string GetAttribute(CellAttribute key);
         void SetAttribute(CellAttribute key, string value);
         void AddToAttribute(CellAttribute key, string value);

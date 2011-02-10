@@ -89,11 +89,17 @@ namespace fitSharp.Test.NUnit.Parser {
 
         static string Format(Tree<CellBase> theParseTree, string theSeparator) {
             var result = new StringBuilder();
+            foreach (Tree<CellBase> branch in theParseTree.Branches)
+                result.AppendFormat("{0}{1}", theSeparator, FormatCell(branch, theSeparator));
+            return result.ToString();
+        }
+
+        static string FormatCell(Tree<CellBase> theParseTree, string theSeparator) {
+            var result = new StringBuilder();
             if (!string.IsNullOrEmpty(theParseTree.Value.GetAttribute(CellAttribute.Leader)))
                 result.AppendFormat("{0}{1}", theParseTree.Value.GetAttribute(CellAttribute.Leader), theSeparator);
             result.Append(theParseTree.Value.GetAttribute(CellAttribute.StartTag));
-            foreach (Tree<CellBase> branch in theParseTree.Branches)
-                result.AppendFormat("{0}{1}", theSeparator, Format(branch, theSeparator));
+            result.Append(Format(theParseTree, theSeparator));
             if (!string.IsNullOrEmpty(theParseTree.Value.GetAttribute(CellAttribute.Body)))
                 result.AppendFormat("{0}{1}", theSeparator, theParseTree.Value.GetAttribute(CellAttribute.Body));
             result.Append(theParseTree.Value.GetAttribute(CellAttribute.EndTag));

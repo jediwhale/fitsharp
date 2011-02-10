@@ -1,4 +1,4 @@
-// Copyright © 2010 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+// Copyright © 2011 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -171,6 +171,10 @@ namespace fit
 
         public object GetArgumentInput(int theIndex, Type theType) {
             return Processor.Parse(theType, new TypedValue(this), new CellTreeLeaf(Args[theIndex])).Value;
+        }
+
+        public V GetArgumentInput<V>(int theIndex) {
+            return Processor.Parse(typeof(V), new TypedValue(this), new CellTreeLeaf(Args[theIndex])).GetValue<V>();
         }
 
 	    public object SystemUnderTest {

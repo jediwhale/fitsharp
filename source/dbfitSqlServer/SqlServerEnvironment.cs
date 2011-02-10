@@ -130,8 +130,8 @@ namespace dbfit
         }
         private static string[] StringTypes = new string[] { "VARCHAR", "NVARCHAR", "CHAR", "NCHAR","TEXT","NTEXT","XML"};
         private static string[] DecimalTypes = new string[] { "DECIMAL", "NUMERIC", "MONEY", "SMALLMONEY" };
-        private static string[] DateTimeTypes = new string[] { "SMALLDATETIME", "DATETIME" };
-        private static string[] DateTime2Types = new string[] { "DATETIME2" };
+        private static string[] DateTypes = new string[] { "SMALLDATETIME", "DATETIME", "TIMESTAMP", "DATE", "DATETIMEOFFSET" };
+        private static string[] DateTypes2008 = new string[] { "DATETIME2" };
         private static string[] DateTypes = new string[] { "DATE" };
         private static string[] TimeTypes = new string[] { "TIME" };
         private static string[] DateTimeOffsetTypes = new string[] { "DATETIMEOFFSET" };
@@ -166,7 +166,7 @@ namespace dbfit
             if (Array.IndexOf(StringTypes, dataType) >= 0) return SqlDbType.VarChar;
             if (Array.IndexOf(DecimalTypes, dataType) >= 0) return SqlDbType.Decimal;
             if (Array.IndexOf(DateTimeTypes, dataType) >= 0) return SqlDbType.DateTime;
-            if (Array.IndexOf(DateTime2Types, dataType) >= 0) return SqlDbType.DateTime2;
+            if (Array.IndexOf(DateTypes2008, dataType) >= 0) return SqlDbType.DateTime2;
             if (Array.IndexOf(DateTypes, dataType) >= 0) return SqlDbType.Date;
             if (Array.IndexOf(TimeTypes, dataType) >= 0) return SqlDbType.Time;
             if (Array.IndexOf(DateTimeOffsetTypes, dataType) >= 0) return SqlDbType.DateTimeOffset;
@@ -197,7 +197,7 @@ namespace dbfit
             if (Array.IndexOf(DateTimeTypes, dataType) >= 0) return typeof(DateTime);
             if (Array.IndexOf(DateTime2Types, dataType) >= 0) return typeof(DateTime);
             if (Array.IndexOf(DateTypes, dataType) >= 0) return typeof(DateTime);
-            if (Array.IndexOf(TimeTypes, dataType) >= 0) return typeof(DateTime);
+            if (Array.IndexOf(DateTypes2008, dataType) >= 0) return typeof(DateTime);
             if (Array.IndexOf(DateTimeOffsetTypes, dataType) >= 0) return typeof(DateTime);
             if (Array.IndexOf(RefCursorTypes, dataType) >= 0) return typeof(DataTable);
             if (Array.IndexOf(BooleanTypes, dataType) >= 0) return typeof(bool);

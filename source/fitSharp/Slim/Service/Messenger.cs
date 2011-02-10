@@ -27,7 +27,7 @@ namespace fitSharp.Slim.Service {
         public Messenger(SocketModel socket) {
             this.socket = socket;
             stream = new SocketStream(socket);
-            stream.Write("Slim -- V0.1\n");
+            stream.Write("Slim -- V0.2\n");
         }
 
         public string Read() {

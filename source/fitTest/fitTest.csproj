@@ -171,6 +171,7 @@
     <Compile Include="NUnit\SuiteRunnerTest.cs" />
     <Compile Include="NUnit\SymbolHandlerTest.cs" />
     <Compile Include="NUnit\TableFixtureTest.cs" />
+    <Compile Include="NUnit\TestBuilder.cs" />
     <Compile Include="NUnit\TestRunnerTest.cs" />
     <Compile Include="NUnit\TestUtils.cs" />
     <Compile Include="NUnit\TextResultWriterTest.cs" />

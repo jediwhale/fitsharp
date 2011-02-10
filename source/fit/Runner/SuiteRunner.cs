@@ -1,4 +1,4 @@
-// Copyright © 2009 Syterra Software Inc.
+// Copyright © 2010 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -77,11 +77,11 @@ namespace fit.Runner {
 	                             Action handleNoTest) {
 	        var service = new Service.Service(configuration);
 	        Tree<Cell> result = service.Compose(input);
-	        if (result == null) {
+	        if (result == null || result.Branches.Count == 0) {
 	            handleNoTest();
 	            return;
 	        }
-	        var storyTest = new StoryTest((Parse) result.Value,
+	        var storyTest = new StoryTest((Parse) result,
 	                                      (tables, counts) =>
 	                                      handleResults(service.ParseTree<Cell, StoryTestString>(tables), counts));
             if (pageName.IsSuitePage) {

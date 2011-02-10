@@ -1,4 +1,4 @@
-﻿// Copyright © 2009 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+﻿// Copyright © 2010 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -11,7 +11,8 @@ using fitSharp.Machine.Model;
 
 namespace fit.Runner {
     public class SocketServer {
-	    private static readonly IdentifierName suiteSetupIdentifier = new IdentifierName("suitesetup");
+        private const string parseError = "Unable to parse input. Input ignored.";
+        private static readonly IdentifierName suiteSetupIdentifier = new IdentifierName("suitesetup");
 
         private readonly FitSocket socket;
         private readonly Processor<Cell> service;
@@ -55,9 +56,10 @@ namespace fit.Runner {
 			catch (Exception e)
 			{
 			    var testStatus = new TestStatus();
-				var parse = new Parse("div", "Unable to parse input. Input ignored.", null, null);
+			    var parse = new CellBase(parseError, "div");
+                parse.SetAttribute(CellAttribute.Body, parseError );
 			    testStatus.MarkException(parse, e);
-			    WriteResults(parse, testStatus.Counts, writer);
+			    WriteResults(new CellTree().AddBranchValue(parse), testStatus.Counts, writer); 
 			}
 		}
 

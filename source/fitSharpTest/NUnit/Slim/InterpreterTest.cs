@@ -29,7 +29,7 @@ namespace fitSharp.Test.NUnit.Slim {
         }
 
         [Test] public void EmptyInstructionReturnEmptyList() {
-            Assert.AreEqual("Slim -- V0.1\n000009:[000000:]", TestInterpreter.ExecuteInstructions("[000000:]"));
+            Assert.AreEqual("Slim -- V0.2\n000009:[000000:]", TestInterpreter.ExecuteInstructions("[000000:]"));
         }
 
         [Test] public void ExecutesMethodOnLibraryInstance() {

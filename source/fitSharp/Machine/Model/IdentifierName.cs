@@ -20,7 +20,7 @@ namespace fitSharp.Machine.Model {
 
         public bool Matches(string name) {
             return name.Contains("_")
-                ? string.Equals(MatchName, name.Replace("_", string.Empty), StringComparison.OrdinalIgnoreCase)
+                ? string.Equals(MatchName.Replace("_", string.Empty), name.Replace("_", string.Empty), StringComparison.OrdinalIgnoreCase)
                 : string.Equals(MatchName, name, StringComparison.OrdinalIgnoreCase);
         }
 

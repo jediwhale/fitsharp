@@ -22,7 +22,8 @@ namespace fitSharp.Parser {
             var items = new ListParser("li", alternationParser, false);
             var lists = new ListParser("ul", items, true);
             alternationParser.ChildParsers = new [] {tables, lists};
-            var result = new TreeList<CellBase>(new CellBase("root"));
+            var root = new CellBase(string.Empty, "div");
+            var result = new TreeList<CellBase>(root);
             foreach (Tree<CellBase> branch in tables.Parse(new LexicalAnalyzer(input))) result.AddBranch(branch);
             return result;
         }

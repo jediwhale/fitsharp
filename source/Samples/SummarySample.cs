@@ -1,6 +1,6 @@
 ﻿using fitlibrary;
 
-namespace fitSharp.Samples {
+namespace fitSharp.Samples_1 {
     public class SummarySample: DoFixture {
 
         public void AddLink() {
