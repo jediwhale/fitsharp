@@ -17,3 +17,4 @@ DATE, TIME, DATETIME2 and DATETIMEOFFSET all map to their own types (SQL 2008 on
 |d1?|d2?|d3?|d4?|d5?|d6?|
 |<<dt1|<<ts1|<<d|<<t|<<dt2|<<dto|
 
+
