@@ -65,6 +65,10 @@ namespace dbfit
         {
             return new Query(queryTable, false);
         }
+        public Fixture Query(String query, int resultSet)
+        {
+            return new Query(environment, query, false, resultSet);
+        }
         public Fixture Update(String table)
         {
             return new Update(environment, table);
