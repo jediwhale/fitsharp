@@ -7,7 +7,6 @@ using System;
 using System.Globalization;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
-using fitSharp.Slim.Model;
 
 namespace fitSharp.Slim.Operators {
     public class ParseDefault: SlimOperator, ParseOperator<string> {
@@ -16,12 +15,11 @@ namespace fitSharp.Slim.Operators {
         }
 
         public TypedValue Parse(Type type, TypedValue instance, Tree<string> parameters) {
-            var input = parameters.Value.Replace("$$", "$");
             RuntimeMember parse = new RuntimeType(type).FindStatic(IdentifierName.Parse, new[] {typeof (string), typeof(IFormatProvider)});
             if (parse != null && parse.ReturnType == type) {
-                return parse.Invoke(new object[] {input, CultureInfo.InvariantCulture});
+                return parse.Invoke(new object[] {parameters.Value, CultureInfo.InvariantCulture});
             }
-            return new BasicProcessor().Parse(type, instance, new SlimLeaf(input));
+            return new BasicProcessor().Parse(type, instance, parameters);
         }
     }
 }

@@ -39,14 +39,18 @@ namespace fitSharp.Test.NUnit.Slim {
             Assert.AreEqual("$symbol", processor.Parse(typeof(object), TypedValue.Void, new SlimLeaf("$symbol")).ValueString);
         }
 
-        [Test] public void ParseSymbolEscapedWithDoubleDollar() {
-            processor.Store(new Symbol("symbol", "testvalue"));
-            Assert.AreEqual("$symbol", processor.Parse(typeof(object), TypedValue.Void, new SlimLeaf("$$symbol")).ValueString);
+        [Test] public void ParseSymbolIgnoresEmbeddedUndefinedSymbols() {
+            Assert.AreEqual("-$symbol-", processor.Parse(typeof(object), TypedValue.Void, new SlimLeaf("-$symbol-")).ValueString);
         }
 
-        [Test] public void ParseSymbolEmbeddedWithEscaped() {
+        [Test] public void ParseSymbolWithDoubleDollar() {
             processor.Store(new Symbol("symbol", "testvalue"));
-            Assert.AreEqual("-$symboltestvalue-", processor.Parse(typeof(object), TypedValue.Void, new SlimLeaf("-$$symbol$symbol-")).ValueString);
+            Assert.AreEqual("$testvalue", processor.Parse(typeof(object), TypedValue.Void, new SlimLeaf("$$symbol")).ValueString);
+        }
+
+        [Test] public void ParseSymbolEmbeddedWithDoubleDollar() {
+            processor.Store(new Symbol("symbol", "testvalue"));
+            Assert.AreEqual("-$testvaluetestvalue-", processor.Parse(typeof(object), TypedValue.Void, new SlimLeaf("-$$symbol$symbol-")).ValueString);
         }
 
         [Test] public void TreeIsParsedForList() {

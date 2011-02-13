@@ -11,7 +11,7 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Slim.Operators {
     public class ParseSymbol: SlimOperator, ParseOperator<string> {
-        private static readonly Regex symbolPattern = new Regex("\\$([\\$a-zA-Z]\\w*)");
+        private static readonly Regex symbolPattern = new Regex("\\$([a-zA-Z]\\w*)");
 
         public bool CanParse(Type type, TypedValue instance, Tree<string> parameters) {
             if (string.IsNullOrEmpty(parameters.Value)) return false;

@@ -33,6 +33,14 @@ namespace fitSharp.Test.NUnit.Slim {
             CheckForException("message:<<NO_CLASS garbage>>");
         }
 
+        [Test] public void ExecuteMakeUsesSymbolInClassName() {
+            processor.Store(new Symbol("symbol", "NUnit"));
+            var executeMake = new ExecuteMake { Processor = processor };
+            var input = new SlimTree().AddBranchValue("step").AddBranchValue("make").AddBranchValue("variable").AddBranchValue("fitSharp.Test.$symbol.Slim.SampleClass");
+            ExecuteOperation(executeMake, input, 2);
+            Assert.IsTrue(processor.Load(new SavedInstance("variable")).Instance is SampleClass);
+        }
+
         [Test] public void ExecuteMakeLibraryIsStacked() {
             var executeMake = new ExecuteMake { Processor = processor };
             var input = new SlimTree().AddBranchValue("step").AddBranchValue("make").AddBranchValue("librarystuff").AddBranchValue("fitSharp.Test.NUnit.Slim.SampleClass");
