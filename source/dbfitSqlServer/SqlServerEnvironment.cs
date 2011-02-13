@@ -1,5 +1,7 @@
-/// Copyright (C) Gojko Adzic 2006-2008 http://gojko.net
-/// Released under GNU GPL 2.0
+// Copyright © 2011 Syterra Software Inc. Includes work Copyright (C) Gojko Adzic 2006-2008 http://gojko.net
+// This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
+// This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System;
 using System.Collections.Generic;
@@ -7,8 +9,6 @@ using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Text.RegularExpressions;
-using System.Xml;
-using System.Text;
 using dbfit.util;
 
 namespace dbfit
@@ -18,7 +18,7 @@ namespace dbfit
     /// </summary>
     public class SqlServerEnvironment : AbstractDbEnvironment
     {
-        private static readonly int MAX_STRING_SIZE = 4000;
+        private const int MAX_STRING_SIZE = 4000;
         protected override String GetConnectionString(String dataSource, String username, String password, String databaseName)
         {
             return String.Format("data source={0};user id={1};password={2};database={3};", dataSource, username, password, databaseName);
@@ -28,8 +28,8 @@ namespace dbfit
         {
             return String.Format("Data Source={0}; User ID={1}; Password={2}", dataSource, username, password);
         }
-        private static DbProviderFactory dbp = DbProviderFactories.GetFactory("System.Data.SqlClient");
-        private Regex paramNames = new Regex("@([A-Za-z0-9_]*)");
+        private static readonly DbProviderFactory dbp = DbProviderFactories.GetFactory("System.Data.SqlClient");
+        private readonly Regex paramNames = new Regex("@([A-Za-z0-9_]*)");
         protected override Regex ParamNameRegex { get { return paramNames;}}
 
         public override DbProviderFactory DbProviderFactory
@@ -49,7 +49,7 @@ namespace dbfit
 
         private static string GetDbName(String objectName)
         {
-            String[] objNameArr = objectName.Split(new char[] { '.' });
+            String[] objNameArr = objectName.Split(new[] { '.' });
             if (objNameArr.Length == 3)
             {
                 //the table is in another database
@@ -82,21 +82,19 @@ namespace dbfit
             dc.CommandType = CommandType.Text;
             AddInput(dc, "@objname", objname);
             DbDataReader reader = dc.ExecuteReader();
-            Dictionary<String, DbParameterAccessor>
-                allParams = new Dictionary<string, DbParameterAccessor>();
+            var allParams = new Dictionary<string, DbParameterAccessor>();
             int position=0;
             while (reader.Read())
             {
 
                 String paramName = (reader.IsDBNull(0)) ? null : reader.GetString(0);
                 String dataType = reader.GetString(1);
-                int length = (reader.IsDBNull(2)) ? 0 : System.Convert.ToInt32(reader[2]);
-                int isOutput = (reader.IsDBNull(3)) ? 0 : System.Convert.ToInt32(reader[3]);
-                byte precision =  System.Convert.ToByte(reader[5]);
-                byte scale = System.Convert.ToByte(reader[6]);
+                int length = (reader.IsDBNull(2)) ? 0 : Convert.ToInt32(reader[2]);
+                int isOutput = (reader.IsDBNull(3)) ? 0 : Convert.ToInt32(reader[3]);
+                byte precision =  Convert.ToByte(reader[5]);
+                byte scale = Convert.ToByte(reader[6]);
 
-                SqlParameter dp = new SqlParameter();
-                dp.Direction = GetParameterDirection(isOutput);
+                var dp = new SqlParameter {Direction = GetParameterDirection(isOutput)};
                 if (!String.IsNullOrEmpty(paramName)) { 
 						dp.ParameterName = paramName; dp.SourceColumn=paramName; 
 				}
@@ -112,7 +110,7 @@ namespace dbfit
                     dp.Size=MAX_STRING_SIZE;
                 else if (length > 0)
                 {
-                    dp.Size = System.Convert.ToInt32(length);
+                    dp.Size = Convert.ToInt32(length);
                 }
                 else
                 {
@@ -128,22 +126,26 @@ namespace dbfit
                 throw new ApplicationException("Cannot read columns/parameters for object " + objname + " - check spelling or access privileges ");
             return allParams;
         }
-        private static string[] StringTypes = new string[] { "VARCHAR", "NVARCHAR", "CHAR", "NCHAR","TEXT","NTEXT","XML"};
-        private static string[] DecimalTypes = new string[] { "DECIMAL", "NUMERIC", "MONEY", "SMALLMONEY" };
-        private static string[] DateTypes = new string[] { "SMALLDATETIME", "DATETIME", "TIMESTAMP", "DATE", "DATETIMEOFFSET" };
-        private static string[] DateTypes2008 = new string[] { "DATETIME2" };
-        private static string[] RefCursorTypes = new string[] { "REF" };
-        private static string[] Int8Types = new string[] { "TINYINT" };
-        private static string[] Int16Types = new string[] { "SMALLINT" };
-        private static string[] Int32Types=new string[] {"INT"};
-        private static string[] Int64Types = new string[] { "BIGINT"};
+        private static readonly string[] StringTypes = new[] { "VARCHAR", "NVARCHAR", "CHAR", "NCHAR","TEXT","NTEXT","XML"};
+        private static readonly string[] DecimalTypes = new[] { "DECIMAL", "NUMERIC", "MONEY", "SMALLMONEY" };
+        private static readonly string[] DateTimeTypes = new[] { "SMALLDATETIME", "DATETIME" };
+        private static readonly string[] DateTypes2008 = new[] { "DATETIME2" };
+        private static readonly string[] DateTypes = new[] { "DATE" };
+        private static readonly string[] TimeTypes = new[] { "TIME" };
+        private static readonly string[] DateTimeOffsetTypes = new[] { "DATETIMEOFFSET" };
+        private static readonly string[] RefCursorTypes = new[] { "REF" };
+        private static readonly string[] Int8Types = new[] { "TINYINT" };
+        private static readonly string[] Int16Types = new[] { "SMALLINT" };
+        private static readonly string[] Int32Types=new[] {"INT"};
+        private static readonly string[] Int64Types = new[] { "BIGINT"};
+        private static readonly string[] TimestampTypes = new[] { "ROWVERSION", "TIMESTAMP" };
 
-        private static string[] BooleanTypes = new string[] { "BIT" };
-		private static string[] BinaryTypes=new string[] {"BINARY","VARBINARY","IMAGE"};
-        private static string[] GuidTypes = new string[] { "UNIQUEIDENTIFIER" };
-        private static string[] VariantTypes = new string[] { "SQL_VARIANT" };
-        private static string[] FloatTypes = new String[] { "FLOAT" };
-        private static string[] RealTypes = new String[] { "REAL" };
+        private static readonly string[] BooleanTypes = new[] { "BIT" };
+        private static readonly string[] BinaryTypes = new[] { "BINARY", "VARBINARY", "IMAGE"};//, };
+        private static readonly string[] GuidTypes = new[] { "UNIQUEIDENTIFIER" };
+        private static readonly string[] VariantTypes = new[] { "SQL_VARIANT" };
+        private static readonly string[] FloatTypes = new[] { "FLOAT" };
+        private static readonly string[] RealTypes = new[] { "REAL" };
         private static string NormaliseTypeName(string dataType)
         {
             dataType = dataType.ToUpper().Trim();
@@ -161,19 +163,23 @@ namespace dbfit
 
             if (Array.IndexOf(StringTypes, dataType) >= 0) return SqlDbType.VarChar;
             if (Array.IndexOf(DecimalTypes, dataType) >= 0) return SqlDbType.Decimal;
-            if (Array.IndexOf(DateTypes, dataType) >= 0) return SqlDbType.DateTime;
+            if (Array.IndexOf(DateTimeTypes, dataType) >= 0) return SqlDbType.DateTime;
             if (Array.IndexOf(DateTypes2008, dataType) >= 0) return SqlDbType.DateTime2;
+            if (Array.IndexOf(DateTypes, dataType) >= 0) return SqlDbType.Date;
+            if (Array.IndexOf(TimeTypes, dataType) >= 0) return SqlDbType.Time;
+            if (Array.IndexOf(DateTimeOffsetTypes, dataType) >= 0) return SqlDbType.DateTimeOffset;
             if (Array.IndexOf(Int8Types, dataType) >= 0) return SqlDbType.TinyInt;
             if (Array.IndexOf(Int16Types, dataType) >= 0) return SqlDbType.SmallInt;
             if (Array.IndexOf(Int32Types, dataType) >= 0) return SqlDbType.Int;
             if (Array.IndexOf(Int64Types, dataType) >= 0) return SqlDbType.BigInt;
             if (Array.IndexOf(BooleanTypes, dataType) >= 0) return SqlDbType.Bit;
-			if (Array.IndexOf(BinaryTypes,dataType)>=0) return SqlDbType.VarBinary;
-            //if (Array.IndexOf(RefCursorTypes, dataType) >= 0) return OracleType.Cursor;
+            if (Array.IndexOf(BinaryTypes,dataType)>=0) return SqlDbType.VarBinary;
+            if (Array.IndexOf(TimestampTypes, dataType) >= 0) return SqlDbType.Timestamp;
             if (Array.IndexOf(GuidTypes, dataType) >= 0) return SqlDbType.UniqueIdentifier;
             if (Array.IndexOf(VariantTypes, dataType) >= 0) return SqlDbType.Variant;
             if (Array.IndexOf(FloatTypes, dataType) >= 0) return SqlDbType.Float;
             if (Array.IndexOf(RealTypes, dataType) >= 0) return SqlDbType.Real;
+
 
             throw new NotSupportedException("Type " + dataType + " is not supported");
         }
@@ -186,47 +192,42 @@ namespace dbfit
             if (Array.IndexOf(Int16Types, dataType) >= 0) return typeof(Int16);
             if (Array.IndexOf(Int32Types, dataType) >= 0) return typeof(Int32);
             if (Array.IndexOf(Int64Types, dataType) >= 0) return typeof(Int64);
+            if (Array.IndexOf(DateTimeTypes, dataType) >= 0) return typeof(DateTime);
             if (Array.IndexOf(DateTypes, dataType) >= 0) return typeof(DateTime);
             if (Array.IndexOf(DateTypes2008, dataType) >= 0) return typeof(DateTime);
+            if (Array.IndexOf(DateTimeOffsetTypes, dataType) >= 0) return typeof(DateTimeOffset);
             if (Array.IndexOf(RefCursorTypes, dataType) >= 0) return typeof(DataTable);
             if (Array.IndexOf(BooleanTypes, dataType) >= 0) return typeof(bool);
-			if (Array.IndexOf(BinaryTypes, dataType) >= 0) return typeof(byte[]);
-            if (Array.IndexOf(GuidTypes, dataType) >= 0) return typeof(System.Guid);
+            if (Array.IndexOf(BinaryTypes, dataType) >= 0) return typeof(byte[]);
+            if (Array.IndexOf(TimestampTypes, dataType) >= 0) return typeof(byte[]);
+            if (Array.IndexOf(GuidTypes, dataType) >= 0) return typeof(Guid);
             if (Array.IndexOf(VariantTypes, dataType) >= 0) return typeof(string);
             if (Array.IndexOf(FloatTypes, dataType) >= 0) return typeof(double);
             if (Array.IndexOf(RealTypes, dataType) >= 0) return typeof(float);
+            if (Array.IndexOf(TimeTypes, dataType) >= 0) return typeof(DateTime);
+
 
             throw new NotSupportedException("Type " + dataType + " is not supported");
         }
-        private static ParameterDirection GetParameterDirection(int isOutput)
-        {
-            if (isOutput==1) return ParameterDirection.Output;
-            else return ParameterDirection.Input;
+        private static ParameterDirection GetParameterDirection(int isOutput) {
+            return isOutput==1 ? ParameterDirection.Output : ParameterDirection.Input;
         }
+
         public override bool SupportsReturnOnInsert { get { return false; } }
-        public override String IdentitySelectStatement(string tableName)
-        {
-            if (tableName == null)
-            {
-                return "select @@identity";
-            }
-            else
-            {
-                return "select IDENT_CURRENT('" + tableName + "')";
-            }
+        public override String IdentitySelectStatement(string tableName) {
+            return tableName == null ? "select @@identity" : "select IDENT_CURRENT('" + tableName + "')";
         }
 
-        public override int GetExceptionCode(Exception dbException)
-        {
-
-            if (dbException is System.Data.SqlClient.SqlException)
+        public override int GetExceptionCode(Exception dbException) {
+            if (dbException is SqlException)
             {
-                Console.WriteLine("SQL Exception " + ((System.Data.SqlClient.SqlException)dbException).Number);
-                return ((System.Data.SqlClient.SqlException)dbException).Number;
+                Console.WriteLine("SQL Exception " + ((SqlException)dbException).Number);
+                return ((SqlException)dbException).Number;
             }
-            else return base.GetExceptionCode(dbException);
+            return base.GetExceptionCode(dbException);
         }
-		 public override string ParameterPrefix
+
+        public override string ParameterPrefix
 		 {
 			 get { return "@";}
 		 }
