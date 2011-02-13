@@ -1,4 +1,4 @@
-﻿// Copyright © 2009,2010 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2011 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -39,6 +39,15 @@ namespace fitSharp.Test.NUnit.Slim {
             var input = new SlimTree().AddBranchValue("step").AddBranchValue("make").AddBranchValue("variable").AddBranchValue("fitSharp.Test.$symbol.Slim.SampleClass");
             ExecuteOperation(executeMake, input, 2);
             Assert.IsTrue(processor.Load(new SavedInstance("variable")).Instance is SampleClass);
+        }
+
+        [Test] public void ExecuteMakeUsesSymbolAsObject() {
+            var newClass = new SampleClass();
+            processor.Store(new Symbol("symbol", newClass));
+            var executeMake = new ExecuteMake { Processor = processor };
+            var input = new SlimTree().AddBranchValue("step").AddBranchValue("make").AddBranchValue("variable").AddBranchValue("$symbol");
+            ExecuteOperation(executeMake, input, 2);
+            Assert.AreEqual(newClass, processor.Load(new SavedInstance("variable")).Instance);
         }
 
         [Test] public void ExecuteMakeLibraryIsStacked() {
