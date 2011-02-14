@@ -24,6 +24,8 @@ namespace fitSharp.Slim.Service {
 
             AddMemory<SavedInstance>();
             AddMemory<Symbol>();
+
+            PushLibraryInstance(new TypedValue(new Actors(this)));
         }
 
         public void PushLibraryInstance(TypedValue instance) {
@@ -38,6 +40,29 @@ namespace fitSharp.Slim.Service {
 
         protected override Operators<string, SlimProcessor> Operators {
             get { return operators; }
+        }
+
+        private class Actors {
+            private const string actorInstanceName = "scriptTableActor";
+
+            private readonly Stack<object> actors = new Stack<object>();
+            private readonly SlimProcessor processor;
+ 
+            public Actors(SlimProcessor processor) {
+                this.processor = processor;
+            }
+
+            public object GetFixture() {
+                return processor.Load(new SavedInstance(actorInstanceName)).Instance;
+            }
+
+            public void PushFixture() {
+                actors.Push(GetFixture());
+            }
+
+            public void PopFixture() {
+                processor.Store(new SavedInstance(actorInstanceName, actors.Pop()));
+            }
         }
     }
 }

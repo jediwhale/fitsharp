@@ -106,6 +106,33 @@ namespace fitSharp.Test.NUnit.Slim {
             Assert.AreEqual(1, SampleClass.MethodCount);
         }
 
+        [Test] public void ExecuteGetFixtureReturnsActorInstance() {
+            MakeSampleClass("sampleData");
+            CallActorMethod("getFixture");
+            Assert.AreEqual("Sample=sampleData", result.Branches[1].Value);
+        }
+
+        [Test] public void ExecutePushAndPopFixtureReturnsActorInstance() {
+            MakeSampleClass("sampleData");
+            CallActorMethod("pushFixture");
+            MakeSampleClass("otherData");
+            CallActorMethod("popFixture");
+            CallActorMethod("info");
+            Assert.AreEqual("sampleData", result.Branches[1].Value);
+        }
+
+        private void MakeSampleClass(string sampleData) {
+            var executeMake = new ExecuteMake { Processor = processor };
+            var input = new SlimTree().AddBranchValue("step").AddBranchValue("make").AddBranchValue("scriptTableActor").AddBranchValue("fitSharp.Test.NUnit.Slim.SampleClass").AddBranchValue(sampleData);
+            ExecuteOperation(executeMake, input, 2);
+        }
+
+        private void CallActorMethod(string methodName) {
+            var executeCall = new ExecuteCall { Processor = processor };
+            var input = new SlimTree().AddBranchValue("step").AddBranchValue("call").AddBranchValue("scriptTableActor").AddBranchValue(methodName);
+            ExecuteOperation(executeCall, input, 2);
+        }
+
         private void ExecuteOperation(ExecuteOperator<string> executeOperator, Tree<string> input, int branchCount) {
             TypedValue executeResult = TypedValue.Void;
             if (executeOperator.CanExecute(TypedValue.Void, input)) {
