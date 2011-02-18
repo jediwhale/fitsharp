@@ -9,17 +9,24 @@ namespace dbfit.util
     {
         private IDbEnvironment environment;
         private Type expectedType;
+        private String tableName;
         public IdRetrievalAccessor(IDbEnvironment environment, Type expectedType)
         {
             this.environment = environment;
             this.expectedType = expectedType;
+        }
+        public IdRetrievalAccessor(IDbEnvironment environment, Type expectedType, String tableName)
+        {
+            this.environment = environment;
+            this.expectedType = expectedType;
+            this.tableName = tableName;
         }
         public object Get()
         {
             if (environment.SupportsReturnOnInsert)
                 throw new ApplicationException(environment.GetType() + 
                     " supports return on insert, IdRetrievalAccessor should not be used");
-            DbCommand cmd = environment.CreateCommand(environment.IdentitySelectStatement, CommandType.Text);
+            DbCommand cmd = environment.CreateCommand(environment.IdentitySelectStatement(tableName), CommandType.Text);
          //   Console.WriteLine(environment.IdentitySelectExpression);
             object value = cmd.ExecuteScalar();
             value=Convert.ChangeType(value, expectedType);

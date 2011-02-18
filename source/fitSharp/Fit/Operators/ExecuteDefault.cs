@@ -38,7 +38,7 @@ namespace fitSharp.Fit.Operators {
         void Input(ExecuteContext context, ExecuteParameters parameters) {
             var beforeCounts = new TestCounts(Processor.TestStatus.Counts);
             Processor.InvokeWithThrow(context.SystemUnderTest, GetMemberName(parameters.Members),
-                             new TreeList<Cell>().AddBranch(parameters.Cells));
+                             new CellTree(parameters.Cells));
             MarkCellWithLastResults(parameters, p => MarkCellWithCounts(p, beforeCounts));
         }
 

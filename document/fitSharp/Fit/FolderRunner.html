@@ -18,12 +18,13 @@ to be bound by the terms of this license. You must not remove this notice, or an
 <br>
 FolderRunner runs the FIT tests in every file in an input folder and its sub-folders. The results are written to an output folder structure that parallels the input structure. A reportIndex.html is created with a summary of the results. Set-up and tear-down files are appended to the front and end of each test file. Files without FIT tests are copied as is. Files and directories can be excluded from processing. Results can be written to an XML file for use with continuous integration tools.<br>
 <br>
-To use: <pre class="code">    FolderRunner -i input -o output -a assemblies -x excludes -c config</pre>where:<ul><li>input is the name of the input folder where the test files reside,<br>
+To use: <pre class="code">    c:\program files\fitsharp\runner -r fit.Runner.FolderRunner,c:\program files\fitsharp\fit.dll
+        -i input -o output -x excludes -c config</pre>where:<ul><li>input is the name of the input folder where the test files reside,<br>
 <li>output is the name of the output folder where the results of the tests will be written,<br>
-<li>assemblies is a list of assemblies separated by ';' where the test fixtures are located,<br>
 <li>excludes is a list of regex patterns separated by ';' of the files and directories to be excluded,<br>
-<li>config is the name of a Suite Configuration File.<br>
-</ul>Example:<pre class="code">    FolderRunner -i spec -o result -a myfixture.dll;myother.dll -x bin;temp.*\.html</pre><br>
+<li>config is the name of a <a href="../FitSharp/SuiteConfigurationFile.html">Suite Configuration File</a>.<br>
+</ul>Example:<pre class="code">    c:\program files\fitsharp\runner -r fit.Runner.FolderRunner,c:\program files\fitsharp\fit.dll
+        -i spec -o result -c myconfig.xml -x bin;temp.*\.html</pre><br>
 The features of <a href="../Fit/FolderRunner.html">Folder Runner</a> are described in detail in the following sections:<ul><li><a href="../Fit/FolderRunnerBasics.html">Folder Runner Basics</a></li><li><a href="../Fit/FolderRunnerSetUpTearDown.html">Folder Runner Set Up Tear Down</a></li><li><a href="../Fit/FolderRunnerDecoration.html">Folder Runner Decoration</a></li></ul></div>
 <div style="width:100%;text-align:right">
 <span class="footer">&copy; Copyright <a href="http://www.syterra.com">Syterra Software Inc.</a> All rights reserved.</span>

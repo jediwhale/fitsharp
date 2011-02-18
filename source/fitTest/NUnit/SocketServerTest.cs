@@ -1,4 +1,4 @@
-﻿// Copyright © 2009 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+﻿// Copyright © 2010 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -26,6 +26,19 @@ namespace fit.Test.NUnit {
             var server = new SocketServer(new FitSocket(socket, new NullReporter()), service, new NullReporter(), false);
             server.ProcessTestDocuments(WriteResult);
             Assert.AreEqual(tables, resultTables);
+        }
+
+        [Test] public void ParseExceptionIsRecorded() {
+            var service = new Service.Service();
+            const string tables = "<table>garbage</table>";
+            var socket = new TestSocket();
+            socket.PutByteString("0000000022");
+            socket.PutByteString(tables);
+            socket.PutByteString("0000000000");
+            var server = new SocketServer(new FitSocket(socket, new NullReporter()), service, new NullReporter(), false);
+            server.ProcessTestDocuments(WriteResult);
+            Assert.IsTrue(resultTables.Contains("class=\"error\""), resultTables);
+            Assert.IsTrue(resultTables.Contains("Unable to parse input. Input ignored."), resultTables);
         }
 
         private void WriteResult(string tables, TestCounts counts) {

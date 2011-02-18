@@ -27,10 +27,10 @@ namespace dbfit {
         /// </summary>
 	    bool SupportsReturnOnInsert { get ;}
         /// <summary>
-        /// If the database requires an additional statement to fetch auto-generated identity values,
+        /// If the database requires an additional statement to fetch auto-generated identity values passing the table name,
         /// this property is used as the select query to execute that statement.
         /// </summary>
-        String IdentitySelectStatement { get ;}
+        String IdentitySelectStatement(String tableName);
         /// <summary>
         /// Meta-data retrieval method that provides a list of parameters for a given stored procedure
         /// or function name. The name may contain a schema qualifier.

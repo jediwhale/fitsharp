@@ -9,7 +9,7 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fit.Fixtures {
-    public class Rule: Fixture {
+    public class Compute: Fixture {
         Parse headerRow;
 
         public override void DoRows(Parse rows) {

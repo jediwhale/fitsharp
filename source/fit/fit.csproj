@@ -55,7 +55,7 @@
     <Compile Include="Fixtures\FileSystem.cs" />
     <Compile Include="Fixtures\FixtureResult.cs" />
     <Compile Include="Fixtures\FlowKeywords.cs" />
-    <Compile Include="Fixtures\Rule.cs" />
+    <Compile Include="Fixtures\Compute.cs" />
     <Compile Include="Operators\ArrayMatchStrategy.cs" />
     <Compile Include="Operators\ComposeHtmlStoryTestString.cs" />
     <Compile Include="Operators\ComposeStoryTestString.cs" />

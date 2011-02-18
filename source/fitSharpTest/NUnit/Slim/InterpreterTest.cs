@@ -1,4 +1,4 @@
-﻿// Copyright © 2009,2010 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2011 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -29,7 +29,7 @@ namespace fitSharp.Test.NUnit.Slim {
         }
 
         [Test] public void EmptyInstructionReturnEmptyList() {
-            Assert.AreEqual("Slim -- V0.1\n000009:[000000:]", TestInterpreter.ExecuteInstructions("[000000:]"));
+            Assert.AreEqual("Slim -- V0.3\n000009:[000000:]", TestInterpreter.ExecuteInstructions("[000000:]"));
         }
 
         [Test] public void ExecutesMethodOnLibraryInstance() {

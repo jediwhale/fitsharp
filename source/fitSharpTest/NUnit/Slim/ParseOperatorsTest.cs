@@ -1,4 +1,4 @@
-﻿// Copyright © 2010 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2011 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -33,6 +33,29 @@ namespace fitSharp.Test.NUnit.Slim {
             processor.Store(new Symbol("symbol1", "test"));
             processor.Store(new Symbol("symbol2", "value"));
             Assert.AreEqual("-testvalue-", Parse(new ParseSymbol { Processor = processor }, typeof(object), new SlimLeaf("-$symbol1$symbol2-")));
+        }
+
+        [Test] public void ParseSymbolIgnoresUndefinedSymbols() {
+            Assert.AreEqual("$symbol", processor.Parse(typeof(object), TypedValue.Void, new SlimLeaf("$symbol")).ValueString);
+        }
+
+        [Test] public void ParseSymbolIgnoresEmbeddedUndefinedSymbols() {
+            Assert.AreEqual("-$symbol-", processor.Parse(typeof(object), TypedValue.Void, new SlimLeaf("-$symbol-")).ValueString);
+        }
+
+        [Test] public void ParseSymbolWithDoubleDollar() {
+            processor.Store(new Symbol("symbol", "testvalue"));
+            Assert.AreEqual("$testvalue", processor.Parse(typeof(object), TypedValue.Void, new SlimLeaf("$$symbol")).ValueString);
+        }
+
+        [Test] public void ParseSymbolEmbeddedWithDoubleDollar() {
+            processor.Store(new Symbol("symbol", "testvalue"));
+            Assert.AreEqual("-$testvaluetestvalue-", processor.Parse(typeof(object), TypedValue.Void, new SlimLeaf("-$$symbol$symbol-")).ValueString);
+        }
+
+        [Test] public void ParseSymbolMatchingRequestedType() {
+            processor.Store(new Symbol("symbol", AppDomain.CurrentDomain));
+            Assert.AreEqual(AppDomain.CurrentDomain, processor.Parse(typeof(AppDomain), TypedValue.Void, new SlimLeaf("$symbol")).Value);
         }
 
         [Test] public void TreeIsParsedForList() {

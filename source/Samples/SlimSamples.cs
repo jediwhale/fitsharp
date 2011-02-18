@@ -76,6 +76,23 @@ namespace fitnesse.slim.test {
                 }
             };
         }
+
+        public object[] query2() {
+            return new [] {
+                new [] {
+                    new [] {"employee number", "1429"},
+                    new [] {"first name", "Bob"},
+                    new [] {"last name", "Martin"},
+                    new [] {"hire date", "10-Oct-1974"}
+                },
+                new [] {
+                    new [] {"employee number", "8832"},
+                    new [] {"first name", "James"},
+                    new [] {"last name", "Grenning"},
+                    new [] {"hire date", "15-Dec-1979"}
+                }
+            };
+        }
     }
 
     public class LoginDialogDriver : DomainAdapter {

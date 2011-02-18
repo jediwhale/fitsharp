@@ -17,7 +17,7 @@ namespace fit.Test.Acceptance {
             Parse embeddedTables = GetEmbeddedTables(theTable);
             Parse expectedCell = GetExpectedCell(theTable);
 
-            var storyTest = new StoryTest(embeddedTables, SpecifyWriter);
+            var storyTest = new StoryTest(new Parse("div", string.Empty, embeddedTables, null), SpecifyWriter);
             storyTest.Execute(Processor.Configuration);
 
             SetEmbeddedTables(theTable, resultTables);
@@ -66,7 +66,7 @@ namespace fit.Test.Acceptance {
         }
 
         void SpecifyWriter(Tree<Cell> theTables, TestCounts counts) {
-            var tables = (Parse) theTables.Value;
+            var tables = (Parse) theTables.Branches[0];
             for (Parse table = tables; table != null; table = table.More) {
                 Parse newTable = table.Copy();
                 if (resultTables == null) {
