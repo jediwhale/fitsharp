@@ -31,7 +31,9 @@ namespace fitSharp.Machine.Engine {
             namespaces = new Namespaces(other.namespaces);
         }
 
-        public void AddAssembly(string assemblyName) { assemblies.AddAssembly(assemblyName); }
+        public void AddAssembly(string assemblyName){
+          assemblies.AddAssembly(assemblyName); 
+        }
 
         public void AddNamespace(string namespaceName) {
             namespaces.Add(namespaceName.Trim());
@@ -99,9 +101,28 @@ namespace fitSharp.Machine.Engine {
             public void AddAssembly(string assemblyName) {
                 if (IsIgnored(assemblyName)) return;
                 if (assemblies.Exists(a => a.Name == assemblyName)) return;
+
+                if (!AssemblyFileExists(assemblyName)) return;
                 var assembly = appDomain.LoadAssembly(assemblyName);
+                
                 if (assemblies.Exists(a => a.Name == assembly.Name)) return;
                 assemblies.Add(assembly);
+            }
+
+            private bool AssemblyFileExists(string assemblyName) {
+                // file:///C:\dev\DEV-Fitsharp\packages\windows\components\ClientAcceptanceTests\bin\SE.WorkStation.Script.AcceptanceTest.dll
+                // fit.dll
+
+                string assemblyFileName = NormalizeAssemblyFileName(assemblyName);
+                return File.Exists(assemblyFileName);
+            }
+
+            private string NormalizeAssemblyFileName(string assemblyName) {
+                string assemblyFileName = assemblyName;
+                if (assemblyName.StartsWith("file:"))
+                  assemblyFileName = new Uri(assemblyName).AbsolutePath;
+
+                return Path.GetFullPath(assemblyFileName);
             }
 
             static bool IsIgnored(string assemblyName) {
