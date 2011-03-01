@@ -63,7 +63,6 @@
     <Compile Include="Operators\NamedMatchStrategy.cs" />
     <Compile Include="Operators\ParseInterpreter.cs" />
     <Compile Include="Operators\RuntimeProcedure.cs" />
-    <Compile Include="Runner\AutoSetThreadCulture.cs" />
     <Compile Include="Runner\FitSocket.cs" />
     <Compile Include="Runner\FolderRunner.cs" />
     <Compile Include="Runner\SocketServer.cs" />
