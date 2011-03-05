@@ -1,4 +1,4 @@
-﻿// Copyright © 2010 Syterra Software Inc.
+﻿// Copyright © 2011 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -14,6 +14,7 @@ namespace fit.Service {
 
         public Operators() {
             Add(new ComposeDefault(), 0);
+            Add(new ComposeShowAsOperator(), 0);
 
             Add(new RuntimeDirect(), 0);
             Add(new RuntimeProcedure(), 0);

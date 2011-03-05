@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Web;
+using fitSharp.Fit.Operators;
 using fitSharp.Machine.Model;
 using fitSharp.Parser;
 
@@ -64,34 +65,8 @@ namespace fit
             }
         }
 
-	    public string Body {
-            get {
-                string result = body;
-                if (HasAttribute(CellAttribute.Add)) {
-                    result = string.Format("<span class=\"fit_grey\">{0}</span>", HttpUtility.HtmlEncode(result));
-                }
-                if (HasAttribute(CellAttribute.InformationPrefix)) {
-                    result = string.Format("<span class=\"fit_grey\">{0}</span>{1}", GetAttribute(CellAttribute.InformationPrefix), result);
-                }
-                if (HasAttribute(CellAttribute.InformationSuffix)) {
-                    result = string.Format("{0}<span class=\"fit_grey\">{1}</span>", result, GetAttribute(CellAttribute.InformationSuffix));
-                }
-                if (HasAttribute(CellAttribute.Actual)) {
-                    result += Label("expected") + "<hr />" + HttpUtility.HtmlEncode(GetAttribute(CellAttribute.Actual)) + Label("actual");
-                }
-                if (HasAttribute(CellAttribute.Exception)) {
-                    result += "<hr /><pre><div class=\"fit_stacktrace\">" + GetAttribute(CellAttribute.Exception) + "</div></pre>";
-                }
-                if (HasAttribute(CellAttribute.Label)) {
-                    result += Label(GetAttribute(CellAttribute.Label));
-                }
-                if (HasAttribute(CellAttribute.Extension)) {
-                    result += string.Format(
-                        "<span><a href=\"javascript:void(0)\" onclick=\"this.parentNode.nextSibling.style.display="
-                        + "this.parentNode.nextSibling.style.display=='none'?'':'none'\">&#8659;</a></span><div style=\"display:none\"><div class=\"fit_extension\">{0}</div></div>",
-                        GetAttribute(CellAttribute.Extension));
-                }
-                return result;
+	    public string Body { get {
+	        return ParseStoryTestString.Body(this);
             }
         }
 

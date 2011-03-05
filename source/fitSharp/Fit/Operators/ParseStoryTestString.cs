@@ -51,10 +51,15 @@ namespace fitSharp.Fit.Operators {
                     : string.Format("{0} class=\"{1}\"{2}", tag.Substring(0, space), cell.GetAttribute(CellAttribute.Status), tag.Substring(space));
         }
 
-	    string Body(Cell cell) {
+        public static string Body(Cell cell) {
             string result = cell.GetAttribute(CellAttribute.Body);
             if (cell.HasAttribute(CellAttribute.Add)) {
-                result = string.Format("<span class=\"fit_grey\">{0}</span>", HttpUtility.HtmlEncode(result));
+                if (cell.HasAttribute(CellAttribute.Formatted)) {
+                    result = string.Format("<pre>{0}</pre>", HttpUtility.HtmlEncode(result));
+                }
+                else if (!cell.HasAttribute(CellAttribute.Raw)) {
+                    result = string.Format("<span class=\"fit_grey\">{0}</span>", HttpUtility.HtmlEncode(result));
+                }
             }
             if (cell.HasAttribute(CellAttribute.InformationPrefix)) {
                 result = string.Format("<span class=\"fit_grey\">{0}</span>{1}", cell.GetAttribute(CellAttribute.InformationPrefix), result);

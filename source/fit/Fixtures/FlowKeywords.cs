@@ -1,4 +1,4 @@
-﻿// Copyright © 2010 Syterra Software Inc.
+﻿// Copyright © 2011 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -10,6 +10,7 @@ using fitlibrary;
 using fitlibrary.exception;
 using fitSharp.Fit.Exception;
 using fitSharp.Fit.Model;
+using fitSharp.Fit.Operators;
 using fitSharp.Machine.Exception;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
@@ -109,6 +110,15 @@ namespace fit.Fixtures {
         public void Show(Parse theCells) {
             try {
                 AddCell(theCells, fixture.ExecuteEmbeddedMethod(theCells));
+            }
+            catch (IgnoredException) {}
+        }
+
+        public void ShowAs(Parse cells) {
+            try {
+                var attributes = fixture.Processor.Parse<Cell, CellAttribute[]>(cells.More);
+                var value = fixture.ExecuteEmbeddedMethod(cells.More);
+                AddCell(cells, new ComposeShowAsOperator(attributes, value));
             }
             catch (IgnoredException) {}
         }
