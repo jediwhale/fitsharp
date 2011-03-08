@@ -19,6 +19,7 @@ namespace fit.Runner {
 	    private readonly ProgressReporter myReporter;
 	    private ResultWriter resultWriter;
 	    private readonly Configuration configuration;
+      private int htmlCount;
 
 		public SuiteRunner(Configuration configuration, ProgressReporter theReporter) {
 		    TestCounts = new TestCounts();
@@ -30,7 +31,7 @@ namespace fit.Runner {
             resultWriter = CreateResultWriter();
             if (theSelectedFile.Length > 0) theSuite.Select(theSelectedFile);
 
-	        RunFolder(theSuite);
+	        RunFolder(theSuite, configuration.GetItem<Settings>().DryRun);
 
             resultWriter.WriteFinalCount(TestCounts);
             resultWriter.Close();
@@ -44,20 +45,35 @@ namespace fit.Runner {
 	        return new NullResultWriter();
 	    }
 
-	    private void RunFolder(StoryTestSuite theSuite) {
+	    private void RunFolder(StoryTestSuite theSuite, bool dryRun) {
 	        StoryTestPage suiteSetUp = theSuite.SuiteSetUp;
             if (suiteSetUp != null) ExecuteStoryPage(suiteSetUp);
             foreach (StoryTestPage testPage in theSuite.Pages) {
+              if (dryRun)
+              {
+                ExecuteDryRun(testPage);
+              }
+              else
+              {
+
                 ExecuteStoryPage(testPage);
+              }
             }
 
 	        foreach (StoryTestSuite childSuite in theSuite.Suites) {
-                RunFolder(childSuite);
+                RunFolder(childSuite, dryRun);
 	        }
 	        StoryTestPage suiteTearDown = theSuite.SuiteTearDown;
             if (suiteTearDown != null) ExecuteStoryPage(suiteTearDown);
-	        theSuite.Finish();
+             theSuite.Finish();
+         
 	    }
+
+      private void ExecuteDryRun(StoryTestPage testPage)
+      {
+        htmlCount++;
+        myReporter.WriteLine(testPage.Name.Name);
+      }
 
 	    private void ExecuteStoryPage(StoryTestPage page) {
 	        try {
