@@ -15,11 +15,12 @@ using fitSharp.Machine.Model;
 namespace fit.Runner {
 	public class SuiteRunner {
 	    
-	    public TestCounts TestCounts { get; private set; }
-	    private readonly ProgressReporter myReporter;
-	    private ResultWriter resultWriter;
-	    private readonly Configuration configuration;
-      private int htmlCount;
+        public TestCounts TestCounts { get; private set; }
+        private readonly ProgressReporter myReporter;
+        private ResultWriter resultWriter;
+        private readonly Configuration configuration;
+
+        private delegate void PageAction(StoryTestPage page);
 
 		public SuiteRunner(Configuration configuration, ProgressReporter theReporter) {
 		    TestCounts = new TestCounts();
@@ -31,7 +32,7 @@ namespace fit.Runner {
             resultWriter = CreateResultWriter();
             if (theSelectedFile.Length > 0) theSuite.Select(theSelectedFile);
 
-	        RunFolder(theSuite);
+            RunFolder(theSuite, configuration.GetItem<Settings>().DryRun);
 
             resultWriter.WriteFinalCount(TestCounts);
             resultWriter.Close();
@@ -45,21 +46,35 @@ namespace fit.Runner {
 	        return new NullResultWriter();
 	    }
 
-	    private void RunFolder(StoryTestSuite theSuite) {
+	    private void RunFolder(StoryTestSuite theSuite, bool dryRun) {
+            PageAction pageAction = SelectPageAction(dryRun);
+
 	        StoryTestPage suiteSetUp = theSuite.SuiteSetUp;
-            if (suiteSetUp != null) ExecuteStoryPage(suiteSetUp);
+            if (suiteSetUp != null) pageAction(suiteSetUp);
+
             foreach (StoryTestPage testPage in theSuite.Pages) {
-                ExecuteStoryPage(testPage);
+                pageAction(testPage);
             }
 
 	        foreach (StoryTestSuite childSuite in theSuite.Suites) {
-                RunFolder(childSuite);
+                RunFolder(childSuite, dryRun);
 	        }
+
 	        StoryTestPage suiteTearDown = theSuite.SuiteTearDown;
-            if (suiteTearDown != null) ExecuteStoryPage(suiteTearDown);
-	        theSuite.Finish();
+            if (suiteTearDown != null) pageAction(suiteTearDown);
+
+            if (!dryRun) {
+                // Finish() creates reportIndex.html in the output directory. We don't want that for dry-run.
+                theSuite.Finish();
+            }
 	    }
 
+        private PageAction SelectPageAction(bool dryRun) {
+            if (dryRun)
+                return DryRunStoryPage;
+            else
+                return ExecuteStoryPage;
+        }
 
 	    private void ExecuteStoryPage(StoryTestPage page) {
 	        try {
@@ -93,5 +108,13 @@ namespace fit.Runner {
 	            storyTest.Execute(configuration);
             }
 	    }
+
+        private void DryRunStoryPage(StoryTestPage page) {
+            page.ExecuteStoryPage(ReportPageName, new NullResultWriter(), (ignore) => { });
+        }
+
+        private void ReportPageName(StoryPageName pageName, StoryTestString input, Action<StoryTestString, TestCounts> handleResults, Action handleNoTest) {
+            myReporter.WriteLine(pageName.Name);
+        }
 	}
 }

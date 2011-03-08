@@ -8,70 +8,44 @@ using fitSharp.Machine.Application;
 namespace fitSharp.Test.NUnit.Application
 {
     [TestFixture]
-    public class ArgumentParserTest
-    {
-        [Test]
-        public void ParseInvokesOneRegisteredSwitchHandler()
-        {
-            string matched = string.Empty;
+    public class ArgumentParserTest {
+        ArgumentParser parser;
 
-           var parser = new ArgumentParser();
-           parser.AddSwitchHandler("d", () => matched = "-d");
-
-           parser.Parse(new string[] { "-d"});
-
-           Assert.AreEqual("-d", matched);
+        [SetUp]
+        public void SetUp() {
+            parser = new ArgumentParser();
         }
 
         [Test]
-        public void ParseInvokesSwitchHandlerForProvidedSwitchOnly()
-        {
+        public void ParseInvokesHandlerForProvidedSwitchOnly() {
             bool dWasInvoked = false;
-            bool eWasInvoked = false;
 
-            var parser = new ArgumentParser();
-            parser.AddSwitchHandler("d", () => dWasInvoked = true);
-            parser.AddSwitchHandler("e", () => eWasInvoked = true);
+            parser.AddArgumentHandler("d", (value) => dWasInvoked = true);
+            parser.AddArgumentHandler("e", (value) => Assert.Fail("Argument handler should only be called if switch was on the command-line"));
 
             parser.Parse(new string[] { "-d" });
 
             Assert.IsTrue(dWasInvoked);
-            Assert.IsFalse(eWasInvoked);
         }
 
         [Test]
-        public void ParseSilentlyIgnoresSwitchForWhichThereIsNoHandler()
-        {
-            bool dWasInvoked = false;
-
-            var parser = new ArgumentParser();
-            parser.AddSwitchHandler("d", () => dWasInvoked = true);
+        public void ParseSilentlyIgnoresSwitchForWhichThereIsNoHandler() {
+            parser.AddArgumentHandler("d", (value) => Assert.Fail("Argument handler should only be called if switch was on the command-line."));
 
             parser.Parse(new string[] { "-ebbot" });
-
-            Assert.IsFalse(dWasInvoked);
         }
 
         [Test]
-        public void ParseSilentlyIgnoresSwitchWithoutHyphen()
-        {
-            string matched = string.Empty;
-
-            var parser = new ArgumentParser();
-            parser.AddSwitchHandler("d", () => matched = "?d");
+        public void ParseSilentlyIgnoresSwitchWithoutHyphen() {
+            parser.AddArgumentHandler("d", (value) => Assert.Fail("Argument handler should only be called if switch is hyphen-prefixed.") );
 
             parser.Parse(new string[] { "?d" });
-
-            Assert.AreEqual(string.Empty, matched);
         }
 
         [Test]
-        public void ParseInvokesOneRegisteredArgumentHandler()
-        {
+        public void ParseSendsArgumentValueToHandler() {
             string argValue = string.Empty;
-            
 
-            var parser = new ArgumentParser();
             parser.AddArgumentHandler("r", (value) => { argValue = value; });
 
             parser.Parse(new string[] { "-r", "folderrunner" });
@@ -80,60 +54,39 @@ namespace fitSharp.Test.NUnit.Application
         }
 
         [Test]
-        public void ParseBothArgumentsAndSwitch()
-        {
+        public void ParseArgumentsWithAndWithoutValues() {
             string argValue = string.Empty;
             string argValue2 = string.Empty;
-            string argValue3 = string.Empty;
+            bool dWasCalled = false;
 
-
-            var parser = new ArgumentParser();
             parser.AddArgumentHandler("r", (value) => argValue = value);
             parser.AddArgumentHandler("c", (value) => argValue2 = value);
-            parser.AddSwitchHandler("d", () => argValue3 = "-d");
+            parser.AddArgumentHandler("d", (value) => dWasCalled = true);
 
-            parser.Parse(new string[] {"-r", "folderrunner", "-d" , "-c", "appconfig.config"});
+            parser.Parse(new string[] {"-r", "folderrunner", "-d", "-c", "appconfig.config"});
 
             Assert.AreEqual("folderrunner", argValue);
             Assert.AreEqual("appconfig.config", argValue2);
-            Assert.AreEqual("-d", argValue3);
-        }
-        [Test]
-        public void ParseArgumentHandlerAsSwitch()
-        {
-            string argValue = string.Empty;
-            string argValue2 = string.Empty;
-            string argValue3 = string.Empty;
-
-
-            var parser = new ArgumentParser();
-            parser.AddArgumentHandler("r", (value) => argValue = value);
-            parser.AddArgumentHandler("c", (value) => argValue2 = value);
-            parser.AddSwitchHandler("d", () => argValue3 = "-d");
-
-            parser.Parse(new string[] { "-r", "-folderrunner", "-d" });
-
-            Assert.AreEqual(string.Empty, argValue);
-            Assert.AreEqual(string.Empty, argValue2);
-            Assert.AreEqual("-d", argValue3);
+            Assert.IsTrue(dWasCalled, "Expected callback for -d switch");
         }
 
         [Test]
-        public void ParseSwitchHandlerAsArgument()
-        {
-            string argValue = string.Empty;
-            string argValue2 = string.Empty;
-            string argValue3 = string.Empty;
+        public void ParseCallsHandlerWithEmptyStringIfThereIsNoValue() {
+            string collectedValue;
 
+            parser.AddArgumentHandler("d", (value) => collectedValue = value);
 
-            var parser = new ArgumentParser();
-            parser.AddSwitchHandler("r", () => argValue = "-r");            
+            collectedValue = "something";   
+            parser.Parse(new string[] { "-d" });
+            Assert.AreEqual(string.Empty, collectedValue);
 
-            parser.Parse(new string[] { "-r", "folderrunner"});
+            collectedValue = "something";
+            parser.Parse(new string[] { "-d", "-r", "rvalue" });
+            Assert.AreEqual(string.Empty, collectedValue);
 
-            Assert.AreEqual(string.Empty, argValue);
-            
+            collectedValue = "something";
+            parser.Parse(new string[] { "-r", "rvalue", "-d" });
+            Assert.AreEqual(string.Empty, collectedValue);
         }
-
     }
 }

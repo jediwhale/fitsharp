@@ -4,6 +4,7 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
+using System.Text;
 
 namespace fitSharp.IO {
     public interface ProgressReporter {
@@ -25,5 +26,16 @@ namespace fitSharp.IO {
 
     public class NullReporter: ProgressReporter {
         public void Write(string theMessage) {}
+    }
+
+    // Useful for testing progress reporting
+    public class CollectingReporter : ProgressReporter {
+        private StringBuilder buffer = new StringBuilder();
+
+        public void Write(string theMessage) {
+            buffer.Append(theMessage);
+        }
+
+        public string Output { get { return buffer.ToString(); } }
     }
 }

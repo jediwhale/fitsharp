@@ -6,62 +6,48 @@ using fitSharp.Machine.Engine;
 
 namespace fitSharp.Machine.Application
 {
-    public class ArgumentParser
-    {
+    public class ArgumentParser {
         Dictionary<string, Action<string>> argumentHandlers;
-        Dictionary<string, Action> switchHandlers;
 
-        public ArgumentParser()
-        {
+        public ArgumentParser() {
             argumentHandlers = new Dictionary<string, Action<string>>();
-            switchHandlers = new Dictionary<string, Action>();
         }
 
-        public void AddArgumentHandler(string argument, Action<string> handler) {
-            argumentHandlers.Add(argument, handler);
+        public void AddArgumentHandler(string name, Action<string> handler) {
+            argumentHandlers.Add(name, handler);
         }
 
-        public void AddSwitchHandler(string @switch, Action handler)
-        {
-            switchHandlers.Add(@switch, handler);
-        }
-
-        public void Parse(string[] commandLineArguments)
-        {            
-            for (int i = 0; i < commandLineArguments.Length; i++)
-            {
-                if (commandLineArguments[i].StartsWith("-") && i == commandLineArguments.Length-1)
-                {
-                    string switchName = commandLineArguments[i].Substring(1);
-                    InvokeSwitchHandler(switchName);
-                }
-
-                else if (commandLineArguments[i].StartsWith("-") && commandLineArguments[i + 1].StartsWith("-"))
-                {
-                    string switchName = commandLineArguments[i].Substring(1);
-                    InvokeSwitchHandler(switchName);
-                }
-                else if (commandLineArguments[i].StartsWith("-"))
-                {
-                    string switchName = commandLineArguments[i].Substring(1);
-                    InvokeArgumentHandler(switchName, commandLineArguments[i + 1]);
+        public void Parse(string[] commandLineArguments) {            
+            for (int i = 0; i < commandLineArguments.Length; i++) {
+                if (IsSwitch(commandLineArguments[i])) {
+                    string name = commandLineArguments[i].Substring(1);
+                    
+                    //Order on if statement is important. 
+                    if (i == commandLineArguments.Length - 1) {   
+                        InvokeArgumentHandler(name);
+                    }
+                    else if (IsSwitch(commandLineArguments[i + 1])) {
+                        InvokeArgumentHandler(name);
+                    }
+                    else {
+                        InvokeArgumentHandler(name, commandLineArguments[i + 1]);
+                    }
                 }
             }
         }
 
-        private void InvokeSwitchHandler(string switchName)
-        {
-            Action handler = null;
-            if (switchHandlers.TryGetValue(switchName, out handler))
-                handler();
+        private static bool IsSwitch(string argument) {
+            return argument.StartsWith("-");
         }
 
-        private void InvokeArgumentHandler(string switchName, string arguments)
-        {
+        private void InvokeArgumentHandler(string name) {
+            InvokeArgumentHandler(name, string.Empty);
+        }
+
+        private void InvokeArgumentHandler(string name, string value) {
             Action<string> handler = null;
-            if (argumentHandlers.TryGetValue(switchName, out handler))
-                handler(arguments);
-            //TODO: look into this Kim
+            if (argumentHandlers.TryGetValue(name, out handler))
+                handler.Invoke(value);
         }
     }
 }

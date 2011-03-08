@@ -23,6 +23,10 @@ namespace fit {
             return firstContent.Replace("\r\n","\n") == secondContent.Replace("\r\n","\n");
         }
 
+        public bool FolderIsEmpty(string folder) {
+            return (Directory.GetFiles(FullName(folder)).Length == 0);
+        }
+
         public void MakeEmptyFolder(string theFolder) {
             try {
                 Directory.Delete(FullName(theFolder), true);

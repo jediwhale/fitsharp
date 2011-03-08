@@ -9,15 +9,18 @@ using fitSharp.IO;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Model;
 using fitSharp.Test.Double;
+using System.Collections.Generic;
 
 namespace fit.Test.Acceptance {
     public class FolderRunnerStory: DomainAdapter {
         private readonly Shell shell;
+        private CollectingReporter reporter;
 
         public object SystemUnderTest { get { return shell; } }
 
         public FolderRunnerStory() {
-            shell = new Shell(new NullReporter(), new FileSystemModel());
+            reporter = new CollectingReporter();
+            shell = new Shell(reporter, new FileSystemModel());
         }
 
         public void Run(string[] theArguments) {
@@ -29,5 +32,11 @@ namespace fit.Test.Acceptance {
         }
 
         public string Results { get { return ((FolderRunner) shell.Runner).Results; }}
+
+        public string[] ConsoleOutput { 
+            get { 
+                return this.reporter.Output.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries); 
+            } 
+        }
     }
 }

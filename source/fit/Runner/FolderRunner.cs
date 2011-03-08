@@ -1,4 +1,4 @@
-// Copyright © 2009 Syterra Software Inc.
+ï»¿// Copyright ï¿½ 2009 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -18,7 +18,11 @@ namespace fit.Runner {
             DateTime now = DateTime.Now;
             myProgressReporter = reporter;
             int result = Run(configuration, commandLineArguments);
-            reporter.Write(string.Format("\n{0}, time: {1}\n", Results, DateTime.Now - now));
+
+            // TODO: This reporting should really be moved into SuiteRunner, I think.
+            if (!configuration.GetItem<Settings>().DryRun)
+                reporter.Write(string.Format("\n{0}, time: {1}\n", Results, DateTime.Now - now));
+
             return result;
         }
 
@@ -35,15 +39,24 @@ namespace fit.Runner {
 
         private static void ParseArguments(Configuration configuration, string[] commandLineArguments) {
             ArgumentParser argumentParser = new ArgumentParser();
-            argumentParser.AddArgumentHandler("i", (value) => { configuration.GetItem<Settings>().InputFolder = value; });
+            argumentParser.AddArgumentHandler("i", (value) => { configuration.GetItem<Settings>().InputFolder = value;});
             argumentParser.AddArgumentHandler("o", (value) => { configuration.GetItem<Settings>().OutputFolder = value; });
-            argumentParser.AddSwitchHandler("d", () => { configuration.GetItem<Settings>().DryRun = true; });
+            argumentParser.AddArgumentHandler("d", (value) => { configuration.GetItem<Settings>().DryRun = true; });
             argumentParser.AddArgumentHandler("x", (value) => {
                 foreach (string pattern in value.Split(';')) {
                     configuration.GetItem<FileExclusions>().Add(pattern);
                 }
             }
-          }
+            );
+
+            argumentParser.Parse(commandLineArguments);
+
+            if (configuration.GetItem<Settings>().InputFolder == null) {
+                throw new FormatException("Missing input folder");
+            }
+            if (configuration.GetItem<Settings>().OutputFolder == null) {
+                throw new FormatException("Missing output folder");
+            }
         }
 	    
         private ProgressReporter myProgressReporter;

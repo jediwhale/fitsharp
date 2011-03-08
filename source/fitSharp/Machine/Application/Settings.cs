@@ -25,6 +25,7 @@ namespace fitSharp.Machine.Application {
         public string Runner { get; set; }
         public string XmlOutput { get; set; }
         public string Behavior { get; set; }
+        public bool DryRun { get; set; }
 
         public string AppConfigFile {
             get { return appConfigFile; }
@@ -61,6 +62,7 @@ namespace fitSharp.Machine.Application {
             OutputFolder = other.OutputFolder;
             Runner = other.Runner;
             XmlOutput = other.XmlOutput;
+            DryRun = other.DryRun;
         }
 
         public Copyable Copy() {

@@ -14,12 +14,11 @@ using fitSharp.Machine.Engine;
 namespace fitSharp.Machine.Application {
 
     public class Shell: MarshalByRefObject {
-        string[] extraArguments;
+        string[] commandLineArguments;
         
         readonly ProgressReporter progressReporter;
         readonly FolderModel folderModel;
         readonly Configuration configuration = new Configuration();
-        ArgumentParser argumentParser = new ArgumentParser();
 
         string appConfigArgument;
         private int result;
@@ -90,46 +89,17 @@ namespace fitSharp.Machine.Application {
                 new Action<AppDomain>(AppDomain.Unload).BeginInvoke(newDomain, null, null);
             }
             return result;
-<<<<<<< HEAD
         }
 
-        void ParseArguments(string[] commandLineArguments)
-        {
-          
+        void ParseArguments(string[] commandLineArguments) {
+            ArgumentParser argumentParser = new ArgumentParser();
+            argumentParser.AddArgumentHandler("c", (value) => { configuration.LoadXml(folderModel.FileContent(value)); });
+            argumentParser.AddArgumentHandler("a", (value) => { appConfigArgument = value; });
+            argumentParser.AddArgumentHandler("r", (value) => { configuration.GetItem<Settings>().Runner = value; });
 
-          argumentParser.AddArgumentHandler("c", (value) => { suiteConfig = value; });
-          argumentParser.AddArgumentHandler("a", (value) => { appConfigArgument = value; });
-          argumentParser.AddArgumentHandler("r", (value) => { configuration.GetItem<Settings>().Runner = value; });
-          argumentParser.Parse(commandLineArguments);
-
-          extraArguments = commandLineArguments;
-
+            argumentParser.Parse(commandLineArguments);
+            this.commandLineArguments = commandLineArguments;
         }
-
-
-
-          /*
-            for (int i = 0; i < commandLineArguments.Length; i++) {
-                if (i < commandLineArguments.Length - 1) {
-                    switch (commandLineArguments[i]) {
-                        case "-c":
-                            configuration.LoadXml(folderModel.FileContent(commandLineArguments[i + 1]));
-                            break;
-                        case "-a":
-                            appConfigArgument = commandLineArguments[i + 1];
-                            break;
-                        case "-r":
-                            configuration.GetItem<Settings>().Runner = commandLineArguments[i + 1];
-                            break;
-                        default:
-                            extraArguments.Add(commandLineArguments[i]);
-                            continue;
-                    }
-                    i++;
-                }
-                else extraArguments.Add(commandLineArguments[i]);
-            }
-        }*/
 
         bool ValidateArguments() {
             if (string.IsNullOrEmpty(configuration.GetItem<Settings>().Runner)) {
@@ -165,7 +135,7 @@ namespace fitSharp.Machine.Application {
         }
 
         private void Run() {
-            result = Runner.Run(extraArguments, configuration, progressReporter);
+            result = Runner.Run(commandLineArguments, configuration, progressReporter);
         }
     }
 }
