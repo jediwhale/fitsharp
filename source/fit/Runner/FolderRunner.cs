@@ -53,6 +53,9 @@ namespace fit.Runner {
                         case "o":
                             configuration.GetItem<Settings>().OutputFolder = argument;
                             break;
+                        case "d":
+                            configuration.GetItem<Settings>().DryRun = true;
+                            break;
                         case "x":
                             foreach (string pattern in argument.Split(';')) {
                                 configuration.GetItem<FileExclusions>().Add(pattern);
