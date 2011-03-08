@@ -29,6 +29,7 @@ namespace fitSharp.Machine.Application {
         public string Behavior { get; set; }
         public string Culture { get; set; }
         public string AppConfigFile { get; set; }
+        public bool DryRun { get; set; }
 
         public CultureInfo CultureInfo
         {
@@ -80,6 +81,7 @@ namespace fitSharp.Machine.Application {
             Runner = other.Runner;
             XmlOutput = other.XmlOutput;
             Culture = other.Culture;
+            DryRun = other.DryRun;
         }
 
         public Copyable Copy() {
