@@ -19,6 +19,7 @@ namespace fit.Runner {
 	    private readonly ProgressReporter myReporter;
 	    private ResultWriter resultWriter;
 	    private readonly Configuration configuration;
+      private int htmlCount;
 
 		public SuiteRunner(Configuration configuration, ProgressReporter theReporter) {
 		    TestCounts = new TestCounts();
@@ -58,6 +59,7 @@ namespace fit.Runner {
             if (suiteTearDown != null) ExecuteStoryPage(suiteTearDown);
 	        theSuite.Finish();
 	    }
+
 
 	    private void ExecuteStoryPage(StoryTestPage page) {
 	        try {

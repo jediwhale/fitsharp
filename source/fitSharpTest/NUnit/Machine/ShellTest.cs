@@ -21,15 +21,15 @@ namespace fitSharp.Test.NUnit.Machine {
 
         [Test] public void AdditionalArgumentsArePassed() {
             RunShell(new [] {"more", "-r", typeof(SampleRunner).FullName, "stuff"});
-            Assert.AreEqual(2, SampleRunner.LastArguments.Length);
+            Assert.AreEqual(4, SampleRunner.LastArguments.Length);
             Assert.AreEqual("more", SampleRunner.LastArguments[0]);
-            Assert.AreEqual("stuff", SampleRunner.LastArguments[1]);
+            Assert.AreEqual("-r", SampleRunner.LastArguments[1]);
         }
 
         [Test] public void CustomAppConfigIsUsed() {
             int result = RunShell(new[] {"-a", "fitSharpTest.dll.alt.config",
                 "-r", typeof (SampleRunner).FullName + "," + typeof (SampleRunner).Assembly.CodeBase} );
-            Assert.AreEqual(606, result);
+            Assert.AreEqual(707, result);
         }
 
         [Test] public void CustomAppConfigFromSuiteConfigIsUsed() {

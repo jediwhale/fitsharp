@@ -1,4 +1,4 @@
-// Copyright © 2011 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2011 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -14,10 +14,12 @@ using fitSharp.Machine.Engine;
 namespace fitSharp.Machine.Application {
 
     public class Shell: MarshalByRefObject {
-        readonly List<string> extraArguments = new List<string>();
+        string[] extraArguments;
+        
         readonly ProgressReporter progressReporter;
         readonly FolderModel folderModel;
         readonly Configuration configuration = new Configuration();
+        ArgumentParser argumentParser = new ArgumentParser();
 
         string appConfigArgument;
         private int result;
@@ -88,9 +90,25 @@ namespace fitSharp.Machine.Application {
                 new Action<AppDomain>(AppDomain.Unload).BeginInvoke(newDomain, null, null);
             }
             return result;
+<<<<<<< HEAD
         }
 
-        void ParseArguments(string[] commandLineArguments) {
+        void ParseArguments(string[] commandLineArguments)
+        {
+          
+
+          argumentParser.AddArgumentHandler("c", (value) => { suiteConfig = value; });
+          argumentParser.AddArgumentHandler("a", (value) => { appConfigArgument = value; });
+          argumentParser.AddArgumentHandler("r", (value) => { configuration.GetItem<Settings>().Runner = value; });
+          argumentParser.Parse(commandLineArguments);
+
+          extraArguments = commandLineArguments;
+
+        }
+
+
+
+          /*
             for (int i = 0; i < commandLineArguments.Length; i++) {
                 if (i < commandLineArguments.Length - 1) {
                     switch (commandLineArguments[i]) {
@@ -111,7 +129,7 @@ namespace fitSharp.Machine.Application {
                 }
                 else extraArguments.Add(commandLineArguments[i]);
             }
-        }
+        }*/
 
         bool ValidateArguments() {
             if (string.IsNullOrEmpty(configuration.GetItem<Settings>().Runner)) {
@@ -147,7 +165,7 @@ namespace fitSharp.Machine.Application {
         }
 
         private void Run() {
-            result = Runner.Run(extraArguments.ToArray(), configuration, progressReporter);
+            result = Runner.Run(extraArguments, configuration, progressReporter);
         }
     }
 }
