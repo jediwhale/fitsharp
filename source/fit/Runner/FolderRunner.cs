@@ -22,8 +22,8 @@ namespace fit.Runner {
             return result;
         }
 
-        private int Run(Configuration configuration, ICollection<string> theArguments) {
-            ParseArguments(configuration, theArguments);
+        private int Run(Configuration configuration, string[] commandLineArguments) {
+            ParseArguments(configuration, commandLineArguments);
             myRunner = new SuiteRunner(configuration, myProgressReporter);
             myRunner.Run(
                 new StoryTestFolder(configuration, new FileSystemModel(configuration.GetItem<Settings>().CodePageNumber)),
@@ -33,43 +33,18 @@ namespace fit.Runner {
 
         public string Results {get { return myRunner.TestCounts.Description; }}
 
-        private static void ParseArguments(Configuration configuration, ICollection<string> theArguments) {
-            if (theArguments.Count == 0) {
-                return;
-            }
-            string lastSwitch = string.Empty;
-            foreach (string argument in theArguments) {
-                if (argument.StartsWith("-")) {
-                    lastSwitch = argument.Substring(1).ToLower();
-                }
-                else {
-                    switch (lastSwitch) {
-                        case "i":
-                            configuration.GetItem<Settings>().InputFolder = argument;
-                            break;
-                        case "o":
-                            configuration.GetItem<Settings>().OutputFolder = argument;
-                            break;
-                        case "x":
-                            foreach (string pattern in argument.Split(';')) {
-                                configuration.GetItem<FileExclusions>().Add(pattern);
-                            }
-                            break;
-                    }
+        private static void ParseArguments(Configuration configuration, string[] commandLineArguments) {
+            ArgumentParser argumentParser = new ArgumentParser();
+            argumentParser.AddArgumentHandler("i", (value) => { configuration.GetItem<Settings>().InputFolder = value; });
+            argumentParser.AddArgumentHandler("o", (value) => { configuration.GetItem<Settings>().OutputFolder = value; });
+            argumentParser.AddSwitchHandler("d", () => { configuration.GetItem<Settings>().DryRun = true; });
+            argumentParser.AddArgumentHandler("x", (value) => {
+                foreach (string pattern in value.Split(';')) {
+                    configuration.GetItem<FileExclusions>().Add(pattern);
                 }
             }
-            if (configuration.GetItem<Settings>().InputFolder == null)
-                throw new FormatException("Missing input folder");
-            if (configuration.GetItem<Settings>().OutputFolder == null)
-                throw new FormatException("Missing output folder");
+          }
         }
-
-        //private static void LoadAssemblies(string theAssemblyList) {
-        //    foreach (string assemblyName in theAssemblyList.Split(';')) {
-        //        //Configuration.Instance.Assemblies.Add(assemblyName);
-        //        Configuration.Instance.ApplicationUnderTest.AddAssembly(assemblyName);
-        //    }
-        //}
 	    
         private ProgressReporter myProgressReporter;
         private SuiteRunner myRunner;
