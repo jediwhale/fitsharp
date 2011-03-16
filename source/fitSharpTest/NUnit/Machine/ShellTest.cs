@@ -19,7 +19,8 @@ namespace fitSharp.Test.NUnit.Machine {
             Assert.AreEqual(SampleRunner.Result, result);
         }
 
-        [Test] public void AdditionalArgumentsArePassed() {
+        [Test]
+        public void AllArgumentsAreForwardedToRunner() {
             RunShell(new [] {"more", "-r", typeof(SampleRunner).FullName, "stuff"});
             Assert.AreEqual(4, SampleRunner.LastArguments.Length);
             Assert.AreEqual("more", SampleRunner.LastArguments[0]);
@@ -29,7 +30,7 @@ namespace fitSharp.Test.NUnit.Machine {
         [Test] public void CustomAppConfigIsUsed() {
             int result = RunShell(new[] {"-a", "fitSharpTest.dll.alt.config",
                 "-r", typeof (SampleRunner).FullName + "," + typeof (SampleRunner).Assembly.CodeBase} );
-            Assert.AreEqual(707, result);
+            Assert.AreEqual(606, result);
         }
 
         [Test] public void CustomAppConfigFromSuiteConfigIsUsed() {

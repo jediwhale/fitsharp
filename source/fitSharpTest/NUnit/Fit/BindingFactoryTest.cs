@@ -47,7 +47,7 @@ namespace fitSharp.Test.NUnit.Fit {
         }
 
         class TestTarget: TargetObjectProvider {
-            public string NewMember;
+            public string NewMember = null; // initialization to suppress warning
             public object GetTargetObject() { return this; }
         }
     }

@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- fitSharp
+Copyright © Syterra Software Inc. All rights reserved.
+The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
+to be bound by the terms of this license. You must not remove this notice, or any other, from this software. -->
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+ <link href="../fitsharp1.css" type="text/css" rel="stylesheet">
+  <link href="fit.css" type="text/css" rel="stylesheet">
+  <title>Folder Runner  With Tags</title>
+</head>
+<body>
+<div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
+<div class="pagename">Tagging test pages</div>
+<div class="content">This is a description of the tagging feature of <a href="../Fit/FolderRunner.html">Folder Runner</a>.<p>
+  Fit's native mechanism for grouping test pages is in <i>suites</i>. In the 
+  case of <a href="../Fit/FolderRunner.html">Folder Runner</a>, a suite is 
+  represented by a file system folder, so test pages are organized in a suite 
+  hierarchy where every suite has three more or less explicit functions;</p>
+  <ol>
+    <li>Group related test pages together and organize them in a logical manner 
+    </li>
+    <li>Allow for execution of a sub-set of tests, e.g. use -i to select a 
+    subfolder or single page of the entire suite</li>
+    <li>Act as a context for setup/teardown and suite setup/teardown, to provide 
+    test pages with reusable before/after steps.</li>
+  </ol>
+  <p>
+  Unfortunately, suite hierarchies are naturally one-to-many, i.e. a test page 
+  can only belong to one single suite.</p>
+  <p>
+  Tagging, on the other hand, is more free-form. It's naturally many-to-many, 
+  i.e. many test pages can share a single tag, and a single test page can have 
+  many tags.
+  This is primarily useful as an additional selection mechanism for #2 above. 
+  The tag selection and suite/page selection are orthogonal and can be used 
+  together to select tagged pages across multiple suites.</p>
+  <h4>Tagging</h4>
+  <p>You tag a page by adding an HTML element with id <code>fit_tags</code>. For 
+  example, to tag a page with &quot;ShoppingBasket&quot; 
+  and &quot;Regression&quot;, add an element like this;</p>
+  <p>
+  <pre>    &lt;p <b>id=&quot;fit_tags&quot;</b>&gt;Tags: ShoppingBasket,Regression&lt;/p&gt;</pre>
+  </p>
+  <p>The highlighted id attribute is what marks this as a tag specification. Note that you can use any element type; &lt;p&gt;, &lt;h1&gt;, &lt;div&gt;, &lt;span&gt;, etc, 
+  as long as it has an id of <code>fit_tags</code>. Also, you are free to add style attributes to highlight or hide the tag 
+  specification, so you can format pages to your taste. We prefer to keep tags visible, because it makes sense for users 
+  editing the page to know which tags apply to it.</p>
+  <p>The format of the element contents allows any prefix label (<i>Tags:</i> 
+  in the example above), so you can use a localized label as long as it ends 
+  with a colon. The prefix label is optional, if there's no colon in the 
+  contents, it's assumed that there is no prefix label, and the entire string 
+  will be interpreted as a tag list. </p>
+  <p>A tag list is simply a comma-separated 
+  list of tag names. The only rules for tag names are;</p>
+  <ul>
+    <li>They must not contain a comma</li>
+    <li>They must not have leading or trailing whitespace</li>
+    <li>They should not contain wildcard characters &quot;*&quot; and &quot;?&quot;, because those 
+    are reserved for wildcard filtering</li>
+    <li>They should not contain the &quot;:&quot; character, because the first colon is 
+    used to locate the optional prefix label. Colons in tags works well as long 
+    as there is a prefix label.</li>
+    <li>The tag list must not contain HTML markup, it is expected to be plain 
+    text</li>
+  </ul>
+  <p>For an example of a tagged page, see
+  <a href="SampleInputFiles/SampleSimpleTest.html">SampleSimpleTest.html</a>.</p>
+
+  <h4>Filtering</h4>
+  <p>The <a href="../Fit/FolderRunner.html">Folder Runner</a> command-line 
+  allows you to specify a tag list, which is used as a filter to only execute 
+  the pages that match the command-line argument. Wildcards are supported in 
+  filters, so you can match partial tag names easily.</p>
+  <p>Given the example with &quot;ShoppingBasket, Regression&quot; above, the page will be 
+  executed if;</p>
+  <ul>
+    <li>No tag filter list is provided on the command-line</li>
+    <li>&quot;ShoppingBasket&quot; is provided</li>
+    <li>&quot;ShoppingBasket, Regression&quot; is provided</li>
+    <li>&quot;shoppingbasket, regression&quot; is provided, because matching is case 
+    insensitive</li>
+    <li>&quot;Reg*&quot; is provided, because matching supports wildcards</li>
+  </ul>
+  <p>But it will not be executed if;</p>
+  <ul>
+    <li>&quot;Checkout,Regression&quot; is provided, because it doesn't have the Checkout 
+    tag</li>
+    <li>&quot;ShoppingBasket, WorkInProgress&quot; is provided, because it doesn't have 
+    the WorkInProgress tag</li>
+  </ul>
+  <p>That is, all tag filters provided on the command-line must match the page for it 
+  to be executed.</p>
+  <p>If you take care with tag naming, you can use wildcard filtering to do an 
+  OR-match of pages, which is otherwise not supported. A common tag prefix can 
+  be used to allow tag filters to group these tags together. For example, pages 
+  tagged;</p>
+  <ul>
+    <li>&quot;feature.notifications.email&quot;</li>
+    <li>&quot;feature.notifications.twitter&quot;</li>
+    <li>&quot;feature.notifications.phone&quot;</li>
+  </ul>
+  <p>can all be executed with a tag filter of &quot;feature.notifications.*&quot;.</p>
+  <p>Note that there are no filtering mechanisms for executing entirely untagged pages or 
+  pages <i>without</i> a specific tag.</p>
+
+
+</div>
+
+</body>
+</html>

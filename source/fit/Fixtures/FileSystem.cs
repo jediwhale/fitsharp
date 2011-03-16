@@ -21,7 +21,7 @@ namespace fit {
             string secondContent = reader.ReadToEnd().Trim();
             reader.Close();
             return firstContent.Replace("\r\n","\n") == secondContent.Replace("\r\n","\n");
-        }
+        }        
 
         public void MakeEmptyFolder(string theFolder) {
             try {

@@ -7,6 +7,9 @@ using System;
 using System.Configuration;
 using System.IO;
 using fitSharp.Machine.Model;
+using System.Threading;
+using System.Globalization;
+using System.Linq;
 
 namespace fitSharp.Machine.Application {
     public class Settings: Copyable {
@@ -18,21 +21,14 @@ namespace fitSharp.Machine.Application {
         private const int DefaultCodePage = 1252;
 
         public string ApartmentState { get; set; }
-        private string appConfigFile;
         public string CodePage { get; set; }
         public string InputFolder { get; set; }
         public string OutputFolder { get; set; }
         public string Runner { get; set; }
         public string XmlOutput { get; set; }
         public string Behavior { get; set; }
-
-        public string AppConfigFile {
-            get { return appConfigFile; }
-            set {
-                appConfigFile = Path.GetFullPath(value);
-                AppDomain.CurrentDomain.SetData("APP_CONFIG_FILE", value);
-            }
-        }
+        public string AppConfigFile { get; set; }
+        public string TagList { get; set; }        
 
         public int CodePageNumber {
             get {
@@ -54,13 +50,14 @@ namespace fitSharp.Machine.Application {
 
         public Settings(Settings other) {
             ApartmentState = other.ApartmentState;
-            appConfigFile = other.appConfigFile;
+            AppConfigFile = other.AppConfigFile;
             Behavior = other.Behavior;
             CodePage = other.CodePage;
             InputFolder = other.InputFolder;
             OutputFolder = other.OutputFolder;
             Runner = other.Runner;
             XmlOutput = other.XmlOutput;
+            TagList = other.TagList;
         }
 
         public Copyable Copy() {

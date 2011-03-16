@@ -26,6 +26,6 @@ namespace fit.Test.NUnit {
             int tearDown = folders.FileContent("out\\reportIndex.html").IndexOf("suiteteardown.html");
             int otherFile = folders.FileContent("out\\reportIndex.html").IndexOf("zzzz.html");
             Assert.IsTrue(otherFile < tearDown);
-        }
+        }    
     }
 }

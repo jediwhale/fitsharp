@@ -1,3 +1,4 @@
+
 // Copyright © 2010 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -15,11 +16,12 @@ using fitSharp.Machine.Model;
 namespace fit.Runner {
 	public class SuiteRunner {
 	    
-	    public TestCounts TestCounts { get; private set; }
-	    private readonly ProgressReporter myReporter;
-	    private ResultWriter resultWriter;
-	    private readonly Configuration configuration;
-      private int htmlCount;
+        public TestCounts TestCounts { get; private set; }
+        private readonly ProgressReporter myReporter;
+        private ResultWriter resultWriter;
+        private readonly Configuration configuration;
+
+        private delegate void PageAction(StoryTestPage page);
 
 		public SuiteRunner(Configuration configuration, ProgressReporter theReporter) {
 		    TestCounts = new TestCounts();
@@ -31,7 +33,7 @@ namespace fit.Runner {
             resultWriter = CreateResultWriter();
             if (theSelectedFile.Length > 0) theSuite.Select(theSelectedFile);
 
-	        RunFolder(theSuite);
+            RunFolder(theSuite);
 
             resultWriter.WriteFinalCount(TestCounts);
             resultWriter.Close();
@@ -46,7 +48,7 @@ namespace fit.Runner {
 	    }
 
 	    private void RunFolder(StoryTestSuite theSuite) {
-	        StoryTestPage suiteSetUp = theSuite.SuiteSetUp;
+             StoryTestPage suiteSetUp = theSuite.SuiteSetUp;
             if (suiteSetUp != null) ExecuteStoryPage(suiteSetUp);
             foreach (StoryTestPage testPage in theSuite.Pages) {
                 ExecuteStoryPage(testPage);
@@ -58,9 +60,8 @@ namespace fit.Runner {
 	        StoryTestPage suiteTearDown = theSuite.SuiteTearDown;
             if (suiteTearDown != null) ExecuteStoryPage(suiteTearDown);
 	        theSuite.Finish();
-	    }
-
-
+            }
+	    
 	    private void ExecuteStoryPage(StoryTestPage page) {
 	        try {
                 page.ExecuteStoryPage(ExecutePage, resultWriter, HandleTestStatus);

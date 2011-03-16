@@ -247,7 +247,7 @@ namespace fit
             }
         }
 
-	    public Cell Value { get { return this; } }
+	    public new Cell Value { get { return this; } }
 	    public bool IsLeaf { get { return Parts == null; } }
 	    public ReadList<Tree<Cell>> Branches { get { return new ParseList(this); } }
         public Parse ParseCell { get { return this; }}

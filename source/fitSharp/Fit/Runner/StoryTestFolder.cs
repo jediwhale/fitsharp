@@ -25,6 +25,7 @@ namespace fitSharp.Fit.Runner {
 
     public class StoryTestFolder: StoryTestSuite {
         private readonly Configuration configuration;
+        private List<StoryTestPageFilter> pageFilters = new List<StoryTestPageFilter>();
  
         public StoryTestFolder(Configuration configuration, FolderModel theFolderModel)
             : this(configuration, 
@@ -56,10 +57,26 @@ namespace fitSharp.Fit.Runner {
                     if (new StoryFileName(fileName).IsSuiteTearDown) continue;
                     if (configuration.GetItem<FileExclusions>().IsExcluded(fileName)) continue;
                     if (mySelection != null && !filePath.EndsWith(mySelection)) continue;
+                    
                     var file = new StoryTestFile(filePath, this, myFolderModel);
+                    if (!SatisfiesFilters(file)) continue;
+                    
                     yield return file;
                 }
             }
+        }
+
+        public void AddPageFilter(StoryTestPageFilter filter) {
+            pageFilters.Add(filter);
+        }
+
+        private bool SatisfiesFilters(StoryTestPage page) {
+            foreach (StoryTestPageFilter filter in pageFilters) {
+                if (!filter.Matches(page))
+                    return false;
+            }
+
+            return true;
         }
 
         public StoryTestPage SuiteSetUp {
@@ -80,9 +97,18 @@ namespace fitSharp.Fit.Runner {
                     string relativeFolder = inputFolder.Substring(Name.Length + 1);
                     if (configuration.GetItem<FileExclusions>().IsExcluded(relativeFolder)) continue;
                     if (mySelection != null && !mySelection.StartsWith(inputFolder)) continue;
-                    yield return new StoryTestFolder(configuration, inputFolder, Path.Combine(OutputPath, relativeFolder), mySelection, myFolderModel, this);
+                    yield return CreateChildSuite(inputFolder, relativeFolder);
                 }
             }
+        }
+
+        private StoryTestSuite CreateChildSuite(string inputFolder, string relativeFolderPath) {
+            StoryTestFolder folder = new StoryTestFolder(configuration, inputFolder, Path.Combine(OutputPath, relativeFolderPath), mySelection, myFolderModel, this);
+
+            foreach (StoryTestPageFilter pageFilter in pageFilters)
+                folder.AddPageFilter(pageFilter);
+
+            return folder;
         }
 
         public void Finish() {

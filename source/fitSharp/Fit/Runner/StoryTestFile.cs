@@ -13,6 +13,7 @@ namespace fitSharp.Fit.Runner {
 
     public interface StoryTestPage {
         StoryPageName Name { get; }
+        string Content { get; }
         //todo: too many args
         void ExecuteStoryPage(Action<StoryPageName, StoryTestString, Action<StoryTestString, TestCounts>, Action> executor, ResultWriter resultWriter, Action<TestCounts> handler);
     }
