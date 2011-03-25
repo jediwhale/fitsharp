@@ -103,6 +103,7 @@ namespace fitSharp.Test.NUnit.Fit {
                     testStatus.LastAction = "blah blah";
                     return result;
                 });
+            processor.Setup(p => p.Compare(It.IsAny<TypedValue>(), It.IsAny<Tree<Cell>>())).Returns(true);
             processor.Setup(p => p.TestStatus).Returns(testStatus);
         }
     }

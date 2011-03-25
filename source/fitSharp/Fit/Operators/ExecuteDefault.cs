@@ -49,7 +49,8 @@ namespace fitSharp.Fit.Operators {
                     Processor.TestStatus.MarkRight(parameters.Cell);
                 }
                 else {
-                    Processor.TestStatus.MarkWrong(parameters.Cell, actual.ValueString);
+                    var actualCell = Processor.Compose(actual);
+                    Processor.TestStatus.MarkWrong(parameters.Cell, actualCell.Value.Text);
                 }
             }
             catch (IgnoredException) {}
