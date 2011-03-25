@@ -140,7 +140,7 @@ namespace fitSharp.Parser {
             }
 
             public int FindPosition(string theToken) {
-                int start = myInput.IndexOf("<" + theToken, myPosition, StringComparison.OrdinalIgnoreCase);
+                int start = myInput.IndexOf("<" + theToken, myPosition, Math.Min(EndPosition, myInput.Length) - myPosition, StringComparison.OrdinalIgnoreCase);
                 if (start < 0 || start > EndPosition) return -1;
                 int end = myInput.IndexOf('>', start);
                 if (end < 0) return -1;
