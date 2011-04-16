@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Acceptance\Slim\SlimDomain.cs" />
+    <Compile Include="Double\Person.cs" />
     <Compile Include="Double\SampleClassTwo.cs" />
     <Compile Include="Double\TestSocket.cs" />
     <Compile Include="NUnit\Fit\BindingFactoryTest.cs" />
