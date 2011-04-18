@@ -65,6 +65,7 @@
     <Compile Include="NUnit\Fit\ConfigureFixtureTest.cs" />
     <Compile Include="NUnit\Fit\ParseByteArrayTest.cs" />
     <Compile Include="NUnit\Fit\ParseDateTest.cs" />
+    <Compile Include="NUnit\Fit\ParseStoryTestStringTest.cs" />
     <Compile Include="NUnit\Fit\ParseSymbolTest.cs" />
     <Compile Include="NUnit\Fit\XmlResultWriterTest.cs" />
     <Compile Include="NUnit\IO\ElapsedTimeTest.cs" />

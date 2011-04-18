@@ -21,7 +21,7 @@ namespace fitSharp.Fit.Fixtures {
                 new CellTree());
             result.ThrowExceptionIfNotValid();
             if (result.IsVoid) return;
-            table.Branches[0].Branches[2].Value.SetAttribute(CellAttribute.Extension, result.ValueString);
+            table.Branches[0].Branches[2].Value.SetAttribute(CellAttribute.Folded, result.ValueString);
         }
     }
 }

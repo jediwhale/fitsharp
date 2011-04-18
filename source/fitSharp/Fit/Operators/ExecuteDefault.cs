@@ -71,7 +71,7 @@ namespace fitSharp.Fit.Operators {
 
         void MarkCellWithLastResults(ExecuteParameters parameters, Action<ExecuteParameters> markWithCounts) {
             if (parameters.Cells != null && !string.IsNullOrEmpty(Processor.TestStatus.LastAction)) {
-                parameters.Cell.SetAttribute(CellAttribute.Extension, Processor.TestStatus.LastAction);
+                parameters.Cell.SetAttribute(CellAttribute.Folded, Processor.TestStatus.LastAction);
                 markWithCounts(parameters);
             }
             Processor.TestStatus.LastAction = null;

@@ -24,6 +24,9 @@ The file format is XML. Here is a sample showing the configurable items:<br>
         &lt;AddAssembly>myTests.dll&lt;/AddAssembly>
         &lt;AddNamespace>myTests&lt;/AddNamespace>
     &lt;/ApplicationUnderTest>
+    &lt;Culture>
+        &lt;Name>en-US&lt;/Name>
+    &lt;/Culture>
     &lt;Settings>
         &lt;ApartmentState>STA&lt;/ApartmentState>
         &lt;AppConfigFile>myapp.config&lt;/AppConfigFile>
@@ -66,17 +69,20 @@ These are the behavior keywords:<ul><li><i>std</i> - removes leading and trailin
 <span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">Code Page</span><br>
 The default code page for file I/O is 1252 (Windows encoding). It can be set to other values to process Unicode, UTF-8 and other encodings. See the MSDN documentation for code page values.<br>
 <br>
+<span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">Culture</span><br>
+The name of the culture to use for test execution. The name "Invariant" can be used for the invariant culture..<br>
+<br>
 <span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">File Exclusions</span><br>
-Regular expression patterns can be added to exclude files from Folder Runner processing.<br>
+Regular expression patterns can be added to exclude files from <a href="../Fit/FolderRunner.html">Folder Runner</a>processing.<br>
 <br>
 <span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">Input Folder</span><br>
-The input folder for Folder Runner.<br>
+The input folder for <a href="../Fit/FolderRunner.html">Folder Runner</a>.<br>
  <br>
 <span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">Fit.Operators/Slim.Operators</span><br>
-Operators can be added or removed from the Operator List used by Fit and Slim.<br>
+Operators can be added or removed from the list of <a href="../Fit/CellOperators.html">Cell Operators</a> used by Fit and Slim.<br>
 <br>
 <span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">Output Folder</span><br>
-The output folder for Folder Runner.<br>
+The output folder for <a href="../Fit/FolderRunner.html">Folder Runner</a>.<br>
 <br>
 <span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">Runner</span><br>
 The class that executes the tests.<br>

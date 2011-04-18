@@ -10,7 +10,7 @@ namespace fitSharp.Machine.Model {
         Body,
         EndTag,
         Exception,
-        Extension,
+        Folded,
         Formatted,
         InformationPrefix,
         InformationSuffix,
