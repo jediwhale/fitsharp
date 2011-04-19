@@ -4,10 +4,10 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using fit.Model;
-using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
 using fitSharp.Fit.Service;
 using NUnit.Framework;
+using TestStatus=fitSharp.Fit.Model.TestStatus;
 
 namespace fit.Test.NUnit {
     [TestFixture]

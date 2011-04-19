@@ -99,7 +99,8 @@ namespace dbfit.fixture {
                     }
                     else // don't add to paramAccessors
                     {
-                        columnAccessors.Assign(paramName, new IdRetrievalAccessor(dbEnvironment, currentColumn.DotNetType));
+                        //columnAccessors.Assign(paramName, new IdRetrievalAccessor(dbEnvironment, currentColumn.DotNetType));
+                        columnAccessors.Assign(paramName, new IdRetrievalAccessor(dbEnvironment, currentColumn.DotNetType,tableName));
                     }
                 }
                 else // not output
@@ -111,7 +112,7 @@ namespace dbfit.fixture {
             accessors = paramAccessors.ToArray();
 		}
 
-	    public RuntimeMember Find(IdentifierName memberName, int parameterCount, Type[] parameterTypes) {
+	    public RuntimeMember Find(IdentifierName memberName, int parameterCount, IList<Type> parameterTypes) {
 	        return columnAccessors.Find(memberName, parameterCount, accessor => memberName.Matches(accessor.Key));
 	    }
 	}

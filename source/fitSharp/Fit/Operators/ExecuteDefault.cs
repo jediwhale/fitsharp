@@ -38,7 +38,7 @@ namespace fitSharp.Fit.Operators {
         void Input(ExecuteContext context, ExecuteParameters parameters) {
             var beforeCounts = new TestCounts(Processor.TestStatus.Counts);
             Processor.InvokeWithThrow(context.SystemUnderTest, GetMemberName(parameters.Members),
-                             new TreeList<Cell>().AddBranch(parameters.Cells));
+                             new CellTree(parameters.Cells));
             MarkCellWithLastResults(parameters, p => MarkCellWithCounts(p, beforeCounts));
         }
 
@@ -49,7 +49,8 @@ namespace fitSharp.Fit.Operators {
                     Processor.TestStatus.MarkRight(parameters.Cell);
                 }
                 else {
-                    Processor.TestStatus.MarkWrong(parameters.Cell, actual.ValueString);
+                    var actualCell = Processor.Compose(actual);
+                    Processor.TestStatus.MarkWrong(parameters.Cell, actualCell.Value.Text);
                 }
             }
             catch (IgnoredException) {}
@@ -70,7 +71,7 @@ namespace fitSharp.Fit.Operators {
 
         void MarkCellWithLastResults(ExecuteParameters parameters, Action<ExecuteParameters> markWithCounts) {
             if (parameters.Cells != null && !string.IsNullOrEmpty(Processor.TestStatus.LastAction)) {
-                parameters.Cell.SetAttribute(CellAttribute.Extension, Processor.TestStatus.LastAction);
+                parameters.Cell.SetAttribute(CellAttribute.Folded, Processor.TestStatus.LastAction);
                 markWithCounts(parameters);
             }
             Processor.TestStatus.LastAction = null;

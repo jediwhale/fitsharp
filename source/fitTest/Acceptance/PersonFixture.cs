@@ -5,7 +5,7 @@
 
 using System;
 using System.Collections;
-using fit.Test.NUnit;
+using fitSharp.Test.Double;
 
 namespace fit.Test.Acceptance
 {

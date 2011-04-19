@@ -4,24 +4,36 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
     public class ParseArray: CellOperator, ParseOperator<Cell> {
         public bool CanParse(Type type, TypedValue instance, Tree<Cell> parameters) {
-            return type.IsArray;
+            return type != typeof (string)
+                && typeof (IEnumerable).IsAssignableFrom(type)
+                && parameters.Branches.Count == 0;
         }
 
         public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
 			string[] strings = parameters.Value.Text.Split(new [] {','});
 
-			Array list = Array.CreateInstance(type.GetElementType(), strings.Length);
-			for (int i = 0; i < strings.Length; i++) {
-                //todo: use cellsubstring?
-			    list.SetValue(Processor.ParseString(type.GetElementType(), strings[i]).Value, i);
-			}
-
+            if (type.IsArray) {
+			    Array array = Array.CreateInstance(type.GetElementType(), strings.Length);
+			    for (int i = 0; i < strings.Length; i++) {
+                    //todo: use cellsubstring?
+			        array.SetValue(Processor.ParseString(type.GetElementType(), strings[i]).Value, i);
+			    }
+                return new TypedValue(array);
+            }
+            Type elementType = type.GetGenericArguments()[0];
+            Type resultType = typeof (List<>).MakeGenericType(new[] {elementType});
+            var list = (IList) Activator.CreateInstance(resultType);
+            foreach (string element in strings) {
+                list.Add(Processor.ParseString(elementType, element).Value);
+            }
             return new TypedValue(list);
         }
     }

@@ -82,7 +82,7 @@ namespace fitSharp.Fit.Service {
         }
 
         public void Do(Tree<Cell> cell) {
-            operation.Create(adapter, memberName, new TreeList<Cell>().AddBranch(cell));
+            operation.Create(adapter, memberName, new CellTree(cell));
         }
 
         public bool IsCheck { get { return false; } }

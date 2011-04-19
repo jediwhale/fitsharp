@@ -12,6 +12,7 @@ namespace fitSharp.Machine.Engine {
         TypedValue Invoke(object[] parameters);
         bool MatchesParameterCount(int count);
         Type GetParameterType(int index);
+        string GetParameterName(int index);
         Type ReturnType { get; }
         string Name { get; }
     }
@@ -26,6 +27,7 @@ namespace fitSharp.Machine.Engine {
         } 
 
         public string Name { get { return info.Name; }}
+        public virtual string GetParameterName(int index) { return info.Name; }
 
         public abstract TypedValue Invoke(object[] parameters);
         public abstract bool MatchesParameterCount(int count);
@@ -42,6 +44,10 @@ namespace fitSharp.Machine.Engine {
 
         public override Type GetParameterType(int index) {
             return Info.GetParameters()[index].ParameterType;
+        }
+
+        public override string GetParameterName(int index) {
+            return Info.GetParameters()[index].Name;
         }
 
         public override TypedValue Invoke(object[] parameters) {
@@ -126,6 +132,10 @@ namespace fitSharp.Machine.Engine {
 
         public override Type GetParameterType(int index) {
             return Info.GetParameters()[index].ParameterType;
+        }
+
+        public override string GetParameterName(int index) {
+            return Info.GetParameters()[index].Name;
         }
 
         public override bool MatchesParameterCount(int count) { return Info.GetParameters().Length == count; }

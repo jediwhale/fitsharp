@@ -44,25 +44,16 @@ namespace fit.Runner {
                 }
                 else {
                     switch (lastSwitch) {
-                        case "a":
-                            //LoadAssemblies(argument);
-                            break;
-                        case "c":
-                            //Configuration.Instance.LoadFile(argument);
-                            break;
                         case "i":
                             configuration.GetItem<Settings>().InputFolder = argument;
                             break;
                         case "o":
-                            //Configuration.Instance.Settings.OutputFolder = argument;
+                            configuration.GetItem<Settings>().OutputFolder = argument;
                             break;
                         case "x":
                             foreach (string pattern in argument.Split(';')) {
                                 configuration.GetItem<FileExclusions>().Add(pattern);
                             }
-                            break;
-                        default:
-                            //throw new FormatException("Invalid switch");
                             break;
                     }
                 }

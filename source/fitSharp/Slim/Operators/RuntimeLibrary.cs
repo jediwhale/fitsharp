@@ -1,4 +1,4 @@
-﻿// Copyright © 2010 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2011 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -17,12 +17,12 @@ namespace fitSharp.Slim.Operators {
 
         public TypedValue Invoke(TypedValue instance, string memberName, Tree<string> parameters) {
             var runtime = new DefaultRuntime<string, Processor<string>> {Processor = Processor};
-            TypedValue result = runtime.Invoke(instance, memberName, parameters);
-            if (IsMemberMissing(result)) {
-                foreach (TypedValue libraryInstance in Processor.LibraryInstances) {
-                    result = runtime.Invoke(libraryInstance, memberName, parameters);
-                    if (!IsMemberMissing(result)) break;
-                }
+            var result = runtime.Invoke(instance, memberName, parameters);
+            if (!IsMemberMissing(result)) return result;
+
+            foreach (var libraryInstance in Processor.LibraryInstances) {
+                var libraryResult = runtime.Invoke(libraryInstance, memberName, parameters);
+                if (!IsMemberMissing(libraryResult)) return libraryResult;
             }
             return result;
         }
@@ -31,7 +31,6 @@ namespace fitSharp.Slim.Operators {
             if (result.IsValid) return false;
             var exception = result.GetValue<System.Exception>();
             return exception != null  && exception is MemberMissingException;
-                
         }
     }
 }

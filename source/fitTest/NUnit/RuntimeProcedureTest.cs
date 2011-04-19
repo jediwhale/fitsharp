@@ -9,6 +9,7 @@ using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
 using Moq;
 using NUnit.Framework;
+using TestStatus=fitSharp.Fit.Model.TestStatus;
 
 namespace fit.Test.NUnit {
     [TestFixture] public class RuntimeProcedureTest {
@@ -104,7 +105,7 @@ namespace fit.Test.NUnit {
         }
 
         static bool IsTableWithVerb(Tree<Cell> t) {
-            return t.Branches[0].Branches.Count == 1 && t.Branches[0].Branches[0].Value.Text == "verb";
+            return t.Branches[0].Branches[0].Branches.Count == 1 && t.Branches[0].Branches[0].Branches[0].Value.Text == "verb";
         }
 
         static bool IsTablesWithVerb(Tree<Cell> t) {

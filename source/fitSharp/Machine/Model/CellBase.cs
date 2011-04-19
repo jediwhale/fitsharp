@@ -15,9 +15,13 @@ namespace fitSharp.Machine.Model {
         public string Text { get; private set; }
         public TypedValue Value { get; set; }
 
-        public CellBase(string text)
-        {
+        public CellBase(string text) {
             Text = text;
+        }
+
+        public CellBase(string text, string tag): this(text) {
+            SetAttribute(CellAttribute.StartTag, "<" + tag + ">");
+            SetAttribute(CellAttribute.EndTag, "</" + tag + ">");
         }
 
         public CellBase(CellBase other) {

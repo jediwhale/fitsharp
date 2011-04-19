@@ -50,12 +50,12 @@ namespace fitSharp.Fit.Runner {
         }
 
         public void HandleNoTest() {
-            myFolderModel.CopyFile(myPath.Name, OutputPath);
+            myFolderModel.CopyFile(myPath.Name, Path.Combine(myFolder.OutputPath, myPath.CopyFileName));
             handler(new TestCounts());
         }
 
         private void WriteFile(StoryTestString testResult, TestCounts counts) {
-            WriteResult(testResult, counts, elapsedTime);
+            WriteResult(testResult, counts);
             resultWriter.WritePageResult(new PageResult(myPath.Name, testResult.ToString(), counts));
             handler(counts);
         }
@@ -87,20 +87,13 @@ namespace fitSharp.Fit.Runner {
             }
         }
 
-        private void WriteResult(StoryTestString testResult, TestCounts counts, ElapsedTime elapsedTime) {
-            string outputFile = OutputPath;
+        private void WriteResult(StoryTestString testResult, TestCounts counts) {
+            string outputFile = Path.Combine(myFolder.OutputPath, myPath.OutputFileName);
             var output = new StringWriter();
             output.Write(testResult);
             output.Close();
             myFolderModel.MakeFile(outputFile, output.ToString());
             myFolder.ListFile(outputFile, counts, elapsedTime);
         }
-
-        private string OutputPath {
-            get {
-                return Path.Combine(myFolder.OutputPath, Path.GetFileName(myPath.Name));
-            }
-        }
     }
-
 }

@@ -1,7 +1,10 @@
-/// Copyright (C) Gojko Adzic 2006-2008 http://gojko.net
-/// Released under GNU GPL 2.0
+// Copyright © 2010 Syterra Software Inc. Includes work Copyright (C) Gojko Adzic 2006-2008 http://gojko.net
+// This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
+// This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
 using System;
-using fitSharp.Machine.Model;
+using fitSharp.Fit.Model;
 
 namespace dbfit.fixture
 {
@@ -30,11 +33,11 @@ namespace dbfit.fixture
 				String requestedEnv=Args[0].ToUpper().Trim();
         IDbEnvironment env; 
         if ("ORACLE".Equals(requestedEnv))
-          env = MakeEnvironment("OracleEnvironment");
+          env = MakeEnvironment("dbfit.OracleEnvironment");
         else if ("SQLSERVER".Equals(requestedEnv))
-          env = MakeEnvironment("SqlServerEnvironment");
+          env = MakeEnvironment("dbfit.SqlServerEnvironment");
         else if ("SQLSERVER2000".Equals(requestedEnv))
-          env = MakeEnvironment("SqlServer2000Environment");
+          env = MakeEnvironment("dbfit.SqlServer2000Environment");
         /*  else if ("DB2".Equals(requestedEnv))
           env = Processor.Create("DB2Environment", new TreeList<Cell>()); */
         else
@@ -46,7 +49,7 @@ namespace dbfit.fixture
 		 }
 
       private IDbEnvironment MakeEnvironment(string name) {
-        return Processor.Create(name, new TreeList<Cell>()).GetValue<IDbEnvironment>();
+        return Processor.Create(name, new CellTree()).GetValue<IDbEnvironment>();
       }
 
       /// <summary>

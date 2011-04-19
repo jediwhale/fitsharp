@@ -52,11 +52,11 @@
   <ItemGroup>
     <Reference Include="Moq, Version=3.1.416.3, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\binary\tools\Moq.dll</HintPath>
+      <HintPath>..\..\binary\tools\moq\Moq.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework, Version=2.5.7.10213, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\binary\tools\nunit.framework.dll</HintPath>
+      <HintPath>..\..\binary\tools\nunit\framework\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -65,25 +65,32 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Acceptance\Slim\SlimDomain.cs" />
+    <Compile Include="Double\Person.cs" />
+    <Compile Include="Double\SampleClassTwo.cs" />
     <Compile Include="Double\TestSocket.cs" />
     <Compile Include="NUnit\Fit\BindingFactoryTest.cs" />
     <Compile Include="NUnit\Fit\CellOperatorsTest.cs" />
     <Compile Include="NUnit\Fit\CellProcessorBaseTest.cs" />
+    <Compile Include="NUnit\Fit\ComposeShowAsOperatorTest.cs" />
     <Compile Include="NUnit\Fit\DefineTest.cs" />
     <Compile Include="NUnit\Fit\ExecuteDefaultTest.cs" />
     <Compile Include="NUnit\Fit\ExecuteInterpretTest.cs" />
     <Compile Include="NUnit\Fit\ExecuteStoryTestTest.cs" />
     <Compile Include="Double\FolderTestModel.cs" />
     <Compile Include="NUnit\Fit\GracefulNameTest.cs" />
+    <Compile Include="NUnit\Fit\ConfigureFixtureTest.cs" />
     <Compile Include="NUnit\Fit\ParseByteArrayTest.cs" />
     <Compile Include="NUnit\Fit\ParseDateTest.cs" />
+    <Compile Include="NUnit\Fit\ParseStoryTestStringTest.cs" />
     <Compile Include="NUnit\Fit\ParseSymbolTest.cs" />
     <Compile Include="NUnit\Fit\XmlResultWriterTest.cs" />
     <Compile Include="NUnit\IO\ElapsedTimeTest.cs" />
     <Compile Include="NUnit\IO\SocketStreamTest.cs" />
     <Compile Include="Double\TestClock.cs" />
     <Compile Include="NUnit\Machine\ApplicationUnderTestTest.cs" />
-    <Compile Include="NUnit\Application\ConfigurationTest.cs" />
+    <Compile Include="NUnit\Machine\ConfigurationTest.cs" />
+    <Compile Include="NUnit\Machine\CultureTest.cs" />
+    <Compile Include="NUnit\Machine\LoggingTest.cs" />
     <Compile Include="NUnit\Parser\HtmlTablesTest.cs" />
     <Compile Include="NUnit\Parser\TextTableScannerTest.cs" />
     <Compile Include="NUnit\Parser\TextTablesTest.cs" />

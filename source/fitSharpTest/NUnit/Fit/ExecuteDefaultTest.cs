@@ -9,6 +9,7 @@ using fitSharp.Fit.Operators;
 using fitSharp.Machine.Model;
 using Moq;
 using NUnit.Framework;
+using TestStatus=fitSharp.Fit.Model.TestStatus;
 
 namespace fitSharp.Test.NUnit.Fit {
     [TestFixture] public class ExecuteDefaultTest {
@@ -35,7 +36,7 @@ namespace fitSharp.Test.NUnit.Fit {
         [Test] public void LastActionIsSetAsInvokeCellAttribute() {
             SetUpSUT("procedure");
             Execute(targetCell);
-            Assert.AreEqual("blah blah", targetCell.Value.GetAttribute(CellAttribute.Extension));
+            Assert.AreEqual("blah blah", targetCell.Value.GetAttribute(CellAttribute.Folded));
         }
 
         [Test] public void CellIsMarkedWithInvokeStatus() {
@@ -57,7 +58,7 @@ namespace fitSharp.Test.NUnit.Fit {
             var parameters = new ExecuteParameters(
                 ExecuteParameters.MakeMemberCell(new CellTreeLeaf("procedure"), targetCell));
             execute.Execute(new ExecuteContext(ExecuteCommand.Input, target.Value), parameters);
-            Assert.AreEqual("blah blah", targetCell.Value.GetAttribute(CellAttribute.Extension));
+            Assert.AreEqual("blah blah", targetCell.Value.GetAttribute(CellAttribute.Folded));
         }
 
         [Test] public void LastActionIsSetAsExpectedCellAttribute() {
@@ -65,7 +66,7 @@ namespace fitSharp.Test.NUnit.Fit {
             var parameters = new ExecuteParameters(
                 ExecuteParameters.Make(new CellTreeLeaf("procedure"), new CellTree(), targetCell));
             execute.Execute(new ExecuteContext(ExecuteCommand.Check, target.Value), parameters);
-            Assert.AreEqual("blah blah", targetCell.Value.GetAttribute(CellAttribute.Extension));
+            Assert.AreEqual("blah blah", targetCell.Value.GetAttribute(CellAttribute.Folded));
         }
 
         TypedValue ExecuteWithNoTargetCell() {
@@ -102,6 +103,7 @@ namespace fitSharp.Test.NUnit.Fit {
                     testStatus.LastAction = "blah blah";
                     return result;
                 });
+            processor.Setup(p => p.Compare(It.IsAny<TypedValue>(), It.IsAny<Tree<Cell>>())).Returns(true);
             processor.Setup(p => p.TestStatus).Returns(testStatus);
         }
     }

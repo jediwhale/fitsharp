@@ -63,6 +63,27 @@ Numeric comparisons can be combined with symbol recall.<br>
 <tr><td>int</td><td>3</td><td>&lt; &lt;&lt;four</td><td></td><td>True</td><td>&lt;span class="fit_grey">3 &lt;/span>&amp;lt; &amp;lt;&amp;lt;four&lt;span class="fit_grey"> 4&lt;/span></td><td></td><td>use whitespace to disambiguate 'less than' and 'recall'</td></tr>
 <tr><td>int</td><td>3</td><td>'&lt;&lt;four'</td><td></td><td>False</td><td>&amp;lt;&amp;lt;four&lt;span class="fit_grey"> 4&lt;/span></td><td></td><td>this is recall, not a comparison</td></tr>
 </table>
+<br>
+When a cell match fails, the actual value is displayed.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>when test is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample domain</td></tr>
+<tr><td>set</td><td>string field</td><td>something</td></tr>
+<tr><td>check</td><td>string field</td><td>else</td></tr>
+<tr><td>set</td><td>strings</td><td>some,thing</td></tr>
+<tr><td>check</td><td>strings</td><td>or,else</td></tr>
+</table>
+</td><td>then result is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample domain</td></tr>
+<tr><td>set</td><td>string field</td><td>something</td></tr>
+<tr><td>check</td><td>string field</td><td class="fail">else <span class="fit_label">expected</span><hr />something <span class="fit_label">actual</span></td></tr>
+<tr><td>set</td><td>strings</td><td>some,thing</td></tr>
+<tr><td>check</td><td>strings</td><td class="fail">or,else <span class="fit_label">expected</span><hr />some, thing <span class="fit_label">actual</span></td></tr>
+</table></td></tr>
+</table>
 </div>
 <div style="width:100%;text-align:right">
 <span class="footer">&copy; Copyright <a href="http://www.syterra.com">Syterra Software Inc.</a> All rights reserved.</span>

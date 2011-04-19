@@ -1,4 +1,4 @@
-﻿// Copyright © 2010 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2011 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -15,11 +15,56 @@ namespace fitSharp.Test.NUnit.Parser {
         }
 
         [Test] public void ParsesWordAsCell() {
-            AssertParse("stuff", " <p> <div> <span> stuff</span> </div></p>");
+            AssertParse("stuff", " <div> <table><tr> <td> stuff</td> </tr></table></div>");
         }
 
-        [Test] public void IgnoresLeadingNewlines() {
-            AssertParse("\n\n\nstuff", " <p> <div> <span> stuff</span> </div></p>");
+        [Test] public void GeneratesTableForLineStartingWithSeparator() {
+            AssertParse("\n|stuff", "<br /> <table class=\"fit_table\"> <tr> <td> stuff</td> </tr></table>");
+        }
+
+        [Test] public void EncodesCellContent() {
+            AssertParse("<<stuff", " <div> <table><tr> <td> &lt;&lt;stuff</td> </tr></table></div>");
+        }
+
+        [Test] public void HandlesLeadingNewlines() {
+            AssertParse("\n\n\nstuff", "<br /><br /><br /> <div> <table><tr> <td> stuff</td> </tr></table></div>");
+        }
+
+        [Test] public void ParsesWordsAsSeparateCells() {
+            AssertParse("more|stuff",
+                " <div> <table><tr> <td> more</td>  <td> stuff</td> </tr></table></div>");
+        }
+
+        [Test] public void ParsesLinesAsSeparateRows() {
+            AssertParse("more 'good'\nstuff",
+                " <div> <table><tr> <td> more</td>  <td> good</td> </tr></table> <table><tr> <td> stuff</td> </tr></table></div>");
+        }
+
+        [Test] public void ParsesNestedTable() {
+            AssertParse("one [\n two\n] three", " <div> <table><tr> <td> one</td>  <td> <div> <table><tr> <td> two</td> </tr></table></div></td>  <td> three</td> </tr></table></div>");
+        }
+
+        [Test] public void ParsesBlankLinesAsSeparateTables() {
+            AssertParse("more\ngood\n\nstuff",
+                " <div> <table><tr> <td> more</td> </tr></table> <table><tr> <td> good</td> </tr></table></div> <br /> <div> <table><tr> <td> stuff</td> </tr></table></div>");
+        }
+
+        [Test] public void IncludesLeaderInFirstTable() {
+            Assert.AreEqual(
+                " more test@ <div> <table><tr> <td> stuff</td> </tr></table></div>",
+                Format(ParseRaw("more test@stuff")));
+        }
+
+        [Test] public void IncludesTrailerInLastTable() {
+            Assert.AreEqual(
+                " test@ <div> <table><tr> <td> stuff</td> </tr></table></div> @test",
+                Format(ParseRaw("test@stuff@test")));
+        }
+
+        [Test] public void IncludesLeaderInSecondTable() {
+            Assert.AreEqual(
+                " test@ <div> <table><tr> <td> stuff</td> </tr></table></div> @test and test@ <div> <table><tr> <td> more</td> </tr></table></div>",
+                Format(ParseRaw("test@stuff@test and test@more")));
         }
 
         static void AssertParse(string input, string expected) {
@@ -28,50 +73,18 @@ namespace fitSharp.Test.NUnit.Parser {
                 Format(Parse(input)));
         }
 
-        [Test] public void ParsesWordsAsSeparateCells() {
-            AssertParse("more|stuff",
-                " <p> <div> <span> more</span>  <span> stuff</span> </div></p>");
-        }
-
-        [Test] public void ParsesLinesAsSeparateRows() {
-            AssertParse("more 'good'\nstuff",
-                " <p> <div> <span> more</span>  <span> good</span> </div> <div> <span> stuff</span> </div></p>");
-        }
-
-        [Test] public void ParsesBlankLinesAsSeparateTables() {
-            AssertParse("more\ngood\n\nstuff",
-                " <p> <div> <span> more</span> </div> <div> <span> good</span> </div></p> <p> <div> <span> stuff</span> </div></p>");
-        }
-
-        [Test] public void IncludesLeaderInFirstTable() {
-            Assert.AreEqual(
-                " more test@ <p> <div> <span> stuff</span> </div></p>",
-                Format(ParseRaw("more test@stuff")));
-        }
-
-        [Test] public void IncludesTrailerInLastTable() {
-            Assert.AreEqual(
-                " test@ <p> <div> <span> stuff</span> </div></p> @test",
-                Format(ParseRaw("test@stuff@test")));
-        }
-
-        [Test] public void IncludesLeaderInSecondTable() {
-            Assert.AreEqual(
-                " test@ <p> <div> <span> stuff</span> </div></p> @test and test@ <p> <div> <span> more</span> </div></p>",
-                Format(ParseRaw("test@stuff@test and test@more")));
-        }
-
         static Tree<CellBase> Parse(string input) {
             return ParseRaw("test@" + input);
         }
 
         static Tree<CellBase> ParseRaw(string input) {
-            return new TextTables().Parse(input);
+            return new TextTables(new TextTableScanner(input, c => c.IsLetter)).Parse();
         }
 
         static string Format(Tree<CellBase> tree) {
             return Format(tree, " ");
-        }
+        }
+
         static string Format(Tree<CellBase> tree, string separator) {
             var result = new StringBuilder();
             if (!string.IsNullOrEmpty(tree.Value.GetAttribute(CellAttribute.Leader)))

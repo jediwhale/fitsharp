@@ -1,8 +1,10 @@
+// Copyright © 2011 Syterra Software Inc. Includes work Copyright (C) Gojko Adzic 2006-2008 http://gojko.net
+// This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
+// This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
 using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Data.Common;
-using System.Text.RegularExpressions;
 using dbfit.fixture;
 using fit;
 
@@ -10,14 +12,12 @@ using fitlibrary;
 
 namespace dbfit
 {
-
     public class DatabaseTest : SequenceFixture
     {
         protected IDbEnvironment environment;
-        //Dictionary<string, object> parameters = new Dictionary<string, object>();
 
         public void SetUp() {
-            dbfit.util.Options.reset();
+            util.Options.reset();
         }
 
         public void TearDown() {
@@ -28,114 +28,144 @@ namespace dbfit
         {
             this.environment = environment;
         }
+
         public void Connect(String dataSource, String username, String password, String database)
         {
-            this.environment.Connect(dataSource, username, password, database);
+            environment.Connect(dataSource, username, password, database);
         }
+
         public void Connect(String dataSource, String username, String password)
         {
-            this.environment.Connect(dataSource, username, password);
+            environment.Connect(dataSource, username, password);
         }
+
         public void Connect(String connectionString)
         {
-            this.environment.Connect(connectionString);
+            environment.Connect(connectionString);
         }
+
         public void ConnectUsingFile(String path)
         {
-            this.environment.ConnectUsingFile(path);
+            environment.ConnectUsingFile(path);
         }
         public void Close()
         {
-            this.environment.CloseConnection();
+            environment.CloseConnection();
         }
 
         public void SetParameter(String name, object value)
         {
-            dbfit.fixture.SetParameter.SetParameterValue(name, value);
+            fixture.SetParameter.SetParameterValue(name, value);
         }
+
         public void ClearParameters()
         {
-            fit.Fixture.ClearSaved();
+            ClearSaved();
         }
+
         public Fixture Query(String query)
         {
             return new Query(environment, query, false);
         }
+
+        public Fixture Query(String query, int resultSet)
+        {
+            return new Query(environment, query, false, resultSet);
+        }
+
         public Fixture Query(DataTable queryTable)
         {
             return new Query(queryTable, false);
         }
+
         public Fixture Update(String table)
         {
             return new Update(environment, table);
         }
+
         public Fixture OrderedQuery(String query)
         {
             return new Query(environment, query, true);
         }
+
         public Fixture Execute(String statement)
         {
             return new Execute(environment, statement);
         }
+
         public Fixture Insert(String table)
         {
             return new Insert(environment, table);
         }
+
         public Fixture ExecuteProcedure(String procedure)
         {
             return new ExecuteProcedure(environment, procedure);
         }
+
         public Fixture ExecuteProcedureExpectException(String procedure)
         {
             return new ExecuteProcedure(environment, procedure, true);
         }
+
         public Fixture ExecuteProcedureExpectException(String procedure, int errorCode)
         {
             return new ExecuteProcedure(environment, procedure, errorCode);
         }
+
         public void Commit()
         {
             environment.Commit();
         }
+
         public void Rollback()
         {
             environment.Rollback();
         }
+
         public Fixture QueryStats()
         {
             return new QueryStats(environment);
         }
+
         public Fixture Clean()
         {
             return new Clean(environment);
         }
+
         public Fixture InspectProcedure(String procedure)
         {
             return new Inspect(environment, Inspect.MODE_PROCEDURE, procedure);
         }
+
         public Fixture InspectTable(String table)
         {
             return new Inspect(environment, Inspect.MODE_TABLE, table);
         }
+
         public Fixture InspectView(String view)
         {
             return new Inspect(environment, Inspect.MODE_TABLE, view);
         }
+
         public Fixture InspectQuery(String query)
         {
             return new Inspect(environment, Inspect.MODE_QUERY, query);
         }
+
         public Fixture StoreQuery(String query, String symbolName)
         {
             return new StoreQuery(environment, query, symbolName);
         }
+
         public Fixture CompareStoredQueries(String symbol1, String symbol2)
         {
             return new CompareStoredQueries(environment, symbol1, symbol2);
         }
+
         public void SetOption(String option, String value)
         {
-            dbfit.util.Options.SetOption(Processor, option, value);
+            util.Options.SetOption(Processor, option, value);
         }
     }
 }

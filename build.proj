@@ -17,20 +17,16 @@
 </Target>
 
 <Target Name="unittests">
-    <Exec Command="binary\tools\nunit-console -nologo -framework:net-4.0 .\build\$(Config)\fitSharpTest.dll" />
-    <Exec Command="binary\tools\nunit-console -nologo -framework:net-4.0 .\build\$(Config)\fitTest.dll" />
+    <Exec Command="binary\tools\nunit\nunit-console -nologo -framework:net-4.0 .\build\$(Config)\fitSharpTest.dll" />
+    <Exec Command="binary\tools\nunit\nunit-console -nologo -framework:net-4.0 .\build\$(Config)\fitTest.dll" />
 </Target>
 
 <Target Name="storytests">
     <Exec Command=".\build\debug\runner -c storytest.config.xml" />
-    <Copy SourceFiles=".\site\reportindex.html" DestinationFiles=".\site\part1.html"/>
-    <Exec Command=".\build\debug\runner -c textstorytest.config.xml" />
-    <Copy SourceFiles=".\site\reportindex.html" DestinationFiles=".\site\part2.html"/>
-    <Exec Command="copy /y .\site\part1.html + .\site\part2.html .\site\reportindex.html"/>
 </Target>
 
 <Target Name="dbfittests">
-    <Exec Command="binary\tools\nunit-console -nologo .\build\$(Config)\dbfitTest.dll" />
+    <Exec Command="binary\tools\nunit\nunit-console -nologo .\build\$(Config)\dbfitTest.dll" />
     <Exec Command="java -jar \apps\fitnesse\fitnesse.jar -o -d .\document -r FitNesseRoot -c &quot;DbFitTests?suite&amp;format=text&quot;" />
 </Target>
 

@@ -3,19 +3,18 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-using System.Text;
 using fitnesse.fixtures;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
+using TestStatus=fitSharp.Fit.Model.TestStatus;
 
 namespace fit.Test.NUnit
 {
 	[TestFixture]
 	public class TableFixtureTest
 	{
-		string table;
 	    StoryTest myStoryTest;
 	    Parse finishedTable;
 	    TestCounts resultCounts;
@@ -24,13 +23,12 @@ namespace fit.Test.NUnit
 		public void SetUp()
 		{
 			TestUtils.InitAssembliesAndNamespaces();
-			var builder = new StringBuilder();
+			var builder = new TestBuilder();
 			builder.Append("<table>");
 			builder.Append("<tr><td colspan='5'>ExampleTableFixture</td></tr>");
 			builder.Append("<tr><td>0,0</td><td>0,1</td><td>0,2</td><td>37</td><td></td></tr>");
 			builder.Append("</table>");
-			table = builder.ToString();
-		    myStoryTest = new StoryTest(Parse.ParseFrom(table), SimpleWriter);
+		    myStoryTest = new StoryTest(builder.Parse, SimpleWriter);
 		    myStoryTest.Execute(new Configuration());
 		}
 
@@ -41,7 +39,7 @@ namespace fit.Test.NUnit
 		}
 
 		void SimpleWriter(Tree<Cell> theTables, TestCounts counts) {
-            finishedTable = (Parse) theTables.Value;
+            finishedTable = (Parse) theTables.Branches[0].Value;
 		    resultCounts = counts;
 		}
 

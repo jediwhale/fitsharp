@@ -44,7 +44,7 @@ namespace fit {
             fixture.Processor = Processor;
             if (theRestOfTheCells != null) {
                 Fixture parent = myParentFixture as FlowFixtureBase;
-                fixture.SetSystemUnderTest(new WithPhrase(theRestOfTheCells).Evaluate(parent ?? this));
+                fixture.SetSystemUnderTest(new MethodPhrase(theRestOfTheCells).Evaluate(parent ?? this));
             }
             return fixture;
         }

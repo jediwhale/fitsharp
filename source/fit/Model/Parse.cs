@@ -1,4 +1,4 @@
-// Copyright © 2010 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+// Copyright © 2011 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -8,7 +8,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using System.Web;
+using fitSharp.Fit.Operators;
 using fitSharp.Machine.Model;
 using fitSharp.Parser;
 
@@ -19,8 +19,12 @@ namespace fit
 		public static int FootnoteFiles;
 
         public static Parse ParseFrom(string input) {
-            return CopyFrom(new HtmlTables().Parse(input)).Parts;
+            return ParseRootFrom(input).Parts;
         }
+
+	    public static Parse ParseRootFrom(string input) {
+	        return CopyFrom(new HtmlTables().Parse(input));
+	    }
 
 	    public Parse More { get; set; }
 	    public Parse Parts { get; set; }
@@ -60,34 +64,8 @@ namespace fit
             }
         }
 
-	    public string Body {
-            get {
-                string result = body;
-                if (HasAttribute(CellAttribute.Add)) {
-                    result = string.Format("<span class=\"fit_grey\">{0}</span>", HttpUtility.HtmlEncode(result));
-                }
-                if (HasAttribute(CellAttribute.InformationPrefix)) {
-                    result = string.Format("<span class=\"fit_grey\">{0}</span>{1}", GetAttribute(CellAttribute.InformationPrefix), result);
-                }
-                if (HasAttribute(CellAttribute.InformationSuffix)) {
-                    result = string.Format("{0}<span class=\"fit_grey\">{1}</span>", result, GetAttribute(CellAttribute.InformationSuffix));
-                }
-                if (HasAttribute(CellAttribute.Actual)) {
-                    result += Label("expected") + "<hr />" + HttpUtility.HtmlEncode(GetAttribute(CellAttribute.Actual)) + Label("actual");
-                }
-                if (HasAttribute(CellAttribute.Exception)) {
-                    result += "<hr /><pre><div class=\"fit_stacktrace\">" + GetAttribute(CellAttribute.Exception) + "</div></pre>";
-                }
-                if (HasAttribute(CellAttribute.Label)) {
-                    result += Label(GetAttribute(CellAttribute.Label));
-                }
-                if (HasAttribute(CellAttribute.Extension)) {
-                    result += string.Format(
-                        "<span><a href=\"javascript:void(0)\" onclick=\"this.parentNode.nextSibling.style.display="
-                        + "this.parentNode.nextSibling.style.display=='none'?'':'none'\">&#8659;</a></span><div style=\"display:none\">{0}</div>",
-                        GetAttribute(CellAttribute.Extension));
-                }
-                return result;
+	    public string Body { get {
+	        return ParseStoryTestString.Body(this);
             }
         }
 
@@ -292,7 +270,7 @@ namespace fit
         }
 
         public int Count {
-            get { return parse.Parts.Size; }
+            get { return parse.Parts == null ? 0 : parse.Parts.Size; }
         }
     }
 }

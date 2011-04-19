@@ -8,6 +8,7 @@ using fitSharp.Fit.Model;
 using fitSharp.Fit.Service;
 using fitSharp.Test.Double;
 using NUnit.Framework;
+using TestStatus=fitSharp.Fit.Model.TestStatus;
 
 namespace fitSharp.Test.NUnit.Fit {
     [TestFixture]

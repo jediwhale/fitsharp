@@ -16,7 +16,7 @@ namespace fit.Operators {
         }
 
         public Tree<Cell> Compose(TypedValue instance) {
-            return Parse.CopyFrom(new TextTables().Parse(instance.ValueString)).Parts;
+            return Parse.CopyFrom(new TextTables(new TextTableScanner(instance.ValueString, c => c.IsLetter)).Parse());
         }
     }
 }
