@@ -6,6 +6,7 @@
 
 using System;
 using System.IO;
+using fit.Runner;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Service;
 using fitSharp.IO;
