@@ -1,4 +1,4 @@
-﻿// Copyright © 2010 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2011 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -51,10 +51,15 @@ namespace fitSharp.Fit.Operators {
                     : string.Format("{0} class=\"{1}\"{2}", tag.Substring(0, space), cell.GetAttribute(CellAttribute.Status), tag.Substring(space));
         }
 
-	    string Body(Cell cell) {
+        public static string Body(Cell cell) {
             string result = cell.GetAttribute(CellAttribute.Body);
             if (cell.HasAttribute(CellAttribute.Add)) {
-                result = string.Format("<span class=\"fit_grey\">{0}</span>", HttpUtility.HtmlEncode(result));
+                if (cell.HasAttribute(CellAttribute.Formatted)) {
+                    result = string.Format("<pre>{0}</pre>", HttpUtility.HtmlEncode(result));
+                }
+                else if (!cell.HasAttribute(CellAttribute.Raw)) {
+                    result = string.Format("<span class=\"fit_grey\">{0}</span>", HttpUtility.HtmlEncode(result));
+                }
             }
             if (cell.HasAttribute(CellAttribute.InformationPrefix)) {
                 result = string.Format("<span class=\"fit_grey\">{0}</span>{1}", cell.GetAttribute(CellAttribute.InformationPrefix), result);
@@ -71,13 +76,23 @@ namespace fitSharp.Fit.Operators {
             if (cell.HasAttribute(CellAttribute.Label)) {
                 result += Label(cell.GetAttribute(CellAttribute.Label));
             }
-            if (cell.HasAttribute(CellAttribute.Extension)) {
-                result += string.Format(
-                    "<span><a href=\"javascript:void(0)\" onclick=\"this.parentNode.nextSibling.style.display="
-                    + "this.parentNode.nextSibling.style.display=='none'?'':'none'\">&#8659;</a></span><div style=\"display:none\"><div class=\"fit_extension\">{0}</div></div>",
-                    cell.GetAttribute(CellAttribute.Extension));
+            if (cell.HasAttribute(CellAttribute.Folded)) {
+                var foldedText = cell.GetAttribute(CellAttribute.Folded);
+                if (string.IsNullOrEmpty(foldedText)) {
+                    result = Folded(result);
+                }
+                else {
+                    result += Folded(foldedText);
+                }
             }
             return result;
+        }
+
+        static string Folded(string text) {
+            return string.Format(
+                "<span><a href=\"javascript:void(0)\" onclick=\"this.parentNode.nextSibling.style.display="
+                + "this.parentNode.nextSibling.style.display=='none'?'':'none'\">&#8659;</a></span><div style=\"display:none\"><div class=\"fit_extension\">{0}</div></div>",
+                text);
         }
 
 	    static string Label(string text) {

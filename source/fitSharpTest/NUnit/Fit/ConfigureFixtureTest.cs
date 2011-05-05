@@ -37,7 +37,7 @@ namespace fitSharp.Test.NUnit.Fit {
             item.WriteItem("stuff");
             var table = MakeTable("show");
             fixture.Interpret(table);
-            Assert.AreEqual("<ul><li>stuff</li></ul>", table.Branches[0].Branches[2].Value.GetAttribute(CellAttribute.Extension));
+            Assert.AreEqual("<ul><li>stuff</li></ul>", table.Branches[0].Branches[2].Value.GetAttribute(CellAttribute.Folded));
         }
     }
 }

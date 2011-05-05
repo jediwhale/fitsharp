@@ -5,6 +5,7 @@
 
 using fitSharp.Fit.Operators;
 using fitSharp.Machine.Model;
+using fitSharp.Test.Double;
 using NUnit.Framework;
 
 namespace fit.Test.NUnit {

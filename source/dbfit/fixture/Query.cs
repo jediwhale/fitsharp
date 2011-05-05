@@ -1,4 +1,4 @@
-// Copyright © 2010 Syterra Software Inc. Includes work Copyright (C) Gojko Adzic 2006-2008 http://gojko.net
+// Copyright © 2011 Syterra Software Inc. Includes work Copyright (C) Gojko Adzic 2006-2008 http://gojko.net
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -45,7 +45,7 @@ namespace dbfit.fixture
             base.DoTable(table);
         }
 
-        public static DataTable GetDataTable(String query, IDbEnvironment environment, int rsNo)
+        public static DataTable GetDataTable(String query,IDbEnvironment environment, int rsNo)
         {
             DbCommand dc = environment.CreateCommand(query, CommandType.Text);
             if (Options.ShouldBindSymbols())

@@ -4,8 +4,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("DbFit Oracle for fitSharp")]
 [assembly: AssemblyDescription("DbFit. This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.")]
 [assembly: AssemblyProduct("fitSharp")]
-[assembly: AssemblyCopyright("Copyright © Gojko Adzic 2007. All rights reserved.")]
+[assembly: AssemblyCopyright("Copyright © 2007 Gojko Adzic, 2011 Syterra Software Inc.. All rights reserved.")]
 
 [assembly: ComVisible(false)]
 
-[assembly: AssemblyVersion("1.6.*")]
+[assembly: AssemblyVersion("1.9.*")]

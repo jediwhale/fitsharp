@@ -1,4 +1,4 @@
-﻿// Copyright © 2010 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2011 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -27,11 +27,7 @@ namespace fitSharp.Parser {
             TreeList<CellBase> table = null;
             scanner.MoveNext();
             do {
-                if (scanner.Current.Type == TokenType.Leader) {
-                    leader = scanner.Current.Content;
-                    scanner.MoveNext();
-                }
-                else if (scanner.Current.Type == TokenType.Word) {
+                if (scanner.Current.Type == TokenType.Word) {
                     SetTags();
                     table = new TreeList<CellBase>(new CellBase(string.Empty));
                     table.Value.SetAttribute(CellAttribute.StartTag, startTags[0]);
@@ -42,15 +38,21 @@ namespace fitSharp.Parser {
                     }
                     result.AddBranch(table);
                     MakeRows(table);
-                    if (scanner.Current.Type == TokenType.Newline) scanner.MoveNext();
+                    if (scanner.Current.Type == TokenType.Newline) {
+                        leader += scanner.Current.Content;
+                        scanner.MoveNext();
+                    }
                 }
                 else {
+                    leader += scanner.Current.Content;
                     scanner.MoveNext();
                 }
             } while (scanner.Current.Type != TokenType.End && scanner.Current.Type != TokenType.EndCell);
+
+            leader += scanner.Current.Content;
         
-            if (table != null && scanner.Current.Content.Length > 0) {
-                 table.Value.SetAttribute(CellAttribute.Trailer, scanner.Current.Content);
+            if (table != null && leader.Length > 0) {
+                 table.Value.SetAttribute(CellAttribute.Trailer, leader);
             }
         }
 
@@ -60,8 +62,8 @@ namespace fitSharp.Parser {
                 endTags = new [] {"</table>", "</tr>", "</td> "};
             }
             else {
-                startTags = new [] {"<p>", "<table><tr>", "<td>"};
-                endTags = new [] {"</p>", "</tr></table>", "</td> "};
+                startTags = new [] {"<div>", "<table><tr>", "<td>"};
+                endTags = new [] {"</div>", "</tr></table>", "</td> "};
             }
         }
 

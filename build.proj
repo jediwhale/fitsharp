@@ -17,8 +17,8 @@
 </Target>
 
 <Target Name="unittests">
-    <Exec Command="binary\tools\nunit\nunit-console -nologo .\build\$(Config)\fitSharpTest.dll" />
-    <Exec Command="binary\tools\nunit\nunit-console -nologo .\build\$(Config)\fitTest.dll" />
+    <Exec Command="binary\tools\nunit\nunit-console -nologo -framework:net-4.0 .\build\$(Config)\fitSharpTest.dll" />
+    <Exec Command="binary\tools\nunit\nunit-console -nologo -framework:net-4.0 .\build\$(Config)\fitTest.dll" />
 </Target>
 
 <Target Name="storytests">

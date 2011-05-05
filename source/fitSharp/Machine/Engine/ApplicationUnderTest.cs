@@ -1,4 +1,4 @@
-﻿// Copyright © 2010 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2011 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using fitSharp.Machine.Exception;
@@ -91,9 +92,11 @@ namespace fitSharp.Machine.Engine {
 
             public void LoadWellKnownAssemblies(string typeName) {
                 if (!typeName.StartsWith("fit.") && !typeName.StartsWith("fitnesse.")) return;
-                if (!assemblies.Exists(a => a.Name.EndsWith("/fit.dll", StringComparison.OrdinalIgnoreCase))) {
+                if (assemblies.Exists(a => a.Name.EndsWith("/fit.dll", StringComparison.OrdinalIgnoreCase))) return;
+                try {
                     AddAssembly(Assembly.GetExecutingAssembly().CodeBase.Replace("/fitSharp.", "/fit."));
                 }
+                catch (FileNotFoundException) {} // if it's not there, we tried our best
             }
 
             public void AddAssembly(string assemblyName) {
@@ -110,13 +113,10 @@ namespace fitSharp.Machine.Engine {
 
             public IEnumerable<Type> Types {
                 get {
-                    foreach (var assembly in assemblies) {
-                        foreach (var type in assembly.Types) yield return type;
-                    }
-                    foreach (var assembly in appDomain.LoadedAssemblies) {
-                        if (assemblies.Exists(a => a.Name == assembly.Name)) continue;
-                        foreach (var type in assembly.Types) yield return type;
-                    }
+                    foreach (var type in assemblies.SelectMany(a => a.Types)) yield return type;
+                    foreach (var type in appDomain.LoadedAssemblies
+                        .Where(assembly => !assemblies.Exists(a => a.Name == assembly.Name))
+                        .SelectMany(a => a.Types)) yield return type;
                 }
             }
 
@@ -155,10 +155,7 @@ namespace fitSharp.Machine.Engine {
             }
 
             public bool IsRegistered(string namespaceName) {
-                foreach (string name in namespaces) {
-                    if (string.Compare(name, namespaceName, StringComparison.OrdinalIgnoreCase) == 0) return true;
-                }
-                return false;
+                return namespaces.Any(name => string.Compare(name, namespaceName, StringComparison.OrdinalIgnoreCase) == 0);
             }
         }
     }

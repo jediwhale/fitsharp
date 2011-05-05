@@ -22,6 +22,10 @@ namespace fitSharp.Test.NUnit.Slim {
             Count++;
         }
 
+        public SampleClass(string info) {
+            Info = info;
+        }
+
         public string SampleMethod() {
             MethodCount++;
             return "testresult";
@@ -44,6 +48,8 @@ namespace fitSharp.Test.NUnit.Slim {
         public SampleClass MakeSample() {
             return new SampleClass {Info = "sample"};
         }
+
+        public override string ToString() { return "Sample=" + Info; }
     }
 
     public class SampleStopTest: ApplicationException {}

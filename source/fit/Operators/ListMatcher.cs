@@ -193,7 +193,7 @@ namespace fit.Operators {
             Parse MakeSurplusRow(CellProcessor processor, object theSurplusRow) {
                 Parse cells = null;
                 foreach (TypedValue actualValue in myStrategy.ActualValues(theSurplusRow)) {
-                    var cell = (Parse) processor.Compose(actualValue);
+                    var cell = (Parse) processor.Compose(actualValue.IsVoid ? new TypedValue(string.Empty) : actualValue);
                     if (cells == null) {
                         cell.SetAttribute(CellAttribute.Label, "surplus");
                         cells = cell;
