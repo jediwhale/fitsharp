@@ -100,11 +100,13 @@
     <Compile Include="Fit\Operators\ParseTextStoryTestString.cs" />
     <Compile Include="Machine\Application\Runnable.cs" />
     <Compile Include="Machine\Application\Runner.cs" />
+    <Compile Include="Machine\Engine\CreateDefault.cs" />
     <Compile Include="Machine\Engine\Culture.cs" />
     <Compile Include="Machine\Engine\CurrentDomain.cs" />
-    <Compile Include="Machine\Engine\DataRowRuntime.cs" />
+    <Compile Include="Machine\Engine\InvokeDataRow.cs" />
     <Compile Include="Machine\Engine\Logging.cs" />
     <Compile Include="Machine\Engine\ApplicationDomain.cs" />
+    <Compile Include="Machine\Engine\ParameterList.cs" />
     <Compile Include="Machine\Engine\Types.cs" />
     <Compile Include="Machine\Model\CellBase.cs" />
     <Compile Include="Fit\Model\CellSubstring.cs" />
@@ -185,7 +187,7 @@
     <Compile Include="Parser\Token.cs" />
     <Compile Include="Slim\Operators\Converter.cs" />
     <Compile Include="Machine\Engine\DefaultParse.cs" />
-    <Compile Include="Machine\Engine\DefaultRuntime.cs" />
+    <Compile Include="Machine\Engine\InvokeDefault.cs" />
     <Compile Include="Machine\Engine\Operator.cs" />
     <Compile Include="Machine\Engine\Operators.cs" />
     <Compile Include="Machine\Engine\ParseNullable.cs" />
@@ -232,7 +234,7 @@
     <Compile Include="Slim\Operators\ParseDictionary.cs" />
     <Compile Include="Slim\Operators\ParseList.cs" />
     <Compile Include="Slim\Operators\ParseSymbol.cs" />
-    <Compile Include="Slim\Operators\RuntimeLibrary.cs" />
+    <Compile Include="Slim\Operators\InvokeLibrary.cs" />
     <Compile Include="Slim\Operators\SavedInstance.cs" />
     <Compile Include="Slim\Operators\SlimOperator.cs" />
     <Compile Include="Slim\Operators\SlimProcessor.cs" />

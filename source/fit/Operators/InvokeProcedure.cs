@@ -1,4 +1,4 @@
-﻿// Copyright © 2010 Syterra Software Inc.
+﻿// Copyright © 2011 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -10,7 +10,7 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fit.Operators {
-    public class RuntimeProcedure: CellOperator, RuntimeOperator<Cell>
+    public class InvokeProcedure: CellOperator, InvokeOperator<Cell>
     {
         public bool CanCreate(string memberName, Tree<Cell> parameters) { return false; }
 

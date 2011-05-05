@@ -16,8 +16,8 @@ namespace fit.Service {
             Add(new ComposeDefault(), 0);
             Add(new ComposeShowAsOperator(), 0);
 
-            Add(new RuntimeDirect(), 0);
-            Add(new RuntimeProcedure(), 0);
+            Add(new InvokeDirect(), 0);
+            Add(new InvokeProcedure(), 0);
 
             Add(new ComposeStoryTestString(), 0);
             Add(new ParseStoryTestString(), 0);
