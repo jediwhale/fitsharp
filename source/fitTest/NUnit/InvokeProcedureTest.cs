@@ -24,13 +24,8 @@ namespace fit.Test.NUnit {
         Procedure procedure;
         TypedValue result;
         TypedValue target;
-        TypedValue fixture;
+        Mock<FlowInterpreter> fixture;
         TestStatus testStatus;
-
-        [Test] public void CreateIsntHandled() {
-            SetupSUT(simpleProcedureHtml);
-            Assert.IsFalse(invoke.CanCreate("anything", new CellTree()));
-        }
 
         [Test] public void InvokeForMembersIsntHandled() {
             SetupSUT(simpleProcedureHtml);
@@ -76,7 +71,14 @@ namespace fit.Test.NUnit {
 
             result = new TypedValue("result");
             target = new TypedValue("target");
-            fixture = new TypedValue("fixture");
+
+            fixture = new Mock<FlowInterpreter>();
+            fixture.Setup(f => f.InterpretFlow(It.Is<Tree<Cell>>(t => IsTablesWithVerb(t))))
+                .Callback<Tree<Cell>>(t =>  {
+                    t.Branches[0].Branches[0].Value.SetAttribute(CellAttribute.Label, "stuff");
+                    testStatus.PopReturn();
+                    testStatus.PushReturn(result);
+                });
 
             testStatus = new TestStatus();
 
@@ -89,15 +91,7 @@ namespace fit.Test.NUnit {
             processor.Setup(p => p.Load(It.Is<Procedure>(v => v.Id == "procedure"))).Returns(procedure);
 
             processor.Setup(p => p.Parse(typeof (Interpreter), target, It.Is<Tree<Cell>>(c => IsDoFixture(c))))
-                .Returns(fixture);
-
-            processor.Setup(p => p.Execute(fixture, It.Is<Tree<Cell>>(t => IsTablesWithVerb(t))))
-                .Returns((TypedValue f, Tree<Cell> t) => {
-                    t.Branches[0].Branches[0].Branches[0].Value.SetAttribute(CellAttribute.Label, "stuff");
-                    testStatus.PopReturn();
-                    testStatus.PushReturn(result);
-                    return TypedValue.Void;
-                });
+                .Returns(new TypedValue(fixture.Object));
 
             processor.Setup(p => p.Parse(typeof (StoryTestString), It.IsAny<TypedValue>(),
                                          It.Is<Tree<Cell>>(t => IsTableWithVerb(t))))
@@ -109,15 +103,15 @@ namespace fit.Test.NUnit {
         }
 
         static bool IsTablesWithVerb(Tree<Cell> t) {
-            if (t.Branches[0].Branches[0].Branches.Count == 1
-                && t.Branches[0].Branches[0].Branches[0].Value.Text == "verb") return true;
-            if (t.Branches[0].Branches[0].Branches.Count == 2
-                && t.Branches[0].Branches[0].Branches[0].Value.Text == "verb"
-                && t.Branches[0].Branches[0].Branches[1].Value.Text == "actual") return true;
-            if (t.Branches[0].Branches[0].Branches.Count == 3
-                && t.Branches[0].Branches[0].Branches[0].Value.Text == "verb"
-                && t.Branches[0].Branches[0].Branches[1].Value.Text == "actual1"
-                && t.Branches[0].Branches[0].Branches[2].Value.Text == "actual2") return true;
+            if (t.Branches[0].Branches.Count == 1
+                && t.Branches[0].Branches[0].Value.Text == "verb") return true;
+            if (t.Branches[0].Branches.Count == 2
+                && t.Branches[0].Branches[0].Value.Text == "verb"
+                && t.Branches[0].Branches[1].Value.Text == "actual") return true;
+            if (t.Branches[0].Branches.Count == 3
+                && t.Branches[0].Branches[0].Value.Text == "verb"
+                && t.Branches[0].Branches[1].Value.Text == "actual1"
+                && t.Branches[0].Branches[2].Value.Text == "actual2") return true;
             return false;
         }
 

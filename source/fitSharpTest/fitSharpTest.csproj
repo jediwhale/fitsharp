@@ -74,7 +74,6 @@
     <Compile Include="NUnit\Fit\ComposeShowAsOperatorTest.cs" />
     <Compile Include="NUnit\Fit\DefineTest.cs" />
     <Compile Include="NUnit\Fit\ExecuteDefaultTest.cs" />
-    <Compile Include="NUnit\Fit\ExecuteInterpretTest.cs" />
     <Compile Include="NUnit\Fit\ExecuteStoryTestTest.cs" />
     <Compile Include="Double\FolderTestModel.cs" />
     <Compile Include="NUnit\Fit\GracefulNameTest.cs" />
