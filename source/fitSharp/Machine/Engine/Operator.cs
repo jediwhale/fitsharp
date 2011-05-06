@@ -22,11 +22,6 @@ namespace fitSharp.Machine.Engine {
         Tree<T> Compose(TypedValue instance);
     }
 
-    public interface ExecuteOperator<T> {
-        bool CanExecute(TypedValue instance, Tree<T> parameters);
-        TypedValue Execute(TypedValue instance, Tree<T> parameters);
-    }
-
     [ContractClass(typeof(ParseOperatorContract<>))]
     public interface ParseOperator<T> {
         bool CanParse(Type type, TypedValue instance, Tree<T> parameters);

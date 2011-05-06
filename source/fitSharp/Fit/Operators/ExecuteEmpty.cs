@@ -7,7 +7,7 @@ using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
-	public class ExecuteEmpty : ExecuteBase {
+	public class ExecuteEmpty : InvokeCommandBase {
 	    public override bool CanExecute(ExecuteContext context, ExecuteParameters parameters) {
 	        return (context.Command == ExecuteCommand.Check || context.Command == ExecuteCommand.Input)
 	               && parameters.Cell.Text.Length == 0

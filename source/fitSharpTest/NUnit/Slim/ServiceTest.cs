@@ -1,4 +1,4 @@
-﻿// Copyright © 2010 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2011 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -21,15 +21,20 @@ namespace fitSharp.Test.NUnit.Slim {
         [Test] public void InstanceIsCreated() {
             SampleClass.Count = 0;
             var statement = new Instructions().MakeVariable("variable", typeof (SampleClass));
-            service.Execute(TypedValue.Void, statement.Tree.Branches[0]);
+            DoInstruction(statement);
             Assert.AreEqual(1, SampleClass.Count);
+        }
+
+        private TypedValue DoInstruction(Instructions statement) {
+            return service.Invoke(new TypedValue(new SlimInstruction()), string.Empty, statement.Tree.Branches[0]);
         }
 
         [Test] public void OperatorIsAddedFromConfiguration() {
             var configuration = new Configuration();
             configuration.LoadXml("<config><fitSharp.Slim.Service.Service><addOperator>fitSharp.Test.NUnit.Slim.SampleOperator</addOperator></fitSharp.Slim.Service.Service></config>");
-            var statement = new SlimTree().AddBranchValue("step").AddBranchValue("sampleCommand");
-            var result = new Service(configuration).Execute(TypedValue.Void, statement).GetValue<Tree<string>>();
+            var statement = new Instructions().MakeCommand("sampleCommand");
+            service = new Service(configuration);
+            var result = DoInstruction(statement).GetValue<Tree<string>>();
             Assert.AreEqual("sampleResult", result.Branches[1].Value);
         }
 
@@ -43,9 +48,9 @@ namespace fitSharp.Test.NUnit.Slim {
         [Test] public void CustomComposeIsCalled() {
             service.AddOperator(new SampleConverter());
             var statement = new Instructions().MakeVariable("variable", typeof(SampleClass));
-            service.Execute(TypedValue.Void, statement.Tree.Branches[0]);
+            DoInstruction(statement);
             statement = new Instructions().ExecuteMethod("makesample");
-            var result = service.Execute(TypedValue.Void, statement.Tree.Branches[0]).GetValue<SlimTree>();
+            var result = DoInstruction(statement).GetValue<SlimTree>();
             Assert.AreEqual("mysample", result.Branches[1].Value);
         }
 
@@ -60,7 +65,7 @@ namespace fitSharp.Test.NUnit.Slim {
         }
     }
 
-    public class SampleOperator: ExecuteBase {
+    public class SampleOperator: InvokeInstructionBase {
         public SampleOperator() : base("sampleCommand") {}
         protected override Tree<string> ExecuteOperation(Tree<string> parameters) {
             return Result(parameters, "sampleResult");

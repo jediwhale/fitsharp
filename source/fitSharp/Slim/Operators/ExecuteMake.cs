@@ -6,7 +6,7 @@
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Slim.Operators {
-    public class ExecuteMake: ExecuteBase {
+    public class ExecuteMake: InvokeInstructionBase {
 
         public ExecuteMake(): base("make") {}
 

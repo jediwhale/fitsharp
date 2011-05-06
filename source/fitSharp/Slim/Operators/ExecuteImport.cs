@@ -6,7 +6,7 @@
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Slim.Operators {
-    public class ExecuteImport: ExecuteBase {
+    public class ExecuteImport: InvokeInstructionBase {
         public ExecuteImport() : base("import") {}
 
         protected override Tree<string> ExecuteOperation(Tree<string> parameters) {

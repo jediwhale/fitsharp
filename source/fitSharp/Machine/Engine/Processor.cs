@@ -16,7 +16,6 @@ namespace fitSharp.Machine.Engine {
         bool Compare(TypedValue instance, Tree<T> parameters);
         Tree<T> Compose(TypedValue instance);
         bool Contains<V>(V matchItem);
-        TypedValue Execute(TypedValue instance, Tree<T> parameters);
         TypedValue Invoke(TypedValue instance, string memberName, Tree<T> parameters);
         V Load<V>(V matchItem);
         TypedValue Parse(Type type, TypedValue instance, Tree<T> parameters);
@@ -32,10 +31,6 @@ namespace fitSharp.Machine.Engine {
 
         public static TypedValue Create<T>(this Processor<T> processor, string membername) {
             return processor.Create(membername, new TreeList<T>());
-        }
-
-        public static TypedValue Execute<T>(this Processor<T> processor, Tree<T> parameters) {
-            return processor.Execute(TypedValue.Void, parameters);
         }
 
         public static TypedValue InvokeWithThrow<T>(this Processor<T> processor, TypedValue instance, string memberName,
@@ -138,21 +133,6 @@ namespace fitSharp.Machine.Engine {
                         o => {
                             result = o.Compose(instance);
                             logging.Write(string.Format(" by {0}", o.GetType()));
-                        });
-                    return result;
-                });
-        }
-
-        public TypedValue Execute(TypedValue instance, Tree<T> parameters) {
-            return DoLoggedOperation(
-                string.Format("execute {0}", instance.ValueString),
-                logging => {
-                    var result = TypedValue.Void;
-                    Operators.Do<ExecuteOperator<T>>(
-                        o => o.CanExecute(instance, parameters),
-                        o => {
-                            result = o.Execute(instance, parameters);
-                            logging.LogResult(o, result);
                         });
                     return result;
                 });

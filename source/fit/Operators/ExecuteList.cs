@@ -14,7 +14,7 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fit.Operators {
-    public class ExecuteList: ExecuteBase, ParseOperator<Cell> {
+    public class ExecuteList: InvokeCommandBase, ParseOperator<Cell> {
         public override bool CanExecute(ExecuteContext context, ExecuteParameters parameters) {
             switch (context.Command) {
                 case ExecuteCommand.Check:

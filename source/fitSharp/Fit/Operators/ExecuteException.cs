@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
-    public class ExecuteException : ExecuteBase {
+    public class ExecuteException : InvokeCommandBase {
         private static readonly IdentifierName exceptionIdentifier = new IdentifierName("exception[");
         private static readonly Regex regexForMessageOnly = new Regex("^\".*\"$");
         private static readonly Regex regexForExceptionTypeNameOnly = new Regex("^.*: \".*\"$");

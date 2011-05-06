@@ -10,7 +10,7 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
-    public class ExecuteDefault: ExecuteBase {
+    public class ExecuteDefault: InvokeCommandBase {
         public override bool CanExecute(ExecuteContext context, ExecuteParameters parameters) {
             return true;
         }

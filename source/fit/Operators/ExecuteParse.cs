@@ -10,7 +10,7 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fit.Operators {
-    public class ExecuteParse: ExecuteBase, ParseOperator<Cell> {
+    public class ExecuteParse: InvokeCommandBase, ParseOperator<Cell> {
         public override bool CanExecute(ExecuteContext context, ExecuteParameters parameters) {
             if (context.Command != ExecuteCommand.Check) return false;
             TypedValue actualValue = GetTypedActual(context, parameters);

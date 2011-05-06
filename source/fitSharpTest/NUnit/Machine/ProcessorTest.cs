@@ -1,9 +1,8 @@
-﻿// Copyright © 2009 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2011 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
-using System;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using fitSharp.Test.Double;
@@ -22,16 +21,6 @@ namespace fitSharp.Test.NUnit.Machine {
             processor = new BasicProcessor();
         }
 
-        [Test] public void NoOperatorIsFound() {
-            try {
-                Execute();
-                Assert.Fail();
-            }
-            catch (ApplicationException) {
-                Assert.IsTrue(true);
-            }
-        }
-
         [Test] public void DefaultOperatorIsFound() {
             processor.AddOperator(defaultTest);
             object result = Execute();
@@ -39,7 +28,7 @@ namespace fitSharp.Test.NUnit.Machine {
         }
 
         private object Execute() {
-            return processor.Execute(TypedValue.Void, new TreeList<string>()).Value;
+            return processor.Invoke(TypedValue.Void, string.Empty, new TreeList<string>()).Value;
         }
 
         [Test] public void SpecificOperatorIsFound() {
@@ -51,7 +40,7 @@ namespace fitSharp.Test.NUnit.Machine {
         }
 
         private object Execute(string parameter) {
-            return processor.Execute(TypedValue.Void, new TreeList<string>(parameter)).Value;
+            return processor.Invoke(TypedValue.Void, string.Empty, new TreeList<string>(parameter)).Value;
         }
 
         [Test] public void TypeIsCreated() {
@@ -93,28 +82,28 @@ namespace fitSharp.Test.NUnit.Machine {
             Assert.AreEqual("stuff", processor.Load(new KeyValueMemory<string, string>("something")).Instance);
         }
 
-        private class DefaultTest: Operator<string, BasicProcessor>, ExecuteOperator<string> {
-            public bool CanExecute(TypedValue instance, Tree<string> parameters) {
+        private class DefaultTest: Operator<string, BasicProcessor>, InvokeOperator<string> {
+            public bool CanInvoke(TypedValue instance, string member, Tree<string> parameters) {
                 return true;
             }
 
-            public TypedValue Execute(TypedValue instance, Tree<string> parameters) {
+            public TypedValue Invoke(TypedValue instance, string member, Tree<string> parameters) {
                 return new TypedValue("defaultexecute");
             }
         }
 
-        private class SpecificTest: Operator<string, BasicProcessor>, ExecuteOperator<string> {
+        private class SpecificTest: Operator<string, BasicProcessor>, InvokeOperator<string> {
             private readonly string name;
 
             public SpecificTest(string name) {
                 this.name = name;
             }
 
-            public bool CanExecute(TypedValue instance, Tree<string> parameters) {
+            public bool CanInvoke(TypedValue instance, string member, Tree<string> parameters) {
                 return parameters.Value == name;
             }
 
-            public TypedValue Execute(TypedValue instance, Tree<string> parameters) {
+            public TypedValue Invoke(TypedValue instance, string member, Tree<string> parameters) {
                 return new TypedValue("execute" + name);
             }
         }

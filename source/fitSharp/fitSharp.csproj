@@ -124,7 +124,7 @@
     <Compile Include="Fit\Operators\ParseDate.cs" />
     <Compile Include="Fit\Operators\CompareNumeric.cs" />
     <Compile Include="Fit\Operators\CompareString.cs" />
-    <Compile Include="Fit\Operators\ExecuteBase.cs" />
+    <Compile Include="Fit\Operators\InvokeCommandBase.cs" />
     <Compile Include="Fit\Operators\ExecuteContext.cs" />
     <Compile Include="Fit\Operators\ExecuteDefault.cs" />
     <Compile Include="Fit\Operators\ExecuteError.cs" />
@@ -223,7 +223,7 @@
     <Compile Include="Slim\Operators\ComposeDefault.cs" />
     <Compile Include="Slim\Operators\ComposeException.cs" />
     <Compile Include="Slim\Operators\ComposeList.cs" />
-    <Compile Include="Slim\Operators\ExecuteBase.cs" />
+    <Compile Include="Slim\Operators\InvokeInstructionBase.cs" />
     <Compile Include="Slim\Operators\ExecuteCall.cs" />
     <Compile Include="Slim\Operators\ExecuteCallAndAssign.cs" />
     <Compile Include="Slim\Operators\ExecuteDefault.cs" />
@@ -235,6 +235,7 @@
     <Compile Include="Slim\Operators\ParseSymbol.cs" />
     <Compile Include="Slim\Operators\InvokeLibrary.cs" />
     <Compile Include="Slim\Operators\SavedInstance.cs" />
+    <Compile Include="Slim\Operators\SlimInstruction.cs" />
     <Compile Include="Slim\Operators\SlimOperator.cs" />
     <Compile Include="Slim\Operators\SlimProcessor.cs" />
     <Compile Include="Slim\Operators\Symbol.cs" />

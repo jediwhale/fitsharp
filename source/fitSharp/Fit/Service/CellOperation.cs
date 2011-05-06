@@ -1,4 +1,4 @@
-// Copyright © 2010 Syterra Software Inc. All rights reserved.
+// Copyright © 2011 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -70,33 +70,38 @@ namespace fitSharp.Fit.Service {
         }
 
         public void Input(object systemUnderTest, Tree<Cell> memberName, Tree<Cell> cell) {
-            processor.Execute(
-                ExecuteContext.Make(ExecuteCommand.Input, systemUnderTest), 
+            processor.Invoke(
+                ExecuteContext.Make(ExecuteCommand.Input, systemUnderTest),
+                string.Empty,
                 ExecuteParameters.MakeMemberCell(memberName, cell));
         }
 
         public void Check(object systemUnderTest, Tree<Cell> memberName, Tree<Cell> parameters, Tree<Cell> expectedCell) {
-            processor.Execute(
-                ExecuteContext.Make(ExecuteCommand.Check, systemUnderTest), 
+            processor.Invoke(
+                ExecuteContext.Make(ExecuteCommand.Check, systemUnderTest),
+                string.Empty,
                 ExecuteParameters.Make(memberName, parameters, expectedCell));
         }
 
         public void Check(object systemUnderTest, TypedValue actualValue, Tree<Cell> expectedCell) {
-            processor.Execute(
+            processor.Invoke(
                 ExecuteContext.Make(ExecuteCommand.Check, systemUnderTest, actualValue),
+                string.Empty,
                 ExecuteParameters.Make(expectedCell));
         }
 
         public TypedValue TryInvoke(object target, Tree<Cell> memberName, Tree<Cell> parameters, Tree<Cell> targetCell) {
-            return processor.Execute(
+            return processor.Invoke(
                 ExecuteContext.Make(ExecuteCommand.Invoke, new TypedValue(target)), 
+                string.Empty,
                 ExecuteParameters.Make(memberName, parameters, targetCell));
         }
 
         public bool Compare(TypedValue actual, Tree<Cell> expectedCell) {
-            return (bool)processor.Execute(
-                             ExecuteContext.Make(ExecuteCommand.Compare, actual), 
-                             ExecuteParameters.Make(expectedCell)).Value;
+            return (bool)processor.Invoke(
+                ExecuteContext.Make(ExecuteCommand.Compare, actual), 
+                string.Empty,
+                ExecuteParameters.Make(expectedCell)).Value;
         }
     }
 }

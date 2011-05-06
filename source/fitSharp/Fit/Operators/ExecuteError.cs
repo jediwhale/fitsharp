@@ -7,7 +7,7 @@
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
-    public class ExecuteError : ExecuteBase {
+    public class ExecuteError : InvokeCommandBase {
         private static readonly IdentifierName errorIdentifier = new IdentifierName("error");
 
         public override bool CanExecute(ExecuteContext context, ExecuteParameters parameters) {

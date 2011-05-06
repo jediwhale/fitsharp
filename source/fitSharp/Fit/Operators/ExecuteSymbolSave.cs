@@ -7,7 +7,7 @@ using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
-    public class ExecuteSymbolSave : ExecuteBase {
+    public class ExecuteSymbolSave : InvokeCommandBase {
         public override bool CanExecute(ExecuteContext context, ExecuteParameters parameters) {
             return context.Command == ExecuteCommand.Check
                 && parameters.Cell.Text.StartsWith(">>");
