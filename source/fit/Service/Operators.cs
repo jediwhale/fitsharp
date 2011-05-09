@@ -24,7 +24,7 @@ namespace fit.Service {
 
             Add(new ComposeTable(), 0);
             Add(new ExecuteList(), 0);
-            Add(new CompareListOperation(), 0);
+            Add(new CompareList(), 0);
             Add(new ParseTable(), 0);
             Add(new ParseTree(), 0);
             Add(new ParseInterpreter(), 0);

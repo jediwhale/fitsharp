@@ -1,4 +1,4 @@
-// Copyright © 2010 Syterra Software Inc.
+// Copyright © 2011 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -25,7 +25,7 @@ namespace fit.Test.Acceptance {
                 string html = "<table><tr><td>" + HttpUtility.HtmlEncode(expectedValue) + "</td></tr></table>";
                 myCell = Parse.ParseFrom(html).Parts.Parts;
                 return
-                    CellOperation.Compare(MakeTypedValue(theActualValue, theActualType), myCell).ToString();
+                    Processor.Compare(MakeTypedValue(theActualValue, theActualType), myCell).ToString();
             }
             catch (Exception) {
                 return "Exception";
