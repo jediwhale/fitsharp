@@ -1,4 +1,4 @@
-﻿// Copyright © 2010 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2011 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -6,6 +6,7 @@
 using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
+using fitSharp.Fit.Service;
 using fitSharp.Machine.Model;
 using Moq;
 using NUnit.Framework;
@@ -55,9 +56,7 @@ namespace fitSharp.Test.NUnit.Fit {
 
         [Test] public void LastActionIsSetAsInputCellAttribute() {
             SetUpSUT("procedure");
-            var parameters = new ExecuteParameters(
-                ExecuteParameters.MakeMemberCell(new CellTreeLeaf("procedure"), targetCell));
-            execute.Execute(new ExecuteContext(ExecuteCommand.Input, target.Value), parameters);
+            new InputOperation(processor.Object, target.Value, new CellTreeLeaf("procedure"), targetCell).Do();
             Assert.AreEqual("blah blah", targetCell.Value.GetAttribute(CellAttribute.Folded));
         }
 

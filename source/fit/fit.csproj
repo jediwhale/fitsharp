@@ -70,6 +70,7 @@
     <Compile Include="Fixtures\FlowKeywords.cs" />
     <Compile Include="Fixtures\Compute.cs" />
     <Compile Include="Operators\ArrayMatchStrategy.cs" />
+    <Compile Include="Operators\CompareListOperation.cs" />
     <Compile Include="Operators\ComposeHtmlStoryTestString.cs" />
     <Compile Include="Operators\ComposeStoryTestString.cs" />
     <Compile Include="Operators\ComposeTextStoryTestString.cs" />

@@ -1,9 +1,10 @@
-// Copyright © 2010 Syterra Software Inc. All rights reserved.
+// Copyright © 2011 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
+using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
 
@@ -71,18 +72,21 @@ namespace fitSharp.Fit.Service {
     }
 
     public class CreateBinding: BindingOperation {
-        private readonly CellOperation operation;
+        private readonly CellProcessor processor;
         private readonly MutableDomainAdapter adapter;
         private readonly string memberName;
 
-        public CreateBinding(CellOperation operation, MutableDomainAdapter adapter, string memberName) {
-            this.operation = operation;
+
+        public CreateBinding(CellProcessor processor, MutableDomainAdapter adapter, string memberName) {
+            this.processor = processor;
             this.adapter = adapter;
             this.memberName = memberName;
         }
 
         public void Do(Tree<Cell> cell) {
-            operation.Create(adapter, memberName, new CellTree(cell));
+            //operation.Create(adapter, memberName, new CellTree(cell));
+            var instance = processor.Create(memberName, new CellTree(cell));
+            adapter.SetSystemUnderTest(instance.Value);
         }
 
         public bool IsCheck { get { return false; } }

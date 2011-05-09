@@ -1,4 +1,4 @@
-// Copyright © 2010 Syterra Software Inc.
+// Copyright © 2011 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -7,7 +7,6 @@ using System;
 using System.Collections;
 using System.Linq;
 using fit.Model;
-using fitlibrary.exception;
 using fitSharp.Fit.Operators;
 using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
@@ -20,9 +19,6 @@ namespace fit.Operators {
                 case ExecuteCommand.Check:
                     var cell1 = (Parse)parameters.Cell;
                     return cell1.Parts != null && typeof(IList).IsAssignableFrom(GetTypedActual(context, parameters).Type);
-                case ExecuteCommand.Compare:
-                    var cell2 = (Parse)parameters.Cell;
-                    return cell2.Parts != null && typeof(IList).IsAssignableFrom(context.Target.Value.Type);
 
                 default:
                     return false;
@@ -30,20 +26,8 @@ namespace fit.Operators {
         }
 
         public override TypedValue Execute(ExecuteContext context, ExecuteParameters parameters) {
-            switch (context.Command) {
-                case ExecuteCommand.Check:
-                    ExecuteCheck(context, parameters);
-                    break;
-                case ExecuteCommand.Compare:
-                    return ExecuteEvaluate(context, parameters);
-            }
+            ExecuteCheck(context, parameters);
             return TypedValue.Void;
-        }
-
-        private TypedValue ExecuteEvaluate(ExecuteContext context, ExecuteParameters parameters) {
-            var cell = (Parse)parameters.Cell;
-            var matcher = new ListMatcher(Processor, new ArrayMatchStrategy(Processor, cell.Parts.Parts));
-            return new TypedValue(matcher.IsEqual(context.Target.Value.Value, cell));
         }
 
         private void ExecuteCheck(ExecuteContext context, ExecuteParameters parameters) {

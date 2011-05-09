@@ -24,6 +24,7 @@ namespace fitSharp.Fit.Operators {
 
             Add(new ExecuteDefault(), 0);
             Add(new ExecuteEmpty(), 0);
+            Add(new InputEmptyOperation(), 0);
             Add(new ExecuteSymbolSave(), 0);
 
             Add(new CompareDefault(), 0);
@@ -55,7 +56,7 @@ namespace fitSharp.Fit.Operators {
 
         private static readonly Dictionary<string, string> renames = new Dictionary<string, string> {
                                                                                                         {"boolhandler", typeof(ParseBoolean).FullName},
-                                                                                                        {"emptycellhandler", typeof(ExecuteEmpty).FullName},
+                                                                                                        {"emptycellhandler", typeof(ExecuteEmpty).FullName}, //todo: inputemptyoperation
                                                                                                         {"exceptionkeywordhandler", typeof(ExecuteException).FullName},
                                                                                                         {"nullkeywordhandler", typeof(ParseNull).FullName},
                                                                                                         {"blankkeywordhandler", typeof(ParseBlank).FullName},

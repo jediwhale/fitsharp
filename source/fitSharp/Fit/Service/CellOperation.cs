@@ -13,7 +13,6 @@ namespace fitSharp.Fit.Service {
         void Check(object systemUnderTest, Tree<Cell> memberName, Tree<Cell> parameters, Tree<Cell> expectedCell);
         void Check(object systemUnderTest, TypedValue actualValue, Tree<Cell> expectedCell);
         bool Compare(TypedValue actual, Tree<Cell> expectedCell);
-        TypedValue Create(string className, Tree<Cell> parameterCell);
         void Input(object systemUnderTest, Tree<Cell> memberName, Tree<Cell> cell);
         TypedValue TryInvoke(object target, Tree<Cell> memberName, Tree<Cell> parameters, Tree<Cell> targetCell);
     }
@@ -21,15 +20,6 @@ namespace fitSharp.Fit.Service {
     public static class CellOperationExtension {
         public static void Check(this CellOperation operation, object systemUnderTest, Tree<Cell> memberName, Tree<Cell> expectedCell) {
             operation.Check(systemUnderTest, memberName, new CellTree(), expectedCell);
-        }
-
-        public static void Create(this CellOperation operation, MutableDomainAdapter adapter, string className, Tree<Cell> parameterCell) {
-            TypedValue instance = operation.Create(className, parameterCell);
-            adapter.SetSystemUnderTest(instance.Value);
-        }
-
-        public static TypedValue Create(this CellOperation operation, string className) {
-            return operation.Create(className, new CellTree());
         }
 
         public static TypedValue Invoke(this CellOperation operation, object target, Tree<Cell> memberName) {
@@ -65,43 +55,40 @@ namespace fitSharp.Fit.Service {
             this.processor = processor;
         }
 
-        public TypedValue Create(string className, Tree<Cell> parameterCell) {
-            return processor.Create(className, parameterCell);
-        }
-
-        public void Input(object systemUnderTest, Tree<Cell> memberName, Tree<Cell> cell) {
-            processor.Invoke(
-                ExecuteContext.Make(ExecuteCommand.Input, systemUnderTest),
-                string.Empty,
-                ExecuteParameters.MakeMemberCell(memberName, cell));
-        }
-
         public void Check(object systemUnderTest, Tree<Cell> memberName, Tree<Cell> parameters, Tree<Cell> expectedCell) {
             processor.Invoke(
                 ExecuteContext.Make(ExecuteCommand.Check, systemUnderTest),
-                string.Empty,
+                ExecuteContext.CheckCommand,
                 ExecuteParameters.Make(memberName, parameters, expectedCell));
         }
 
         public void Check(object systemUnderTest, TypedValue actualValue, Tree<Cell> expectedCell) {
             processor.Invoke(
                 ExecuteContext.Make(ExecuteCommand.Check, systemUnderTest, actualValue),
-                string.Empty,
+                ExecuteContext.CheckCommand,
                 ExecuteParameters.Make(expectedCell));
         }
 
         public TypedValue TryInvoke(object target, Tree<Cell> memberName, Tree<Cell> parameters, Tree<Cell> targetCell) {
             return processor.Invoke(
                 ExecuteContext.Make(ExecuteCommand.Invoke, new TypedValue(target)), 
-                string.Empty,
+                ExecuteContext.InvokeCommand,
                 ExecuteParameters.Make(memberName, parameters, targetCell));
         }
 
         public bool Compare(TypedValue actual, Tree<Cell> expectedCell) {
-            return (bool)processor.Invoke(
-                ExecuteContext.Make(ExecuteCommand.Compare, actual), 
-                string.Empty,
-                ExecuteParameters.Make(expectedCell)).Value;
+            return processor.Invoke(
+                    new TypedValue(new CompareOperation(processor, actual, expectedCell)), 
+                    "Do",
+                    new CellTree())
+                .GetValue<bool>();
+        }
+
+        public void Input(object systemUnderTest, Tree<Cell> memberName, Tree<Cell> inputCell) {
+            processor.Invoke(
+                    new TypedValue(new InputOperation(processor, systemUnderTest, memberName, inputCell)), 
+                    "Do",
+                    new CellTree());
         }
     }
 }
