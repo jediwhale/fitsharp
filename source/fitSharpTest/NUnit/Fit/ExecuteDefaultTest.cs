@@ -56,7 +56,7 @@ namespace fitSharp.Test.NUnit.Fit {
 
         [Test] public void LastActionIsSetAsInputCellAttribute() {
             SetUpSUT("procedure");
-            new InputOperation(processor.Object, target.Value, new CellTreeLeaf("procedure"), targetCell).Do();
+            new InvokeOperation(processor.Object, target, new CellTreeLeaf("procedure"), targetCell, targetCell).Do();
             Assert.AreEqual("blah blah", targetCell.Value.GetAttribute(CellAttribute.Folded));
         }
 

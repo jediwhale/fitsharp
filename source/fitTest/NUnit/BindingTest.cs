@@ -17,34 +17,34 @@ namespace fit.Test.NUnit {
         {
             var f = new TestFixture { Processor = new Service.Service()};
 
-            BindingOperation bindingOperation = new InputBinding(f.CellOperation, f, TestUtils.CreateCell("sampleInt"));
+            BindingOperation bindingOperation = new InputBinding(f.Processor, f, TestUtils.CreateCell("sampleInt"));
             bindingOperation.Do(MakeCell("123456"));
             Assert.AreEqual(123456, f.sampleInt);
 
             bindingOperation.Do(MakeCell("-234567"));
             Assert.AreEqual(-234567, f.sampleInt);
 			
-            bindingOperation = new InputBinding(f.CellOperation, f, TestUtils.CreateCell("sampleDouble"));
+            bindingOperation = new InputBinding(f.Processor, f, TestUtils.CreateCell("sampleDouble"));
             bindingOperation.Do(MakeCell("3.14159"));
             Assert.AreEqual(3.14159, f.sampleDouble);
 
-            bindingOperation = new InputBinding(f.CellOperation, f, TestUtils.CreateCell("sampleChar"));
+            bindingOperation = new InputBinding(f.Processor, f, TestUtils.CreateCell("sampleChar"));
             bindingOperation.Do(MakeCell("a"));
             Assert.AreEqual('a', f.sampleChar);
 
-            bindingOperation = new InputBinding(f.CellOperation, f, TestUtils.CreateCell("sampleString"));
+            bindingOperation = new InputBinding(f.Processor, f, TestUtils.CreateCell("sampleString"));
             bindingOperation.Do(MakeCell("xyzzy"));
             Assert.AreEqual("xyzzy", f.sampleString);
 
-            bindingOperation = new InputBinding(f.CellOperation, f, TestUtils.CreateCell("sampleFloat"));
+            bindingOperation = new InputBinding(f.Processor, f, TestUtils.CreateCell("sampleFloat"));
             bindingOperation.Do(MakeCell("6.02e23"));
             Assert.AreEqual(6.02e23f, f.sampleFloat, 1e17f);
 
-            bindingOperation = new InputBinding(f.CellOperation, f, TestUtils.CreateCell("sampleByte"));
+            bindingOperation = new InputBinding(f.Processor, f, TestUtils.CreateCell("sampleByte"));
             bindingOperation.Do(MakeCell("123"));
             Assert.AreEqual(123, f.sampleByte);
 
-            bindingOperation = new InputBinding(f.CellOperation, f, TestUtils.CreateCell("sampleShort"));
+            bindingOperation = new InputBinding(f.Processor, f, TestUtils.CreateCell("sampleShort"));
             bindingOperation.Do(MakeCell("12345"));
             Assert.AreEqual(12345, f.sampleShort);
         }

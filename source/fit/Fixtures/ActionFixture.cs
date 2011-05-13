@@ -44,7 +44,7 @@ namespace fit
 
 		public virtual void Enter()
 		{
-			CellOperation.Input(GetTarget(actor), cells.More, cells.More.More);
+            new InputBinding(Processor, new Actor(actor), cells.More).Do(cells.More.More);
 		}
 
 		public virtual void Press()
@@ -64,6 +64,19 @@ namespace fit
         private static object GetTarget(object actor) {
             var target = actor as TargetObjectProvider;
             return target == null ? actor : target.GetTargetObject();
+        }
+
+        private class Actor: TargetObjectProvider {
+            public Actor(object instance) {
+                this.instance = instance;
+            }
+
+            public object GetTargetObject() {
+                var target = instance as TargetObjectProvider;
+                return target == null ? instance : target.GetTargetObject();
+            }
+
+            readonly object instance;
         }
 	}
 }

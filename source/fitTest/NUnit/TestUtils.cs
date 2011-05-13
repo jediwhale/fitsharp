@@ -49,7 +49,7 @@ namespace fit.Test.NUnit {
         }
 
         public static void DoInput(Fixture fixture, Tree<Cell> range, Parse cell) {
-            fixture.CellOperation.Input(fixture.GetTargetObject(), range, cell);
+            new InputBinding(fixture.Processor, fixture, range).Do(cell);
         }
 
         public static void DoCheck(Fixture fixture, Tree<Cell> range, Parse cell) {

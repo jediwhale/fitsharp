@@ -12,7 +12,6 @@ namespace fitSharp.Fit.Service {
     public interface CellOperation {
         void Check(object systemUnderTest, Tree<Cell> memberName, Tree<Cell> parameters, Tree<Cell> expectedCell);
         void Check(object systemUnderTest, TypedValue actualValue, Tree<Cell> expectedCell);
-        void Input(object systemUnderTest, Tree<Cell> memberName, Tree<Cell> cell);
         TypedValue TryInvoke(object target, Tree<Cell> memberName, Tree<Cell> parameters, Tree<Cell> targetCell);
     }
 
@@ -73,13 +72,6 @@ namespace fitSharp.Fit.Service {
                 ExecuteContext.Make(ExecuteCommand.Invoke, new TypedValue(target)), 
                 ExecuteContext.InvokeCommand,
                 ExecuteParameters.Make(memberName, parameters, targetCell));
-        }
-
-        public void Input(object systemUnderTest, Tree<Cell> memberName, Tree<Cell> inputCell) {
-            processor.Invoke(
-                    new TypedValue(new InputOperation(processor, systemUnderTest, memberName, inputCell)), 
-                    "Do",
-                    new CellTree());
         }
     }
 }

@@ -42,7 +42,7 @@ namespace fitSharp.Fit.Service {
                 return new CreateBinding(processor, adapter, newMemberName);
 		    }
 
-		    return new InputBinding(cellOperation, targetProvider, nameCell);
+		    return new InputBinding(processor, targetProvider, nameCell);
 		}
 
 		static bool NoOperationIsImpliedBy(string name) { return name.Length == 0; }

@@ -95,11 +95,9 @@
     <Compile Include="Fit\Exception\IgnoredException.cs" />
     <Compile Include="Fit\Fixtures\Define.cs" />
     <Compile Include="Fit\Operators\ComposeShowAsOperator.cs" />
-    <Compile Include="Fit\Operators\InputEmptyOperation.cs" />
     <Compile Include="Fit\Operators\ParseNullArray.cs" />
     <Compile Include="Fit\Operators\ParseStoryTestString.cs" />
     <Compile Include="Fit\Operators\ParseTextStoryTestString.cs" />
-    <Compile Include="Fit\Service\InputOperation.cs" />
     <Compile Include="Fit\Service\InvokeOperation.cs" />
     <Compile Include="Machine\Application\Runnable.cs" />
     <Compile Include="Machine\Application\Runner.cs" />

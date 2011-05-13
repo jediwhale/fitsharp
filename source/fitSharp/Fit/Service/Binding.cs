@@ -6,6 +6,7 @@
 using System;
 using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
+using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Service {
@@ -36,21 +37,58 @@ namespace fitSharp.Fit.Service {
     }
 
     public class InputBinding: BindingOperation {
-        private readonly CellOperation operation;
+        private readonly CellProcessor processor;
         private readonly TargetObjectProvider targetProvider;
         private readonly Tree<Cell> memberCell;
 
 
-        public InputBinding(CellOperation operation, TargetObjectProvider targetProvider, Tree<Cell> memberCell) {
-            this.operation = operation;
+        public InputBinding(CellProcessor processor, TargetObjectProvider targetProvider, Tree<Cell> memberCell) {
+            this.processor = processor;
             this.memberCell = memberCell;
             this.targetProvider = targetProvider;
         }
+
         public void Do(Tree<Cell> cell) {
-            operation.Input(targetProvider.GetTargetObject(), memberCell, cell);
+            //operation.Input(targetProvider.GetTargetObject(), memberCell, cell);
+            var instance = new TypedValue(targetProvider.GetTargetObject());
+            if (cell.IsLeaf && cell.Value.Text.Length == 0) {
+	            var actual = processor.Invoke(instance, GetMemberName(memberCell), new CellTree());
+	            if (actual.IsValid) ShowActual(cell.Value, actual.Value);
+            }
+            else {
+                var beforeCounts = new TestCounts(processor.TestStatus.Counts);
+                processor.InvokeWithThrow(instance, GetMemberName(memberCell), new CellTree(cell));
+                MarkCellWithLastResults(beforeCounts, cell);
+            }
         }
 
         public bool IsCheck { get { return false; } }
+
+        string GetMemberName(Tree<Cell> members) {
+            return processor.ParseTree<Cell, MemberName>(members).ToString();
+        }
+
+        static void ShowActual(Cell cell, object actual) {
+            cell.AddToAttribute(
+                CellAttribute.InformationSuffix,
+                actual == null ? "null"
+	            : actual.ToString().Length == 0 ? "blank"
+	            : actual.ToString());
+	    }
+        void MarkCellWithLastResults(TestCounts testCounts, Tree<Cell> cell) {
+            if (cell != null && !string.IsNullOrEmpty(processor.TestStatus.LastAction)) {
+                cell.Value.SetAttribute(CellAttribute.Folded, processor.TestStatus.LastAction);
+                MarkCellWithCounts(testCounts, cell);
+            }
+            processor.TestStatus.LastAction = null;
+        }
+
+        void MarkCellWithCounts(TestCounts beforeCounts, Tree<Cell> cell) {
+            var style = processor.TestStatus.Counts.Subtract(beforeCounts).Style;
+            if (!string.IsNullOrEmpty(style) && string.IsNullOrEmpty(cell.Value.GetAttribute(CellAttribute.Status))) {
+                cell.Value.SetAttribute(CellAttribute.Status, style);
+            }
+        }
     }
 
     public class CheckBinding: BindingOperation {
