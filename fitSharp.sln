@@ -30,7 +30,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dbfitSqlServer", "source\db
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dbfitOracle", "source\dbfitOracle\dbfitOracle.csproj", "{E60C59D8-84BC-4C69-802F-26C62A0CF0F4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dbfitSybase", "dbfitSybase\dbfitSybase.csproj", "{33B34718-6151-4D91-B27F-EB8FD64CB66B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dbfitSybase", "source\dbfitSybase\dbfitSybase.csproj", "{33B34718-6151-4D91-B27F-EB8FD64CB66B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
