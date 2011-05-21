@@ -20,7 +20,7 @@ namespace fit.Test.NUnit {
             cellOperation.Verify(o => o.TryInvoke(setUp,
                 It.Is<Tree<Cell>>(c => c.Branches[0].Value.Text == "method"),
                 It.Is<Tree<Cell>>(c => c.Branches[0].Value.Text == "value"),
-                It.Is<Tree<Cell>>(c => c.Value.Text == "value")));
+                It.Is<Cell>(c => c.Text == "value")));
         }
     }
 }

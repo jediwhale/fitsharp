@@ -49,7 +49,6 @@ namespace fitSharp.Fit.Service {
         }
 
         public void Do(Tree<Cell> cell) {
-            //operation.Input(targetProvider.GetTargetObject(), memberCell, cell);
             var instance = new TypedValue(targetProvider.GetTargetObject());
             if (cell.IsLeaf && cell.Value.Text.Length == 0) {
 	            var actual = processor.Invoke(instance, GetMemberName(memberCell), new CellTree());

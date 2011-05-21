@@ -23,6 +23,7 @@ namespace fitSharp.Fit.Operators {
             Add(new ParseSymbol(), 0);
 
             Add(new ExecuteDefault(), 0);
+            Add(new InvokeOperationDefault(), 0);
             Add(new ExecuteEmpty(), 0);
             Add(new ExecuteSymbolSave(), 0);
 
