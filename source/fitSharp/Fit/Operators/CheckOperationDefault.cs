@@ -3,33 +3,34 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-using fitSharp.Fit.Model;
+using fitSharp.Fit.Exception;
 using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators
 {
-    public class InvokeOperationDefault: CellOperator, InvokeOperator<Cell>
+    public class CheckOperationDefault: CellOperator, InvokeOperator<Cell>
     {
         public bool CanInvoke(TypedValue instance, string memberName, Tree<Cell> parameters) {
-            return instance.Type == typeof (CellOperationContext) && memberName == CellOperationContext.InvokeCommand;
+            return instance.Type == typeof (CellOperationContext) && memberName == CellOperationContext.CheckCommand;
         }
 
         public TypedValue Invoke(TypedValue instance, string memberName, Tree<Cell> parameters) {
             var context = instance.GetValue<CellOperationContext>();
-            var beforeCounts = new TestCounts(Processor.TestStatus.Counts);
-            TypedValue result = context.DoInvoke(Processor);
-            MarkCellWithLastResults(parameters, p => MarkCellWithCounts(p, beforeCounts));
-            return result;
-        }
-
-
-        void MarkCellWithCounts(Cell target, TestCounts beforeCounts) {
-            string style = Processor.TestStatus.Counts.Subtract(beforeCounts).Style;
-            if (!string.IsNullOrEmpty(style) && string.IsNullOrEmpty(target.GetAttribute(CellAttribute.Status))) {
-                target.SetAttribute(CellAttribute.Status, style);
+            try {
+                var actual = context.GetTypedActual(Processor);
+                if (Processor.Compare(actual, parameters)) {
+                    Processor.TestStatus.MarkRight(parameters.Value);
+                }
+                else {
+                    var actualCell = Processor.Compose(actual);
+                    Processor.TestStatus.MarkWrong(parameters.Value, actualCell.Value.Text);
+                }
             }
+            catch (IgnoredException) {}
+            MarkCellWithLastResults(parameters, p => {});
+            return TypedValue.Void;
         }
     }
 }

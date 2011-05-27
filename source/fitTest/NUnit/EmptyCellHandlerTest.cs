@@ -19,7 +19,7 @@ namespace fit.Test.NUnit {
 
         [Test]
         public void TestMatch() {
-            Assert.IsTrue(IsMatch(ExecuteCommand.Check, new ExecuteEmpty(), ExecuteParameters.Make(TestUtils.CreateCell(""))));
+            Assert.IsTrue(IsMatch(new CheckOperationEmpty(), ""));
         }
 
         [Test]

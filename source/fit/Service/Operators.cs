@@ -23,7 +23,7 @@ namespace fit.Service {
             Add(new ParseStoryTestString(), 0);
 
             Add(new ComposeTable(), 0);
-            Add(new ExecuteList(), 0);
+            Add(new ListOperator(), 0);
             Add(new CompareList(), 0);
             Add(new ParseTable(), 0);
             Add(new ParseTree(), 0);

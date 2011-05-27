@@ -16,16 +16,12 @@ namespace fit.Test.NUnit {
         [Test]
         public void TestRegisterAndGet()
         {
-            Assert.IsTrue(IsMatch("<<xyz"));
-            Assert.IsFalse(TestUtils.IsMatch(ExecuteCommand.Check, new ExecuteSymbolSave(), ExecuteParameters.Make(TestUtils.CreateCell("x<<yz"))));
-            Assert.IsFalse(IsMatch("x<<yz"));
-            Assert.IsTrue(TestUtils.IsMatch(ExecuteCommand.Check, new ExecuteSymbolSave(), ExecuteParameters.Make(TestUtils.CreateCell(">>xyz"))));
-            Assert.IsFalse(TestUtils.IsMatch(ExecuteCommand.Check, new ExecuteSymbolSave(), ExecuteParameters.Make(TestUtils.CreateCell("x>>yz"))));
-            Assert.IsFalse(IsMatch("x>>yz"));
-        }
-
-        private static bool IsMatch(string input) {
-            return IsMatch(new ParseSymbol(), input);
+            Assert.IsTrue(IsMatch(new ParseSymbol(), "<<xyz"));
+            Assert.IsFalse(IsMatch(new CheckOperationSymbolSave(), "x<<yz"));
+            Assert.IsFalse(IsMatch(new ParseSymbol(), "x<<yz"));
+            Assert.IsTrue(IsMatch(new CheckOperationSymbolSave(), ">>xyz"));
+            Assert.IsFalse(IsMatch(new CheckOperationSymbolSave(), "x>>yz"));
+            Assert.IsFalse(IsMatch(new ParseSymbol(), "x>>yz"));
         }
 
         [Test]

@@ -1,29 +1,31 @@
-// FitNesse.NET
-// Copyright © 2008 Syterra Software Inc. Includes work by Object Mentor, Inc., (c) 2002 Cunningham & Cunningham, Inc.
+// Copyright © 2011 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System.Reflection;
 using System.Text.RegularExpressions;
+using fitSharp.Fit.Service;
+using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
-    public class ExecuteException : InvokeCommandBase {
+    public class CheckOperationException: CellOperator, InvokeOperator<Cell> {
         private static readonly IdentifierName exceptionIdentifier = new IdentifierName("exception[");
         private static readonly Regex regexForMessageOnly = new Regex("^\".*\"$");
         private static readonly Regex regexForExceptionTypeNameOnly = new Regex("^.*: \".*\"$");
 
-        public override bool CanExecute(ExecuteContext context, ExecuteParameters parameters) {
-            return context.Command == ExecuteCommand.Check
-                && exceptionIdentifier.IsStartOf(parameters.Cell.Text) && parameters.Cell.Text.EndsWith("]");
+        public bool CanInvoke(TypedValue instance, string memberName, Tree<Cell> parameters) {
+            return instance.Type == typeof (CellOperationContext) && memberName == CellOperationContext.CheckCommand
+                && exceptionIdentifier.IsStartOf(parameters.Value.Text) && parameters.Value.Text.EndsWith("]");
         }
 
-        public override TypedValue Execute(ExecuteContext context, ExecuteParameters parameters) {
-            string exceptionContent = parameters.Cell.Text.Substring("exception[".Length, parameters.Cell.Text.Length - ("exception[".Length + 1));
+        public TypedValue Invoke(TypedValue instance, string memberName, Tree<Cell> parameters) {
+            var context = instance.GetValue<CellOperationContext>();
+            string exceptionContent = parameters.Value.Text.Substring("exception[".Length, parameters.Value.Text.Length - ("exception[".Length + 1));
             try {
-                GetActual(context, parameters);
-                Processor.TestStatus.MarkWrong(parameters.Cell, "no exception");
+                context.GetActual(Processor);
+                Processor.TestStatus.MarkWrong(parameters.Value, "no exception");
             }
             catch (TargetInvocationException e) {
                 if (IsMessageOnly(exceptionContent)) {
@@ -48,13 +50,14 @@ namespace fitSharp.Fit.Operators {
             return regexForMessageOnly.IsMatch(exceptionContent);
         }
 
-        private void EvaluateException(bool expression, ExecuteParameters parameters, TargetInvocationException e) {
+        private void EvaluateException(bool expression, Tree<Cell> parameters, TargetInvocationException e) {
             if (expression) {
-                Processor.TestStatus.MarkRight(parameters.Cell);
+                Processor.TestStatus.MarkRight(parameters.Value);
             }
             else {
-                Processor.TestStatus.MarkWrong(parameters.Cell, "exception[" + e.InnerException.GetType().Name + ": \"" + e.InnerException.Message + "\"]");
+                Processor.TestStatus.MarkWrong(parameters.Value, "exception[" + e.InnerException.GetType().Name + ": \"" + e.InnerException.Message + "\"]");
             }
         }
+
     }
 }

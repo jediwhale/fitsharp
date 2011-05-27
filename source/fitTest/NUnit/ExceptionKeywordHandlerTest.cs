@@ -15,8 +15,8 @@ namespace fit.Test.NUnit {
         [Test]
         public void TestMatch()
         {
-            Assert.IsTrue(IsMatch(ExecuteCommand.Check, new ExecuteException(), ExecuteParameters.Make(TestUtils.CreateCell("exception[]"))));
-            Assert.IsTrue(IsMatch(ExecuteCommand.Check, new ExecuteException(), ExecuteParameters.Make(TestUtils.CreateCell("exception[NullPointerException]"))));
+            Assert.IsTrue(IsMatch(new CheckOperationException(), "exception[]"));
+            Assert.IsTrue(IsMatch(new CheckOperationException(), "exception[NullPointerException]"));
         }
 
 

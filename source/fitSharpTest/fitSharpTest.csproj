@@ -73,7 +73,7 @@
     <Compile Include="NUnit\Fit\CellProcessorBaseTest.cs" />
     <Compile Include="NUnit\Fit\ComposeShowAsOperatorTest.cs" />
     <Compile Include="NUnit\Fit\DefineTest.cs" />
-    <Compile Include="NUnit\Fit\ExecuteDefaultTest.cs" />
+    <Compile Include="NUnit\Fit\CellOperationDefaultTest.cs" />
     <Compile Include="NUnit\Fit\ExecuteStoryTestTest.cs" />
     <Compile Include="Double\FolderTestModel.cs" />
     <Compile Include="NUnit\Fit\GracefulNameTest.cs" />

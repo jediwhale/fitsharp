@@ -13,27 +13,19 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fit.Operators {
-    public class ExecuteList: InvokeCommandBase, ParseOperator<Cell> {
-        public override bool CanExecute(ExecuteContext context, ExecuteParameters parameters) {
-            switch (context.Command) {
-                case ExecuteCommand.Check:
-                    var cell1 = (Parse)parameters.Cell;
-                    return cell1.Parts != null && typeof(IList).IsAssignableFrom(GetTypedActual(context, parameters).Type);
-
-                default:
-                    return false;
-            }
+    public class ListOperator: CellOperator, InvokeOperator<Cell>, ParseOperator<Cell> { //todo: split, eliminate fit dependency
+        public bool CanInvoke(TypedValue instance, string memberName, Tree<Cell> parameters) {
+            var context = instance.Value as CellOperationContext;
+            return context != null && memberName == CellOperationContext.CheckCommand
+                && !parameters.IsLeaf && typeof (IList).IsAssignableFrom(context.GetTypedActual(Processor).Type);
         }
 
-        public override TypedValue Execute(ExecuteContext context, ExecuteParameters parameters) {
-            ExecuteCheck(context, parameters);
-            return TypedValue.Void;
-        }
-
-        private void ExecuteCheck(ExecuteContext context, ExecuteParameters parameters) {
-            var cell = (Parse)parameters.Cell;
+        public TypedValue Invoke(TypedValue instance, string memberName, Tree<Cell> parameters) {
+            var context = instance.GetValue<CellOperationContext>();
+            var cell = (Parse)parameters.Value;
             var matcher = new ListMatcher(Processor, new ArrayMatchStrategy(Processor, cell.Parts.Parts));
-            matcher.MarkCell(context.SystemUnderTest.Value, GetActual(context, parameters), cell.Parts.Parts);
+            matcher.MarkCell(context.SystemUnderTest, context.GetActual(Processor), cell.Parts.Parts); //todo: encapsulate part in celloperationcontext??
+            return TypedValue.Void;
         }
 
         public bool CanParse(Type type, TypedValue instance, Tree<Cell> parameters) {
@@ -53,5 +45,6 @@ namespace fit.Operators {
                     return list;
                 }));
         }
+
     }
 }

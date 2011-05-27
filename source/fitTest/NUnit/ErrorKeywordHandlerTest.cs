@@ -15,7 +15,7 @@ namespace fit.Test.NUnit {
         [Test]
         public void MatchesErrorKeyword()
         {
-            Assert.IsTrue(IsMatch(ExecuteCommand.Check, new ExecuteError(), ExecuteParameters.Make(TestUtils.CreateCell("error"))));
+            Assert.IsTrue(IsMatch(new CheckOperationError(), "error"));
         }
 
         [Test]

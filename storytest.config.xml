@@ -29,7 +29,7 @@
     </Culture>
     
     <Fit.Operators>
-        <add>fit.Operators.ExecuteParse</add>
+        <add>fit.Operators.ParseModelOperator</add>
     </Fit.Operators>
     
 </suiteConfig>
