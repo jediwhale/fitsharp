@@ -90,6 +90,7 @@
     <Compile Include="Fit\Application\ConfigurationList.cs" />
     <Compile Include="Fit\Application\FileExclusions.cs" />
     <Compile Include="Fit\Fixtures\ConfigureFixture.cs" />
+    <Compile Include="Fit\Operators\CellOperationContext.cs" />
     <Compile Include="Fit\Operators\CellOperators.cs" />
     <Compile Include="Fit\Engine\CellProcessor.cs" />
     <Compile Include="Fit\Exception\IgnoredException.cs" />

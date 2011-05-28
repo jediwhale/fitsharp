@@ -4,10 +4,8 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using fitSharp.Fit.Engine;
-using fitSharp.Fit.Exception;
 using fitSharp.Fit.Model;
-using fitSharp.Machine.Engine;
-using fitSharp.Machine.Exception;
+using fitSharp.Fit.Operators;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Service {
@@ -49,17 +47,11 @@ namespace fitSharp.Fit.Service {
     }
 
     public class CellOperationImpl: CellOperation {
-        private readonly CellProcessor processor;
-
         public CellOperationImpl(CellProcessor processor) {
             this.processor = processor;
         }
 
         public void Check(object systemUnderTest, Tree<Cell> memberName, Tree<Cell> parameters, Tree<Cell> expectedCell) {
-            //processor.Invoke(
-            //    ExecuteContext.Make(ExecuteCommand.Check, systemUnderTest),
-            //    ExecuteContext.CheckCommand,
-            //    ExecuteParameters.Make(memberName, parameters, expectedCell));
             processor.Invoke(
                 CellOperationContext.Make(systemUnderTest, memberName, parameters),
                 CellOperationContext.CheckCommand,
@@ -67,10 +59,6 @@ namespace fitSharp.Fit.Service {
         }
 
         public void Check(object systemUnderTest, TypedValue actualValue, Tree<Cell> expectedCell) {
-            //processor.Invoke(
-            //    ExecuteContext.Make(ExecuteCommand.Check, systemUnderTest, actualValue),
-            //    ExecuteContext.CheckCommand,
-            //    ExecuteParameters.Make(expectedCell));
             processor.Invoke(
                 CellOperationContext.Make(systemUnderTest, actualValue),
                 CellOperationContext.CheckCommand,
@@ -83,66 +71,7 @@ namespace fitSharp.Fit.Service {
                 CellOperationContext.InvokeCommand,
                 new CellTree(targetCell));
         }
-    }
 
-    public class CellOperationContext {
-        public const string CheckCommand = "Check";
-        public const string InvokeCommand = "Invoke";
-
-        public static TypedValue Make(object systemUnderTest, Tree<Cell> memberName, Tree<Cell> parameters) {
-            return new TypedValue(new CellOperationContext(systemUnderTest, memberName, parameters));
-        }
-
-        public static TypedValue Make(object systemUnderTest, TypedValue actualValue) {
-            return new TypedValue(new CellOperationContext(systemUnderTest, actualValue));
-        }
-
-        CellOperationContext(object systemUnderTest, Tree<Cell> memberName, Tree<Cell> parameters) {
-            this.systemUnderTest = systemUnderTest;
-            this.memberName = memberName;
-            this.parameters = parameters;
-        }
-
-        CellOperationContext(object systemUnderTest, TypedValue actualValue) {
-            this.systemUnderTest = systemUnderTest;
-            this.actualValue = actualValue;
-        }
-
-        public TypedValue DoInvoke(CellProcessor processor) {
-            var targetObjectProvider = systemUnderTest as TargetObjectProvider;
-            var name = GetMemberName(processor);
-            return processor.Invoke(
-                    new TypedValue(targetObjectProvider != null ? targetObjectProvider.GetTargetObject() : systemUnderTest),
-                    name, parameters);
-        }
-
-        public object GetActual(CellProcessor processor) {
-            return GetTypedActual(processor).Value;
-        }
-
-        public TypedValue GetTypedActual(CellProcessor processor) {
-            if (!actualValue.HasValue) {
-                try {
-                    TypedValue actualResult = processor.InvokeWithThrow(new TypedValue(systemUnderTest), GetMemberName(processor), parameters);
-                    actualValue = actualResult;
-                }
-                catch (ParseException<Cell> e) {
-                    processor.TestStatus.MarkException(e.Subject, e);
-                    throw new IgnoredException();
-                }
-            }
-            return actualValue.Value;
-        }
-
-        public object SystemUnderTest { get { return systemUnderTest; } }
-
-        string GetMemberName(Processor<Cell> processor) {
-            return processor.ParseTree<Cell, MemberName>(memberName).ToString();
-        }
-
-        readonly object systemUnderTest;
-        private TypedValue? actualValue;
-        readonly Tree<Cell> memberName;
-        readonly Tree<Cell> parameters;
+        readonly CellProcessor processor;
     }
 }
