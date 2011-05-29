@@ -1,10 +1,12 @@
-// Copyright © 2010 Syterra Software Inc. All rights reserved.
+// Copyright © 2011 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
+using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
+using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Service {
@@ -35,21 +37,57 @@ namespace fitSharp.Fit.Service {
     }
 
     public class InputBinding: BindingOperation {
-        private readonly CellOperation operation;
+        private readonly CellProcessor processor;
         private readonly TargetObjectProvider targetProvider;
         private readonly Tree<Cell> memberCell;
 
 
-        public InputBinding(CellOperation operation, TargetObjectProvider targetProvider, Tree<Cell> memberCell) {
-            this.operation = operation;
+        public InputBinding(CellProcessor processor, TargetObjectProvider targetProvider, Tree<Cell> memberCell) {
+            this.processor = processor;
             this.memberCell = memberCell;
             this.targetProvider = targetProvider;
         }
+
         public void Do(Tree<Cell> cell) {
-            operation.Input(targetProvider.GetTargetObject(), memberCell, cell);
+            var instance = new TypedValue(targetProvider.GetTargetObject());
+            if (cell.IsLeaf && cell.Value.Text.Length == 0) {
+	            var actual = processor.Invoke(instance, GetMemberName(memberCell), new CellTree());
+	            if (actual.IsValid) ShowActual(cell.Value, actual.Value);
+            }
+            else {
+                var beforeCounts = new TestCounts(processor.TestStatus.Counts);
+                processor.InvokeWithThrow(instance, GetMemberName(memberCell), new CellTree(cell));
+                MarkCellWithLastResults(beforeCounts, cell);
+            }
         }
 
         public bool IsCheck { get { return false; } }
+
+        string GetMemberName(Tree<Cell> members) {
+            return processor.ParseTree<Cell, MemberName>(members).ToString();
+        }
+
+        static void ShowActual(Cell cell, object actual) {
+            cell.AddToAttribute(
+                CellAttribute.InformationSuffix,
+                actual == null ? "null"
+	            : actual.ToString().Length == 0 ? "blank"
+	            : actual.ToString());
+	    }
+        void MarkCellWithLastResults(TestCounts testCounts, Tree<Cell> cell) {
+            if (cell != null && !string.IsNullOrEmpty(processor.TestStatus.LastAction)) {
+                cell.Value.SetAttribute(CellAttribute.Folded, processor.TestStatus.LastAction);
+                MarkCellWithCounts(testCounts, cell);
+            }
+            processor.TestStatus.LastAction = null;
+        }
+
+        void MarkCellWithCounts(TestCounts beforeCounts, Tree<Cell> cell) {
+            var style = processor.TestStatus.Counts.Subtract(beforeCounts).Style;
+            if (!string.IsNullOrEmpty(style) && string.IsNullOrEmpty(cell.Value.GetAttribute(CellAttribute.Status))) {
+                cell.Value.SetAttribute(CellAttribute.Status, style);
+            }
+        }
     }
 
     public class CheckBinding: BindingOperation {
@@ -71,18 +109,21 @@ namespace fitSharp.Fit.Service {
     }
 
     public class CreateBinding: BindingOperation {
-        private readonly CellOperation operation;
+        private readonly CellProcessor processor;
         private readonly MutableDomainAdapter adapter;
         private readonly string memberName;
 
-        public CreateBinding(CellOperation operation, MutableDomainAdapter adapter, string memberName) {
-            this.operation = operation;
+
+        public CreateBinding(CellProcessor processor, MutableDomainAdapter adapter, string memberName) {
+            this.processor = processor;
             this.adapter = adapter;
             this.memberName = memberName;
         }
 
         public void Do(Tree<Cell> cell) {
-            operation.Create(adapter, memberName, new CellTree(cell));
+            //operation.Create(adapter, memberName, new CellTree(cell));
+            var instance = processor.Create(memberName, new CellTree(cell));
+            adapter.SetSystemUnderTest(instance.Value);
         }
 
         public bool IsCheck { get { return false; } }

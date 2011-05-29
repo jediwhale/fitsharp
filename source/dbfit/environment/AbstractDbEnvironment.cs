@@ -74,6 +74,13 @@ namespace dbfit
             else if (dbp.DbName != null) Connect(dbp.Service, dbp.Username, dbp.Password, dbp.DbName);
             else Connect(dbp.Service, dbp.Username, dbp.Password);
         }
+        public virtual void ConnectNoTransaction(String dataSource, String username, String password, String database)
+        {
+            string connectionString = GetConnectionString(dataSource, username, password, database);
+            CurrentConnection = DbProviderFactory.CreateConnection();
+            CurrentConnection.ConnectionString = connectionString;
+            CurrentConnection.Open();
+        }
         protected virtual void AddInput(DbCommand dbCommand, String name, Object value)
         {
             DbParameter dbParameter = dbCommand.CreateParameter();

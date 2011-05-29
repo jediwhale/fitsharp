@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -10,10 +10,28 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>fitSharp</RootNamespace>
     <AssemblyName>fitSharp</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkSubset>
-    </TargetFrameworkSubset>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -23,6 +41,31 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeContractsEnableRuntimeChecking>False</CodeContractsEnableRuntimeChecking>
+    <CodeContractsRuntimeOnlyPublicSurface>False</CodeContractsRuntimeOnlyPublicSurface>
+    <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
+    <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
+    <CodeContractsRuntimeSkipQuantifiers>False</CodeContractsRuntimeSkipQuantifiers>
+    <CodeContractsRunCodeAnalysis>False</CodeContractsRunCodeAnalysis>
+    <CodeContractsNonNullObligations>False</CodeContractsNonNullObligations>
+    <CodeContractsBoundsObligations>False</CodeContractsBoundsObligations>
+    <CodeContractsArithmeticObligations>False</CodeContractsArithmeticObligations>
+    <CodeContractsEnumObligations>False</CodeContractsEnumObligations>
+    <CodeContractsRedundantAssumptions>False</CodeContractsRedundantAssumptions>
+    <CodeContractsRunInBackground>False</CodeContractsRunInBackground>
+    <CodeContractsShowSquigglies>False</CodeContractsShowSquigglies>
+    <CodeContractsUseBaseLine>False</CodeContractsUseBaseLine>
+    <CodeContractsEmitXMLDocs>False</CodeContractsEmitXMLDocs>
+    <CodeContractsCustomRewriterAssembly />
+    <CodeContractsCustomRewriterClass />
+    <CodeContractsLibPaths />
+    <CodeContractsExtraRewriteOptions />
+    <CodeContractsExtraAnalysisOptions />
+    <CodeContractsBaseLineFile />
+    <CodeContractsCacheAnalysisResults>True</CodeContractsCacheAnalysisResults>
+    <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
+    <CodeContractsReferenceAssembly>%28none%29</CodeContractsReferenceAssembly>
+    <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -35,9 +78,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -50,20 +90,28 @@
     <Compile Include="Fit\Application\ConfigurationList.cs" />
     <Compile Include="Fit\Application\FileExclusions.cs" />
     <Compile Include="Fit\Fixtures\ConfigureFixture.cs" />
+    <Compile Include="Fit\Operators\CellOperationContext.cs" />
     <Compile Include="Fit\Operators\CellOperators.cs" />
     <Compile Include="Fit\Engine\CellProcessor.cs" />
     <Compile Include="Fit\Exception\IgnoredException.cs" />
     <Compile Include="Fit\Fixtures\Define.cs" />
+    <Compile Include="Fit\Operators\CheckOperationDefault.cs" />
+    <Compile Include="Fit\Operators\CheckOperationSymbolSave.cs" />
+    <Compile Include="Fit\Operators\ComposeShowAsOperator.cs" />
+    <Compile Include="Fit\Operators\InvokeOperationDefault.cs" />
     <Compile Include="Fit\Operators\ParseNullArray.cs" />
     <Compile Include="Fit\Operators\ParseStoryTestString.cs" />
     <Compile Include="Fit\Operators\ParseTextStoryTestString.cs" />
+    <Compile Include="Fit\Service\InvokeOperation.cs" />
     <Compile Include="Machine\Application\Runnable.cs" />
     <Compile Include="Machine\Application\Runner.cs" />
+    <Compile Include="Machine\Engine\CreateDefault.cs" />
     <Compile Include="Machine\Engine\Culture.cs" />
     <Compile Include="Machine\Engine\CurrentDomain.cs" />
-    <Compile Include="Machine\Engine\DataRowRuntime.cs" />
+    <Compile Include="Machine\Engine\InvokeDataRow.cs" />
     <Compile Include="Machine\Engine\Logging.cs" />
     <Compile Include="Machine\Engine\ApplicationDomain.cs" />
+    <Compile Include="Machine\Engine\ParameterList.cs" />
     <Compile Include="Machine\Engine\Types.cs" />
     <Compile Include="Machine\Model\CellBase.cs" />
     <Compile Include="Fit\Model\CellSubstring.cs" />
@@ -76,19 +124,13 @@
     <Compile Include="Fit\Operators\CompareEmpty.cs" />
     <Compile Include="Fit\Operators\CompareFail.cs" />
     <Compile Include="Fit\Operators\CompareRegEx.cs" />
-    <Compile Include="Fit\Operators\ExecuteEmpty.cs" />
-    <Compile Include="Fit\Operators\ExecuteInterpret.cs" />
+    <Compile Include="Fit\Operators\CheckOperationEmpty.cs" />
     <Compile Include="Fit\Operators\ParseByteArray.cs" />
     <Compile Include="Fit\Operators\ParseDate.cs" />
     <Compile Include="Fit\Operators\CompareNumeric.cs" />
     <Compile Include="Fit\Operators\CompareString.cs" />
-    <Compile Include="Fit\Operators\ExecuteBase.cs" />
-    <Compile Include="Fit\Operators\ExecuteContext.cs" />
-    <Compile Include="Fit\Operators\ExecuteDefault.cs" />
-    <Compile Include="Fit\Operators\ExecuteError.cs" />
-    <Compile Include="Fit\Operators\ExecuteException.cs" />
-    <Compile Include="Fit\Operators\ExecuteParameters.cs" />
-    <Compile Include="Fit\Operators\ExecuteSymbolSave.cs" />
+    <Compile Include="Fit\Operators\CheckOperationError.cs" />
+    <Compile Include="Fit\Operators\CheckOperationException.cs" />
     <Compile Include="Fit\Operators\ParseQuotedString.cs" />
     <Compile Include="Fit\Operators\ParseSymbol.cs" />
     <Compile Include="Fit\Runner\StoryFileName.cs" />
@@ -144,7 +186,7 @@
     <Compile Include="Parser\Token.cs" />
     <Compile Include="Slim\Operators\Converter.cs" />
     <Compile Include="Machine\Engine\DefaultParse.cs" />
-    <Compile Include="Machine\Engine\DefaultRuntime.cs" />
+    <Compile Include="Machine\Engine\InvokeDefault.cs" />
     <Compile Include="Machine\Engine\Operator.cs" />
     <Compile Include="Machine\Engine\Operators.cs" />
     <Compile Include="Machine\Engine\ParseNullable.cs" />
@@ -181,7 +223,7 @@
     <Compile Include="Slim\Operators\ComposeDefault.cs" />
     <Compile Include="Slim\Operators\ComposeException.cs" />
     <Compile Include="Slim\Operators\ComposeList.cs" />
-    <Compile Include="Slim\Operators\ExecuteBase.cs" />
+    <Compile Include="Slim\Operators\InvokeInstructionBase.cs" />
     <Compile Include="Slim\Operators\ExecuteCall.cs" />
     <Compile Include="Slim\Operators\ExecuteCallAndAssign.cs" />
     <Compile Include="Slim\Operators\ExecuteDefault.cs" />
@@ -191,8 +233,9 @@
     <Compile Include="Slim\Operators\ParseDictionary.cs" />
     <Compile Include="Slim\Operators\ParseList.cs" />
     <Compile Include="Slim\Operators\ParseSymbol.cs" />
-    <Compile Include="Slim\Operators\RuntimeLibrary.cs" />
+    <Compile Include="Slim\Operators\InvokeLibrary.cs" />
     <Compile Include="Slim\Operators\SavedInstance.cs" />
+    <Compile Include="Slim\Operators\SlimInstruction.cs" />
     <Compile Include="Slim\Operators\SlimOperator.cs" />
     <Compile Include="Slim\Operators\SlimProcessor.cs" />
     <Compile Include="Slim\Operators\Symbol.cs" />
@@ -205,6 +248,28 @@
     <Compile Include="Slim\Service\SlimOperators.cs" />
     <Compile Include="Swim\ResultCell.cs" />
     <Compile Include="Swim\ResultPage.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

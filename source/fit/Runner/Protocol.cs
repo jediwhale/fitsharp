@@ -7,7 +7,7 @@ using System;
 using System.Text;
 using fitSharp.Fit.Model;
 
-namespace fitnesse.fitserver
+namespace fit.Runner
 {
 	public class Protocol
 	{

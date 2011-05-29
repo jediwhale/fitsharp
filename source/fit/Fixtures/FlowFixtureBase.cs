@@ -38,12 +38,12 @@ namespace fitlibrary {
 
 	    public void DoSetUp(Tree<Cell> table) {
 	        var tableCell = (Parse) table.Value;
-            ExecuteOptionalMethod(RuntimeDirect.SetUpMethod, tableCell.Parts.Parts);
+            ExecuteOptionalMethod(InvokeDirect.SetUpMethod, tableCell.Parts.Parts);
 	    }
 
 	    public void DoTearDown(Tree<Cell> table) {
 	        var tableCell = (Parse) table.Value;
-            ExecuteOptionalMethod(RuntimeDirect.TearDownMethod, tableCell.Parts.Parts);
+            ExecuteOptionalMethod(InvokeDirect.TearDownMethod, tableCell.Parts.Parts);
 	    }
         
         protected void ProcessFlowRows(Parse theRows) {
@@ -58,7 +58,7 @@ namespace fitlibrary {
 
         protected void ProcessFlowRow(Parse theCurrentRow) {
             try {
-                string specialActionName = RuntimeDirect.MakeDirect(
+                string specialActionName = InvokeDirect.MakeDirect(
                     Processor.ParseTree<Cell, MemberName>(new CellRange(theCurrentRow.Parts, 1)).ToString());
                 TypedValue result = Processor.Invoke(new FlowKeywords(this), specialActionName, theCurrentRow.Parts);
                 if (!result.IsValid) {

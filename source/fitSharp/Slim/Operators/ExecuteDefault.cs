@@ -7,7 +7,7 @@ using fitSharp.Machine.Model;
 using fitSharp.Slim.Exception;
 
 namespace fitSharp.Slim.Operators {
-    public class ExecuteDefault: ExecuteBase {
+    public class ExecuteDefault: InvokeInstructionBase {
         public ExecuteDefault(): base(string.Empty) {}
 
         protected override Tree<string> ExecuteOperation(Tree<string> parameters) {

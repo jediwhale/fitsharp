@@ -14,7 +14,7 @@ namespace fitSharp.Slim.Service {
             Add(new ComposeDefault(), 0);
             Add(new ExecuteDefault(), 0);
             Add(new ParseDefault(), 0);
-            Add(new RuntimeLibrary(), 0);
+            Add(new InvokeLibrary(), 0);
 
             Add(new ExecuteImport(), 0);
             Add(new ExecuteMake(), 0);

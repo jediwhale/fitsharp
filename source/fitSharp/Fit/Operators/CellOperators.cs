@@ -1,4 +1,4 @@
-﻿// Copyright © 2009,2010 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2011 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -12,7 +12,7 @@ namespace fitSharp.Fit.Operators {
     public class CellOperators: Operators<Cell, CellProcessor> {
 
         public CellOperators() {
-            Add(new DataRowRuntime<Cell, CellProcessor>(), 0);
+            Add(new InvokeDataRow<Cell, CellProcessor>(), 0);
             Add(new ParseDefault(), 0);
             Add(new ParseMemberName(), 0);
             Add(new ParseBoolean(), 0);
@@ -22,10 +22,10 @@ namespace fitSharp.Fit.Operators {
             Add(new ParseNull(), 0);
             Add(new ParseSymbol(), 0);
 
-            Add(new ExecuteDefault(), 0);
-            Add(new ExecuteInterpret(), 0);
-            Add(new ExecuteEmpty(), 0);
-            Add(new ExecuteSymbolSave(), 0);
+            Add(new CheckOperationDefault(), 0);
+            Add(new InvokeOperationDefault(), 0);
+            Add(new CheckOperationEmpty(), 0);
+            Add(new CheckOperationSymbolSave(), 0);
 
             Add(new CompareDefault(), 0);
             Add(new CompareEmpty(), 0);
@@ -34,8 +34,8 @@ namespace fitSharp.Fit.Operators {
             Add(new ParseArray(), 2);
             Add(new ParseByteArray(), 2);
             Add(new ParseNullArray(), 2);
-            Add(new ExecuteError(), 2);
-            Add(new ExecuteException(), 2);
+            Add(new CheckOperationError(), 2);
+            Add(new CheckOperationException(), 2);
             Add(new CompareFail(), 2);
 
             AddNamespaces(createConfiguration.GetItem<ApplicationUnderTest>());
@@ -56,11 +56,11 @@ namespace fitSharp.Fit.Operators {
 
         private static readonly Dictionary<string, string> renames = new Dictionary<string, string> {
                                                                                                         {"boolhandler", typeof(ParseBoolean).FullName},
-                                                                                                        {"emptycellhandler", typeof(ExecuteEmpty).FullName},
-                                                                                                        {"exceptionkeywordhandler", typeof(ExecuteException).FullName},
+                                                                                                        {"emptycellhandler", typeof(CheckOperationEmpty).FullName}, //todo: inputemptyoperation
+                                                                                                        {"exceptionkeywordhandler", typeof(CheckOperationException).FullName},
                                                                                                         {"nullkeywordhandler", typeof(ParseNull).FullName},
                                                                                                         {"blankkeywordhandler", typeof(ParseBlank).FullName},
-                                                                                                        {"errorkeywordhandler", typeof(ExecuteError).FullName},
+                                                                                                        {"errorkeywordhandler", typeof(CheckOperationError).FullName},
                                                                                                         {"endswithhandler", typeof(CompareEndsWith).FullName},
                                                                                                         {"failkeywordhandler", typeof(CompareFail).FullName},
                                                                                                         {"startswithhandler", typeof(CompareStartsWith).FullName},
@@ -68,7 +68,7 @@ namespace fitSharp.Fit.Operators {
                                                                                                         {"numericcomparehandler", typeof(CompareNumeric).FullName},
                                                                                                         {"stringhandler", typeof(CompareString).FullName},
                                                                                                         {"substringhandler", typeof(CompareSubstring).FullName},
-                                                                                                        {"symbolsavehandler", typeof(ExecuteSymbolSave).FullName},
+                                                                                                        {"symbolsavehandler", typeof(CheckOperationSymbolSave).FullName},
                                                                                                         {"symbolrecallhandler", typeof(ParseSymbol).FullName},
                                                                                                         {"regexhandler", typeof(CompareRegEx).FullName},
                                                                                                         {"listhandler", "fit.Operators.ExecuteList"},

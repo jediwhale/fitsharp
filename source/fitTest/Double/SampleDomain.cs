@@ -4,8 +4,8 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System;
-using fit.Test.NUnit;
 using fitlibrary.tree;
+using fitSharp.Test.Double;
 
 namespace fit.Test.Double {
     public class SampleDomain {

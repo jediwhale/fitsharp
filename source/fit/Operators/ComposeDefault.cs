@@ -23,19 +23,17 @@ namespace fit.Operators {
         }
 
         static string GetValueString(TypedValue instance) {
-            string valueString = string.Empty;
-            if (!instance.IsNullOrEmpty) {
-                if (instance.Value is Array) {
-                    var arrayString = new StringBuilder();
-                    foreach (object value in (IEnumerable)instance.Value) {
-                        if (arrayString.Length > 0) arrayString.Append(", ");
-                        arrayString.Append(value.ToString());
-                    }
-                    valueString =  arrayString.ToString();
+            string valueString;
+            if (!instance.IsNullOrEmpty && instance.Value is Array) {
+                var arrayString = new StringBuilder();
+                foreach (object value in (IEnumerable)instance.Value) {
+                    if (arrayString.Length > 0) arrayString.Append(", ");
+                    arrayString.Append(value.ToString());
                 }
-                else
-                    valueString = instance.Value.ToString();
+                valueString =  arrayString.ToString();
             }
+            else
+                valueString = instance.ValueString;
             return valueString;
         }
     }

@@ -38,6 +38,8 @@ namespace dbfit.fixture
           env = MakeEnvironment("dbfit.SqlServerEnvironment");
         else if ("SQLSERVER2000".Equals(requestedEnv))
           env = MakeEnvironment("dbfit.SqlServer2000Environment");
+        else if ("SYBASE".Equals(requestedEnv))
+          env = MakeEnvironment("dbfit.SybaseEnvironment");
         /*  else if ("DB2".Equals(requestedEnv))
           env = Processor.Create("DB2Environment", new TreeList<Cell>()); */
         else

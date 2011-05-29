@@ -1,4 +1,4 @@
-// Copyright © 2010 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+// Copyright © 2011 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -76,7 +76,7 @@ namespace fit.Test.NUnit {
             Parse cell = TestUtils.CreateCell("xyz");
             MakeStringFixture();
             stringFixture.Field = "abc";
-            Assert.IsFalse(stringFixture.CellOperation.Compare(new TypedValue("abc"), cell));
+            Assert.IsFalse(service.Compare(new TypedValue("abc"), cell));
             Assert.AreNotEqual(TestStatus.Wrong, cell.GetAttribute(CellAttribute.Status));
             Assert.IsFalse(cell.Body.IndexOf("abc") > -1);
             Assert.IsTrue(cell.Body.IndexOf("xyz") > -1);
@@ -89,14 +89,14 @@ namespace fit.Test.NUnit {
             Parse cell = TestUtils.CreateCell("xyz");
             MakeStringFixture();
             stringFixture.Field = "xyz";
-            Assert.IsTrue(stringFixture.CellOperation.Compare(new TypedValue("xyz"), cell));
+            Assert.IsTrue(service.Compare(new TypedValue("xyz"), cell));
             Assert.AreNotEqual(TestStatus.Right, cell.GetAttribute(CellAttribute.Status));
             TestUtils.VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
 
         class FixtureWithExecutableMethod : Fixture
         {
-            public static int Calls = 0;
+            public static int Calls;
 
             public void Do()
             {

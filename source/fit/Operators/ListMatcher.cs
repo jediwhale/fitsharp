@@ -1,4 +1,4 @@
-// Copyright © 2010 Syterra Software Inc.
+// Copyright © 2011 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -30,7 +30,7 @@ namespace fit.Operators {
         }
 
         public virtual bool CellMatches(TypedValue actualValue, Parse expectedCell, int columnNumber) {
-            return new CellOperationImpl(Processor).Compare(actualValue, expectedCell);
+            return Processor.Compare(actualValue, expectedCell);
         }
     }
 
@@ -193,7 +193,7 @@ namespace fit.Operators {
             Parse MakeSurplusRow(CellProcessor processor, object theSurplusRow) {
                 Parse cells = null;
                 foreach (TypedValue actualValue in myStrategy.ActualValues(theSurplusRow)) {
-                    var cell = (Parse) processor.Compose(actualValue);
+                    var cell = (Parse) processor.Compose(actualValue.IsVoid ? new TypedValue(string.Empty) : actualValue);
                     if (cells == null) {
                         cell.SetAttribute(CellAttribute.Label, "surplus");
                         cells = cell;

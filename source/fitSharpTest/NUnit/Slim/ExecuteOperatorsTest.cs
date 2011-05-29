@@ -1,4 +1,4 @@
-﻿// Copyright © 2009,2010 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2011 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -31,6 +31,23 @@ namespace fitSharp.Test.NUnit.Slim {
             var input = new SlimTree().AddBranchValue("step").AddBranchValue("make").AddBranchValue("variable").AddBranchValue("garbage");
             ExecuteOperation(executeMake, input, 2);
             CheckForException("message:<<NO_CLASS garbage>>");
+        }
+
+        [Test] public void ExecuteMakeUsesSymbolInClassName() {
+            processor.Store(new Symbol("symbol", "NUnit"));
+            var executeMake = new ExecuteMake { Processor = processor };
+            var input = new SlimTree().AddBranchValue("step").AddBranchValue("make").AddBranchValue("variable").AddBranchValue("fitSharp.Test.$symbol.Slim.SampleClass");
+            ExecuteOperation(executeMake, input, 2);
+            Assert.IsTrue(processor.Load(new SavedInstance("variable")).Instance is SampleClass);
+        }
+
+        [Test] public void ExecuteMakeUsesSymbolAsObject() {
+            var newClass = new SampleClass();
+            processor.Store(new Symbol("symbol", newClass));
+            var executeMake = new ExecuteMake { Processor = processor };
+            var input = new SlimTree().AddBranchValue("step").AddBranchValue("make").AddBranchValue("variable").AddBranchValue("$symbol");
+            ExecuteOperation(executeMake, input, 2);
+            Assert.AreEqual(newClass, processor.Load(new SavedInstance("variable")).Instance);
         }
 
         [Test] public void ExecuteMakeLibraryIsStacked() {
@@ -89,10 +106,37 @@ namespace fitSharp.Test.NUnit.Slim {
             Assert.AreEqual(1, SampleClass.MethodCount);
         }
 
-        private void ExecuteOperation(ExecuteOperator<string> executeOperator, Tree<string> input, int branchCount) {
+        [Test] public void ExecuteGetFixtureReturnsActorInstance() {
+            MakeSampleClass("sampleData");
+            CallActorMethod("getFixture");
+            Assert.AreEqual("Sample=sampleData", result.Branches[1].Value);
+        }
+
+        [Test] public void ExecutePushAndPopFixtureReturnsActorInstance() {
+            MakeSampleClass("sampleData");
+            CallActorMethod("pushFixture");
+            MakeSampleClass("otherData");
+            CallActorMethod("popFixture");
+            CallActorMethod("info");
+            Assert.AreEqual("sampleData", result.Branches[1].Value);
+        }
+
+        private void MakeSampleClass(string sampleData) {
+            var executeMake = new ExecuteMake { Processor = processor };
+            var input = new SlimTree().AddBranchValue("step").AddBranchValue("make").AddBranchValue("scriptTableActor").AddBranchValue("fitSharp.Test.NUnit.Slim.SampleClass").AddBranchValue(sampleData);
+            ExecuteOperation(executeMake, input, 2);
+        }
+
+        private void CallActorMethod(string methodName) {
+            var executeCall = new ExecuteCall { Processor = processor };
+            var input = new SlimTree().AddBranchValue("step").AddBranchValue("call").AddBranchValue("scriptTableActor").AddBranchValue(methodName);
+            ExecuteOperation(executeCall, input, 2);
+        }
+
+        private void ExecuteOperation(InvokeOperator<string> executeOperator, Tree<string> input, int branchCount) {
             TypedValue executeResult = TypedValue.Void;
-            if (executeOperator.CanExecute(TypedValue.Void, input)) {
-                executeResult = executeOperator.Execute(TypedValue.Void, input);
+            if (executeOperator.CanInvoke(new TypedValue(new SlimInstruction()), string.Empty, input)) {
+                executeResult = executeOperator.Invoke(new TypedValue(new SlimInstruction()), string.Empty, input);
             }
             result = executeResult.GetValue<Tree<string>>();
             Assert.IsFalse(result.IsLeaf);

@@ -1,4 +1,4 @@
-﻿// Copyright © 2010 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2011 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -15,55 +15,55 @@ namespace fitSharp.Test.NUnit.Parser {
         }
 
         [Test] public void ParsesWordAsCell() {
-            AssertParse("stuff", " <p> <table><tr> <td> stuff</td> </tr></table></p>");
+            AssertParse("stuff", " <div> <table><tr> <td> stuff</td> </tr></table></div>");
         }
 
         [Test] public void GeneratesTableForLineStartingWithSeparator() {
-            AssertParse("\n|stuff", " <table class=\"fit_table\"> <tr> <td> stuff</td> </tr></table>");
+            AssertParse("\n|stuff", "<br /> <table class=\"fit_table\"> <tr> <td> stuff</td> </tr></table>");
         }
 
         [Test] public void EncodesCellContent() {
-            AssertParse("<<stuff", " <p> <table><tr> <td> &lt;&lt;stuff</td> </tr></table></p>");
+            AssertParse("<<stuff", " <div> <table><tr> <td> &lt;&lt;stuff</td> </tr></table></div>");
         }
 
-        [Test] public void IgnoresLeadingNewlines() {
-            AssertParse("\n\n\nstuff", " <p> <table><tr> <td> stuff</td> </tr></table></p>");
+        [Test] public void HandlesLeadingNewlines() {
+            AssertParse("\n\n\nstuff", "<br /><br /><br /> <div> <table><tr> <td> stuff</td> </tr></table></div>");
         }
 
         [Test] public void ParsesWordsAsSeparateCells() {
             AssertParse("more|stuff",
-                " <p> <table><tr> <td> more</td>  <td> stuff</td> </tr></table></p>");
+                " <div> <table><tr> <td> more</td>  <td> stuff</td> </tr></table></div>");
         }
 
         [Test] public void ParsesLinesAsSeparateRows() {
             AssertParse("more 'good'\nstuff",
-                " <p> <table><tr> <td> more</td>  <td> good</td> </tr></table> <table><tr> <td> stuff</td> </tr></table></p>");
+                " <div> <table><tr> <td> more</td>  <td> good</td> </tr></table> <table><tr> <td> stuff</td> </tr></table></div>");
         }
 
         [Test] public void ParsesNestedTable() {
-            AssertParse("one [\n two\n] three", " <p> <table><tr> <td> one</td>  <td> <p> <table><tr> <td> two</td> </tr></table></p></td>  <td> three</td> </tr></table></p>");
+            AssertParse("one [\n two\n] three", " <div> <table><tr> <td> one</td>  <td> <div> <table><tr> <td> two</td> </tr></table></div></td>  <td> three</td> </tr></table></div>");
         }
 
         [Test] public void ParsesBlankLinesAsSeparateTables() {
             AssertParse("more\ngood\n\nstuff",
-                " <p> <table><tr> <td> more</td> </tr></table> <table><tr> <td> good</td> </tr></table></p> <p> <table><tr> <td> stuff</td> </tr></table></p>");
+                " <div> <table><tr> <td> more</td> </tr></table> <table><tr> <td> good</td> </tr></table></div> <br /> <div> <table><tr> <td> stuff</td> </tr></table></div>");
         }
 
         [Test] public void IncludesLeaderInFirstTable() {
             Assert.AreEqual(
-                " more test@ <p> <table><tr> <td> stuff</td> </tr></table></p>",
+                " more test@ <div> <table><tr> <td> stuff</td> </tr></table></div>",
                 Format(ParseRaw("more test@stuff")));
         }
 
         [Test] public void IncludesTrailerInLastTable() {
             Assert.AreEqual(
-                " test@ <p> <table><tr> <td> stuff</td> </tr></table></p> @test",
+                " test@ <div> <table><tr> <td> stuff</td> </tr></table></div> @test",
                 Format(ParseRaw("test@stuff@test")));
         }
 
         [Test] public void IncludesLeaderInSecondTable() {
             Assert.AreEqual(
-                " test@ <p> <table><tr> <td> stuff</td> </tr></table></p> @test and test@ <p> <table><tr> <td> more</td> </tr></table></p>",
+                " test@ <div> <table><tr> <td> stuff</td> </tr></table></div> @test and test@ <div> <table><tr> <td> more</td> </tr></table></div>",
                 Format(ParseRaw("test@stuff@test and test@more")));
         }
 

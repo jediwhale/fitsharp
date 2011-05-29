@@ -6,12 +6,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using fit.Test.Acceptance;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
+using fitSharp.Test.Double;
 using NUnit.Framework;
 using TestStatus=fitSharp.Fit.Model.TestStatus;
 
