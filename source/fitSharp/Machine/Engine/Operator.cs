@@ -4,7 +4,7 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
-using System.Diagnostics.Contracts;
+//using System.Diagnostics.Contracts;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
@@ -22,13 +22,13 @@ namespace fitSharp.Machine.Engine {
         Tree<T> Compose(TypedValue instance);
     }
 
-    [ContractClass(typeof(ParseOperatorContract<>))]
+    //[ContractClass(typeof(ParseOperatorContract<>))]
     public interface ParseOperator<T> {
         bool CanParse(Type type, TypedValue instance, Tree<T> parameters);
         TypedValue Parse(Type type, TypedValue instance, Tree<T> parameters);
     }
 
-    [ContractClassFor(typeof(ParseOperator<>))] abstract class ParseOperatorContract<T>: ParseOperator<T> {
+    /*[ContractClassFor(typeof(ParseOperator<>))] abstract class ParseOperatorContract<T>: ParseOperator<T> {
         public bool CanParse(Type type, TypedValue instance, Tree<T> parameters) {
             return false;
         }
@@ -37,7 +37,7 @@ namespace fitSharp.Machine.Engine {
             Contract.Requires(type != null);
             return TypedValue.Void;
         }
-    }
+    }*/
 
     public interface CreateOperator<T> {
         bool CanCreate(string memberName, Tree<T> parameters);
