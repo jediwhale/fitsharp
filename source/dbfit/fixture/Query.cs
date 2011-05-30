@@ -62,6 +62,12 @@ namespace dbfit.fixture
         public static DataTable GetDataTable(String query, IDbEnvironment environment)
         {
             return GetDataTable(query, environment, 1);
+            return ds.Tables[rsNo - 1];
+        }
+
+        public static DataTable GetDataTable(String query, IDbEnvironment environment)
+        {
+            return GetDataTable(query, environment, 1);
         }
 
         protected override ListMatchStrategy MatchStrategy {

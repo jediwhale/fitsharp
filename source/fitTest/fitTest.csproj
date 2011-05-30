@@ -174,7 +174,7 @@
     <Compile Include="NUnit\ParseBlankTest.cs" />
     <Compile Include="NUnit\ParseBooleanTest.cs" />
     <Compile Include="NUnit\ParseInterpreterTest.cs" />
-    <Compile Include="NUnit\RuntimeProcedureTest.cs" />
+    <Compile Include="NUnit\InvokeProcedureTest.cs" />
     <Compile Include="NUnit\SetUpFixtureTest.cs" />
     <Compile Include="NUnit\SocketServerTest.cs" />
     <Compile Include="NUnit\StoryTestStringOperatorsTest.cs" />

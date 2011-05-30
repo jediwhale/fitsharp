@@ -1,4 +1,4 @@
-﻿// Copyright © 2010 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2011 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -6,15 +6,17 @@
 using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
+using fitSharp.Fit.Service;
 using fitSharp.Machine.Model;
 using Moq;
 using NUnit.Framework;
 using TestStatus=fitSharp.Fit.Model.TestStatus;
 
 namespace fitSharp.Test.NUnit.Fit {
-    [TestFixture] public class ExecuteDefaultTest {
+    [TestFixture] public class CellOperationDefaultTest {
         Mock<CellProcessor> processor;
-        ExecuteDefault execute;
+        InvokeOperationDefault invoke;
+        CheckOperationDefault check;
         TypedValue target;
         TypedValue result;
         TestStatus testStatus;
@@ -55,17 +57,16 @@ namespace fitSharp.Test.NUnit.Fit {
 
         [Test] public void LastActionIsSetAsInputCellAttribute() {
             SetUpSUT("procedure");
-            var parameters = new ExecuteParameters(
-                ExecuteParameters.MakeMemberCell(new CellTreeLeaf("procedure"), targetCell));
-            execute.Execute(new ExecuteContext(ExecuteCommand.Input, target.Value), parameters);
+            new InvokeOperation(processor.Object, target, new CellTreeLeaf("procedure"), targetCell, targetCell).Do();
             Assert.AreEqual("blah blah", targetCell.Value.GetAttribute(CellAttribute.Folded));
         }
 
         [Test] public void LastActionIsSetAsExpectedCellAttribute() {
             SetUpSUT("procedure");
-            var parameters = new ExecuteParameters(
-                ExecuteParameters.Make(new CellTreeLeaf("procedure"), new CellTree(), targetCell));
-            execute.Execute(new ExecuteContext(ExecuteCommand.Check, target.Value), parameters);
+            //var parameters = new ExecuteParameters(
+            //    ExecuteParameters.Make(new CellTreeLeaf("procedure"), new CellTree(), targetCell));
+            //execute.Execute(new ExecuteContext(ExecuteCommand.Check, target.Value), parameters);
+            check.Invoke(CellOperationContext.Make(target.Value, new CellTreeLeaf("procedure"), new CellTree()), CellOperationContext.CheckCommand, targetCell);
             Assert.AreEqual("blah blah", targetCell.Value.GetAttribute(CellAttribute.Folded));
         }
 
@@ -74,16 +75,19 @@ namespace fitSharp.Test.NUnit.Fit {
         }
 
         TypedValue Execute(Tree<Cell> targetCell) {
-            var parameters = new ExecuteParameters(
-                ExecuteParameters.Make(new CellTreeLeaf(memberName), new CellTree(), targetCell));
-            return execute.Execute(new ExecuteContext(ExecuteCommand.Invoke, target), parameters);
+            //var parameters = new ExecuteParameters(
+            //    ExecuteParameters.Make(new CellTreeLeaf(memberName), new CellTree(), targetCell));
+            //return execute.Execute(new ExecuteContext(ExecuteCommand.Invoke, target), parameters);
+            return invoke.Invoke(CellOperationContext.Make(target.Value, new CellTreeLeaf(memberName), new CellTree()),
+                CellOperationContext.InvokeCommand, targetCell);
         }
 
         void SetUpSUT(string memberName) {
             this.memberName = memberName;
             testStatus = new TestStatus();
             processor = new Mock<CellProcessor>();
-            execute = new ExecuteDefault {Processor = processor.Object};
+            invoke = new InvokeOperationDefault {Processor = processor.Object};
+            check = new CheckOperationDefault {Processor = processor.Object};
 
             target = new TypedValue("target");
             result = new TypedValue("result");

@@ -1,4 +1,4 @@
-﻿// Copyright © 2010 Syterra Software Inc.
+﻿// Copyright © 2011 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -12,7 +12,7 @@ using NUnit.Framework;
 using TestStatus=fitSharp.Fit.Model.TestStatus;
 
 namespace fit.Test.NUnit {
-    [TestFixture] public class RuntimeProcedureTest {
+    [TestFixture] public class InvokeProcedureTest {
         const string simpleProcedureHtml = "<table><tr><td>define</td><td>procedure</td></tr><tr><td>verb</td></tr></table>";
         const string parameterProcedureHtml =
             "<table><tr><td>define</td><td>procedure</td><td>parm</td></tr><tr><td>verb</td><td>parm</td></tr></table>";
@@ -20,53 +20,48 @@ namespace fit.Test.NUnit {
             "<table><tr><td>define</td><td>procedure</td><td>parm1</td><td></td><td>parm2</td></tr><tr><td>verb</td><td>parm1</td><td>parm2</td></tr></table>";
 
         Mock<CellProcessor> processor;
-        RuntimeProcedure runtime;
+        InvokeProcedure invoke;
         Procedure procedure;
         TypedValue result;
         TypedValue target;
-        TypedValue fixture;
+        Mock<FlowInterpreter> fixture;
         TestStatus testStatus;
-
-        [Test] public void CreateIsntHandled() {
-            SetupSUT(simpleProcedureHtml);
-            Assert.IsFalse(runtime.CanCreate("anything", new CellTree()));
-        }
 
         [Test] public void InvokeForMembersIsntHandled() {
             SetupSUT(simpleProcedureHtml);
-            Assert.IsFalse(runtime.CanInvoke(target, "member", new CellTree()));
+            Assert.IsFalse(invoke.CanInvoke(target, "member", new CellTree()));
         }
 
         [Test] public void InvokeForProceduresIsHandled() {
             SetupSUT(simpleProcedureHtml);
-            Assert.IsTrue(runtime.CanInvoke(target, "procedure", new CellTree()));
+            Assert.IsTrue(invoke.CanInvoke(target, "procedure", new CellTree()));
         }
 
         [Test] public void ProcedureIsExecuted() {
             SetupSUT(simpleProcedureHtml);
-            Assert.AreEqual(result, runtime.Invoke(target, "procedure", new CellTree()));
+            Assert.AreEqual(result, invoke.Invoke(target, "procedure", new CellTree()));
         }
 
         [Test] public void ProcedureExecutionIsLogged() {
             SetupSUT(simpleProcedureHtml);
-            runtime.Invoke(target, "procedure", new CellTree());
+            invoke.Invoke(target, "procedure", new CellTree());
             Assert.AreEqual("procedure log", testStatus.LastAction);
         }
 
         [Test] public void ProcedureIsExecutedOnACopyOfBody() {
             SetupSUT(simpleProcedureHtml);
-            runtime.Invoke(target, "procedure", new CellTree());
+            invoke.Invoke(target, "procedure", new CellTree());
             Assert.AreEqual(string.Empty, procedure.Instance.Branches[1].Branches[0].Value.GetAttribute(CellAttribute.Label));
         }
 
         [Test] public void ParameterValueIsSubstituted() {
             SetupSUT(parameterProcedureHtml);
-            Assert.AreEqual(result, runtime.Invoke(target, "procedure", new Parse("tr", "", new Parse("td", "actual", null, null), null)));
+            Assert.AreEqual(result, invoke.Invoke(target, "procedure", new Parse("tr", "", new Parse("td", "actual", null, null), null)));
         }
 
         [Test] public void TwoParameterValuesAreSubstituted() {
             SetupSUT(twoParameterProcedureHtml);
-            Assert.AreEqual(result, runtime.Invoke(target, "procedure", new Parse("tr", "",
+            Assert.AreEqual(result, invoke.Invoke(target, "procedure", new Parse("tr", "",
                 new Parse("td", "actual1", null, new Parse("td", "actual2", null, null)),
                 null)));
         }
@@ -76,12 +71,19 @@ namespace fit.Test.NUnit {
 
             result = new TypedValue("result");
             target = new TypedValue("target");
-            fixture = new TypedValue("fixture");
+
+            fixture = new Mock<FlowInterpreter>();
+            fixture.Setup(f => f.InterpretFlow(It.Is<Tree<Cell>>(t => IsTablesWithVerb(t))))
+                .Callback<Tree<Cell>>(t =>  {
+                    t.Branches[0].Branches[0].Value.SetAttribute(CellAttribute.Label, "stuff");
+                    testStatus.PopReturn();
+                    testStatus.PushReturn(result);
+                });
 
             testStatus = new TestStatus();
 
             processor = new Mock<CellProcessor>();
-            runtime = new RuntimeProcedure {Processor = processor.Object};
+            invoke = new InvokeProcedure {Processor = processor.Object};
 
             processor.Setup(p => p.TestStatus).Returns(testStatus);
             processor.Setup(p => p.Contains(It.Is<Procedure>(v => v.Id == "member"))).Returns(false);
@@ -89,15 +91,7 @@ namespace fit.Test.NUnit {
             processor.Setup(p => p.Load(It.Is<Procedure>(v => v.Id == "procedure"))).Returns(procedure);
 
             processor.Setup(p => p.Parse(typeof (Interpreter), target, It.Is<Tree<Cell>>(c => IsDoFixture(c))))
-                .Returns(fixture);
-
-            processor.Setup(p => p.Execute(fixture, It.Is<Tree<Cell>>(t => IsTablesWithVerb(t))))
-                .Returns((TypedValue f, Tree<Cell> t) => {
-                    t.Branches[0].Branches[0].Branches[0].Value.SetAttribute(CellAttribute.Label, "stuff");
-                    testStatus.PopReturn();
-                    testStatus.PushReturn(result);
-                    return TypedValue.Void;
-                });
+                .Returns(new TypedValue(fixture.Object));
 
             processor.Setup(p => p.Parse(typeof (StoryTestString), It.IsAny<TypedValue>(),
                                          It.Is<Tree<Cell>>(t => IsTableWithVerb(t))))
@@ -109,15 +103,15 @@ namespace fit.Test.NUnit {
         }
 
         static bool IsTablesWithVerb(Tree<Cell> t) {
-            if (t.Branches[0].Branches[0].Branches.Count == 1
-                && t.Branches[0].Branches[0].Branches[0].Value.Text == "verb") return true;
-            if (t.Branches[0].Branches[0].Branches.Count == 2
-                && t.Branches[0].Branches[0].Branches[0].Value.Text == "verb"
-                && t.Branches[0].Branches[0].Branches[1].Value.Text == "actual") return true;
-            if (t.Branches[0].Branches[0].Branches.Count == 3
-                && t.Branches[0].Branches[0].Branches[0].Value.Text == "verb"
-                && t.Branches[0].Branches[0].Branches[1].Value.Text == "actual1"
-                && t.Branches[0].Branches[0].Branches[2].Value.Text == "actual2") return true;
+            if (t.Branches[0].Branches.Count == 1
+                && t.Branches[0].Branches[0].Value.Text == "verb") return true;
+            if (t.Branches[0].Branches.Count == 2
+                && t.Branches[0].Branches[0].Value.Text == "verb"
+                && t.Branches[0].Branches[1].Value.Text == "actual") return true;
+            if (t.Branches[0].Branches.Count == 3
+                && t.Branches[0].Branches[0].Value.Text == "verb"
+                && t.Branches[0].Branches[1].Value.Text == "actual1"
+                && t.Branches[0].Branches[2].Value.Text == "actual2") return true;
             return false;
         }
 

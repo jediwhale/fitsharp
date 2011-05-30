@@ -7,7 +7,6 @@ using System;
 using System.Reflection;
 using fit.Model;
 using fitSharp.Fit.Model;
-using fitSharp.Fit.Operators;
 using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
@@ -41,15 +40,8 @@ namespace fit.Test.NUnit {
             return compareOperator.CanCompare(new TypedValue(instance, type), CreateCell(value));
         }
 
-        public static bool IsMatch(ExecuteCommand command, ExecuteOperator<Cell> executor, Tree<Cell> parameters) {
-            var processor = new CellProcessorBase();
-            processor.AddOperator(new ParseMemberName());
-            ((CellOperator) executor).Processor = processor;
-            return executor.CanExecute(new TypedValue(new ExecuteContext(command, new TypedValue("stuff"))), parameters);
-        }
-
         public static void DoInput(Fixture fixture, Tree<Cell> range, Parse cell) {
-            fixture.CellOperation.Input(fixture.GetTargetObject(), range, cell);
+            new InputBinding(fixture.Processor, fixture, range).Do(cell);
         }
 
         public static void DoCheck(Fixture fixture, Tree<Cell> range, Parse cell) {

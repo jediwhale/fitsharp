@@ -1,4 +1,4 @@
-﻿// Copyright © 2009,2010 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2011 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -8,16 +8,17 @@ using fitSharp.Machine.Model;
 using fitSharp.Slim.Model;
 
 namespace fitSharp.Slim.Operators {
-    public abstract class ExecuteBase: SlimOperator, ExecuteOperator<string> {
+    public abstract class InvokeInstructionBase: SlimOperator, InvokeOperator<string> {
         private const string defaultResult = "OK";
         private readonly IdentifierName identifier;
 
-        public bool CanExecute(TypedValue instance, Tree<string> parameters) {
-            return identifier.IsEmpty ||
-                   (parameters.Branches.Count > 1 && identifier.Matches(parameters.Branches[1].Value));
+        public bool CanInvoke(TypedValue instance, string memberName, Tree<string> parameters) {
+            return instance.Type == typeof(SlimInstruction) && (
+                identifier.IsEmpty ||
+                   (parameters.Branches.Count > 1 && identifier.Matches(parameters.Branches[1].Value)));
         }
 
-        public TypedValue Execute(TypedValue instance, Tree<string> parameters) {
+        public TypedValue Invoke(TypedValue instance, string memberName, Tree<string> parameters) {
             try {
                 return new TypedValue(ExecuteOperation(parameters));
             }
@@ -26,7 +27,7 @@ namespace fitSharp.Slim.Operators {
             }
         }
 
-        protected ExecuteBase(string identifierName) {
+        protected InvokeInstructionBase(string identifierName) {
             identifier = new IdentifierName(identifierName);
         }
 

@@ -1,4 +1,4 @@
-﻿// Copyright © 2010 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2011 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -16,7 +16,6 @@ namespace fitSharp.Machine.Engine {
         bool Compare(TypedValue instance, Tree<T> parameters);
         Tree<T> Compose(TypedValue instance);
         bool Contains<V>(V matchItem);
-        TypedValue Execute(TypedValue instance, Tree<T> parameters);
         TypedValue Invoke(TypedValue instance, string memberName, Tree<T> parameters);
         V Load<V>(V matchItem);
         TypedValue Parse(Type type, TypedValue instance, Tree<T> parameters);
@@ -32,10 +31,6 @@ namespace fitSharp.Machine.Engine {
 
         public static TypedValue Create<T>(this Processor<T> processor, string membername) {
             return processor.Create(membername, new TreeList<T>());
-        }
-
-        public static TypedValue Execute<T>(this Processor<T> processor, Tree<T> parameters) {
-            return processor.Execute(TypedValue.Void, parameters);
         }
 
         public static TypedValue InvokeWithThrow<T>(this Processor<T> processor, TypedValue instance, string memberName,
@@ -143,21 +138,6 @@ namespace fitSharp.Machine.Engine {
                 });
         }
 
-        public TypedValue Execute(TypedValue instance, Tree<T> parameters) {
-            return DoLoggedOperation(
-                string.Format("execute {0}", instance.ValueString),
-                logging => {
-                    var result = TypedValue.Void;
-                    Operators.Do<ExecuteOperator<T>>(
-                        o => o.CanExecute(instance, parameters),
-                        o => {
-                            result = o.Execute(instance, parameters);
-                            logging.LogResult(o, result);
-                        });
-                    return result;
-                });
-        }
-
         public virtual TypedValue Parse(Type type, TypedValue instance, Tree<T> parameters) {
             return DoLoggedOperation(
                 string.Format("parse {0}", type),
@@ -178,7 +158,7 @@ namespace fitSharp.Machine.Engine {
                 string.Format("create {0}", memberName),
                 logging => {
                     var result = TypedValue.Void;
-                        Operators.Do<RuntimeOperator<T>>(
+                        Operators.Do<CreateOperator<T>>(
                             o => o.CanCreate(memberName, parameters),
                             o => {
                                 result = o.Create(memberName, parameters);
@@ -195,7 +175,7 @@ namespace fitSharp.Machine.Engine {
                     : string.Empty,
                 logging => {
                     var result = TypedValue.Void;
-                    Operators.Do<RuntimeOperator<T>>(
+                    Operators.Do<InvokeOperator<T>>(
                         o => o.CanInvoke(instance, memberName, parameters),
                         o => {
                             result = o.Invoke(instance, memberName, parameters);

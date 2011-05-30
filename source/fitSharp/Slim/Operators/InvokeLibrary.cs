@@ -8,15 +8,11 @@ using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Slim.Operators {
-    public class RuntimeLibrary: SlimOperator, RuntimeOperator<string> {
-        public bool CanCreate(string memberName, Tree<string> parameters) { return false; }
-
-        public TypedValue Create(string memberName, Tree<string> parameters) { throw new System.NotImplementedException(); }
-
+    public class InvokeLibrary: SlimOperator, InvokeOperator<string> {
         public bool CanInvoke(TypedValue instance, string memberName, Tree<string> parameters) { return true; }
 
         public TypedValue Invoke(TypedValue instance, string memberName, Tree<string> parameters) {
-            var runtime = new DefaultRuntime<string, Processor<string>> {Processor = Processor};
+            var runtime = new InvokeDefault<string, Processor<string>> {Processor = Processor};
             var result = runtime.Invoke(instance, memberName, parameters);
             if (!IsMemberMissing(result)) return result;
 

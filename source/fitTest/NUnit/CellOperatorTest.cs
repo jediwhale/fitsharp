@@ -1,4 +1,4 @@
-﻿// Copyright © 2010 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+﻿// Copyright © 2011 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -32,11 +32,10 @@ namespace fit.Test.NUnit {
             return compareOperator.CanCompare(new TypedValue(instance, type), TestUtils.CreateCell(value));
         }
 
-        public static bool IsMatch(ExecuteCommand command, ExecuteOperator<Cell> executor, Tree<Cell> parameters) {
-            var processor = new CellProcessorBase();
-            processor.AddOperator(new ParseMemberName());
-            ((CellOperator) executor).Processor = processor;
-            return executor.CanExecute(new TypedValue(new ExecuteContext(command, null, new TypedValue("stuff"))), parameters);
+        public static bool IsMatch(InvokeOperator<Cell> checkOperation, string input) {
+            return checkOperation.CanInvoke(CellOperationContext.Make(null, new TypedValue(null)),
+                                                            CellOperationContext.CheckCommand,
+                                                            TestUtils.CreateCell(input));
         }
 
         public void MakeStringFixture() {

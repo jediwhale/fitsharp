@@ -1,4 +1,4 @@
-﻿// Copyright © 2009,2010 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2011 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -7,14 +7,15 @@ using System;
 using System.Collections.Generic;
 
 namespace fitSharp.Machine.Engine {
-    public delegate bool CanDoOperation<T>(T anOperator);
-    public delegate void DoOperation<T>(T anOperator);
+    public delegate bool CanDoOperation<in T>(T anOperator);
+    public delegate void DoOperation<in T>(T anOperator);
     public class Operators<T, P> where P: class, Processor<T> {
         private readonly List<List<Operator<T, P>>> operators = new List<List<Operator<T, P>>>();
         protected readonly Configuration createConfiguration = new Configuration();
 
         public Operators() {
-            Add(new DefaultRuntime<T,P>(), 0);
+            Add(new InvokeDefault<T,P>(), 0);
+            Add(new CreateDefault<T,P>(), 0);
         }
 
         public Operators(P processor): this() {

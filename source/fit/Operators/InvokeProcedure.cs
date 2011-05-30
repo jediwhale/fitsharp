@@ -1,4 +1,4 @@
-﻿// Copyright © 2010 Syterra Software Inc.
+﻿// Copyright © 2011 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -10,12 +10,8 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fit.Operators {
-    public class RuntimeProcedure: CellOperator, RuntimeOperator<Cell>
+    public class InvokeProcedure: CellOperator, InvokeOperator<Cell>
     {
-        public bool CanCreate(string memberName, Tree<Cell> parameters) { return false; }
-
-        public TypedValue Create(string memberName, Tree<Cell> parameters) { return TypedValue.Void; }
-
         public bool CanInvoke(TypedValue instance, string memberName, Tree<Cell> parameters) {
             return Processor.Contains(new Procedure(memberName));
         }
@@ -27,7 +23,7 @@ namespace fit.Operators {
 
         private TypedValue Invoke(Parse procedure, TypedValue target, Tree<Cell> parameterValues) {
             var doFixture = new CellTree("fitlibrary.DoFixture");
-            var fixture = Processor.Parse(typeof (Interpreter), target, doFixture);
+            var fixture = Processor.Parse(typeof (Interpreter), target, doFixture).GetValue<FlowInterpreter>();
 
             var parameters = new Parameters(procedure.Parts, parameterValues);
             var body = procedure.Parts.More.Parts.Parts != null
@@ -38,9 +34,15 @@ namespace fit.Operators {
                     s => s == procedure ? s.Parts.More : s.Parts));
 
             Processor.TestStatus.PushReturn(TypedValue.Void);
-            Processor.Execute(fixture, body);
+            ExecuteProcedure(fixture, body);
             Processor.TestStatus.LastAction = Processor.ParseTree(typeof(StoryTestString), body).ValueString;
             return Processor.TestStatus.PopReturn();
+        }
+
+        static void ExecuteProcedure(FlowInterpreter flowInterpreter, Tree<Cell> body) {
+            foreach (var table in body.Branches) {
+                flowInterpreter.InterpretFlow(table);
+            }
         }
 
         private class Parameters {

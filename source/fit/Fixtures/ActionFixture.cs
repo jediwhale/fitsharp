@@ -1,4 +1,4 @@
-// Copyright © 2009 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+// Copyright © 2011 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -6,6 +6,7 @@
 using System;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Service;
+using fitSharp.Machine.Engine;
 
 namespace fit
 {
@@ -36,14 +37,14 @@ namespace fit
 
 		public virtual void Start()
 		{
-		    actor = CellOperation.Create(cells.More.Text.Trim()).Value;
+		    actor = Processor.Create(cells.More.Text.Trim()).Value;
 		    var fixture = actor as Fixture;
             if (fixture != null) fixture.Processor = Processor;
 		}
 
 		public virtual void Enter()
 		{
-			CellOperation.Input(GetTarget(actor), cells.More, cells.More.More);
+            new InputBinding(Processor, new Actor(actor), cells.More).Do(cells.More.More);
 		}
 
 		public virtual void Press()
@@ -63,6 +64,19 @@ namespace fit
         private static object GetTarget(object actor) {
             var target = actor as TargetObjectProvider;
             return target == null ? actor : target.GetTargetObject();
+        }
+
+        private class Actor: TargetObjectProvider {
+            public Actor(object instance) {
+                this.instance = instance;
+            }
+
+            public object GetTargetObject() {
+                var target = instance as TargetObjectProvider;
+                return target == null ? instance : target.GetTargetObject();
+            }
+
+            readonly object instance;
         }
 	}
 }

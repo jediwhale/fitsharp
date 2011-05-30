@@ -1,4 +1,4 @@
-// Copyright © 2009 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+// Copyright © 2011 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -16,19 +16,12 @@ namespace fit.Test.NUnit {
         [Test]
         public void TestRegisterAndGet()
         {
-            Assert.IsTrue(IsMatch("<<xyz"));
-            Assert.IsFalse(TestUtils.IsMatch(ExecuteCommand.Check, new ExecuteSymbolSave(), ExecuteParameters.Make(TestUtils.CreateCell("x<<yz"))));
-            Assert.IsFalse(IsMatch("x<<yz"));
-            Assert.IsTrue(TestUtils.IsMatch(ExecuteCommand.Check, new ExecuteSymbolSave(), ExecuteParameters.Make(TestUtils.CreateCell(">>xyz"))));
-            Assert.IsFalse(TestUtils.IsMatch(ExecuteCommand.Input, new ExecuteSymbolSave(), ExecuteParameters.MakeMemberCell(TestUtils.CreateCell("stuff"), TestUtils.CreateCell(">>xyz"))));
-            Assert.IsFalse(TestUtils.IsMatch(ExecuteCommand.Check, new ExecuteSymbolSave(), ExecuteParameters.Make(TestUtils.CreateCell("x>>yz"))));
-            Assert.IsFalse(IsMatch("x>>yz"));
-
-            Assert.IsFalse(TestUtils.IsMatch(ExecuteCommand.Input, new ExecuteSymbolSave(), ExecuteParameters.MakeMemberCell(TestUtils.CreateCell("stuff"), TestUtils.CreateCell("error"))));
-        }
-
-        private static bool IsMatch(string input) {
-            return IsMatch(new ParseSymbol(), input);
+            Assert.IsTrue(IsMatch(new ParseSymbol(), "<<xyz"));
+            Assert.IsFalse(IsMatch(new CheckOperationSymbolSave(), "x<<yz"));
+            Assert.IsFalse(IsMatch(new ParseSymbol(), "x<<yz"));
+            Assert.IsTrue(IsMatch(new CheckOperationSymbolSave(), ">>xyz"));
+            Assert.IsFalse(IsMatch(new CheckOperationSymbolSave(), "x>>yz"));
+            Assert.IsFalse(IsMatch(new ParseSymbol(), "x>>yz"));
         }
 
         [Test]
@@ -104,7 +97,7 @@ namespace fit.Test.NUnit {
             MakeStringFixture();
             StoreSymbol("def", "ghi");
             stringFixture.Field = "xyz";
-            stringFixture.CellOperation.Compare(new TypedValue("xyz"), cell);
+            service.Compare(new TypedValue("xyz"), cell);
             Assert.AreEqual("<<def<span class=\"fit_grey\"> ghi</span>", cell.Body);
             TestUtils.VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
@@ -115,7 +108,7 @@ namespace fit.Test.NUnit {
             MakeStringFixture();
             StoreSymbol("def", "ghi");
             stringFixture.Field = "ghi";
-            Assert.IsTrue(stringFixture.CellOperation.Compare(new TypedValue("ghi"), cell));
+            Assert.IsTrue(service.Compare(new TypedValue("ghi"), cell));
             TestUtils.VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
 
@@ -125,7 +118,7 @@ namespace fit.Test.NUnit {
             MakeStringFixture();
             StoreSymbol("def", "ghi");
             stringFixture.Field = "not ghi";
-            Assert.IsFalse(stringFixture.CellOperation.Compare(new TypedValue("not ghi"), cell));
+            Assert.IsFalse(service.Compare(new TypedValue("not ghi"), cell));
             TestUtils.VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
 
@@ -135,7 +128,7 @@ namespace fit.Test.NUnit {
             MakeStringFixture();
             StoreSymbol("def", "ghi");
             stringFixture.Field = null;
-            Assert.IsFalse(stringFixture.CellOperation.Compare(new TypedValue(null, typeof(string)), cell));
+            Assert.IsFalse(service.Compare(new TypedValue(null, typeof(string)), cell));
             TestUtils.VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
 
@@ -155,7 +148,7 @@ namespace fit.Test.NUnit {
         {
             Parse cell = TestUtils.CreateCell("<<thePerson");
             MakePersonFixture();
-            Person person = new Person("Eeek", "Gadd");
+            var person = new Person("Eeek", "Gadd");
             StoreSymbol("thePerson", person);
             personFixture.Field = person;
             TestUtils.DoCheck(personFixture, TestUtils.CreateCellRange("Field"), cell);
@@ -178,8 +171,8 @@ namespace fit.Test.NUnit {
         {
             Parse cell = TestUtils.CreateCell("<<thePerson");
             MakePersonFixture();
-            Person person = new Person("Eeek", "Gadd");
-            Person person2 = new Person("Eeek", "Gadds");
+            var person = new Person("Eeek", "Gadd");
+            var person2 = new Person("Eeek", "Gadds");
             StoreSymbol("thePerson", person);
             personFixture.Field = person2;
             TestUtils.DoCheck(personFixture, TestUtils.CreateCellRange("Field"), cell);

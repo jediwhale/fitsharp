@@ -1,4 +1,4 @@
-// Copyright © 2009 Syterra Software Inc.
+// Copyright © 2011 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -10,7 +10,6 @@ using fitlibrary;
 using fitlibrary.table;
 using fitlibrary.tree;
 using fitSharp.Fit.Operators;
-using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
@@ -45,8 +44,8 @@ namespace fit.Test.Acceptance {
             return IsEqual(theCells.Last, string.Format("'{0}'", result));
         }
 
-        private static bool IsEqual(Tree<Cell> cell, object value) {
-            return new CellOperationImpl(new Service.Service()).Compare(new TypedValue(value), cell);
+        private bool IsEqual(Tree<Cell> cell, object value) {
+            return Processor.Compare(new TypedValue(value), cell);
         }
 
         public bool CheckParseInteger(Parse theCells) {

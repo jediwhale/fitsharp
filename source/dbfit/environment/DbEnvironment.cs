@@ -115,6 +115,13 @@ namespace dbfit {
         void ConnectUsingFile(String connectionPropertiesFile);
 
         /// <summary>
+        /// Connects to the database using a specified database for the user witout a transaction
+        /// </summary>
+        /// <param name="dataSource">Host (optionally port), machine name or any other data source identifier</param>
+        /// <param name="database">default database after connection</param>
+        void ConnectNoTransaction(String dataSource, String username, String password, String database);
+
+        /// <summary>
         /// bind any fixture symbols that match command parameters to this command. 
         /// symbols that have no matching parameters are ignored.
         /// </summary>

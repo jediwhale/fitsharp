@@ -16,14 +16,15 @@ namespace fit.Service {
             Add(new ComposeDefault(), 0);
             Add(new ComposeShowAsOperator(), 0);
 
-            Add(new RuntimeDirect(), 0);
-            Add(new RuntimeProcedure(), 0);
+            Add(new InvokeDirect(), 0);
+            Add(new InvokeProcedure(), 0);
 
             Add(new ComposeStoryTestString(), 0);
             Add(new ParseStoryTestString(), 0);
 
             Add(new ComposeTable(), 0);
-            Add(new ExecuteList(), 0);
+            Add(new ListOperator(), 0);
+            Add(new CompareList(), 0);
             Add(new ParseTable(), 0);
             Add(new ParseTree(), 0);
             Add(new ParseInterpreter(), 0);

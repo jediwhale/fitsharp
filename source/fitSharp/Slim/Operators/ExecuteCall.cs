@@ -6,7 +6,7 @@
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Slim.Operators {
-    public class ExecuteCall: ExecuteBase {
+    public class ExecuteCall: InvokeInstructionBase {
         public ExecuteCall() : base("call") {}
 
         protected override Tree<string> ExecuteOperation(Tree<string> parameters) {
