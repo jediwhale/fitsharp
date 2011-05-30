@@ -1,4 +1,4 @@
-// Copyright © 2010 Syterra Software Inc.
+// Copyright © 2011 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -72,7 +72,7 @@ namespace fitlibrary {
 
                 }
                 if (!result.IsValid) {
-                    if (theCurrentRow.Parts.Text.Length > 0) {
+                    if (result.IsException<MemberMissingException>() && theCurrentRow.Parts.Text.Length > 0) {
                         var newFixture = Processor.ParseTree<Cell, Interpreter>(theCurrentRow);
                         var adapter = newFixture as MutableDomainAdapter;
                         if (adapter != null) adapter.SetSystemUnderTest(SystemUnderTest);

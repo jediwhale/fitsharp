@@ -82,8 +82,8 @@
     <Compile Include="Fit\Operators\ParseDate.cs" />
     <Compile Include="Fit\Operators\CompareNumeric.cs" />
     <Compile Include="Fit\Operators\CompareString.cs" />
-    <Compile Include="Fit\Operators\CheckOperationError.cs" />
-    <Compile Include="Fit\Operators\CheckOperationException.cs" />
+    <Compile Include="Fit\Operators\CompareError.cs" />
+    <Compile Include="Fit\Operators\CompareException.cs" />
     <Compile Include="Fit\Operators\ParseQuotedString.cs" />
     <Compile Include="Fit\Operators\ParseSymbol.cs" />
     <Compile Include="Fit\Runner\StoryFileName.cs" />

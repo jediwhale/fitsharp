@@ -29,7 +29,7 @@ namespace fit.Fixtures {
                 parameterList.Add(new CellTreeLeaf(new GracefulName(nameCell.Text).ToString()));
                 parameterList.Add(valueCell);
             }
-            var result = Processor.InvokeWithThrow(new TypedValue(SystemUnderTest), memberName,
+            var result = Processor.Invoke(new TypedValue(SystemUnderTest), memberName,
                                           new EnumeratedTree<Cell>(parameterList));
             CellOperation.Check(SystemUnderTest, result, row.Parts.Last);
         }

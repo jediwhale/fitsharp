@@ -1,4 +1,4 @@
-// Copyright © 2010 Syterra Software Inc.
+// Copyright © 2011 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -31,6 +31,12 @@ namespace fit.Test.Double {
             if (Message == "OK") return Message;
             if (Message == null) throw new NullReferenceException();
             throw new ApplicationException(Message);
+        }
+
+        public string Throw(string message) {
+            if (message == null) throw new NullReferenceException();
+            if (message == "OK") return message;
+            throw new ApplicationException(message);
         }
 
         public void AddDays(int days) { DateTimeField = DateTimeField.AddDays(days); }
