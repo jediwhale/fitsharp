@@ -7,7 +7,9 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using MySql.Data;
+using System.Text;
+using MySql.Data.Types;
+using MySql.Data.MySqlClient;
 using System.Text.RegularExpressions;
 using dbfit.util;
 
@@ -121,39 +123,48 @@ namespace dbfit
             }
             return allParams;
         }
-        private static string[] StringTypes = new string[] { "VARCHAR", "VARCHAR2", "NVARCHAR2", "CHAR", "NCHAR", "ROWID", "CLOB", "NCLOB" };
-        private static string[] DecimalTypes = new string[] { "BINARY_INTEGER", "NUMBER", "FLOAT" };
-        private static string[] DateTypes = new string[] { "TIMESTAMP", "DATE" };
-        private static string[] RefCursorTypes = new string[] { "REF" };
+        //datatypes done
+        private static string[] StringTypes = new string[] { "VARCHAR", "CHAR", "TEXT" };
+        private static string[] IntTypes = new string[] { "TINYINT", "SMALLINT", "MEDIUMINT", "INT", "INTEGER" };
+        private static string[] LongTypes = new string[] { "BIGINT", "INTEGER UNSIGNED", "INT UNSIGNED" };
+        private static string[] FloatTypes = new string[] { "FLOAT" };
+        private static string[] DoubleTypes = new string[] { "DOUBLE" };
+        private static string[] DecimalTypes = new string[] { "DECIMAL", "DEC" };
+        private static string[] DateTypes = new string[] { "DATE" };
+        private static string[] TimestampTypes = new string[] { "TIMESTAMP", "DATETIME" };
+        //\done
 
-        private static string NormaliseTypeName(string dataType)
+        private static string NormaliseTypeName(string dataType) //done
         {
             dataType = dataType.ToUpper().Trim();
-            int idx = dataType.IndexOf(" ");
-            if (idx >= 0) dataType = dataType.Substring(0, idx);
-            idx = dataType.IndexOf("(");
-            if (idx >= 0) dataType = dataType.Substring(0, idx);
             return dataType;
         }
-        private static OracleType GetDBType(String dataType)
+        private static MySqlDbType GetDBType(String dataType) //done
         {
             //todo:strip everything from first blank
             dataType = NormaliseTypeName(dataType);
 
-            if (Array.IndexOf(StringTypes, dataType) >= 0) return OracleType.VarChar;
-            if (Array.IndexOf(DecimalTypes, dataType) >= 0) return OracleType.Number;
-            if (Array.IndexOf(DateTypes, dataType) >= 0) return OracleType.DateTime;
-            if (Array.IndexOf(RefCursorTypes, dataType) >= 0) return OracleType.Cursor;
+            if (Array.IndexOf(StringTypes, dataType) >= 0) return MySqlDbType.VarChar;
+            if (Array.IndexOf(IntTypes, dataType) >= 0) return MySqlDbType.Int32;
+            if (Array.IndexOf(LongTypes, dataType) >= 0) return MySqlDbType.Int64;
+            if (Array.IndexOf(FloatTypes, dataType) >= 0) return MySqlDbType.Float;
+            if (Array.IndexOf(DoubleTypes, dataType) >= 0) return MySqlDbType.Double;
+            if (Array.IndexOf(DecimalTypes, dataType) >= 0) return MySqlDbType.Decimal;
+            if (Array.IndexOf(DateTypes, dataType) >= 0) return MySqlDbType.Date;
+            if (Array.IndexOf(TimestampTypes, dataType) >= 0) return MySqlDbType.DateTime;
             throw new NotSupportedException("Type " + dataType + " is not supported");
         }
-        private static Type GetDotNetType(String dataType)
+        private static Type GetDotNetType(String dataType) //done
         {
             dataType = NormaliseTypeName(dataType);
             if (Array.IndexOf(StringTypes, dataType) >= 0) return typeof(string);
+            if (Array.IndexOf(IntTypes, dataType) >= 0) return typeof(Int32);
+            if (Array.IndexOf(LongTypes, dataType) >= 0) return typeof(long);
+            if (Array.IndexOf(FloatTypes, dataType) >= 0) return typeof(float);
+            if (Array.IndexOf(DoubleTypes, dataType) >= 0) return typeof(double);
             if (Array.IndexOf(DecimalTypes, dataType) >= 0) return typeof(decimal);
             if (Array.IndexOf(DateTypes, dataType) >= 0) return typeof(DateTime);
-            if (Array.IndexOf(RefCursorTypes, dataType) >= 0) return typeof(DataTable);
-
+            if (Array.IndexOf(TimestampTypes, dataType) >= 0) return typeof(DateTime);
             throw new NotSupportedException("Type " + dataType + " is not supported");
         }
         private static ParameterDirection GetParameterDirection(String direction)
@@ -203,20 +214,20 @@ namespace dbfit
             }
             return sb.ToString();
         }
-        public override int GetExceptionCode(Exception dbException)
+        public override int GetExceptionCode(Exception dbException) //done
         {
-            if (dbException is System.Data.OracleClient.OracleException)
-                return ((System.Data.OracleClient.OracleException)dbException).Code;
+            if (dbException is MySql.Data.MySqlClient.MySqlException)
+                return ((MySql.Data.MySqlClient.MySqlException)dbException).ErrorCode;
             else if (dbException is System.Data.Common.DbException)
                 return ((System.Data.Common.DbException)dbException).ErrorCode;
             else return 0;
         }
-        public override String ParameterPrefix
+        public override String ParameterPrefix //done
         {
-            get { return ":"; }
+            get { return "?"; }
         }
-        public override bool SupportsReturnOnInsert { get { return true; } }
-        public override String IdentitySelectStatement(string tableName) { throw new ApplicationException("Oracle supports return on insert"); }
+        public override bool SupportsReturnOnInsert { get { return false; } } //done
+        public override String IdentitySelectStatement(string tableName) { return "select last_insert_id()"; } //done
 
     }
 }
