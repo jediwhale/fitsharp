@@ -1,0 +1,222 @@
+﻿// Copyright © 2011 Ed Harper Includes work Copyright (C) Gojko Adzic 2006-2008 http://gojko.net
+// This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
+// This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using MySql.Data;
+using System.Text.RegularExpressions;
+using dbfit.util;
+
+namespace dbfit
+{
+    /// <summary>
+    /// Implementation of IDbEnvironment that works with MySql
+    /// </summary>
+    public class MySqlEnvironment : AbstractDbEnvironment
+    {
+        private const int MAX_STRING_SIZE = 65535;
+        protected override String GetConnectionString(String dataSource, String username, String password, String databaseName)
+        {
+            return String.Format("data source={0};user id={1};password={2};database={3};", dataSource, username, password, databaseName);
+        }
+
+        protected override String GetConnectionString(String dataSource, String username, String password)
+        {
+            return String.Format("Data Source={0}; User ID={1}; Password={2}", dataSource, username, password);
+        }
+        private static readonly DbProviderFactory dbp = DbProviderFactories.GetFactory("MySql.Data");
+        private readonly Regex paramNames = new Regex("[?]([A-Za-z0-9_]*)");
+        protected override Regex ParamNameRegex { get { return paramNames; } }
+
+        public override DbProviderFactory DbProviderFactory
+        {
+            get { return dbp; }
+        }
+        public override Dictionary<String, DbParameterAccessor> GetAllProcedureParameters(String procName) //done
+        {
+            String[] qualifiers = NameNormaliser.NormaliseName(procName).Split('.');
+            String qry = " select type,param_list,returns from mysql.proc where ";
+            if (qualifiers.Length == 2)
+            {
+                qry += " lower(db)=?0 and lower(name)=?1 ";
+            }
+            else
+            {
+                qry += " (db=database() and lower(name)=?1)";
+            }
+            //Console.WriteLine(qry);
+            Dictionary<String, DbParameterAccessor> res = ReadIntoParams(qualifiers, qry);
+            if (res.Count == 0) throw new ApplicationException("Cannot read list of parameters for " + procName + " - check spelling and access privileges");
+            return res;
+        }
+        public override Dictionary<String, DbParameterAccessor> GetAllColumns(String tableOrViewName) //done
+        {
+            String[] qualifiers = NameNormaliser.NormaliseName(tableOrViewName).Split('.');
+            String qry = @" select column_name, data_type, character_maximum_length 
+				'IN' as direction from information_schema.columns where  ";
+            if (qualifiers.Length == 2)
+            {
+                qry += " lower(table_schema)=?0 and lower(table_name)=?1 ";
+            }
+            else
+            {
+                qry += @" 
+					(table_schema=database() and lower(table_name)=?1)";
+            }
+            qry += " order by ordinal_position ";
+            Dictionary<String, DbParameterAccessor> res = ReadIntoParams(qualifiers, qry);
+            if (res.Count == 0) throw new ApplicationException("Cannot read list of columns for " + tableOrViewName + " - check spelling and access privileges");
+            return res;
+        }
+
+        private Dictionary<string, DbParameterAccessor> ReadIntoParams(String[] queryParameters, String query)
+        {
+            DbCommand dc = CurrentConnection.CreateCommand();
+            dc.Transaction = CurrentTransaction;
+            dc.CommandText = query;
+            dc.CommandType = CommandType.Text;
+            for (int i = 0; i < queryParameters.Length; i++)
+            {
+                AddInput(dc, ":" + i, queryParameters[i].ToUpper());
+            }
+            DbDataReader reader = dc.ExecuteReader();
+            Dictionary<String, DbParameterAccessor>
+                allParams = new Dictionary<string, DbParameterAccessor>();
+            int position = 0;
+            while (reader.Read())
+            {
+
+                String paramName = (reader.IsDBNull(0)) ? null : reader.GetString(0);
+                String dataType = reader.GetString(1);
+                int length = (reader.IsDBNull(2)) ? 0 : reader.GetInt32(2);
+                String direction = reader.GetString(3);
+                OracleParameter dp = new OracleParameter();
+                dp.Direction = GetParameterDirection(direction);
+                if (paramName != null)
+                {
+                    dp.ParameterName = paramName; dp.SourceColumn = paramName;
+                }
+                else
+                {
+                    dp.Direction = ParameterDirection.ReturnValue;
+                }
+
+                dp.OracleType = GetDBType(dataType);
+                if (length > 0)
+                {
+                    dp.Size = length;
+
+                }
+                else
+                {
+                    if (!ParameterDirection.Input.Equals(dp.Direction) || typeof(String).Equals(GetDotNetType(dataType)))
+                        dp.Size = 4000;
+                }
+                allParams[NameNormaliser.NormaliseName(paramName)] =
+                    new DbParameterAccessor(dp, GetDotNetType(dataType), position++, dataType);
+            }
+            return allParams;
+        }
+        private static string[] StringTypes = new string[] { "VARCHAR", "VARCHAR2", "NVARCHAR2", "CHAR", "NCHAR", "ROWID", "CLOB", "NCLOB" };
+        private static string[] DecimalTypes = new string[] { "BINARY_INTEGER", "NUMBER", "FLOAT" };
+        private static string[] DateTypes = new string[] { "TIMESTAMP", "DATE" };
+        private static string[] RefCursorTypes = new string[] { "REF" };
+
+        private static string NormaliseTypeName(string dataType)
+        {
+            dataType = dataType.ToUpper().Trim();
+            int idx = dataType.IndexOf(" ");
+            if (idx >= 0) dataType = dataType.Substring(0, idx);
+            idx = dataType.IndexOf("(");
+            if (idx >= 0) dataType = dataType.Substring(0, idx);
+            return dataType;
+        }
+        private static OracleType GetDBType(String dataType)
+        {
+            //todo:strip everything from first blank
+            dataType = NormaliseTypeName(dataType);
+
+            if (Array.IndexOf(StringTypes, dataType) >= 0) return OracleType.VarChar;
+            if (Array.IndexOf(DecimalTypes, dataType) >= 0) return OracleType.Number;
+            if (Array.IndexOf(DateTypes, dataType) >= 0) return OracleType.DateTime;
+            if (Array.IndexOf(RefCursorTypes, dataType) >= 0) return OracleType.Cursor;
+            throw new NotSupportedException("Type " + dataType + " is not supported");
+        }
+        private static Type GetDotNetType(String dataType)
+        {
+            dataType = NormaliseTypeName(dataType);
+            if (Array.IndexOf(StringTypes, dataType) >= 0) return typeof(string);
+            if (Array.IndexOf(DecimalTypes, dataType) >= 0) return typeof(decimal);
+            if (Array.IndexOf(DateTypes, dataType) >= 0) return typeof(DateTime);
+            if (Array.IndexOf(RefCursorTypes, dataType) >= 0) return typeof(DataTable);
+
+            throw new NotSupportedException("Type " + dataType + " is not supported");
+        }
+        private static ParameterDirection GetParameterDirection(String direction)
+        {
+            if ("IN".Equals(direction)) return ParameterDirection.Input;
+            if ("OUT".Equals(direction)) return ParameterDirection.Output;
+            if ("IN/OUT".Equals(direction)) return ParameterDirection.InputOutput;
+            //todo return val
+            throw new NotSupportedException("Direction " + direction + " is not supported");
+        }
+        public override String BuildInsertCommand(String tableName, DbParameterAccessor[] accessors)
+        {
+            StringBuilder sb = new StringBuilder("insert into ");
+            sb.Append(tableName).Append("(");
+            String comma = "";
+            String retComma = "";
+
+            StringBuilder values = new StringBuilder();
+            StringBuilder retNames = new StringBuilder();
+            StringBuilder retValues = new StringBuilder();
+
+            foreach (DbParameterAccessor accessor in accessors)
+            {
+                if (!accessor.IsBoundToCheckOperation)
+                {
+                    sb.Append(comma);
+                    values.Append(comma);
+                    sb.Append(accessor.DbParameter.SourceColumn);
+                    values.Append(":").Append(accessor.DbParameter.ParameterName);
+                    comma = ",";
+                }
+                else
+                {
+                    retNames.Append(retComma);
+                    retValues.Append(retComma);
+                    retNames.Append(accessor.DbParameter.SourceColumn);
+                    retValues.Append(":").Append(accessor.DbParameter.ParameterName);
+                    retComma = ",";
+                }
+            }
+            sb.Append(") values (");
+            sb.Append(values);
+            sb.Append(")");
+            if (retValues.Length > 0)
+            {
+                sb.Append(" returning ").Append(retNames).Append(" into ").Append(retValues);
+            }
+            return sb.ToString();
+        }
+        public override int GetExceptionCode(Exception dbException)
+        {
+            if (dbException is System.Data.OracleClient.OracleException)
+                return ((System.Data.OracleClient.OracleException)dbException).Code;
+            else if (dbException is System.Data.Common.DbException)
+                return ((System.Data.Common.DbException)dbException).ErrorCode;
+            else return 0;
+        }
+        public override String ParameterPrefix
+        {
+            get { return ":"; }
+        }
+        public override bool SupportsReturnOnInsert { get { return true; } }
+        public override String IdentitySelectStatement(string tableName) { throw new ApplicationException("Oracle supports return on insert"); }
+
+    }
+}
