@@ -75,7 +75,7 @@ namespace dbfit
             return res;
         }
 
-        private Dictionary<string, DbParameterAccessor> ReadIntoParams(String[] queryParameters, String query)
+        private Dictionary<string, DbParameterAccessor> ReadIntoParams(String[] queryParameters, String query) //done
         {
             DbCommand dc = CurrentConnection.CreateCommand();
             dc.Transaction = CurrentTransaction;
@@ -96,7 +96,7 @@ namespace dbfit
                 String dataType = reader.GetString(1);
                 int length = (reader.IsDBNull(2)) ? 0 : reader.GetInt32(2);
                 String direction = reader.GetString(3);
-                OracleParameter dp = new OracleParameter();
+                MySqlParameter dp = new MySqlParameter();
                 dp.Direction = GetParameterDirection(direction);
                 if (paramName != null)
                 {
@@ -107,7 +107,7 @@ namespace dbfit
                     dp.Direction = ParameterDirection.ReturnValue;
                 }
 
-                dp.OracleType = GetDBType(dataType);
+                dp.MySqlDbType = GetDBType(dataType);
                 if (length > 0)
                 {
                     dp.Size = length;
@@ -193,7 +193,7 @@ namespace dbfit
                     sb.Append(comma);
                     values.Append(comma);
                     sb.Append(accessor.DbParameter.SourceColumn);
-                    values.Append(":").Append(accessor.DbParameter.ParameterName);
+                    values.Append("?").Append(accessor.DbParameter.ParameterName);
                     comma = ",";
                 }
                 else
@@ -201,7 +201,7 @@ namespace dbfit
                     retNames.Append(retComma);
                     retValues.Append(retComma);
                     retNames.Append(accessor.DbParameter.SourceColumn);
-                    retValues.Append(":").Append(accessor.DbParameter.ParameterName);
+                    retValues.Append("?").Append(accessor.DbParameter.ParameterName);
                     retComma = ",";
                 }
             }

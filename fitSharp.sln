@@ -1,5 +1,5 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual C# Express 2010
+# Visual Studio 2010
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "fitSharpText", "fitSharpText", "{69DCFB68-FD05-422F-91E8-205AC1E301E5}"
 	ProjectSection(SolutionItems) = preProject
 		source\fitSharpText\fit.css = source\fitSharpText\fit.css
@@ -32,7 +32,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dbfitOracle", "source\dbfit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dbfitSybase", "source\dbfitSybase\dbfitSybase.csproj", "{33B34718-6151-4D91-B27F-EB8FD64CB66B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dbfit.MySql", "dbfit.MySql\dbfit.MySql.csproj", "{97391EED-1EF8-44C2-A534-887C4E1C7109}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dbfitMySql", "dbfit.MySql\dbfitMySql.csproj", "{97391EED-1EF8-44C2-A534-887C4E1C7109}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
