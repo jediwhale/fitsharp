@@ -31,7 +31,7 @@ namespace dbfit
             return String.Format("Data Source={0}; User ID={1}; Password={2}", dataSource, username, password);
         }
         private static readonly DbProviderFactory dbp = DbProviderFactories.GetFactory("MySql.Data.MySqlClient");
-        private readonly Regex paramNames = new Regex("[?]([A-Za-z0-9_]*)");
+        private readonly Regex paramNames = new Regex("@([A-Za-z0-9_]*)");
         protected override Regex ParamNameRegex { get { return paramNames; } }
 
         public override DbProviderFactory DbProviderFactory
@@ -44,11 +44,11 @@ namespace dbfit
             String qry = " select type,param_list,returns from mysql.proc where ";
             if (qualifiers.Length == 2)
             {
-                qry += " lower(db)=?0 and lower(name)=?1 ";
+                qry += " lower(db)=@dbname and lower(name)=@objname ";
             }
             else
             {
-                qry += " (db=database() and lower(name)=?1)";
+                qry += " (db=database() and lower(name)=@objname)";
             }
             //Console.WriteLine(qry);
             Dictionary<String, DbParameterAccessor> res = ReadIntoParams(qualifiers, qry);
@@ -62,12 +62,12 @@ namespace dbfit
 				'IN' as direction from information_schema.columns where  ";
             if (qualifiers.Length == 2)
             {
-                qry += " lower(table_schema)=?0 and lower(table_name)=?1 ";
+                qry += " lower(table_schema)=@schema and lower(table_name)=@objname ";
             }
             else
             {
                 qry += @" 
-					(table_schema=database() and lower(table_name)=?1)";
+					(table_schema=database() and lower(table_name)=@objname)";
             }
             qry += " order by ordinal_position ";
             Dictionary<String, DbParameterAccessor> res = ReadIntoParams(qualifiers, qry);
@@ -81,10 +81,19 @@ namespace dbfit
             dc.Transaction = CurrentTransaction;
             dc.CommandText = query;
             dc.CommandType = CommandType.Text;
-            for (int i = 0; i < queryParameters.Length; i++)
+            if (queryParameters.Length == 2)
             {
-                AddInput(dc, ":" + i, queryParameters[i].ToUpper());
+                AddInput(dc, "@schema", queryParameters[0]);
+                AddInput(dc, "@objname", queryParameters[1]);
             }
+            else
+            {
+                AddInput(dc, "@objname", queryParameters[0]);
+            }
+            //for (int i = 0; i < queryParameters.Length; i++)
+            //{
+            //    AddInput(dc, "@" + i, queryParameters[i].ToUpper());
+            //}
             DbDataReader reader = dc.ExecuteReader();
             Dictionary<String, DbParameterAccessor>
                 allParams = new Dictionary<string, DbParameterAccessor>();
@@ -175,45 +184,7 @@ namespace dbfit
             //todo return val
             throw new NotSupportedException("Direction " + direction + " is not supported");
         }
-        //public override String BuildInsertCommand(String tableName, DbParameterAccessor[] accessors)
-        //{
-        //    StringBuilder sb = new StringBuilder("insert into ");
-        //    sb.Append(tableName).Append("(");
-        //    String comma = "";
-        //    String retComma = "";
 
-        //    StringBuilder values = new StringBuilder();
-        //    StringBuilder retNames = new StringBuilder();
-        //    StringBuilder retValues = new StringBuilder();
-
-        //    foreach (DbParameterAccessor accessor in accessors)
-        //    {
-        //        if (!accessor.IsBoundToCheckOperation)
-        //        {
-        //            sb.Append(comma);
-        //            values.Append(comma);
-        //            sb.Append(accessor.DbParameter.SourceColumn);
-        //            values.Append("?").Append(accessor.DbParameter.ParameterName);
-        //            comma = ",";
-        //        }
-        //        else
-        //        {
-        //            retNames.Append(retComma);
-        //            retValues.Append(retComma);
-        //            retNames.Append(accessor.DbParameter.SourceColumn);
-        //            retValues.Append("?").Append(accessor.DbParameter.ParameterName);
-        //            retComma = ",";
-        //        }
-        //    }
-        //    sb.Append(") values (");
-        //    sb.Append(values);
-        //    sb.Append(")");
-        //    if (retValues.Length > 0)
-        //    {
-        //        sb.Append(" returning ").Append(retNames).Append(" into ").Append(retValues);
-        //    }
-        //    return sb.ToString();
-        //}
         public override int GetExceptionCode(Exception dbException) //done
         {
             if (dbException is MySql.Data.MySqlClient.MySqlException)
@@ -224,7 +195,7 @@ namespace dbfit
         }
         public override String ParameterPrefix //done
         {
-            get { return "?"; }
+            get { return "@"; }
         }
         public override bool SupportsReturnOnInsert { get { return false; } } //done
         public override String IdentitySelectStatement(string tableName) { return "select last_insert_id()"; } //done
