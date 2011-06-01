@@ -30,7 +30,7 @@ namespace dbfit
         {
             return String.Format("Data Source={0}; User ID={1}; Password={2}", dataSource, username, password);
         }
-        private static readonly DbProviderFactory dbp = DbProviderFactories.GetFactory("MySql.Data");
+        private static readonly DbProviderFactory dbp = DbProviderFactories.GetFactory("MySql.Data.MySqlClient");
         private readonly Regex paramNames = new Regex("[?]([A-Za-z0-9_]*)");
         protected override Regex ParamNameRegex { get { return paramNames; } }
 
@@ -169,51 +169,51 @@ namespace dbfit
         }
         private static ParameterDirection GetParameterDirection(String direction)
         {
-            if ("IN".Equals(direction)) return ParameterDirection.Input;
-            if ("OUT".Equals(direction)) return ParameterDirection.Output;
-            if ("IN/OUT".Equals(direction)) return ParameterDirection.InputOutput;
+            if ("in".Equals(direction.ToLower())) return ParameterDirection.Input;
+            if ("out".Equals(direction.ToLower())) return ParameterDirection.Output;
+            if ("inout".Equals(direction.ToLower())) return ParameterDirection.InputOutput;
             //todo return val
             throw new NotSupportedException("Direction " + direction + " is not supported");
         }
-        public override String BuildInsertCommand(String tableName, DbParameterAccessor[] accessors)
-        {
-            StringBuilder sb = new StringBuilder("insert into ");
-            sb.Append(tableName).Append("(");
-            String comma = "";
-            String retComma = "";
+        //public override String BuildInsertCommand(String tableName, DbParameterAccessor[] accessors)
+        //{
+        //    StringBuilder sb = new StringBuilder("insert into ");
+        //    sb.Append(tableName).Append("(");
+        //    String comma = "";
+        //    String retComma = "";
 
-            StringBuilder values = new StringBuilder();
-            StringBuilder retNames = new StringBuilder();
-            StringBuilder retValues = new StringBuilder();
+        //    StringBuilder values = new StringBuilder();
+        //    StringBuilder retNames = new StringBuilder();
+        //    StringBuilder retValues = new StringBuilder();
 
-            foreach (DbParameterAccessor accessor in accessors)
-            {
-                if (!accessor.IsBoundToCheckOperation)
-                {
-                    sb.Append(comma);
-                    values.Append(comma);
-                    sb.Append(accessor.DbParameter.SourceColumn);
-                    values.Append("?").Append(accessor.DbParameter.ParameterName);
-                    comma = ",";
-                }
-                else
-                {
-                    retNames.Append(retComma);
-                    retValues.Append(retComma);
-                    retNames.Append(accessor.DbParameter.SourceColumn);
-                    retValues.Append("?").Append(accessor.DbParameter.ParameterName);
-                    retComma = ",";
-                }
-            }
-            sb.Append(") values (");
-            sb.Append(values);
-            sb.Append(")");
-            if (retValues.Length > 0)
-            {
-                sb.Append(" returning ").Append(retNames).Append(" into ").Append(retValues);
-            }
-            return sb.ToString();
-        }
+        //    foreach (DbParameterAccessor accessor in accessors)
+        //    {
+        //        if (!accessor.IsBoundToCheckOperation)
+        //        {
+        //            sb.Append(comma);
+        //            values.Append(comma);
+        //            sb.Append(accessor.DbParameter.SourceColumn);
+        //            values.Append("?").Append(accessor.DbParameter.ParameterName);
+        //            comma = ",";
+        //        }
+        //        else
+        //        {
+        //            retNames.Append(retComma);
+        //            retValues.Append(retComma);
+        //            retNames.Append(accessor.DbParameter.SourceColumn);
+        //            retValues.Append("?").Append(accessor.DbParameter.ParameterName);
+        //            retComma = ",";
+        //        }
+        //    }
+        //    sb.Append(") values (");
+        //    sb.Append(values);
+        //    sb.Append(")");
+        //    if (retValues.Length > 0)
+        //    {
+        //        sb.Append(" returning ").Append(retNames).Append(" into ").Append(retValues);
+        //    }
+        //    return sb.ToString();
+        //}
         public override int GetExceptionCode(Exception dbException) //done
         {
             if (dbException is MySql.Data.MySqlClient.MySqlException)
