@@ -13,7 +13,6 @@ namespace fit.Service {
     public class Operators: CellOperators, Copyable {
 
         public Operators() {
-            Add(new ComposeDefault(), 0);
             Add(new ComposeShowAsOperator(), 0);
 
             Add(new InvokeDirect(), 0);

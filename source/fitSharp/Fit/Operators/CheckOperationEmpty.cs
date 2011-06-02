@@ -3,7 +3,6 @@
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
-using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
@@ -17,12 +16,9 @@ namespace fitSharp.Fit.Operators {
 
 	    public TypedValue Invoke(TypedValue instance, string memberName, Tree<Cell> parameters) {
             var context = instance.GetValue<CellOperationContext>();
-	        var actual = context.GetActual(Processor);
-            parameters.Value.AddToAttribute(
-                CellAttribute.InformationSuffix,
-                actual == null ? "null"
-	            : actual.ToString().Length == 0 ? "blank"
-	            : actual.ToString()); //todo: compose??
+	        var actualCell = Processor.Compose(context.GetTypedActual(Processor));
+	        parameters.Value.AddToAttribute(CellAttribute.InformationSuffix,
+                actualCell.Value.Text.Length == 0 ? "blank" : actualCell.Value.Text); // slightly quirky behavior from original fitnesse.net
 	        return TypedValue.Void;
 	    }
 	}

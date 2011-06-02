@@ -111,7 +111,6 @@
     <Compile Include="Model\Table.cs" />
     <Compile Include="Model\Tree.cs" />
     <Compile Include="Model\CellRange.cs" />
-    <Compile Include="Operators\ComposeDefault.cs" />
     <Compile Include="Operators\InvokeDirect.cs" />
     <Compile Include="Operators\ComposeTable.cs" />
     <Compile Include="Fixtures\FitVersionFixture.cs" />

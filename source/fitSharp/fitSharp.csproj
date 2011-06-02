@@ -50,12 +50,12 @@
     <Compile Include="Fit\Fixtures\Define.cs" />
     <Compile Include="Fit\Operators\CheckOperationDefault.cs" />
     <Compile Include="Fit\Operators\CheckOperationSymbolSave.cs" />
+    <Compile Include="Fit\Operators\ComposeDefault.cs" />
     <Compile Include="Fit\Operators\ComposeShowAsOperator.cs" />
     <Compile Include="Fit\Operators\InvokeOperationDefault.cs" />
     <Compile Include="Fit\Operators\ParseNullArray.cs" />
     <Compile Include="Fit\Operators\ParseStoryTestString.cs" />
     <Compile Include="Fit\Operators\ParseTextStoryTestString.cs" />
-    <Compile Include="Fit\Service\InvokeOperation.cs" />
     <Compile Include="Machine\Application\Runnable.cs" />
     <Compile Include="Machine\Application\Runner.cs" />
     <Compile Include="Machine\Engine\CreateDefault.cs" />

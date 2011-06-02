@@ -6,7 +6,6 @@
 using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
-using fitSharp.Fit.Service;
 using fitSharp.Machine.Model;
 using Moq;
 using NUnit.Framework;
@@ -57,15 +56,12 @@ namespace fitSharp.Test.NUnit.Fit {
 
         [Test] public void LastActionIsSetAsInputCellAttribute() {
             SetUpSUT("procedure");
-            new InvokeOperation(processor.Object, target, new CellTreeLeaf("procedure"), targetCell, targetCell).Do();
+            Execute(targetCell);
             Assert.AreEqual("blah blah", targetCell.Value.GetAttribute(CellAttribute.Folded));
         }
 
         [Test] public void LastActionIsSetAsExpectedCellAttribute() {
             SetUpSUT("procedure");
-            //var parameters = new ExecuteParameters(
-            //    ExecuteParameters.Make(new CellTreeLeaf("procedure"), new CellTree(), targetCell));
-            //execute.Execute(new ExecuteContext(ExecuteCommand.Check, target.Value), parameters);
             check.Invoke(CellOperationContext.Make(target.Value, new CellTreeLeaf("procedure"), new CellTree()), CellOperationContext.CheckCommand, targetCell);
             Assert.AreEqual("blah blah", targetCell.Value.GetAttribute(CellAttribute.Folded));
         }
@@ -75,9 +71,6 @@ namespace fitSharp.Test.NUnit.Fit {
         }
 
         TypedValue Execute(Tree<Cell> targetCell) {
-            //var parameters = new ExecuteParameters(
-            //    ExecuteParameters.Make(new CellTreeLeaf(memberName), new CellTree(), targetCell));
-            //return execute.Execute(new ExecuteContext(ExecuteCommand.Invoke, target), parameters);
             return invoke.Invoke(CellOperationContext.Make(target.Value, new CellTreeLeaf(memberName), new CellTree()),
                 CellOperationContext.InvokeCommand, targetCell);
         }
