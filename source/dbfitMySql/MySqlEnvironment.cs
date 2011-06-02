@@ -32,6 +32,7 @@ namespace dbfit
         }
         private static readonly DbProviderFactory dbp = DbProviderFactories.GetFactory("MySql.Data.MySqlClient");
         private readonly Regex paramNames = new Regex("@([A-Za-z0-9_]*)");
+        private readonly Regex multispaces = new Regex("\\s+");
         protected override Regex ParamNameRegex { get { return paramNames; } }
 
         public override DbProviderFactory DbProviderFactory
@@ -44,38 +45,139 @@ namespace dbfit
             String qry = " select type,param_list,returns from mysql.proc where ";
             if (qualifiers.Length == 2)
             {
-                qry += " lower(db)=@dbname and lower(name)=@objname ";
+                qry += " lower(db)=@schema and lower(name)=@objname ";
             }
             else
             {
                 qry += " (db=database() and lower(name)=@objname)";
             }
             //Console.WriteLine(qry);
-            Dictionary<String, DbParameterAccessor> res = ReadIntoParams(qualifiers, qry);
+            Dictionary<String, DbParameterAccessor> res = ProcedureReadIntoParams(qualifiers, qry);
             if (res.Count == 0) throw new ApplicationException("Cannot read list of parameters for " + procName + " - check spelling and access privileges");
             return res;
         }
         public override Dictionary<String, DbParameterAccessor> GetAllColumns(String tableOrViewName) //done
         {
             String[] qualifiers = NameNormaliser.NormaliseName(tableOrViewName).Split('.');
-            String qry = @" select column_name, data_type, character_maximum_length 
-				'IN' as direction from information_schema.columns where  ";
+            String qry = @" select column_name, data_type, character_maximum_length, 'IN' as direction from information_schema.columns where  ";
             if (qualifiers.Length == 2)
             {
                 qry += " lower(table_schema)=@schema and lower(table_name)=@objname ";
             }
             else
             {
-                qry += @" 
-					(table_schema=database() and lower(table_name)=@objname)";
+                qry += @" (table_schema=database() and lower(table_name)=@objname)";
             }
             qry += " order by ordinal_position ";
+            //Console.WriteLine(qry);
             Dictionary<String, DbParameterAccessor> res = ReadIntoParams(qualifiers, qry);
             if (res.Count == 0) throw new ApplicationException("Cannot read list of columns for " + tableOrViewName + " - check spelling and access privileges");
             return res;
         }
 
+
+        private Dictionary<string, DbParameterAccessor> ProcedureReadIntoParams(String[] queryParameters, String query) //done
+        {
+            DbDataReader reader = ExecuteParameterQuery(queryParameters, query);
+            Dictionary<String, DbParameterAccessor>
+                allParams = new Dictionary<string, DbParameterAccessor>();
+            reader.Read();
+            String procType = (reader.IsDBNull(0)) ? null : reader.GetString(0);
+            String paramList = multispaces.Replace(reader.GetString(1)," ");
+            String returns = reader.GetString(2);
+            reader.Close();
+            int position = 0;
+            foreach (string param in paramList.Split(','))
+            {
+                string[] tokens = param.Trim().ToLower().Split(new char[] { ' ' , '(' , ')' });
+                int i = 0;
+                string direction = "";
+                string paramName = "";
+                string dataType = "";
+                int length = 0;
+
+                if (tokens[i].Equals("in") || tokens[i].Equals("out") || tokens[i].Equals("inout"))
+                {
+                    direction = tokens[i];
+                    i++;
+                }
+                else
+                {
+                    direction = "in";
+                }
+                paramName = tokens[i];
+                i++;
+                dataType = tokens[i];
+                i++;
+                
+                if (!Int32.TryParse(tokens[i],out length))
+                {
+                    length = 0;
+                }
+
+                MySqlParameter dp = BuildMySqlParameter(direction, paramName, dataType, length);
+                allParams[NameNormaliser.NormaliseName(paramName)] =
+                    new DbParameterAccessor(dp, GetDotNetType(dataType), position++, dataType);
+            }
+            if(procType.Equals("FUNCTION"))
+            {
+                string[] tokens = returns.Trim().ToLower().Split(new char[] { ' ', '(', ')' });
+                string paramName = "?";
+                string dataType = tokens[0];
+                MySqlParameter dp = BuildMySqlParameter("return", paramName, dataType, -1);
+                allParams[NameNormaliser.NormaliseName(paramName)] =
+                    new DbParameterAccessor(dp, GetDotNetType(dataType), position++, dataType);
+            }
+            return allParams;
+        }
+
+        private static MySqlParameter BuildMySqlParameter(string direction, string paramName, string dataType, int length)
+        {
+            MySqlParameter dp = new MySqlParameter();
+            dp.Direction = GetParameterDirection(direction);
+            if (paramName != null)
+            {
+                dp.ParameterName = paramName; dp.SourceColumn = paramName;
+            }
+            else
+            {
+                dp.Direction = ParameterDirection.ReturnValue;
+            }
+
+            dp.MySqlDbType = GetDBType(dataType);
+            if (length > 0)
+            {
+                dp.Size = length;
+            }
+            else
+            {
+                if (!ParameterDirection.Input.Equals(dp.Direction) || typeof(String).Equals(GetDotNetType(dataType))) dp.Size = MAX_STRING_SIZE;
+            }
+            return dp;
+        }
+
         private Dictionary<string, DbParameterAccessor> ReadIntoParams(String[] queryParameters, String query) //done
+        {
+            DbDataReader reader = ExecuteParameterQuery(queryParameters, query);
+            Dictionary<String, DbParameterAccessor>
+                allParams = new Dictionary<string, DbParameterAccessor>();
+            int position = 0;
+            while (reader.Read())
+            {
+
+                String paramName = (reader.IsDBNull(0)) ? null : reader.GetString(0);
+                String dataType = reader.GetString(1);
+                int length = (reader.IsDBNull(2)) ? 0 : reader.GetInt32(2);
+                String direction = reader.GetString(3);
+                MySqlParameter dp = BuildMySqlParameter(direction, paramName, dataType, length);
+                allParams[NameNormaliser.NormaliseName(paramName)] =
+                    new DbParameterAccessor(dp, GetDotNetType(dataType), position++, dataType);
+            }
+            reader.Close();
+            return allParams;
+        }
+
+        private DbDataReader ExecuteParameterQuery(String[] queryParameters, String query)
         {
             DbCommand dc = CurrentConnection.CreateCommand();
             dc.Transaction = CurrentTransaction;
@@ -90,47 +192,8 @@ namespace dbfit
             {
                 AddInput(dc, "@objname", queryParameters[0]);
             }
-            //for (int i = 0; i < queryParameters.Length; i++)
-            //{
-            //    AddInput(dc, "@" + i, queryParameters[i].ToUpper());
-            //}
             DbDataReader reader = dc.ExecuteReader();
-            Dictionary<String, DbParameterAccessor>
-                allParams = new Dictionary<string, DbParameterAccessor>();
-            int position = 0;
-            while (reader.Read())
-            {
-
-                String paramName = (reader.IsDBNull(0)) ? null : reader.GetString(0);
-                String dataType = reader.GetString(1);
-                int length = (reader.IsDBNull(2)) ? 0 : reader.GetInt32(2);
-                String direction = reader.GetString(3);
-                MySqlParameter dp = new MySqlParameter();
-                dp.Direction = GetParameterDirection(direction);
-                if (paramName != null)
-                {
-                    dp.ParameterName = paramName; dp.SourceColumn = paramName;
-                }
-                else
-                {
-                    dp.Direction = ParameterDirection.ReturnValue;
-                }
-
-                dp.MySqlDbType = GetDBType(dataType);
-                if (length > 0)
-                {
-                    dp.Size = length;
-
-                }
-                else
-                {
-                    if (!ParameterDirection.Input.Equals(dp.Direction) || typeof(String).Equals(GetDotNetType(dataType)))
-                        dp.Size = 4000;
-                }
-                allParams[NameNormaliser.NormaliseName(paramName)] =
-                    new DbParameterAccessor(dp, GetDotNetType(dataType), position++, dataType);
-            }
-            return allParams;
+            return reader;
         }
         //datatypes done
         private static string[] StringTypes = new string[] { "VARCHAR", "CHAR", "TEXT" };
@@ -181,7 +244,7 @@ namespace dbfit
             if ("in".Equals(direction.ToLower())) return ParameterDirection.Input;
             if ("out".Equals(direction.ToLower())) return ParameterDirection.Output;
             if ("inout".Equals(direction.ToLower())) return ParameterDirection.InputOutput;
-            //todo return val
+            if ("return".Equals(direction.ToLower())) return ParameterDirection.ReturnValue;
             throw new NotSupportedException("Direction " + direction + " is not supported");
         }
 
@@ -198,7 +261,7 @@ namespace dbfit
             get { return "@"; }
         }
         public override bool SupportsReturnOnInsert { get { return false; } } //done
-        public override String IdentitySelectStatement(string tableName) { return "select last_insert_id()"; } //done
+        public override String IdentitySelectStatement(string tableName) { return "select last_insert_id();"; } //done
 
     }
 }
