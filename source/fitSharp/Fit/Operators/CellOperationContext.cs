@@ -38,7 +38,7 @@ namespace fitSharp.Fit.Operators {
         public TypedValue GetTypedActual(CellProcessor processor) {
             if (!actualValue.HasValue) {
                 try {
-                    TypedValue actualResult = processor.InvokeWithThrow(new TypedValue(systemUnderTest), GetMemberName(processor), parameters);
+                    TypedValue actualResult = processor.Invoke(new TypedValue(systemUnderTest), GetMemberName(processor), parameters);
                     actualValue = actualResult;
                 }
                 catch (ParseException<Cell> e) {

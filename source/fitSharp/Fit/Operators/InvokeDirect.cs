@@ -1,14 +1,14 @@
-﻿// Copyright © 2011 Syterra Software Inc.
-// This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
-// This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+﻿// Copyright © 2011 Syterra Software Inc. All rights reserved.
+// The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+// which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
+// to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
-using fitSharp.Fit.Operators;
+using System;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
 
-namespace fit.Operators {
+namespace fitSharp.Fit.Operators {
     public class InvokeDirect: CellOperator, InvokeOperator<Cell> {
         public const string SetUpMethod = DirectPrefix + "setup";
         public const string TearDownMethod = DirectPrefix + "teardown";
@@ -30,7 +30,8 @@ namespace fit.Operators {
                              : TypedValue.MakeInvalid(new MemberMissingException(instance.Type, memberName, 0));
             }
             else {
-                var member = RuntimeType.FindDirectInstance(instance.Value, new IdentifierName(memberName), new[] {typeof (Parse)});
+                var type = Processor.ParseString<Cell, Type>("fit.Parse");
+                var member = RuntimeType.FindDirectInstance(instance.Value, new IdentifierName(memberName), new[] {type});
                 return member != null
                              ? member.Invoke(new object[] {parameters.Value})
                              : TypedValue.MakeInvalid(new MemberMissingException(instance.Type, memberName, 1));

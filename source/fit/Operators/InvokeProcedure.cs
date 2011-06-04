@@ -6,6 +6,7 @@
 using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
+using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
@@ -39,9 +40,10 @@ namespace fit.Operators {
             return Processor.TestStatus.PopReturn();
         }
 
-        static void ExecuteProcedure(FlowInterpreter flowInterpreter, Tree<Cell> body) {
+        void ExecuteProcedure(FlowInterpreter flowInterpreter, Tree<Cell> body) {
             foreach (var table in body.Branches) {
-                flowInterpreter.InterpretFlow(table);
+                var interpretFlow = Processor.Create(typeof (InterpretFlow).FullName).GetValue<InterpretTableFlow>();
+                interpretFlow.DoTableFlow(Processor, flowInterpreter, table);
             }
         }
 

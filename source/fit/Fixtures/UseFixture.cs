@@ -31,7 +31,7 @@ namespace fit {
             var symbol = new Symbol(theName);
             if (!parent.Processor.Contains(symbol)) return null;
 
-            var result = FixtureResult.Wrap(parent.Processor.Load(symbol).Instance) as Fixture;
+            var result = FixtureResult.Wrap(parent.Processor.Load(symbol).Instance) as Fixture; //todo: dry interpretflow
             if (result == null) throw new FitFailureException("Result is not a Fixture.");
             return result;
         }

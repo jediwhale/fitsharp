@@ -3,6 +3,7 @@
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
+using System;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using fitSharp.Test.Double;
@@ -58,6 +59,18 @@ namespace fitSharp.Test.NUnit.Machine {
             var instance = new TypedValue(new SampleClass());
             TypedValue result = processor.Invoke(instance, "MethodWithParms", new TreeList<string>().AddBranchValue("stringparm0"));
             Assert.AreEqual("samplestringparm0", result.Value);
+        }
+
+        [Test] public void ExceptionReturnedAsValue() {
+            var instance = new TypedValue(new SampleClass());
+            TypedValue result = processor.Invoke(instance, "throw", new TreeList<string>().AddBranchValue("oh no"));
+            Assert.IsTrue(!result.IsValid);
+            Assert.IsTrue(result.Value is ApplicationException);
+        }
+
+        [Test, ExpectedException(typeof(ApplicationException))] public void ExceptionIsThrown() {
+            var instance = new TypedValue(new SampleClass());
+            processor.InvokeWithThrow(instance, "throw", new TreeList<string>().AddBranchValue("oh no"));
         }
 
         [Test] public void OperatorIsRemoved() {

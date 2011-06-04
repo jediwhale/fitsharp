@@ -1,4 +1,4 @@
-﻿// Copyright © 2010 Syterra Software Inc.
+﻿// Copyright © 2011 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -6,19 +6,18 @@
 using System;
 using System.Collections;
 using System.Text;
-using fitSharp.Fit.Operators;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
-namespace fit.Operators {
+namespace fitSharp.Fit.Operators {
     public class ComposeDefault : CellOperator, ComposeOperator<Cell> {
         public bool CanCompose(TypedValue instance) {
             return true;
         }
 
         public Tree<Cell> Compose(TypedValue instance) {
-            var newCell = new Parse("td", GetValueString(instance), null, null);
-            newCell.SetAttribute(CellAttribute.Add, string.Empty);
+            var newCell = Processor.MakeCell(GetValueString(instance), new Tree<Cell>[] {});
+            newCell.Value.SetAttribute(CellAttribute.Add, string.Empty);
             return newCell;
         }
 

@@ -63,6 +63,7 @@ namespace fitSharp.Test.NUnit.Fit {
             public bool IsVisible { get { return true; } }
             public void Interpret(Tree<Cell> table) {}
             public TestStatus TestStatus { get { return new TestStatus(); } }
+            public void Prepare(Interpreter parent, Tree<Cell> table) {}
         }
 
         private class SampleItem: Copyable, SetUpTearDown {

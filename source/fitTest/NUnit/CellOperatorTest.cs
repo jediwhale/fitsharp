@@ -32,6 +32,12 @@ namespace fit.Test.NUnit {
             return compareOperator.CanCompare(new TypedValue(instance, type), TestUtils.CreateCell(value));
         }
 
+        public static bool IsMatch(CompareOperator<Cell> compareOperator, string value) {
+            var processor = new CellProcessorBase();
+            processor.AddOperator(new CompareDefault());
+            return compareOperator.CanCompare(new TypedValue(null, typeof(object)), TestUtils.CreateCell(value));
+        }
+
         public static bool IsMatch(InvokeOperator<Cell> checkOperation, string input) {
             return checkOperation.CanInvoke(CellOperationContext.Make(null, new TypedValue(null)),
                                                             CellOperationContext.CheckCommand,

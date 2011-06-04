@@ -17,29 +17,25 @@ to be bound by the terms of this license. You must not remove this notice, or an
 <div class="content">The exception keyword specifies an exception as an expected value.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>story test fixture</td></tr>
-</table>
-<br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>check</td><td>test result</td><td><br>
+<tr><td>when test is</td><td><br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>sample domain</td></tr>
 </table>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>use</td><td>column</td><td>with</td><td>current</td></tr>
-<tr><td>message</td><td>throw exception?</td></tr>
+<tr><td>compute</td></tr>
+<tr><td>message</td><td>throw</td></tr>
 <tr><td>oh no</td><td>exception["oh no"]</td></tr>
 <tr><td>oops</td><td>exception[ApplicationException]</td></tr>
 <tr><td>null</td><td>exception[NullReferenceException]</td></tr>
 <tr><td>help</td><td>exception[ApplicationException: "help"]</td></tr>
 <tr><td>OK</td><td>exception[ApplicationException]</td></tr>
 </table>
-</td><td><table border="1" cellpadding="2" cellspacing="0"><tr><td>sample domain</td></tr></table><br><table border="1" cellpadding="2" cellspacing="0"><tr><td>use</td><td>column</td><td>with</td><td>current</td></tr><tr><td>message</td><td>throw exception?</td></tr><tr><td>oh no</td><td class="pass">exception["oh no"]</td></tr><tr><td>oops</td><td class="pass">exception[ApplicationException]</td></tr><tr><td>null</td><td class="pass">exception[NullReferenceException]</td></tr><tr><td>help</td><td class="pass">exception[ApplicationException: "help"]</td></tr><tr><td>OK</td><td class="fail">exception[ApplicationException] <span class="fit_label">expected</span><hr />no exception <span class="fit_label">actual</span></td></tr></table></td></tr>
+</td><td>then result is</td><td><table border="1" cellpadding="2" cellspacing="0"><tr><td>sample domain</td></tr></table><br><table border="1" cellpadding="2" cellspacing="0"><tr><td>compute</td></tr><tr><td>message</td><td>throw</td></tr><tr><td>oh no</td><td class="pass">exception["oh no"]</td></tr><tr><td>oops</td><td class="pass">exception[ApplicationException]</td></tr><tr><td>null</td><td class="pass">exception[NullReferenceException]</td></tr><tr><td>help</td><td class="pass">exception[ApplicationException: "help"]</td></tr><tr><td>OK</td><td class="fail">exception[ApplicationException] <span class="fit_label">expected</span><hr />OK <span class="fit_label">actual</span></td></tr></table></td></tr>
 </table>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>check</td><td>test result</td><td><br>
+<tr><td>when test is</td><td><br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>sample domain</td></tr>
 </table>
@@ -48,7 +44,7 @@ to be bound by the terms of this license. You must not remove this notice, or an
 <tr><td>set</td><td>message</td><td>oh no</td></tr>
 <tr><td>check</td><td>throw exception</td><td>exception["oh no"]</td></tr>
 </table>
-</td><td><table border="1" cellpadding="2" cellspacing="0"><tr><td>sample domain</td></tr></table><br><table border="1" cellpadding="2" cellspacing="0"><tr><td>set</td><td>message</td><td>oh no</td></tr><tr><td>check</td><td>throw exception</td><td class="pass">exception["oh no"]</td></tr></table></td></tr>
+</td><td>then result is</td><td><table border="1" cellpadding="2" cellspacing="0"><tr><td>sample domain</td></tr></table><br><table border="1" cellpadding="2" cellspacing="0"><tr><td>set</td><td>message</td><td>oh no</td></tr><tr><td>check</td><td>throw exception</td><td class="pass">exception["oh no"]</td></tr></table></td></tr>
 </table>
 </div>
 <div style="width:100%;text-align:right">

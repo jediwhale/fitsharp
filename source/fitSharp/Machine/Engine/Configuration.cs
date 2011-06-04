@@ -5,7 +5,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Xml;
 using fitSharp.Machine.Model;
 
@@ -51,12 +50,7 @@ namespace fitSharp.Machine.Engine {
         }
 
         void LoadNode(string typeName, XmlNode methodNode) {
-            try {
-                new BasicProcessor().Invoke(AliasType(typeName), AliasMethod(typeName, methodNode.Name), NodeParameters(methodNode));
-            }
-            catch (TargetInvocationException e) {
-                throw e.InnerException;
-            }
+            new BasicProcessor().InvokeWithThrow(AliasType(typeName), AliasMethod(typeName, methodNode.Name), NodeParameters(methodNode));
         }
 
         static readonly Dictionary<string, string> aliasTypes = new Dictionary<string, string> {

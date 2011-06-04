@@ -12,6 +12,7 @@ namespace fitSharp.Fit.Operators {
     public class CellOperators: Operators<Cell, CellProcessor> {
 
         public CellOperators() {
+            Add(new ComposeDefault(), 0);
             Add(new InvokeDataRow<Cell, CellProcessor>(), 0);
             Add(new ParseDefault(), 0);
             Add(new ParseMemberName(), 0);
@@ -34,8 +35,8 @@ namespace fitSharp.Fit.Operators {
             Add(new ParseArray(), 2);
             Add(new ParseByteArray(), 2);
             Add(new ParseNullArray(), 2);
-            Add(new CheckOperationError(), 2);
-            Add(new CheckOperationException(), 2);
+            Add(new CompareError(), 2);
+            Add(new CompareException(), 2);
             Add(new CompareFail(), 2);
 
             AddNamespaces(createConfiguration.GetItem<ApplicationUnderTest>());
@@ -56,11 +57,11 @@ namespace fitSharp.Fit.Operators {
 
         private static readonly Dictionary<string, string> renames = new Dictionary<string, string> {
                                                                                                         {"boolhandler", typeof(ParseBoolean).FullName},
-                                                                                                        {"emptycellhandler", typeof(CheckOperationEmpty).FullName}, //todo: inputemptyoperation
-                                                                                                        {"exceptionkeywordhandler", typeof(CheckOperationException).FullName},
+                                                                                                        {"emptycellhandler", typeof(CheckOperationEmpty).FullName},
+                                                                                                        {"exceptionkeywordhandler", typeof(CompareException).FullName},
                                                                                                         {"nullkeywordhandler", typeof(ParseNull).FullName},
                                                                                                         {"blankkeywordhandler", typeof(ParseBlank).FullName},
-                                                                                                        {"errorkeywordhandler", typeof(CheckOperationError).FullName},
+                                                                                                        {"errorkeywordhandler", typeof(CompareError).FullName},
                                                                                                         {"endswithhandler", typeof(CompareEndsWith).FullName},
                                                                                                         {"failkeywordhandler", typeof(CompareFail).FullName},
                                                                                                         {"startswithhandler", typeof(CompareStartsWith).FullName},
