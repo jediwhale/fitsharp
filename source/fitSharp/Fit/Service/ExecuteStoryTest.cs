@@ -86,7 +86,7 @@ namespace fitSharp.Fit.Service {
                 DoTable(table, activeFixture, flowFixture != null);
             }
             else {
-                flowFixture.InterpretFlow(table);
+                new InterpretFlow().DoTableFlow(processor, flowFixture, table);
             }
         }
 

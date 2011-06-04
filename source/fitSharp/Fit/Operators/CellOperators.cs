@@ -57,7 +57,7 @@ namespace fitSharp.Fit.Operators {
 
         private static readonly Dictionary<string, string> renames = new Dictionary<string, string> {
                                                                                                         {"boolhandler", typeof(ParseBoolean).FullName},
-                                                                                                        {"emptycellhandler", typeof(CheckOperationEmpty).FullName}, //todo: inputemptyoperation
+                                                                                                        {"emptycellhandler", typeof(CheckOperationEmpty).FullName},
                                                                                                         {"exceptionkeywordhandler", typeof(CompareException).FullName},
                                                                                                         {"nullkeywordhandler", typeof(ParseNull).FullName},
                                                                                                         {"blankkeywordhandler", typeof(ParseBlank).FullName},

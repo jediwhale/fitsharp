@@ -6,6 +6,7 @@
 using fit.Operators;
 using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
+using fitSharp.Fit.Service;
 using fitSharp.Machine.Model;
 using Moq;
 using NUnit.Framework;
@@ -25,6 +26,7 @@ namespace fit.Test.NUnit {
         TypedValue result;
         TypedValue target;
         Mock<FlowInterpreter> fixture;
+        Mock<InterpretTableFlow> flow;
         TestStatus testStatus;
 
         [Test] public void InvokeForMembersIsntHandled() {
@@ -73,8 +75,10 @@ namespace fit.Test.NUnit {
             target = new TypedValue("target");
 
             fixture = new Mock<FlowInterpreter>();
-            fixture.Setup(f => f.InterpretFlow(It.Is<Tree<Cell>>(t => IsTablesWithVerb(t))))
-                .Callback<Tree<Cell>>(t =>  {
+
+            flow = new Mock<InterpretTableFlow>();
+            flow.Setup(f => f.DoTableFlow(It.IsAny<CellProcessor>(), fixture.Object, It.Is<Tree<Cell>>(t => IsTablesWithVerb(t))))
+                .Callback<CellProcessor, FlowInterpreter, Tree<Cell>>((p, f, t) => {
                     t.Branches[0].Branches[0].Value.SetAttribute(CellAttribute.Label, "stuff");
                     testStatus.PopReturn();
                     testStatus.PushReturn(result);
@@ -92,6 +96,8 @@ namespace fit.Test.NUnit {
 
             processor.Setup(p => p.Parse(typeof (Interpreter), target, It.Is<Tree<Cell>>(c => IsDoFixture(c))))
                 .Returns(new TypedValue(fixture.Object));
+
+            processor.Setup(p => p.Create(typeof (InterpretFlow).FullName, It.IsAny<Tree<Cell>>())).Returns(new TypedValue(flow.Object));
 
             processor.Setup(p => p.Parse(typeof (StoryTestString), It.IsAny<TypedValue>(),
                                          It.Is<Tree<Cell>>(t => IsTableWithVerb(t))))

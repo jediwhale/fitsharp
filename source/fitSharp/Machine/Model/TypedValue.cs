@@ -14,6 +14,7 @@ namespace fitSharp.Machine.Model {
 
         public object Value { get; private set; }
         public T GetValue<T>() { return (T)Value;} 
+        public T GetValueAs<T>() where T: class { return Value as T;} 
         public Type Type { get; private set; }
 
         public TypedValue(object value, Type type) : this() {

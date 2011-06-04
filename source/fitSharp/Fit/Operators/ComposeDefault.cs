@@ -16,7 +16,7 @@ namespace fitSharp.Fit.Operators {
         }
 
         public Tree<Cell> Compose(TypedValue instance) {
-            var newCell = Processor.MakeCell(GetValueString(instance));
+            var newCell = Processor.MakeCell(GetValueString(instance), new Tree<Cell>[] {});
             newCell.Value.SetAttribute(CellAttribute.Add, string.Empty);
             return newCell;
         }
