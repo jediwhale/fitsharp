@@ -5,6 +5,7 @@
 
 
 using System.Collections;
+using System.Linq;
 using fitSharp.Fit.Operators;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
@@ -21,7 +22,7 @@ namespace fit.Operators
         public bool Compare(TypedValue actual, Tree<Cell> expected) {
             var cell = (Parse)expected.Value;
             var matcher = new ListMatcher(Processor, new ArrayMatchStrategy(Processor, cell.Parts.Parts));
-            return matcher.IsEqual(actual.Value, cell);
+            return matcher.IsEqual(actual.GetValue<IEnumerable>().Cast<object>(), cell);
         }
     }
 }

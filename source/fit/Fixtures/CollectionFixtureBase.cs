@@ -4,6 +4,8 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using fit;
 using fit.Operators;
 
@@ -11,15 +13,15 @@ namespace fitlibrary {
 
 	public abstract class CollectionFixtureBase: Fixture {
 	    protected CollectionFixtureBase() {
-            myArray = new ArrayList();
+            myArray = new List<object>();
         }
 
-	    protected CollectionFixtureBase(object[] theArray) {
-            myArray = new ArrayList(theArray);
+	    protected CollectionFixtureBase(IEnumerable<object> theArray) {
+            myArray = new List<object>(theArray);
         }
 
-	    protected CollectionFixtureBase(ICollection theCollection) {
-            myArray = new ArrayList(theCollection);
+	    protected CollectionFixtureBase(IEnumerable theCollection) {
+	        myArray = theCollection.Cast<object>().ToList();
         }
 
 	    protected CollectionFixtureBase(IEnumerator theEnumerator) {
@@ -27,25 +29,19 @@ namespace fitlibrary {
 	    }
 
 	    protected void SetCollection(IEnumerator enumerator) {
-            myArray = new ArrayList();
+	        myArray = new List<object>();
 	        while (enumerator.MoveNext()) {
 	            myArray.Add(enumerator.Current);
 	        }
 	    }
 
-	    protected CollectionFixtureBase(object[][] theGrid): this() {
-            for (int i = 0; i < theGrid.Length; i++) {
-                myArray.Add(theGrid[i]);
-            }
-        }
-
-        protected abstract ListMatchStrategy MatchStrategy {get;}
+	    protected abstract ListMatchStrategy MatchStrategy {get;}
 
         protected void CompareRows(Parse theTableRows) {
             var matcher = new ListMatcher(Processor, MatchStrategy);
-            matcher.MarkCell(GetTargetObject(), myArray, theTableRows);
+            matcher.MarkCell(myArray, theTableRows);
         }
 
-        protected ArrayList myArray;
+        protected List<object> myArray;
 	}
 }

@@ -1,9 +1,10 @@
-// Copyright © 2009 Syterra Software Inc.
+// Copyright © 2011 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using fit;
 using fit.Operators;
@@ -13,9 +14,9 @@ namespace fitlibrary {
 
 	public class SetFixture: NamedCollectionFixtureBase {
 
-        public SetFixture(object[] theArray): base(theArray) {}
+        public SetFixture(IEnumerable<object> theArray): base(theArray) {}
 
-        public SetFixture(ICollection theCollection): base(theCollection) {}
+        public SetFixture(IEnumerable theCollection): base(theCollection) {}
 
         public SetFixture(IEnumerator theEnumerator): base(theEnumerator) {}
 

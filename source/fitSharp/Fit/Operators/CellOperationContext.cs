@@ -19,8 +19,8 @@ namespace fitSharp.Fit.Operators {
             return new TypedValue(new CellOperationContext(systemUnderTest, memberName, parameters));
         }
 
-        public static TypedValue Make(object systemUnderTest, TypedValue actualValue) {
-            return new TypedValue(new CellOperationContext(systemUnderTest, actualValue));
+        public static TypedValue Make(TypedValue actualValue) {
+            return new TypedValue(new CellOperationContext(actualValue));
         }
 
         public TypedValue DoInvoke(CellProcessor processor) {
@@ -33,6 +33,10 @@ namespace fitSharp.Fit.Operators {
 
         public object GetActual(CellProcessor processor) {
             return GetTypedActual(processor).Value;
+        }
+
+        public T GetActual<T>(CellProcessor processor) {
+            return GetTypedActual(processor).GetValue<T>();
         }
 
         public TypedValue GetTypedActual(CellProcessor processor) {
@@ -57,8 +61,7 @@ namespace fitSharp.Fit.Operators {
             this.parameters = parameters;
         }
 
-        CellOperationContext(object systemUnderTest, TypedValue actualValue) {
-            this.systemUnderTest = systemUnderTest;
+        CellOperationContext(TypedValue actualValue) {
             this.actualValue = actualValue;
         }
 

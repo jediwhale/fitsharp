@@ -48,7 +48,6 @@
     <Compile Include="Fixtures\ConfigurationSetupFixture.cs" />
     <Compile Include="Fixtures\ConstraintFixture.cs" />
     <Compile Include="Fixtures\FileSystem.cs" />
-    <Compile Include="Fixtures\FixtureResult.cs" />
     <Compile Include="Fixtures\FlowKeywords.cs" />
     <Compile Include="Fixtures\Compute.cs" />
     <Compile Include="Operators\ArrayMatchStrategy.cs" />

@@ -24,7 +24,7 @@ namespace fit.Operators {
             var context = instance.GetValue<CellOperationContext>();
             var cell = (Parse)parameters.Value;
             var matcher = new ListMatcher(Processor, new ArrayMatchStrategy(Processor, cell.Parts.Parts));
-            matcher.MarkCell(context.SystemUnderTest, context.GetActual(Processor), cell.Parts.Parts); //todo: encapsulate part in celloperationcontext??
+            matcher.MarkCell(context.GetActual<IEnumerable>(Processor).Cast<object>(), cell.Parts.Parts); //todo: encapsulate part in celloperationcontext??
             return TypedValue.Void;
         }
 

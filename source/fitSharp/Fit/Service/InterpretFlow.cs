@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Xml;
@@ -64,7 +65,6 @@ namespace fitSharp.Fit.Service
                         var adapter = newFixture as MutableDomainAdapter;
                         if (adapter != null) adapter.SetSystemUnderTest(interpreter.SystemUnderTest);
                         ProcessRestOfTable(newFixture, processor.MakeCell(string.Empty, table.Branches.Skip(rowNumber)));
-                        hasFinishedTable = true;
                     }
                     else {
                         result.ThrowExceptionIfNotValid();
@@ -80,7 +80,8 @@ namespace fitSharp.Fit.Service
                         ColorMethodName(interpreter.MethodRowSelector.SelectMethodCells(currentRow), result.GetValue<bool>());
                     }
                     else {
-                        Wrap(result, processor.MakeCell(string.Empty, table.Branches.Skip(rowNumber)));
+                        new InterpretResult(processor).Interpret(result,
+                            i => ProcessRestOfTable(i, processor.MakeCell(string.Empty, table.Branches.Skip(rowNumber))));
                     }
                 }
             }
@@ -96,14 +97,14 @@ namespace fitSharp.Fit.Service
         }
 
         void ProcessRestOfTable(Interpreter childInterpreter, Tree<Cell> theRestOfTheRows) {
-            childInterpreter.Processor = processor;
-            childInterpreter.Prepare(interpreter, theRestOfTheRows);
+            childInterpreter.Prepare(processor, interpreter, theRestOfTheRows.Branches[0]);
             try {
                 ExecuteStoryTest.DoTable(theRestOfTheRows, childInterpreter, false);
             }
             catch (System.Exception e) {
                 processor.TestStatus.MarkException(theRestOfTheRows.Branches[0].Branches[0].Value, e);
             }
+            hasFinishedTable = true;
         }
 
         void ColorMethodName(Tree<Cell> methodCells, bool isRight) {
@@ -112,18 +113,28 @@ namespace fitSharp.Fit.Service
             }
         }
 
-        void Wrap(TypedValue result, Tree<Cell> table) {
+        readonly int rowsToSkip;
+
+        CellProcessor processor;
+        FlowInterpreter interpreter;
+        bool hasFinishedTable;
+    }
+
+    public class InterpretResult {
+        public InterpretResult(CellProcessor processor) {
+            this.processor = processor;
+        }
+
+        public void Interpret(TypedValue result, Action<Interpreter> action) {
             if (result.Value == null) return;
             if (result.Type.IsPrimitive) return;
             if (result.Type == typeof(string)) return;
             var wrapInterpreter = result.GetValueAs<Interpreter>();
             if (wrapInterpreter == null) {
-                if (IsObjectArray(result.Type))
-                    wrapInterpreter = MakeInterpreter("fitlibrary.ArrayFixture", typeof(object[]), result.Value);
+                if (typeof (IEnumerable<object>).IsAssignableFrom(result.Type))
+                    wrapInterpreter = MakeInterpreter("fitlibrary.ArrayFixture", typeof(IEnumerable<object>), result.Value);
                 else if (typeof (IDictionary).IsAssignableFrom(result.Type))
-                    wrapInterpreter = MakeInterpreter("fitlibrary.SetFixture", typeof(ICollection), result.GetValue<IDictionary>().Values);
-                else if (typeof (ICollection).IsAssignableFrom(result.Type))
-                    wrapInterpreter = MakeInterpreter("fitlibrary.ArrayFixture", typeof(ICollection), result.Value);
+                    wrapInterpreter = MakeInterpreter("fitlibrary.SetFixture", typeof(IEnumerable), result.GetValue<IDictionary>().Values);
                 else if (typeof (IEnumerator).IsAssignableFrom(result.Type))
                     wrapInterpreter = MakeInterpreter("fitlibrary.ArrayFixture", typeof(IEnumerator), result.Value);
                 else if (typeof (DataTable).IsAssignableFrom(result.Type))
@@ -131,11 +142,10 @@ namespace fitSharp.Fit.Service
                 else if (typeof (XmlDocument).IsAssignableFrom(result.Type))
                     wrapInterpreter = MakeInterpreter("fitlibrary.XmlFixture", typeof(XmlDocument), result.Value);
                 else if (typeof (IEnumerable).IsAssignableFrom(result.Type))
-                    wrapInterpreter = MakeInterpreter("fitlibrary.ArrayFixture", typeof(IEnumerator), result.GetValue<IEnumerable>().GetEnumerator());
+                    wrapInterpreter = MakeInterpreter("fitlibrary.ArrayFixture", typeof(IEnumerable), result.Value);
                 else wrapInterpreter = MakeInterpreter("fitlibrary.DoFixture", typeof (object), result.Value);
             }
-            ProcessRestOfTable(wrapInterpreter, table);
-            hasFinishedTable = true;
+            action(wrapInterpreter);
         }
 
         Interpreter MakeInterpreter(string fixtureName, Type parameterType, object parameter) {
@@ -144,16 +154,6 @@ namespace fitSharp.Fit.Service
             return runtimeMember.Invoke(new [] {parameter}).GetValue<Interpreter>();
         }
 
-        static bool IsObjectArray(Type type) {
-            return (type.IsArray
-                    && !type.GetElementType().IsArray
-                    && type.GetElementType().IsAssignableFrom(typeof(object)));
-        }
-
-        readonly int rowsToSkip;
-
-        CellProcessor processor;
-        FlowInterpreter interpreter;
-        bool hasFinishedTable;
+        readonly CellProcessor processor;
     }
 }

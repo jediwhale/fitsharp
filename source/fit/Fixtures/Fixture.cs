@@ -21,7 +21,7 @@ namespace fit
 	    CellProcessor processor;
 
 	    protected object mySystemUnderTest;
-	    protected Fixture myParentFixture;
+	    protected Interpreter myParentFixture;
 
 	    public CellProcessor Processor {
 	        get { return processor; }
@@ -47,11 +47,10 @@ namespace fit
 
         public virtual bool IsVisible { get { return true; } }
 
-	    public void Prepare(Interpreter parent, Tree<Cell> table) {
-	        var parentFixture = (Fixture) parent;
-	        Processor = parentFixture.Processor;
-	        myParentFixture = parentFixture;
-	        GetArgsForRow(table.Branches[0]);
+	    public void Prepare(CellProcessor processor, Interpreter parent, Tree<Cell> row) {
+	        Processor = processor;
+	        myParentFixture = parent;
+	        GetArgsForRow(row);
 	    }
 
         public void Interpret(Tree<Cell> table) { DoTable((Parse)table.Value); }

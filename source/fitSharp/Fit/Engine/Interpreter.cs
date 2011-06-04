@@ -8,11 +8,10 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Engine {
     public interface Interpreter {
-        CellProcessor Processor { set; }
         bool IsVisible { get; }
         void Interpret(Tree<Cell> table);
         TestStatus TestStatus { get; }
-        void Prepare(Interpreter parent, Tree<Cell> table);
+        void Prepare(CellProcessor processor, Interpreter parent, Tree<Cell> table);
     }
 
     public interface FlowInterpreter: Interpreter, DomainAdapter {
