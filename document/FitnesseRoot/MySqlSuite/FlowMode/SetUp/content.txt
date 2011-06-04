@@ -1,3 +1,6 @@
 !|dbfit.MySqlTest|
 
 !|Connect|localhost|dbfit_user|password|dbfit|
+
+!|Execute|truncate table Test_DBFit|
+!|Execute|truncate table users|

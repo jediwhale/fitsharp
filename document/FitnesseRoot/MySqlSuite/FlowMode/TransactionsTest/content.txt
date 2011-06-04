@@ -1,10 +1,8 @@
-|Execute|Create table Test_DBFit(name varchar(50), luckyNumber int) type = InnoDB|
-
 |Execute|Insert into Test_DBFit values ('Obi Wan',80)|
 
 |Execute|Insert into Test_DBFit values ('Darth Maul',10)|
 
-!|Execute|Rollback|
+!|Rollback|
 
 |Query|Select * from Test_DBFit|
 |Name|Lucky Number|
@@ -13,7 +11,7 @@
 
 |Execute|Insert into Test_DBFit values ('Darth Maul',10)|
 
-!|Execute|Commit|
+!|Commit|
 
 |Query|Select * from Test_DBFit|
 |Name|Lucky Number|
@@ -22,11 +20,9 @@
 
 |Execute|Insert into Test_DBFit values ('Anakin Skywalker',17)|
 
-!|Execute|Rollback|
+!|Rollback|
 
 |Query|Select * from Test_DBFit|
 |Name|Lucky Number|
 |Darth Maul|10|
 |Obi Wan|80|
-
-|Execute|Drop table Test_DBFit|

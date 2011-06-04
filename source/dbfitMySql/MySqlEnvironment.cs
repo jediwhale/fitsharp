@@ -110,7 +110,7 @@ namespace dbfit
                 dataType = tokens[i];
                 i++;
                 
-                if (!Int32.TryParse(tokens[i],out length))
+                if (i <= tokens.Length -1 && !Int32.TryParse(tokens[i],out length))
                 {
                     length = 0;
                 }
