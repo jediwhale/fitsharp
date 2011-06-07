@@ -11,7 +11,7 @@ using fitSharp.Machine.Model;
 namespace fitSharp.Fit.Service {
     public interface CellOperation {
         void Check(object systemUnderTest, Tree<Cell> memberName, Tree<Cell> parameters, Tree<Cell> expectedCell);
-        void Check(object systemUnderTest, TypedValue actualValue, Tree<Cell> expectedCell);
+        void Check(TypedValue actualValue, Tree<Cell> expectedCell);
         TypedValue TryInvoke(object target, Tree<Cell> memberName, Tree<Cell> parameters, Cell targetCell);
     }
 
@@ -58,9 +58,9 @@ namespace fitSharp.Fit.Service {
                 expectedCell);
         }
 
-        public void Check(object systemUnderTest, TypedValue actualValue, Tree<Cell> expectedCell) {
+        public void Check(TypedValue actualValue, Tree<Cell> expectedCell) {
             processor.Invoke(
-                CellOperationContext.Make(systemUnderTest, actualValue),
+                CellOperationContext.Make(actualValue),
                 CellOperationContext.CheckCommand,
                 expectedCell);
         }

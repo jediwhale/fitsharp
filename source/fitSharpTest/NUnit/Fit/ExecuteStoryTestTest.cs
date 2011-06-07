@@ -59,18 +59,18 @@ namespace fitSharp.Test.NUnit.Fit {
 
             public SampleFixture() { Count++; }
 
-            public CellProcessor Processor { set {} }
             public bool IsVisible { get { return true; } }
             public void Interpret(Tree<Cell> table) {}
             public TestStatus TestStatus { get { return new TestStatus(); } }
-            public void Prepare(Interpreter parent, Tree<Cell> table) {}
+            public void Prepare(CellProcessor processor, Interpreter parent, Tree<Cell> table) {
+            }
         }
 
         private class SampleItem: Copyable, SetUpTearDown {
             public bool IsSetUp;
             public bool IsTearDown;
             public Copyable Copy() {
-                throw new System.NotImplementedException();
+                throw new NotImplementedException();
             }
 
             public void SetUp() {

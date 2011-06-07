@@ -39,7 +39,7 @@ namespace fit.Test.NUnit {
         }
 
         public static bool IsMatch(InvokeOperator<Cell> checkOperation, string input) {
-            return checkOperation.CanInvoke(CellOperationContext.Make(null, new TypedValue(null)),
+            return checkOperation.CanInvoke(CellOperationContext.Make(new TypedValue(null)),
                                                             CellOperationContext.CheckCommand,
                                                             TestUtils.CreateCell(input));
         }

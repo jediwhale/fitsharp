@@ -4,7 +4,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System;
-using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using fit.Model;
 using fitSharp.Fit.Engine;
@@ -43,8 +43,8 @@ namespace fit.Operators {
             this.processor = processor;
         }
 
-        public bool IsEqual(object theActualValue, Parse theExpectedValueCell) {
-            var actuals = new Actuals((IList)theActualValue, strategy);
+        public bool IsEqual(IEnumerable<object> theActualValue, Parse theExpectedValueCell) {
+            var actuals = new Actuals(theActualValue, strategy);
             int expectedRow = 0;
             foreach (Parse currentRow in new CellRange(theExpectedValueCell.Parts.Parts.More).Cells) {
                 int match = actuals.FindMatch(RowMatches, expectedRow, currentRow.Parts);
@@ -54,8 +54,8 @@ namespace fit.Operators {
             return (actuals.UnmatchedCount == 0);
         }
 
-        public bool MarkCell(object systemUnderTest, object theActualValue, Parse theTableRows) {
-            var actuals = new Actuals((IList)theActualValue, strategy);
+        public bool MarkCell(IEnumerable<object> theActualValue, Parse theTableRows) {
+            var actuals = new Actuals(theActualValue, strategy);
             if (theTableRows.More == null && actuals.UnmatchedCount == 0) {
                 processor.TestStatus.MarkRight(theTableRows);
             }
@@ -91,7 +91,7 @@ namespace fit.Operators {
                     int i = 0;
                     foreach (Parse cell in new CellRange(markRow.Parts).Cells) {
                         if (actualValues[i].Type != typeof(void) || cell.Text.Length > 0) {
-                             new CellOperationImpl(processor).Check(systemUnderTest, actualValues[i], cell);
+                             new CellOperationImpl(processor).Check(actualValues[i], cell);
 
                         }
                         i++;
@@ -129,13 +129,10 @@ namespace fit.Operators {
             readonly ListMatchStrategy myStrategy;
 
             public delegate bool Matches(Parse theExpectedCells, object theActual);
-            public Actuals(IList theActualValues, ListMatchStrategy theStrategy) {
-                myActuals = new List<ActualItem>(theActualValues.Count);
-                foreach (object actualValue in theActualValues) {
-                    myActuals.Add(new ActualItem(actualValue));
-                }
+            public Actuals(IEnumerable<object> theActualValues, ListMatchStrategy theStrategy) {
+                myActuals = new List<ActualItem>(theActualValues.Select(o => new ActualItem(o)));
                 myStrategy = theStrategy;
-                UnmatchedCount = theActualValues.Count;
+                UnmatchedCount = myActuals.Count;
             }
 
             public int UnmatchedCount { get; private set; }

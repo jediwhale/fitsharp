@@ -1,9 +1,10 @@
-// Copyright © 2010 Syterra Software Inc.
+// Copyright © 2011 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System.Collections;
+using System.Collections.Generic;
 using fit;
 using fit.Operators;
 using fitSharp.Fit.Engine;
@@ -16,7 +17,7 @@ namespace fitlibrary {
 
         public UnnamedCollectionFixtureBase(IEnumerator theEnumerator): base(theEnumerator) {}
 
-        public UnnamedCollectionFixtureBase(object[][] theActualValues): base(theActualValues) {}
+        public UnnamedCollectionFixtureBase(IEnumerable<object[]> theActualValues): base(theActualValues) {}
 
         public override void DoTable(Parse theTable) {
             CompareRows(theTable.Parts);

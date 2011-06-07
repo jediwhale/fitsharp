@@ -14,13 +14,12 @@ namespace fitSharp.Fit.Fixtures {
         public TestStatus TestStatus { get; private set; }
 
         private CellProcessor processor;
-        public void Prepare(Interpreter parent, Tree<Cell> table) {}
+
+        public void Prepare(CellProcessor processor, Interpreter parent, Tree<Cell> table) {
+            this.processor = processor;
+        }
 
         public Define() { TestStatus = new TestStatus(); }
-
-        public CellProcessor Processor {
-            set { processor = value; }
-        }
 
         public bool IsVisible { get { return false; } }
 

@@ -1,4 +1,4 @@
-﻿// Copyright © 2009 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2011 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -34,7 +34,8 @@ namespace fitSharp.Test.NUnit.Fit {
             processor
                 .Setup(p => p.Parse(typeof (MemberName), TypedValue.Void, It.Is<Tree<Cell>>(c => isName(c))))
                 .Returns(new TypedValue(new MemberName("myprocedure")));
-            var define = new Define {Processor = processor.Object};
+            var define = new Define();
+            define.Prepare(processor.Object, null, new CellTree());
             var input = new CellTree(defineRow, new CellTree("stuff"));
             define.Interpret(input);
             processor.Verify(p => p.Store(It.Is<Procedure>(v => v.Id == "myprocedure" && v.Instance == input)));

@@ -10,16 +10,18 @@ using fitSharp.Machine.Model;
 namespace fitSharp.Fit.Fixtures {
     public class ConfigureFixture: Interpreter {
         public ConfigureFixture() { TestStatus = new TestStatus(); }
-        public CellProcessor Processor { private get; set; }
+        private CellProcessor processor;
         public TestStatus TestStatus { get; private set; }
 
-        public void Prepare(Interpreter parent, Tree<Cell> table) {}
+        public void Prepare(CellProcessor processor, Interpreter parent, Tree<Cell> table) {
+            this.processor = processor;
+        }
 
         public bool IsVisible { get { return false; } }
 
         public void Interpret(Tree<Cell> table) {
-            TypedValue result = Processor.Invoke(
-                new TypedValue(Processor.Configuration.GetItem(table.Branches[0].Branches[1].Value.Text)),
+            TypedValue result = processor.Invoke(
+                new TypedValue(processor.Configuration.GetItem(table.Branches[0].Branches[1].Value.Text)),
                 table.Branches[0].Branches[2].Value.Text,
                 new CellTree());
             result.ThrowExceptionIfNotValid();
