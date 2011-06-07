@@ -2,5 +2,7 @@
 
 !|Connect|localhost|dbfit_user|password|dbfit|
 
-!|Execute|truncate table Test_DBFit|
-!|Execute|truncate table users|
+!|Execute|delete from Test_DBFit|
+!|Execute|delete from  users|
+
+

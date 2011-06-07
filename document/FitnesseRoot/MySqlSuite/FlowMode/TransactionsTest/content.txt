@@ -1,3 +1,5 @@
+|COMMIT|
+
 |Execute|Insert into Test_DBFit values ('Obi Wan',80)|
 
 |Execute|Insert into Test_DBFit values ('Darth Maul',10)|
