@@ -4,6 +4,8 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using fitlibrary.tree;
 using fitSharp.Test.Double;
 
@@ -43,6 +45,13 @@ namespace fit.Test.Double {
 
         public Tree MakeTree(string[] leaves) {
             return new SampleTree(string.Empty, leaves.Length == 1 && leaves[0].Length == 0 ? new string[] {} : leaves);
+        }
+
+        public IEnumerable<Person> GetPeople(string[] names) {
+            return names.Select(n => {
+                var split = n.Split('-');
+                return new Person(split[0], split[1]);
+            });
         }
     }
 

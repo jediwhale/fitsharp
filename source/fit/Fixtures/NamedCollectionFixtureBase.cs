@@ -11,6 +11,8 @@ using fitlibrary.exception;
 namespace fitlibrary {
 
 	public abstract class NamedCollectionFixtureBase: CollectionFixtureBase {
+        protected NamedCollectionFixtureBase(): base() {}
+
 	    protected NamedCollectionFixtureBase(IEnumerable<object> theArray): base(theArray) {}
 
 	    protected NamedCollectionFixtureBase(IEnumerable theCollection): base(theCollection) {}

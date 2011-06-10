@@ -29,10 +29,11 @@ namespace fitlibrary {
 	    }
 
 	    protected void SetCollection(IEnumerator enumerator) {
-	        myArray = new List<object>();
+	        var collection  = new List<object>();
 	        while (enumerator.MoveNext()) {
-	            myArray.Add(enumerator.Current);
+	            collection.Add(enumerator.Current);
 	        }
+            SetSystemUnderTest(collection);
 	    }
 
 	    protected abstract ListMatchStrategy MatchStrategy {get;}
@@ -42,6 +43,9 @@ namespace fitlibrary {
             matcher.MarkCell(myArray, theTableRows);
         }
 
-        protected List<object> myArray;
+	    protected IEnumerable<object> myArray {
+	        get { return (IEnumerable<object>)SystemUnderTest;}
+            set { SetSystemUnderTest(value);  }
+	    }
 	}
 }
