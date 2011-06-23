@@ -14,6 +14,7 @@ namespace fitSharp.Fit.Operators {
     public class CellOperationContext {
         public const string CheckCommand = "Check";
         public const string InvokeCommand = "Invoke";
+        public const string WrapCommand = "Wrap";
 
         public static TypedValue Make(object systemUnderTest, Tree<Cell> memberName, Tree<Cell> parameters) {
             return new TypedValue(new CellOperationContext(systemUnderTest, memberName, parameters));

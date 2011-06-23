@@ -52,11 +52,13 @@
     <Compile Include="Fit\Operators\CheckOperationSymbolSave.cs" />
     <Compile Include="Fit\Operators\ComposeDefault.cs" />
     <Compile Include="Fit\Operators\ComposeShowAsOperator.cs" />
-    <Compile Include="Fit\Operators\InvokeDirect.cs" />
+    <Compile Include="Fit\Operators\InvokeSpecialAction.cs" />
     <Compile Include="Fit\Operators\InvokeOperationDefault.cs" />
+    <Compile Include="Fit\Operators\InvokeSetUpTearDown.cs" />
     <Compile Include="Fit\Operators\ParseNullArray.cs" />
     <Compile Include="Fit\Operators\ParseStoryTestString.cs" />
     <Compile Include="Fit\Operators\ParseTextStoryTestString.cs" />
+    <Compile Include="Fit\Operators\WrapOperationDefault.cs" />
     <Compile Include="Fit\Service\InterpretFlow.cs" />
     <Compile Include="Machine\Application\Runnable.cs" />
     <Compile Include="Machine\Application\Runner.cs" />
