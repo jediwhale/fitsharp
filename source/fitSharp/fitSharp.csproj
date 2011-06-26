@@ -42,6 +42,7 @@
     <Compile Include="Fit\Application\Configurable.cs" />
     <Compile Include="Fit\Application\ConfigurationList.cs" />
     <Compile Include="Fit\Application\FileExclusions.cs" />
+    <Compile Include="Fit\Fixtures\ClearSymbols.cs" />
     <Compile Include="Fit\Fixtures\ConfigureFixture.cs" />
     <Compile Include="Fit\Operators\CellOperationContext.cs" />
     <Compile Include="Fit\Operators\CellOperators.cs" />
@@ -133,7 +134,6 @@
     <Compile Include="Machine\Application\Shell.cs" />
     <Compile Include="Machine\Engine\ApplicationUnderTest.cs" />
     <Compile Include="Machine\Engine\BasicProcessor.cs" />
-    <Compile Include="Machine\Engine\Memory.cs" />
     <Compile Include="Machine\Engine\ParseEnum.cs" />
     <Compile Include="Machine\Model\SetUp.cs" />
     <Compile Include="Parser\Characters.cs" />

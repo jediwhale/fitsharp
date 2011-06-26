@@ -18,28 +18,37 @@ namespace fitSharp.Test.NUnit.Machine {
         }
 
         [Test] public void MethodIsExecuted() {
-            configuration.LoadXml("<config><fitSharp.Test.NUnit.Machine.TestConfig><TestMethod>stuff</TestMethod></fitSharp.Test.NUnit.Machine.TestConfig></config>");
-            Assert.AreEqual("stuff", configuration.GetItem<TestConfig>().Data);
+            configuration.LoadXml("<config><fitSharp.Test.NUnit.Machine.FullTestConfig><TestMethod>stuff</TestMethod></fitSharp.Test.NUnit.Machine.FullTestConfig></config>");
+            Assert.AreEqual("stuff", configuration.GetItem<FullTestConfig>().Data);
         }
 
         [Test] public void MethodWithTwoParametersIsExecuted() {
-            configuration.LoadXml("<config><fitSharp.Test.NUnit.Machine.TestConfig><TestMethod second=\"more\">stuff</TestMethod></fitSharp.Test.NUnit.Machine.TestConfig></config>");
-            Assert.AreEqual("more stuff", configuration.GetItem<TestConfig>().Data);
+            configuration.LoadXml("<config><fitSharp.Test.NUnit.Machine.FullTestConfig><TestMethod second=\"more\">stuff</TestMethod></fitSharp.Test.NUnit.Machine.FullTestConfig></config>");
+            Assert.AreEqual("more stuff", configuration.GetItem<FullTestConfig>().Data);
         }
 
         [Test] public void TwoFilesAreLoadedIncrementally() {
-            configuration.LoadXml("<config><fitSharp.Test.NUnit.Machine.TestConfig><TestMethod>stuff</TestMethod></fitSharp.Test.NUnit.Machine.TestConfig></config>");
-            configuration.LoadXml("<config><fitSharp.Test.NUnit.Machine.TestConfig><Append>more</Append></fitSharp.Test.NUnit.Machine.TestConfig></config>");
-            Assert.AreEqual("stuffmore", configuration.GetItem<TestConfig>().Data);
+            configuration.LoadXml("<config><fitSharp.Test.NUnit.Machine.FullTestConfig><TestMethod>stuff</TestMethod></fitSharp.Test.NUnit.Machine.FullTestConfig></config>");
+            configuration.LoadXml("<config><fitSharp.Test.NUnit.Machine.FullTestConfig><Append>more</Append></fitSharp.Test.NUnit.Machine.FullTestConfig></config>");
+            Assert.AreEqual("stuffmore", configuration.GetItem<FullTestConfig>().Data);
         }
 
-        [Test] public void ChangesDontShowInCopy() {
-            var test = new TestConfig {Data = "stuff"};
+        [Test] public void CopyableChangesDontShowInCopy() {
+            var test = new FullTestConfig {Data = "stuff"};
             configuration.SetItem(test.GetType(), test);
             var copy = new Configuration(configuration);
-            configuration.GetItem<TestConfig>().Data = "other";
-            Assert.AreEqual("stuff", copy.GetItem<TestConfig>().Data);
-            Assert.AreEqual("other", configuration.GetItem<TestConfig>().Data);
+            configuration.GetItem<FullTestConfig>().Data = "other";
+            Assert.AreEqual("stuff", copy.GetItem<FullTestConfig>().Data);
+            Assert.AreEqual("other", configuration.GetItem<FullTestConfig>().Data);
+        }
+
+        [Test] public void OtherChangesShowInCopy() {
+            var test = new SimpleTestConfig {Data = "stuff"};
+            configuration.SetItem(test.GetType(), test);
+            var copy = new Configuration(configuration);
+            configuration.GetItem<SimpleTestConfig>().Data = "other";
+            Assert.AreEqual("other", copy.GetItem<SimpleTestConfig>().Data);
+            Assert.AreEqual("other", configuration.GetItem<SimpleTestConfig>().Data);
         }
 
         [Test] public void AliasTypeIsUsed() {
@@ -53,15 +62,15 @@ namespace fitSharp.Test.NUnit.Machine {
         }
 
         [Test] public void SetUpTearDownIsExecuted() {
-            configuration.SetItem(typeof(TestConfig), new TestConfig());
+            configuration.SetItem(typeof(FullTestConfig), new FullTestConfig());
             configuration.SetUp();
-            Assert.AreEqual("setup", configuration.GetItem<TestConfig>().Data);
+            Assert.AreEqual("setup", configuration.GetItem<FullTestConfig>().Data);
             configuration.TearDown();
-            Assert.AreEqual("teardown", configuration.GetItem<TestConfig>().Data);
+            Assert.AreEqual("teardown", configuration.GetItem<FullTestConfig>().Data);
         }
     }
 
-    public class TestConfig: Copyable, SetUpTearDown {
+    public class FullTestConfig: Copyable, SetUpTearDown {
         public string Data;
 
         public void TestMethod(string data) {
@@ -77,7 +86,7 @@ namespace fitSharp.Test.NUnit.Machine {
         }
 
         public Copyable Copy() {
-            return new TestConfig {Data = Data};
+            return new FullTestConfig {Data = Data};
         }
 
         public void SetUp() {
@@ -87,5 +96,9 @@ namespace fitSharp.Test.NUnit.Machine {
         public void TearDown() {
             Data = "teardown";
         }
+    }
+
+    public class SimpleTestConfig {
+        public string Data;
     }
 }

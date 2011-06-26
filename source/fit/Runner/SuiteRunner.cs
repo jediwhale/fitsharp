@@ -28,7 +28,7 @@ namespace fit.Runner {
 
 	    public void Run(StoryTestSuite theSuite, string theSelectedFile) {
             resultWriter = CreateResultWriter();
-            if (theSelectedFile.Length > 0) theSuite.Select(theSelectedFile);
+            if (!string.IsNullOrEmpty(theSelectedFile)) theSuite.Select(theSelectedFile);
 
 	        RunFolder(theSuite);
 

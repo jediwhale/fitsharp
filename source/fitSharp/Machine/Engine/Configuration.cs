@@ -11,13 +11,15 @@ using fitSharp.Machine.Model;
 namespace fitSharp.Machine.Engine {
     public class Configuration {
 
-        readonly Dictionary<Type, Copyable> items = new Dictionary<Type, Copyable>();
+        readonly Dictionary<Type, object> items = new Dictionary<Type, object>();
 
         public Configuration() {}
 
         public Configuration(Configuration other) {
             foreach (Type key in other.items.Keys) {
-                SetItem(key, other.items[key].Copy());
+                var item = other.items[key];
+                var copyableItem = item as Copyable;
+                SetItem(key, copyableItem != null ? copyableItem.Copy() : item);
             }
         }
 
@@ -107,25 +109,25 @@ namespace fitSharp.Machine.Engine {
             return result;
         }
 
-        public T GetItem<T>() where T: Copyable, new() {
+        public T GetItem<T>() where T: new() {
             if (!items.ContainsKey(typeof(T))) {
                 items[typeof(T)] = new T();
             }
             return (T)items[typeof(T)];
         }
 
-        public Copyable GetItem(string typeName) {
+        public object GetItem(string typeName) {
             RuntimeType type = new ApplicationUnderTest().FindType(new IdentifierName(typeName));
             return GetItem(type.Type);
         }
 
-        public Copyable GetItem(Type type) {
+        public object GetItem(Type type) {
             if (!items.ContainsKey(type)) {
                 items[type] = new BasicProcessor().Create(type.AssemblyQualifiedName).GetValue<Copyable>();
             }
             return items[type];
         }
 
-        public void SetItem(Type type, Copyable value) { items[type] = value; }
+        public void SetItem(Type type, object value) { items[type] = value; }
     }
 }

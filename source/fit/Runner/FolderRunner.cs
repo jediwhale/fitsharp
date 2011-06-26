@@ -27,13 +27,13 @@ namespace fit.Runner {
             myRunner = new SuiteRunner(configuration, myProgressReporter);
             myRunner.Run(
                 new StoryTestFolder(configuration, new FileSystemModel(configuration.GetItem<Settings>().CodePageNumber)),
-                string.Empty);
+                selectedFile);
             return myRunner.TestCounts.FailCount;
         }
 
         public string Results {get { return myRunner.TestCounts.Description; }}
 
-        private static void ParseArguments(Configuration configuration, ICollection<string> theArguments) {
+        private void ParseArguments(Configuration configuration, ICollection<string> theArguments) {
             if (theArguments.Count == 0) {
                 return;
             }
@@ -50,6 +50,9 @@ namespace fit.Runner {
                         case "o":
                             configuration.GetItem<Settings>().OutputFolder = argument;
                             break;
+                        case "s":
+                            selectedFile = argument;
+                            break;
                         case "x":
                             foreach (string pattern in argument.Split(';')) {
                                 configuration.GetItem<FileExclusions>().Add(pattern);
@@ -64,14 +67,9 @@ namespace fit.Runner {
                 throw new FormatException("Missing output folder");
         }
 
-        //private static void LoadAssemblies(string theAssemblyList) {
-        //    foreach (string assemblyName in theAssemblyList.Split(';')) {
-        //        //Configuration.Instance.Assemblies.Add(assemblyName);
-        //        Configuration.Instance.ApplicationUnderTest.AddAssembly(assemblyName);
-        //    }
-        //}
-	    
+    
         private ProgressReporter myProgressReporter;
         private SuiteRunner myRunner;
+        string selectedFile;
     }
 }

@@ -4,6 +4,8 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
+using System.Collections.Generic;
+using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
@@ -77,10 +79,6 @@ namespace fitSharp.Machine.Engine {
 
         public ApplicationUnderTest ApplicationUnderTest {
             get { return Configuration.GetItem<ApplicationUnderTest>(); }
-        }
-
-        private Memory MemoryBanks {
-            get { return Configuration.GetItem<Memory>(); }
         }
 
         protected ProcessorBase(Configuration configuration) {
@@ -186,24 +184,28 @@ namespace fitSharp.Machine.Engine {
         }
 
         public void AddMemory<V>() {
-            MemoryBanks.Add<V>();
+            GetMemory<V>();
         }
 
         public void Store<V>(V newItem) {
-            MemoryBanks.Store(newItem);
+            GetMemory<V>().Replace(newItem);
         }
 
         public V Load<V>(V matchItem) {
-            return MemoryBanks.Load(matchItem);
+            return GetMemory<V>().First(
+                item => matchItem.Equals(item),
+                () => { throw new MemoryMissingException<V>(matchItem); });
         }
 
         public bool Contains<V>(V matchItem) {
-            return MemoryBanks.Contains(matchItem);
+            return GetMemory<V>().Contains(matchItem);
         }
 
         public void Clear<V>() {
-            MemoryBanks.Clear<V>();
+            GetMemory<V>().Clear();
         }
+
+        private List<V> GetMemory<V>() { return Configuration.GetItem<List<V>>();}
 
         R DoLoggedOperation<R>(string startMessage, Func<OperationLogging, R> operation) {
             var logging = new OperationLogging(Configuration);
