@@ -51,7 +51,7 @@
     <Compile Include="Double\Person.cs" />
     <Compile Include="Double\SampleClassTwo.cs" />
     <Compile Include="Double\TestSocket.cs" />
-    <Compile Include="NUnit\Application\SuiteConfigurationTest.cs" />
+    <Compile Include="NUnit\Machine\SuiteConfigurationTest.cs" />
     <Compile Include="NUnit\Fit\BindingFactoryTest.cs" />
     <Compile Include="NUnit\Fit\CellOperatorsTest.cs" />
     <Compile Include="NUnit\Fit\CellProcessorBaseTest.cs" />
@@ -112,6 +112,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

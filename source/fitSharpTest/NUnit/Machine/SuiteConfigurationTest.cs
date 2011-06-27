@@ -9,7 +9,7 @@ using fitSharp.Machine.Model;
 using fitSharp.Test.Double;
 using NUnit.Framework;
 
-namespace fitSharp.Test.NUnit.Application {
+namespace fitSharp.Test.NUnit.Machine {
     [TestFixture] public class SuiteConfigurationTest {
         [SetUp] public void SetUp() {
             configuration = new Configuration();

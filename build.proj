@@ -36,7 +36,7 @@
 </Target>
 
 <ItemGroup>
-  <ZipFiles Include="build\release\fit.dll;build\release\fitSharp.dll;build\release\dbfit.dll;build\release\dbfit.oracle.dll;build\release\dbfit.sqlserver.dll;build\release\Runner*.exe;*License.txt" />
+  <ZipFiles Include="build\release\fit.dll;build\release\fitSharp.dll;build\release\dbfit.dll;build\release\dbfit.oracle.dll;build\release\dbfit.sqlserver.dll;build\release\dbfit.sybase.dll;build\release\Runner*.exe;*License.txt" />
 </ItemGroup>
 
 <Target Name="zip">
