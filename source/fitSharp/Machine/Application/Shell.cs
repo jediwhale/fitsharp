@@ -95,7 +95,7 @@ namespace fitSharp.Machine.Application {
                 if (i < commandLineArguments.Length - 1) {
                     switch (commandLineArguments[i]) {
                         case "-c":
-                            configuration.LoadXml(folderModel.FileContent(commandLineArguments[i + 1]));
+                            new SuiteConfiguration(configuration).LoadXml(folderModel.FileContent(commandLineArguments[i + 1]));
                             break;
                         case "-a":
                             appConfigArgument = commandLineArguments[i + 1];

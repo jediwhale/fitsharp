@@ -63,6 +63,7 @@
     <Compile Include="Fit\Service\InterpretFlow.cs" />
     <Compile Include="Machine\Application\Runnable.cs" />
     <Compile Include="Machine\Application\Runner.cs" />
+    <Compile Include="Machine\Application\SuiteConfiguration.cs" />
     <Compile Include="Machine\Engine\CreateDefault.cs" />
     <Compile Include="Machine\Engine\Culture.cs" />
     <Compile Include="Machine\Engine\CurrentDomain.cs" />
