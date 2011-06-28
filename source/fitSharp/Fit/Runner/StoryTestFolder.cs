@@ -1,4 +1,4 @@
-// Copyright © 2010 Syterra Software Inc. All rights reserved.
+// Copyright © 2011 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Application;
 using fitSharp.IO;
@@ -25,6 +26,7 @@ namespace fitSharp.Fit.Runner {
 
     public class StoryTestFolder: StoryTestSuite {
         private readonly Configuration configuration;
+        private readonly List<StoryTestPageFilter> pageFilters = new List<StoryTestPageFilter>();
  
         public StoryTestFolder(Configuration configuration, FolderModel theFolderModel)
             : this(configuration, 
@@ -57,9 +59,18 @@ namespace fitSharp.Fit.Runner {
                     if (configuration.GetItem<FileExclusions>().IsExcluded(fileName)) continue;
                     if (mySelection != null && !filePath.EndsWith(mySelection)) continue;
                     var file = new StoryTestFile(filePath, this, myFolderModel);
+                    if (!SatisfiesFilters(file)) continue;
                     yield return file;
                 }
             }
+        }
+
+        public void AddPageFilter(StoryTestPageFilter filter) {
+            pageFilters.Add(filter);
+        }
+
+        private bool SatisfiesFilters(StoryTestPage page) {
+            return pageFilters.All(filter => filter.Matches(page));
         }
 
         public StoryTestPage SuiteSetUp {
@@ -80,9 +91,18 @@ namespace fitSharp.Fit.Runner {
                     string relativeFolder = inputFolder.Substring(Name.Length + 1);
                     if (configuration.GetItem<FileExclusions>().IsExcluded(relativeFolder)) continue;
                     if (mySelection != null && !mySelection.StartsWith(inputFolder)) continue;
-                    yield return new StoryTestFolder(configuration, inputFolder, Path.Combine(OutputPath, relativeFolder), mySelection, myFolderModel, this);
+                    yield return CreateChildSuite(inputFolder, relativeFolder);
                 }
             }
+        }
+
+        private StoryTestSuite CreateChildSuite(string inputFolder, string relativeFolderPath) {
+            var folder = new StoryTestFolder(configuration, inputFolder, Path.Combine(OutputPath, relativeFolderPath), mySelection, myFolderModel, this);
+
+            foreach (var pageFilter in pageFilters)
+                folder.AddPageFilter(pageFilter);
+
+            return folder;
         }
 
         public void Finish() {

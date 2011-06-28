@@ -15,27 +15,32 @@ namespace fit.Runner {
     public class FolderRunner: Runnable {
 
         public int Run(IList<string> commandLineArguments, Configuration configuration, ProgressReporter reporter) {
-            DateTime now = DateTime.Now;
+            var now = DateTime.Now;
             myProgressReporter = reporter;
-            int result = Run(configuration, commandLineArguments);
+            var result = Run(configuration, commandLineArguments);
             //todo: to suiterunner?
             if (!configuration.GetItem<Settings>().DryRun)
                 reporter.Write(string.Format("\n{0}, time: {1}\n", Results, DateTime.Now - now));
             return result;
         }
 
-        private int Run(Configuration configuration, IList<string> arguments) {
+        public string Results {get { return myRunner.TestCounts.Description; }}
+
+
+        ProgressReporter myProgressReporter;
+        SuiteRunner myRunner;
+        string selectedFile;
+
+        int Run(Configuration configuration, IList<string> arguments) {
             ParseArguments(configuration, arguments);
             myRunner = new SuiteRunner(configuration, myProgressReporter);
             myRunner.Run(
-                new StoryTestFolder(configuration, new FileSystemModel(configuration.GetItem<Settings>().CodePageNumber)),
+                CreateStoryTestFolder(configuration),
                 selectedFile);
             return myRunner.TestCounts.FailCount;
         }
 
-        public string Results {get { return myRunner.TestCounts.Description; }}
-
-        private void ParseArguments(Configuration configuration, IList<string> arguments) {
+        void ParseArguments(Configuration configuration, IList<string> arguments) {
             if (arguments.Count == 0) {
                 return;
             }
@@ -45,6 +50,8 @@ namespace fit.Runner {
             argumentParser.AddArgumentHandler("o", value => configuration.GetItem<Settings>().OutputFolder = value);
             argumentParser.AddArgumentHandler("s", value => selectedFile = value);
             argumentParser.AddArgumentHandler("x", value => configuration.GetItem<FileExclusions>().AddRange(value.Split(';')));
+            argumentParser.AddArgumentHandler("t", value => configuration.GetItem<Settings>().TagList = value);
+
             argumentParser.Parse(arguments);
             if (configuration.GetItem<Settings>().InputFolder == null)
                 throw new FormatException("Missing input folder");
@@ -52,8 +59,14 @@ namespace fit.Runner {
                 throw new FormatException("Missing output folder");
         }
     
-        private ProgressReporter myProgressReporter;
-        private SuiteRunner myRunner;
-        string selectedFile;
+        StoryTestFolder CreateStoryTestFolder(Configuration configuration) {
+            var storyTestFolder = new StoryTestFolder(configuration, new FileSystemModel(configuration.GetItem<Settings>().CodePageNumber));
+
+            string tagList = configuration.GetItem<Settings>().TagList;
+            if (!string.IsNullOrEmpty(tagList))
+                storyTestFolder.AddPageFilter(new TagFilter(tagList));
+
+            return storyTestFolder;
+        }
     }
 }

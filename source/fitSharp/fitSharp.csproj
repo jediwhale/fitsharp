@@ -60,6 +60,8 @@
     <Compile Include="Fit\Operators\ParseStoryTestString.cs" />
     <Compile Include="Fit\Operators\ParseTextStoryTestString.cs" />
     <Compile Include="Fit\Operators\WrapOperationDefault.cs" />
+    <Compile Include="Fit\Runner\StoryTestPageFilter.cs" />
+    <Compile Include="Fit\Runner\TagFilter.cs" />
     <Compile Include="Fit\Service\InterpretFlow.cs" />
     <Compile Include="Machine\Application\ArgumentParser.cs" />
     <Compile Include="Machine\Application\Runnable.cs" />
