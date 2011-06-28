@@ -51,6 +51,7 @@
     <Compile Include="Double\Person.cs" />
     <Compile Include="Double\SampleClassTwo.cs" />
     <Compile Include="Double\TestSocket.cs" />
+    <Compile Include="NUnit\Machine\ArgumentParserTest.cs" />
     <Compile Include="NUnit\Machine\SuiteConfigurationTest.cs" />
     <Compile Include="NUnit\Fit\BindingFactoryTest.cs" />
     <Compile Include="NUnit\Fit\CellOperatorsTest.cs" />

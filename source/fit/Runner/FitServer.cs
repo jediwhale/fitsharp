@@ -4,6 +4,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System;
+using System.Collections.Generic;
 using fit.Runner;
 using fit.Service;
 using fitSharp.Fit.Model;
@@ -30,13 +31,13 @@ namespace fitnesse.fitserver
 		private const int SOCKET_TOKEN = 3;
 		private const int DONE = 4;
 
-	    public int Run(string[] commandLineArguments, Configuration configuration, ProgressReporter reporter) {
+	    public int Run(IList<string> commandLineArguments, Configuration configuration, ProgressReporter reporter) {
 	        this.configuration = configuration;
 	        Run(commandLineArguments);
 	        return totalCounts.FailCount;
 	    }
 
-	    public void Run(string[] CommandLineArguments)
+	    public void Run(IList<string> CommandLineArguments)
 		{
 			ParseCommandLineArguments(CommandLineArguments);
 
@@ -52,40 +53,39 @@ namespace fitnesse.fitserver
 		    Exit();
 		}
 
-		private void ParseCommandLineArguments(string[] args)
+		private void ParseCommandLineArguments(IEnumerable<string> args)
 		{
 			int argumentPosition = 0;
 
-			for (int i = 0; i < args.Length; i++)
-			{
-				if (args[i].StartsWith("-"))
-				{
-					if ("-v".Equals(args[i]))
-						verbose = true;
-                    else
-						PrintUsageAndExit();
-				}
-				else
-				{
-					switch (argumentPosition)
-					{
-						case ASSEMBLYLIST:
-					        new PathParser(args[i]).AddAssemblies(configuration);
-					        break;
-						case HOST:
-							host = args[i];
-							break;
-						case PORT:
-							port = Int32.Parse(args[i]);
-							break;
-						case SOCKET_TOKEN:
-							socketToken = args[i];
-							break;
-					}
-					argumentPosition++;
-				}
+			foreach (string t in args) {
+			    if (t.StartsWith("-"))
+			    {
+			        if ("-v".Equals(t))
+			            verbose = true;
+			        else
+			            PrintUsageAndExit();
+			    }
+			    else
+			    {
+			        switch (argumentPosition)
+			        {
+			            case ASSEMBLYLIST:
+			                new PathParser(t).AddAssemblies(configuration);
+			                break;
+			            case HOST:
+			                host = t;
+			                break;
+			            case PORT:
+			                port = Int32.Parse(t);
+			                break;
+			            case SOCKET_TOKEN:
+			                socketToken = t;
+			                break;
+			        }
+			        argumentPosition++;
+			    }
 			}
-			if (argumentPosition != DONE)
+		    if (argumentPosition != DONE)
 				PrintUsageAndExit();
 		}
 

@@ -4,6 +4,7 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Threading;
 using fitSharp.IO;
@@ -21,7 +22,7 @@ namespace fitSharp.Test.NUnit.Machine {
 
         [Test] public void AdditionalArgumentsArePassed() {
             RunShell(new [] {"more", "-r", typeof(SampleRunner).FullName, "stuff"});
-            Assert.AreEqual(2, SampleRunner.LastArguments.Length);
+            Assert.AreEqual(2, SampleRunner.LastArguments.Count);
             Assert.AreEqual("more", SampleRunner.LastArguments[0]);
             Assert.AreEqual("stuff", SampleRunner.LastArguments[1]);
         }
@@ -68,14 +69,14 @@ namespace fitSharp.Test.NUnit.Machine {
     public class SampleRunner: Runnable {
         public const int Result = 707;
 
-        public static string[] LastArguments;
+        public static IList<string> LastArguments;
         public static ApartmentState ApartmentState;
 
         public SampleRunner() {
             LastArguments = new string[] {};
         }
 
-        public int Run(string[] arguments, Configuration configuration, ProgressReporter reporter) {
+        public int Run(IList<string> arguments, Configuration configuration, ProgressReporter reporter) {
             LastArguments = arguments;
             ApartmentState = Thread.CurrentThread.GetApartmentState();
             try {

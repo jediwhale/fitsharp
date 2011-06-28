@@ -4,6 +4,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using fit.Runner;
 using fit.Service;
@@ -34,7 +35,7 @@ namespace fitnesse.fitserver
 	    private SocketServer server;
 	    private FitSocket clientSocket;
 
-	    public int Run(string[] commandLineArguments, Configuration configuration, ProgressReporter reporter) {
+	    public int Run(IList<string> commandLineArguments, Configuration configuration, ProgressReporter reporter) {
 	        this.configuration = configuration;
 			if(!ParseArgs(configuration, commandLineArguments))
 			{
@@ -87,7 +88,7 @@ namespace fitnesse.fitserver
 			return totalCounts.FailCount;
 		}
 
-	    public bool ParseArgs(Configuration configuration, string[] args) {
+	    public bool ParseArgs(Configuration configuration, IList<string> args) {
 	        string resultsFile = null;
 	        string outputType = "text";
 	        int index = 0;
@@ -115,7 +116,7 @@ namespace fitnesse.fitserver
 	            port = Int32.Parse(args[index++]);
 	            pageName = args[index++];
 	            string assemblies = null;
-	            while (args.Length > index)
+	            while (args.Count > index)
 	                assemblies = assemblies == null ? args[index++] : (assemblies + ";" + args[index++]);
 	            if (assemblies != null) {
 	                new PathParser(assemblies).AddAssemblies(configuration);

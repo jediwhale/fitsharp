@@ -61,6 +61,7 @@
     <Compile Include="Fit\Operators\ParseTextStoryTestString.cs" />
     <Compile Include="Fit\Operators\WrapOperationDefault.cs" />
     <Compile Include="Fit\Service\InterpretFlow.cs" />
+    <Compile Include="Machine\Application\ArgumentParser.cs" />
     <Compile Include="Machine\Application\Runnable.cs" />
     <Compile Include="Machine\Application\Runner.cs" />
     <Compile Include="Machine\Application\SuiteConfiguration.cs" />

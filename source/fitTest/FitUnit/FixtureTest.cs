@@ -3,6 +3,7 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
+using System.Collections.Generic;
 using System.Threading;
 using fitlibrary;
 using fitSharp.IO;
@@ -26,7 +27,7 @@ namespace fit.Test.FitUnit {
         }
 
         private class MyRunner: Runnable {
-            public int Run(string[] commandLineArguments, Configuration configuration, ProgressReporter reporter)
+            public int Run(IList<string> commandLineArguments, Configuration configuration, ProgressReporter reporter)
             {
                 new StoryTest(Tables).Execute(configuration);
                 return 0;
