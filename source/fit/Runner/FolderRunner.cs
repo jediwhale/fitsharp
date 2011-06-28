@@ -18,7 +18,9 @@ namespace fit.Runner {
             DateTime now = DateTime.Now;
             myProgressReporter = reporter;
             int result = Run(configuration, commandLineArguments);
-            reporter.Write(string.Format("\n{0}, time: {1}\n", Results, DateTime.Now - now));
+            //todo: to suiterunner?
+            if (!configuration.GetItem<Settings>().DryRun)
+                reporter.Write(string.Format("\n{0}, time: {1}\n", Results, DateTime.Now - now));
             return result;
         }
 
@@ -38,6 +40,7 @@ namespace fit.Runner {
                 return;
             }
             var argumentParser = new ArgumentParser();
+            argumentParser.AddSwitchHandler("d", () => configuration.GetItem<Settings>().DryRun = true);
             argumentParser.AddArgumentHandler("i", value => configuration.GetItem<Settings>().InputFolder = value);
             argumentParser.AddArgumentHandler("o", value => configuration.GetItem<Settings>().OutputFolder = value);
             argumentParser.AddArgumentHandler("s", value => selectedFile = value);

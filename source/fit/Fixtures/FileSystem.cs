@@ -1,4 +1,4 @@
-// Copyright © 2009 Syterra Software Inc.
+// Copyright © 2011 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -14,13 +14,17 @@ namespace fit {
         }
 
         public bool FileSameAs(string theFirstFile, string theSecondFile) {
-            StreamReader reader = new StreamReader(FullName(theFirstFile));
+            var reader = new StreamReader(FullName(theFirstFile));
             string firstContent = reader.ReadToEnd().Trim();
             reader.Close();
             reader = new StreamReader(FullName(theSecondFile));
             string secondContent = reader.ReadToEnd().Trim();
             reader.Close();
             return firstContent.Replace("\r\n","\n") == secondContent.Replace("\r\n","\n");
+        }
+
+        public bool FolderIsEmpty(string folder) {
+            return Directory.GetFiles(FullName(folder)).Length == 0;
         }
 
         public void MakeEmptyFolder(string theFolder) {
@@ -42,7 +46,7 @@ namespace fit {
             return theFileName;
         }
 
-        private Dictionary<string, string> myAliases = new Dictionary<string, string>();
+        private readonly Dictionary<string, string> myAliases = new Dictionary<string, string>();
 
     }
 }

@@ -1,4 +1,4 @@
-// Copyright © 2010 Syterra Software Inc.
+// Copyright © 2011 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -13,11 +13,13 @@ using fitSharp.Test.Double;
 namespace fit.Test.Acceptance {
     public class FolderRunnerStory: DomainAdapter {
         private readonly Shell shell;
+        private readonly CollectingReporter reporter;
 
         public object SystemUnderTest { get { return shell; } }
 
         public FolderRunnerStory() {
-            shell = new Shell(new NullReporter(), new FileSystemModel());
+            reporter = new CollectingReporter();
+            shell = new Shell(reporter, new FileSystemModel());
         }
 
         public void Run(string[] theArguments) {
@@ -29,5 +31,11 @@ namespace fit.Test.Acceptance {
         }
 
         public string Results { get { return ((FolderRunner) shell.Runner).Results; }}
+
+        public string[] ConsoleOutput {
+            get {
+                return reporter.Output.Split(new[] {'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries);
+            }
+        }
     }
 }
