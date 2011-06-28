@@ -207,7 +207,7 @@ namespace dbfit
             if (Array.IndexOf(TimeTypes, dataType) >= 0) return typeof(DateTime);
 
 
-            throw new NotSupportedException("Type " + dataType + " is not supported");
+            throw new NotSupportedException(".net Type " + dataType + " is not supported");
         }
         private static ParameterDirection GetParameterDirection(int isOutput) {
             return isOutput==1 ? ParameterDirection.Output : ParameterDirection.Input;

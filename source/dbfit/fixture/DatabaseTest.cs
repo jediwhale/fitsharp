@@ -77,8 +77,7 @@ namespace dbfit
         {
             return new Query(queryTable, false);
         }
-
-        public Fixture Update(String table)
+         public Fixture Update(String table)
         {
             return new Update(environment, table);
         }
