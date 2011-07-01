@@ -44,7 +44,7 @@ namespace fitlibrary {
         }
 
 	    protected IEnumerable<object> myArray {
-	        get { return (IEnumerable<object>)SystemUnderTest;}
+	        get { return SystemUnderTest as IEnumerable<object>;}
             set { SetSystemUnderTest(value);  }
 	    }
 	}
