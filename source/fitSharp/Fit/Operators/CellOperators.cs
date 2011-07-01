@@ -14,6 +14,8 @@ namespace fitSharp.Fit.Operators {
         public CellOperators() {
             Add(new ComposeDefault(), 0);
             Add(new InvokeDataRow<Cell, CellProcessor>(), 0);
+            Add(new InvokeSpecialAction(), 0);
+            Add(new InvokeSetUpTearDown(), 0);
             Add(new ParseDefault(), 0);
             Add(new ParseMemberName(), 0);
             Add(new ParseBoolean(), 0);
@@ -25,6 +27,7 @@ namespace fitSharp.Fit.Operators {
 
             Add(new CheckOperationDefault(), 0);
             Add(new InvokeOperationDefault(), 0);
+            Add(new WrapOperationDefault(), 0);
             Add(new CheckOperationEmpty(), 0);
             Add(new CheckOperationSymbolSave(), 0);
 

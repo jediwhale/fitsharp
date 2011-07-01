@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- fitSharp
+Copyright © Syterra Software Inc. All rights reserved.
+The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
+to be bound by the terms of this license. You must not remove this notice, or any other, from this software. -->
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+ <link href="../fitsharp1.css" type="text/css" rel="stylesheet">
+  <link href="fit.css" type="text/css" rel="stylesheet">
+  <title>Flow Mode</title>
+</head>
+<body>
+<div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
+<div class="pagename">Flow Mode</div>
+<div class="content">In <a href="../Fit/FlowMode.html">Flow Mode</a>, a fixture processes all the tables in the story test, without repeating the fixture name in the first row of each table.<br>
+<br>
+Each row is interpreted as one of the following.<ul><li>One of the standard <a href="../Fit/FlowFixtureKeywords.html">Flow Fixture Keywords</a>.</li><li>A custom flow fixture keyword defined in the current fixture.</li><li>A method defined in the current fixture.</li><li>A method defined in the current fixture's System Under Test.</li><li>The name of a new fixture that will process the rest of the current table.</li></ul><br>
+If the method invoked for a row returns certain types, the return value will be interpreted by a new fixture that will process the rest of the table.<br>
+<br>
+Any enumerable return type is processed by an <a href="../Fit/ArrayFixture.html">Array Fixture</a>.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>when test is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample domain</td></tr>
+<tr><td>get people</td><td>Bob-Martin,Mike-Stockdale</td></tr>
+<tr><td>first name</td><td>last name</td></tr>
+<tr><td>Bob</td><td>Martin</td></tr>
+<tr><td>Mike</td><td>Stockdale</td></tr>
+</table>
+</td><td>then result is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample domain</td></tr>
+<tr><td>get people</td><td>Bob-Martin,Mike-Stockdale</td></tr>
+<tr><td>first name</td><td>last name</td></tr>
+<tr><td class="pass">Bob</td><td class="pass">Martin</td></tr>
+<tr><td class="pass">Mike</td><td class="pass">Stockdale</td></tr>
+</table></td></tr>
+</table>
+<br>
+To use a different fixture for an enumerable return type, use the <a href="../Fit/UseFixture.html">Use Fixture</a>.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>when test is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample domain</td></tr>
+<tr><td>use</td><td>set</td><td>with</td><td>get people</td><td>Mike-Stockdale,Bob-Martin</td></tr>
+<tr><td>first name</td><td>last name</td></tr>
+<tr><td>Bob</td><td>Martin</td></tr>
+<tr><td>Mike</td><td>Stockdale</td></tr>
+</table>
+</td><td>then result is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample domain</td></tr>
+<tr><td>use</td><td>set</td><td>with</td><td>get people</td><td>Mike-Stockdale,Bob-Martin</td></tr>
+<tr><td>first name</td><td>last name</td></tr>
+<tr><td class="pass">Bob</td><td class="pass">Martin</td></tr>
+<tr><td class="pass">Mike</td><td class="pass">Stockdale</td></tr>
+</table></td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>when test is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample domain</td></tr>
+<tr><td>use</td><td>subset</td><td>with</td><td>get people</td><td>Mike-Stockdale,Bob-Martin</td></tr>
+<tr><td>first name</td><td>last name</td></tr>
+<tr><td>Bob</td><td>Martin</td></tr>
+</table>
+</td><td>then result is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample domain</td></tr>
+<tr><td>use</td><td>subset</td><td>with</td><td>get people</td><td>Mike-Stockdale,Bob-Martin</td></tr>
+<tr><td>first name</td><td>last name</td></tr>
+<tr><td class="pass">Bob</td><td class="pass">Martin</td></tr>
+</table></td></tr>
+</table>
+</div>
+<div style="width:100%;text-align:right">
+<span class="footer">&copy; Copyright <a href="http://www.syterra.com">Syterra Software Inc.</a> All rights reserved.</span>
+</div>
+
+</body>
+</html>

@@ -30,11 +30,11 @@ namespace fitlibrary {
         public virtual bool IsInFlow(int tableCount) { return tableCount == 1; }
         
 	    public void DoSetUp(Tree<Cell> table) {
-            ExecuteOptionalMethod(InvokeDirect.SetUpMethod, (Parse)table.Branches[0].Branches[0]);
+            ExecuteOptionalMethod(InvokeSetUpTearDown.SetUpMethod, (Parse)table.Branches[0].Branches[0]);
 	    }
 
 	    public void DoTearDown(Tree<Cell> table) {
-            ExecuteOptionalMethod(InvokeDirect.TearDownMethod, (Parse)table.Branches[0].Branches[0]);
+            ExecuteOptionalMethod(InvokeSetUpTearDown.TearDownMethod, (Parse)table.Branches[0].Branches[0]);
 	    }
 
 	    protected void ProcessFlowRows(Parse table) {

@@ -3,6 +3,7 @@
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
+using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using fitSharp.Slim.Model;
@@ -31,7 +32,7 @@ namespace fitSharp.Test.NUnit.Slim {
 
         [Test] public void OperatorIsAddedFromConfiguration() {
             var configuration = new Configuration();
-            configuration.LoadXml("<config><fitSharp.Slim.Service.Service><addOperator>fitSharp.Test.NUnit.Slim.SampleOperator</addOperator></fitSharp.Slim.Service.Service></config>");
+            new SuiteConfiguration(configuration).LoadXml("<config><fitSharp.Slim.Service.Service><addOperator>fitSharp.Test.NUnit.Slim.SampleOperator</addOperator></fitSharp.Slim.Service.Service></config>");
             var statement = new Instructions().MakeCommand("sampleCommand");
             service = new Service(configuration);
             var result = DoInstruction(statement).GetValue<Tree<string>>();

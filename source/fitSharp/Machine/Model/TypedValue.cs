@@ -14,7 +14,23 @@ namespace fitSharp.Machine.Model {
 
         public object Value { get; private set; }
         public T GetValue<T>() { return (T)Value;} 
-        public T GetValueAs<T>() where T: class { return Value as T;} 
+        public T GetValueAs<T>() where T: class { return Value as T;}
+
+        public void For<T>(Action<T> action, Action notAction) where T: class {
+            if (!HasValue) return;
+            var valueAs = GetValueAs<T>();
+            if (valueAs != null) action(valueAs);
+            else notAction();
+        }
+
+        public void For<T>(Action<T> action) where T: class {
+            For(action, () => { });
+        }
+
+        public void Not<T>(Action notAction) where T: class {
+            For<T>(t => {}, notAction);
+        }
+
         public Type Type { get; private set; }
 
         public TypedValue(object value, Type type) : this() {
@@ -26,6 +42,7 @@ namespace fitSharp.Machine.Model {
 
         public bool IsVoid { get { return Type == typeof (void) && Value == null; } }
         public bool IsValid { get { return Type != typeof (void) || Value == null; } }
+        public bool HasValue { get { return Type != typeof (void) && Type != typeof(DBNull) && Value != null; } }
         public bool IsNullOrEmpty { get { return Value == null || Type == typeof(DBNull) || Value.ToString().Length == 0; } }
         public string ValueString {
             get {

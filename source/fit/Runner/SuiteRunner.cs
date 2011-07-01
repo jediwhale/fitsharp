@@ -1,4 +1,4 @@
-// Copyright © 2010 Syterra Software Inc.
+// Copyright © 2011 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -28,9 +28,9 @@ namespace fit.Runner {
 
 	    public void Run(StoryTestSuite theSuite, string theSelectedFile) {
             resultWriter = CreateResultWriter();
-            if (theSelectedFile.Length > 0) theSuite.Select(theSelectedFile);
+            if (!string.IsNullOrEmpty(theSelectedFile)) theSuite.Select(theSelectedFile);
 
-	        RunFolder(theSuite);
+	        RunFolder(theSuite, configuration.GetItem<Settings>().DryRun);
 
             resultWriter.WriteFinalCount(TestCounts);
             resultWriter.Close();
@@ -44,20 +44,26 @@ namespace fit.Runner {
 	        return new NullResultWriter();
 	    }
 
-	    private void RunFolder(StoryTestSuite theSuite) {
+	    private void RunFolder(StoryTestSuite theSuite, bool dryRun) {
+	        var pageAction = SelectPageAction(dryRun);
 	        StoryTestPage suiteSetUp = theSuite.SuiteSetUp;
-            if (suiteSetUp != null) ExecuteStoryPage(suiteSetUp);
+            if (suiteSetUp != null) pageAction(suiteSetUp);
             foreach (StoryTestPage testPage in theSuite.Pages) {
-                ExecuteStoryPage(testPage);
+                pageAction(testPage);
             }
 
 	        foreach (StoryTestSuite childSuite in theSuite.Suites) {
-                RunFolder(childSuite);
+                RunFolder(childSuite, dryRun);
 	        }
 	        StoryTestPage suiteTearDown = theSuite.SuiteTearDown;
-            if (suiteTearDown != null) ExecuteStoryPage(suiteTearDown);
-	        theSuite.Finish();
+            if (suiteTearDown != null) pageAction(suiteTearDown);
+	        if (!dryRun) theSuite.Finish();
 	    }
+
+        private Action<StoryTestPage> SelectPageAction(bool dryRun) {
+            if (dryRun) return DryRunStoryPage;
+            return ExecuteStoryPage;
+        }
 
 	    private void ExecuteStoryPage(StoryTestPage page) {
 	        try {
@@ -68,7 +74,16 @@ namespace fit.Runner {
 	        }
 	    }
 
-        private void HandleTestStatus(TestCounts counts) {
+	    private void DryRunStoryPage(StoryTestPage page) {
+            page.ExecuteStoryPage(ReportPageName, new NullResultWriter(), ignore => {});
+	    }
+
+	    private void ReportPageName(StoryPageName pageName, StoryTestString input, Action<StoryTestString, TestCounts> handleResults,
+	                             Action handleNoTest) {
+	        myReporter.WriteLine(pageName.Name);
+	    }
+
+	    private void HandleTestStatus(TestCounts counts) {
 	        myReporter.Write(counts.Letter);
 	        TestCounts.TallyCounts(counts);
         }

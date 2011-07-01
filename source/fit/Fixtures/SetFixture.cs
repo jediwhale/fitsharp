@@ -13,6 +13,7 @@ using fitSharp.Fit.Engine;
 namespace fitlibrary {
 
 	public class SetFixture: NamedCollectionFixtureBase {
+        public SetFixture(): base() {}
 
         public SetFixture(IEnumerable<object> theArray): base(theArray) {}
 

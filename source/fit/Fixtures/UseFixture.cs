@@ -8,7 +8,6 @@ using fitlibrary;
 using fitlibrary.exception;
 using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
-using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
@@ -34,11 +33,9 @@ namespace fit {
             var symbol = new Symbol(theName);
             if (!parent.Processor.Contains(symbol)) return null;
 
-            Interpreter result = null;
-            new InterpretResult(Processor).Interpret(new TypedValue(parent.Processor.Load(symbol).Instance), i => result = i);
-
-            if (result == null) throw new FitFailureException("Result is not a Fixture.");
-            return result;
+            var result =  CellOperation.Wrap(new TypedValue(parent.Processor.Load(symbol).Instance));
+            result.Not<Interpreter>(() => { throw new FitFailureException("Result is not a Fixture."); });
+            return result.GetValueAs<Interpreter>();
         }
 
         Interpreter MakeNewFixture(string theFixtureName, Parse theRestOfTheCells) {

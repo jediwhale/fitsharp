@@ -24,7 +24,7 @@ namespace fitSharp.Fit.Operators {
         }
 
         public bool CanCompare(TypedValue actual, Tree<Cell> expected) {
-            var options = (CompareString)Processor.Configuration.GetItem(GetType().FullName);
+            var options = Processor.Configuration.GetItem<CompareString>();
             if (!HasPrefix(options.list, expected.Value.Text)) return false;
             if (actual.Type != typeof(string)) return false;
 
@@ -33,7 +33,7 @@ namespace fitSharp.Fit.Operators {
         }
 
         public bool Compare(TypedValue actual, Tree<Cell> expected) {
-            var options = (CompareString)Processor.Configuration.GetItem(GetType().FullName);
+            var options = Processor.Configuration.GetItem<CompareString>();
             return IsMatch(options.list, actual.ValueString, expected.Value.Text);
         }
 

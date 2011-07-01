@@ -18,7 +18,7 @@ to be bound by the terms of this license. You must not remove this notice, or an
 |xxx|xxx|
 
 |fixtureB|
-|xxx|xxx|</pre> Do Fixture and Sequence Fixture (and any fixture derived from Flow Fixture Base) can also operate in flow mode, processing all the tables on the story test page without repeating the fixture name in each table. These fixtures are known as flow fixtures. When a flow fixture appears in the first cell of the first table, it operates in flow mode. <pre class="test">|flowFixtureA|
+|xxx|xxx|</pre> Do Fixture and Sequence Fixture (and any fixture derived from Flow Fixture Base) can also operate in <a href="../Fit/FlowMode.html">Flow Mode</a>, processing all the tables on the story test page without repeating the fixture name in each table. These fixtures are known as flow fixtures. When a flow fixture appears in the first cell of the first table, it operates in <a href="../Fit/FlowMode.html">Flow Mode</a>. <pre class="test">|flowFixtureA|
 |xxx|xxx|
 
 |xxx|xxx|</pre> If a flow fixture appears after the first table, it operates in standard mode. <pre class="test">|fixtureA|
@@ -28,7 +28,7 @@ to be bound by the terms of this license. You must not remove this notice, or an
 |xxx|xxx|
 
 |fixtureC|
-|xxx|xxx|</pre> A fixture can "hide" itself, so that a subsequent flow fixture will appear to be in the first table, and thus operate in flow mode. <a href="../Fit/ImportFixture.html">Import Fixture</a> and <a href="../Fit/FitVersionFixture.html">Fit Version Fixture</a> are examples of hidden fixtures. The hidden fixture overrides the IsVisible property: <pre class="code">public class MyHiddenFixture: Fixture {
+|xxx|xxx|</pre> A fixture can "hide" itself, so that a subsequent flow fixture will appear to be in the first table, and thus operate in <a href="../Fit/FlowMode.html">Flow Mode</a>. <a href="../Fit/ImportFixture.html">Import Fixture</a> and <a href="../Fit/FitVersionFixture.html">Fit Version Fixture</a> are examples of hidden fixtures. The hidden fixture overrides the IsVisible property: <pre class="code">public class MyHiddenFixture: Fixture {
     public override bool IsVisible { get { return false; } }
 ...}</pre><pre class="test">|myHiddenFixture|
 |xxx|xxx|
@@ -36,7 +36,7 @@ to be bound by the terms of this license. You must not remove this notice, or an
 |flowFixtureA|
 |xxx|xxx|
 
-|xxx|xxx|</pre> A flow fixture can use a different rule to determine when to operate in flow mode, by overriding the IsInFlow metohd: <pre class="code">public class MyGreedyFixture: FlowFixtureBase {
+|xxx|xxx|</pre> A flow fixture can use a different rule to determine when to operate in <a href="../Fit/FlowMode.html">Flow Mode</a>, by overriding the IsInFlow metohd: <pre class="code">public class MyGreedyFixture: FlowFixtureBase {
     public override bool IsInFlow(int tableCount) { return true; }
 ...}</pre><pre class="test">|fixtureA|
 |xxx|xxx|
@@ -47,7 +47,7 @@ to be bound by the terms of this license. You must not remove this notice, or an
 |xxx|xxx|</pre> In the tables above, the fixture class name appears in the first cell. If this cell contains a class name that doesn't inherit from Fixture, then a Do Fixture is created with the class as its System Under Test. <pre class="test">|myDomainClass|
 |xxx|xxx|</pre> is a shorthand for <pre class="test">|do|
 |start|myDomainClass|
-|xxx|xxx|</pre> If the first cell isn't a class name at all, a Do Fixture is still created. In this case, the first cell will have to be one of the <a href="../Fit/FlowFixtureKeywords.html">Flow Fixture Keywords</a> or a procedure from a <a href="../Fit/DefineFixture.html">Define Fixture</a> in a Suite Set Up page. <pre class="test">|with|new|myDoaminClass|xxx|xxx|
+|xxx|xxx|</pre> If the first cell isn't a class name at all, a Do Fixture is still created. In this case, the first cell will have to be one of the <a href="../Fit/FlowFixtureKeywords.html">Flow Fixture Keywords</a> or a procedure from a <a href="../Fit/DefineFixture.html">Define Fixture</a> in a Suite Set Up page. <pre class="test">|with|new|myDomainClass|xxx|xxx|
 |xxx|xxx|</pre> or <pre class="test">|myProcedure|xxx|xxx|
 |xxx|xxx|</pre> <br>
 </div>

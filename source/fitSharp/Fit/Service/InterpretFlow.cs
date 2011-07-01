@@ -3,12 +3,7 @@
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data;
 using System.Linq;
-using System.Xml;
 using fitSharp.Fit.Engine;
 using fitSharp.Fit.Exception;
 using fitSharp.Fit.Model;
@@ -17,8 +12,7 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
 
-namespace fitSharp.Fit.Service
-{
+namespace fitSharp.Fit.Service {
     public class InterpretFlow: InterpretTableFlow {
         public InterpretFlow(): this(0) {}
 
@@ -43,20 +37,14 @@ namespace fitSharp.Fit.Service
             var currentRow = table.Branches[rowNumber];
             try
             {
-                var specialActionName = InvokeDirect.MakeDirect(
+                var specialActionName = InvokeSpecialAction.MakeName(
                     processor.ParseTree<Cell, MemberName>(currentRow.Branches[0]).ToString());
-                var runtimeType = processor.ParseString<Cell, RuntimeType>("fit.Fixtures.FlowKeywords");
-                var runtimeMember = runtimeType.GetConstructor(1);
-                var flowKeywords = runtimeMember.Invoke(new object[] {interpreter});
-                var result = processor.Invoke(flowKeywords, specialActionName, currentRow.Branches[0]);
-                if (!result.IsValid) {
-                    result = processor.Invoke(interpreter, specialActionName, currentRow.Branches[0]);
-                }
+                var result = processor.Invoke(interpreter, specialActionName, currentRow.Branches[0]);
                 if (!result.IsValid) {
                      result = new CellOperationImpl(processor).TryInvoke(interpreter,
                          interpreter.MethodRowSelector.SelectMethodCells(currentRow),
                          interpreter.MethodRowSelector.SelectParameterCells(currentRow),
-                        currentRow.Branches[0].Value);
+                         currentRow.Branches[0].Value);
 
                 }
                 if (!result.IsValid) {
@@ -80,8 +68,9 @@ namespace fitSharp.Fit.Service
                         ColorMethodName(interpreter.MethodRowSelector.SelectMethodCells(currentRow), result.GetValue<bool>());
                     }
                     else {
-                        new InterpretResult(processor).Interpret(result,
-                            i => ProcessRestOfTable(i, processor.MakeCell(string.Empty, table.Branches.Skip(rowNumber))));
+                        new CellOperationImpl(processor)
+                            .Wrap(result)
+                            .For<Interpreter>(i => ProcessRestOfTable(i, processor.MakeCell(string.Empty, table.Branches.Skip(rowNumber))));
                     }
                 }
             }
@@ -118,42 +107,5 @@ namespace fitSharp.Fit.Service
         CellProcessor processor;
         FlowInterpreter interpreter;
         bool hasFinishedTable;
-    }
-
-    public class InterpretResult {
-        public InterpretResult(CellProcessor processor) {
-            this.processor = processor;
-        }
-
-        public void Interpret(TypedValue result, Action<Interpreter> action) {
-            if (result.Value == null) return;
-            if (result.Type.IsPrimitive) return;
-            if (result.Type == typeof(string)) return;
-            var wrapInterpreter = result.GetValueAs<Interpreter>();
-            if (wrapInterpreter == null) {
-                if (typeof (IEnumerable<object>).IsAssignableFrom(result.Type))
-                    wrapInterpreter = MakeInterpreter("fitlibrary.ArrayFixture", typeof(IEnumerable<object>), result.Value);
-                else if (typeof (IDictionary).IsAssignableFrom(result.Type))
-                    wrapInterpreter = MakeInterpreter("fitlibrary.SetFixture", typeof(IEnumerable), result.GetValue<IDictionary>().Values);
-                else if (typeof (IEnumerator).IsAssignableFrom(result.Type))
-                    wrapInterpreter = MakeInterpreter("fitlibrary.ArrayFixture", typeof(IEnumerator), result.Value);
-                else if (typeof (DataTable).IsAssignableFrom(result.Type))
-                    wrapInterpreter = MakeInterpreter("fitlibrary.ArrayFixture", typeof(DataTable), result.Value);
-                else if (typeof (XmlDocument).IsAssignableFrom(result.Type))
-                    wrapInterpreter = MakeInterpreter("fitlibrary.XmlFixture", typeof(XmlDocument), result.Value);
-                else if (typeof (IEnumerable).IsAssignableFrom(result.Type))
-                    wrapInterpreter = MakeInterpreter("fitlibrary.ArrayFixture", typeof(IEnumerable), result.Value);
-                else wrapInterpreter = MakeInterpreter("fitlibrary.DoFixture", typeof (object), result.Value);
-            }
-            action(wrapInterpreter);
-        }
-
-        Interpreter MakeInterpreter(string fixtureName, Type parameterType, object parameter) {
-            var runtimeType = processor.ParseString<Cell, RuntimeType>(fixtureName);
-            var runtimeMember = runtimeType.FindConstructor(new [] {parameterType});
-            return runtimeMember.Invoke(new [] {parameter}).GetValue<Interpreter>();
-        }
-
-        readonly CellProcessor processor;
     }
 }

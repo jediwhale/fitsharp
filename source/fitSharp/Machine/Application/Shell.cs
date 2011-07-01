@@ -14,14 +14,6 @@ using fitSharp.Machine.Engine;
 namespace fitSharp.Machine.Application {
 
     public class Shell: MarshalByRefObject {
-        readonly List<string> extraArguments = new List<string>();
-        readonly ProgressReporter progressReporter;
-        readonly FolderModel folderModel;
-        readonly Configuration configuration = new Configuration();
-
-        string appConfigArgument;
-        private int result;
-
         public Runnable Runner { get; private set; }
 
         public Shell() {
@@ -34,10 +26,10 @@ namespace fitSharp.Machine.Application {
             this.folderModel = folderModel;
         }
 
-        public int Run(string[] commandLineArguments) {
+        public int Run(IList<string> commandLineArguments) {
             try {
                 ParseArguments(commandLineArguments);
-                string appConfigName = LookForAppConfig();
+                var appConfigName = LookForAppConfig();
                 return appConfigName.Length == 0
                            ? RunInCurrentDomain()
                            : RunInNewDomain(appConfigName, commandLineArguments);
@@ -48,14 +40,21 @@ namespace fitSharp.Machine.Application {
             }
         }
 
+        readonly List<string> extraArguments = new List<string>();
+        readonly ProgressReporter progressReporter;
+        readonly FolderModel folderModel;
+        readonly Configuration configuration = new Configuration();
+
+        string appConfigArgument;
+        int result;
+
         string LookForAppConfig() {
             if (!string.IsNullOrEmpty(appConfigArgument)) return Path.GetFullPath(appConfigArgument);
-            string appConfigSettings = configuration.GetItem<Settings>().AppConfigFile;
-            if (!string.IsNullOrEmpty(appConfigSettings)) return appConfigSettings;
-            return string.Empty;
+            var appConfigSettings = configuration.GetItem<Settings>().AppConfigFile;
+            return !string.IsNullOrEmpty(appConfigSettings) ? appConfigSettings : string.Empty;
         }
 
-        int RunInCurrentDomain(string[] commandLineArguments) {
+        int RunInCurrentDomain(IList<string> commandLineArguments) {
             ParseArguments(commandLineArguments);
             return RunInCurrentDomain();
         }
@@ -68,13 +67,13 @@ namespace fitSharp.Machine.Application {
             return Execute();
         }
 
-        static int RunInNewDomain(string appConfigName, string[] commandLineArguments) {
+        static int RunInNewDomain(string appConfigName, IList<string> commandLineArguments) {
             //todo: can we specify apppath for the new domain?
             var appDomainSetup = new AppDomainSetup {
                 ApplicationBase = AppDomain.CurrentDomain.BaseDirectory,
                 ConfigurationFile = appConfigName
             };
-            AppDomain newDomain = AppDomain.CreateDomain("fitSharp.Machine", null, appDomainSetup);
+            var newDomain = AppDomain.CreateDomain("fitSharp.Machine", null, appDomainSetup);
             int result;
             try {
                 var remoteShell = (Shell) newDomain.CreateInstanceAndUnwrap(
@@ -83,34 +82,20 @@ namespace fitSharp.Machine.Application {
                 result = remoteShell.RunInCurrentDomain(commandLineArguments);
             }
             finally {
-                //AppDomain.Unload(newDomain);
                 // avoid deadlock on Unload
                 new Action<AppDomain>(AppDomain.Unload).BeginInvoke(newDomain, null, null);
             }
             return result;
         }
 
-        void ParseArguments(string[] commandLineArguments) {
-            for (int i = 0; i < commandLineArguments.Length; i++) {
-                if (i < commandLineArguments.Length - 1) {
-                    switch (commandLineArguments[i]) {
-                        case "-c":
-                            configuration.LoadXml(folderModel.FileContent(commandLineArguments[i + 1]));
-                            break;
-                        case "-a":
-                            appConfigArgument = commandLineArguments[i + 1];
-                            break;
-                        case "-r":
-                            configuration.GetItem<Settings>().Runner = commandLineArguments[i + 1];
-                            break;
-                        default:
-                            extraArguments.Add(commandLineArguments[i]);
-                            continue;
-                    }
-                    i++;
-                }
-                else extraArguments.Add(commandLineArguments[i]);
-            }
+        void ParseArguments(IList<string> commandLineArguments) {
+            var argumentParser = new ArgumentParser();
+            argumentParser.AddArgumentHandler("a", value => appConfigArgument = value);
+            argumentParser.AddArgumentHandler("c", value => new SuiteConfiguration(configuration).LoadXml(folderModel.FileContent(value)));
+            argumentParser.AddArgumentHandler("r", value => configuration.GetItem<Settings>().Runner = value);
+            argumentParser.SetUnusedHandler(value => extraArguments.Add(value));
+            argumentParser.Parse(commandLineArguments);
+
         }
 
         bool ValidateArguments() {
@@ -122,7 +107,7 @@ namespace fitSharp.Machine.Application {
         }
 
         private int Execute() {
-            string[] tokens = configuration.GetItem<Settings>().Runner.Split(',');
+            var tokens = configuration.GetItem<Settings>().Runner.Split(',');
             if (tokens.Length > 1) {
                 configuration.GetItem<ApplicationUnderTest>().AddAssembly(tokens[1]);
             }
@@ -132,7 +117,7 @@ namespace fitSharp.Machine.Application {
         }
 
         private void ExecuteInApartment() {
-            string apartmentConfiguration = configuration.GetItem<Settings>().ApartmentState;
+            var apartmentConfiguration = configuration.GetItem<Settings>().ApartmentState;
             if (apartmentConfiguration != null) {
                 var desiredState = (ApartmentState)Enum.Parse(typeof(ApartmentState), apartmentConfiguration);
                 if (Thread.CurrentThread.GetApartmentState() != desiredState) {

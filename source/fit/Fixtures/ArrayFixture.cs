@@ -11,6 +11,7 @@ using fit.Operators;
 namespace fitlibrary {
 
     public class ArrayFixture: NamedCollectionFixtureBase {
+        public ArrayFixture(): base() {}
 
         public ArrayFixture(IEnumerable<object> theArray): base(theArray) {}
 

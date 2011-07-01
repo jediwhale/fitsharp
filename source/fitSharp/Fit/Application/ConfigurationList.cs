@@ -35,6 +35,10 @@ namespace fitSharp.Fit.Application {
             throw new ArgumentException(string.Format("Key '{0}' not found.", before));
         }
 
+        public void AddRange(IEnumerable<string> values) {
+            foreach (var value in values) Add(value);
+        }
+
         public void Add(string theValue) {
             T valueItem = Parse(theValue);
             if (valueItem == null) return;

@@ -41,7 +41,7 @@ namespace dbfit.fixture
         else if ("SYBASE".Equals(requestedEnv))
           env = MakeEnvironment("dbfit.SybaseEnvironment");
         else if ("MYSQL".Equals(requestedEnv))
-            env = MakeEnvironment("dbfit.MySqlEnvironment");
+          env = MakeEnvironment("dbfit.MySqlEnvironment");
         /*  else if ("DB2".Equals(requestedEnv))
           env = Processor.Create("DB2Environment", new TreeList<Cell>()); */
         else

@@ -1,4 +1,4 @@
-// Copyright © 2009 Syterra Software Inc.
+// Copyright © 2011 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -17,6 +17,8 @@ namespace fit.Test.FitUnit {
             myConfiguration.SetItem(typeof(TestList), new TestList());
             SetSystemUnderTest(myConfiguration);
         }
+
+        public void LoadXml(string xml) { new SuiteConfiguration(myConfiguration).LoadXml(xml); }
 
         public DoFixture Settings() {
             return new DoFixture(myConfiguration.GetItem<Settings>());

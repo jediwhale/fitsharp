@@ -6,6 +6,7 @@
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
+using fitSharp.Test.Double;
 using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Machine {
@@ -17,75 +18,35 @@ namespace fitSharp.Test.NUnit.Machine {
             configuration = new Configuration();
         }
 
-        [Test] public void MethodIsExecuted() {
-            configuration.LoadXml("<config><fitSharp.Test.NUnit.Machine.TestConfig><TestMethod>stuff</TestMethod></fitSharp.Test.NUnit.Machine.TestConfig></config>");
-            Assert.AreEqual("stuff", configuration.GetItem<TestConfig>().Data);
-        }
-
-        [Test] public void MethodWithTwoParametersIsExecuted() {
-            configuration.LoadXml("<config><fitSharp.Test.NUnit.Machine.TestConfig><TestMethod second=\"more\">stuff</TestMethod></fitSharp.Test.NUnit.Machine.TestConfig></config>");
-            Assert.AreEqual("more stuff", configuration.GetItem<TestConfig>().Data);
-        }
-
-        [Test] public void TwoFilesAreLoadedIncrementally() {
-            configuration.LoadXml("<config><fitSharp.Test.NUnit.Machine.TestConfig><TestMethod>stuff</TestMethod></fitSharp.Test.NUnit.Machine.TestConfig></config>");
-            configuration.LoadXml("<config><fitSharp.Test.NUnit.Machine.TestConfig><Append>more</Append></fitSharp.Test.NUnit.Machine.TestConfig></config>");
-            Assert.AreEqual("stuffmore", configuration.GetItem<TestConfig>().Data);
-        }
-
-        [Test] public void ChangesDontShowInCopy() {
-            var test = new TestConfig {Data = "stuff"};
+        [Test] public void CopyableChangesDontShowInCopy() {
+            var test = new FullTestConfig {Data = "stuff"};
             configuration.SetItem(test.GetType(), test);
             var copy = new Configuration(configuration);
-            configuration.GetItem<TestConfig>().Data = "other";
-            Assert.AreEqual("stuff", copy.GetItem<TestConfig>().Data);
-            Assert.AreEqual("other", configuration.GetItem<TestConfig>().Data);
+            configuration.GetItem<FullTestConfig>().Data = "other";
+            Assert.AreEqual("stuff", copy.GetItem<FullTestConfig>().Data);
+            Assert.AreEqual("other", configuration.GetItem<FullTestConfig>().Data);
         }
 
-        [Test] public void AliasTypeIsUsed() {
-            configuration.LoadXml("<config><fit.Settings><inputFolder>stuff</inputFolder></fit.Settings></config>");
-            Assert.AreEqual("stuff", configuration.GetItem<Settings>().InputFolder);
+        [Test] public void OtherChangesShowInCopy() {
+            var test = new SimpleTestConfig {Data = "stuff"};
+            configuration.SetItem(test.GetType(), test);
+            var copy = new Configuration(configuration);
+            configuration.GetItem<SimpleTestConfig>().Data = "other";
+            Assert.AreEqual("other", copy.GetItem<SimpleTestConfig>().Data);
+            Assert.AreEqual("other", configuration.GetItem<SimpleTestConfig>().Data);
         }
 
-        [Test] public void AliasMethodIsUsed() {
-            configuration.LoadXml("<config><fit.Namespaces><add>fitSharp.Test.NUnit.Machine</add></fit.Namespaces></config>");
-            Assert.IsNotNull(configuration.GetItem<ApplicationUnderTest>().FindType(new IdentifierName("ConfigurationTest")));
-        }
 
         [Test] public void SetUpTearDownIsExecuted() {
-            configuration.SetItem(typeof(TestConfig), new TestConfig());
+            configuration.SetItem(typeof(FullTestConfig), new FullTestConfig());
             configuration.SetUp();
-            Assert.AreEqual("setup", configuration.GetItem<TestConfig>().Data);
+            Assert.AreEqual("setup", configuration.GetItem<FullTestConfig>().Data);
             configuration.TearDown();
-            Assert.AreEqual("teardown", configuration.GetItem<TestConfig>().Data);
+            Assert.AreEqual("teardown", configuration.GetItem<FullTestConfig>().Data);
         }
     }
 
-    public class TestConfig: Copyable, SetUpTearDown {
+    public class SimpleTestConfig {
         public string Data;
-
-        public void TestMethod(string data) {
-            Data = data;
-        }
-
-        public void TestMethod(string data, string more) {
-            Data = more + " " + data;
-        }
-
-        public void Append(string data) {
-            Data += data;
-        }
-
-        public Copyable Copy() {
-            return new TestConfig {Data = Data};
-        }
-
-        public void SetUp() {
-            Data = "setup";
-        }
-
-        public void TearDown() {
-            Data = "teardown";
-        }
     }
 }

@@ -8,13 +8,13 @@ grant all privileges on dbfit.* to dbfit_user@localhost identified by 'password'
 
 grant all privileges on dbfit.* to dbfit_user@127.0.0.1 identified by 'password';
 
-grant select on mysql.* to dbfit_user;
+grant select on mysql.* to dbfit_user@localhost;
 
 flush privileges;
 
 use dbfit;
 
-create table users(name varchar(50) unique, username varchar(50), userid int auto_increment primary key) type=InnoDB;
+create table users(name varchar(50) unique, username varchar(50), userid int auto_increment primary key);
 
 CREATE PROCEDURE ConcatenateStrings (IN firststring varchar(100), IN secondstring varchar(100), OUT concatenated varchar(200)) set concatenated = concat(firststring , concat( ' ' , secondstring ));
 

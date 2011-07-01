@@ -1,4 +1,4 @@
-// Copyright © 2009 Syterra Software Inc.
+// Copyright © 2011 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -14,64 +14,59 @@ using fitSharp.Machine.Engine;
 namespace fit.Runner {
     public class FolderRunner: Runnable {
 
-        public int Run(string[] commandLineArguments, Configuration configuration, ProgressReporter reporter) {
-            DateTime now = DateTime.Now;
+        public int Run(IList<string> commandLineArguments, Configuration configuration, ProgressReporter reporter) {
+            var now = DateTime.Now;
             myProgressReporter = reporter;
-            int result = Run(configuration, commandLineArguments);
-            reporter.Write(string.Format("\n{0}, time: {1}\n", Results, DateTime.Now - now));
+            var result = Run(configuration, commandLineArguments);
+            //todo: to suiterunner?
+            if (!configuration.GetItem<Settings>().DryRun)
+                reporter.Write(string.Format("\n{0}, time: {1}\n", Results, DateTime.Now - now));
             return result;
-        }
-
-        private int Run(Configuration configuration, ICollection<string> theArguments) {
-            ParseArguments(configuration, theArguments);
-            myRunner = new SuiteRunner(configuration, myProgressReporter);
-            myRunner.Run(
-                new StoryTestFolder(configuration, new FileSystemModel(configuration.GetItem<Settings>().CodePageNumber)),
-                string.Empty);
-            return myRunner.TestCounts.FailCount;
         }
 
         public string Results {get { return myRunner.TestCounts.Description; }}
 
-        private static void ParseArguments(Configuration configuration, ICollection<string> theArguments) {
-            if (theArguments.Count == 0) {
+
+        ProgressReporter myProgressReporter;
+        SuiteRunner myRunner;
+        string selectedFile;
+
+        int Run(Configuration configuration, IList<string> arguments) {
+            ParseArguments(configuration, arguments);
+            myRunner = new SuiteRunner(configuration, myProgressReporter);
+            myRunner.Run(
+                CreateStoryTestFolder(configuration),
+                selectedFile);
+            return myRunner.TestCounts.FailCount;
+        }
+
+        void ParseArguments(Configuration configuration, IList<string> arguments) {
+            if (arguments.Count == 0) {
                 return;
             }
-            string lastSwitch = string.Empty;
-            foreach (string argument in theArguments) {
-                if (argument.StartsWith("-")) {
-                    lastSwitch = argument.Substring(1).ToLower();
-                }
-                else {
-                    switch (lastSwitch) {
-                        case "i":
-                            configuration.GetItem<Settings>().InputFolder = argument;
-                            break;
-                        case "o":
-                            configuration.GetItem<Settings>().OutputFolder = argument;
-                            break;
-                        case "x":
-                            foreach (string pattern in argument.Split(';')) {
-                                configuration.GetItem<FileExclusions>().Add(pattern);
-                            }
-                            break;
-                    }
-                }
-            }
+            var argumentParser = new ArgumentParser();
+            argumentParser.AddSwitchHandler("d", () => configuration.GetItem<Settings>().DryRun = true);
+            argumentParser.AddArgumentHandler("i", value => configuration.GetItem<Settings>().InputFolder = value);
+            argumentParser.AddArgumentHandler("o", value => configuration.GetItem<Settings>().OutputFolder = value);
+            argumentParser.AddArgumentHandler("s", value => selectedFile = value);
+            argumentParser.AddArgumentHandler("x", value => configuration.GetItem<FileExclusions>().AddRange(value.Split(';')));
+            argumentParser.AddArgumentHandler("t", value => configuration.GetItem<Settings>().TagList = value);
+
+            argumentParser.Parse(arguments);
             if (configuration.GetItem<Settings>().InputFolder == null)
                 throw new FormatException("Missing input folder");
             if (configuration.GetItem<Settings>().OutputFolder == null)
                 throw new FormatException("Missing output folder");
         }
+    
+        StoryTestFolder CreateStoryTestFolder(Configuration configuration) {
+            var storyTestFolder = new StoryTestFolder(configuration, new FileSystemModel(configuration.GetItem<Settings>().CodePageNumber));
 
-        //private static void LoadAssemblies(string theAssemblyList) {
-        //    foreach (string assemblyName in theAssemblyList.Split(';')) {
-        //        //Configuration.Instance.Assemblies.Add(assemblyName);
-        //        Configuration.Instance.ApplicationUnderTest.AddAssembly(assemblyName);
-        //    }
-        //}
-	    
-        private ProgressReporter myProgressReporter;
-        private SuiteRunner myRunner;
+            string tagList = configuration.GetItem<Settings>().TagList;
+            if (!string.IsNullOrEmpty(tagList))
+                storyTestFolder.AddPageFilter(new TagFilter(tagList));
+
+            return storyTestFolder;
+        }
     }
 }

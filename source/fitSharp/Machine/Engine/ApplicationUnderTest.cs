@@ -43,6 +43,22 @@ namespace fitSharp.Machine.Engine {
             namespaces.Remove(namespaceName.Trim());
         }
 
+        public RuntimeType FindType(string exactTypename) {
+            return FindType(new ExactNameMatcher(exactTypename));
+        }
+
+        class ExactNameMatcher: NameMatcher {
+            public ExactNameMatcher(string matchName) {
+                MatchName = matchName;
+            }
+
+            public bool Matches(string candidateName) {
+                return MatchName == candidateName;
+            }
+
+            public string MatchName {get; private set; }
+        }
+
         public RuntimeType FindType(NameMatcher typeName) {
             Type type = Type.GetType(typeName.MatchName);
             if (type == null) {

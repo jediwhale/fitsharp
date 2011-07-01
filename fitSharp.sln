@@ -32,7 +32,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dbfitOracle", "source\dbfit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dbfitSybase", "source\dbfitSybase\dbfitSybase.csproj", "{33B34718-6151-4D91-B27F-EB8FD64CB66B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dbfitMySql", "source\dbfitMySql\dbfitMySql.csproj", "{97391EED-1EF8-44C2-A534-887C4E1C7109}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dbfitMySql", "source\dbfitMySql\dbfitMySql.csproj", "{BCC642FC-1459-47E4-985E-AA6BFE10A6E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -96,6 +96,10 @@ Global
 		{97391EED-1EF8-44C2-A534-887C4E1C7109}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{97391EED-1EF8-44C2-A534-887C4E1C7109}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{97391EED-1EF8-44C2-A534-887C4E1C7109}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCC642FC-1459-47E4-985E-AA6BFE10A6E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCC642FC-1459-47E4-985E-AA6BFE10A6E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCC642FC-1459-47E4-985E-AA6BFE10A6E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCC642FC-1459-47E4-985E-AA6BFE10A6E5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

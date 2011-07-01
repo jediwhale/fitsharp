@@ -15,7 +15,6 @@ namespace fit.Service {
         public Operators() {
             Add(new ComposeShowAsOperator(), 0);
 
-            Add(new InvokeDirect(), 0);
             Add(new InvokeProcedure(), 0);
 
             Add(new ComposeStoryTestString(), 0);
