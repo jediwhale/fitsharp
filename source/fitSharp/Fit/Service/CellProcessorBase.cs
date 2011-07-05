@@ -35,9 +35,9 @@ namespace fitSharp.Fit.Service {
 
         public override TypedValue Parse(System.Type type, TypedValue instance, Tree<Cell> parameters) {
             Cell cell = parameters.Value;
-            if (cell != null && cell.Value.Type == type) return cell.Value;
+            if (cell != null && cell.ParsedValue.Type == type) return cell.ParsedValue;
             TypedValue parsedValue = base.Parse(type, instance, parameters);
-            if (cell != null) cell.Value = parsedValue;
+            if (cell != null) cell.ParsedValue = parsedValue;
             return parsedValue;
         }
 

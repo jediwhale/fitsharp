@@ -1,20 +1,23 @@
-// Modified or written by Object Mentor, Inc. for inclusion with FitNesse.
-// Copyright (c) 2002 Cunningham & Cunningham, Inc.
-// Released under the terms of the GNU General Public License version 2 or later.
+// Copyright © 2011 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+// This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
+// This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
 using System;
 using System.Collections;
+using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
 
 namespace fitnesse.fitserver
 {
 	public class PathParser
 	{
-		private ArrayList assemblyPaths = new ArrayList();
-		private string configFilePath;
+		private readonly ArrayList assemblyPaths = new ArrayList();
+		private readonly string configFilePath;
 
 		public PathParser(string pathNames)
 		{
-			if (pathNames != null && pathNames.Length > 0)
+			if (!string.IsNullOrEmpty(pathNames))
 				foreach (string pathName in pathNames.Split(';'))
 				{
 					if (pathName.EndsWith("config"))
@@ -50,7 +53,7 @@ namespace fitnesse.fitserver
 	            configuration.GetItem<ApplicationUnderTest>().AddAssembly(assemblyPath.Replace("\"", string.Empty));
 	        }
 	        if (HasConfigFilePath())
-	            AppDomain.CurrentDomain.SetData("APP_CONFIG_FILE", ConfigFilePath);
+	            configuration.GetItem<Settings>().AppConfigFile = configFilePath;
 	    }
 	}
 }

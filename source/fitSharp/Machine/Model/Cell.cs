@@ -28,6 +28,6 @@ namespace fitSharp.Machine.Model {
         string GetAttribute(CellAttribute key);
         void SetAttribute(CellAttribute key, string value);
         void AddToAttribute(CellAttribute key, string value);
-        TypedValue Value { get; set; }
+        TypedValue ParsedValue { get; set; }
     }
 }
