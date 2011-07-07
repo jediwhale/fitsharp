@@ -22,7 +22,7 @@ namespace fit.Test.NUnit {
         public void SetUp()
         {
             runner = new TestRunner();
-            configuration = new Configuration();
+            configuration = new TypeDictionary();
         }
 
         [TearDown]
@@ -59,7 +59,9 @@ namespace fit.Test.NUnit {
             //todo: use a mock so we can test this
             //Assert.IsTrue(Configuration.Instance.Assemblies.HasValue("fit.dll"));
             //Assert.IsTrue(Configuration.Instance.Assemblies.HasValue("other.dll"));
-            Assert.AreEqual("fit.config", Path.GetFileName(AppDomain.CurrentDomain.GetData("APP_CONFIG_FILE").ToString()));
+            var appDomainSetup = configuration.GetItem<AppDomainSetup>();
+            appDomainSetup.ApplicationBase = AppDomain.CurrentDomain.BaseDirectory;
+            Assert.AreEqual("fit.config", Path.GetFileName(appDomainSetup.ConfigurationFile));
             Assert.AreEqual(runner.resultWriter.GetType(), typeof(NullResultWriter));
         }
 

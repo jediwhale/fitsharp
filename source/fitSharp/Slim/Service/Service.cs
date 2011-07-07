@@ -16,7 +16,7 @@ namespace fitSharp.Slim.Service {
         private readonly SlimOperators operators;
         private readonly Stack<TypedValue> libraryInstances = new Stack<TypedValue>();
 
-        public Service(): this(new Configuration()) {}
+        public Service(): this(new TypeDictionary()) {} //todo: test only -> factory
 
         public Service(Configuration configuration) : base(configuration) {
             operators = configuration.GetItem<SlimOperators>();

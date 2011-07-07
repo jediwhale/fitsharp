@@ -5,7 +5,6 @@
 
 using System;
 using System.Collections;
-using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
 
 namespace fitnesse.fitserver
@@ -53,7 +52,7 @@ namespace fitnesse.fitserver
 	            configuration.GetItem<ApplicationUnderTest>().AddAssembly(assemblyPath.Replace("\"", string.Empty));
 	        }
 	        if (HasConfigFilePath())
-	            configuration.GetItem<Settings>().AppConfigFile = configFilePath;
+	            configuration.GetItem<AppDomainSetup>().ConfigurationFile = configFilePath; //todo: needs to be done before shell.runinnewdomain - runnable has parseargs method?
 	    }
 	}
 }

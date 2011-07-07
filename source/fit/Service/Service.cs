@@ -13,7 +13,7 @@ using fitSharp.Machine.Model;
 
 namespace fit.Service {
     public class Service: CellProcessorBase {
-        public Service(): this(new Configuration()) {}
+        public Service(): this(new TypeDictionary()) {} // todo: test only -> factory
 
         public Service(Configuration configuration): base(configuration, configuration.GetItem<Operators>()) {
             ApplicationUnderTest.AddNamespace("fit");

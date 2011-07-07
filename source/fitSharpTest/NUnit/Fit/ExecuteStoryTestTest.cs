@@ -33,13 +33,13 @@ namespace fitSharp.Test.NUnit.Fit {
         }
 
         [Test] public void SetsUpConfiguration() {
-            processor.Configuration.SetItem(typeof(SampleItem), new SampleItem());
+            processor.Configuration.GetItem<SampleItem>();
             execute.DoTables(tables);
             Assert.IsTrue(processor.Configuration.GetItem<SampleItem>().IsSetUp);
         }
 
         [Test] public void TearsDownConfiguration() {
-            processor.Configuration.SetItem(typeof(SampleItem), new SampleItem());
+            processor.Configuration.GetItem<SampleItem>();
             execute.DoTables(tables);
             Assert.IsTrue(processor.Configuration.GetItem<SampleItem>().IsTearDown);
         }

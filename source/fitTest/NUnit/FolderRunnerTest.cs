@@ -14,7 +14,7 @@ namespace fit.Test.NUnit {
         Configuration configuration;
 
         [SetUp] public void SetUp() {
-            configuration = new Configuration();
+            configuration = new TypeDictionary();
             configuration.GetItem<Settings>().DryRun = false;
             configuration.GetItem<Settings>().InputFolder = "in";
             configuration.GetItem<Settings>().OutputFolder = "out";

@@ -19,7 +19,7 @@ namespace fit.Test.NUnit {
         FolderTestModel folders;
 
         [SetUp] public void SetUp() {
-            config = new Configuration();
+            config = new TypeDictionary();
             config.GetItem<Settings>().InputFolder = "in";
             config.GetItem<Settings>().OutputFolder = "out";
 

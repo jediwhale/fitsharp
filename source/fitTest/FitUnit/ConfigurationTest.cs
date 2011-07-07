@@ -13,8 +13,8 @@ namespace fit.Test.FitUnit {
     public class ConfigurationTest: DoFixture {
         
         public ConfigurationTest() {
-            myConfiguration = new Configuration();
-            myConfiguration.SetItem(typeof(TestList), new TestList());
+            myConfiguration = new TypeDictionary();
+            myConfiguration.GetItem<TestList>();
             SetSystemUnderTest(myConfiguration);
         }
 
@@ -25,7 +25,7 @@ namespace fit.Test.FitUnit {
         }
 
         public void SaveCopy() {
-            mySavedCopy = new Configuration(myConfiguration);
+            mySavedCopy = myConfiguration.Copy();
         }
 
         public void RestoreCopy() {

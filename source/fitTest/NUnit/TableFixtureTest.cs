@@ -29,7 +29,7 @@ namespace fit.Test.NUnit
 			builder.Append("<tr><td>0,0</td><td>0,1</td><td>0,2</td><td>37</td><td></td></tr>");
 			builder.Append("</table>");
 		    myStoryTest = new StoryTest(builder.Parse, SimpleWriter);
-		    myStoryTest.Execute(new Configuration());
+		    myStoryTest.Execute(new TypeDictionary());
 		}
 
 		[TearDown]

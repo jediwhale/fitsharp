@@ -11,7 +11,7 @@ namespace fitSharp.Machine.Engine {
     public delegate void DoOperation<in T>(T anOperator);
     public class Operators<T, P> where P: class, Processor<T> {
         private readonly List<List<Operator<T, P>>> operators = new List<List<Operator<T, P>>>();
-        protected readonly Configuration createConfiguration = new Configuration();
+        protected readonly Configuration createConfiguration = new TypeDictionary();
 
         public Operators() {
             Add(new InvokeDefault<T,P>(), 0);

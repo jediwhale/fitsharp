@@ -29,7 +29,7 @@ namespace fit {
         }
 
         public void Execute(Configuration configuration) {
-		    var newConfig = new Configuration(configuration);
+		    var newConfig = configuration.Copy();
             ExecuteOnConfiguration(newConfig);
         }
 

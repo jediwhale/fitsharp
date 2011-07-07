@@ -74,6 +74,7 @@
     <Compile Include="Machine\Engine\Logging.cs" />
     <Compile Include="Machine\Engine\ApplicationDomain.cs" />
     <Compile Include="Machine\Engine\ParameterList.cs" />
+    <Compile Include="Machine\Engine\TypeDictionary.cs" />
     <Compile Include="Machine\Engine\Types.cs" />
     <Compile Include="Machine\Model\CellBase.cs" />
     <Compile Include="Fit\Model\CellSubstring.cs" />
@@ -139,6 +140,7 @@
     <Compile Include="Machine\Engine\ApplicationUnderTest.cs" />
     <Compile Include="Machine\Engine\BasicProcessor.cs" />
     <Compile Include="Machine\Engine\ParseEnum.cs" />
+    <Compile Include="Machine\Model\ObjectExtension.cs" />
     <Compile Include="Machine\Model\SetUp.cs" />
     <Compile Include="Parser\Characters.cs" />
     <Compile Include="Parser\CharacterType.cs" />

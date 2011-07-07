@@ -31,7 +31,7 @@ namespace fitSharp.Test.NUnit.Slim {
         }
 
         [Test] public void OperatorIsAddedFromConfiguration() {
-            var configuration = new Configuration();
+            var configuration = new TypeDictionary();
             new SuiteConfiguration(configuration).LoadXml("<config><fitSharp.Slim.Service.Service><addOperator>fitSharp.Test.NUnit.Slim.SampleOperator</addOperator></fitSharp.Slim.Service.Service></config>");
             var statement = new Instructions().MakeCommand("sampleCommand");
             service = new Service(configuration);

@@ -73,7 +73,7 @@
     <Compile Include="NUnit\IO\SocketStreamTest.cs" />
     <Compile Include="Double\TestClock.cs" />
     <Compile Include="NUnit\Machine\ApplicationUnderTestTest.cs" />
-    <Compile Include="NUnit\Machine\ConfigurationTest.cs" />
+    <Compile Include="NUnit\Machine\TypeDictionaryTest.cs" />
     <Compile Include="NUnit\Machine\CreateDefaultTest.cs" />
     <Compile Include="NUnit\Machine\CultureTest.cs" />
     <Compile Include="NUnit\Machine\LoggingTest.cs" />

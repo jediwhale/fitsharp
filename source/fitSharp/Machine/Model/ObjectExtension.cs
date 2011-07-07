@@ -5,13 +5,11 @@
 
 using System;
 
-namespace fitSharp.Machine.Engine {
-    public interface Configuration {
-        Configuration Copy();
-        void Apply(Action<object> action);
-        bool HasItem<T>();
-        T GetItem<T>() where T: new();
-        object GetItem(string typeName);
+namespace fitSharp.Machine.Model {
+    public static class ObjectExtension {
+        public static void As<T>(this object item, Action<T> action) where T: class {
+            var itemAsT = item as T;
+            if (itemAsT != null) action(itemAsT);
+        }
     }
-   
 }

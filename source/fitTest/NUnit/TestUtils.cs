@@ -19,7 +19,7 @@ namespace fit.Test.NUnit {
     {
         public static Configuration InitAssembliesAndNamespaces()
         {
-            var configuration = new Configuration();
+            var configuration = new TypeDictionary();
             configuration.GetItem<ApplicationUnderTest>().AddAssembly(Assembly.GetAssembly(typeof (TestUtils)).CodeBase);
             configuration.GetItem<ApplicationUnderTest>().AddNamespace("fit.Test.NUnit");
             configuration.GetItem<ApplicationUnderTest>().AddNamespace("fit.Test.Acceptance");

@@ -33,9 +33,9 @@ namespace fitSharp.Fit.Service {
 			processor.TestStatus.Summary["run elapsed time"] = new ElapsedTime();
             Cell heading = tables.Branches[0].Branches[0].Branches[0].Value;
             try {
-                processor.Configuration.SetUp();
+                processor.Configuration.Apply(i => i.As<SetUpTearDown>(s => s.SetUp()));
                 InterpretTables(tables);
-                processor.Configuration.TearDown();
+                processor.Configuration.Apply(i => i.As<SetUpTearDown>(s => s.TearDown()));
             }
             catch (System.Exception e) {
                 processor.TestStatus.MarkException(heading, e);

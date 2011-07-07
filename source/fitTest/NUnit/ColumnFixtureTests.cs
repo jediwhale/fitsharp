@@ -33,7 +33,7 @@ namespace fit.Test.NUnit {
 
         void RunTest(Parse parse) {
             var test = new StoryTest(parse, (t,c) => { resultCounts = c;});
-            test.Execute(new Configuration());
+            test.Execute(new TypeDictionary());
         }
 
         [Test]
