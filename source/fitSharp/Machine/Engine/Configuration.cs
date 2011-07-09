@@ -13,5 +13,4 @@ namespace fitSharp.Machine.Engine {
         T GetItem<T>() where T: new();
         object GetItem(string typeName);
     }
-   
 }
