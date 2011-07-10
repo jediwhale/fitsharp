@@ -3,56 +3,27 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-using System;
-using System.Collections;
-using fitSharp.Machine.Engine;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace fitnesse.fitserver
-{
-	public class PathParser
-	{
-		private readonly ArrayList assemblyPaths = new ArrayList();
-		private readonly string configFilePath;
+namespace fitnesse.fitserver {
+	public class PathParser {
 
-		public PathParser(string pathNames)
-		{
+		public PathParser(string pathNames) {
 			if (!string.IsNullOrEmpty(pathNames))
-				foreach (string pathName in pathNames.Split(';'))
-				{
-					if (pathName.EndsWith("config"))
-					{
-						if (configFilePath == null)
-							configFilePath = pathName;
-						else
-							throw new ArgumentException("Please check the path. There should only be one config file on the path and there are at least two.");
-					}
-					else
-						assemblyPaths.Add(pathName);
+				foreach (var pathName in pathNames.Split(';').Where(IsValid)) {
+				    assemblyPaths.Add(pathName.Replace("\"", string.Empty));
 				}
 		}
 
-		public IList AssemblyPaths
-		{
+	    public IEnumerable<string> AssemblyPaths {
 			get { return assemblyPaths; }
 		}
 
-		public bool HasConfigFilePath()
-		{
-			return configFilePath != null;
-		}
-
-		public string ConfigFilePath
-		{
-			get { return configFilePath; }
-		}
-
-	    public void AddAssemblies(Configuration configuration) {
-	        foreach (string assemblyPath in AssemblyPaths) {
-	            if (assemblyPath == "defaultPath") continue;
-	            configuration.GetItem<ApplicationUnderTest>().AddAssembly(assemblyPath.Replace("\"", string.Empty));
-	        }
-	        if (HasConfigFilePath())
-	            configuration.GetItem<AppDomainSetup>().ConfigurationFile = configFilePath; //todo: needs to be done before shell.runinnewdomain - runnable has parseargs method?
+	    static bool IsValid(string pathName) {
+	        return !pathName.EndsWith("config") && pathName != "defaultPath";
 	    }
+
+		readonly List<string> assemblyPaths = new List<string>();
 	}
 }

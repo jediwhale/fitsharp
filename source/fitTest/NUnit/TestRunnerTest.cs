@@ -61,7 +61,6 @@ namespace fit.Test.NUnit {
             //Assert.IsTrue(Configuration.Instance.Assemblies.HasValue("other.dll"));
             var appDomainSetup = configuration.GetItem<AppDomainSetup>();
             appDomainSetup.ApplicationBase = AppDomain.CurrentDomain.BaseDirectory;
-            Assert.AreEqual("fit.config", Path.GetFileName(appDomainSetup.ConfigurationFile));
             Assert.AreEqual(runner.resultWriter.GetType(), typeof(NullResultWriter));
         }
 

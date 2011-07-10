@@ -4,6 +4,8 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using fitnesse.fitserver;
 using NUnit.Framework;
 
@@ -15,9 +17,7 @@ namespace fit.Test.NUnit {
         public void TestEmptyString()
         {
             PathParser parser = new PathParser("");
-            Assert.AreEqual(0, parser.AssemblyPaths.Count);
-            Assert.IsFalse(parser.HasConfigFilePath());
-            Assert.IsNull(parser.ConfigFilePath);
+            Assert.AreEqual(0, parser.AssemblyPaths.Count());
         }
 
         [Test]
@@ -25,8 +25,6 @@ namespace fit.Test.NUnit {
         {
             PathParser parser = new PathParser(null);
             verifyAssemblyPaths(new string[]{}, parser.AssemblyPaths);
-            Assert.IsFalse(parser.HasConfigFilePath());
-            Assert.IsNull(parser.ConfigFilePath);
         }
 
         [Test]
@@ -34,9 +32,7 @@ namespace fit.Test.NUnit {
         {
             string path = "d:\\path\\to\\assembly.dll";
             PathParser parser = new PathParser(path);
-            verifyAssemblyPaths(new string[]{path}, parser.AssemblyPaths);
-            Assert.IsFalse(parser.HasConfigFilePath());
-            Assert.IsNull(parser.ConfigFilePath);
+            verifyAssemblyPaths(new []{path}, parser.AssemblyPaths);
         }
 
         [Test]
@@ -46,9 +42,7 @@ namespace fit.Test.NUnit {
             string path2 = "d:\\path\\to\\another\\assembly.dll";
             string paths = path1 + ";" + path2;
             PathParser parser = new PathParser(paths);
-            verifyAssemblyPaths(new string[]{path1, path2}, parser.AssemblyPaths);
-            Assert.IsFalse(parser.HasConfigFilePath());
-            Assert.IsNull(parser.ConfigFilePath);
+            verifyAssemblyPaths(new []{path1, path2}, parser.AssemblyPaths);
         }
 
         [Test]
@@ -57,8 +51,6 @@ namespace fit.Test.NUnit {
             string path = "d:\\path\\to\\assembly.dll.config";
             PathParser parser = new PathParser(path);
             verifyAssemblyPaths(new string[]{}, parser.AssemblyPaths);
-            Assert.IsTrue(parser.HasConfigFilePath());
-            Assert.AreEqual(path, parser.ConfigFilePath);
         }
 
         [Test]
@@ -67,18 +59,16 @@ namespace fit.Test.NUnit {
             string path = "fake.config";
             PathParser parser = new PathParser(path);
             verifyAssemblyPaths(new string[]{}, parser.AssemblyPaths);
-            Assert.IsTrue(parser.HasConfigFilePath());
-            Assert.AreEqual(path, parser.ConfigFilePath);
         }
 
         [Test]
-        [ExpectedException("System.ArgumentException", ExpectedMessage = "Please check the path. There should only be one config file on the path and there are at least two.")]
         public void TestExceptionOnSecondConfigFile()
         {
             string path1 = "d:\\path\\to\\assembly.dll.config";
             string path2 = "d:\\path\\to\\another\\assembly.dll.config";
             string paths = path1 + ";" + path2;
-            new PathParser(paths);
+            var parser = new PathParser(paths);
+            verifyAssemblyPaths(new string[]{}, parser.AssemblyPaths);
         }
 
         public void TestOneConfigFileAndOneAssemblyFile()
@@ -87,15 +77,13 @@ namespace fit.Test.NUnit {
             string configFilePath = "d:\\path\\to\\assembly.dll.config";
             string paths = assemblyPath + ";" + configFilePath;
             PathParser parser = new PathParser(paths);
-            verifyAssemblyPaths(new string[]{assemblyPath}, parser.AssemblyPaths);
-            Assert.IsTrue(parser.HasConfigFilePath());
-            Assert.AreEqual(configFilePath, parser.ConfigFilePath);
+            verifyAssemblyPaths(new []{assemblyPath}, parser.AssemblyPaths);
         }
 
-        private void verifyAssemblyPaths(string[] expected, IList list2)
+        private void verifyAssemblyPaths(string[] expected, IEnumerable<string> list2)
         {
             IList list1 = new ArrayList(expected);
-            Assert.AreEqual(list1.Count, list2.Count);
+            Assert.AreEqual(list1.Count, list2.Count());
             foreach (object obj in list1)
                 Assert.IsTrue(list2.Contains(obj));
         }

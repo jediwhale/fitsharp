@@ -17,16 +17,14 @@
 </table>
 </div>
 </div>
-The PathParser is used by the .NET FitServer to parse the path passed to it from FitNesse. You can include a config file on the path, and .NET FitServer will use that config file during the test run.<br><br>Try just one path entry...<br><table border="1" cellspacing="0">
+The PathParser is used by the .NET FitServer to parse the path passed to it from FitNesse. A config file on the path is ignored. This method of specifying an app config file is deprecated as its implementation was unreliable.  App config files can be reliably specified with a -a switch or in a suite configuration file.<br><br>Try just one path entry...<br><table border="1" cellspacing="0">
 <tr><td colspan="3">path parser fixture</td>
 </tr>
 <tr><td>path string</td>
 <td>assembly paths?</td>
-<td>config file path?</td>
 </tr>
 <tr><td>c:\path\to\assembly.dll</td>
 <td>c:\path\to\assembly.dll</td>
-<td>null</td>
 </tr>
 </table>
 <br>Now two...<br><table border="1" cellspacing="0">
@@ -34,11 +32,9 @@ The PathParser is used by the .NET FitServer to parse the path passed to it from
 </tr>
 <tr><td>path string</td>
 <td>assembly paths?</td>
-<td>config file path?</td>
 </tr>
 <tr><td>c:\path\to\assembly.dll;c:\path\to\other\assembly.dll</td>
 <td>c:\path\to\assembly.dll,c:\path\to\other\assembly.dll</td>
-<td>null</td>
 </tr>
 </table>
 <br>Now one assembly and one config file<br><table border="1" cellspacing="0">
@@ -46,11 +42,9 @@ The PathParser is used by the .NET FitServer to parse the path passed to it from
 </tr>
 <tr><td>path string</td>
 <td>assembly paths?</td>
-<td>config file path?</td>
 </tr>
 <tr><td>c:\path\to\assembly.dll;c:\path\to\assembly.config</td>
 <td>c:\path\to\assembly.dll</td>
-<td>c:\path\to\assembly.config</td>
 </tr>
 </table>
 <br><div class="teardown">
