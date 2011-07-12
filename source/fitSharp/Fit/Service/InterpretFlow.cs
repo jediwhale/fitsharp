@@ -24,7 +24,7 @@ namespace fitSharp.Fit.Service {
             this.interpreter = interpreter;
             this.processor = processor;
 
-            if (interpreter.TestStatus.IsAbandoned) return;
+            if (processor.TestStatus.IsAbandoned) return;
             hasFinishedTable = false;
             for (var i = 0; i < table.Branches.Count; i++) {
                 if (i < rowsToSkip) continue;
@@ -70,7 +70,7 @@ namespace fitSharp.Fit.Service {
                     else {
                         new CellOperationImpl(processor)
                             .Wrap(result)
-                            .For<Interpreter>(i => ProcessRestOfTable(i, processor.MakeCell(string.Empty, table.Branches.Skip(rowNumber))));
+                            .As<Interpreter>(i => ProcessRestOfTable(i, processor.MakeCell(string.Empty, table.Branches.Skip(rowNumber))));
                     }
                 }
             }
@@ -86,9 +86,9 @@ namespace fitSharp.Fit.Service {
         }
 
         void ProcessRestOfTable(Interpreter childInterpreter, Tree<Cell> theRestOfTheRows) {
-            childInterpreter.Prepare(processor, interpreter, theRestOfTheRows.Branches[0]);
+            processor.TestStatus.Parent = interpreter;
             try {
-                ExecuteStoryTest.DoTable(theRestOfTheRows, childInterpreter, false);
+                ExecuteStoryTest.DoTable(theRestOfTheRows, childInterpreter, processor, false);
             }
             catch (System.Exception e) {
                 processor.TestStatus.MarkException(theRestOfTheRows.Branches[0].Branches[0].Value, e);

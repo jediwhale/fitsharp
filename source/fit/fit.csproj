@@ -55,7 +55,6 @@
     <Compile Include="Operators\ComposeStoryTestString.cs" />
     <Compile Include="Operators\ComposeTextStoryTestString.cs" />
     <Compile Include="Operators\NamedMatchStrategy.cs" />
-    <Compile Include="Operators\ParseInterpreter.cs" />
     <Compile Include="Operators\InvokeProcedure.cs" />
     <Compile Include="Runner\FitSocket.cs" />
     <Compile Include="Runner\FolderRunner.cs" />

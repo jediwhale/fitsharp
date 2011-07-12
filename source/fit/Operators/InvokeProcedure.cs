@@ -23,8 +23,7 @@ namespace fit.Operators {
         }
 
         private TypedValue Invoke(Parse procedure, TypedValue target, Tree<Cell> parameterValues) {
-            var doFixture = new CellTree("fitlibrary.DoFixture");
-            var fixture = Processor.Parse(typeof (Interpreter), target, doFixture).GetValue<FlowInterpreter>();
+            var fixture = ExecuteStoryTest.MakeDefaultFlowInterpreter(Processor, target);
 
             var parameters = new Parameters(procedure.Parts, parameterValues);
             var body = procedure.Parts.More.Parts.Parts != null

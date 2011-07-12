@@ -11,19 +11,8 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Fixtures {
     public class Define: Interpreter {
-        public TestStatus TestStatus { get; private set; }
-
-        private CellProcessor processor;
-
-        public void Prepare(CellProcessor processor, Interpreter parent, Tree<Cell> table) {
-            this.processor = processor;
-        }
-
-        public Define() { TestStatus = new TestStatus(); }
-
-        public bool IsVisible { get { return false; } }
-
-        public void Interpret(Tree<Cell> table) {
+        public void Interpret(CellProcessor processor, Tree<Cell> table) {
+            processor.TestStatus.TableCount--;
             var name = processor.ParseTree<Cell, MemberName>(new EnumeratedTree<Cell>(table.Branches[0].Branches.Skip(1).Alternate()));
             processor.Store(new Procedure(name.ToString(), table));
         }

@@ -16,19 +16,19 @@ namespace fitSharp.Machine.Model {
         public T GetValue<T>() { return (T)Value;} 
         public T GetValueAs<T>() where T: class { return Value as T;}
 
-        public void For<T>(Action<T> action, Action notAction) where T: class {
+        public void As<T>(Action<T> action, Action notAction) where T: class {
             if (!HasValue) return;
             var valueAs = GetValueAs<T>();
             if (valueAs != null) action(valueAs);
             else notAction();
         }
 
-        public void For<T>(Action<T> action) where T: class {
-            For(action, () => { });
+        public void As<T>(Action<T> action) where T: class {
+            As(action, () => { });
         }
 
-        public void Not<T>(Action notAction) where T: class {
-            For<T>(t => {}, notAction);
+        public void AsNot<T>(Action notAction) where T: class {
+            As<T>(t => {}, notAction);
         }
 
         public Type Type { get; private set; }

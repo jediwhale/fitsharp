@@ -5,6 +5,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using fitSharp.Fit.Engine;
 using fitSharp.Fit.Exception;
 using fitSharp.Machine.Model;
 
@@ -18,6 +19,8 @@ namespace fitSharp.Fit.Model {
         public const string Ignore = "ignore";
         public const string Right = "pass";
 
+        public int TableCount { get; set; }
+        public Interpreter Parent { get; set; }
         public bool IsAbandoned { get; set; }
         public string LastAction { get; set; }
         public Hashtable Summary { get; private set; }

@@ -18,11 +18,10 @@ namespace fitSharp.Test.NUnit.Fit {
         [SetUp] public void SetUp() {
             processor = new CellProcessorBase();
             fixture = new ConfigureFixture();
-            fixture.Prepare(processor, null, new CellTree());
         }
 
         [Test] public void InvokesMethodOnConfigurationItem() {
-            fixture.Interpret(MakeTable("start"));
+            fixture.Interpret(processor, MakeTable("start"));
             var item = processor.Configuration.GetItem<Logging>();
             item.WriteItem("stuff");
             Assert.AreEqual("<ul><li>stuff</li></ul>", item.Show);
@@ -37,7 +36,7 @@ namespace fitSharp.Test.NUnit.Fit {
             item.Start();
             item.WriteItem("stuff");
             var table = MakeTable("show");
-            fixture.Interpret(table);
+            fixture.Interpret(processor, table);
             Assert.AreEqual("<ul><li>stuff</li></ul>", table.Branches[0].Branches[2].Value.GetAttribute(CellAttribute.Folded));
         }
     }

@@ -9,17 +9,8 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Fixtures {
     public class ConfigureFixture: Interpreter {
-        public ConfigureFixture() { TestStatus = new TestStatus(); }
-        private CellProcessor processor;
-        public TestStatus TestStatus { get; private set; }
-
-        public void Prepare(CellProcessor processor, Interpreter parent, Tree<Cell> table) {
-            this.processor = processor;
-        }
-
-        public bool IsVisible { get { return false; } }
-
-        public void Interpret(Tree<Cell> table) {
+        public void Interpret(CellProcessor processor, Tree<Cell> table) {
+            processor.TestStatus.TableCount--;
             TypedValue result = processor.Invoke(
                 new TypedValue(processor.Configuration.GetItem(table.Branches[0].Branches[1].Value.Text)),
                 table.Branches[0].Branches[2].Value.Text,

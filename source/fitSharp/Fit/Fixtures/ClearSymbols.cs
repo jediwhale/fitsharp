@@ -9,19 +9,9 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Fixtures {
     public class ClearSymbols: Interpreter {
-        public TestStatus TestStatus { get; private set; } //todo: dry
-        public bool IsVisible { get { return false; } }
-
-        public ClearSymbols() { TestStatus = new TestStatus(); }
-
-        public void Interpret(Tree<Cell> table) {
+        public void Interpret(CellProcessor processor, Tree<Cell> table) {
+            processor.TestStatus.TableCount--;
             processor.Clear<Symbol>();
         }
-
-        public void Prepare(CellProcessor processor, Interpreter parent, Tree<Cell> table) {
-            this.processor = processor;
-        }
-
-        CellProcessor processor;
     }
 }

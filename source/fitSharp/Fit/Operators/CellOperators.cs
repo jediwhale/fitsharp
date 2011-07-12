@@ -24,6 +24,7 @@ namespace fitSharp.Fit.Operators {
             Add(new ParseBlank(), 0);
             Add(new ParseNull(), 0);
             Add(new ParseSymbol(), 0);
+            Add(new ParseInterpreter(), 0);
 
             Add(new CheckOperationDefault(), 0);
             Add(new InvokeOperationDefault(), 0);

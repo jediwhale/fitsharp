@@ -29,7 +29,8 @@ namespace fitlibrary {
 
         public virtual bool IsInFlow(int tableCount) { return tableCount == 1; }
         
-	    public void DoSetUp(Tree<Cell> table) {
+	    public void DoSetUp(CellProcessor processor, Tree<Cell> table) {
+	        Prepare(processor, table.Branches[0]);
             ExecuteOptionalMethod(InvokeSetUpTearDown.SetUpMethod, (Parse)table.Branches[0].Branches[0]);
 	    }
 

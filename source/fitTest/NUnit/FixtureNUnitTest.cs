@@ -15,7 +15,7 @@ namespace fit.Test.NUnit {
         {
             const string tableString = "<table><tr><td>StringFixture</td></tr><tr><td>field</td><td>field</td></tr></table>";
             Fixture stringFixture = new StringFixture();
-            stringFixture.Prepare(null, stringFixture, Parse.ParseFrom(tableString).Parts);
+            stringFixture.Prepare(null, Parse.ParseFrom(tableString).Parts);
             Assert.AreEqual(0, stringFixture.Args.Length);
         }
 
@@ -25,7 +25,7 @@ namespace fit.Test.NUnit {
             const string arg = "I'd like to buy an argument";
             const string tableString = "<table><tr><td>StringFixture</td><td>" + arg + "</td></tr><tr><td>field</td><td>field</td></tr></table>";
             Fixture stringFixture = new StringFixture();
-            stringFixture.Prepare(null, stringFixture, Parse.ParseFrom(tableString).Parts);
+            stringFixture.Prepare(null, Parse.ParseFrom(tableString).Parts);
             Assert.AreEqual(1, stringFixture.Args.Length);
             Assert.AreEqual(arg, stringFixture.Args[0]);
         }
@@ -37,7 +37,7 @@ namespace fit.Test.NUnit {
             const string arg2 = "I'd like to buy another argument";
             const string tableString = "<table><tr><td>StringFixture</td><td>" + arg1 + "</td><td>" + arg2 + "</td></tr><tr><td>field</td><td>field</td></tr></table>";
             Fixture stringFixture = new StringFixture();
-            stringFixture.Prepare(null, stringFixture, Parse.ParseFrom(tableString).Parts);
+            stringFixture.Prepare(null, Parse.ParseFrom(tableString).Parts);
             Assert.AreEqual(2, stringFixture.Args.Length);
             Assert.AreEqual(arg1, stringFixture.Args[0]);
             Assert.AreEqual(arg2, stringFixture.Args[1]);

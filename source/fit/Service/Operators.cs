@@ -25,7 +25,6 @@ namespace fit.Service {
             Add(new CompareList(), 0);
             Add(new ParseTable(), 0);
             Add(new ParseTree(), 0);
-            Add(new ParseInterpreter(), 0);
         }
 
         public Operators(Operators<Cell, CellProcessor> other) {

@@ -10,7 +10,7 @@ using fitSharp.Machine.Engine;
 
 namespace fitSharp.Machine.Application
 {
-    public class Runner {
+    public class Runner { //todo: no longer used?
         private readonly string[] arguments;
         private readonly Configuration configuration;
         private readonly ProgressReporter progressReporter;
