@@ -5,7 +5,7 @@
 
 using fitSharp.Machine.Model;
 
-namespace fitSharp.Fit.Engine {
+namespace fitSharp.Fit.Model {
     public interface Interpreter {
         void Interpret(CellProcessor processor, Tree<Cell> table);
     }

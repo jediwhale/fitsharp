@@ -5,7 +5,6 @@
 
 using System.Linq;
 using fit;
-using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
 

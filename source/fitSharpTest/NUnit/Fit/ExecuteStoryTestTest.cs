@@ -4,14 +4,12 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
-using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
 using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
-using TestStatus=fitSharp.Fit.Model.TestStatus;
 
 namespace fitSharp.Test.NUnit.Fit {
     [TestFixture] public class ExecuteStoryTestTest {
@@ -59,8 +57,6 @@ namespace fitSharp.Test.NUnit.Fit {
 
             public SampleFixture() { Count++; }
 
-            public void Interpret(Tree<Cell> table) {}
-            public void Prepare(CellProcessor processor, Tree<Cell> table) {}
             public void Interpret(CellProcessor processor, Tree<Cell> table) {}
         }
 

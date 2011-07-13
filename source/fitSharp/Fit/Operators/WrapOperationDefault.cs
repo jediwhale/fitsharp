@@ -8,7 +8,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Xml;
-using fitSharp.Fit.Engine;
+using fitSharp.Fit.Model;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 

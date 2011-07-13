@@ -46,7 +46,7 @@
     <Compile Include="Fit\Fixtures\ConfigureFixture.cs" />
     <Compile Include="Fit\Operators\CellOperationContext.cs" />
     <Compile Include="Fit\Operators\CellOperators.cs" />
-    <Compile Include="Fit\Engine\CellProcessor.cs" />
+    <Compile Include="Fit\Model\CellProcessor.cs" />
     <Compile Include="Fit\Exception\IgnoredException.cs" />
     <Compile Include="Fit\Fixtures\Define.cs" />
     <Compile Include="Fit\Operators\CheckOperationDefault.cs" />
@@ -106,7 +106,7 @@
     <Compile Include="Fit\Service\CellOperation.cs" />
     <Compile Include="Fit\Service\CellProcessorBase.cs" />
     <Compile Include="Fit\Service\ExecuteStoryTest.cs" />
-    <Compile Include="Fit\Engine\Interpreter.cs" />
+    <Compile Include="Fit\Model\Interpreter.cs" />
     <Compile Include="Fit\Model\Procedure.cs" />
     <Compile Include="Fit\Service\NullResultWriter.cs" />
     <Compile Include="Fit\Service\ResultWriter.cs" />
@@ -213,7 +213,9 @@
     <Compile Include="Swim\ResultCell.cs" />
     <Compile Include="Swim\ResultPage.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Fit\Engine\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

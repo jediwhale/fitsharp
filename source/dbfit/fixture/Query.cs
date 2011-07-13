@@ -10,7 +10,7 @@ using dbfit.util;
 using fit;
 using fit.Operators;
 using fitlibrary;
-using fitSharp.Fit.Engine;
+using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
 
 namespace dbfit.fixture
