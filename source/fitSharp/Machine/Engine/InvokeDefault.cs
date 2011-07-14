@@ -11,8 +11,6 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
     public class InvokeDefault<T,P>: Operator<T, P>, InvokeOperator<T> where P: class, Processor<T> {
-        const string namedParameterPrefix = "!";
-
         public bool CanInvoke(TypedValue instance, string memberName, Tree<T> parameters) {
             return true;
         }
@@ -22,14 +20,14 @@ namespace fitSharp.Machine.Engine {
             var parameterNames = new List<string>();
             int parameterCount;
 
-            if (memberName.StartsWith(namedParameterPrefix)) {
+            if (memberName.StartsWith(MemberName.NamedParameterPrefix)) {
                 parameterNames = parameters.Branches.Alternate().Aggregate(new List<string>(),
                                                           (names, parameter) => {
                                                               names.Add(Processor.ParseTree<T, string>(parameter));
                                                               return names;
                                                           });
                 parameterCount = parameterNames.Count;
-                member = RuntimeType.FindInstance(instance.Value, new IdentifierName(memberName.Substring(namedParameterPrefix.Length)), parameterNames);
+                member = RuntimeType.FindInstance(instance.Value, new IdentifierName(memberName.Substring(MemberName.NamedParameterPrefix.Length)), parameterNames);
             }
             else {
                 parameterCount = parameters.Branches.Count;
@@ -39,7 +37,7 @@ namespace fitSharp.Machine.Engine {
             if (member == null)
                 return TypedValue.MakeInvalid(new MemberMissingException(instance.Type, new IdentifierName(memberName).SourceName, parameterCount));
 
-            var parameterList = memberName.StartsWith(namedParameterPrefix)
+            var parameterList = memberName.StartsWith(MemberName.NamedParameterPrefix)
                 ? new ParameterList<T>(Processor).GetNamedParameterList(instance, parameters, member, parameterNames)
                 : new ParameterList<T>(Processor).GetParameterList(instance, parameters, member);
             try {

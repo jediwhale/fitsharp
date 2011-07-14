@@ -43,6 +43,7 @@
     <Compile Include="Fit\Application\ConfigurationList.cs" />
     <Compile Include="Fit\Application\FileExclusions.cs" />
     <Compile Include="Fit\Fixtures\ClearSymbols.cs" />
+    <Compile Include="Fit\Fixtures\Compute.cs" />
     <Compile Include="Fit\Fixtures\ConfigureFixture.cs" />
     <Compile Include="Fit\Operators\CellOperationContext.cs" />
     <Compile Include="Fit\Operators\CellOperators.cs" />
@@ -123,7 +124,7 @@
     <Compile Include="Fit\Operators\CompareFloatingPoint.cs" />
     <Compile Include="Fit\Operators\ParseMemberName.cs" />
     <Compile Include="Fit\Model\GracefulName.cs" />
-    <Compile Include="Fit\Model\MemberName.cs" />
+    <Compile Include="Machine\Model\MemberName.cs" />
     <Compile Include="Fit\Operators\CompareDefault.cs" />
     <Compile Include="Fit\Operators\CompareEndsWith.cs" />
     <Compile Include="Fit\Operators\CompareIntegralRange.cs" />
@@ -143,6 +144,7 @@
     <Compile Include="Machine\Engine\ParseEnum.cs" />
     <Compile Include="Machine\Model\ObjectExtension.cs" />
     <Compile Include="Machine\Model\SetUp.cs" />
+    <Compile Include="Machine\Model\Traverse.cs" />
     <Compile Include="Parser\Characters.cs" />
     <Compile Include="Parser\CharacterType.cs" />
     <Compile Include="Parser\TextTables.cs" />

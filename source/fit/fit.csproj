@@ -48,7 +48,6 @@
     <Compile Include="Fixtures\ConstraintFixture.cs" />
     <Compile Include="Fixtures\FileSystem.cs" />
     <Compile Include="Fixtures\FlowKeywords.cs" />
-    <Compile Include="Fixtures\Compute.cs" />
     <Compile Include="Operators\ArrayMatchStrategy.cs" />
     <Compile Include="Operators\CompareList.cs" />
     <Compile Include="Operators\ComposeHtmlStoryTestString.cs" />
