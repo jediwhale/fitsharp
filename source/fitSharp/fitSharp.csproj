@@ -43,6 +43,7 @@
     <Compile Include="Fit\Application\ConfigurationList.cs" />
     <Compile Include="Fit\Application\FileExclusions.cs" />
     <Compile Include="Fit\Fixtures\ClearSymbols.cs" />
+    <Compile Include="Fit\Fixtures\CommentFixture.cs" />
     <Compile Include="Fit\Fixtures\Compute.cs" />
     <Compile Include="Fit\Fixtures\ConfigureFixture.cs" />
     <Compile Include="Fit\Operators\CellOperationContext.cs" />

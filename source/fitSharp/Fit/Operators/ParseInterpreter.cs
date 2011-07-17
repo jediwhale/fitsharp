@@ -4,6 +4,7 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
+using fitSharp.Fit.Fixtures;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
@@ -25,7 +26,7 @@ namespace fitSharp.Fit.Operators {
         }
 
         Interpreter MakeInterpreter(string className) {
-            if (className.Length == 0 || !char.IsLetter(className[0])) return Processor.Create("fitlibrary.CommentFixture").GetValueAs<Interpreter>();
+            if (className.Length == 0 || !char.IsLetter(className[0])) return new CommentFixture();
 
             var result = Processor.Create(className);
             return result.GetValueAs<Interpreter>() ?? WithSystemUnderTest(Processor.Create("fitlibrary.DoFixture").GetValueAs<Interpreter>(), result);

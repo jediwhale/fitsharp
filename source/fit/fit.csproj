@@ -43,7 +43,6 @@
     <Compile Include="Exception\InvalidMethodException.cs" />
     <Compile Include="Fixtures\CalculateFixture.cs" />
     <Compile Include="Fixtures\CombinationFixture.cs" />
-    <Compile Include="Fixtures\CommentFixture.cs" />
     <Compile Include="Fixtures\ConfigurationSetupFixture.cs" />
     <Compile Include="Fixtures\ConstraintFixture.cs" />
     <Compile Include="Fixtures\FileSystem.cs" />
