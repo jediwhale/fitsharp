@@ -34,6 +34,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dbfitSybase", "source\dbfit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dbfitMySql", "source\dbfitMySql\dbfitMySql.csproj", "{BCC642FC-1459-47E4-985E-AA6BFE10A6E5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "fitIf", "source\fitIf\fitIf.csproj", "{C60E1405-C544-4EFC-B742-C7A714B94773}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -96,6 +98,8 @@ Global
 		{BCC642FC-1459-47E4-985E-AA6BFE10A6E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BCC642FC-1459-47E4-985E-AA6BFE10A6E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BCC642FC-1459-47E4-985E-AA6BFE10A6E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C60E1405-C544-4EFC-B742-C7A714B94773}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{C60E1405-C544-4EFC-B742-C7A714B94773}.Release|Any CPU.ActiveCfg = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

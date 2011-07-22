@@ -15,20 +15,20 @@ namespace fitSharp.Machine.Model {
             return this;
         }
 
-        public Traverse<T> First(Action<Tree<T>> visit) {
-            first = visit;
+        public Traverse<T> Header(Action<Tree<T>> visit) {
+            header = visit;
             return this;
         }
 
         public void VisitTable(Tree<T> table) {
-            var action = first;
+            var action = header;
             foreach (var row in table.Branches.Skip(1)) {
                 action(row);
                 action = rest;
             }
         }
 
-        Action<Tree<T>> first = t => {};
+        Action<Tree<T>> header = t => {};
         Action<Tree<T>> rest = t => {};
     }
 }

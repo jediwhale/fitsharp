@@ -16,7 +16,7 @@ namespace fitSharp.Test.NUnit.Machine {
 
         [Test] public void VisitsFirstRow() {
             new Traverse<Cell>()
-                .Rows.First(Visit)
+                .Rows.Header(Visit)
                 .VisitTable(new CellTree("fixture", "row1", "row2"));
             Assert.AreEqual("row1", nodesVisited.Join(","));
         }

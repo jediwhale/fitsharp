@@ -19,7 +19,7 @@ namespace fitSharp.Fit.Fixtures {
 
         public void Interpret(CellProcessor processor, Tree<Cell> table) {
             new Traverse<Cell>()
-                .Rows.First(row => headerRow = row)
+                .Rows.Header(row => headerRow = row)
                 .Rows.Rest(row => ComputeRow(processor, row))
                 .VisitTable(table);
         }
