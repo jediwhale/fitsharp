@@ -13,18 +13,15 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fit.Operators {
-    public class ListOperator: CellOperator, InvokeOperator<Cell>, ParseOperator<Cell> { //todo: split, eliminate fit dependency
-        public bool CanInvoke(TypedValue instance, string memberName, Tree<Cell> parameters) {
-            var context = instance.Value as CellOperationContext;
-            return context != null && memberName == CellOperationContext.CheckCommand
-                && !parameters.IsLeaf && typeof (IList).IsAssignableFrom(context.GetTypedActual(Processor).Type);
+    public class ListOperator: CellOperator, CheckOperator, ParseOperator<Cell> { //todo: split, eliminate fit dependency
+        public bool CanCheck(CellOperationValue actualValue, Tree<Cell> expectedCell) {
+            return !expectedCell.IsLeaf && typeof (IList).IsAssignableFrom(actualValue.GetTypedActual(Processor).Type);
         }
 
-        public TypedValue Invoke(TypedValue instance, string memberName, Tree<Cell> parameters) {
-            var context = instance.GetValue<CellOperationContext>();
-            var cell = (Parse)parameters.Value;
+        public TypedValue Check(CellOperationValue actualValue, Tree<Cell> expectedCell) {
+            var cell = (Parse)expectedCell.Value;
             var matcher = new ListMatcher(Processor, new ArrayMatchStrategy(Processor, cell.Parts.Parts));
-            matcher.MarkCell(context.GetActual<IEnumerable>(Processor).Cast<object>(), cell.Parts.Parts); //todo: encapsulate part in celloperationcontext??
+            matcher.MarkCell(actualValue.GetActual<IEnumerable>(Processor).Cast<object>(), cell.Parts.Parts); //todo: encapsulate part in celloperationcontext??
             return TypedValue.Void;
         }
 

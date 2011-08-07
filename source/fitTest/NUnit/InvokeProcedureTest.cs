@@ -5,7 +5,6 @@
 
 using fit.Operators;
 using fitSharp.Fit.Model;
-using fitSharp.Fit.Service;
 using fitSharp.Machine.Model;
 using Moq;
 using NUnit.Framework;
@@ -13,11 +12,12 @@ using TestStatus=fitSharp.Fit.Model.TestStatus;
 
 namespace fit.Test.NUnit {
     [TestFixture] public class InvokeProcedureTest {
+        const string noParameterProcedureHtml = "<table><tr><td>define</td><td>procedure</td></tr><tr><td>settext</td></tr></table>";
         const string simpleProcedureHtml = "<table><tr><td>define</td><td>procedure</td></tr><tr><td>verb</td></tr></table>";
-        const string parameterProcedureHtml =
-            "<table><tr><td>define</td><td>procedure</td><td>parm</td></tr><tr><td>verb</td><td>parm</td></tr></table>";
+        const string oneParameterProcedureHtml =
+            "<table><tr><td>define</td><td>procedure</td><td>parm</td></tr><tr><td>settext</td><td>parm</td></tr></table>";
         const string twoParameterProcedureHtml =
-            "<table><tr><td>define</td><td>procedure</td><td>parm1</td><td></td><td>parm2</td></tr><tr><td>verb</td><td>parm1</td><td>parm2</td></tr></table>";
+            "<table><tr><td>define</td><td>procedure</td><td>parm1</td><td></td><td>parm2</td></tr><tr><td>settext</td><td>parm1</td><td></td><td>parm2</td></tr></table>";
 
         Mock<CellProcessor> processor;
         InvokeProcedure invoke;
@@ -28,19 +28,29 @@ namespace fit.Test.NUnit {
         Mock<InterpretTableFlow> flow;
         TestStatus testStatus;
 
+        InvokeProcedure invokeProcedure;
+        CellProcessor cellProcessor;
+
+        [SetUp] public void SetUp() {
+            invokeProcedure = new InvokeProcedure();
+            cellProcessor = new Service.Service();
+            invokeProcedure.Processor = cellProcessor;
+        }
+
         [Test] public void InvokeForMembersIsntHandled() {
-            SetupSUT(simpleProcedureHtml);
-            Assert.IsFalse(invoke.CanInvoke(target, "member", new CellTree()));
+            Assert.IsFalse(invokeProcedure.CanInvoke(TypedValue.Void, "member", new CellTree()));
         }
 
         [Test] public void InvokeForProceduresIsHandled() {
-            SetupSUT(simpleProcedureHtml);
-            Assert.IsTrue(invoke.CanInvoke(target, "procedure", new CellTree()));
+            cellProcessor.Store(new Procedure("procedure"));
+            Assert.IsTrue(invokeProcedure.CanInvoke(TypedValue.Void, "procedure", new CellTree()));
         }
 
         [Test] public void ProcedureIsExecuted() {
-            SetupSUT(simpleProcedureHtml);
-            Assert.AreEqual(result, invoke.Invoke(target, "procedure", new CellTree()));
+            cellProcessor.Store(new Procedure("procedure", Parse.ParseFrom(noParameterProcedureHtml)));
+            var sample = new Sample();
+            invokeProcedure.Invoke(new TypedValue(sample), "procedure", new CellTree());
+            Assert.AreEqual("hi", sample.Text);
         }
 
         [Test] public void ProcedureExecutionIsLogged() {
@@ -56,15 +66,19 @@ namespace fit.Test.NUnit {
         }
 
         [Test] public void ParameterValueIsSubstituted() {
-            SetupSUT(parameterProcedureHtml);
-            Assert.AreEqual(result, invoke.Invoke(target, "procedure", new Parse("tr", "", new Parse("td", "actual", null, null), null)));
+            cellProcessor.Store(new Procedure("procedure", Parse.ParseFrom(oneParameterProcedureHtml)));
+            var sample = new Sample();
+            invokeProcedure.Invoke(new TypedValue(sample), "procedure", new Parse("tr", "", new Parse("td", "actual", null, null), null));
+            Assert.AreEqual("actual", sample.Text);
         }
 
         [Test] public void TwoParameterValuesAreSubstituted() {
-            SetupSUT(twoParameterProcedureHtml);
-            Assert.AreEqual(result, invoke.Invoke(target, "procedure", new Parse("tr", "",
+            cellProcessor.Store(new Procedure("procedure", Parse.ParseFrom(twoParameterProcedureHtml)));
+            var sample = new Sample();
+            invokeProcedure.Invoke(new TypedValue(sample), "procedure", new Parse("tr", "",
                 new Parse("td", "actual1", null, new Parse("td", "actual2", null, null)),
-                null)));
+                null));
+            Assert.AreEqual("actual1actual2", sample.Text);
         }
 
         void SetupSUT(string html) {
@@ -96,8 +110,6 @@ namespace fit.Test.NUnit {
             processor.Setup(p => p.Parse(typeof (Interpreter), target, It.Is<Tree<Cell>>(c => IsDoFixture(c))))
                 .Returns(new TypedValue(fixture.Object));
 
-            processor.Setup(p => p.Create(typeof (InterpretFlow).FullName, It.IsAny<Tree<Cell>>())).Returns(new TypedValue(flow.Object));
-
             processor.Setup(p => p.Parse(typeof (StoryTestString), It.IsAny<TypedValue>(),
                                          It.Is<Tree<Cell>>(t => IsTableWithVerb(t))))
                 .Returns(new TypedValue("procedure log"));
@@ -122,6 +134,13 @@ namespace fit.Test.NUnit {
 
         static bool IsDoFixture(Tree<Cell> c) {
             return c.Branches[0].Value.Text == "fitlibrary.DoFixture";
+        }
+
+        class Sample {
+            public string Text;
+            public void SetText() { Text = "hi"; }
+            public void SetText(string text) { Text = text; }
+            public void SetText(string text1, string text2) { Text = text1 + text2; }
         }
     }
 }

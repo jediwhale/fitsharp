@@ -67,8 +67,7 @@ namespace fitSharp.Fit.Service {
                         ColorMethodName(interpreter.MethodRowSelector.SelectMethodCells(currentRow), result.GetValue<bool>());
                     }
                     else {
-                        new CellOperationImpl(processor)
-                            .Wrap(result)
+                        processor.Operate<WrapOperator>(result)
                             .As<Interpreter>(i => ProcessRestOfTable(i, processor.MakeCell(string.Empty, table.Branches.Skip(rowNumber))));
                     }
                 }

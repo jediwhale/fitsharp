@@ -5,6 +5,7 @@
 
 using System;
 using fitSharp.Fit.Model;
+using fitSharp.Machine.Engine;
 
 namespace dbfit.fixture
 {

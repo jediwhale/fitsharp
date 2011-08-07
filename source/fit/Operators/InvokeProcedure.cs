@@ -40,8 +40,7 @@ namespace fit.Operators {
 
         void ExecuteProcedure(FlowInterpreter flowInterpreter, Tree<Cell> body) {
             foreach (var table in body.Branches) {
-                var interpretFlow = Processor.Create(typeof (InterpretFlow).FullName).GetValue<InterpretTableFlow>();
-                interpretFlow.DoTableFlow(Processor, flowInterpreter, table);
+                new InterpretFlow().DoTableFlow(Processor, flowInterpreter, table);
             }
         }
 

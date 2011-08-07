@@ -7,6 +7,7 @@ using fit.Fixtures;
 using fitlibrary;
 using fitlibrary.exception;
 using fitSharp.Fit.Model;
+using fitSharp.Fit.Operators;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
@@ -31,7 +32,7 @@ namespace fit {
             var symbol = new Symbol(theName);
             if (!Processor.Contains(symbol)) return null;
 
-            var result =  CellOperation.Wrap(new TypedValue(Processor.Load(symbol).Instance));
+            var result =  Processor.Operate<WrapOperator>(new TypedValue(Processor.Load(symbol).Instance));
             result.AsNot<Interpreter>(() => { throw new FitFailureException("Result is not a Fixture."); });
             return result.GetValueAs<Interpreter>();
         }

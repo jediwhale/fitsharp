@@ -7,22 +7,22 @@ using fitSharp.Fit.Model;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
-namespace fitSharp.Fit.Operators
-{
-    public class InvokeOperationDefault: CellOperator, InvokeOperator<Cell>
-    {
-        public bool CanInvoke(TypedValue instance, string memberName, Tree<Cell> parameters) {
-            return instance.Type == typeof (CellOperationContext) && memberName == CellOperationContext.InvokeCommand;
+namespace fitSharp.Fit.Operators {
+    public class ExecuteDefault: CellOperator, ExecuteOperator {
+        public bool CanExecute(object systemUnderTest, Tree<Cell> memberName, Tree<Cell> parameters, Cell targetCell) {
+            return true;
         }
 
-        public TypedValue Invoke(TypedValue instance, string memberName, Tree<Cell> parameters) {
-            var context = instance.GetValue<CellOperationContext>();
+        public TypedValue Execute(object systemUnderTest, Tree<Cell> memberName, Tree<Cell> parameters, Cell targetCell) {
             var beforeCounts = new TestCounts(Processor.TestStatus.Counts);
-            TypedValue result = context.DoInvoke(Processor);
-            MarkCellWithLastResults(parameters, p => MarkCellWithCounts(p, beforeCounts));
+            var targetObjectProvider = systemUnderTest as TargetObjectProvider;
+            var name = Processor.ParseTree<Cell, MemberName>(memberName).ToString();
+            var result = Processor.Invoke(
+                    new TypedValue(targetObjectProvider != null ? targetObjectProvider.GetTargetObject() : systemUnderTest),
+                    name, parameters);
+            MarkCellWithLastResults(new CellTree(targetCell), p => MarkCellWithCounts(p, beforeCounts));
             return result;
         }
-
 
         void MarkCellWithCounts(Cell target, TestCounts beforeCounts) {
             string style = Processor.TestStatus.Counts.Subtract(beforeCounts).Style;

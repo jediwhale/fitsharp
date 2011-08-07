@@ -16,5 +16,11 @@ namespace fitSharp.Test.NUnit.Fit {
             operators.Do<ParseOperator<Cell>>(o => (o is ParseDate), o => {});
             Assert.IsTrue(true, "no exception");
         }
+
+        [Test] public void FindsWrapOperator() {
+            var operators = new CellOperators();
+            var result = operators.FindOperator<WrapOperator>(new object[] {null});
+            Assert.AreEqual(typeof(WrapDefault), result.GetType());
+        }
     }
 }

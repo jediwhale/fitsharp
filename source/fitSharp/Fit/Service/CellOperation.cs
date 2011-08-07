@@ -12,7 +12,6 @@ namespace fitSharp.Fit.Service {
         void Check(object systemUnderTest, Tree<Cell> memberName, Tree<Cell> parameters, Tree<Cell> expectedCell);
         void Check(TypedValue actualValue, Tree<Cell> expectedCell);
         TypedValue TryInvoke(object target, Tree<Cell> memberName, Tree<Cell> parameters, Cell targetCell);
-        TypedValue Wrap(TypedValue actualValue);
     }
 
     public static class CellOperationExtension {
@@ -52,31 +51,19 @@ namespace fitSharp.Fit.Service {
         }
 
         public void Check(object systemUnderTest, Tree<Cell> memberName, Tree<Cell> parameters, Tree<Cell> expectedCell) {
-            processor.Invoke(
-                CellOperationContext.Make(systemUnderTest, memberName, parameters),
-                CellOperationContext.CheckCommand,
+            processor.Operate<CheckOperator>(
+                CellOperationValue.Make(systemUnderTest, memberName, parameters),
                 expectedCell);
         }
 
         public void Check(TypedValue actualValue, Tree<Cell> expectedCell) {
-            processor.Invoke(
-                CellOperationContext.Make(actualValue),
-                CellOperationContext.CheckCommand,
+            processor.Operate<CheckOperator>(
+                CellOperationValue.Make(actualValue),
                 expectedCell);
         }
 
         public TypedValue TryInvoke(object systemUnderTest, Tree<Cell> memberName, Tree<Cell> parameters, Cell targetCell) {
-            return processor.Invoke(
-                CellOperationContext.Make(systemUnderTest, memberName, parameters),
-                CellOperationContext.InvokeCommand,
-                new CellTree(targetCell));
-        }
-
-        public TypedValue Wrap(TypedValue actualValue) {
-            return processor.Invoke(
-                CellOperationContext.Make(actualValue),
-                CellOperationContext.WrapCommand,
-                new CellTree());
+            return processor.Operate<ExecuteOperator>(systemUnderTest, memberName, parameters, targetCell);
         }
 
         readonly CellProcessor processor;

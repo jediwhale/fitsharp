@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
     public delegate bool CanDoOperation<in T>(T anOperator);
@@ -71,6 +72,23 @@ namespace fitSharp.Machine.Engine {
                 }
             }
             throw new ApplicationException(string.Format("No default for {0}", typeof(T).Name));
+        }
+
+        public O FindOperator<O>(object[] parameters) where O: class {
+            var operationType = typeof (O).Name;
+            var operationName = operationType.Substring(0, operationType.IndexOf("Operator"));
+            for (var priority = operators.Count - 1; priority >= 0; priority--) {
+                for (var i = operators[priority].Count - 1; i >= 0; i--) {
+                    var anOperator = operators[priority][i];
+                    anOperator.Processor = Processor;
+                    var candidate = anOperator as O;
+                    if (candidate == null) continue;
+                    var member = RuntimeType.FindDirectInstance(candidate, new IdentifierName("Can" + operationName), parameters.Length);
+                    if (!member.Invoke(parameters).GetValue<bool>()) continue;
+                    return candidate;
+                }
+            }
+            throw new ApplicationException(string.Format("No default for {0}", typeof (O).Name));
         }
     }
 }

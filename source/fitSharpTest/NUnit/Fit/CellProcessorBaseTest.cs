@@ -4,6 +4,7 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using fitSharp.Fit.Model;
+using fitSharp.Fit.Operators;
 using fitSharp.Fit.Service;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
@@ -20,6 +21,12 @@ namespace fitSharp.Test.NUnit.Fit {
             processor.Parse(typeof (string), TypedValue.Void, cell);
             Assert.AreEqual(" value", cell.Value.GetAttribute(CellAttribute.InformationSuffix));
             Assert.AreEqual("value", result.GetValue<string>());
+        }
+
+        [Test] public void WrapsValue() {
+            var processor = new CellProcessorBase();
+            var result = processor.Operate<WrapOperator>(new TypedValue("hi"));
+            Assert.AreEqual("hi", result.ValueString);
         }
     }
 }

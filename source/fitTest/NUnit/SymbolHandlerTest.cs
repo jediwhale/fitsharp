@@ -17,10 +17,10 @@ namespace fit.Test.NUnit {
         public void TestRegisterAndGet()
         {
             Assert.IsTrue(IsMatch(new ParseSymbol(), "<<xyz"));
-            Assert.IsFalse(IsMatch(new CheckOperationSymbolSave(), "x<<yz"));
+            Assert.IsFalse(IsMatch(new CheckSymbolSave(), "x<<yz"));
             Assert.IsFalse(IsMatch(new ParseSymbol(), "x<<yz"));
-            Assert.IsTrue(IsMatch(new CheckOperationSymbolSave(), ">>xyz"));
-            Assert.IsFalse(IsMatch(new CheckOperationSymbolSave(), "x>>yz"));
+            Assert.IsTrue(IsMatch(new CheckSymbolSave(), ">>xyz"));
+            Assert.IsFalse(IsMatch(new CheckSymbolSave(), "x>>yz"));
             Assert.IsFalse(IsMatch(new ParseSymbol(), "x>>yz"));
         }
 

@@ -29,7 +29,15 @@ namespace fitSharp.Machine.Engine {
         public string Name { get { return info.Name; }}
         public virtual string GetParameterName(int index) { return info.Name; }
 
-        public abstract TypedValue Invoke(object[] parameters);
+        public TypedValue Invoke(object[] parameters) {
+            try {
+                return TryInvoke(parameters);
+            } catch (TargetInvocationException e) {
+                throw e.InnerException;
+            }
+        }
+
+        public abstract TypedValue TryInvoke(object[] parameters);
         public abstract bool MatchesParameterCount(int count);
         public abstract Type GetParameterType(int index);
         public abstract Type ReturnType { get; }
@@ -50,7 +58,7 @@ namespace fitSharp.Machine.Engine {
             return Info.GetParameters()[index].Name;
         }
 
-        public override TypedValue Invoke(object[] parameters) {
+        public override TypedValue TryInvoke(object[] parameters) {
             Type type = info.DeclaringType;
             object result = type.InvokeMember(info.Name,
                                               BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
@@ -70,8 +78,8 @@ namespace fitSharp.Machine.Engine {
             this.key = key;
         }
 
-        public override TypedValue Invoke(object[] parameters) {
-            return base.Invoke(new object[] {key});
+        public override TypedValue TryInvoke(object[] parameters) {
+            return base.TryInvoke(new object[] {key});
         }
     }
 
@@ -86,7 +94,7 @@ namespace fitSharp.Machine.Engine {
 
         public override bool MatchesParameterCount(int count) { return count == 0 || count == 1; }
 
-        public override TypedValue Invoke(object[] parameters) {
+        public override TypedValue TryInvoke(object[] parameters) {
             Type type = info.DeclaringType;
             object result = type.InvokeMember(info.Name,
                                               BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
@@ -111,7 +119,7 @@ namespace fitSharp.Machine.Engine {
 
         public override bool MatchesParameterCount(int count) { return count == 0 && Info.CanRead || count == 1 && Info.CanWrite; }
 
-        public override TypedValue Invoke(object[] parameters) {
+        public override TypedValue TryInvoke(object[] parameters) {
             Type type = info.DeclaringType;
             object result = type.InvokeMember(info.Name,
                                               BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
@@ -140,7 +148,7 @@ namespace fitSharp.Machine.Engine {
 
         public override bool MatchesParameterCount(int count) { return Info.GetParameters().Length == count; }
 
-        public override TypedValue Invoke(object[] parameters) {
+        public override TypedValue TryInvoke(object[] parameters) {
             Type type = info.DeclaringType;
             var result = Info.Invoke(parameters);
             return new TypedValue(result, type);
