@@ -9,7 +9,7 @@ using fitSharp.Machine.Model;
 using NUnit.Framework;
 
 namespace fit.Test.NUnit {
-    [TestFixture] public class CellMatching: Fixture {
+    [TestFixture] public class CellMatching {
 
         [Test] public void NullEqualsNullCell() {
             Assert.IsTrue(IsEqual(new Parse("td", null, null, null), null));
@@ -53,7 +53,9 @@ namespace fit.Test.NUnit {
             var cell = new Parse("td", "something else", null, null);
             var fixture = new Fixture {Processor = new Service.Service()};
             fixture.CellOperation.Check(new TypedValue("something"), cell);
-            Assert.AreEqual("\n<td class=\"fail\">something else <span class=\"fit_label\">expected</span><hr />something <span class=\"fit_label\">actual</span></td>", cell.ToString());
+            Assert.AreEqual(fitSharp.Fit.Model.TestStatus.Wrong, cell.GetAttribute(CellAttribute.Status));
+            Assert.AreEqual("something", cell.GetAttribute(CellAttribute.Actual));
+            Assert.IsTrue(cell.HasAttribute(CellAttribute.Difference));
         }
     
         [Test] public void TreeEqualsSameTreeCell() {

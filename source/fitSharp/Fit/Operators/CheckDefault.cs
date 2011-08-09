@@ -6,10 +6,8 @@
 using fitSharp.Fit.Exception;
 using fitSharp.Machine.Model;
 
-namespace fitSharp.Fit.Operators
-{
-    public class CheckDefault: CellOperator, CheckOperator
-    {
+namespace fitSharp.Fit.Operators {
+    public class CheckDefault: CellOperator, CheckOperator {
         public bool CanCheck(CellOperationValue actualValue, Tree<Cell> expectedCell) {
             return true;
         }

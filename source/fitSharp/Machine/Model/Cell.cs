@@ -8,6 +8,7 @@ namespace fitSharp.Machine.Model {
         Actual,
         Add,
         Body,
+        Difference,
         EndTag,
         Exception,
         Folded,

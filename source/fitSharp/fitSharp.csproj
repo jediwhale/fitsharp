@@ -148,6 +148,7 @@
     <Compile Include="Machine\Engine\ParseEnum.cs" />
     <Compile Include="Machine\Model\ObjectExtension.cs" />
     <Compile Include="Machine\Model\SetUp.cs" />
+    <Compile Include="Machine\Model\StringDifference.cs" />
     <Compile Include="Machine\Model\Traverse.cs" />
     <Compile Include="Parser\Characters.cs" />
     <Compile Include="Parser\CharacterType.cs" />

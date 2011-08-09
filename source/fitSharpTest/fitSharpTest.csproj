@@ -54,6 +54,7 @@
     <Compile Include="NUnit\Fit\TagFilterTest.cs" />
     <Compile Include="NUnit\Machine\ArgumentParserTest.cs" />
     <Compile Include="NUnit\Machine\OperatorsTest.cs" />
+    <Compile Include="NUnit\Machine\StringDifferenceTest.cs" />
     <Compile Include="NUnit\Machine\SuiteConfigurationTest.cs" />
     <Compile Include="NUnit\Fit\BindingFactoryTest.cs" />
     <Compile Include="NUnit\Fit\CellOperatorsTest.cs" />
