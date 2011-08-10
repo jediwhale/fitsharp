@@ -18,7 +18,7 @@ namespace fit.Test.FitUnit {
         public void RunTestFixture(string theRows) {
             string html = string.Format("<table><tr><td>fit.Test.FitUnit.TestFixtureFixture</td></tr>{0}</table>", theRows);
             Tables = Parse.ParseFrom(html);
-            var configuration = new Configuration(Processor.Configuration);
+            var configuration = Processor.Configuration.Copy();
             configuration.GetItem<Settings>().Runner = "fit.Test.FitUnit.MyRunner";
             new fitSharp.Machine.Application.Runner(new string[] {}, Processor.Configuration, new NullReporter());
         }

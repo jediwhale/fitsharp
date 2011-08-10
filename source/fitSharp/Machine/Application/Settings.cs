@@ -3,9 +3,7 @@
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
-using System;
 using System.Configuration;
-using System.IO;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Application {
@@ -18,7 +16,6 @@ namespace fitSharp.Machine.Application {
         private const int DefaultCodePage = 1252;
 
         public string ApartmentState { get; set; }
-        private string appConfigFile;
         public string CodePage { get; set; }
         public string InputFolder { get; set; }
         public string OutputFolder { get; set; }
@@ -27,14 +24,6 @@ namespace fitSharp.Machine.Application {
         public string Behavior { get; set; }
         public bool DryRun { get; set; }
         public string TagList { get; set; }
-
-        public string AppConfigFile {
-            get { return appConfigFile; }
-            set {
-                appConfigFile = Path.GetFullPath(value);
-                AppDomain.CurrentDomain.SetData("APP_CONFIG_FILE", value);
-            }
-        }
 
         public int CodePageNumber {
             get {
@@ -56,7 +45,6 @@ namespace fitSharp.Machine.Application {
 
         public Settings(Settings other) {
             ApartmentState = other.ApartmentState;
-            appConfigFile = other.appConfigFile;
             Behavior = other.Behavior;
             CodePage = other.CodePage;
             InputFolder = other.InputFolder;

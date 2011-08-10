@@ -47,10 +47,10 @@
 <tr><td>DoTable</td></tr>
 </table>
 <br><table border="1" cellspacing="0">
-<tr><td>check</td><td>first cell value</td><td class="error">3<hr/> <span class="fit_label">No embedded table.</span></td><td><table border><tr><td>embedded3</td></tr></table></td></tr>
+<tr><td>check</td><td>first cell value</td><td class="error">3<hr /> <span class="fit_stacktrace">No embedded table.</span></td><td><table border><tr><td>embedded3</td></tr></table></td></tr>
 </table>
 <br><table border="1" cellspacing="0">
-<tr><td>check</td><td>first cell value</td><td><table border><tr><td><table border><tr><td>embedded3</td></tr></table></td><td>embedded4</td></tr></table></td><td class="error">4<hr/> <span class="fit_label">No embedded table.</span></td></tr>
+<tr><td>check</td><td>first cell value</td><td><table border><tr><td><table border><tr><td>embedded3</td></tr></table></td><td>embedded4</td></tr></table></td><td class="error">4<hr /> <span class="fit_stacktrace">No embedded table.</span></td></tr>
 </table>
 <br><table border="1" cellspacing="0">
 <tr><td>show</td><td>first cell value</td><td><table border><tr><td><table><tr><td>embedded3</td></tr></table border></td><td>embedded4</td></tr></table></td>
@@ -68,7 +68,7 @@
 <br><table border="1" cellspacing="0">
 <tr><td>check</td><td>first cell string value</td>
 <td><table border><tr><td>embedded1</td><td><table border><tr><td>embedded2</td></tr></table></td></tr></table></td>
-<td class="fail">one <span class="fit_label">expected</span><hr>embedded1 <span class="fit_label">actual</span></td></tr>
+<td class="fail">one <span class="fit_label">expected</span><hr />embedded1 <span class="fit_label">actual</span><hr />Length expected 3 was 9</td></tr>
 </table>
 <br><table border="1" cellspacing="0">
 <tr><td>check</td><td>first cell string value</td>
@@ -80,7 +80,7 @@
 <td class="pass"><table border><tr><td>embedded3</td></tr></table></td></tr>
 </table>
 <br><table border="1" cellspacing="0">
-<tr><td>check</td><td>null table</td><td class="error">12<hr/> <span class="fit_label">No embedded table.</span></td></tr>
+<tr><td>check</td><td>null table</td><td class="error">12<hr /> <span class="fit_stacktrace">No embedded table.</span></td></tr>
 </table></td>
 </tr>
 </table>

@@ -80,16 +80,6 @@ namespace fit.Test.NUnit {
 
             Assert.AreEqual(string.Empty, table1.Differences(table2));
         }
-
-        [Test] public void AlternateStackTraceStartsWithExpectedMatches() {
-            var table1 = new FixtureTable(Parse.ParseFrom(
-                                                       "<table><tr><td>same<span class=\"fit_stacktrace\">stack trace blah blah</span></td></tr></table>"));
-
-            var table2 = new FixtureTable(Parse.ParseFrom(
-                                                       "<table><tr><td>same<span class=\"fit_label\">stack trace</span></td></tr></table>>"));
-
-            Assert.AreEqual(string.Empty, table1.Differences(table2));
-        }
     
         [Test] public void StackTraceNoneExpectedDifferent() {
             var table1 = new FixtureTable(Parse.ParseFrom(

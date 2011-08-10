@@ -3,7 +3,6 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
 using fitSharp.Fit.Service;
@@ -23,8 +22,7 @@ namespace fit.Operators {
         }
 
         private TypedValue Invoke(Parse procedure, TypedValue target, Tree<Cell> parameterValues) {
-            var doFixture = new CellTree("fitlibrary.DoFixture");
-            var fixture = Processor.Parse(typeof (Interpreter), target, doFixture).GetValue<FlowInterpreter>();
+            var fixture = ExecuteStoryTest.MakeDefaultFlowInterpreter(Processor, target);
 
             var parameters = new Parameters(procedure.Parts, parameterValues);
             var body = procedure.Parts.More.Parts.Parts != null
@@ -42,8 +40,7 @@ namespace fit.Operators {
 
         void ExecuteProcedure(FlowInterpreter flowInterpreter, Tree<Cell> body) {
             foreach (var table in body.Branches) {
-                var interpretFlow = Processor.Create(typeof (InterpretFlow).FullName).GetValue<InterpretTableFlow>();
-                interpretFlow.DoTableFlow(Processor, flowInterpreter, table);
+                new InterpretFlow().DoTableFlow(Processor, flowInterpreter, table);
             }
         }
 

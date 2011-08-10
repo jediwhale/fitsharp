@@ -6,8 +6,8 @@
 using fit.Fixtures;
 using fitlibrary;
 using fitlibrary.exception;
-using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
+using fitSharp.Fit.Operators;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
@@ -22,19 +22,18 @@ namespace fit {
             string fixtureName = restOfTheCells.Text;
             var targetFixture = GetNamedFixture(fixtureName) ?? MakeNewFixture(fixtureName, restOfTheCells.More);
 
-            targetFixture.Prepare(Processor, this, theTable.Parts);
-            targetFixture.Interpret(theTable);
+            targetFixture.Interpret(Processor, theTable);
         }
 
         Interpreter GetNamedFixture(string theName) {
-            var parent = myParentFixture as FlowFixtureBase;
+            var parent = Processor.TestStatus.Parent;
             if (parent == null) return null;
 
             var symbol = new Symbol(theName);
-            if (!parent.Processor.Contains(symbol)) return null;
+            if (!Processor.Contains(symbol)) return null;
 
-            var result =  CellOperation.Wrap(new TypedValue(parent.Processor.Load(symbol).Instance));
-            result.Not<Interpreter>(() => { throw new FitFailureException("Result is not a Fixture."); });
+            var result =  Processor.Operate<WrapOperator>(new TypedValue(Processor.Load(symbol).Instance));
+            result.AsNot<Interpreter>(() => { throw new FitFailureException("Result is not a Fixture."); });
             return result.GetValueAs<Interpreter>();
         }
 
@@ -46,7 +45,7 @@ namespace fit {
             if (theRestOfTheCells != null) {
                 var adapter = fixture as MutableDomainAdapter;
                 if (adapter != null) {
-                    Fixture parent = myParentFixture as FlowFixtureBase;
+                    Fixture parent = Processor.TestStatus.Parent as FlowFixtureBase;
                     adapter.SetSystemUnderTest(new MethodPhrase(theRestOfTheCells).Evaluate(parent ?? this));
                 }
             }

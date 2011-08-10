@@ -17,10 +17,10 @@ namespace fit.Test.NUnit {
         public void TestRegisterAndGet()
         {
             Assert.IsTrue(IsMatch(new ParseSymbol(), "<<xyz"));
-            Assert.IsFalse(IsMatch(new CheckOperationSymbolSave(), "x<<yz"));
+            Assert.IsFalse(IsMatch(new CheckSymbolSave(), "x<<yz"));
             Assert.IsFalse(IsMatch(new ParseSymbol(), "x<<yz"));
-            Assert.IsTrue(IsMatch(new CheckOperationSymbolSave(), ">>xyz"));
-            Assert.IsFalse(IsMatch(new CheckOperationSymbolSave(), "x>>yz"));
+            Assert.IsTrue(IsMatch(new CheckSymbolSave(), ">>xyz"));
+            Assert.IsFalse(IsMatch(new CheckSymbolSave(), "x>>yz"));
             Assert.IsFalse(IsMatch(new ParseSymbol(), "x>>yz"));
         }
 
@@ -74,7 +74,7 @@ namespace fit.Test.NUnit {
             StoreSymbol("def", "ghi");
             stringFixture.Field = "xyz";
             TestUtils.DoCheck(stringFixture, TestUtils.CreateCellRange("Field"), cell);
-            Assert.AreEqual("<<def<span class=\"fit_grey\"> ghi</span> <span class=\"fit_label\">expected</span><hr />xyz <span class=\"fit_label\">actual</span>", cell.Body);
+            Assert.AreEqual("<<def<span class=\"fit_grey\"> ghi</span> <span class=\"fit_label\">expected</span><hr />xyz <span class=\"fit_label\">actual</span><hr />At 0 expected g was x", cell.Body);
             TestUtils.VerifyCounts(stringFixture, 0, 1, 0, 0);
         }	
 

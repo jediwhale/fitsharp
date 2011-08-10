@@ -4,7 +4,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using fit.Operators;
-using fitSharp.Fit.Engine;
+using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
@@ -25,7 +25,6 @@ namespace fit.Service {
             Add(new CompareList(), 0);
             Add(new ParseTable(), 0);
             Add(new ParseTree(), 0);
-            Add(new ParseInterpreter(), 0);
         }
 
         public Operators(Operators<Cell, CellProcessor> other) {

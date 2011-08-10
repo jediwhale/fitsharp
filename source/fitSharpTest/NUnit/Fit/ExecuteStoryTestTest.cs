@@ -4,14 +4,12 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
-using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
 using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
-using TestStatus=fitSharp.Fit.Model.TestStatus;
 
 namespace fitSharp.Test.NUnit.Fit {
     [TestFixture] public class ExecuteStoryTestTest {
@@ -33,13 +31,13 @@ namespace fitSharp.Test.NUnit.Fit {
         }
 
         [Test] public void SetsUpConfiguration() {
-            processor.Configuration.SetItem(typeof(SampleItem), new SampleItem());
+            processor.Configuration.GetItem<SampleItem>();
             execute.DoTables(tables);
             Assert.IsTrue(processor.Configuration.GetItem<SampleItem>().IsSetUp);
         }
 
         [Test] public void TearsDownConfiguration() {
-            processor.Configuration.SetItem(typeof(SampleItem), new SampleItem());
+            processor.Configuration.GetItem<SampleItem>();
             execute.DoTables(tables);
             Assert.IsTrue(processor.Configuration.GetItem<SampleItem>().IsTearDown);
         }
@@ -59,11 +57,7 @@ namespace fitSharp.Test.NUnit.Fit {
 
             public SampleFixture() { Count++; }
 
-            public bool IsVisible { get { return true; } }
-            public void Interpret(Tree<Cell> table) {}
-            public TestStatus TestStatus { get { return new TestStatus(); } }
-            public void Prepare(CellProcessor processor, Interpreter parent, Tree<Cell> table) {
-            }
+            public void Interpret(CellProcessor processor, Tree<Cell> table) {}
         }
 
         private class SampleItem: Copyable, SetUpTearDown {

@@ -33,6 +33,7 @@ namespace fitSharp.Machine.Engine {
         }
 
         public void AddAssembly(string assemblyName) { assemblies.AddAssembly(assemblyName); }
+        public void AddAssemblies(IEnumerable<string> assemblyNames) { foreach (var assemblyName in assemblyNames)  AddAssembly(assemblyName);}
 
         public void AddNamespace(string namespaceName) {
             namespaces.Add(namespaceName.Trim());

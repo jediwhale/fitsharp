@@ -92,15 +92,39 @@ The fit.css file is only creates in sub-directories where test results are writt
 <tr><td>not</td><td>file</td><td>testoutput\SampleSubNoTest\fit.css</td><td>exists</td></tr>
 </table>
 <br>
-The input can be a single file.<br>
+The input can be a single file. In this case, the suite setup and teardown are not run.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>with</td><td>new</td><td>folder runner story</td></tr>
-<tr><td>run</td><td>-c,document\fitSharp\Fit\SampleInputFiles\SampleConfig.xml ,-i,document\fitSharp\Fit\SampleInputFiles\SampleSimpleTest.html</td></tr>
+<tr><td>make empty folder</td><td>testoutput</td></tr>
 </table>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>check</td><td>results</td><td>1 right, 0 wrong, 0 ignored, 0 exceptions</td></tr>
+<tr><td>with</td><td>new</td><td>folder runner story</td></tr>
+<tr><td>run</td><td>-c,document\fitSharp\Fit\SampleInputFiles\SampleConfig.xml ,-i,document\fitSharp\Fit\SampleInputFiles\SampleSubFolder\SampleFailingTest.html</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>check</td><td>results</td><td>0 right, 1 wrong, 0 ignored, 0 exceptions</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>with</td><td>file system</td></tr>
+<tr><td>not</td><td>file</td><td>testoutput\SampleSubFolder\SuiteSetUp.html</td><td>exists</td></tr>
+</table>
+<br>
+To process a selected file with the associated suite set up and tear down, use the -s option. This specifies the name of the file, relative to the input folder<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>make empty folder</td><td>testoutput</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>with</td><td>new</td><td>folder runner story</td></tr>
+<tr><td>run</td><td>-c,document\fitSharp\Fit\SampleInputFiles\SampleConfig.xml ,-s,SampleSubFolder\SampleFailingTest.html</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>check</td><td>results</td><td>2 right, 1 wrong, 0 ignored, 0 exceptions</td></tr>
 </table>
 <br>
 XML output can be created.<br>

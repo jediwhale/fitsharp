@@ -9,7 +9,7 @@ namespace fitSharp.Machine.Engine {
     public class BasicProcessor: ProcessorBase<string, BasicProcessor> {
         private readonly Operators<string, BasicProcessor> operators;
 
-        public BasicProcessor(): this(new Configuration()) {
+        public BasicProcessor(): this(new TypeDictionary()) {
         }
 
         public BasicProcessor(Configuration configuration): base(configuration) {

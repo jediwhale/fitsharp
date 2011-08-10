@@ -13,38 +13,45 @@ namespace fitSharp.Fit.Operators {
             return true;
         }
 
-        public bool Compare(TypedValue actual, Tree<Cell> expected) {
-            if (actual.IsVoid) {
+        public bool Compare(TypedValue actualValue, Tree<Cell> expected) {
+            if (actualValue.IsVoid) {
                 return false;
             }
-            actual.ThrowExceptionIfNotValid();
-            TypedValue expectedValue = Processor.ParseTree(actual.Type, expected);
-            return AreEqual(expectedValue.Value, actual.Value);
+            actualValue.ThrowExceptionIfNotValid();
+            var expectedValue = Processor.ParseTree(actualValue.Type, expected);
+
+            return AreEqual(actualValue, expectedValue, expected.Value);
         }
 
-        private static bool AreEqual(object o1, object o2)
-        {
-            if (o1 is DateTime && o2 is DateTime)
-                return o1.ToString().Equals(o2.ToString());
-            if (o1 == null || o1 is DBNull)
-                return o2 == null || o2 is DBNull;
-            if (o2 == null || o2 is DBNull) return false;
-            if (o1 is Array && o2 is Array)
-                return ArraysAreEqual(o1, o2);
-            if (o1 is string)
-                return o1.Equals(o2.ToString());
-            return (o1.Equals(o2));
+        bool AreEqual(TypedValue actualValue, TypedValue expectedValue, Cell expectedCell) {
+            if (expectedValue.Type == typeof(DateTime) && actualValue.Type == typeof(DateTime))
+                return expectedValue.ValueString == actualValue.ValueString;
+
+            if (expectedValue.IsNull)
+                return actualValue.IsNull;
+
+            if (actualValue.IsNull) return false;
+
+            if (expectedValue.GetValueAs<Array>() != null && actualValue.GetValueAs<Array>() != null)
+                return ArraysAreEqual(expectedValue.GetValueAs<Array>(), actualValue.GetValueAs<Array>());
+
+            if (expectedValue.Type == typeof(string)) {
+                if (expectedValue.ValueString == actualValue.ValueString) return true;
+                if (expectedCell != null) {
+                    var difference = new StringDifference(expectedValue.ValueString, actualValue.ValueString).ToString();
+                    if (difference.Length > 0) expectedCell.SetAttribute(CellAttribute.Difference, difference);
+                }
+                return false;
+            }
+
+            return expectedValue.Value.Equals(actualValue.Value);
         }
 
-        private static bool ArraysAreEqual(object o1, object o2)
-        {
-            var a1 = (Array) o1;
-            var a2 = (Array) o2;
+        bool ArraysAreEqual(Array a1, Array a2) { //todo: for any IEnumerable
             if (a1.Length != a2.Length)
                 return false;
-            for (int i = 0; i < a1.Length; i++)
-            {
-                if (!AreEqual(a1.GetValue(i), a2.GetValue(i)))
+            for (var i = 0; i < a1.Length; i++) {
+                if (!AreEqual(new TypedValue(a1.GetValue(i), a1.GetType().GetElementType()), new TypedValue(a2.GetValue(i), a2.GetType().GetElementType()), null))
                     return false;
             }
             return true;

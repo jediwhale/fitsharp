@@ -13,7 +13,7 @@ namespace fitSharp.Machine.Model {
         Dictionary<CellAttribute, string> attributes;
 
         public string Text { get; private set; }
-        public TypedValue Value { get; set; }
+        public TypedValue ParsedValue { get; set; }
 
         public CellBase(string text) {
             Text = text;

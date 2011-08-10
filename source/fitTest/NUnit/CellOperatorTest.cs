@@ -38,9 +38,8 @@ namespace fit.Test.NUnit {
             return compareOperator.CanCompare(new TypedValue(null, typeof(object)), TestUtils.CreateCell(value));
         }
 
-        public static bool IsMatch(InvokeOperator<Cell> checkOperation, string input) {
-            return checkOperation.CanInvoke(CellOperationContext.Make(new TypedValue(null)),
-                                                            CellOperationContext.CheckCommand,
+        public static bool IsMatch(CheckOperator checkOperator, string input) {
+            return checkOperator.CanCheck(CellOperationValue.Make(new TypedValue(null)),
                                                             TestUtils.CreateCell(input));
         }
 

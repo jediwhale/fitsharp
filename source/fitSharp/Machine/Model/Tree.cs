@@ -39,5 +39,9 @@ namespace fitSharp.Machine.Model {
             serializer.WriteSuffix(tree);
             return serializer;
         }
+
+        public static T Last<T>(this ReadList<T> list) {
+            return list[list.Count - 1];
+        }
     }
 }

@@ -42,7 +42,7 @@ namespace fitSharp.Fit.Operators {
 			builder.Append(cell.GetAttribute(CellAttribute.Trailer));
 		}
 
-        string Tag(Cell cell) {
+        static string Tag(Cell cell) {
 	        string tag = cell.GetAttribute(CellAttribute.StartTag);
 	        int space = tag.IndexOf(' ');
 	        if (space < 0) space = tag.Length - 1;
@@ -69,6 +69,9 @@ namespace fitSharp.Fit.Operators {
             }
             if (cell.HasAttribute(CellAttribute.Actual)) {
                 result += Label("expected") + "<hr />" + HttpUtility.HtmlEncode(cell.GetAttribute(CellAttribute.Actual)) + Label("actual");
+                if (cell.HasAttribute(CellAttribute.Difference)) {
+                    result += "<hr />" + HttpUtility.HtmlEncode(cell.GetAttribute(CellAttribute.Difference));
+                }
             }
             if (cell.HasAttribute(CellAttribute.Exception)) {
                 result += "<hr /><pre><div class=\"fit_stacktrace\">" + cell.GetAttribute(CellAttribute.Exception) + "</div></pre>";

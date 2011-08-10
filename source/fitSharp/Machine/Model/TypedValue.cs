@@ -16,19 +16,19 @@ namespace fitSharp.Machine.Model {
         public T GetValue<T>() { return (T)Value;} 
         public T GetValueAs<T>() where T: class { return Value as T;}
 
-        public void For<T>(Action<T> action, Action notAction) where T: class {
+        public void As<T>(Action<T> action, Action notAction) where T: class {
             if (!HasValue) return;
             var valueAs = GetValueAs<T>();
             if (valueAs != null) action(valueAs);
             else notAction();
         }
 
-        public void For<T>(Action<T> action) where T: class {
-            For(action, () => { });
+        public void As<T>(Action<T> action) where T: class {
+            As(action, () => { });
         }
 
-        public void Not<T>(Action notAction) where T: class {
-            For<T>(t => {}, notAction);
+        public void AsNot<T>(Action notAction) where T: class {
+            As<T>(t => {}, notAction);
         }
 
         public Type Type { get; private set; }
@@ -41,9 +41,13 @@ namespace fitSharp.Machine.Model {
         public TypedValue(object value): this(value, value != null ? value.GetType() : typeof(object)) {}
 
         public bool IsVoid { get { return Type == typeof (void) && Value == null; } }
-        public bool IsValid { get { return Type != typeof (void) || Value == null; } }
-        public bool HasValue { get { return Type != typeof (void) && Type != typeof(DBNull) && Value != null; } }
-        public bool IsNullOrEmpty { get { return Value == null || Type == typeof(DBNull) || Value.ToString().Length == 0; } }
+        public bool IsInvalid { get { return Type == typeof (void) && Value != null; } }
+        public bool IsValid { get { return !IsInvalid; } }
+        public bool IsObject { get { return IsValid && ! IsVoid; } }
+        public bool HasValue { get { return IsObject && !IsNull; } }
+        public bool IsNull { get { return IsObject && (Value == null || Type == typeof(DBNull)); } }
+        public bool IsNullOrEmpty { get { return IsObject && (IsNull || Value.ToString().Length == 0); } }
+
         public string ValueString {
             get {
                 if (IsVoid) return "void";

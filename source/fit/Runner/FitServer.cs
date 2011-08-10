@@ -70,7 +70,7 @@ namespace fitnesse.fitserver
 			        switch (argumentPosition)
 			        {
 			            case ASSEMBLYLIST:
-			                new PathParser(t).AddAssemblies(configuration);
+                            configuration.GetItem<ApplicationUnderTest>().AddAssemblies(new PathParser(t).AssemblyPaths);
 			                break;
 			            case HOST:
 			                host = t;

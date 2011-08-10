@@ -3,7 +3,6 @@
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
-using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
 using fitSharp.Machine.Model;
@@ -14,8 +13,8 @@ using TestStatus=fitSharp.Fit.Model.TestStatus;
 namespace fitSharp.Test.NUnit.Fit {
     [TestFixture] public class CellOperationDefaultTest {
         Mock<CellProcessor> processor;
-        InvokeOperationDefault invoke;
-        CheckOperationDefault check;
+        ExecuteDefault invoke;
+        CheckDefault check;
         TypedValue target;
         TypedValue result;
         TestStatus testStatus;
@@ -62,7 +61,7 @@ namespace fitSharp.Test.NUnit.Fit {
 
         [Test] public void LastActionIsSetAsExpectedCellAttribute() {
             SetUpSUT("procedure");
-            check.Invoke(CellOperationContext.Make(target.Value, new CellTreeLeaf("procedure"), new CellTree()), CellOperationContext.CheckCommand, targetCell);
+            check.Check(CellOperationValue.Make(target.Value, new CellTreeLeaf("procedure"), new CellTree()), targetCell);
             Assert.AreEqual("blah blah", targetCell.Value.GetAttribute(CellAttribute.Folded));
         }
 
@@ -71,16 +70,16 @@ namespace fitSharp.Test.NUnit.Fit {
         }
 
         TypedValue Execute(Tree<Cell> targetCell) {
-            return invoke.Invoke(CellOperationContext.Make(target.Value, new CellTreeLeaf(memberName), new CellTree()),
-                CellOperationContext.InvokeCommand, targetCell);
+            return invoke.Execute(target.Value, new CellTreeLeaf(memberName), new CellTree(), 
+                targetCell == null ? null : targetCell.Value);
         }
 
         void SetUpSUT(string memberName) {
             this.memberName = memberName;
             testStatus = new TestStatus();
             processor = new Mock<CellProcessor>();
-            invoke = new InvokeOperationDefault {Processor = processor.Object};
-            check = new CheckOperationDefault {Processor = processor.Object};
+            invoke = new ExecuteDefault {Processor = processor.Object};
+            check = new CheckDefault {Processor = processor.Object};
 
             target = new TypedValue("target");
             result = new TypedValue("result");

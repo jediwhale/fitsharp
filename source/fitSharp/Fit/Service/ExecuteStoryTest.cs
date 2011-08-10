@@ -4,7 +4,6 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
-using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
 using fitSharp.IO;
 using fitSharp.Machine.Engine;
@@ -15,12 +14,18 @@ namespace fitSharp.Fit.Service {
     public delegate void WriteTestResult(Tree<Cell> tables, TestCounts counts);
 
     public class ExecuteStoryTest {
-        readonly CellProcessor processor;
-        readonly WriteTestResult writer;
+        public static FlowInterpreter MakeDefaultFlowInterpreter(CellProcessor processor, TypedValue target) {
+            var fixture = processor.Parse(typeof (Interpreter), target, defaultFlowTable.Branches[0]).GetValue<FlowInterpreter>();
+            fixture.Interpret(processor, defaultFlowTable);
+            return fixture;
+        }
 
-        Interpreter activeFixture;
-        FlowInterpreter flowFixture;
-        int tableCount;
+        public static void DoTable(Tree<Cell> table, Interpreter activeFixture, CellProcessor processor, bool inFlow) {
+            var activeFlowFixture = activeFixture as FlowInterpreter;
+            if (activeFlowFixture != null) activeFlowFixture.DoSetUp(processor, table);
+            activeFixture.Interpret(processor, table);
+            if (activeFlowFixture != null && !inFlow) activeFlowFixture.DoTearDown(table);
+        }
 
         public ExecuteStoryTest(CellProcessor processor, WriteTestResult writer) {
             this.writer = writer;
@@ -33,9 +38,9 @@ namespace fitSharp.Fit.Service {
 			processor.TestStatus.Summary["run elapsed time"] = new ElapsedTime();
             Cell heading = tables.Branches[0].Branches[0].Branches[0].Value;
             try {
-                processor.Configuration.SetUp();
+                processor.Configuration.Apply(i => i.As<SetUpTearDown>(s => s.SetUp()));
                 InterpretTables(tables);
-                processor.Configuration.TearDown();
+                processor.Configuration.Apply(i => i.As<SetUpTearDown>(s => s.TearDown()));
             }
             catch (System.Exception e) {
                 processor.TestStatus.MarkException(heading, e);
@@ -49,13 +54,13 @@ namespace fitSharp.Fit.Service {
                 flowFixture = null;
             }
             catch (TypeMissingException) {
-                activeFixture = processor.ParseTree<Cell, Interpreter>(new CellTree("fitlibrary.DoFixture"));
-                flowFixture = (FlowInterpreter) activeFixture;
+                flowFixture = MakeDefaultFlowInterpreter(processor, TypedValue.Void);
+                activeFixture = flowFixture;
             }
         }
 
-		void InterpretTables(Tree<Cell> theTables) {
-            tableCount = 1;
+        void InterpretTables(Tree<Cell> theTables) {
+		    processor.TestStatus.TableCount = 1;
             foreach (Tree<Cell> table in theTables.Branches) {
                 try {
                     try {
@@ -69,7 +74,7 @@ namespace fitSharp.Fit.Service {
                     if (!typeof(AbandonException).IsAssignableFrom(e.GetType())) throw;
                 }
                 activeFixture = null;
-                tableCount++;
+		        processor.TestStatus.TableCount++;
             }
             if (flowFixture != null) flowFixture.DoTearDown(theTables.Branches[0]);
 		}
@@ -77,24 +82,24 @@ namespace fitSharp.Fit.Service {
         void InterpretTable(Tree<Cell> table) {
             Cell heading = table.Branches[0].Branches[0].Value;
             if (heading == null || processor.TestStatus.IsAbandoned) return;
-            if (flowFixture == null && tableCount == 1) GetStartingFixture(table);
+            if (flowFixture == null && processor.TestStatus.TableCount == 1) GetStartingFixture(table);
             if (flowFixture == null) {
                 if (activeFixture == null) activeFixture = processor.ParseTree<Cell, Interpreter>(table.Branches[0]);
                 var activeFlowFixture = activeFixture as FlowInterpreter;
-                if (activeFlowFixture != null && activeFlowFixture.IsInFlow(tableCount)) flowFixture = activeFlowFixture;
-                if (!activeFixture.IsVisible) tableCount--;
-                DoTable(table, activeFixture, flowFixture != null);
+                if (activeFlowFixture != null && activeFlowFixture.IsInFlow(processor.TestStatus.TableCount)) flowFixture = activeFlowFixture;
+                DoTable(table, activeFixture, processor, flowFixture != null);
             }
             else {
                 new InterpretFlow().DoTableFlow(processor, flowFixture, table);
             }
         }
 
-        public static void DoTable(Tree<Cell> table, Interpreter activeFixture, bool inFlow) {
-            var activeFlowFixture = activeFixture as FlowInterpreter;
-            if (activeFlowFixture != null) activeFlowFixture.DoSetUp(table);
-            activeFixture.Interpret(table);
-            if (activeFlowFixture != null && !inFlow) activeFlowFixture.DoTearDown(table);
-        }
+        static readonly CellTree defaultFlowTable = new CellTree(new CellTree("fitlibrary.DoFixture"));
+
+        readonly CellProcessor processor;
+        readonly WriteTestResult writer;
+
+        Interpreter activeFixture;
+        FlowInterpreter flowFixture;
     }
 }

@@ -4,7 +4,6 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System.Linq;
-using fitSharp.Fit.Engine;
 using fitSharp.Fit.Exception;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
@@ -24,7 +23,7 @@ namespace fitSharp.Fit.Service {
             this.interpreter = interpreter;
             this.processor = processor;
 
-            if (interpreter.TestStatus.IsAbandoned) return;
+            if (processor.TestStatus.IsAbandoned) return;
             hasFinishedTable = false;
             for (var i = 0; i < table.Branches.Count; i++) {
                 if (i < rowsToSkip) continue;
@@ -68,9 +67,8 @@ namespace fitSharp.Fit.Service {
                         ColorMethodName(interpreter.MethodRowSelector.SelectMethodCells(currentRow), result.GetValue<bool>());
                     }
                     else {
-                        new CellOperationImpl(processor)
-                            .Wrap(result)
-                            .For<Interpreter>(i => ProcessRestOfTable(i, processor.MakeCell(string.Empty, table.Branches.Skip(rowNumber))));
+                        processor.Operate<WrapOperator>(result)
+                            .As<Interpreter>(i => ProcessRestOfTable(i, processor.MakeCell(string.Empty, table.Branches.Skip(rowNumber))));
                     }
                 }
             }
@@ -86,9 +84,9 @@ namespace fitSharp.Fit.Service {
         }
 
         void ProcessRestOfTable(Interpreter childInterpreter, Tree<Cell> theRestOfTheRows) {
-            childInterpreter.Prepare(processor, interpreter, theRestOfTheRows.Branches[0]);
+            processor.TestStatus.Parent = interpreter;
             try {
-                ExecuteStoryTest.DoTable(theRestOfTheRows, childInterpreter, false);
+                ExecuteStoryTest.DoTable(theRestOfTheRows, childInterpreter, processor, false);
             }
             catch (System.Exception e) {
                 processor.TestStatus.MarkException(theRestOfTheRows.Branches[0].Branches[0].Value, e);

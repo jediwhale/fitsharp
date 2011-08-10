@@ -29,29 +29,14 @@ namespace fitSharp.Machine.Application {
         public int Run(IList<string> commandLineArguments) {
             try {
                 ParseArguments(commandLineArguments);
-                var appConfigName = LookForAppConfig();
-                return appConfigName.Length == 0
+                return !configuration.HasItem<AppDomainSetup>()
                            ? RunInCurrentDomain()
-                           : RunInNewDomain(appConfigName, commandLineArguments);
+                           : RunInNewDomain(configuration.GetItem<AppDomainSetup>(), commandLineArguments);
             }
             catch (System.Exception e) {
                 progressReporter.Write(string.Format("{0}\n", e));
                 return 1;
             }
-        }
-
-        readonly List<string> extraArguments = new List<string>();
-        readonly ProgressReporter progressReporter;
-        readonly FolderModel folderModel;
-        readonly Configuration configuration = new Configuration();
-
-        string appConfigArgument;
-        int result;
-
-        string LookForAppConfig() {
-            if (!string.IsNullOrEmpty(appConfigArgument)) return Path.GetFullPath(appConfigArgument);
-            var appConfigSettings = configuration.GetItem<Settings>().AppConfigFile;
-            return !string.IsNullOrEmpty(appConfigSettings) ? appConfigSettings : string.Empty;
         }
 
         int RunInCurrentDomain(IList<string> commandLineArguments) {
@@ -67,12 +52,10 @@ namespace fitSharp.Machine.Application {
             return Execute();
         }
 
-        static int RunInNewDomain(string appConfigName, IList<string> commandLineArguments) {
-            //todo: can we specify apppath for the new domain?
-            var appDomainSetup = new AppDomainSetup {
-                ApplicationBase = AppDomain.CurrentDomain.BaseDirectory,
-                ConfigurationFile = appConfigName
-            };
+        static int RunInNewDomain(AppDomainSetup appDomainSetup, IList<string> commandLineArguments) {
+            if (string.IsNullOrEmpty(appDomainSetup.ApplicationBase)) {
+                appDomainSetup.ApplicationBase = AppDomain.CurrentDomain.BaseDirectory;
+            }
             var newDomain = AppDomain.CreateDomain("fitSharp.Machine", null, appDomainSetup);
             int result;
             try {
@@ -90,7 +73,7 @@ namespace fitSharp.Machine.Application {
 
         void ParseArguments(IList<string> commandLineArguments) {
             var argumentParser = new ArgumentParser();
-            argumentParser.AddArgumentHandler("a", value => appConfigArgument = value);
+            argumentParser.AddArgumentHandler("a", value => configuration.GetItem<AppDomainSetup>().ConfigurationFile = Path.GetFullPath(value));
             argumentParser.AddArgumentHandler("c", value => new SuiteConfiguration(configuration).LoadXml(folderModel.FileContent(value)));
             argumentParser.AddArgumentHandler("r", value => configuration.GetItem<Settings>().Runner = value);
             argumentParser.SetUnusedHandler(value => extraArguments.Add(value));
@@ -134,5 +117,12 @@ namespace fitSharp.Machine.Application {
         private void Run() {
             result = Runner.Run(extraArguments.ToArray(), configuration, progressReporter);
         }
+
+        readonly List<string> extraArguments = new List<string>();
+        readonly ProgressReporter progressReporter;
+        readonly FolderModel folderModel;
+        readonly Configuration configuration = new TypeDictionary();
+
+        int result;
     }
 }

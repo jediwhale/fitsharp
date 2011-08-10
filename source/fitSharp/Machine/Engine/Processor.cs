@@ -11,17 +11,22 @@ using fitSharp.Machine.Model;
 namespace fitSharp.Machine.Engine {
     public interface Processor<T> {
         Configuration Configuration { get; }
+
         ApplicationUnderTest ApplicationUnderTest { get; }
         void AddNamespace(string namespaceName);
+
         void AddOperator(string operatorName);
-        TypedValue Create(string memberName, Tree<T> parameters);
+        void RemoveOperator(string operatorName);
+
         bool Compare(TypedValue instance, Tree<T> parameters);
         Tree<T> Compose(TypedValue instance);
-        bool Contains<V>(V matchItem);
-        TypedValue Invoke(TypedValue instance, string memberName, Tree<T> parameters);
-        V Load<V>(V matchItem);
         TypedValue Parse(Type type, TypedValue instance, Tree<T> parameters);
-        void RemoveOperator(string operatorName);
+        TypedValue Invoke(TypedValue instance, string memberName, Tree<T> parameters);
+
+        TypedValue Operate<O>(params object[] parameters) where O : class;
+
+        bool Contains<V>(V matchItem);
+        V Load<V>(V matchItem);
         void Store<V>(V newItem);
         void Clear<V>();
     }
@@ -69,6 +74,10 @@ namespace fitSharp.Machine.Engine {
 
         public static V ParseString<T, V>(this Processor<T> processor, string input) {
             return processor.ParseString(typeof (V), input).GetValue<V>();
+        }
+
+        public static TypedValue Create<T>(this Processor<T> processor, string memberName, Tree<T> parameters) {
+            return processor.Operate<CreateOperator<T>>(memberName, parameters);
         }
     }
 
@@ -151,20 +160,24 @@ namespace fitSharp.Machine.Engine {
                 });
         }
 
-        public TypedValue Create(string memberName, Tree<T> parameters) {
-            return DoLoggedOperation(
-                string.Format("create {0}", memberName),
-                logging => {
-                    var result = TypedValue.Void;
-                        Operators.Do<CreateOperator<T>>(
-                            o => o.CanCreate(memberName, parameters),
-                            o => {
-                                result = o.Create(memberName, parameters);
-                                logging.LogResult(o, result);
-                            });
-                        return result;
-                });
+        public TypedValue Operate<O>(params object[] parameters) where O: class {
+            var operationType = typeof (O).Name;
+            var operationName = operationType.Substring(0, operationType.IndexOf("Operator"));
+            var logging = new OperationLogging(Configuration);
+            try {
+                logging.Start(operationName);
+                logging.LogParameters(parameters);
+                var candidate = Operators.FindOperator<O>(parameters);
+                var member = RuntimeType.FindDirectInstance(candidate, new IdentifierName(operationName), parameters.Length);
+                var result = member.Invoke(parameters).GetValue<TypedValue>();
+                logging.LogResult(candidate, result);
+                return result;
+            }
+            finally {
+                logging.End();
+            }
         }
+
 
         public TypedValue Invoke(TypedValue instance, string memberName, Tree<T> parameters) {
             return DoLoggedOperation(
@@ -230,6 +243,12 @@ namespace fitSharp.Machine.Engine {
                 if (message.Length <= 0) return;
                 logging = configuration.GetItem<Logging>();
                 logging.StartWrite(message);
+            }
+
+            public void LogParameters(IEnumerable<object> parameters) {
+                foreach (var parameter in parameters) {
+                    if (parameter != null) logging.Write(" " + parameter);
+                }
             }
 
             public void LogResult(object o, TypedValue result) {

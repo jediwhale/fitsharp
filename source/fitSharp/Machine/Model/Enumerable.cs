@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace fitSharp.Machine.Model {
     public static class EnumerableExtension {
@@ -29,6 +30,15 @@ namespace fitSharp.Machine.Model {
                 break;
             }
             list.Add(newItem);
+        }
+
+        public static string Join<T>(this IEnumerable<T> list, string separator) {
+            var result = new StringBuilder();
+            foreach (var item in list) {
+                if (result.Length > 0) result.Append(separator);
+                result.Append(item.ToString());
+            }
+            return result.ToString();
         }
     }
 }

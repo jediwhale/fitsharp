@@ -10,7 +10,7 @@ namespace fitSharp.Fit.Model {
         readonly Cell baseCell;
 
         public string Text { get; private set; }
-        public TypedValue Value { get; set; }
+        public TypedValue ParsedValue { get; set; }
 
         public CellSubstring(Cell baseCell, string text) {
             this.baseCell = baseCell;

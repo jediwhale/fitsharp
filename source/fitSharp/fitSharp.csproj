@@ -43,23 +43,29 @@
     <Compile Include="Fit\Application\ConfigurationList.cs" />
     <Compile Include="Fit\Application\FileExclusions.cs" />
     <Compile Include="Fit\Fixtures\ClearSymbols.cs" />
+    <Compile Include="Fit\Fixtures\CommentFixture.cs" />
+    <Compile Include="Fit\Fixtures\Compute.cs" />
     <Compile Include="Fit\Fixtures\ConfigureFixture.cs" />
-    <Compile Include="Fit\Operators\CellOperationContext.cs" />
+    <Compile Include="Fit\Operators\CellOperationValue.cs" />
     <Compile Include="Fit\Operators\CellOperators.cs" />
-    <Compile Include="Fit\Engine\CellProcessor.cs" />
+    <Compile Include="Fit\Model\CellProcessor.cs" />
     <Compile Include="Fit\Exception\IgnoredException.cs" />
     <Compile Include="Fit\Fixtures\Define.cs" />
-    <Compile Include="Fit\Operators\CheckOperationDefault.cs" />
-    <Compile Include="Fit\Operators\CheckOperationSymbolSave.cs" />
+    <Compile Include="Fit\Operators\CheckDefault.cs" />
+    <Compile Include="Fit\Operators\CheckSymbolSave.cs" />
+    <Compile Include="Fit\Operators\CheckOperator.cs" />
     <Compile Include="Fit\Operators\ComposeDefault.cs" />
     <Compile Include="Fit\Operators\ComposeShowAsOperator.cs" />
+    <Compile Include="Fit\Operators\ExecuteOperator.cs" />
     <Compile Include="Fit\Operators\InvokeSpecialAction.cs" />
-    <Compile Include="Fit\Operators\InvokeOperationDefault.cs" />
+    <Compile Include="Fit\Operators\ExecuteDefault.cs" />
     <Compile Include="Fit\Operators\InvokeSetUpTearDown.cs" />
+    <Compile Include="Fit\Operators\ParseInterpreter.cs" />
     <Compile Include="Fit\Operators\ParseNullArray.cs" />
     <Compile Include="Fit\Operators\ParseStoryTestString.cs" />
     <Compile Include="Fit\Operators\ParseTextStoryTestString.cs" />
-    <Compile Include="Fit\Operators\WrapOperationDefault.cs" />
+    <Compile Include="Fit\Operators\WrapDefault.cs" />
+    <Compile Include="Fit\Operators\WrapOperator.cs" />
     <Compile Include="Fit\Runner\StoryTestPageFilter.cs" />
     <Compile Include="Fit\Runner\TagFilter.cs" />
     <Compile Include="Fit\Service\InterpretFlow.cs" />
@@ -74,6 +80,7 @@
     <Compile Include="Machine\Engine\Logging.cs" />
     <Compile Include="Machine\Engine\ApplicationDomain.cs" />
     <Compile Include="Machine\Engine\ParameterList.cs" />
+    <Compile Include="Machine\Engine\TypeDictionary.cs" />
     <Compile Include="Machine\Engine\Types.cs" />
     <Compile Include="Machine\Model\CellBase.cs" />
     <Compile Include="Fit\Model\CellSubstring.cs" />
@@ -86,7 +93,7 @@
     <Compile Include="Fit\Operators\CompareEmpty.cs" />
     <Compile Include="Fit\Operators\CompareFail.cs" />
     <Compile Include="Fit\Operators\CompareRegEx.cs" />
-    <Compile Include="Fit\Operators\CheckOperationEmpty.cs" />
+    <Compile Include="Fit\Operators\CheckEmpty.cs" />
     <Compile Include="Fit\Operators\ParseByteArray.cs" />
     <Compile Include="Fit\Operators\ParseDate.cs" />
     <Compile Include="Fit\Operators\CompareNumeric.cs" />
@@ -104,7 +111,7 @@
     <Compile Include="Fit\Service\CellOperation.cs" />
     <Compile Include="Fit\Service\CellProcessorBase.cs" />
     <Compile Include="Fit\Service\ExecuteStoryTest.cs" />
-    <Compile Include="Fit\Engine\Interpreter.cs" />
+    <Compile Include="Fit\Model\Interpreter.cs" />
     <Compile Include="Fit\Model\Procedure.cs" />
     <Compile Include="Fit\Service\NullResultWriter.cs" />
     <Compile Include="Fit\Service\ResultWriter.cs" />
@@ -121,7 +128,7 @@
     <Compile Include="Fit\Operators\CompareFloatingPoint.cs" />
     <Compile Include="Fit\Operators\ParseMemberName.cs" />
     <Compile Include="Fit\Model\GracefulName.cs" />
-    <Compile Include="Fit\Model\MemberName.cs" />
+    <Compile Include="Machine\Model\MemberName.cs" />
     <Compile Include="Fit\Operators\CompareDefault.cs" />
     <Compile Include="Fit\Operators\CompareEndsWith.cs" />
     <Compile Include="Fit\Operators\CompareIntegralRange.cs" />
@@ -139,7 +146,10 @@
     <Compile Include="Machine\Engine\ApplicationUnderTest.cs" />
     <Compile Include="Machine\Engine\BasicProcessor.cs" />
     <Compile Include="Machine\Engine\ParseEnum.cs" />
+    <Compile Include="Machine\Model\ObjectExtension.cs" />
     <Compile Include="Machine\Model\SetUp.cs" />
+    <Compile Include="Machine\Model\StringDifference.cs" />
+    <Compile Include="Machine\Model\Traverse.cs" />
     <Compile Include="Parser\Characters.cs" />
     <Compile Include="Parser\CharacterType.cs" />
     <Compile Include="Parser\TextTables.cs" />
@@ -210,7 +220,9 @@
     <Compile Include="Swim\ResultCell.cs" />
     <Compile Include="Swim\ResultPage.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Fit\Engine\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

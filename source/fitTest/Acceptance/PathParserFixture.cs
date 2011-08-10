@@ -3,6 +3,7 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
+using System.Linq;
 using fitnesse.fitserver;
 
 namespace fit.Test.Acceptance {
@@ -10,16 +11,14 @@ namespace fit.Test.Acceptance {
     {
         public string PathString;
         public string[] AssemblyPaths;
-        public string ConfigFilePath;
 
         public override void Execute()
         {
             PathParser parser = new PathParser(PathString);
-            AssemblyPaths = new string[parser.AssemblyPaths.Count];
+            AssemblyPaths = new string[parser.AssemblyPaths.Count()];
             int index = 0;
             foreach(string assemblyPath in parser.AssemblyPaths)
                 AssemblyPaths[index++] = assemblyPath;
-            ConfigFilePath = parser.ConfigFilePath;
         }
 
     }

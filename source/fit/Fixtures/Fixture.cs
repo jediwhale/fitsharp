@@ -6,7 +6,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Service;
 using fitSharp.Machine.Model;
@@ -21,7 +20,6 @@ namespace fit
 	    CellProcessor processor;
 
 	    protected object mySystemUnderTest;
-	    protected Interpreter myParentFixture;
 
 	    public CellProcessor Processor {
 	        get { return processor; }
@@ -47,13 +45,16 @@ namespace fit
 
         public virtual bool IsVisible { get { return true; } }
 
-	    public void Prepare(CellProcessor processor, Interpreter parent, Tree<Cell> row) {
+	    public void Prepare(CellProcessor processor, Tree<Cell> row) {
 	        Processor = processor;
-	        myParentFixture = parent;
 	        GetArgsForRow(row);
 	    }
 
-        public void Interpret(Tree<Cell> table) { DoTable((Parse)table.Value); }
+	    public void Interpret(CellProcessor processor, Tree<Cell> table) {
+	        Prepare(processor, table.Branches[0]);
+	        if (!IsVisible) this.processor.TestStatus.TableCount--;
+	        table.Value.As<Parse>(DoTable);
+	    }
 
 	    public virtual void DoTable(Parse table)
 		{

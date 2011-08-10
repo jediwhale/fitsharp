@@ -12,7 +12,7 @@ using NUnit.Framework;
 namespace fitSharp.Test.NUnit.Machine {
     [TestFixture] public class SuiteConfigurationTest {
         [SetUp] public void SetUp() {
-            configuration = new Configuration();
+            configuration = new TypeDictionary();
             suiteConfiguration = new SuiteConfiguration(configuration);
         }
         [Test] public void MethodIsExecuted() {
@@ -38,7 +38,7 @@ namespace fitSharp.Test.NUnit.Machine {
 
         [Test] public void AliasMethodIsUsed() {
             suiteConfiguration.LoadXml("<config><fit.Namespaces><add>fitSharp.Test.NUnit.Machine</add></fit.Namespaces></config>");
-            Assert.IsNotNull(configuration.GetItem<ApplicationUnderTest>().FindType(new IdentifierName("ConfigurationTest")));
+            Assert.IsNotNull(configuration.GetItem<ApplicationUnderTest>().FindType(new IdentifierName("SuiteConfigurationTest")));
         }
 
         Configuration configuration;

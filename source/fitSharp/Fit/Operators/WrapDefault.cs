@@ -1,35 +1,30 @@
-﻿// Copyright © 2011 Syterra Software Inc.
-// This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
-// This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+﻿// Copyright © 2011 Syterra Software Inc. All rights reserved.
+// The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+// which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
+// to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Xml;
-using fitSharp.Fit.Engine;
-using fitSharp.Machine.Engine;
+using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
 
-namespace fitSharp.Fit.Operators
-{
-    public class WrapOperationDefault: CellOperator, InvokeOperator<Cell>
-    {
-        public bool CanInvoke(TypedValue instance, string memberName, Tree<Cell> parameters) {
-            return instance.Type == typeof (CellOperationContext) && memberName == CellOperationContext.WrapCommand;
+namespace fitSharp.Fit.Operators {
+    public class WrapDefault: CellOperator, WrapOperator {
+        public bool CanWrap(TypedValue result) {
+            return true;
         }
 
-        public TypedValue Invoke(TypedValue instance, string memberName, Tree<Cell> parameters) {
-            var context = instance.GetValue<CellOperationContext>();
-            var result = context.GetTypedActual(Processor);
+        public TypedValue Wrap(TypedValue result) {
             if (!result.HasValue) return result;
             if (result.Type.IsPrimitive) return result;
             if (result.Type == typeof(string)) return result;
             var wrapInterpreter = result.GetValueAs<Interpreter>();
             if (wrapInterpreter != null) return result;
-                if (typeof (IEnumerable<object>).IsAssignableFrom(result.Type))
-                    return MakeInterpreter("fitlibrary.ArrayFixture", typeof(IEnumerable<object>), result.Value);
+            if (typeof (IEnumerable<object>).IsAssignableFrom(result.Type))
+                return MakeInterpreter("fitlibrary.ArrayFixture", typeof(IEnumerable<object>), result.Value);
             if (typeof (IDictionary).IsAssignableFrom(result.Type))
                 return MakeInterpreter("fitlibrary.SetFixture", typeof(IEnumerable), result.GetValue<IDictionary>().Values);
             if (typeof (IEnumerator).IsAssignableFrom(result.Type))

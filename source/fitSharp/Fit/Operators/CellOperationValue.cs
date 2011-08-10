@@ -3,7 +3,6 @@
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
-using fitSharp.Fit.Engine;
 using fitSharp.Fit.Exception;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Engine;
@@ -11,25 +10,13 @@ using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
-    public class CellOperationContext {
-        public const string CheckCommand = "Check";
-        public const string InvokeCommand = "Invoke";
-        public const string WrapCommand = "Wrap";
-
-        public static TypedValue Make(object systemUnderTest, Tree<Cell> memberName, Tree<Cell> parameters) {
-            return new TypedValue(new CellOperationContext(systemUnderTest, memberName, parameters));
+    public class CellOperationValue {
+        public static CellOperationValue Make(object systemUnderTest, Tree<Cell> memberName, Tree<Cell> parameters) {
+            return new CellOperationValue(systemUnderTest, memberName, parameters);
         }
 
-        public static TypedValue Make(TypedValue actualValue) {
-            return new TypedValue(new CellOperationContext(actualValue));
-        }
-
-        public TypedValue DoInvoke(CellProcessor processor) {
-            var targetObjectProvider = systemUnderTest as TargetObjectProvider;
-            var name = GetMemberName(processor);
-            return processor.Invoke(
-                    new TypedValue(targetObjectProvider != null ? targetObjectProvider.GetTargetObject() : systemUnderTest),
-                    name, parameters);
+        public static CellOperationValue Make(TypedValue actualValue) {
+            return new CellOperationValue(actualValue);
         }
 
         public object GetActual(CellProcessor processor) {
@@ -56,13 +43,13 @@ namespace fitSharp.Fit.Operators {
 
         public object SystemUnderTest { get { return systemUnderTest; } }
 
-        CellOperationContext(object systemUnderTest, Tree<Cell> memberName, Tree<Cell> parameters) {
+        CellOperationValue(object systemUnderTest, Tree<Cell> memberName, Tree<Cell> parameters) {
             this.systemUnderTest = systemUnderTest;
             this.memberName = memberName;
             this.parameters = parameters;
         }
 
-        CellOperationContext(TypedValue actualValue) {
+        CellOperationValue(TypedValue actualValue) {
             this.actualValue = actualValue;
         }
 

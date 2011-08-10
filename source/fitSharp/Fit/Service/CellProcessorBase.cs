@@ -4,7 +4,6 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System.Collections.Generic;
-using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
 using fitSharp.Machine.Engine;
@@ -22,7 +21,7 @@ namespace fitSharp.Fit.Service {
             return result;
         }
 
-        public CellProcessorBase(): this(new Configuration(), new CellOperators()) {}
+        public CellProcessorBase(): this(new TypeDictionary(), new CellOperators()) {} //todo: test only -> factory
 
         protected CellProcessorBase(Configuration configuration, CellOperators operators): base(configuration) {
             TestStatus = new TestStatus();
@@ -35,9 +34,9 @@ namespace fitSharp.Fit.Service {
 
         public override TypedValue Parse(System.Type type, TypedValue instance, Tree<Cell> parameters) {
             Cell cell = parameters.Value;
-            if (cell != null && cell.Value.Type == type) return cell.Value;
+            if (cell != null && cell.ParsedValue.Type == type) return cell.ParsedValue;
             TypedValue parsedValue = base.Parse(type, instance, parameters);
-            if (cell != null) cell.Value = parsedValue;
+            if (cell != null) cell.ParsedValue = parsedValue;
             return parsedValue;
         }
 

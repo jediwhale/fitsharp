@@ -9,6 +9,7 @@ using fit.Model;
 using fitlibrary;
 using fitlibrary.exception;
 using fitSharp.Fit.Exception;
+using fitSharp.Fit.Fixtures;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
 using fitSharp.Machine.Exception;

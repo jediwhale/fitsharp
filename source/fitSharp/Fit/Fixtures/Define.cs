@@ -4,26 +4,14 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System.Linq;
-using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Fixtures {
     public class Define: Interpreter {
-        public TestStatus TestStatus { get; private set; }
-
-        private CellProcessor processor;
-
-        public void Prepare(CellProcessor processor, Interpreter parent, Tree<Cell> table) {
-            this.processor = processor;
-        }
-
-        public Define() { TestStatus = new TestStatus(); }
-
-        public bool IsVisible { get { return false; } }
-
-        public void Interpret(Tree<Cell> table) {
+        public void Interpret(CellProcessor processor, Tree<Cell> table) {
+            processor.TestStatus.TableCount--;
             var name = processor.ParseTree<Cell, MemberName>(new EnumeratedTree<Cell>(table.Branches[0].Branches.Skip(1).Alternate()));
             processor.Store(new Procedure(name.ToString(), table));
         }

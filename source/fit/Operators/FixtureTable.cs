@@ -90,7 +90,6 @@ namespace fit.Operators {
         static string[] SplitBody(string theSource) {
             var result = new string[2];
             int marker = theSource.IndexOf("fit_stacktrace");
-            if (marker < 0) marker = theSource.IndexOf("fit_label");
             if (marker < 0) {
                 result[0] = theSource;
             }

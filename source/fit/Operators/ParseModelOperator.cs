@@ -5,32 +5,26 @@
 
 using System;
 using fitSharp.Fit.Operators;
-using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fit.Operators {
-    public class ParseModelOperator: CellOperator, InvokeOperator<Cell>, ParseOperator<Cell> { // todo: split, eliminate fit dependency
-        public bool CanInvoke(TypedValue instance, string memberName, Tree<Cell> parameters) {
-            var context = instance.Value as CellOperationContext;
-            return context != null && memberName == CellOperationContext.CheckCommand
-                   && typeof (Parse).IsAssignableFrom(context.GetTypedActual(Processor).Type);
+    public class ParseModelOperator: CellOperator, CheckOperator, ParseOperator<Cell> { // todo: split, eliminate fit dependency
+        public bool CanCheck(CellOperationValue actualValue, Tree<Cell> expectedCell) {
+            return typeof (Parse).IsAssignableFrom(actualValue.GetTypedActual(Processor).Type);
         }
 
-        public TypedValue Invoke(TypedValue instance, string memberName, Tree<Cell> parameters) {
-            var context = instance.GetValue<CellOperationContext>();
-            TypedValue actualValue = context.GetTypedActual(Processor);
-
-            var cell = (Parse) parameters.Value;
-            var expected = new FixtureTable(cell.Parts);
-            var tables = actualValue.GetValue<Parse>();
-            var actual = new FixtureTable(tables);
-            string differences = actual.Differences(expected);
+        public TypedValue Check(CellOperationValue actualValue, Tree<Cell> expectedCell) {
+            var cell = (Parse) expectedCell.Value;
+            var expectedTable = new FixtureTable(cell.Parts);
+            var tables = actualValue.GetActual<Parse>(Processor);
+            var actualTable = new FixtureTable(tables);
+            string differences = actualTable.Differences(expectedTable);
             if (differences.Length == 0) {
-				Processor.TestStatus.MarkRight(parameters.Value);
+				Processor.TestStatus.MarkRight(expectedCell.Value);
             }
             else {
-                Processor.TestStatus.MarkWrong(parameters.Value, differences);
+                Processor.TestStatus.MarkWrong(expectedCell.Value, differences);
                 cell.More = new Parse("td", string.Empty, tables, null);
             }
             return TypedValue.Void;

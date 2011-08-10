@@ -29,12 +29,16 @@ namespace fitSharp.Machine.Application {
         }
 
         void LoadNode(string typeName, XmlNode methodNode) {
-            new BasicProcessor().InvokeWithThrow(AliasType(typeName), AliasMethod(typeName, methodNode.Name), NodeParameters(methodNode));
+            new BasicProcessor().InvokeWithThrow(AliasType(typeName, methodNode.Name), AliasMethod(typeName, methodNode.Name), NodeParameters(methodNode));
         }
 
-        TypedValue AliasType(string originalType) {
-            string originalTypeLower = originalType.ToLowerInvariant();
-            return new TypedValue(configuration.GetItem(aliasTypes.ContainsKey(originalTypeLower) ? aliasTypes[originalTypeLower] : originalType));
+        TypedValue AliasType(string originalType, string originalMethod) {
+            var originalTypeLower = originalType.ToLowerInvariant();
+            var newType = aliasTypes.ContainsKey(originalTypeLower) ? aliasTypes[originalTypeLower] : originalType;
+            if (newType == "fitSharp.Machine.Application.Settings" && originalMethod.ToLowerInvariant() == "appconfigfile") {
+                newType = "System.AppDomainSetup";
+            }
+            return new TypedValue(configuration.GetItem(newType));
         }
 
         static string AliasMethod(string originalType, string originalMethod) {
@@ -57,6 +61,8 @@ namespace fitSharp.Machine.Application {
                     return "add";
                 case "removeOperator":
                     return "remove";
+                case "AppConfigFile":
+                    return "ConfigurationFile";
             }
             return originalMethod;
         }

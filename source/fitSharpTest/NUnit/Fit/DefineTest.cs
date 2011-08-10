@@ -4,12 +4,12 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
-using fitSharp.Fit.Engine;
 using fitSharp.Fit.Fixtures;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
 using Moq;
 using NUnit.Framework;
+using TestStatus = fitSharp.Fit.Model.TestStatus;
 
 namespace fitSharp.Test.NUnit.Fit {
     [TestFixture] public class DefineTest {
@@ -34,10 +34,12 @@ namespace fitSharp.Test.NUnit.Fit {
             processor
                 .Setup(p => p.Parse(typeof (MemberName), TypedValue.Void, It.Is<Tree<Cell>>(c => isName(c))))
                 .Returns(new TypedValue(new MemberName("myprocedure")));
+            processor
+                .Setup(p => p.TestStatus)
+                .Returns(new TestStatus());
             var define = new Define();
-            define.Prepare(processor.Object, null, new CellTree());
             var input = new CellTree(defineRow, new CellTree("stuff"));
-            define.Interpret(input);
+            define.Interpret(processor.Object, input);
             processor.Verify(p => p.Store(It.Is<Procedure>(v => v.Id == "myprocedure" && v.Instance == input)));
         }
 

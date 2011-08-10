@@ -79,7 +79,7 @@ namespace fitnesse.fitserver
 			{
 				if(verbose)
 					output.WriteLine("Adding assemblies: " + assemblyPath);
-		        new PathParser(assemblyPath).AddAssemblies(configuration);
+                configuration.GetItem<ApplicationUnderTest>().AddAssemblies(new PathParser(assemblyPath).AssemblyPaths);
 			}
 		}
 
@@ -119,7 +119,7 @@ namespace fitnesse.fitserver
 	            while (args.Count > index)
 	                assemblies = assemblies == null ? args[index++] : (assemblies + ";" + args[index++]);
 	            if (assemblies != null) {
-	                new PathParser(assemblies).AddAssemblies(configuration);
+                    configuration.GetItem<ApplicationUnderTest>().AddAssemblies(new PathParser(assemblies).AssemblyPaths);
 	            }
 	            return true;
 	        }
