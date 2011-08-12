@@ -15,7 +15,7 @@ namespace fitSharp.Fit.Runner {
         StoryPageName Name { get; }
         string Content { get; }
         //todo: too many args
-        void ExecuteStoryPage(Action<StoryPageName, StoryTestString, Action<StoryTestString, TestCounts>, Action> executor, ResultWriter resultWriter, Action<TestCounts> handler);
+        void ExecuteStoryPage(Action<StoryPageName, StoryTestString, Action<string, TestCounts>, Action> executor, ResultWriter resultWriter, Action<TestCounts> handler);
     }
 
     public class StoryTestFile: StoryTestPage {
@@ -35,7 +35,7 @@ namespace fitSharp.Fit.Runner {
 
         public StoryPageName Name { get { return myPath; } }
 
-        public void ExecuteStoryPage(Action<StoryPageName, StoryTestString, Action<StoryTestString, TestCounts>, Action> executor, ResultWriter resultWriter, Action<TestCounts> handler) {
+        public void ExecuteStoryPage(Action<StoryPageName, StoryTestString, Action<string, TestCounts>, Action> executor, ResultWriter resultWriter, Action<TestCounts> handler) {
             elapsedTime = new ElapsedTime();
             this.resultWriter = resultWriter;
             this.handler = handler;
@@ -55,9 +55,9 @@ namespace fitSharp.Fit.Runner {
             handler(new TestCounts());
         }
 
-        private void WriteFile(StoryTestString testResult, TestCounts counts) {
+        private void WriteFile(string testResult, TestCounts counts) {
             WriteResult(testResult, counts);
-            resultWriter.WritePageResult(new PageResult(myPath.Name, testResult.ToString(), counts));
+            resultWriter.WritePageResult(new PageResult(myPath.Name, testResult, counts));
             handler(counts);
         }
 
@@ -88,7 +88,7 @@ namespace fitSharp.Fit.Runner {
             }
         }
 
-        private void WriteResult(StoryTestString testResult, TestCounts counts) {
+        private void WriteResult(string testResult, TestCounts counts) {
             string outputFile = Path.Combine(myFolder.OutputPath, myPath.OutputFileName);
             var output = new StringWriter();
             output.Write(testResult);

@@ -17,8 +17,7 @@ namespace fitIf
 {
     public class Shell {
         public Shell(string[] commandLineArguments) {
-            var appDomainSetup = new AppDomainSetup();
-            appDomainSetup.ApplicationBase = AppDomain.CurrentDomain.BaseDirectory;
+            var appDomainSetup = new AppDomainSetup { ApplicationBase = AppDomain.CurrentDomain.BaseDirectory };
             testDomain = AppDomain.CreateDomain("fitSharp.Machine", null, appDomainSetup);
             runner = (Runner) testDomain.CreateInstanceAndUnwrap(
                                               Assembly.GetExecutingAssembly().GetName().Name,
@@ -62,18 +61,31 @@ namespace fitIf
                     input;
                 service = new Service(configuration);
                 var test = service.Compose(new StoryTestString(storyTest));
-                new ExecuteStoryTest(new Service(configuration), WriteTestResult)
+                var writer = new Writer(service);
+                new ExecuteStoryTest(new Service(configuration), writer)
                     .DoTables(test);
-                return result.ToString();
-            }
-
-            void WriteTestResult(Tree<Cell> tables, TestCounts counts) {
-                result = service.ParseTree<Cell, StoryTestString>(tables);
+                return writer.Result;
             }
 
             readonly Configuration configuration = new TypeDictionary();
             Service service;
-            StoryTestString result;
+
+            class Writer: StoryTestWriter {
+
+                public Writer(CellProcessor processor) {
+                    this.processor = processor;
+                }
+
+                public string Result { get; private set; }
+
+                public void WriteTable(Tree<Cell> table) {}
+
+                public void WriteTest(Tree<Cell> test, TestCounts counts) {
+                    Result = processor.ParseTree<Cell, StoryTestString>(test).ToString();
+                }
+
+                readonly CellProcessor processor;
+            }
         }
     }
 }

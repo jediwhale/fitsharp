@@ -1,4 +1,4 @@
-// Copyright © 2010 Syterra Software Inc. Includes work © 2003-2006 Rick Mugridge, University of Auckland, New Zealand.
+// Copyright © 2011 Syterra Software Inc. Includes work © 2003-2006 Rick Mugridge, University of Auckland, New Zealand.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -11,19 +11,18 @@ using fitSharp.Machine.Model;
 
 namespace fit.Test.Acceptance {
     public class SpecifyFixture: Fixture {
-        Parse resultTables;
-
         public override void DoTable(Parse theTable) {
             Parse embeddedTables = GetEmbeddedTables(theTable);
             Parse expectedCell = GetExpectedCell(theTable);
 
-            var storyTest = new StoryTest(new Parse("div", string.Empty, embeddedTables, null), SpecifyWriter);
+            var writer = new CopyStoryTestWriter();
+            var storyTest = new StoryTest(new Parse("div", string.Empty, embeddedTables, null), writer);
             storyTest.Execute(Processor.Configuration);
 
-            SetEmbeddedTables(theTable, resultTables);
+            SetEmbeddedTables(theTable, writer.ResultTables);
 
             if (expectedCell != null) {
-                var actual = new FixtureTable(resultTables);
+                var actual = new FixtureTable(writer.ResultTables);
                 var expected = new FixtureTable(expectedCell.Parts);
                 string differences = actual.Differences(expected);
                 if (differences.Length == 0) {
@@ -63,19 +62,6 @@ namespace fit.Test.Acceptance {
                     throw new FitFailureException("No embedded table for expected results.");
             }
             return expectedCell;
-        }
-
-        void SpecifyWriter(Tree<Cell> theTables, TestCounts counts) {
-            var tables = (Parse) theTables.Branches[0];
-            for (Parse table = tables; table != null; table = table.More) {
-                Parse newTable = table.Copy();
-                if (resultTables == null) {
-                    resultTables = newTable;
-                }
-                else {
-                    resultTables.Last.More = newTable;
-                }
-            }
         }
     }
 }

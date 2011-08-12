@@ -3,6 +3,7 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
+using System.Linq;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
@@ -41,9 +42,9 @@ namespace fit.Test.NUnit {
 
         private static void CheckRoundTrip(string input) {
             var service = new Service.Service();
-            var source = (Parse)service.Compose(new StoryTestString(input));
-            var result = service.Parse(typeof(StoryTestString), TypedValue.Void, source);
-            Assert.AreEqual(input, result.ValueString);
+            var source = service.Compose(new StoryTestString(input));
+            var result = source.Branches.Aggregate(string.Empty, (current, table) => current + service.Parse(typeof (StoryTableString), TypedValue.Void, table));
+            Assert.AreEqual(input, result);
         }
     }
 }

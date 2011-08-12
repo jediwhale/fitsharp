@@ -73,6 +73,7 @@
     <Compile Include="Acceptance\CellParsing.cs" />
     <Compile Include="Acceptance\Coloring.cs" />
     <Compile Include="Acceptance\ColorInspectorFixture.cs" />
+    <Compile Include="Acceptance\CopyStoryTestWriter.cs" />
     <Compile Include="Acceptance\CountFixture.cs" />
     <Compile Include="Acceptance\DirectCombination.cs" />
     <Compile Include="Acceptance\DoCalculateFixtureSetUp.cs" />
@@ -171,9 +172,7 @@
     <Compile Include="NUnit\SymbolHandlerTest.cs" />
     <Compile Include="NUnit\TableFixtureTest.cs" />
     <Compile Include="NUnit\TestBuilder.cs" />
-    <Compile Include="NUnit\TestRunnerTest.cs" />
     <Compile Include="NUnit\TestUtils.cs" />
-    <Compile Include="NUnit\TextResultWriterTest.cs" />
     <Compile Include="NUnit\ValueArrayTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

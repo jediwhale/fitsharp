@@ -5,7 +5,6 @@
 
 using fitnesse.fixtures;
 using fitSharp.Fit.Model;
-using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
 using TestStatus=fitSharp.Fit.Model.TestStatus;
@@ -15,9 +14,9 @@ namespace fit.Test.NUnit
 	[TestFixture]
 	public class TableFixtureTest
 	{
-	    StoryTest myStoryTest;
-	    Parse finishedTable;
+	    Parse table;
 	    TestCounts resultCounts;
+	    ExampleTableFixture fixture;
 
 		[SetUp]
 		public void SetUp()
@@ -28,19 +27,16 @@ namespace fit.Test.NUnit
 			builder.Append("<tr><td colspan='5'>ExampleTableFixture</td></tr>");
 			builder.Append("<tr><td>0,0</td><td>0,1</td><td>0,2</td><td>37</td><td></td></tr>");
 			builder.Append("</table>");
-		    myStoryTest = new StoryTest(builder.Parse, SimpleWriter);
-		    myStoryTest.Execute(new TypeDictionary());
+		    table = builder.Parse.Parts;
+            fixture = new ExampleTableFixture {Processor = new Service.Service()};
+		    fixture.DoTable(table);
+		    resultCounts = fixture.TestStatus.Counts;
 		}
 
 		[TearDown]
 		public void TearDown()
 		{
 			ExampleTableFixture.ResetStatics();
-		}
-
-		void SimpleWriter(Tree<Cell> theTables, TestCounts counts) {
-            finishedTable = (Parse) theTables.Branches[0].Value;
-		    resultCounts = counts;
 		}
 
 		[Test]
@@ -77,23 +73,23 @@ namespace fit.Test.NUnit
 		public void TestRight()
 		{
 			Assert.AreEqual(1, resultCounts.GetCount(TestStatus.Right));
-            Assert.AreEqual(TestStatus.Right, finishedTable.At(0,1,0).GetAttribute(CellAttribute.Status));
+            Assert.AreEqual(TestStatus.Right, table.At(0,1,0).GetAttribute(CellAttribute.Status));
 		}
 
 		[Test]
 		public void TestWrong()
 		{
 			Assert.AreEqual(2, resultCounts.GetCount(TestStatus.Wrong));
-            Assert.AreEqual(TestStatus.Wrong, finishedTable.At(0,1,1).GetAttribute(CellAttribute.Status));
-            Assert.AreEqual(TestStatus.Wrong, finishedTable.At(0,1,2).GetAttribute(CellAttribute.Status));
-			Assert.IsTrue(finishedTable.At(0,1,2).Body.IndexOf("actual") > 0);
+            Assert.AreEqual(TestStatus.Wrong, table.At(0,1,1).GetAttribute(CellAttribute.Status));
+            Assert.AreEqual(TestStatus.Wrong, table.At(0,1,2).GetAttribute(CellAttribute.Status));
+			Assert.IsTrue(table.At(0,1,2).Body.IndexOf("actual") > 0);
 		}
 
 		[Test]
 		public void TestIgnore()
 		{
 			Assert.AreEqual(1, resultCounts.GetCount(TestStatus.Ignore));
-            Assert.AreEqual(TestStatus.Ignore, finishedTable.At(0,1,3).GetAttribute(CellAttribute.Status));
+            Assert.AreEqual(TestStatus.Ignore, table.At(0,1,3).GetAttribute(CellAttribute.Status));
 		}
 
 		[Test]

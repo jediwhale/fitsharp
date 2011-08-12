@@ -13,14 +13,22 @@ using fitSharp.Machine.Model;
 namespace fitSharp.Fit.Operators {
     public class ParseStoryTestString: CellOperator, ParseOperator<Cell> {
         public bool CanParse(Type type, TypedValue instance, Tree<Cell> parameters) {
-            return type == typeof(StoryTestString);
+            return type == typeof(StoryTestString) || type == typeof(StoryTableString);
         }
 
         public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
-            return new TypedValue(new StoryTestString(ToString(parameters)));
+            return type == typeof(StoryTestString)
+                ? new TypedValue(new StoryTestString(TestToString(parameters)))
+                : new TypedValue(new StoryTableString(TableToString(parameters)));
         }
 
-		string ToString(Tree<Cell> cells) {
+        string TableToString(Tree<Cell> cells) {
+		    var result = new StringBuilder();
+            BuildCell(result, cells);
+			return result.ToString();
+		}
+
+        string TestToString(Tree<Cell> cells) {
 		    var result = new StringBuilder();
             BuildBranches(cells, result);
 			return result.ToString();

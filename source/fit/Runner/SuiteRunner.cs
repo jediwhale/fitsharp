@@ -78,7 +78,7 @@ namespace fit.Runner {
             page.ExecuteStoryPage(ReportPageName, new NullResultWriter(), ignore => {});
 	    }
 
-	    private void ReportPageName(StoryPageName pageName, StoryTestString input, Action<StoryTestString, TestCounts> handleResults,
+	    private void ReportPageName(StoryPageName pageName, StoryTestString input, Action<string, TestCounts> handleResults,
 	                             Action handleNoTest) {
 	        myReporter.WriteLine(pageName.Name);
 	    }
@@ -88,7 +88,7 @@ namespace fit.Runner {
 	        TestCounts.TallyCounts(counts);
         }
 
-	    private void ExecutePage(StoryPageName pageName, StoryTestString input, Action<StoryTestString, TestCounts> handleResults,
+	    private void ExecutePage(StoryPageName pageName, StoryTestString input, Action<string, TestCounts> handleResults,
 	                             Action handleNoTest) {
 	        var service = new Service.Service(configuration);
 	        Tree<Cell> result = service.Compose(input);
@@ -96,9 +96,7 @@ namespace fit.Runner {
 	            handleNoTest();
 	            return;
 	        }
-	        var storyTest = new StoryTest((Parse) result,
-	                                      (tables, counts) =>
-	                                      handleResults(service.ParseTree<Cell, StoryTestString>(tables), counts));
+	        var storyTest = new StoryTest((Parse) result, new Writer(service, handleResults));
             if (pageName.IsSuitePage) {
 	            storyTest.ExecuteOnConfiguration(configuration);
             }
@@ -106,5 +104,22 @@ namespace fit.Runner {
 	            storyTest.Execute(configuration);
             }
 	    }
+
+        class Writer: StoryTestWriter {
+            public Writer(CellProcessor processor, Action<string, TestCounts> writer) {
+                this.processor = processor;
+                this.writer = writer;
+            }
+
+            public void WriteTable(Tree<Cell> table) {}
+
+            public void WriteTest(Tree<Cell> test, TestCounts counts) {
+                var result = processor.ParseTree<Cell, StoryTestString>(test).ToString();
+                writer(result, counts);
+            }
+
+            readonly CellProcessor processor;
+            readonly Action<string, TestCounts> writer;
+        }
 	}
 }

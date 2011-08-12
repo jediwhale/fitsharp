@@ -14,6 +14,10 @@ namespace fit.Test.NUnit {
         private string resultTables;
         private TestCounts resultCounts;
 
+        [SetUp] public void SetUp() {
+            resultTables = string.Empty;
+        }
+
         [Test] public void StoryTestIsExecuted() {
             var service = new Service.Service();
             service.AddNamespace("fitlibrary");
@@ -42,7 +46,7 @@ namespace fit.Test.NUnit {
         }
 
         private void WriteResult(string tables, TestCounts counts) {
-            resultTables = tables;
+            resultTables += tables;
             resultCounts = counts;
         }
     }
