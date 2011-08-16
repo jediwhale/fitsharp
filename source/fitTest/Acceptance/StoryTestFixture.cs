@@ -9,7 +9,7 @@ namespace fit.Test.Acceptance {
     public class StoryTestFixture: DoFixture {
 
         public Parse TestResult(Parse theTest) {
-            var writer = new CopyStoryTestWriter();
+            var writer = new StoryTestCopyWriter();
             var story = new StoryTest(new Parse("div", string.Empty, theTest, null), writer);
             story.Execute(Processor.Configuration);
             return writer.ResultTables;

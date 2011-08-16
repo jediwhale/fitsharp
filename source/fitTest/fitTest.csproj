@@ -73,7 +73,7 @@
     <Compile Include="Acceptance\CellParsing.cs" />
     <Compile Include="Acceptance\Coloring.cs" />
     <Compile Include="Acceptance\ColorInspectorFixture.cs" />
-    <Compile Include="Acceptance\CopyStoryTestWriter.cs" />
+    <Compile Include="Acceptance\StoryTestCopyWriter.cs" />
     <Compile Include="Acceptance\CountFixture.cs" />
     <Compile Include="Acceptance\DirectCombination.cs" />
     <Compile Include="Acceptance\DoCalculateFixtureSetUp.cs" />

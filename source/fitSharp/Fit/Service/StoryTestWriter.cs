@@ -12,7 +12,7 @@ namespace fitSharp.Fit.Service {
         void WriteTest(Tree<Cell> test, TestCounts counts);
     }
 
-    public class NullStoryTestWriter: StoryTestWriter {
+    public class StoryTestNullWriter: StoryTestWriter {
         public void WriteTable(Tree<Cell> table) {}
         public void WriteTest(Tree<Cell> test, TestCounts counts) {}
     }

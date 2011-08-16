@@ -4,7 +4,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using fit.Runner;
-using fitSharp.Fit.Model;
+using fitSharp.Fit.Service;
 using fitSharp.IO;
 using fitSharp.Test.Double;
 using NUnit.Framework;
@@ -12,7 +12,6 @@ using NUnit.Framework;
 namespace fit.Test.NUnit {
     [TestFixture] public class SocketServerTest {
         private string resultTables;
-        private TestCounts resultCounts;
 
         [SetUp] public void SetUp() {
             resultTables = string.Empty;
@@ -28,7 +27,7 @@ namespace fit.Test.NUnit {
             socket.PutByteString(tables);
             socket.PutByteString("0000000000");
             var server = new SocketServer(new FitSocket(socket, new NullReporter()), service, new NullReporter(), false);
-            server.ProcessTestDocuments(WriteResult);
+            server.ProcessTestDocuments(new StoryTestStringWriter(service).ForTables(s => resultTables += s));
             Assert.AreEqual(tables, resultTables);
         }
 
@@ -40,14 +39,9 @@ namespace fit.Test.NUnit {
             socket.PutByteString(tables);
             socket.PutByteString("0000000000");
             var server = new SocketServer(new FitSocket(socket, new NullReporter()), service, new NullReporter(), false);
-            server.ProcessTestDocuments(WriteResult);
+            server.ProcessTestDocuments(new StoryTestStringWriter(service).ForTables(s => resultTables += s));
             Assert.IsTrue(resultTables.Contains("class=\"error\""), resultTables);
             Assert.IsTrue(resultTables.Contains("Unable to parse input. Input ignored."), resultTables);
-        }
-
-        private void WriteResult(string tables, TestCounts counts) {
-            resultTables += tables;
-            resultCounts = counts;
         }
     }
 }

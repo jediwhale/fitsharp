@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using fit.Runner;
 using fit.Service;
 using fitSharp.Fit.Model;
+using fitSharp.Fit.Service;
 using fitSharp.IO;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
@@ -46,14 +47,19 @@ namespace fitnesse.fitserver
 			clientSocket = new FitSocket(new SocketModelImpl(host, port), reporter);
 			EstablishConnection();
 
-		    var server = new SocketServer(clientSocket, new Service(configuration), reporter, true);
-			server.ProcessTestDocuments(WriteResults);
+	        var service = new Service(configuration);
+	        var writer = new StoryTestStringWriter(service)
+	            .ForTables(WriteTables)
+	            .ForCounts(WriteCounts);
+
+		    var server = new SocketServer(clientSocket, service, reporter, true);
+			server.ProcessTestDocuments(writer);
 
 		    clientSocket.Close();
 		    Exit();
 		}
 
-		private void ParseCommandLineArguments(IEnumerable<string> args)
+	    private void ParseCommandLineArguments(IEnumerable<string> args)
 		{
 			int argumentPosition = 0;
 
@@ -115,15 +121,12 @@ namespace fitnesse.fitserver
 		    clientSocket.EstablishConnection(Protocol.FormatRequest(socketToken));
 		}
 
-	    private void WriteResults(string tables, TestCounts counts)
-	    {
-            if (tables.Length > 0) {
-                reporter.WriteLine("\tTransmitting tables of length " + tables.Length);
-                clientSocket.SendDocument(tables);
-            }
+        private void WriteTables(string tables) {
+            reporter.WriteLine("\tTransmitting tables of length " + tables.Length);
+            clientSocket.SendDocument(tables);
+        }
 
-	        if (counts == null) return;
-
+	    private void WriteCounts(TestCounts counts) {
 	        reporter.WriteLine("\tTest Document finished");
 	        clientSocket.SendCounts(counts);
 

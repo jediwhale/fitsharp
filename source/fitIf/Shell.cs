@@ -11,7 +11,6 @@ using fitSharp.Fit.Service;
 using fitSharp.IO;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
-using fitSharp.Machine.Model;
 
 namespace fitIf
 {
@@ -61,31 +60,14 @@ namespace fitIf
                     input;
                 service = new Service(configuration);
                 var test = service.Compose(new StoryTestString(storyTest));
-                var writer = new Writer(service);
+                var writer = new StoryTestStringWriter(service);
                 new ExecuteStoryTest(new Service(configuration), writer)
                     .DoTables(test);
-                return writer.Result;
+                return writer.Tables;
             }
 
             readonly Configuration configuration = new TypeDictionary();
             Service service;
-
-            class Writer: StoryTestWriter {
-
-                public Writer(CellProcessor processor) {
-                    this.processor = processor;
-                }
-
-                public string Result { get; private set; }
-
-                public void WriteTable(Tree<Cell> table) {}
-
-                public void WriteTest(Tree<Cell> test, TestCounts counts) {
-                    Result = processor.ParseTree<Cell, StoryTestString>(test).ToString();
-                }
-
-                readonly CellProcessor processor;
-            }
         }
     }
 }

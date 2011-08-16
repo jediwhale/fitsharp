@@ -8,7 +8,7 @@ using fitSharp.Fit.Service;
 using fitSharp.Machine.Model;
 
 namespace fit.Test.Acceptance {
-    public class CopyStoryTestWriter: StoryTestWriter {
+    public class StoryTestCopyWriter: StoryTestWriter {
         public void WriteTable(Tree<Cell> table) {}
 
         public Parse ResultTables {get; private set; }

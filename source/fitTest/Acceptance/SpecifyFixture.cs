@@ -15,7 +15,7 @@ namespace fit.Test.Acceptance {
             Parse embeddedTables = GetEmbeddedTables(theTable);
             Parse expectedCell = GetExpectedCell(theTable);
 
-            var writer = new CopyStoryTestWriter();
+            var writer = new StoryTestCopyWriter();
             var storyTest = new StoryTest(new Parse("div", string.Empty, embeddedTables, null), writer);
             storyTest.Execute(Processor.Configuration);
 

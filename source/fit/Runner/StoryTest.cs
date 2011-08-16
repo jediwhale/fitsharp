@@ -17,7 +17,7 @@ namespace fit {
         public Parse Tables { get; private set; }
 
         public StoryTest() {
-            writer = new NullStoryTestWriter();
+            writer = new StoryTestNullWriter();
         }
 
         public StoryTest(Parse theTables): this() {

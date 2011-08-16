@@ -28,7 +28,7 @@ namespace fit.Runner {
             IMaybeProcessingSuiteSetup = suiteSetUpIsAnonymous;
         }
 
-		public void ProcessTestDocuments(Action<string, TestCounts> writer)
+		public void ProcessTestDocuments(StoryTestWriter writer)
 		{
 			string document;
 
@@ -41,13 +41,12 @@ namespace fit.Runner {
 		    reporter.WriteLine("\ncompletion signal recieved");
 		}
 
-        private void ProcessTestDocument(string document, Action<string, TestCounts> writer) {
-            var storyTestWriter = new Writer(service, writer);
+        private void ProcessTestDocument(string document, StoryTestWriter writer) {
 			try
 			{
                 Tree<Cell> result = service.Compose(new StoryTestString(document));
                 var parse = result != null ? (Parse)result.Value : null;
-			    var storyTest = new StoryTest(parse, storyTestWriter);
+			    var storyTest = new StoryTest(parse, writer);
 			    reporter.WriteLine(parse.Leader);
 			    if (suiteSetupIdentifier.IsStartOf(parse.Leader) || IMaybeProcessingSuiteSetup)
                     storyTest.ExecuteOnConfiguration(service.Configuration);
@@ -60,33 +59,9 @@ namespace fit.Runner {
 			    var parse = new CellBase(parseError, "div");
                 parse.SetAttribute(CellAttribute.Body, parseError );
 			    testStatus.MarkException(parse, e);
-                storyTestWriter.WriteTable(new CellTree(parse));
-			    storyTestWriter.WriteTest(new CellTree().AddBranchValue(parse), testStatus.Counts); 
+                writer.WriteTable(new CellTree(parse));
+			    writer.WriteTest(new CellTree().AddBranchValue(parse), testStatus.Counts); 
 			}
 		}
-
-        class Writer: StoryTestWriter {
-            public Writer(CellProcessor processor, Action<string, TestCounts> writer) {
-                this.processor = processor;
-                this.writer = writer;
-            }
-
-            public void WriteTable(Tree<Cell> table) {
-                var testResult = processor.ParseTree<Cell, StoryTableString>(table).ToString();
-                if (testResult.Length > 0) {
-                    writer(testResult, null); //todo: clean up null
-                    writesTables = true;
-                }
-            }
-
-            public void WriteTest(Tree<Cell> test, TestCounts counts) {
-                var testResult = writesTables ? string.Empty : processor.ParseTree<Cell, StoryTestString>(test).ToString();
-                writer(testResult, counts);
-            }
-
-            readonly CellProcessor processor;
-            readonly Action<string, TestCounts> writer;
-            bool writesTables;
-        }
     }
 }
