@@ -73,7 +73,7 @@ namespace fitSharp.Machine.Application {
 
         void ParseArguments(IList<string> commandLineArguments) {
             var argumentParser = new ArgumentParser();
-            argumentParser.AddArgumentHandler("a", value => configuration.GetItem<AppDomainSetup>().ConfigurationFile = Path.GetFullPath(value));
+            argumentParser.AddArgumentHandler("a", value => configuration.GetItem<AppDomainSetup>().ConfigurationFile = value);
             argumentParser.AddArgumentHandler("c", value => new SuiteConfiguration(configuration).LoadXml(folderModel.FileContent(value)));
             argumentParser.AddArgumentHandler("r", value => configuration.GetItem<Settings>().Runner = value);
             argumentParser.SetUnusedHandler(value => extraArguments.Add(value));

@@ -14,6 +14,20 @@ using NUnit.Framework;
 using Configuration=fitSharp.Machine.Engine.Configuration;
 
 namespace fitSharp.Test.NUnit.Machine {
+
+    class PushCurrentDirectory : IDisposable {
+        string original;
+
+        public PushCurrentDirectory(string directory) {
+            original = Environment.CurrentDirectory;
+            Environment.CurrentDirectory = directory;
+        }
+
+        public void Dispose() {
+            Environment.CurrentDirectory = original;
+        }
+    }
+
     [TestFixture] public class ShellTest {
         [Test] public void RunnerIsCalled() {
             int result = RunShell(new [] {"-r", typeof(SampleRunner).FullName});
@@ -29,8 +43,14 @@ namespace fitSharp.Test.NUnit.Machine {
 
         [Test] public void CustomAppConfigIsUsed() {
             int result = RunShell(new[] {"-a", "fitSharpTest.dll.alt.config",
-                "-r", typeof (SampleRunner).FullName + "," + typeof (SampleRunner).Assembly.CodeBase} );
+                "-r", typeof (SampleRunner).FullName + "," + typeof (SampleRunner).Assembly.CodeBase});
             Assert.AreEqual(606, result);
+        }
+
+        [Test] public void CustomAppConfigIsLoadedRelativeToExecutingAssembly() {
+            using (new PushCurrentDirectory(@"\")) {
+                CustomAppConfigIsUsed();
+            }
         }
 
         [Test] public void CustomAppConfigFromSuiteConfigIsUsed() {
