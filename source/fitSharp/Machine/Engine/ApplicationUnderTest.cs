@@ -119,9 +119,31 @@ namespace fitSharp.Machine.Engine {
             public void AddAssembly(string assemblyName) {
                 if (IsIgnored(assemblyName)) return;
                 if (assemblies.Exists(a => a.Name == assemblyName)) return;
+                if (!AssemblyFileExists(assemblyName)) return;
+
                 var assembly = appDomain.LoadAssembly(assemblyName);
+
                 if (assemblies.Exists(a => a.Name == assembly.Name)) return;
                 assemblies.Add(assembly);
+            }
+
+            private bool AssemblyFileExists(string assemblyName) {
+                // Could be either of the forms:
+                //  file:///C:\foo\bar\bob.dll
+                //  bob.dll
+                //  C:\foo\bar\bob.dll
+                //  \bob.dll
+
+                string assemblyFileName = NormalizeAssemblyFileName(assemblyName);
+                return File.Exists(assemblyFileName);
+            }
+
+            private string NormalizeAssemblyFileName(string assemblyName) {
+                string assemblyFileName = assemblyName;
+                if (assemblyName.StartsWith("file:"))
+                    assemblyFileName = new Uri(assemblyName).AbsolutePath;
+
+                return Path.GetFullPath(assemblyFileName);
             }
 
             static bool IsIgnored(string assemblyName) {
