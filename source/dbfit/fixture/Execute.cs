@@ -26,7 +26,7 @@ namespace dbfit.fixture
             using (DbCommand dc = environment.CreateCommand(statement, CommandType.Text))
             {
                 if (dbfit.util.Options.ShouldBindSymbols()) 
-                    environment.BindFixtureSymbols(dc);
+                    environment.BindFixtureSymbols(Processor, dc);
                 dc.ExecuteNonQuery();
             }
         }

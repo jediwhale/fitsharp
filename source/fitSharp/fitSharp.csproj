@@ -46,6 +46,7 @@
     <Compile Include="Fit\Fixtures\CommentFixture.cs" />
     <Compile Include="Fit\Fixtures\Compute.cs" />
     <Compile Include="Fit\Fixtures\ConfigureFixture.cs" />
+    <Compile Include="Fit\Model\Procedures.cs" />
     <Compile Include="Fit\Model\StoryTableString.cs" />
     <Compile Include="Fit\Operators\CellOperationValue.cs" />
     <Compile Include="Fit\Operators\CellOperators.cs" />
@@ -114,7 +115,6 @@
     <Compile Include="Fit\Service\CellProcessorBase.cs" />
     <Compile Include="Fit\Service\ExecuteStoryTest.cs" />
     <Compile Include="Fit\Model\Interpreter.cs" />
-    <Compile Include="Fit\Model\Procedure.cs" />
     <Compile Include="Fit\Service\NullResultWriter.cs" />
     <Compile Include="Fit\Service\ResultWriter.cs" />
     <Compile Include="Fit\Service\XmlResultWriter.cs" />
@@ -140,7 +140,6 @@
     <Compile Include="Fit\Operators\ParseBlank.cs" />
     <Compile Include="Fit\Operators\ParseBoolean.cs" />
     <Compile Include="Fit\Operators\ParseDefault.cs" />
-    <Compile Include="Fit\Model\Symbol.cs" />
     <Compile Include="Fit\Operators\ParseNull.cs" />
     <Compile Include="Fit\Operators\ParseType.cs" />
     <Compile Include="Machine\Engine\Configuration.cs" />
@@ -151,6 +150,7 @@
     <Compile Include="Machine\Model\ObjectExtension.cs" />
     <Compile Include="Machine\Model\SetUp.cs" />
     <Compile Include="Machine\Model\StringDifference.cs" />
+    <Compile Include="Machine\Model\Symbols.cs" />
     <Compile Include="Machine\Model\Traverse.cs" />
     <Compile Include="Parser\Characters.cs" />
     <Compile Include="Parser\CharacterType.cs" />

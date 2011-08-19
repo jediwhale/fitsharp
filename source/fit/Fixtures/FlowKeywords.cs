@@ -97,8 +97,7 @@ namespace fit.Fixtures {
             object namedValue = ourWithIdentifier.Equals(restOfTheCells.More.Text)
                                     ? new MethodPhrase(restOfTheCells.More).Evaluate(fixture)
                                     : fixture.ExecuteEmbeddedMethod(restOfTheCells);
-            fixture.Processor.Store(new Symbol(restOfTheCells.Text, namedValue));
-
+            fixture.Processor.Get<Symbols>().Save(restOfTheCells.Text, namedValue);
             fixture.TestStatus.MarkRight(restOfTheCells);
         }
 

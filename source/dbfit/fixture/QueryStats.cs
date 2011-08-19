@@ -44,7 +44,7 @@ namespace dbfit.fixture
             else
             {
                 DbCommand dc = environment.CreateCommand(Query, CommandType.Text);
-                environment.BindFixtureSymbols(dc);
+                environment.BindFixtureSymbols(Processor, dc);
 
                 DbDataAdapter oap = environment.DbProviderFactory.CreateDataAdapter();
                 oap.SelectCommand = dc;

@@ -13,12 +13,12 @@ namespace fit.Operators {
     public class InvokeProcedure: CellOperator, InvokeOperator<Cell>
     {
         public bool CanInvoke(TypedValue instance, string memberName, Tree<Cell> parameters) {
-            return Processor.Contains(new Procedure(memberName));
+            return Processor.Get<Procedures>().HasValue(memberName);
         }
 
         public TypedValue Invoke(TypedValue instance, string memberName, Tree<Cell> parameters) {
-            var procedure = Processor.Load(new Procedure(memberName));
-            return Invoke((Parse)procedure.Instance, instance, parameters);
+            var procedure = Processor.Get<Procedures>().GetValue(memberName);
+            return Invoke((Parse)procedure, instance, parameters);
         }
 
         private TypedValue Invoke(Parse procedure, TypedValue target, Tree<Cell> parameterValues) {

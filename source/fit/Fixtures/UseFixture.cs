@@ -29,10 +29,10 @@ namespace fit {
             var parent = Processor.TestStatus.Parent;
             if (parent == null) return null;
 
-            var symbol = new Symbol(theName);
-            if (!Processor.Contains(symbol)) return null;
+            var symbols = Processor.Get<Symbols>();
+            if (!symbols.HasValue(theName)) return null;
 
-            var result =  Processor.Operate<WrapOperator>(new TypedValue(Processor.Load(symbol).Instance));
+            var result =  Processor.Operate<WrapOperator>(new TypedValue(symbols.GetValue(theName)));
             result.AsNot<Interpreter>(() => { throw new FitFailureException("Result is not a Fixture."); });
             return result.GetValueAs<Interpreter>();
         }

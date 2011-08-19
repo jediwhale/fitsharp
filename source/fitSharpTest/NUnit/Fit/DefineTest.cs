@@ -3,44 +3,28 @@
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
-using System;
 using fitSharp.Fit.Fixtures;
 using fitSharp.Fit.Model;
+using fitSharp.Fit.Service;
 using fitSharp.Machine.Model;
-using Moq;
 using NUnit.Framework;
-using TestStatus = fitSharp.Fit.Model.TestStatus;
 
 namespace fitSharp.Test.NUnit.Fit {
     [TestFixture] public class DefineTest {
         [Test] public void ProcedureIsSaved() {
-            TestDefine(IsSinglePartName, new CellTree("define", "myprocedure"));
-        }
-
-        private static bool IsSinglePartName(Tree<Cell> c) {
-            return c.Branches.Count == 1 && c.Branches[0].Value.Text == "myprocedure";
+            TestDefine(new CellTree("define", "myprocedure"));
         }
 
         [Test] public void MultiCellNameIsUsed() {
-            TestDefine(IsMultiPartName, new CellTree("define", "my", "p1", "procedure", "p2"));
+            TestDefine(new CellTree("define", "my", "p1", "procedure", "p2"));
         }
 
-        private static bool IsMultiPartName(Tree<Cell> c) {
-            return c.Branches.Count == 2 && c.Branches[0].Value.Text == "my" && c.Branches[1].Value.Text == "procedure";
-        }
-
-        private static void TestDefine(Func<Tree<Cell>, bool> isName, Tree<Cell> defineRow) {
-            var processor = new Mock<CellProcessor>();
-            processor
-                .Setup(p => p.Parse(typeof (MemberName), TypedValue.Void, It.Is<Tree<Cell>>(c => isName(c))))
-                .Returns(new TypedValue(new MemberName("myprocedure")));
-            processor
-                .Setup(p => p.TestStatus)
-                .Returns(new TestStatus());
+        private static void TestDefine(Tree<Cell> defineRow) {
+            var processor = new CellProcessorBase();
             var define = new Define();
             var input = new CellTree(defineRow, new CellTree("stuff"));
-            define.Interpret(processor.Object, input);
-            processor.Verify(p => p.Store(It.Is<Procedure>(v => v.Id == "myprocedure" && v.Instance == input)));
+            define.Interpret(processor, input);
+            Assert.AreEqual(input, processor.Get<Procedures>().GetValue("myprocedure"));
         }
 
     }

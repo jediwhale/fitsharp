@@ -28,8 +28,8 @@ namespace fitSharp.Fit.Service {
 	        this.operators = operators;
 	        operators.Processor = this;
 
-            AddMemory<Symbol>();
-            AddMemory<Procedure>();
+            Configuration.GetItem<Symbols>();
+            Configuration.GetItem<Procedures>();
         }
 
         public override TypedValue Parse(System.Type type, TypedValue instance, Tree<Cell> parameters) {

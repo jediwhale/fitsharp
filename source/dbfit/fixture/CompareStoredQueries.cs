@@ -2,10 +2,11 @@
 /// Released under GNU GPL 2.0
 using System;
 using System.Collections.Generic;
-using System.Text;
 using fit;
 using System.Data;
 using dbfit.util;
+using fitSharp.Fit.Model;
+using fitSharp.Machine.Model;
 
 namespace dbfit.fixture
 {
@@ -45,7 +46,7 @@ namespace dbfit.fixture
             this.symbol2 = symbol2;
         }
         private DataTable GetDataTable(String symbolName){
-		    Object o=Fixture.Recall(symbolName);
+		    Object o=Processor.Get<Symbols>().GetValueOrDefault(symbolName, null);
 		    if (o==null) throw new ApplicationException("Cannot load a stored query from "+symbolName+  " - is is empty");
 		    if (o.GetType().Equals(typeof(DataTable))) return (DataTable) o;
 		    throw new ApplicationException("Cannot load stored query from "+symbolName 

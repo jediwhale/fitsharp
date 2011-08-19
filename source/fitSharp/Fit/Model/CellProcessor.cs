@@ -13,4 +13,8 @@ namespace fitSharp.Fit.Model
 	    TestStatus TestStatus { get; set; }
         Tree<Cell> MakeCell(string text, IEnumerable<Tree<Cell>> branches);
     }
+
+    public static class CellProcessorExtension {
+        public static V Get<V>(this CellProcessor processor) where V: new() { return processor.Configuration.GetItem<V>(); }
+    }
 }

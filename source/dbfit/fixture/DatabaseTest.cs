@@ -5,10 +5,14 @@
 
 using System;
 using System.Data;
+using System.Data.Common;
 using dbfit.fixture;
+using dbfit.util;
 using fit;
 
 using fitlibrary;
+using fitSharp.Fit.Model;
+using fitSharp.Machine.Model;
 
 namespace dbfit
 {
@@ -55,22 +59,22 @@ namespace dbfit
 
         public void SetParameter(String name, object value)
         {
-            fixture.SetParameter.SetParameterValue(name, value);
+            fixture.SetParameter.SetParameterValue(Processor, name, value);
         }
 
         public void ClearParameters()
         {
-            ClearSaved();
+            Processor.Get<Symbols>().Clear();
         }
 
         public Fixture Query(String query)
         {
-            return new Query(environment, query, false);
+            return new Query(GetDataTable(Processor, query, environment), false);
         }
 
         public Fixture Query(String query, int resultSet)
         {
-            return new Query(environment, query, false, resultSet);
+            return new Query(GetDataTable(Processor, query, environment, resultSet), false);
         }
 
         public Fixture Query(DataTable queryTable)
@@ -85,7 +89,7 @@ namespace dbfit
 
         public Fixture OrderedQuery(String query)
         {
-            return new Query(environment, query, true);
+            return new Query(GetDataTable(Processor, query, environment), true);
         }
 
         public Fixture Execute(String statement)
@@ -166,6 +170,25 @@ namespace dbfit
         public void SetOption(String option, String value)
         {
             util.Options.SetOption(Processor, option, value);
+        }
+
+        public static DataTable GetDataTable(CellProcessor processor, String query, IDbEnvironment environment)
+        {
+            return GetDataTable(processor, query, environment, 1);
+        }
+
+        public static DataTable GetDataTable(CellProcessor processor, String query,IDbEnvironment environment, int rsNo)
+        {
+            DbCommand dc = environment.CreateCommand(query, CommandType.Text);
+            if (Options.ShouldBindSymbols())
+                environment.BindFixtureSymbols(processor, dc);
+
+            DbDataAdapter oap = environment.DbProviderFactory.CreateDataAdapter();
+            oap.SelectCommand = dc;
+            var ds = new DataSet();
+            oap.Fill(ds);
+            dc.Dispose();
+            return ds.Tables[rsNo - 1];
         }
     }
 }

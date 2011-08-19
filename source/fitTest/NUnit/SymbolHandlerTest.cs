@@ -180,11 +180,11 @@ namespace fit.Test.NUnit {
         }
 
         private object LoadSymbol(string symbolName) {
-            return service.Load(new Symbol(symbolName)).Instance;
+            return service.Get<Symbols>().GetValue(symbolName);
         }
 
         private void StoreSymbol(string symbolName, object symbolValue) {
-            service.Store(new Symbol(symbolName, symbolValue));
+            service.Get<Symbols>().Save(symbolName, symbolValue);
         }
 
     }

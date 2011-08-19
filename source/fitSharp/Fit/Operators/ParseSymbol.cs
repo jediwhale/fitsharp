@@ -15,8 +15,9 @@ namespace fitSharp.Fit.Operators {
         }
 
         public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
-            var symbol = new Symbol(parameters.Value.Text.Substring(2));
-            var result = new TypedValue(Processor.Contains(symbol) ? Processor.Load(symbol).Instance : null, type);
+            var symbols = Processor.Get<Symbols>();
+            var symbol = parameters.Value.Text.Substring(2);
+            var result = new TypedValue(symbols.HasValue(symbol) ? symbols.GetValue(symbol) : null, type);
             parameters.Value.AddToAttribute(
                 CellAttribute.InformationSuffix,
                 result.Value == null ? "null" : result.Value.ToString()); //todo: dry

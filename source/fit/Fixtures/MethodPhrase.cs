@@ -40,9 +40,10 @@ namespace fit.Fixtures {
             }
             var fixture = theFixture as FlowFixtureBase;
             if (fixture == null) throw MakeException("flow fixture required");
-            var symbol = new Symbol(restOfCells.Text);
-            return fixture.Processor.Contains(symbol)
-                ? fixture.Processor.Load(symbol).Instance
+
+            var symbols = fixture.Processor.Get<Symbols>();
+            return symbols.HasValue(restOfCells.Text)
+                ? symbols.GetValue(restOfCells.Text)
                 : fixture.ExecuteEmbeddedMethod(myCells);
         }
 

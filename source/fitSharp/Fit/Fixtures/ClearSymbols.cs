@@ -10,7 +10,7 @@ namespace fitSharp.Fit.Fixtures {
     public class ClearSymbols: Interpreter {
         public void Interpret(CellProcessor processor, Tree<Cell> table) {
             processor.TestStatus.TableCount--;
-            processor.Clear<Symbol>();
+            processor.Get<Symbols>().Clear();
         }
     }
 }
