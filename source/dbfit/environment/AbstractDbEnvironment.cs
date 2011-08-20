@@ -102,11 +102,11 @@ namespace dbfit
             dc.CommandTimeout = Options.CommandTimeOut;
             return dc;
         }
-        public void BindFixtureSymbols(CellProcessor processor, DbCommand dc)
+        public void BindFixtureSymbols(Symbols symbols, DbCommand dc)
         {
             foreach (String paramName in ExtractParamNames(dc.CommandText))
             {
-                AddInput(dc, paramName, processor.Get<Symbols>().GetValueOrDefault(paramName, null));
+                AddInput(dc, paramName, symbols.GetValueOrDefault(paramName, null));
             }
         }
         public void CloseConnection()

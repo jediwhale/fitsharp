@@ -36,7 +36,7 @@ namespace dbfit.fixture
         public override void DoTable(Parse table)
         {
             if (myArray == null) SetCollection(DatabaseTest.GetDataTable(
-                Processor,
+                Symbols,
                 GetArgumentInput<String>(0),
                 DbEnvironmentFactory.DefaultEnvironment).Rows.GetEnumerator());
             base.DoTable(table);

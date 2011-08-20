@@ -4,9 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Data;
-using System.Text.RegularExpressions;
-using System.Text;
-using fitSharp.Fit.Model;
+using fitSharp.Machine.Model;
 
 namespace dbfit {
     /// <summary>
@@ -128,7 +126,7 @@ namespace dbfit {
         /// symbols that have no matching parameters are ignored.
         /// </summary>
         /// <param name="dc"></param>
-        void BindFixtureSymbols(CellProcessor processor, DbCommand dc);
+        void BindFixtureSymbols(Symbols symbols, DbCommand dc);
 
         /// <summary>
         /// Commit current transaction

@@ -51,8 +51,7 @@ namespace fitlibrary {
         }
 
         public object NamedFixture(string theName) {
-            var symbols = Processor.Get<Symbols>();
-            return symbols.HasValue(theName) ? symbols.GetValue(theName) : null;
+            return Symbols.HasValue(theName) ? Symbols.GetValue(theName) : null;
         }
 
         public void AddNamedFixture(string name, object fixture) { Processor.Get<Symbols>().Save(name, fixture); }

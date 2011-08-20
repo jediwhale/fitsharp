@@ -29,10 +29,9 @@ namespace fit {
             var parent = Processor.TestStatus.Parent;
             if (parent == null) return null;
 
-            var symbols = Processor.Get<Symbols>();
-            if (!symbols.HasValue(theName)) return null;
+            if (!Symbols.HasValue(theName)) return null;
 
-            var result =  Processor.Operate<WrapOperator>(new TypedValue(symbols.GetValue(theName)));
+            var result =  Processor.Operate<WrapOperator>(new TypedValue(Symbols.GetValue(theName)));
             result.AsNot<Interpreter>(() => { throw new FitFailureException("Result is not a Fixture."); });
             return result.GetValueAs<Interpreter>();
         }

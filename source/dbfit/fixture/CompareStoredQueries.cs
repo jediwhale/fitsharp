@@ -46,7 +46,7 @@ namespace dbfit.fixture
             this.symbol2 = symbol2;
         }
         private DataTable GetDataTable(String symbolName){
-		    Object o=Processor.Get<Symbols>().GetValueOrDefault(symbolName, null);
+		    Object o=Symbols.GetValueOrDefault(symbolName, null);
 		    if (o==null) throw new ApplicationException("Cannot load a stored query from "+symbolName+  " - is is empty");
 		    if (o.GetType().Equals(typeof(DataTable))) return (DataTable) o;
 		    throw new ApplicationException("Cannot load stored query from "+symbolName 

@@ -30,6 +30,7 @@ namespace fit
 	    }
 
 	    public TestStatus TestStatus { get { return Processor.TestStatus; } }
+        public Symbols Symbols { get { return Processor.Get<Symbols>(); } }
 
 	    public CellOperation CellOperation {
 	        get {

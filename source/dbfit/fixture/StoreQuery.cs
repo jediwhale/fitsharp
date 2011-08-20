@@ -30,7 +30,7 @@ namespace dbfit.fixture
                 symbolName = Args[1];
             }
             if (symbolName.StartsWith(">>")) symbolName = symbolName.Substring(2);
-            Processor.Get<Symbols>().Save(symbolName, DatabaseTest.GetDataTable(Processor, query,dbEnvironment));
+            Symbols.Save(symbolName, DatabaseTest.GetDataTable(Symbols, query,dbEnvironment));
         }
 
     }

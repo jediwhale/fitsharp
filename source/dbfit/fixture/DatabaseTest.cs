@@ -11,7 +11,6 @@ using dbfit.util;
 using fit;
 
 using fitlibrary;
-using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
 
 namespace dbfit
@@ -59,22 +58,22 @@ namespace dbfit
 
         public void SetParameter(String name, object value)
         {
-            fixture.SetParameter.SetParameterValue(Processor, name, value);
+            fixture.SetParameter.SetParameterValue(Symbols, name, value);
         }
 
         public void ClearParameters()
         {
-            Processor.Get<Symbols>().Clear();
+            Symbols.Clear();
         }
 
         public Fixture Query(String query)
         {
-            return new Query(GetDataTable(Processor, query, environment), false);
+            return new Query(GetDataTable(Symbols, query, environment), false);
         }
 
         public Fixture Query(String query, int resultSet)
         {
-            return new Query(GetDataTable(Processor, query, environment, resultSet), false);
+            return new Query(GetDataTable(Symbols, query, environment, resultSet), false);
         }
 
         public Fixture Query(DataTable queryTable)
@@ -89,7 +88,7 @@ namespace dbfit
 
         public Fixture OrderedQuery(String query)
         {
-            return new Query(GetDataTable(Processor, query, environment), true);
+            return new Query(GetDataTable(Symbols, query, environment), true);
         }
 
         public Fixture Execute(String statement)
@@ -172,16 +171,16 @@ namespace dbfit
             util.Options.SetOption(Processor, option, value);
         }
 
-        public static DataTable GetDataTable(CellProcessor processor, String query, IDbEnvironment environment)
+        public static DataTable GetDataTable(Symbols symbols, String query, IDbEnvironment environment)
         {
-            return GetDataTable(processor, query, environment, 1);
+            return GetDataTable(symbols, query, environment, 1);
         }
 
-        public static DataTable GetDataTable(CellProcessor processor, String query,IDbEnvironment environment, int rsNo)
+        public static DataTable GetDataTable(Symbols symbols, String query,IDbEnvironment environment, int rsNo)
         {
             DbCommand dc = environment.CreateCommand(query, CommandType.Text);
             if (Options.ShouldBindSymbols())
-                environment.BindFixtureSymbols(processor, dc);
+                environment.BindFixtureSymbols(symbols, dc);
 
             DbDataAdapter oap = environment.DbProviderFactory.CreateDataAdapter();
             oap.SelectCommand = dc;
