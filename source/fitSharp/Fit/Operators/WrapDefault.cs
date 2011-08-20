@@ -27,14 +27,14 @@ namespace fitSharp.Fit.Operators {
                 return MakeInterpreter("fitlibrary.ArrayFixture", typeof(IEnumerable<object>), result.Value);
             if (typeof (IDictionary).IsAssignableFrom(result.Type))
                 return MakeInterpreter("fitlibrary.SetFixture", typeof(IEnumerable), result.GetValue<IDictionary>().Values);
-            if (typeof (IEnumerator).IsAssignableFrom(result.Type))
-                return MakeInterpreter("fitlibrary.ArrayFixture", typeof(IEnumerator), result.Value);
             if (typeof (DataTable).IsAssignableFrom(result.Type))
                 return MakeInterpreter("fitlibrary.ArrayFixture", typeof(DataTable), result.Value);
             if (typeof (XmlDocument).IsAssignableFrom(result.Type))
                 return MakeInterpreter("fitlibrary.XmlFixture", typeof(XmlDocument), result.Value);
             if (typeof (IEnumerable).IsAssignableFrom(result.Type))
                 return MakeInterpreter("fitlibrary.ArrayFixture", typeof(IEnumerable), result.Value);
+            if (typeof (IEnumerator).IsAssignableFrom(result.Type))
+                return MakeInterpreter("fitlibrary.ArrayFixture", typeof(IEnumerator), result.Value);
             return MakeInterpreter("fitlibrary.DoFixture", typeof (object), result.Value);
         }
 
