@@ -22,7 +22,7 @@ namespace fitnesse.fitserver
 		private string host;
 		private int port;
 		private string socketToken;
-	    private Configuration configuration;
+	    private Memory memory;
 	    private ProgressReporter reporter;
 	    private readonly TestCounts totalCounts = new TestCounts();
 
@@ -32,8 +32,8 @@ namespace fitnesse.fitserver
 		private const int SOCKET_TOKEN = 3;
 		private const int DONE = 4;
 
-	    public int Run(IList<string> commandLineArguments, Configuration configuration, ProgressReporter reporter) {
-	        this.configuration = configuration;
+	    public int Run(IList<string> commandLineArguments, Memory memory, ProgressReporter reporter) {
+	        this.memory = memory;
 	        Run(commandLineArguments);
 	        return totalCounts.FailCount;
 	    }
@@ -47,7 +47,7 @@ namespace fitnesse.fitserver
 			clientSocket = new FitSocket(new SocketModelImpl(host, port), reporter);
 			EstablishConnection();
 
-	        var service = new Service(configuration);
+	        var service = new Service(memory);
 	        var writer = new StoryTestStringWriter(service)
 	            .ForTables(WriteTables)
 	            .ForCounts(WriteCounts);
@@ -76,7 +76,7 @@ namespace fitnesse.fitserver
 			        switch (argumentPosition)
 			        {
 			            case ASSEMBLYLIST:
-                            configuration.GetItem<ApplicationUnderTest>().AddAssemblies(new PathParser(t).AssemblyPaths);
+                            memory.GetItem<ApplicationUnderTest>().AddAssemblies(new PathParser(t).AssemblyPaths);
 			                break;
 			            case HOST:
 			                host = t;

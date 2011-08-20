@@ -11,31 +11,31 @@ using fitSharp.IO;
 
 namespace fit.Test.NUnit {
     [TestFixture] public class FolderRunnerTest {
-        Configuration configuration;
+        Memory memory;
 
         [SetUp] public void SetUp() {
-            configuration = new TypeDictionary();
-            configuration.GetItem<Settings>().DryRun = false;
-            configuration.GetItem<Settings>().InputFolder = "in";
-            configuration.GetItem<Settings>().OutputFolder = "out";
+            memory = new TypeDictionary();
+            memory.GetItem<Settings>().DryRun = false;
+            memory.GetItem<Settings>().InputFolder = "in";
+            memory.GetItem<Settings>().OutputFolder = "out";
         }
 
         [Test] public void ParsingOfDryRunInputAndOutputFolderIsDoneCorrectly() {
             var runner = new FolderRunner();
-            runner.Run(new[] { "-d", "-i", "overridden_in", "-o", "overridden_out" }, configuration, new NullReporter());
+            runner.Run(new[] { "-d", "-i", "overridden_in", "-o", "overridden_out" }, memory, new NullReporter());
 
-            Assert.AreEqual(true, configuration.GetItem<Settings>().DryRun);
-            Assert.AreEqual("overridden_in", configuration.GetItem<Settings>().InputFolder);
-            Assert.AreEqual("overridden_out", configuration.GetItem<Settings>().OutputFolder);
+            Assert.AreEqual(true, memory.GetItem<Settings>().DryRun);
+            Assert.AreEqual("overridden_in", memory.GetItem<Settings>().InputFolder);
+            Assert.AreEqual("overridden_out", memory.GetItem<Settings>().OutputFolder);
         }
 
         [Test] public void DryRunSuppressesSummaryReport() {
-            configuration.GetItem<Settings>().DryRun = true;
+            memory.GetItem<Settings>().DryRun = true;
 
             var reporter = new CollectingReporter();
 
             var runner = new FolderRunner();
-            runner.Run(new string[] {}, configuration, reporter);
+            runner.Run(new string[] {}, memory, reporter);
 
             Assert.AreEqual(string.Empty, reporter.Output);
         }

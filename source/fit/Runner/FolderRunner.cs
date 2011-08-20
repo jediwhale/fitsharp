@@ -14,12 +14,12 @@ using fitSharp.Machine.Engine;
 namespace fit.Runner {
     public class FolderRunner: Runnable {
 
-        public int Run(IList<string> commandLineArguments, Configuration configuration, ProgressReporter reporter) {
+        public int Run(IList<string> commandLineArguments, Memory memory, ProgressReporter reporter) {
             var now = DateTime.Now;
             myProgressReporter = reporter;
-            var result = Run(configuration, commandLineArguments);
+            var result = Run(memory, commandLineArguments);
             //todo: to suiterunner?
-            if (!configuration.GetItem<Settings>().DryRun)
+            if (!memory.GetItem<Settings>().DryRun)
                 reporter.Write(string.Format("\n{0}, time: {1}\n", Results, DateTime.Now - now));
             return result;
         }
@@ -31,38 +31,38 @@ namespace fit.Runner {
         SuiteRunner myRunner;
         string selectedFile;
 
-        int Run(Configuration configuration, IList<string> arguments) {
-            ParseArguments(configuration, arguments);
-            myRunner = new SuiteRunner(configuration, myProgressReporter);
+        int Run(Memory memory, IList<string> arguments) {
+            ParseArguments(memory, arguments);
+            myRunner = new SuiteRunner(memory, myProgressReporter);
             myRunner.Run(
-                CreateStoryTestFolder(configuration),
+                CreateStoryTestFolder(memory),
                 selectedFile);
             return myRunner.TestCounts.FailCount;
         }
 
-        void ParseArguments(Configuration configuration, IList<string> arguments) {
+        void ParseArguments(Memory memory, IList<string> arguments) {
             if (arguments.Count == 0) {
                 return;
             }
             var argumentParser = new ArgumentParser();
-            argumentParser.AddSwitchHandler("d", () => configuration.GetItem<Settings>().DryRun = true);
-            argumentParser.AddArgumentHandler("i", value => configuration.GetItem<Settings>().InputFolder = value);
-            argumentParser.AddArgumentHandler("o", value => configuration.GetItem<Settings>().OutputFolder = value);
+            argumentParser.AddSwitchHandler("d", () => memory.GetItem<Settings>().DryRun = true);
+            argumentParser.AddArgumentHandler("i", value => memory.GetItem<Settings>().InputFolder = value);
+            argumentParser.AddArgumentHandler("o", value => memory.GetItem<Settings>().OutputFolder = value);
             argumentParser.AddArgumentHandler("s", value => selectedFile = value);
-            argumentParser.AddArgumentHandler("x", value => configuration.GetItem<FileExclusions>().AddRange(value.Split(';')));
-            argumentParser.AddArgumentHandler("t", value => configuration.GetItem<Settings>().TagList = value);
+            argumentParser.AddArgumentHandler("x", value => memory.GetItem<FileExclusions>().AddRange(value.Split(';')));
+            argumentParser.AddArgumentHandler("t", value => memory.GetItem<Settings>().TagList = value);
 
             argumentParser.Parse(arguments);
-            if (configuration.GetItem<Settings>().InputFolder == null)
+            if (memory.GetItem<Settings>().InputFolder == null)
                 throw new FormatException("Missing input folder");
-            if (configuration.GetItem<Settings>().OutputFolder == null)
+            if (memory.GetItem<Settings>().OutputFolder == null)
                 throw new FormatException("Missing output folder");
         }
     
-        StoryTestFolder CreateStoryTestFolder(Configuration configuration) {
-            var storyTestFolder = new StoryTestFolder(configuration, new FileSystemModel(configuration.GetItem<Settings>().CodePageNumber));
+        StoryTestFolder CreateStoryTestFolder(Memory memory) {
+            var storyTestFolder = new StoryTestFolder(memory, new FileSystemModel(memory.GetItem<Settings>().CodePageNumber));
 
-            string tagList = configuration.GetItem<Settings>().TagList;
+            string tagList = memory.GetItem<Settings>().TagList;
             if (!string.IsNullOrEmpty(tagList))
                 storyTestFolder.AddPageFilter(new TagFilter(tagList));
 

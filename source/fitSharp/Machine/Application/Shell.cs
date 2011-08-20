@@ -29,9 +29,9 @@ namespace fitSharp.Machine.Application {
         public int Run(IList<string> commandLineArguments) {
             try {
                 ParseArguments(commandLineArguments);
-                return !configuration.HasItem<AppDomainSetup>()
+                return !memory.HasItem<AppDomainSetup>()
                            ? RunInCurrentDomain()
-                           : RunInNewDomain(configuration.GetItem<AppDomainSetup>(), commandLineArguments);
+                           : RunInNewDomain(memory.GetItem<AppDomainSetup>(), commandLineArguments);
             }
             catch (System.Exception e) {
                 progressReporter.Write(string.Format("{0}\n", e));
@@ -73,16 +73,16 @@ namespace fitSharp.Machine.Application {
 
         void ParseArguments(IList<string> commandLineArguments) {
             var argumentParser = new ArgumentParser();
-            argumentParser.AddArgumentHandler("a", value => configuration.GetItem<AppDomainSetup>().ConfigurationFile = Path.GetFullPath(value));
-            argumentParser.AddArgumentHandler("c", value => new SuiteConfiguration(configuration).LoadXml(folderModel.FileContent(value)));
-            argumentParser.AddArgumentHandler("r", value => configuration.GetItem<Settings>().Runner = value);
+            argumentParser.AddArgumentHandler("a", value => memory.GetItem<AppDomainSetup>().ConfigurationFile = Path.GetFullPath(value));
+            argumentParser.AddArgumentHandler("c", value => new SuiteConfiguration(memory).LoadXml(folderModel.FileContent(value)));
+            argumentParser.AddArgumentHandler("r", value => memory.GetItem<Settings>().Runner = value);
             argumentParser.SetUnusedHandler(value => extraArguments.Add(value));
             argumentParser.Parse(commandLineArguments);
 
         }
 
         bool ValidateArguments() {
-            if (string.IsNullOrEmpty(configuration.GetItem<Settings>().Runner)) {
+            if (string.IsNullOrEmpty(memory.GetItem<Settings>().Runner)) {
                 progressReporter.Write("Missing runner class\n");
                 return false;
             }
@@ -90,9 +90,9 @@ namespace fitSharp.Machine.Application {
         }
 
         private int Execute() {
-            var tokens = configuration.GetItem<Settings>().Runner.Split(',');
+            var tokens = memory.GetItem<Settings>().Runner.Split(',');
             if (tokens.Length > 1) {
-                configuration.GetItem<ApplicationUnderTest>().AddAssembly(tokens[1]);
+                memory.GetItem<ApplicationUnderTest>().AddAssembly(tokens[1]);
             }
             Runner = new BasicProcessor().Create(tokens[0]).GetValue<Runnable>();
             ExecuteInApartment();
@@ -100,7 +100,7 @@ namespace fitSharp.Machine.Application {
         }
 
         private void ExecuteInApartment() {
-            var apartmentConfiguration = configuration.GetItem<Settings>().ApartmentState;
+            var apartmentConfiguration = memory.GetItem<Settings>().ApartmentState;
             if (apartmentConfiguration != null) {
                 var desiredState = (ApartmentState)Enum.Parse(typeof(ApartmentState), apartmentConfiguration);
                 if (Thread.CurrentThread.GetApartmentState() != desiredState) {
@@ -115,13 +115,13 @@ namespace fitSharp.Machine.Application {
         }
 
         private void Run() {
-            result = Runner.Run(extraArguments.ToArray(), configuration, progressReporter);
+            result = Runner.Run(extraArguments.ToArray(), memory, progressReporter);
         }
 
         readonly List<string> extraArguments = new List<string>();
         readonly ProgressReporter progressReporter;
         readonly FolderModel folderModel;
-        readonly Configuration configuration = new TypeDictionary();
+        readonly Memory memory = new TypeDictionary();
 
         int result;
     }

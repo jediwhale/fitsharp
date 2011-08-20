@@ -21,17 +21,16 @@ namespace fitSharp.Test.NUnit.Slim {
 
         [SetUp] public void SetUp() {
             processor = new Service();
-            processor.AddMemory<Symbol>();
         }
 
         [Test] public void ParseSymbolReplacesWithValue() {
-            processor.Store(new Symbol("symbol", "testvalue"));
+            processor.Get<Symbols>().Save("symbol", "testvalue");
             Assert.AreEqual("testvalue", Parse(new ParseSymbol { Processor = processor }, typeof(object), new SlimLeaf("$symbol")));
         }
 
         [Test] public void ParseSymbolReplacesEmbeddedValues() {
-            processor.Store(new Symbol("symbol1", "test"));
-            processor.Store(new Symbol("symbol2", "value"));
+            processor.Get<Symbols>().Save("symbol1", "test");
+            processor.Get<Symbols>().Save("symbol2", "value");
             Assert.AreEqual("-testvalue-", Parse(new ParseSymbol { Processor = processor }, typeof(object), new SlimLeaf("-$symbol1$symbol2-")));
         }
 
@@ -44,17 +43,17 @@ namespace fitSharp.Test.NUnit.Slim {
         }
 
         [Test] public void ParseSymbolWithDoubleDollar() {
-            processor.Store(new Symbol("symbol", "testvalue"));
+            processor.Get<Symbols>().Save("symbol", "testvalue");
             Assert.AreEqual("$testvalue", processor.Parse(typeof(object), TypedValue.Void, new SlimLeaf("$$symbol")).ValueString);
         }
 
         [Test] public void ParseSymbolEmbeddedWithDoubleDollar() {
-            processor.Store(new Symbol("symbol", "testvalue"));
+            processor.Get<Symbols>().Save("symbol", "testvalue");
             Assert.AreEqual("-$testvaluetestvalue-", processor.Parse(typeof(object), TypedValue.Void, new SlimLeaf("-$$symbol$symbol-")).ValueString);
         }
 
         [Test] public void ParseSymbolMatchingRequestedType() {
-            processor.Store(new Symbol("symbol", AppDomain.CurrentDomain));
+            processor.Get<Symbols>().Save("symbol", AppDomain.CurrentDomain);
             Assert.AreEqual(AppDomain.CurrentDomain, processor.Parse(typeof(AppDomain), TypedValue.Void, new SlimLeaf("$symbol")).Value);
         }
 

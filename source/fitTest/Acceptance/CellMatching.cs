@@ -6,13 +6,14 @@
 using System;
 using System.Web;
 using fitlibrary;
+using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
 
 namespace fit.Test.Acceptance {
     public class CellMatching : CalculateFixture {
 
         public override void DoTable(Parse table) {
-            Save("four", 4);
+            Processor.Get<Symbols>().Save("four", 4);
             base.DoTable(table);
         }
 

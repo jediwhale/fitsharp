@@ -15,6 +15,6 @@ namespace fitSharp.Fit.Model
     }
 
     public static class CellProcessorExtension {
-        public static V Get<V>(this CellProcessor processor) where V: new() { return processor.Configuration.GetItem<V>(); }
+        public static V Get<V>(this CellProcessor processor) where V: new() { return processor.Memory.GetItem<V>(); }
     }
 }

@@ -18,12 +18,12 @@ namespace fitSharp.Slim.Service {
 
         public Service(): this(new TypeDictionary()) {} //todo: test only -> factory
 
-        public Service(Configuration configuration) : base(configuration) {
-            operators = configuration.GetItem<SlimOperators>();
+        public Service(Memory memory) : base(memory) {
+            operators = memory.GetItem<SlimOperators>();
             operators.Processor = this;
 
-            AddMemory<SavedInstance>();
-            AddMemory<Symbol>();
+            Memory.GetItem<SavedInstances>();
+            Memory.GetItem<Symbols>();
 
             PushLibraryInstance(new TypedValue(new Actors(this)));
         }
@@ -34,8 +34,10 @@ namespace fitSharp.Slim.Service {
 
         public IEnumerable<TypedValue> LibraryInstances { get { return libraryInstances; } }
 
-        public Symbol LoadSymbol(string input) {
-            return singleSymbolPattern.IsMatch(input) ? Load(new Symbol(input.Substring(1))) : null;
+        public TypedValue LoadSymbol(string input) {
+            return singleSymbolPattern.IsMatch(input)
+                ? new TypedValue(this.Get<Symbols>().GetValue(input.Substring(1)))
+                : TypedValue.Void;
         }
 
         protected override Operators<string, SlimProcessor> Operators {
@@ -53,7 +55,7 @@ namespace fitSharp.Slim.Service {
             }
 
             public object GetFixture() {
-                return processor.Load(new SavedInstance(actorInstanceName)).Instance;
+                return processor.Get<SavedInstances>().GetValue(actorInstanceName);
             }
 
             public void PushFixture() {
@@ -61,7 +63,7 @@ namespace fitSharp.Slim.Service {
             }
 
             public void PopFixture() {
-                processor.Store(new SavedInstance(actorInstanceName, actors.Pop()));
+                processor.Get<SavedInstances>().Save(actorInstanceName, actors.Pop());
             }
         }
     }

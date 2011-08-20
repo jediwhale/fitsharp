@@ -4,7 +4,6 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using fitSharp.Fit.Operators;
-using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
 
@@ -15,7 +14,7 @@ namespace fit.Test.NUnit {
         [Test]
         public void TestLoadHandler()
         {
-            Configuration configuration = TestUtils.InitAssembliesAndNamespaces();
+            var configuration = TestUtils.InitAssembliesAndNamespaces();
             var builder = new TestBuilder();
             builder.Append("<table>");
             builder.Append("<tr><td colspan=\"2\">cell handler loader</td></tr>");
@@ -30,7 +29,7 @@ namespace fit.Test.NUnit {
         [Test]
         public void TestRemoveHandler()
         {
-            Configuration configuration = TestUtils.InitAssembliesAndNamespaces();
+            var configuration = TestUtils.InitAssembliesAndNamespaces();
             new Service.Service(configuration).AddOperator(new CompareSubstring());
             var builder = new TestBuilder();
             builder.Append("<table>");

@@ -43,7 +43,7 @@ namespace fitSharp.Fit.Operators {
             Add(new CompareException(), 2);
             Add(new CompareFail(), 2);
 
-            AddNamespaces(createConfiguration.GetItem<ApplicationUnderTest>());
+            AddNamespaces(createMemory.GetItem<ApplicationUnderTest>());
         }
 
         public void AddNamespaces(ApplicationUnderTest applicationUnderTest) {

@@ -39,8 +39,8 @@ namespace fit.Test.FitUnit {
 
         public DoFixture GetItem(string type) { return new DoFixture(Processor.Configuration.GetItem(type));}
 
-        private Configuration mySavedCopy;
-        private Configuration myConfiguration;
+        private Memory mySavedCopy;
+        private Memory myConfiguration;
     }
 
     public class TestList: ConfigurationList<string> {

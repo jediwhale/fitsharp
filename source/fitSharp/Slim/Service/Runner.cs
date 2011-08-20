@@ -14,8 +14,8 @@ namespace fitSharp.Slim.Service {
         private Service service;
         private string assemblyPaths;
 
-        public int Run(IList<string> commandLineArguments, Configuration configuration, ProgressReporter reporter) {
-            service = new Service(configuration);
+        public int Run(IList<string> commandLineArguments, Memory memory, ProgressReporter reporter) {
+            service = new Service(memory);
             ParseCommandLine(commandLineArguments);
             new Interpreter(messenger, assemblyPaths, service).ProcessInstructions();
             return 0;

@@ -58,8 +58,9 @@ namespace fitSharp.Slim.Operators {
         }
 
         protected TypedValue InvokeMember(Tree<string> parameters, int memberIndex) {
-            var instance = new SavedInstance(parameters.Branches[memberIndex].Value);
-            object target = Processor.Contains(instance) ? Processor.Load(instance).Instance : new NullInstance();
+            var savedInstances = Processor.Get<SavedInstances>();
+            var instance = parameters.Branches[memberIndex].Value;
+            object target = savedInstances.HasValue(instance) ? savedInstances.GetValue(instance) : new NullInstance();
             TypedValue result = Processor.Invoke(target, parameters.Branches[memberIndex + 1].Value, ParameterTree(parameters, memberIndex + 2));
             result.ThrowExceptionIfNotValid();
             return result;

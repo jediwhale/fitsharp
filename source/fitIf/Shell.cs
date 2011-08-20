@@ -38,7 +38,7 @@ namespace fitIf
         class Runner: MarshalByRefObject {
             public void SetUp(string[] commandLineArguments) {
                 var argumentParser = new ArgumentParser();
-                argumentParser.AddArgumentHandler("c", value => new SuiteConfiguration(configuration).LoadXml(new FileSystemModel().FileContent(value)));
+                argumentParser.AddArgumentHandler("c", value => new SuiteConfiguration(memory).LoadXml(new FileSystemModel().FileContent(value)));
                 argumentParser.Parse(commandLineArguments);
             }
 
@@ -58,15 +58,15 @@ namespace fitIf
                     "</style>\n" +
                     "test@\n" +
                     input;
-                service = new Service(configuration);
+                service = new Service(memory);
                 var test = service.Compose(new StoryTestString(storyTest));
                 var writer = new StoryTestStringWriter(service);
-                new ExecuteStoryTest(new Service(configuration), writer)
+                new ExecuteStoryTest(new Service(memory), writer)
                     .DoTables(test);
                 return writer.Tables;
             }
 
-            readonly Configuration configuration = new TypeDictionary();
+            readonly Memory memory = new TypeDictionary();
             Service service;
         }
     }

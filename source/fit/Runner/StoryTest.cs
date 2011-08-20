@@ -8,7 +8,7 @@ using fitSharp.Machine.Engine;
 
 namespace fit {
     public interface StoryCommand {
-        void Execute(Configuration configuration);
+        void Execute(Memory memory);
     }
 
     public class StoryTest: StoryCommand {
@@ -28,13 +28,13 @@ namespace fit {
             this.writer = writer;
         }
 
-        public void Execute(Configuration configuration) {
-		    var newConfig = configuration.Copy();
+        public void Execute(Memory memory) {
+		    var newConfig = memory.Copy();
             ExecuteOnConfiguration(newConfig);
         }
 
-        public void ExecuteOnConfiguration(Configuration configuration) {
-            new ExecuteStoryTest(new Service.Service(configuration), writer)
+        public void ExecuteOnConfiguration(Memory memory) {
+            new ExecuteStoryTest(new Service.Service(memory), writer)
                 .DoTables(Tables);
         }
     }

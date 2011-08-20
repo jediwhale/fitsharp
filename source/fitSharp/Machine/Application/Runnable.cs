@@ -9,6 +9,6 @@ using fitSharp.Machine.Engine;
 
 namespace fitSharp.Machine.Application {
     public interface Runnable {
-        int Run(IList<string> commandLineArguments, Configuration configuration, ProgressReporter reporter);
+        int Run(IList<string> commandLineArguments, Memory memory, ProgressReporter reporter);
     }
 }

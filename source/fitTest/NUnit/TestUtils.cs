@@ -17,13 +17,13 @@ using TestStatus=fitSharp.Fit.Model.TestStatus;
 namespace fit.Test.NUnit {
     public class TestUtils
     {
-        public static Configuration InitAssembliesAndNamespaces()
+        public static Memory InitAssembliesAndNamespaces()
         {
-            var configuration = new TypeDictionary();
-            configuration.GetItem<ApplicationUnderTest>().AddAssembly(Assembly.GetAssembly(typeof (TestUtils)).CodeBase);
-            configuration.GetItem<ApplicationUnderTest>().AddNamespace("fit.Test.NUnit");
-            configuration.GetItem<ApplicationUnderTest>().AddNamespace("fit.Test.Acceptance");
-            return configuration;
+            var memory = new TypeDictionary();
+            memory.GetItem<ApplicationUnderTest>().AddAssembly(Assembly.GetAssembly(typeof (TestUtils)).CodeBase);
+            memory.GetItem<ApplicationUnderTest>().AddNamespace("fit.Test.NUnit");
+            memory.GetItem<ApplicationUnderTest>().AddNamespace("fit.Test.Acceptance");
+            return memory;
         }
 
         public static Parse CreateCell(string value)

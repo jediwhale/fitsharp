@@ -5,6 +5,7 @@
 
 using System.Collections;
 using fitlibrary;
+using fitSharp.Fit.Model;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
 
@@ -12,23 +13,23 @@ namespace fit {
     public class ConfigurationSetupFixture: DoFixture {
 
         public override void DoTable(Parse table) {
-            SetSystemUnderTest(Processor.Configuration);
+            SetSystemUnderTest(Processor.Memory);
             base.DoTable(table);
         }
 
         public DoFixture Settings() {
-            return new DoFixture(Processor.Configuration.GetItem<Settings>());
+            return new DoFixture(Processor.Get<Settings>());
         }
 
-        public DoFixture ApplicationUnderTest() { return new DoFixture(Processor.Configuration.GetItem<ApplicationUnderTest>()); }
+        public DoFixture ApplicationUnderTest() { return new DoFixture(Processor.Get<ApplicationUnderTest>()); }
 
         //look at
         public DoFixture Service() { return new DoFixture(Processor); }
 
-        public DoFixture GetItem(string type) { return new DoFixture(Processor.Configuration.GetItem(type));}
+        public DoFixture GetItem(string type) { return new DoFixture(Processor.Memory.GetItem(type));}
 
         public IEnumerable List(string name) {
-            return (IEnumerable)Processor.Configuration.GetItem(name);
+            return (IEnumerable)Processor.Memory.GetItem(name);
         }
     }
 }

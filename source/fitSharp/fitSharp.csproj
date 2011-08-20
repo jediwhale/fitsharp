@@ -142,7 +142,7 @@
     <Compile Include="Fit\Operators\ParseDefault.cs" />
     <Compile Include="Fit\Operators\ParseNull.cs" />
     <Compile Include="Fit\Operators\ParseType.cs" />
-    <Compile Include="Machine\Engine\Configuration.cs" />
+    <Compile Include="Machine\Engine\Memory.cs" />
     <Compile Include="Machine\Application\Shell.cs" />
     <Compile Include="Machine\Engine\ApplicationUnderTest.cs" />
     <Compile Include="Machine\Engine\BasicProcessor.cs" />
@@ -150,6 +150,7 @@
     <Compile Include="Machine\Model\ObjectExtension.cs" />
     <Compile Include="Machine\Model\SetUp.cs" />
     <Compile Include="Machine\Model\StringDifference.cs" />
+    <Compile Include="Machine\Model\StringObjectMemory.cs" />
     <Compile Include="Machine\Model\Symbols.cs" />
     <Compile Include="Machine\Model\Traverse.cs" />
     <Compile Include="Parser\Characters.cs" />
@@ -178,7 +179,6 @@
     <Compile Include="Machine\Model\DomainAdapter.cs" />
     <Compile Include="Machine\Model\EnumeratedTree.cs" />
     <Compile Include="Machine\Model\IdentifierName.cs" />
-    <Compile Include="Machine\Model\KeyValueMemory.cs" />
     <Compile Include="Machine\Model\LanguageName.cs" />
     <Compile Include="Machine\Model\NameMatcher.cs" />
     <Compile Include="Machine\Model\Tree.cs" />
@@ -207,11 +207,10 @@
     <Compile Include="Slim\Operators\ParseList.cs" />
     <Compile Include="Slim\Operators\ParseSymbol.cs" />
     <Compile Include="Slim\Operators\InvokeLibrary.cs" />
-    <Compile Include="Slim\Operators\SavedInstance.cs" />
+    <Compile Include="Slim\Operators\SavedInstances.cs" />
     <Compile Include="Slim\Operators\SlimInstruction.cs" />
     <Compile Include="Slim\Operators\SlimOperator.cs" />
     <Compile Include="Slim\Operators\SlimProcessor.cs" />
-    <Compile Include="Slim\Operators\Symbol.cs" />
     <Compile Include="Slim\Service\Document.cs" />
     <Compile Include="Slim\Service\Interpreter.cs" />
     <Compile Include="Slim\Service\Messenger.cs" />

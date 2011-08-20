@@ -9,9 +9,9 @@ using System.Configuration;
 using System.Threading;
 using fitSharp.IO;
 using fitSharp.Machine.Application;
+using fitSharp.Machine.Engine;
 using fitSharp.Test.Double;
 using NUnit.Framework;
-using Configuration=fitSharp.Machine.Engine.Configuration;
 
 namespace fitSharp.Test.NUnit.Machine {
     [TestFixture] public class ShellTest {
@@ -76,7 +76,7 @@ namespace fitSharp.Test.NUnit.Machine {
             LastArguments = new string[] {};
         }
 
-        public int Run(IList<string> arguments, Configuration configuration, ProgressReporter reporter) {
+        public int Run(IList<string> arguments, Memory memory, ProgressReporter reporter) {
             LastArguments = arguments;
             ApartmentState = Thread.CurrentThread.GetApartmentState();
             try {

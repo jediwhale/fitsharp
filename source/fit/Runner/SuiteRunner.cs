@@ -18,28 +18,28 @@ namespace fit.Runner {
 	    public TestCounts TestCounts { get; private set; }
 	    private readonly ProgressReporter myReporter;
 	    private ResultWriter resultWriter;
-	    private readonly Configuration configuration;
+	    private readonly Memory memory;
 
-		public SuiteRunner(Configuration configuration, ProgressReporter theReporter) {
+		public SuiteRunner(Memory memory, ProgressReporter theReporter) {
 		    TestCounts = new TestCounts();
 		    myReporter = theReporter;
-		    this.configuration = configuration;
+		    this.memory = memory;
 		}
 
 	    public void Run(StoryTestSuite theSuite, string theSelectedFile) {
             resultWriter = CreateResultWriter();
             if (!string.IsNullOrEmpty(theSelectedFile)) theSuite.Select(theSelectedFile);
 
-	        RunFolder(theSuite, configuration.GetItem<Settings>().DryRun);
+	        RunFolder(theSuite, memory.GetItem<Settings>().DryRun);
 
             resultWriter.WriteFinalCount(TestCounts);
             resultWriter.Close();
 	    }
 
 	    private ResultWriter CreateResultWriter() {
-	        if (configuration.GetItem<Settings>().XmlOutput != null) {
-	            return new XmlResultWriter(configuration.GetItem<Settings>().XmlOutput,
-	                                       new FileSystemModel(configuration.GetItem<Settings>().CodePageNumber));
+	        if (memory.GetItem<Settings>().XmlOutput != null) {
+	            return new XmlResultWriter(memory.GetItem<Settings>().XmlOutput,
+	                                       new FileSystemModel(memory.GetItem<Settings>().CodePageNumber));
 	        }
 	        return new NullResultWriter();
 	    }
@@ -68,7 +68,7 @@ namespace fit.Runner {
 
 	    private StoryTestPageExecutor SelectExecutor(bool dryRun) {
 	        if (dryRun) return new ReportPage(myReporter);
-	        return new ExecutePage(configuration, resultWriter, HandleTestStatus);
+	        return new ExecutePage(memory, resultWriter, HandleTestStatus);
 	    }
 
 	    private void HandleTestStatus(TestCounts counts) {
@@ -77,8 +77,8 @@ namespace fit.Runner {
         }
 
         class ExecutePage: StoryTestPageExecutor {
-            public ExecutePage(Configuration configuration, ResultWriter resultWriter,  Action<TestCounts> handleCounts) {
-                this.configuration = configuration;
+            public ExecutePage(Memory memory, ResultWriter resultWriter,  Action<TestCounts> handleCounts) {
+                this.memory = memory;
                 this.resultWriter = resultWriter;
                 this.handleCounts = handleCounts;
             }
@@ -90,7 +90,7 @@ namespace fit.Runner {
                     page.WriteNonTest();
                     DoNoTest();
                 }
-	            var service = new Service.Service(configuration);
+	            var service = new Service.Service(memory);
 	            Tree<Cell> result = service.Compose(new StoryTestString(input));
 	            if (result == null || result.Branches.Count == 0) {
                     page.WriteNonTest();
@@ -100,10 +100,10 @@ namespace fit.Runner {
                 var writer = new StoryTestStringWriter(service);
                 var storyTest = new StoryTest((Parse) result, writer);
                 if (page.Name.IsSuitePage) {
-	                storyTest.ExecuteOnConfiguration(configuration);
+	                storyTest.ExecuteOnConfiguration(memory);
                 }
                 else {
-	                storyTest.Execute(configuration);
+	                storyTest.Execute(memory);
                 }
                 var pageResult = new PageResult(page.Name.Name, writer.Tables, writer.Counts, elapsedTime);
                 page.WriteTest(pageResult);
@@ -116,7 +116,7 @@ namespace fit.Runner {
             }
 
             readonly ResultWriter resultWriter;
-            readonly Configuration configuration;
+            readonly Memory memory;
             readonly Action<TestCounts> handleCounts;
         }
 

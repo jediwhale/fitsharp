@@ -98,7 +98,7 @@ namespace fitSharp.Test.NUnit.Slim {
         }
 
         [Test] public void MemoryExceptionIsComposed() {
-            CheckExceptionCompose(new MemoryMissingException<SavedInstance>(new SavedInstance("stuff")), "message:<<NO_INSTANCE stuff>> ");
+            CheckExceptionCompose(new MemoryMissingException<string>("stuff"), "message:<<NO_INSTANCE stuff>> ");
         }
 
         [Test] public void InstructionExceptionIsComposed() {

@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using fitSharp.Fit.Model;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
@@ -24,7 +25,7 @@ namespace fitSharp.Fit.Operators {
         }
 
         public bool CanCompare(TypedValue actual, Tree<Cell> expected) {
-            var options = Processor.Configuration.GetItem<CompareString>();
+            var options = Processor.Get<CompareString>();
             if (!HasPrefix(options.list, expected.Value.Text)) return false;
             if (actual.Type != typeof(string)) return false;
 
@@ -33,7 +34,7 @@ namespace fitSharp.Fit.Operators {
         }
 
         public bool Compare(TypedValue actual, Tree<Cell> expected) {
-            var options = Processor.Configuration.GetItem<CompareString>();
+            var options = Processor.Get<CompareString>();
             return IsMatch(options.list, actual.ValueString, expected.Value.Text);
         }
 

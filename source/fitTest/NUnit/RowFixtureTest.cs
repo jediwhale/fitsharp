@@ -23,7 +23,7 @@ namespace fit.Test.NUnit {
         Parse table;
         Parse storyTables;
         TestCounts resultCounts;
-        Configuration configuration;
+        Memory memory;
         string testResult;
         Service.Service processor;
 
@@ -172,11 +172,11 @@ namespace fit.Test.NUnit {
         [SetUp]
         public void SetUp()
         {
-            configuration = TestUtils.InitAssembliesAndNamespaces();
+            memory = TestUtils.InitAssembliesAndNamespaces();
             storyTables = new TestBuilder("<table><tr><td>" + rowFixtureName + "</td></tr><tr><td>name</td></tr></table>").Parse;
             table = storyTables.Parts;
             NewRowFixtureDerivative.QueryValues.Clear();
-            processor = new Service.Service(configuration);
+            processor = new Service.Service(memory);
         }
 
         [Test]
