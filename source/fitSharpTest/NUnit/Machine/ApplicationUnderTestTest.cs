@@ -4,6 +4,7 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
+using System.IO;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using fitSharp.Test.Double;
@@ -92,6 +93,19 @@ namespace fitSharp.Test.NUnit.Machine {
             ExpectFitAssemblyIsLoaded();
             applicationUnderTest.FindType(new IdentifierName("fit.FitSample"));
             domain.VerifyAll();
+        }
+
+        [Test] public void OptionalAssemblyIsLoaded() {
+            SetUpMockDomain();
+            applicationUnderTest.AddOptionalAssembly("myassembly.dll");
+            domain.Verify(d => d.LoadAssembly("myassembly.dll"), Times.Once());
+        }
+
+        [Test] public void OptionalAssemblyIgnoresMissingAssembly() {
+            SetUpMockDomain();
+            domain.Setup(d => d.LoadAssembly("myassembly.dll")).Throws(new FileNotFoundException());
+            applicationUnderTest.AddOptionalAssembly("myassembly.dll");
+            Assert.IsTrue(true);
         }
 
         void ExpectFitAssemblyIsLoaded() {

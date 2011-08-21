@@ -26,6 +26,7 @@ The file format is XML. Here is a sample showing the configurable items:<br>
     &lt;/AppDomainSetup>
     &lt;ApplicationUnderTest>
         &lt;AddAssembly>myTests.dll&lt;/AddAssembly>
+        &lt;AddOptionalAssembly>myOtherTests.dll&lt;/AddOptionalAssembly>
         &lt;AddNamespace>myTests&lt;/AddNamespace>
     &lt;/ApplicationUnderTest>
     &lt;Culture>
@@ -61,8 +62,7 @@ The default COM apartment state is MTA. It can be set to STA when testing with s
 This section describes the App Domain in which story tests are executed. Two frequently-used properties are:<ul><li>ApplicationBase: the directory where application executable files are found</li><li>ConfigurationFile: the application configuration file used by the application under test.</li></ul>See the MSDN documentation for a complete list of properties for App Domain Setup.<br>
 <br>
 <span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">ApplicationUnderTest</span><br>
-Assemblies and namespaces can be loaded to be used when looking for fixture classes. <br>
-<br>
+Assemblies and namespaces can be specified to be used when looking for fixture and domain classes.<ul><li>AddAssembly: loads the assembly</li><li>AddOptionalAssembly: loads the assembly, but is ignores if the assembly is not found. This may be useful when the suite configuration file is used in different situations where different assemblies may be present.</li><li>AddNamespace: adds the namespace to a list that is used to look for classes when class names appear without a namespace. </li></ul><br>
 <span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">Behavior</span><br>
 This is a comma-separated list of keywords to specify behavior that differs between different Fit versions.<br>
 <br>
