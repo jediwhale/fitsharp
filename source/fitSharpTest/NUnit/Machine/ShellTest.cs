@@ -33,6 +33,12 @@ namespace fitSharp.Test.NUnit.Machine {
             Assert.AreEqual(606, result);
         }
 
+        [Test] public void CustomAppConfigIsLoadedRelativeToExecutingAssembly() {
+            using (new PushCurrentDirectory(@"\")) {
+                CustomAppConfigIsUsed();
+            }
+        }
+
         [Test] public void CustomAppConfigFromSuiteConfigIsUsed() {
             var folders = new FolderTestModel();
             folders.MakeFile("suite.config.xml", "<config><Settings><AppConfigFile>fitSharpTest.dll.alt.config</AppConfigFile></Settings></config>");
@@ -63,6 +69,19 @@ namespace fitSharp.Test.NUnit.Machine {
 
         private static int RunShell(string[] arguments, FolderModel model) {
             return new Shell(new ConsoleReporter(), model).Run(arguments);
+        }
+
+        class PushCurrentDirectory : IDisposable {
+            public PushCurrentDirectory(string directory) {
+                original = Environment.CurrentDirectory;
+                Environment.CurrentDirectory = directory;
+            }
+
+            public void Dispose() {
+                Environment.CurrentDirectory = original;
+            }
+
+            readonly string original;
         }
     }
 
