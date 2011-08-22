@@ -73,6 +73,7 @@
     <Compile Include="Fit\Service\StoryTestStringWriter.cs" />
     <Compile Include="Fit\Service\StoryTestWriter.cs" />
     <Compile Include="Machine\Application\ArgumentParser.cs" />
+    <Compile Include="Machine\Application\Context.cs" />
     <Compile Include="Machine\Application\Runnable.cs" />
     <Compile Include="Machine\Application\Runner.cs" />
     <Compile Include="Machine\Application\SuiteConfiguration.cs" />
