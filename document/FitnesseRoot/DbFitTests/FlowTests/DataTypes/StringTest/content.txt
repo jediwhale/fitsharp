@@ -2,17 +2,17 @@
 
 Following types map to string: "VARCHAR", "NVARCHAR", "CHAR", "NCHAR","TEXT","NTEXT", "SQL_VARIANT"
 
-|Execute|Create table datatypetest (s1 varchar(20), s2 nvarchar(20), s3 char(4), s4 nchar(5), s5 text, s6 ntext, s7 SQL_VARIANT,s8 xml)|
+|Execute|Create table datatypetest (s1 varchar(20), s2 nvarchar(20), s3 char(4), s4 nchar(5), s5 text, s6 ntext, s7 SQL_VARIANT,s8 xml, s9 nvarchar(3500))|
 
 |Insert|datatypetest|
-|s1|s2|s3|s4|s5|s6|s7|s8|
-|VARCHAR|NVARCHAR|CHAR|NCHAR|TEXT|NTEXT|SQL_VARIANT|XML|
-|null|null|null|null|null|null|null|null|
+|s1|s2|s3|s4|s5|s6|s7|s8|s9|
+|VARCHAR|NVARCHAR|CHAR|NCHAR|TEXT|NTEXT|SQL_VARIANT|XML|bigNvarchar|
+|null|null|null|null|null|null|null|null|null|
 
 |Query|Select * from datatypetest|
-|s1|s2?|s3?|s4?|s5?|s6?|s7|s8|
-|VARCHAR|NVARCHAR|CHAR|NCHAR|TEXT|NTEXT|SQL_VARIANT|XML|
-|null|null|null|null|null|null|null|null|
+|s1|s2?|s3?|s4?|s5?|s6?|s7|s8|s9|
+|VARCHAR|NVARCHAR|CHAR|NCHAR|TEXT|NTEXT|SQL_VARIANT|XML|bigNvarchar|
+|null|null|null|null|null|null|null|null|null|
 
 
 |execute|delete from datatypetest|

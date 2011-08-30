@@ -108,6 +108,10 @@ namespace dbfit
                 if (scale > 0) dp.Scale = scale;
                 if ("NTEXT".Equals(typeName)||("TEXT".Equals(typeName)))
                     dp.Size=MAX_STRING_SIZE;
+                else if ("NVARCHAR".Equals(typeName) || ("NCHAR".Equals(typeName)))
+                {
+                    dp.Size = System.Convert.ToInt32(length) / 2;
+                }
                 else if (length > 0)
                 {
                     dp.Size = Convert.ToInt32(length);
