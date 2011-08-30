@@ -172,6 +172,7 @@ AS
 DELETE [Users];
 ' 
 END
+GO
 
 CREATE PROCEDURE [dbo].[TestProc2]
 	@iddocument int,
@@ -187,18 +188,23 @@ begin
 	raiserror(@errorsave, 15, 1, 'Custom error message')
 	return @errorsave
 end
+go
 
-sp_addmessage @msgnum = 53120, @severity=1, @msgtext = 'test user defined error msg' 
+exec sp_addmessage @msgnum = 53120, @severity=1, @msgtext = 'test user defined error msg' 
 
+GO
 CREATE procedure [dbo].[ListUsers_P] @howmuch int AS
 BEGIN
 select top (@howmuch) * from users order by userid
 END;
+GO
 
 create procedure MultiplyIO(@factor int, @val int output) as
 begin
 	set @val = @factor*@val;
 end;
+
+GO
 
 create procedure TestDecimal
 @inParam decimal(15, 8),
@@ -208,4 +214,20 @@ as
 begin
 set @copyOfInParam = @inParam
 set @constOutParam = 123.456;
+end;
+
+GO
+
+Create procedure TestReturn
+@inParam int
+as
+begin
+	return @inParam
 end
+GO
+
+alter PROC up_vb
+	@vb varbinary(16)
+as
+	select cast(0x1020304050 as varbinary(16)) as d2
+GO

@@ -126,7 +126,9 @@ namespace dbfit
                 throw new ApplicationException("Cannot read columns/parameters for object " + objname + " - check spelling or access privileges ");
             return allParams;
         }
-        private static readonly string[] StringTypes = new[] { "VARCHAR", "NVARCHAR", "CHAR", "NCHAR","TEXT","NTEXT","XML"};
+        private static readonly string[] SingleByteStringTypes = new string[] { "VARCHAR", "CHAR", "TEXT" };
+        private static readonly string[] DoubleByteStringTypes = new string[] { "NVARCHAR", "NCHAR", "NTEXT" };
+        private static readonly string[] XMLTypes = new string[] { "XML" };
         private static readonly string[] DecimalTypes = new[] { "DECIMAL", "NUMERIC", "MONEY", "SMALLMONEY" };
         private static readonly string[] DateTimeTypes = new[] { "SMALLDATETIME", "DATETIME" };
         private static readonly string[] DateTypes2008 = new[] { "DATETIME2" };
@@ -161,7 +163,9 @@ namespace dbfit
             //todo:strip everything from first blank
             dataType = NormaliseTypeName(dataType);
 
-            if (Array.IndexOf(StringTypes, dataType) >= 0) return SqlDbType.VarChar;
+            if (Array.IndexOf(SingleByteStringTypes, dataType) >= 0) return SqlDbType.VarChar;
+            if (Array.IndexOf(DoubleByteStringTypes, dataType) >= 0) return SqlDbType.NVarChar;
+            if (Array.IndexOf(XMLTypes, dataType) >= 0) return SqlDbType.Xml;
             if (Array.IndexOf(DecimalTypes, dataType) >= 0) return SqlDbType.Decimal;
             if (Array.IndexOf(DateTimeTypes, dataType) >= 0) return SqlDbType.DateTime;
             if (Array.IndexOf(DateTypes2008, dataType) >= 0) return SqlDbType.DateTime2;
@@ -186,7 +190,9 @@ namespace dbfit
         protected static Type GetDotNetType(String dataType)
         {
             dataType = NormaliseTypeName(dataType);
-            if (Array.IndexOf(StringTypes, dataType) >= 0) return typeof(string);
+            if (Array.IndexOf(SingleByteStringTypes, dataType) >= 0) return typeof(string);
+            if (Array.IndexOf(DoubleByteStringTypes, dataType) >= 0) return typeof(string);
+            if (Array.IndexOf(XMLTypes, dataType) >= 0) return typeof(string);
             if (Array.IndexOf(DecimalTypes, dataType) >= 0) return typeof(decimal);
             if (Array.IndexOf(Int8Types, dataType) >= 0) return typeof(byte);
             if (Array.IndexOf(Int16Types, dataType) >= 0) return typeof(Int16);

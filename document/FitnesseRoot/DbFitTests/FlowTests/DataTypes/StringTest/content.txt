@@ -25,3 +25,13 @@ Following types map to string: "VARCHAR", "NVARCHAR", "CHAR", "NCHAR","TEXT","NT
 |s5?|s6?|
 |this string is longer than twelve characters|this string is longer than twelve characters|
 
+Test unicode
+|execute|delete from datatypetest|
+
+|Insert|datatypetest|
+|s2|s4|
+|金霸王直通金霸王直通|金霸王直通|
+
+|Query|Select s2, s4 from datatypetest|
+|s2|s4|
+|金霸王直通金霸王直通|金霸王直通|
