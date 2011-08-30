@@ -70,8 +70,7 @@ namespace fitSharp.Test.NUnit.Fit {
         }
 
         [Test] public void SymbolIsParsed() {
-            var symbol = new Symbol("two", 2);
-            parseDate.Processor.Store(symbol);
+            parseDate.Processor.Get<Symbols>().Save("two", 2);
             Assert.IsTrue(TryParse(typeof(DateTime), "today-<<two"));
             Assert.AreEqual(DateTime.Now.Date.AddDays(-2), result);
         }

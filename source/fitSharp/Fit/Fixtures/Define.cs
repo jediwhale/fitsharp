@@ -13,7 +13,7 @@ namespace fitSharp.Fit.Fixtures {
         public void Interpret(CellProcessor processor, Tree<Cell> table) {
             processor.TestStatus.TableCount--;
             var name = processor.ParseTree<Cell, MemberName>(new EnumeratedTree<Cell>(table.Branches[0].Branches.Skip(1).Alternate()));
-            processor.Store(new Procedure(name.ToString(), table));
+            processor.Get<Procedures>().Save(name.ToString(), table);
         }
     }
 }

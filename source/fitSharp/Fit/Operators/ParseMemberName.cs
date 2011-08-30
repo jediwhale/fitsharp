@@ -22,7 +22,7 @@ namespace fitSharp.Fit.Operators {
         }
 
         public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
-            StringBuilder nameParts = Processor.Configuration.GetItem<Settings>().BehaviorHas("fitlibrary1")
+            StringBuilder nameParts = Processor.Get<Settings>().BehaviorHas("fitlibrary1")
                 ? parameters.Leaves().Aggregate(new StringBuilder(), (t, cell) => AppendWithConversion(t, cell.Text))
                 : parameters.Leaves().Aggregate(new StringBuilder(), (t, cell) => Append(t, cell.Text));
 

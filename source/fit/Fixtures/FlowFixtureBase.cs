@@ -51,11 +51,10 @@ namespace fitlibrary {
         }
 
         public object NamedFixture(string theName) {
-            var symbol = new Symbol(theName);
-            return Processor.Contains(symbol) ? Processor.Load(symbol).Instance : null;
+            return Symbols.HasValue(theName) ? Symbols.GetValue(theName) : null;
         }
 
-        public void AddNamedFixture(string name, object fixture) { Processor.Store(new Symbol(name, fixture)); }
+        public void AddNamedFixture(string name, object fixture) { Processor.Get<Symbols>().Save(name, fixture); }
 
         public void DoCheckOperation(Parse expectedValue, CellRange cells) {
             CellOperation.Check(GetTargetObject(),

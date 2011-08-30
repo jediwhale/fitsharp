@@ -22,7 +22,7 @@ namespace fitSharp.Test.NUnit.Fit {
         private static void ParseCell(string cellContent, string symbolName) {
             var cell = new CellTreeLeaf(cellContent);
             var processor = new CellProcessorBase();
-            processor.Store(new Symbol(symbolName, "value"));
+            processor.Get<Symbols>().Save(symbolName, "value");
             new ParseSymbol{Processor = processor}.Parse(typeof (string), TypedValue.Void, cell);
             Assert.AreEqual(" value", cell.Value.GetAttribute(CellAttribute.InformationSuffix));
         }

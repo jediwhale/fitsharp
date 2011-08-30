@@ -18,69 +18,57 @@ namespace fit.Runner {
 	    public TestCounts TestCounts { get; private set; }
 	    private readonly ProgressReporter myReporter;
 	    private ResultWriter resultWriter;
-	    private readonly Configuration configuration;
+	    private readonly Memory memory;
 
-		public SuiteRunner(Configuration configuration, ProgressReporter theReporter) {
+		public SuiteRunner(Memory memory, ProgressReporter theReporter) {
 		    TestCounts = new TestCounts();
 		    myReporter = theReporter;
-		    this.configuration = configuration;
+		    this.memory = memory;
 		}
 
 	    public void Run(StoryTestSuite theSuite, string theSelectedFile) {
             resultWriter = CreateResultWriter();
             if (!string.IsNullOrEmpty(theSelectedFile)) theSuite.Select(theSelectedFile);
 
-	        RunFolder(theSuite, configuration.GetItem<Settings>().DryRun);
+	        RunFolder(theSuite, memory.GetItem<Settings>().DryRun);
 
             resultWriter.WriteFinalCount(TestCounts);
             resultWriter.Close();
 	    }
 
 	    private ResultWriter CreateResultWriter() {
-	        if (configuration.GetItem<Settings>().XmlOutput != null) {
-	            return new XmlResultWriter(configuration.GetItem<Settings>().XmlOutput,
-	                                       new FileSystemModel(configuration.GetItem<Settings>().CodePageNumber));
+	        if (memory.GetItem<Settings>().XmlOutput != null) {
+	            return new XmlResultWriter(memory.GetItem<Settings>().XmlOutput,
+	                                       new FileSystemModel(memory.GetItem<Settings>().CodePageNumber));
 	        }
 	        return new NullResultWriter();
 	    }
 
 	    private void RunFolder(StoryTestSuite theSuite, bool dryRun) {
-	        var pageAction = SelectPageAction(dryRun);
+	        var executor = SelectExecutor(dryRun);
+
 	        StoryTestPage suiteSetUp = theSuite.SuiteSetUp;
-            if (suiteSetUp != null) pageAction(suiteSetUp);
-            foreach (StoryTestPage testPage in theSuite.Pages) {
-                pageAction(testPage);
+            if (suiteSetUp != null) executor.Do(suiteSetUp);
+	        foreach (StoryTestPage testPage in theSuite.Pages) {
+                try {
+                    executor.Do(testPage);
+                }
+                catch (Exception e) {
+	                myReporter.Write(e.ToString());
+	            }
             }
 
 	        foreach (StoryTestSuite childSuite in theSuite.Suites) {
                 RunFolder(childSuite, dryRun);
 	        }
 	        StoryTestPage suiteTearDown = theSuite.SuiteTearDown;
-            if (suiteTearDown != null) pageAction(suiteTearDown);
+            if (suiteTearDown != null) executor.Do(suiteTearDown);
 	        if (!dryRun) theSuite.Finish();
 	    }
 
-        private Action<StoryTestPage> SelectPageAction(bool dryRun) {
-            if (dryRun) return DryRunStoryPage;
-            return ExecuteStoryPage;
-        }
-
-	    private void ExecuteStoryPage(StoryTestPage page) {
-	        try {
-                page.ExecuteStoryPage(ExecutePage, resultWriter, HandleTestStatus);
-	        }
-	        catch (Exception e) {
-	            myReporter.Write(e.ToString());
-	        }
-	    }
-
-	    private void DryRunStoryPage(StoryTestPage page) {
-            page.ExecuteStoryPage(ReportPageName, new NullResultWriter(), ignore => {});
-	    }
-
-	    private void ReportPageName(StoryPageName pageName, StoryTestString input, Action<StoryTestString, TestCounts> handleResults,
-	                             Action handleNoTest) {
-	        myReporter.WriteLine(pageName.Name);
+	    private StoryTestPageExecutor SelectExecutor(bool dryRun) {
+	        if (dryRun) return new ReportPage(myReporter);
+	        return new ExecutePage(memory, resultWriter, HandleTestStatus);
 	    }
 
 	    private void HandleTestStatus(TestCounts counts) {
@@ -88,23 +76,63 @@ namespace fit.Runner {
 	        TestCounts.TallyCounts(counts);
         }
 
-	    private void ExecutePage(StoryPageName pageName, StoryTestString input, Action<StoryTestString, TestCounts> handleResults,
-	                             Action handleNoTest) {
-	        var service = new Service.Service(configuration);
-	        Tree<Cell> result = service.Compose(input);
-	        if (result == null || result.Branches.Count == 0) {
-	            handleNoTest();
-	            return;
-	        }
-	        var storyTest = new StoryTest((Parse) result,
-	                                      (tables, counts) =>
-	                                      handleResults(service.ParseTree<Cell, StoryTestString>(tables), counts));
-            if (pageName.IsSuitePage) {
-	            storyTest.ExecuteOnConfiguration(configuration);
+        class ExecutePage: StoryTestPageExecutor {
+            public ExecutePage(Memory memory, ResultWriter resultWriter,  Action<TestCounts> handleCounts) {
+                this.memory = memory;
+                this.resultWriter = resultWriter;
+                this.handleCounts = handleCounts;
             }
-            else {
-	            storyTest.Execute(configuration);
+
+            public void Do(StoryTestPage page) {
+                var elapsedTime = new ElapsedTime();
+                var input = page.TestContent;
+                if (string.IsNullOrEmpty(input)) {
+                    page.WriteNonTest();
+                    DoNoTest();
+                }
+	            var service = new Service.Service(memory);
+	            Tree<Cell> result = service.Compose(new StoryTestString(input));
+	            if (result == null || result.Branches.Count == 0) {
+                    page.WriteNonTest();
+                    DoNoTest();
+	                return;
+	            }
+                var writer = new StoryTestStringWriter(service);
+                var storyTest = new StoryTest((Parse) result, writer);
+                if (page.Name.IsSuitePage) {
+	                storyTest.ExecuteOnConfiguration(memory);
+                }
+                else {
+	                storyTest.Execute(memory);
+                }
+                var pageResult = new PageResult(page.Name.Name, writer.Tables, writer.Counts, elapsedTime);
+                page.WriteTest(pageResult);
+                handleCounts(writer.Counts);
+                resultWriter.WritePageResult(pageResult);
             }
-	    }
+
+            public void DoNoTest() {
+                handleCounts(new TestCounts());
+            }
+
+            readonly ResultWriter resultWriter;
+            readonly Memory memory;
+            readonly Action<TestCounts> handleCounts;
+        }
+
+        class ReportPage: StoryTestPageExecutor {
+            public ReportPage(ProgressReporter reporter) {
+                this.reporter = reporter;
+            }
+
+            public void Do(StoryTestPage page) {
+                if (string.IsNullOrEmpty(page.TestContent)) return;
+	            reporter.WriteLine(page.Name.Name);
+            }
+
+            public void DoNoTest() {}
+
+            readonly ProgressReporter reporter;
+        }
 	}
 }

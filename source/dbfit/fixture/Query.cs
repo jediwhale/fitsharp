@@ -4,6 +4,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System;
+using System.Collections;
 using System.Data.Common;
 using System.Data;
 using dbfit.util;
@@ -23,14 +24,7 @@ namespace dbfit.fixture
             myArray = null;
         }
 
-        public Query(IDbEnvironment environment, String query, bool isOrdered): base(GetDataTable(query, environment).Rows.GetEnumerator())
-        {
-            this.isOrdered = isOrdered;
-        }
-
-        public Query(IDbEnvironment environment, String query, bool isOrdered,int rsNo)
-            : base(GetDataTable(query, environment,rsNo).Rows.GetEnumerator())
-        {
+        public Query(IEnumerator enumerator, bool isOrdered): base(enumerator) {
             this.isOrdered = isOrdered;
         }
 
@@ -41,29 +35,13 @@ namespace dbfit.fixture
 
         public override void DoTable(Parse table)
         {
-            if (myArray == null) SetCollection(GetDataTable(GetArgumentInput<String>(0), DbEnvironmentFactory.DefaultEnvironment).Rows.GetEnumerator());
+            if (myArray == null) SetCollection(DatabaseTest.GetDataTable(
+                Symbols,
+                GetArgumentInput<String>(0),
+                DbEnvironmentFactory.DefaultEnvironment).Rows.GetEnumerator());
             base.DoTable(table);
         }
 
-        public static DataTable GetDataTable(String query,IDbEnvironment environment, int rsNo)
-        {
-            DbCommand dc = environment.CreateCommand(query, CommandType.Text);
-            if (Options.ShouldBindSymbols())
-                environment.BindFixtureSymbols(dc);
-
-            DbDataAdapter oap = environment.DbProviderFactory.CreateDataAdapter();
-            oap.SelectCommand = dc;
-            var ds = new DataSet();
-            oap.Fill(ds);
-            dc.Dispose();
-            return ds.Tables[rsNo - 1];
-        }
-
-
-        public static DataTable GetDataTable(String query, IDbEnvironment environment)
-        {
-            return GetDataTable(query, environment, 1);
-        }
 
         protected override ListMatchStrategy MatchStrategy {
             get { return new QueryMatchStrategy(Processor, myHeaderRow, isOrdered); }

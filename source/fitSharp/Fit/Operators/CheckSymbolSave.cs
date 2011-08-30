@@ -14,8 +14,7 @@ namespace fitSharp.Fit.Operators {
 
         public TypedValue Check(CellOperationValue actualValue, Tree<Cell> expectedCell) {
             var value = actualValue.GetActual(Processor);
-            var symbol = new Symbol(expectedCell.Value.Text.Substring(2), value);
-            Processor.Store(symbol);
+            Processor.Get<Symbols>().Save(expectedCell.Value.Text.Substring(2), value);
 
             expectedCell.Value.AddToAttribute(CellAttribute.InformationSuffix, value == null ? "null" : value.ToString());
             return TypedValue.Void;

@@ -15,13 +15,13 @@ using System;
 namespace fit.Test.NUnit {
     [TestFixture] public class SuiteRunnerTest {
 
-        Configuration config;
+        Memory memory;
         FolderTestModel folders;
 
         [SetUp] public void SetUp() {
-            config = new TypeDictionary();
-            config.GetItem<Settings>().InputFolder = "in";
-            config.GetItem<Settings>().OutputFolder = "out";
+            memory = new TypeDictionary();
+            memory.GetItem<Settings>().InputFolder = "in";
+            memory.GetItem<Settings>().OutputFolder = "out";
 
             folders = new FolderTestModel();
         }
@@ -38,7 +38,7 @@ namespace fit.Test.NUnit {
         }
 
         [Test] public void SuiteSetupAndTearDownAreIncludedInDryRun() {
-            config.GetItem<Settings>().DryRun = true;
+            memory.GetItem<Settings>().DryRun = true;
 
             AddTestFile(@"in\suitesetup.html");
             AddTestFile(@"in\test.html");
@@ -54,7 +54,7 @@ namespace fit.Test.NUnit {
         }
 
         [Test] public void SetupAndTearDownAreNotIncludedInDryRun() {
-            config.GetItem<Settings>().DryRun = true;
+            memory.GetItem<Settings>().DryRun = true;
 
             AddTestFile(@"in\setup.html");
             AddTestFile(@"in\test.html");
@@ -69,7 +69,7 @@ namespace fit.Test.NUnit {
         }
 
         [Test] public void DryRunListsAllApplicableTestFiles() {
-            config.GetItem<Settings>().DryRun = true;
+            memory.GetItem<Settings>().DryRun = true;
 
             AddTestFile(@"in\test1.html");
             AddTestFile(@"in\test2.html");
@@ -83,7 +83,7 @@ namespace fit.Test.NUnit {
         }
 
         [Test] public void DryRunDoesNotProduceAnyTestResults() {
-            config.GetItem<Settings>().DryRun = true;
+            memory.GetItem<Settings>().DryRun = true;
 
             AddTestFile(@"in\test1.html");
             AddTestFile(@"in\test2.html");
@@ -99,8 +99,8 @@ namespace fit.Test.NUnit {
         }
 
         private void RunSuite(ProgressReporter reporter) {
-            var runner = new SuiteRunner(config, reporter);
-            runner.Run(new StoryTestFolder(config, folders), string.Empty);
+            var runner = new SuiteRunner(memory, reporter);
+            runner.Run(new StoryTestFolder(memory, folders), string.Empty);
         }
 
         private void AddTestFile(string path) {

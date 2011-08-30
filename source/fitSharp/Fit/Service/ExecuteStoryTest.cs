@@ -11,8 +11,6 @@ using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Service {
-    public delegate void WriteTestResult(Tree<Cell> tables, TestCounts counts);
-
     public class ExecuteStoryTest {
         public static FlowInterpreter MakeDefaultFlowInterpreter(CellProcessor processor, TypedValue target) {
             var fixture = processor.Parse(typeof (Interpreter), target, defaultFlowTable.Branches[0]).GetValue<FlowInterpreter>();
@@ -27,7 +25,7 @@ namespace fitSharp.Fit.Service {
             if (activeFlowFixture != null && !inFlow) activeFlowFixture.DoTearDown(table);
         }
 
-        public ExecuteStoryTest(CellProcessor processor, WriteTestResult writer) {
+        public ExecuteStoryTest(CellProcessor processor, StoryTestWriter writer) {
             this.writer = writer;
             this.processor = processor;
         }
@@ -38,14 +36,14 @@ namespace fitSharp.Fit.Service {
 			processor.TestStatus.Summary["run elapsed time"] = new ElapsedTime();
             Cell heading = tables.Branches[0].Branches[0].Branches[0].Value;
             try {
-                processor.Configuration.Apply(i => i.As<SetUpTearDown>(s => s.SetUp()));
+                processor.Memory.Apply(i => i.As<SetUpTearDown>(s => s.SetUp()));
                 InterpretTables(tables);
-                processor.Configuration.Apply(i => i.As<SetUpTearDown>(s => s.TearDown()));
+                processor.Memory.Apply(i => i.As<SetUpTearDown>(s => s.TearDown()));
             }
             catch (System.Exception e) {
                 processor.TestStatus.MarkException(heading, e);
             }
-			writer(tables, processor.TestStatus.Counts);
+			writer.WriteTest(tables, processor.TestStatus.Counts);
         }
 
         void GetStartingFixture(Tree<Cell> table) {
@@ -73,6 +71,9 @@ namespace fitSharp.Fit.Service {
                 catch (System.Exception e) {
                     if (!typeof(AbandonException).IsAssignableFrom(e.GetType())) throw;
                 }
+
+                writer.WriteTable(table);
+
                 activeFixture = null;
 		        processor.TestStatus.TableCount++;
             }
@@ -97,7 +98,7 @@ namespace fitSharp.Fit.Service {
         static readonly CellTree defaultFlowTable = new CellTree(new CellTree("fitlibrary.DoFixture"));
 
         readonly CellProcessor processor;
-        readonly WriteTestResult writer;
+        readonly StoryTestWriter writer;
 
         Interpreter activeFixture;
         FlowInterpreter flowFixture;

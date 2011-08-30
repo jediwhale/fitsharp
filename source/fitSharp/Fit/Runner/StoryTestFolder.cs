@@ -25,18 +25,18 @@ namespace fitSharp.Fit.Runner {
     }
 
     public class StoryTestFolder: StoryTestSuite {
-        private readonly Configuration configuration;
+        private readonly Memory memory;
         private readonly List<StoryTestPageFilter> pageFilters = new List<StoryTestPageFilter>();
  
-        public StoryTestFolder(Configuration configuration, FolderModel theFolderModel)
-            : this(configuration, 
-                   configuration.GetItem<Settings>().InputFolder,
-                   configuration.GetItem<Settings>().OutputFolder, null, theFolderModel, null) {
+        public StoryTestFolder(Memory memory, FolderModel theFolderModel)
+            : this(memory, 
+                   memory.GetItem<Settings>().InputFolder,
+                   memory.GetItem<Settings>().OutputFolder, null, theFolderModel, null) {
             myReport = new Report(OutputPath);
         }
 
-        public StoryTestFolder(Configuration configuration, string theInputPath, string theOutputPath, string theSelection, FolderModel theFolderModel, StoryTestFolder theParentFolder) {
-            this.configuration = configuration;
+        public StoryTestFolder(Memory memory, string theInputPath, string theOutputPath, string theSelection, FolderModel theFolderModel, StoryTestFolder theParentFolder) {
+            this.memory = memory;
             Name = theInputPath;
             OutputPath = theOutputPath;
             myFolderModel = theFolderModel;
@@ -56,7 +56,7 @@ namespace fitSharp.Fit.Runner {
                     string fileName = Path.GetFileName(filePath);
                     if (new StoryFileName(fileName).IsSuiteSetUp) continue;
                     if (new StoryFileName(fileName).IsSuiteTearDown) continue;
-                    if (configuration.GetItem<FileExclusions>().IsExcluded(fileName)) continue;
+                    if (memory.GetItem<FileExclusions>().IsExcluded(fileName)) continue;
                     if (mySelection != null && !filePath.EndsWith(mySelection)) continue;
                     var file = new StoryTestFile(filePath, this, myFolderModel);
                     if (!SatisfiesFilters(file)) continue;
@@ -89,7 +89,7 @@ namespace fitSharp.Fit.Runner {
             get {
                 foreach (string inputFolder in myFolderModel.GetFolders(Name)) {
                     string relativeFolder = inputFolder.Substring(Name.Length + 1);
-                    if (configuration.GetItem<FileExclusions>().IsExcluded(relativeFolder)) continue;
+                    if (memory.GetItem<FileExclusions>().IsExcluded(relativeFolder)) continue;
                     if (mySelection != null && !mySelection.StartsWith(inputFolder)) continue;
                     yield return CreateChildSuite(inputFolder, relativeFolder);
                 }
@@ -97,7 +97,7 @@ namespace fitSharp.Fit.Runner {
         }
 
         private StoryTestSuite CreateChildSuite(string inputFolder, string relativeFolderPath) {
-            var folder = new StoryTestFolder(configuration, inputFolder, Path.Combine(OutputPath, relativeFolderPath), mySelection, myFolderModel, this);
+            var folder = new StoryTestFolder(memory, inputFolder, Path.Combine(OutputPath, relativeFolderPath), mySelection, myFolderModel, this);
 
             foreach (var pageFilter in pageFilters)
                 folder.AddPageFilter(pageFilter);

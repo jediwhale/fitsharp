@@ -17,12 +17,12 @@ namespace fit.Test.NUnit {
     public class ActionFixtureTest
     {
         Parse table;
-        Configuration configuration;
+        Memory memory;
 
         [SetUp]
         public void SetUp()
         {
-            configuration = TestUtils.InitAssembliesAndNamespaces();
+            memory = TestUtils.InitAssembliesAndNamespaces();
         }
 
         static Parse BuildTable(string name)
@@ -49,7 +49,7 @@ namespace fit.Test.NUnit {
         public void TestStart()
         {
             table = BuildTable("ActionFixture");
-            var fixture = new ActionFixture { Processor = new Service.Service(configuration) };
+            var fixture = new ActionFixture { Processor = new Service.Service(memory) };
             fixture.DoTable(table);
             Assert.AreEqual(0, fixture.TestStatus.Counts.GetCount(TestStatus.Exception), table.ToString());
             Assert.IsNotNull(fixture.GetTargetObject());
@@ -59,7 +59,7 @@ namespace fit.Test.NUnit {
         public void TestCheck()
         {
             table = BuildTable("ActionFixture");
-            var fixture = new ActionFixture{ Processor = new Service.Service(configuration) };
+            var fixture = new ActionFixture{ Processor = new Service.Service(memory) };
             fixture.DoTable(table);
             Assert.AreEqual(0, fixture.TestStatus.Counts.GetCount(TestStatus.Exception), table.ToString());
             var countFixture = (CountFixture)fixture.GetTargetObject();
@@ -72,7 +72,7 @@ namespace fit.Test.NUnit {
         public void TestCheckOnTimedActionFixture()
         {
             table = BuildTable("TimedActionFixture");
-            var fixture = new ActionFixture{ Processor = new Service.Service(configuration) };
+            var fixture = new ActionFixture{ Processor = new Service.Service(memory) };
             fixture.DoTable(table);
             Assert.AreEqual(0, fixture.TestStatus.Counts.GetCount(TestStatus.Exception), table.ToString());
             var countFixture = (CountFixture)fixture.GetTargetObject();

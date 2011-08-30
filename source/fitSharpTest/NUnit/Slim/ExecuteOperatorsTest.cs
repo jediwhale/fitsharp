@@ -34,20 +34,20 @@ namespace fitSharp.Test.NUnit.Slim {
         }
 
         [Test] public void ExecuteMakeUsesSymbolInClassName() {
-            processor.Store(new Symbol("symbol", "NUnit"));
+            processor.Get<Symbols>().Save("symbol", "NUnit");
             var executeMake = new ExecuteMake { Processor = processor };
             var input = new SlimTree().AddBranchValue("step").AddBranchValue("make").AddBranchValue("variable").AddBranchValue("fitSharp.Test.$symbol.Slim.SampleClass");
             ExecuteOperation(executeMake, input, 2);
-            Assert.IsTrue(processor.Load(new SavedInstance("variable")).Instance is SampleClass);
+            Assert.IsTrue(processor.Get<SavedInstances>().GetValue("variable") is SampleClass);
         }
 
         [Test] public void ExecuteMakeUsesSymbolAsObject() {
             var newClass = new SampleClass();
-            processor.Store(new Symbol("symbol", newClass));
+            processor.Get<Symbols>().Save("symbol", newClass);
             var executeMake = new ExecuteMake { Processor = processor };
             var input = new SlimTree().AddBranchValue("step").AddBranchValue("make").AddBranchValue("variable").AddBranchValue("$symbol");
             ExecuteOperation(executeMake, input, 2);
-            Assert.AreEqual(newClass, processor.Load(new SavedInstance("variable")).Instance);
+            Assert.AreEqual(newClass, processor.Get<SavedInstances>().GetValue("variable"));
         }
 
         [Test] public void ExecuteMakeLibraryIsStacked() {
@@ -62,7 +62,7 @@ namespace fitSharp.Test.NUnit.Slim {
         }
 
         [Test] public void ExecuteCallBadMethodReturnsException() {
-            processor.Store(new SavedInstance("variable", new SampleClass()));
+            processor.Get<SavedInstances>().Save("variable", new SampleClass());
             var executeCall = new ExecuteCall { Processor = processor };
             var input = new SlimTree().AddBranchValue("step").AddBranchValue("call").AddBranchValue("variable").AddBranchValue("garbage");
             ExecuteOperation(executeCall, input, 2);
@@ -77,18 +77,18 @@ namespace fitSharp.Test.NUnit.Slim {
         }
 
         [Test] public void ExecuteCallAndAssignSavesSymbol() {
-            processor.Store(new SavedInstance("variable", new SampleClass()));
+            processor.Get<SavedInstances>().Save("variable", new SampleClass());
             var executeCallAndAssign = new ExecuteCallAndAssign { Processor = processor };
             var input =
                 new SlimTree().AddBranchValue("step").AddBranchValue("callAndAssign").AddBranchValue("symbol").AddBranchValue(
                     "variable").AddBranchValue("sampleMethod");
             ExecuteOperation(executeCallAndAssign, input, 2);
             Assert.AreEqual("testresult", result.Branches[1].Value);
-            Assert.AreEqual("testresult", processor.Load(new Symbol("symbol")).Instance);
+            Assert.AreEqual("testresult", processor.Get<Symbols>().GetValue("symbol"));
         }
 
         [Test] public void ExecuteCallUsesDomainAdapter() {
-            processor.Store(new SavedInstance("variable", new SampleClass()));
+            processor.Get<SavedInstances>().Save("variable", new SampleClass());
             var executeCall = new ExecuteCall { Processor = processor };
             var input = new SlimTree().AddBranchValue("step").AddBranchValue("call").AddBranchValue("variable").AddBranchValue("DomainMethod");
             ExecuteOperation(executeCall, input, 2);

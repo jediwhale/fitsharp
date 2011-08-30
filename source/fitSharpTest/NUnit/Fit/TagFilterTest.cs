@@ -1,4 +1,10 @@
-﻿using System;
+﻿// Copyright © 2011 Syterra Software Inc. All rights reserved.
+// The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+// which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
+// to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
+
+using System;
+using fitSharp.Fit.Model;
 using NUnit.Framework;
 using fitSharp.Fit.Runner;
 
@@ -157,29 +163,18 @@ namespace fitSharp.Test.NUnit.Fit {
             return (testparser.Matches(page));
         }
 
-        private class StubStoryTestPage : StoryTestPage
-        {
+        private class StubStoryTestPage : StoryTestPage {
             readonly string content;
 
-            public StubStoryTestPage(string content)
-            {
+            public StubStoryTestPage(string content) {
                 this.content = content;
             }
 
-            public StoryPageName Name
-            {
-                get { return new StoryFileName("unused"); }
-            }
-
-            public string Content
-            {
-                get { return content; }
-            }
-
-            public void ExecuteStoryPage(Action<StoryPageName, fitSharp.Fit.Model.StoryTestString, Action<fitSharp.Fit.Model.StoryTestString, fitSharp.Fit.Model.TestCounts>, Action> executor, fitSharp.Fit.Service.ResultWriter resultWriter, Action<fitSharp.Fit.Model.TestCounts> handler)
-            {
-                // Nothing to do here
-            }
+            public StoryPageName Name { get { return new StoryFileName("unused"); } }
+            public string Content{ get { return content; } }
+            public void WriteTest(PageResult result) {}
+            public void WriteNonTest() {}
+            public string TestContent { get { return content; } }
         }
     }
 }

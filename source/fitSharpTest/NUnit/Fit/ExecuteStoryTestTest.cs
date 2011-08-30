@@ -20,7 +20,7 @@ namespace fitSharp.Test.NUnit.Fit {
         [SetUp] public void SetUp() {
             processor = new CellProcessorBase();
             processor.AddOperator(new TestParseInterpreter());
-            execute = new ExecuteStoryTest(processor, (t, c) => {});
+            execute = new ExecuteStoryTest(processor, new StoryTestNullWriter());
             tables = new CellTree(new CellTree(new CellTree("myfixture")));
         }
     

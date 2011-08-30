@@ -1,7 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using fit;
+using fitSharp.Fit.Model;
+using fitSharp.Machine.Model;
 
 namespace dbfit.fixture
 {
@@ -30,7 +30,7 @@ namespace dbfit.fixture
                 symbolName = Args[1];
             }
             if (symbolName.StartsWith(">>")) symbolName = symbolName.Substring(2);
-            Fixture.Save(symbolName, Query.GetDataTable(query,dbEnvironment));
+            Symbols.Save(symbolName, DatabaseTest.GetDataTable(Symbols, query,dbEnvironment));
         }
 
     }

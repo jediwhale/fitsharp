@@ -14,7 +14,7 @@ namespace fitSharp.Test.NUnit.Fit {
         [Test] public void CachesParsedValue() {
             var cell = new CellTreeLeaf("<<symbol");
             var processor = new CellProcessorBase();
-            processor.Store(new Symbol("symbol", "value"));
+            processor.Get<Symbols>().Save("symbol", "value");
             TypedValue result = processor.Parse(typeof (string), TypedValue.Void, cell);
             Assert.AreEqual("value", result.GetValue<string>());
             Assert.AreEqual(" value", cell.Value.GetAttribute(CellAttribute.InformationSuffix));

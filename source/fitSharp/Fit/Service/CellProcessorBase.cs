@@ -23,13 +23,13 @@ namespace fitSharp.Fit.Service {
 
         public CellProcessorBase(): this(new TypeDictionary(), new CellOperators()) {} //todo: test only -> factory
 
-        protected CellProcessorBase(Configuration configuration, CellOperators operators): base(configuration) {
+        protected CellProcessorBase(Memory memory, CellOperators operators): base(memory) {
             TestStatus = new TestStatus();
 	        this.operators = operators;
 	        operators.Processor = this;
 
-            AddMemory<Symbol>();
-            AddMemory<Procedure>();
+            Memory.GetItem<Symbols>();
+            Memory.GetItem<Procedures>();
         }
 
         public override TypedValue Parse(System.Type type, TypedValue instance, Tree<Cell> parameters) {

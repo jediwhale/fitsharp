@@ -27,9 +27,9 @@ namespace fit.Test.FitUnit {
         }
 
         private class MyRunner: Runnable {
-            public int Run(IList<string> commandLineArguments, Configuration configuration, ProgressReporter reporter)
+            public int Run(IList<string> commandLineArguments, Memory memory, ProgressReporter reporter)
             {
-                new StoryTest(Tables).Execute(configuration);
+                new StoryTest(Tables).Execute(memory);
                 return 0;
             }
         }

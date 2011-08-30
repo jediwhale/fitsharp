@@ -23,7 +23,7 @@ namespace fit.Test.NUnit {
             var table = Parse.ParseFrom("<table><tr><td>name</td><td>symbol</td><td>stuff</td></tr></table>");
             keywords.Name(table.Parts.Parts);
             Assert.AreEqual("some stuff", fixture.NamedFixture("symbol"));
-            Assert.AreEqual("some stuff", fixture.Processor.Load(new Symbol("symbol")).Instance);
+            Assert.AreEqual("some stuff", fixture.Processor.Get<Symbols>().GetValue("symbol"));
         }
 
         [Test] public void ShowAsKeywordComposesWithAttributes() {

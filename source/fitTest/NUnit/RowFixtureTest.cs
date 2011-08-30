@@ -22,24 +22,24 @@ namespace fit.Test.NUnit {
         readonly string rowFixtureName = typeof (NewRowFixtureDerivative).Name;
         Parse table;
         Parse storyTables;
-        StoryTest myStoryTest;
         TestCounts resultCounts;
-        Configuration configuration;
+        Memory memory;
         string testResult;
+        Service.Service processor;
 
         public void TestExpectBlankOrNullAllCorrect()
         {
-            DoTable(
+            DoTable(new BusinessObjectRowFixture(),
                 BuildTable(new[] {"null", "blank", "joe"}),
                 BuildObjectArray(new[] {null, "", "joe"}),
                 3, 0, 0, 0
                 );
-            DoTable(
+            DoTable(new BusinessObjectRowFixture(),
                 BuildTable(new[] {"Null", "Blank"}),
                 BuildObjectArray(new[] {null, ""}),
                 2, 0, 0, 0
                 );
-            DoTable(
+            DoTable(new BusinessObjectRowFixture(),
                 BuildTable(new[] {"NULL", "BLANK"}),
                 BuildObjectArray(new[] {null, ""}),
                 2, 0, 0, 0
@@ -50,7 +50,7 @@ namespace fit.Test.NUnit {
         {
             TestUtils.InitAssembliesAndNamespaces();
             Parse atable = BuildTable(new[] {"blank", "null"});
-            DoTable(
+            DoTable(new BusinessObjectRowFixture(),
                 atable,
                 BuildObjectArray(new[] {"", "this is not null"}),
                 1, 2, 0, 0
@@ -82,18 +82,20 @@ namespace fit.Test.NUnit {
             return objects;
         }
 
-        public void DoTable(Parse tables, object[] businessObjects, int right, int wrong, int ignores, int exceptions)
+        public void DoTable(Fixture fixture, Parse tables, object[] businessObjects, int right, int wrong, int ignores, int exceptions)
         {
             BusinessObjectRowFixture.objects = businessObjects;
-            RunTest(tables);
+            RunTest(fixture, tables);
 
             TestUtils.CheckCounts(resultCounts, right, wrong, ignores, exceptions);
         }
 
-        void RunTest(Parse parse) {
-            var test = new StoryTest(parse, (t,c) => { resultCounts = c;});
-            test.Execute(configuration);
-            testResult = new ParseStoryTestString().Parse(null, new TypedValue(), parse).ValueString;
+        string RunTest(Fixture fixture, Parse parse) {
+            fixture.Processor = processor;
+            fixture.DoTable(parse.Parts);
+            resultCounts = fixture.TestStatus.Counts;
+            testResult = new ParseStoryTestString().Parse(typeof(StoryTableString), new TypedValue(), parse.Parts).ValueString;
+            return testResult;
         }
 
         [Test]
@@ -115,7 +117,7 @@ namespace fit.Test.NUnit {
                                                    new BusinessObject(new[] {"number3"})
                                                };
 
-            RunTest(parse);
+            RunTest(new BusinessObjectRowFixture(), parse);
             Assert.IsTrue(parse.ToString().IndexOf("number1") > 0);
             Assert.IsTrue(parse.ToString().IndexOf("number2") > 0);
             Assert.IsTrue(parse.ToString().IndexOf("number3") > 0);
@@ -141,7 +143,7 @@ namespace fit.Test.NUnit {
                                                    new BusinessObject(new[] {"number1"}),
                                                };
 
-            RunTest(parse);
+            RunTest(new BusinessObjectRowFixture(), parse);
             Assert.IsTrue(parse.ToString().IndexOf("number1") > 0);
             Assert.IsTrue(parse.ToString().IndexOf("number2") > 0);
             Assert.IsTrue(parse.ToString().IndexOf("number3") > 0);
@@ -151,7 +153,7 @@ namespace fit.Test.NUnit {
         [Test]
         public void TestStartsWithHandlerInSecondColumn()
         {
-            new Service.Service(configuration).AddOperator(typeof(CompareStartsWith).FullName);
+            processor.AddOperator(typeof(CompareStartsWith).FullName);
             var builder = new TestBuilder();
             builder.Append("<table>");
             builder.Append("<tr><td>people row fixture</td></tr>");
@@ -161,7 +163,7 @@ namespace fit.Test.NUnit {
             PeopleLoaderFixture.people.Clear();
             PeopleLoaderFixture.people.Add(new Person("Nigel", "Tufnel"));
             var tables = builder.Parse;
-            RunTest(tables);
+            RunTest(new PeopleRowFixture(), tables);
             Assert.IsTrue(tables.ToString().IndexOf("Tuf..") > -1);
             Assert.IsFalse(tables.ToString().IndexOf("Tufnel") > -1);
             TestUtils.CheckCounts(resultCounts, 2, 0, 0, 0);
@@ -170,10 +172,11 @@ namespace fit.Test.NUnit {
         [SetUp]
         public void SetUp()
         {
-            configuration = TestUtils.InitAssembliesAndNamespaces();
+            memory = TestUtils.InitAssembliesAndNamespaces();
             storyTables = new TestBuilder("<table><tr><td>" + rowFixtureName + "</td></tr><tr><td>name</td></tr></table>").Parse;
             table = storyTables.Parts;
             NewRowFixtureDerivative.QueryValues.Clear();
+            processor = new Service.Service(memory);
         }
 
         [Test]
@@ -183,8 +186,7 @@ namespace fit.Test.NUnit {
         }
 
         void RunTest() {
-            myStoryTest = new StoryTest(storyTables, (t,c) => { resultCounts = c;});
-            myStoryTest.Execute(configuration);
+            RunTest(new NewRowFixtureDerivative(), storyTables);
         }
 
         [Test]
@@ -411,9 +413,10 @@ namespace fit.Test.NUnit {
                                                          "<tr><td class=\"pass\">2</td><td class=\"pass\">Phil</td><td class=\"pass\">blank</td></tr>" +
                                                          "\n<tr>\n<td class=\"fail\"><span class=\"fit_grey\">1</span> <span class=\"fit_label\">surplus</span></td>\n<td><span class=\"fit_grey\">null</span></td>\n<td><span class=\"fit_grey\">Jones</span></td></tr>" +
                                                          "</table>";
-            var tables = new TestBuilder(loaderFixtureHtml + inspectorFixtureHtml).Parse;
-            RunTest(tables);
-            Assert.AreEqual(loaderFixtureHtml + processedInspectorFixtureHtml, testResult);
+
+            var result = RunTest(new PeopleLoaderFixture(), new TestBuilder(loaderFixtureHtml).Parse)
+                         + RunTest(new PeopleRowFixture(), new TestBuilder(inspectorFixtureHtml).Parse);
+            Assert.AreEqual(loaderFixtureHtml + processedInspectorFixtureHtml, result);
         }
 
         [Test]
@@ -440,9 +443,9 @@ namespace fit.Test.NUnit {
                                     "<tr><td>field</td></tr>" +
                                     "<tr><td class=\"pass\">a,b,c</td></tr>" +
                                     "</table>";
-            var tables = new TestBuilder(setUpTableHtml + tableHtml).Parse;
-            RunTest(tables);
-            Assert.AreEqual(processedSetUpTableHtml + expected, testResult);
+            var result = RunTest(new ArrayOfStringsFixture(), new TestBuilder(setUpTableHtml).Parse)
+                         + RunTest(new ArrayOfStringsRowFixture(), new TestBuilder(tableHtml).Parse);
+            Assert.AreEqual(processedSetUpTableHtml + expected, result);
         }
 
         [Test]
@@ -455,7 +458,7 @@ namespace fit.Test.NUnit {
                                      "</table>";
             Array colorsArray = Enum.GetValues(typeof (Color));
             var colorsList = new ArrayList(colorsArray);
-            DoTable(new TestBuilder(tableHtml).Parse, colorsList.ToArray(), 2, 0, 0, 0);
+            DoTable(new ColorInspectorFixture(), new TestBuilder( tableHtml).Parse, colorsList.ToArray(), 2, 0, 0, 0);
         }
 
         void VerifyCounts(int right, int wrong, int exceptions, int ignores)

@@ -5,7 +5,6 @@
 
 using System.Collections;
 using fitSharp.Fit.Model;
-using fitSharp.Machine.Engine;
 using NUnit.Framework;
 
 namespace fit.Test.NUnit {
@@ -27,13 +26,14 @@ namespace fit.Test.NUnit {
             var parse = builder.Parse;
 
             TestUtils.InitAssembliesAndNamespaces();
-            RunTest(parse);
+            RunTest(new StringFixture(), parse);
             TestUtils.CheckCounts(resultCounts, 1, 0, 0, 0);
         }
 
-        void RunTest(Parse parse) {
-            var test = new StoryTest(parse, (t,c) => { resultCounts = c;});
-            test.Execute(new TypeDictionary());
+        void RunTest(Fixture fixture, Parse parse) {
+            fixture.Processor = new Service.Service();
+            fixture.DoTable(parse.Parts);
+            resultCounts = fixture.TestStatus.Counts;
         }
 
         [Test]
@@ -49,7 +49,7 @@ namespace fit.Test.NUnit {
             var parse = builder.Parse;
 
             TestUtils.InitAssembliesAndNamespaces();
-            RunTest(parse);
+            RunTest(new StringFixture(), parse);
             TestUtils.CheckCounts(resultCounts, 3, 0, 0, 0);
         }
 
@@ -127,7 +127,7 @@ namespace fit.Test.NUnit {
             builder.Append("<tr><td>some value</td><td>this is a comment</td></tr>");
             builder.Append("</table>");
             var table = builder.Parse;
-            RunTest(table);
+            RunTest(new StringFixture(), table);
             TestUtils.CheckCounts(resultCounts, 0, 0, 0, 0);
         }
 

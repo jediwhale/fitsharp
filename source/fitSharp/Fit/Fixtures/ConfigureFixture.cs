@@ -11,7 +11,7 @@ namespace fitSharp.Fit.Fixtures {
         public void Interpret(CellProcessor processor, Tree<Cell> table) {
             processor.TestStatus.TableCount--;
             TypedValue result = processor.Invoke(
-                new TypedValue(processor.Configuration.GetItem(table.Branches[0].Branches[1].Value.Text)),
+                new TypedValue(processor.Memory.GetItem(table.Branches[0].Branches[1].Value.Text)),
                 table.Branches[0].Branches[2].Value.Text,
                 new CellTree());
             result.ThrowExceptionIfNotValid();

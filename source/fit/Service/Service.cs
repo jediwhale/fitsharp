@@ -15,11 +15,11 @@ namespace fit.Service {
     public class Service: CellProcessorBase {
         public Service(): this(new TypeDictionary()) {} // todo: test only -> factory
 
-        public Service(Configuration configuration): base(configuration, configuration.GetItem<Operators>()) {
+        public Service(Memory memory): base(memory, memory.GetItem<Operators>()) {
             ApplicationUnderTest.AddNamespace("fit");
             ApplicationUnderTest.AddNamespace("fitSharp.Fit.Fixtures");
             ApplicationUnderTest.AddAssembly(Assembly.GetExecutingAssembly().CodeBase);
-            configuration.GetItem<Operators>().AddNamespaces(ApplicationUnderTest);
+            memory.GetItem<Operators>().AddNamespaces(ApplicationUnderTest);
         }
 
         public void AddCellHandler(string handlerName) {

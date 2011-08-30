@@ -9,9 +9,9 @@ using System.Configuration;
 using System.Threading;
 using fitSharp.IO;
 using fitSharp.Machine.Application;
+using fitSharp.Machine.Engine;
 using fitSharp.Test.Double;
 using NUnit.Framework;
-using Configuration=fitSharp.Machine.Engine.Configuration;
 
 namespace fitSharp.Test.NUnit.Machine {
     [TestFixture] public class ShellTest {
@@ -31,6 +31,12 @@ namespace fitSharp.Test.NUnit.Machine {
             int result = RunShell(new[] {"-a", "fitSharpTest.dll.alt.config",
                 "-r", typeof (SampleRunner).FullName + "," + typeof (SampleRunner).Assembly.CodeBase} );
             Assert.AreEqual(606, result);
+        }
+
+        [Test] public void CustomAppConfigIsLoadedRelativeToExecutingAssembly() {
+            using (new PushCurrentDirectory(@"\")) {
+                CustomAppConfigIsUsed();
+            }
         }
 
         [Test] public void CustomAppConfigFromSuiteConfigIsUsed() {
@@ -64,6 +70,19 @@ namespace fitSharp.Test.NUnit.Machine {
         private static int RunShell(string[] arguments, FolderModel model) {
             return new Shell(new ConsoleReporter(), model).Run(arguments);
         }
+
+        class PushCurrentDirectory : IDisposable {
+            public PushCurrentDirectory(string directory) {
+                original = Environment.CurrentDirectory;
+                Environment.CurrentDirectory = directory;
+            }
+
+            public void Dispose() {
+                Environment.CurrentDirectory = original;
+            }
+
+            readonly string original;
+        }
     }
 
     public class SampleRunner: Runnable {
@@ -76,7 +95,7 @@ namespace fitSharp.Test.NUnit.Machine {
             LastArguments = new string[] {};
         }
 
-        public int Run(IList<string> arguments, Configuration configuration, ProgressReporter reporter) {
+        public int Run(IList<string> arguments, Memory memory, ProgressReporter reporter) {
             LastArguments = arguments;
             ApartmentState = Thread.CurrentThread.GetApartmentState();
             try {

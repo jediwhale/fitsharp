@@ -5,11 +5,11 @@
 
 using System;
 using System.Collections.Generic;
-using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
     public interface Processor<T> {
+        Memory Memory { get; }
         Configuration Configuration { get; }
 
         ApplicationUnderTest ApplicationUnderTest { get; }
@@ -24,11 +24,6 @@ namespace fitSharp.Machine.Engine {
         TypedValue Invoke(TypedValue instance, string memberName, Tree<T> parameters);
 
         TypedValue Operate<O>(params object[] parameters) where O : class;
-
-        bool Contains<V>(V matchItem);
-        V Load<V>(V matchItem);
-        void Store<V>(V newItem);
-        void Clear<V>();
     }
 
     public static class ProcessorExtension {
@@ -84,14 +79,18 @@ namespace fitSharp.Machine.Engine {
     public abstract class ProcessorBase<T, P> : Processor<T> where P : class, Processor<T> {
         protected abstract Operators<T, P> Operators { get; }
 
-        public Configuration Configuration { get; protected set; }
-
-        public ApplicationUnderTest ApplicationUnderTest {
-            get { return Configuration.GetItem<ApplicationUnderTest>(); }
+        public Configuration Configuration {
+            get { return (Configuration)Memory; }
         }
 
-        protected ProcessorBase(Configuration configuration) {
-            Configuration = configuration;
+        public Memory Memory { get; protected set; }
+
+        public ApplicationUnderTest ApplicationUnderTest {
+            get { return Memory.GetItem<ApplicationUnderTest>(); }
+        }
+
+        protected ProcessorBase(Memory memory) {
+            Memory = memory;
         }
 
         public void AddOperator(string operatorName) {
@@ -163,7 +162,7 @@ namespace fitSharp.Machine.Engine {
         public TypedValue Operate<O>(params object[] parameters) where O: class {
             var operationType = typeof (O).Name;
             var operationName = operationType.Substring(0, operationType.IndexOf("Operator"));
-            var logging = new OperationLogging(Configuration);
+            var logging = new OperationLogging(Memory);
             try {
                 logging.Start(operationName);
                 logging.LogParameters(parameters);
@@ -196,32 +195,8 @@ namespace fitSharp.Machine.Engine {
                 });
         }
 
-        public void AddMemory<V>() {
-            GetMemory<V>();
-        }
-
-        public void Store<V>(V newItem) {
-            GetMemory<V>().Replace(newItem);
-        }
-
-        public V Load<V>(V matchItem) {
-            return GetMemory<V>().First(
-                item => matchItem.Equals(item),
-                () => { throw new MemoryMissingException<V>(matchItem); });
-        }
-
-        public bool Contains<V>(V matchItem) {
-            return GetMemory<V>().Contains(matchItem);
-        }
-
-        public void Clear<V>() {
-            GetMemory<V>().Clear();
-        }
-
-        private List<V> GetMemory<V>() { return Configuration.GetItem<List<V>>();}
-
         R DoLoggedOperation<R>(string startMessage, Func<OperationLogging, R> operation) {
-            var logging = new OperationLogging(Configuration);
+            var logging = new OperationLogging(Memory);
             try {
                 logging.Start(startMessage);
                 return operation(logging);
@@ -232,16 +207,16 @@ namespace fitSharp.Machine.Engine {
         }
 
         class OperationLogging {
-            readonly Configuration configuration;
+            readonly Memory memory;
             Logging logging;
 
-            public OperationLogging(Configuration configuration) {
-                this.configuration = configuration;
+            public OperationLogging(Memory memory) {
+                this.memory = memory;
             }
 
             public void Start(string message) {
                 if (message.Length <= 0) return;
-                logging = configuration.GetItem<Logging>();
+                logging = memory.GetItem<Logging>();
                 logging.StartWrite(message);
             }
 

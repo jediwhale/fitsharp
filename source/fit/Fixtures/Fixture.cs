@@ -14,7 +14,7 @@ namespace fit
 {
 	public class Fixture: MutableDomainAdapter, TargetObjectProvider, Interpreter
 	{
-	    static CellProcessor symbolProcessor; // backwards compatibility with static symbol methods
+	    static CellProcessor symbolProcessor; // compatibility with obsolete static symbol methods
 
 	    CellOperation cellOperation;
 	    CellProcessor processor;
@@ -25,11 +25,12 @@ namespace fit
 	        get { return processor; }
 	        set {
 	            processor = value;
-	            symbolProcessor = value;
+	            symbolProcessor = processor;
 	        }
 	    }
 
 	    public TestStatus TestStatus { get { return Processor.TestStatus; } }
+        public Symbols Symbols { get { return Processor.Get<Symbols>(); } }
 
 	    public CellOperation CellOperation {
 	        get {
@@ -137,21 +138,19 @@ namespace fit
 			return text;
 		}
 
-		public static object Recall(string key)
+		[Obsolete] public static object Recall(string key)
 		{
-		    return symbolProcessor.Contains(new Symbol(key))
-		               ? symbolProcessor.Load(new Symbol(key)).Instance
-		               : null;
+		    return symbolProcessor.Get<Symbols>().GetValueOrDefault(key, null);
 		}
 
-		public static void Save(string key, object value)
+		[Obsolete] public static void Save(string key, object value)
 		{
-			symbolProcessor.Store(new Symbol(key, value));
+			symbolProcessor.Get<Symbols>().Save(key, value);
 		}
 
-		public static void ClearSaved()
+		[Obsolete] public static void ClearSaved()
 		{
-		    symbolProcessor.Clear<Symbol>();
+		    symbolProcessor.Get<Symbols>().Clear();
 		}
 
 		public virtual object GetTargetObject()

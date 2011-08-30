@@ -44,7 +44,12 @@ namespace fitlibrary {
         }
 
 	    protected IEnumerable<object> myArray {
-	        get { return SystemUnderTest as IEnumerable<object>;}
+	        get {
+                var genericResult = SystemUnderTest as IEnumerable<object>;
+                if (genericResult != null) return genericResult;
+	            var result = SystemUnderTest as IEnumerable;
+	            return result.Cast<object>().ToList();
+	        }
             set { SetSystemUnderTest(value);  }
 	    }
 	}

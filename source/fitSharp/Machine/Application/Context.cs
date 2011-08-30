@@ -3,14 +3,8 @@
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
-using System;
-
-namespace fitSharp.Machine.Engine {
-    public interface Configuration {
-        Configuration Copy();
-        void Apply(Action<object> action);
-        bool HasItem<T>();
-        T GetItem<T>() where T: new();
-        object GetItem(string typeName);
+namespace fitSharp.Machine.Application {
+    public class Context {
+        public string TestPagePath { get; set; }
     }
 }

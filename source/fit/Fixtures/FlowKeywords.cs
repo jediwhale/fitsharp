@@ -10,7 +10,6 @@ using fitlibrary;
 using fitlibrary.exception;
 using fitSharp.Fit.Exception;
 using fitSharp.Fit.Fixtures;
-using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
 using fitSharp.Machine.Exception;
 using fitSharp.Machine.Engine;
@@ -97,8 +96,7 @@ namespace fit.Fixtures {
             object namedValue = ourWithIdentifier.Equals(restOfTheCells.More.Text)
                                     ? new MethodPhrase(restOfTheCells.More).Evaluate(fixture)
                                     : fixture.ExecuteEmbeddedMethod(restOfTheCells);
-            fixture.Processor.Store(new Symbol(restOfTheCells.Text, namedValue));
-
+            fixture.Symbols.Save(restOfTheCells.Text, namedValue);
             fixture.TestStatus.MarkRight(restOfTheCells);
         }
 

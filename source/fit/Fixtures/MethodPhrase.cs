@@ -7,7 +7,6 @@ using System;
 using fit.Model;
 using fitlibrary;
 using fitlibrary.exception;
-using fitSharp.Fit.Model;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
@@ -40,9 +39,9 @@ namespace fit.Fixtures {
             }
             var fixture = theFixture as FlowFixtureBase;
             if (fixture == null) throw MakeException("flow fixture required");
-            var symbol = new Symbol(restOfCells.Text);
-            return fixture.Processor.Contains(symbol)
-                ? fixture.Processor.Load(symbol).Instance
+
+            return fixture.Symbols.HasValue(restOfCells.Text)
+                ? fixture.Symbols.GetValue(restOfCells.Text)
                 : fixture.ExecuteEmbeddedMethod(myCells);
         }
 

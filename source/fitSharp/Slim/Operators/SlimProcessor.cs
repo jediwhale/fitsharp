@@ -11,6 +11,10 @@ namespace fitSharp.Slim.Operators {
     public interface SlimProcessor: Processor<string> {
         void PushLibraryInstance(TypedValue instance);
         IEnumerable<TypedValue> LibraryInstances { get; }
-        Symbol LoadSymbol(string input);
+        TypedValue LoadSymbol(string input);
+    }
+
+    public static class SlimPrcoessorrExtension {
+        public static V Get<V>(this SlimProcessor processor) where V: new() { return processor.Memory.GetItem<V>(); }
     }
 }

@@ -84,7 +84,7 @@ namespace fit.Test.NUnit {
         {
             IList list1 = new ArrayList(expected);
             Assert.AreEqual(list1.Count, list2.Count());
-            foreach (object obj in list1)
+            foreach (string obj in list1)
                 Assert.IsTrue(list2.Contains(obj));
         }
 

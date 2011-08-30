@@ -33,8 +33,8 @@ namespace fitSharp.Slim.Operators {
             if (TryResult<ParseException<string>>(instance,
                                                   e => string.Format("NO_CONVERTER_FOR_ARGUMENT_NUMBER {0}", e.Type), ref result)) return result;
 
-            if (TryResult<MemoryMissingException<SavedInstance>>(instance,
-                                                                 e => string.Format("NO_INSTANCE {0}", e.Key.Id), ref result)) return result;
+            if (TryResult<MemoryMissingException<string>>(instance,
+                                                                 e => string.Format("NO_INSTANCE {0}", e.Key), ref result)) return result;
 
             if (TryResult<TypeMissingException>(instance,
                                                 e => string.Format("NO_CLASS {0}", e.TypeName), ref result)) return result;

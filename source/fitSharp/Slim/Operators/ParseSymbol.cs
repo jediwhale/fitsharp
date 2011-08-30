@@ -21,9 +21,8 @@ namespace fitSharp.Slim.Operators {
 
         public TypedValue Parse(Type type, TypedValue instance, Tree<string> parameters) {
             var singleSymbol = Processor.LoadSymbol(parameters.Value);
-            if (singleSymbol != null) {
-                var symbolValue = singleSymbol.Instance;
-                if (symbolValue != null && symbolValue.GetType() == type) return new TypedValue(symbolValue);
+            if (singleSymbol.IsObject) {
+                if (!singleSymbol.IsNull && singleSymbol.Type == type) return singleSymbol;
             }
             string decodedInput = ReplaceSymbols(parameters.Value);
             return Processor.Parse(type, decodedInput);
@@ -36,8 +35,8 @@ namespace fitSharp.Slim.Operators {
                 string symbolName = symbolMatch.Groups[1].Value;
                 if (symbolMatch.Index > lastMatch)
                     result.Append(input.Substring(lastMatch, symbolMatch.Index - lastMatch));
-                result.Append(Processor.Contains(new Symbol(symbolName))
-                                        ? Processor.Load(new Symbol(symbolName)).Instance
+                result.Append(Processor.Get<Symbols>().HasValue(symbolName)
+                                        ? Processor.Get<Symbols>().GetValue(symbolName)
                                         : "$" + symbolName);
                 lastMatch = symbolMatch.Index + symbolMatch.Length;
             }

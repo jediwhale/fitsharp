@@ -3,11 +3,17 @@
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
+using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
 
-namespace fitSharp.Fit.Model {
-    public class Symbol: KeyValueMemory<string, object> {
-        public Symbol(string id): base(id.Trim()) {}
-        public Symbol(string id, object instance): base(id.Trim(), instance) {}
+namespace fitSharp.Fit.Service {
+    public interface StoryTestWriter {
+        void WriteTable(Tree<Cell> table);
+        void WriteTest(Tree<Cell> test, TestCounts counts);
+    }
+
+    public class StoryTestNullWriter: StoryTestWriter {
+        public void WriteTable(Tree<Cell> table) {}
+        public void WriteTest(Tree<Cell> test, TestCounts counts) {}
     }
 }

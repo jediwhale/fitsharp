@@ -4,8 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Data;
-using System.Text.RegularExpressions;
-using System.Text;
+using fitSharp.Machine.Model;
+
 namespace dbfit {
     /// <summary>
     /// IDbEnvironment provides a common interface for database-specific meta-data retrieval
@@ -126,7 +126,7 @@ namespace dbfit {
         /// symbols that have no matching parameters are ignored.
         /// </summary>
         /// <param name="dc"></param>
-        void BindFixtureSymbols(DbCommand dc);
+        void BindFixtureSymbols(Symbols symbols, DbCommand dc);
 
         /// <summary>
         /// Commit current transaction

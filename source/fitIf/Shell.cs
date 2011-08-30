@@ -11,14 +11,12 @@ using fitSharp.Fit.Service;
 using fitSharp.IO;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
-using fitSharp.Machine.Model;
 
 namespace fitIf
 {
     public class Shell {
         public Shell(string[] commandLineArguments) {
-            var appDomainSetup = new AppDomainSetup();
-            appDomainSetup.ApplicationBase = AppDomain.CurrentDomain.BaseDirectory;
+            var appDomainSetup = new AppDomainSetup { ApplicationBase = AppDomain.CurrentDomain.BaseDirectory };
             testDomain = AppDomain.CreateDomain("fitSharp.Machine", null, appDomainSetup);
             runner = (Runner) testDomain.CreateInstanceAndUnwrap(
                                               Assembly.GetExecutingAssembly().GetName().Name,
@@ -40,7 +38,7 @@ namespace fitIf
         class Runner: MarshalByRefObject {
             public void SetUp(string[] commandLineArguments) {
                 var argumentParser = new ArgumentParser();
-                argumentParser.AddArgumentHandler("c", value => new SuiteConfiguration(configuration).LoadXml(new FileSystemModel().FileContent(value)));
+                argumentParser.AddArgumentHandler("c", value => new SuiteConfiguration(memory).LoadXml(new FileSystemModel().FileContent(value)));
                 argumentParser.Parse(commandLineArguments);
             }
 
@@ -60,20 +58,16 @@ namespace fitIf
                     "</style>\n" +
                     "test@\n" +
                     input;
-                service = new Service(configuration);
+                service = new Service(memory);
                 var test = service.Compose(new StoryTestString(storyTest));
-                new ExecuteStoryTest(new Service(configuration), WriteTestResult)
+                var writer = new StoryTestStringWriter(service);
+                new ExecuteStoryTest(new Service(memory), writer)
                     .DoTables(test);
-                return result.ToString();
+                return writer.Tables;
             }
 
-            void WriteTestResult(Tree<Cell> tables, TestCounts counts) {
-                result = service.ParseTree<Cell, StoryTestString>(tables);
-            }
-
-            readonly Configuration configuration = new TypeDictionary();
+            readonly Memory memory = new TypeDictionary();
             Service service;
-            StoryTestString result;
         }
     }
 }

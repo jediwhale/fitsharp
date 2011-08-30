@@ -1,4 +1,4 @@
-// Copyright © 2009 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+// Copyright © 2011 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using fit.Runner;
 using fit.Service;
 using fitSharp.Fit.Model;
+using fitSharp.Fit.Service;
 using fitSharp.IO;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
@@ -21,7 +22,7 @@ namespace fitnesse.fitserver
 		private string host;
 		private int port;
 		private string socketToken;
-	    private Configuration configuration;
+	    private Memory memory;
 	    private ProgressReporter reporter;
 	    private readonly TestCounts totalCounts = new TestCounts();
 
@@ -31,8 +32,8 @@ namespace fitnesse.fitserver
 		private const int SOCKET_TOKEN = 3;
 		private const int DONE = 4;
 
-	    public int Run(IList<string> commandLineArguments, Configuration configuration, ProgressReporter reporter) {
-	        this.configuration = configuration;
+	    public int Run(IList<string> commandLineArguments, Memory memory, ProgressReporter reporter) {
+	        this.memory = memory;
 	        Run(commandLineArguments);
 	        return totalCounts.FailCount;
 	    }
@@ -46,14 +47,19 @@ namespace fitnesse.fitserver
 			clientSocket = new FitSocket(new SocketModelImpl(host, port), reporter);
 			EstablishConnection();
 
-		    var server = new SocketServer(clientSocket, new Service(configuration), reporter, true);
-			server.ProcessTestDocuments(WriteResults);
+	        var service = new Service(memory);
+	        var writer = new StoryTestStringWriter(service)
+	            .ForTables(WriteTables)
+	            .ForCounts(WriteCounts);
+
+		    var server = new SocketServer(clientSocket, service, reporter, true);
+			server.ProcessTestDocuments(writer);
 
 		    clientSocket.Close();
 		    Exit();
 		}
 
-		private void ParseCommandLineArguments(IEnumerable<string> args)
+	    private void ParseCommandLineArguments(IEnumerable<string> args)
 		{
 			int argumentPosition = 0;
 
@@ -70,7 +76,7 @@ namespace fitnesse.fitserver
 			        switch (argumentPosition)
 			        {
 			            case ASSEMBLYLIST:
-                            configuration.GetItem<ApplicationUnderTest>().AddAssemblies(new PathParser(t).AssemblyPaths);
+                            memory.GetItem<ApplicationUnderTest>().AddAssemblies(new PathParser(t).AssemblyPaths);
 			                break;
 			            case HOST:
 			                host = t;
@@ -115,11 +121,12 @@ namespace fitnesse.fitserver
 		    clientSocket.EstablishConnection(Protocol.FormatRequest(socketToken));
 		}
 
-	    private void WriteResults(string tables, TestCounts counts)
-	    {
-	        reporter.WriteLine("\tTransmitting tables of length " + tables.Length);
-	        clientSocket.SendDocument(tables);
+        private void WriteTables(string tables) {
+            reporter.WriteLine("\tTransmitting tables of length " + tables.Length);
+            clientSocket.SendDocument(tables);
+        }
 
+	    private void WriteCounts(TestCounts counts) {
 	        reporter.WriteLine("\tTest Document finished");
 	        clientSocket.SendCounts(counts);
 

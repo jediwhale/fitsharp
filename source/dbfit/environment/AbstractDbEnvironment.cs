@@ -8,6 +8,8 @@ using System.Data;
 using System.Text.RegularExpressions;
 using System.Text;
 using dbfit.util;
+using fitSharp.Fit.Model;
+using fitSharp.Machine.Model;
 
 namespace dbfit
 {
@@ -100,11 +102,11 @@ namespace dbfit
             dc.CommandTimeout = Options.CommandTimeOut;
             return dc;
         }
-        public void BindFixtureSymbols(DbCommand dc)
+        public void BindFixtureSymbols(Symbols symbols, DbCommand dc)
         {
             foreach (String paramName in ExtractParamNames(dc.CommandText))
             {
-                AddInput(dc, paramName, fit.Fixture.Recall(paramName));
+                AddInput(dc, paramName, symbols.GetValueOrDefault(paramName, null));
             }
         }
         public void CloseConnection()

@@ -84,15 +84,13 @@ namespace fitSharp.Test.NUnit.Machine {
         }
 
         [Test] public void EmptyMemoryContainsNothing() {
-            processor.AddMemory<string>();
-            Assert.IsFalse(processor.Contains("anything"));
+            Assert.IsFalse(processor.Configuration.GetItem<StringObjectMemory>().HasValue("anything"));
         }
 
         [Test] public void StoredDataIsLoaded() {
-            processor.AddMemory<KeyValueMemory<string, string>>();
-            processor.Store(new KeyValueMemory<string, string>("something", "stuff"));
-            Assert.IsTrue(processor.Contains(new KeyValueMemory<string, string>("something")));
-            Assert.AreEqual("stuff", processor.Load(new KeyValueMemory<string, string>("something")).Instance);
+            processor.Configuration.GetItem<StringObjectMemory>().Save("something", "stuff");
+            Assert.IsTrue(processor.Configuration.GetItem<StringObjectMemory>().HasValue("something"));
+            Assert.AreEqual("stuff", processor.Configuration.GetItem<StringObjectMemory>().GetValue("something"));
         }
 
         private class DefaultTest: Operator<string, BasicProcessor>, InvokeOperator<string> {

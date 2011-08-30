@@ -10,7 +10,7 @@ using fitSharp.Machine.Model;
 namespace fitSharp.Machine.Engine {
     public class TypeDictionary: Configuration {
 
-        public Configuration Copy() {
+        public Memory Copy() {
             var copy = new TypeDictionary();
             foreach (Type key in items.Keys) {
                 var item = items[key];

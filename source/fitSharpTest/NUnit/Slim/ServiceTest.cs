@@ -40,7 +40,7 @@ namespace fitSharp.Test.NUnit.Slim {
         }
 
         [Test] public void ParseSymbolIsDoneFirst() {
-            service.Store(new Symbol("symbol", "input"));
+            service.Get<Symbols>().Save("symbol", "input");
             service.AddOperator(new SampleConverter());
             var value = (SampleClass)service.Parse(typeof(SampleClass), TypedValue.Void, new SlimLeaf("$symbol")).Value;
             Assert.AreEqual("custominput", value.Info);

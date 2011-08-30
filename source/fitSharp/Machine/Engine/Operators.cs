@@ -12,7 +12,7 @@ namespace fitSharp.Machine.Engine {
     public delegate void DoOperation<in T>(T anOperator);
     public class Operators<T, P> where P: class, Processor<T> {
         private readonly List<List<Operator<T, P>>> operators = new List<List<Operator<T, P>>>();
-        protected readonly Configuration createConfiguration = new TypeDictionary();
+        protected readonly Memory createMemory = new TypeDictionary();
 
         public Operators() {
             Add(new InvokeDefault<T,P>(), 0);
@@ -26,7 +26,7 @@ namespace fitSharp.Machine.Engine {
         public P Processor { private get; set; }
 
         public Operator<T, P> Add(string operatorName) {
-            return Add((Operator<T, P>)(Processor == null ? new BasicProcessor(createConfiguration).Create(operatorName).Value : Processor.Create(operatorName).Value));
+            return Add((Operator<T, P>)(Processor == null ? new BasicProcessor(createMemory).Create(operatorName).Value : Processor.Create(operatorName).Value));
         }
 
         public Operator<T, P> Add(Operator<T, P> anOperator) { return Add(anOperator, 1); }
