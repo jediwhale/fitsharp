@@ -90,6 +90,9 @@ namespace fit.Runner {
                     page.WriteNonTest();
                     DoNoTest();
                 }
+
+                StoreCurrentlyExecutingPagePath(page.Name.Name);
+
 	            var service = new Service.Service(memory);
 	            Tree<Cell> result = service.Compose(new StoryTestString(input));
 	            if (result == null || result.Branches.Count == 0) {
@@ -97,6 +100,7 @@ namespace fit.Runner {
                     DoNoTest();
 	                return;
 	            }
+
                 var writer = new StoryTestStringWriter(service);
                 var storyTest = new StoryTest((Parse) result, writer);
                 if (page.Name.IsSuitePage) {
@@ -113,6 +117,10 @@ namespace fit.Runner {
 
             public void DoNoTest() {
                 handleCounts(new TestCounts());
+            }
+
+            private void StoreCurrentlyExecutingPagePath(string path) {
+                memory.GetItem<Context>().TestPagePath = path;
             }
 
             readonly ResultWriter resultWriter;

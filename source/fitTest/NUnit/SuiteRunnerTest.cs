@@ -94,6 +94,16 @@ namespace fit.Test.NUnit {
             Assert.IsEmpty(folders.GetFolders("out"));
         }
 
+        [Test]
+        public void TestPagePathIsStoredInMemoryWhenPageExecutes() {
+            Assert.IsNullOrEmpty(memory.GetItem<Context>().TestPagePath);
+
+            AddTestFile(@"in\page.html");
+            RunSuite();
+
+            Assert.AreEqual(@"in\page.html", memory.GetItem<Context>().TestPagePath);
+        }
+
         private void RunSuite() {
             RunSuite(new NullReporter());
         }

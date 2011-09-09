@@ -4,7 +4,9 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using fitSharp.Fit.Service;
+using fitSharp.Fit.Model;
 using NUnit.Framework;
+using fitSharp.Machine.Application;
 
 namespace fit.Test.NUnit {
     [TestFixture]
@@ -60,6 +62,28 @@ namespace fit.Test.NUnit {
             Assert.AreEqual("&lt;&amp;&lt;", Fixture.Escape("<&<"));
             Assert.AreEqual("&amp;&lt;&amp;", Fixture.Escape("&<&"));
             Assert.AreEqual("a &lt; b &amp;&amp; c &lt; d", Fixture.Escape("a < b && c < d"));
+        }
+    }
+
+    [TestFixture]
+    public class ContextTest {
+        private Fixture fixture;
+        private CellProcessorBase processor;
+
+        [SetUp]
+        public void SetUp() {
+            processor = new CellProcessorBase();
+            processor.Memory.GetItem<Context>().TestPagePath = @"\some\path.html";
+
+            fixture = new Fixture { Processor = processor };
+        }
+
+        [Test]
+        public void TestProcessorContextDataIsExposedToFixture() {
+            // I admit this test is a little forced, but I have another test verifying that
+            // the context is populated by SuiteRunner, so it makes sense to test
+            // that the fixture sees the change, too. To me, anyway.
+            Assert.AreEqual(@"\some\path.html", fixture.Processor.Get<Context>().TestPagePath);
         }
     }
 
