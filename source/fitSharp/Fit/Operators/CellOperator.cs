@@ -9,14 +9,5 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
-    public abstract class CellOperator: Operator<Cell, CellProcessor> { //todo: rename? move?
-        public void MarkCellWithLastResults(Tree<Cell> parameters, Action<Cell> markWithCounts) {
-            var cell = parameters == null ? null : parameters.Value;
-            if (cell != null && !string.IsNullOrEmpty(Processor.TestStatus.LastAction)) {
-                cell.SetAttribute(CellAttribute.Folded, Processor.TestStatus.LastAction);
-                markWithCounts(cell);
-            }
-            Processor.TestStatus.LastAction = null;
-        }
-    }
+    public abstract class CellOperator: Operator<Cell, CellProcessor> {}
 }

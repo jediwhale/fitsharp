@@ -24,7 +24,7 @@ namespace fitSharp.Fit.Operators {
                 }
             }
             catch (IgnoredException) {}
-            MarkCellWithLastResults(expectedCell, p => {});
+            Processor.TestStatus.MarkCellWithLastResults(expectedCell);
             return TypedValue.Void;
         }
     }
