@@ -56,7 +56,7 @@ namespace fitSharp.Fit.Service {
             else {
                 var beforeCounts = new TestCounts(processor.TestStatus.Counts);
                 processor.InvokeWithThrow(instance, GetMemberName(memberCell), new CellTree(cell));
-                MarkCellWithLastResults(beforeCounts, cell);
+                processor.TestStatus.MarkCellWithLastResults(cell, beforeCounts);
             }
         }
 
@@ -73,20 +73,6 @@ namespace fitSharp.Fit.Service {
 	            : actual.ToString().Length == 0 ? "blank"
 	            : actual.ToString());
 	    }
-        void MarkCellWithLastResults(TestCounts testCounts, Tree<Cell> cell) {
-            if (cell != null && !string.IsNullOrEmpty(processor.TestStatus.LastAction)) {
-                cell.Value.SetAttribute(CellAttribute.Folded, processor.TestStatus.LastAction);
-                MarkCellWithCounts(testCounts, cell);
-            }
-            processor.TestStatus.LastAction = null;
-        }
-
-        void MarkCellWithCounts(TestCounts beforeCounts, Tree<Cell> cell) {
-            var style = processor.TestStatus.Counts.Subtract(beforeCounts).Style;
-            if (!string.IsNullOrEmpty(style) && string.IsNullOrEmpty(cell.Value.GetAttribute(CellAttribute.Status))) {
-                cell.Value.SetAttribute(CellAttribute.Status, style);
-            }
-        }
     }
 
     public class CheckBinding: BindingOperation {
@@ -120,7 +106,6 @@ namespace fitSharp.Fit.Service {
         }
 
         public void Do(Tree<Cell> cell) {
-            //operation.Create(adapter, memberName, new CellTree(cell));
             var instance = processor.Create(memberName, new CellTree(cell));
             adapter.SetSystemUnderTest(instance.Value);
         }

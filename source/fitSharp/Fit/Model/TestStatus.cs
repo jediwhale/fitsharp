@@ -1,8 +1,9 @@
-﻿// Copyright © 2010 Syterra Software Inc.
+﻿// Copyright © 2011 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using fitSharp.Fit.Exception;
@@ -96,6 +97,30 @@ namespace fitSharp.Fit.Model {
                 MarkRight(cell);
             else
                 MarkWrong(cell);
+        }
+
+        public void MarkCellWithLastResults(Tree<Cell> parameters) {
+            MarkCellWithLastResults(parameters, c => { });
+        }
+
+        public void MarkCellWithLastResults(Tree<Cell> parameters, TestCounts beforeCounts) {
+            MarkCellWithLastResults(parameters, c => MarkWithCounts(c, beforeCounts));
+        }
+
+        void MarkCellWithLastResults(Tree<Cell> parameters, Action<Cell> markWithCounts) {
+            var cell = parameters == null ? null : parameters.Value;
+            if (cell != null && !string.IsNullOrEmpty(LastAction)) {
+                cell.SetAttribute(CellAttribute.Folded, LastAction);
+                markWithCounts(cell);
+            }
+            LastAction = null;
+        }
+
+        void MarkWithCounts(Cell cell, TestCounts beforeCounts) {
+            var style = Counts.Subtract(beforeCounts).Style;
+            if (!string.IsNullOrEmpty(style) && string.IsNullOrEmpty(cell.GetAttribute(CellAttribute.Status))) {
+                cell.SetAttribute(CellAttribute.Status, style);
+            }
         }
     }
 }

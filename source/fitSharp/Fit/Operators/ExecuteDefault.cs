@@ -20,15 +20,8 @@ namespace fitSharp.Fit.Operators {
             var result = Processor.Invoke(
                     new TypedValue(targetObjectProvider != null ? targetObjectProvider.GetTargetObject() : systemUnderTest),
                     name, parameters);
-            MarkCellWithLastResults(new CellTree(targetCell), p => MarkCellWithCounts(p, beforeCounts));
+            Processor.TestStatus.MarkCellWithLastResults(new CellTree(targetCell), beforeCounts);
             return result;
-        }
-
-        void MarkCellWithCounts(Cell target, TestCounts beforeCounts) {
-            string style = Processor.TestStatus.Counts.Subtract(beforeCounts).Style;
-            if (!string.IsNullOrEmpty(style) && string.IsNullOrEmpty(target.GetAttribute(CellAttribute.Status))) {
-                target.SetAttribute(CellAttribute.Status, style);
-            }
         }
     }
 }
