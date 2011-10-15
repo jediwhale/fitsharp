@@ -32,8 +32,9 @@ namespace fitSharp.Fit.Operators {
             return result.GetValueAs<Interpreter>() ?? WithSystemUnderTest(Processor.Create("fitlibrary.DoFixture").GetValueAs<Interpreter>(), result);
         }
 
-        static Interpreter WithSystemUnderTest(Interpreter interpreter, TypedValue systemUnderTest) {
+        Interpreter WithSystemUnderTest(Interpreter interpreter, TypedValue systemUnderTest) {
             if (!systemUnderTest.IsVoid) {
+                Processor.CallStack.SystemUnderTest = systemUnderTest;
                 var adapter = interpreter as MutableDomainAdapter;
                 if (adapter != null) adapter.SetSystemUnderTest(systemUnderTest.Value);
             }

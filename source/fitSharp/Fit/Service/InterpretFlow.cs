@@ -67,6 +67,7 @@ namespace fitSharp.Fit.Service {
                         ColorMethodName(interpreter.MethodRowSelector.SelectMethodCells(currentRow), result.GetValue<bool>());
                     }
                     else {
+                        //todo: change wrapping re sut & call stack?
                         processor.Operate<WrapOperator>(result)
                             .As<Interpreter>(i => ProcessRestOfTable(i, processor.MakeCell(string.Empty, table.Branches.Skip(rowNumber))));
                     }
@@ -84,13 +85,17 @@ namespace fitSharp.Fit.Service {
         }
 
         void ProcessRestOfTable(Interpreter childInterpreter, Tree<Cell> theRestOfTheRows) {
+            //todo: eliminate parent - use stack
             processor.TestStatus.Parent = interpreter;
+            processor.CallStack.Push();
+            processor.CallStack.SystemUnderTest = new TypedValue(interpreter.SystemUnderTest);
             try {
                 ExecuteStoryTest.DoTable(theRestOfTheRows, childInterpreter, processor, false);
             }
             catch (System.Exception e) {
                 processor.TestStatus.MarkException(theRestOfTheRows.Branches[0].Branches[0].Value, e);
             }
+            processor.CallStack.PopReturn();
             hasFinishedTable = true;
         }
 

@@ -11,6 +11,7 @@ namespace fitSharp.Fit.Model
 {
     public interface CellProcessor: Processor<Cell> {
 	    TestStatus TestStatus { get; set; }
+        CallStack CallStack { get; }
         Tree<Cell> MakeCell(string text, IEnumerable<Tree<Cell>> branches);
     }
 

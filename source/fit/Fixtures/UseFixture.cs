@@ -26,8 +26,8 @@ namespace fit {
         }
 
         Interpreter GetNamedFixture(string theName) {
-            var parent = Processor.TestStatus.Parent;
-            if (parent == null) return null;
+            //var parent = Processor.TestStatus.Parent;
+            //if (parent == null) return null;
 
             if (!Symbols.HasValue(theName)) return null;
 

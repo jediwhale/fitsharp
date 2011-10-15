@@ -53,7 +53,7 @@ namespace fit.Fixtures {
 
         public void Return(Parse cells) {
             var result = new MethodPhrase(cells).Evaluate(fixture);
-            fixture.Processor.TestStatus.SetReturn(new TypedValue(result));
+            fixture.Processor.CallStack.SetReturn(new TypedValue(result));
         }
 
         public void Set(Parse theCells) {
