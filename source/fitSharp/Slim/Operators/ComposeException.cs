@@ -1,4 +1,4 @@
-﻿// Copyright © 2009 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2011 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -30,8 +30,8 @@ namespace fitSharp.Slim.Operators {
             //if (TryResult<CreateException>(instance,
             //                               e => string.Format("COULD_NOT_INVOKE_CONSTRUCTOR {0}", e.Type), ref result)) return result;
 
-            if (TryResult<ParseException<string>>(instance,
-                                                  e => string.Format("NO_CONVERTER_FOR_ARGUMENT_NUMBER {0}", e.Type), ref result)) return result;
+            //if (TryResult<ParseException<string>>(instance,
+            //                                      e => string.Format("NO_CONVERTER_FOR_ARGUMENT_NUMBER {0}", e.Type), ref result)) return result;
 
             if (TryResult<MemoryMissingException<string>>(instance,
                                                                  e => string.Format("NO_INSTANCE {0}", e.Key), ref result)) return result;

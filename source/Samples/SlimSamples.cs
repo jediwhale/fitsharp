@@ -17,6 +17,8 @@ namespace fitnesse.slim.test {
             Count++;
         }
 
+        public int[] IntegerArray { get; set; }
+
         public string SampleMethod() {
             MethodCount++;
             return "testresult";

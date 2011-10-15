@@ -59,7 +59,7 @@ namespace fitSharp.Test.NUnit.Slim {
 
         [Test] public void TreeIsParsedForList() {
             var list =
-                Parse(new ParseList{ Processor = processor }, typeof (List<int>), new SlimTree().AddBranchValue("5").AddBranchValue("4")) as List<int>;
+                Parse(new ParseList{ Processor = processor }, typeof (List<int>), new SlimLeaf("[5, 4]")) as List<int>;
             Assert.IsNotNull(list);
             Assert.AreEqual(2, list.Count);
             Assert.AreEqual(5, list[0]);
@@ -68,7 +68,7 @@ namespace fitSharp.Test.NUnit.Slim {
 
         [Test] public void TreeIsParsedForArray() {
             var list =
-                Parse(new ParseList{ Processor = processor }, typeof (int[]), new SlimTree().AddBranchValue("5").AddBranchValue("4")) as int[];
+                Parse(new ParseList{ Processor = processor }, typeof (int[]), new SlimLeaf("[5, 4]")) as int[];
             Assert.IsNotNull(list);
             Assert.AreEqual(2, list.Length);
             Assert.AreEqual(5, list[0]);

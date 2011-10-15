@@ -100,6 +100,7 @@
     <Compile Include="NUnit\Slim\InterpreterTest.cs" />
     <Compile Include="NUnit\Slim\ParseOperatorsTest.cs" />
     <Compile Include="NUnit\Slim\InvokeLibraryTest.cs" />
+    <Compile Include="NUnit\Slim\SlimTreeTest.cs" />
     <Compile Include="NUnit\Slim\SampleClass.cs" />
     <Compile Include="NUnit\Slim\ServiceTest.cs" />
     <Compile Include="NUnit\Slim\TestInterpreter.cs" />
