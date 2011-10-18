@@ -32,10 +32,10 @@ namespace fit.Operators {
                     s => s == procedure ? null : s.More,
                     s => s == procedure ? s.Parts.More : s.Parts));
 
-            Processor.TestStatus.PushReturn(TypedValue.Void);
+            Processor.CallStack.Push();
             ExecuteProcedure(fixture, body);
             Processor.TestStatus.LastAction = Processor.ParseTree(typeof(StoryTestString), body).ValueString;
-            return Processor.TestStatus.PopReturn();
+            return Processor.CallStack.PopReturn();
         }
 
         void ExecuteProcedure(FlowInterpreter flowInterpreter, Tree<Cell> body) {

@@ -14,6 +14,7 @@ namespace fitSharp.Fit.Service {
     public class CellProcessorBase: ProcessorBase<Cell, CellProcessor>, CellProcessor {
         protected readonly CellOperators operators;
 	    public TestStatus TestStatus { get; set; }
+        public CallStack CallStack { get; private set; }
 
         public virtual Tree<Cell> MakeCell(string text, IEnumerable<Tree<Cell>> branches) {
             var result = new CellTree(text);
@@ -25,6 +26,7 @@ namespace fitSharp.Fit.Service {
 
         protected CellProcessorBase(Memory memory, CellOperators operators): base(memory) {
             TestStatus = new TestStatus();
+            CallStack = new CallStack();
 	        this.operators = operators;
 	        operators.Processor = this;
 

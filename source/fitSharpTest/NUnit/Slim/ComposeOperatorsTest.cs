@@ -106,11 +106,6 @@ namespace fitSharp.Test.NUnit.Slim {
                                   "message:<<MALFORMED_INSTRUCTION stuff,nonsense>> ");
         }
 
-        [Test] public void ParseExceptionIsComposed() {
-            CheckExceptionCompose(new ParseException<string>("member", typeof(string), 0, "garbage", new ApplicationException("blah")),
-                                  "message:<<NO_CONVERTER_FOR_ARGUMENT_NUMBER System.String>> ");
-        }
-
         Tree<string> Compose(ComposeOperator<string> composeOperator, object instance, Type type) {
             var compose = (SlimOperator)composeOperator;
             compose.Processor = processor;

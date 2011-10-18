@@ -46,6 +46,7 @@
     <Compile Include="Fit\Fixtures\CommentFixture.cs" />
     <Compile Include="Fit\Fixtures\Compute.cs" />
     <Compile Include="Fit\Fixtures\ConfigureFixture.cs" />
+    <Compile Include="Fit\Model\CallStack.cs" />
     <Compile Include="Fit\Model\Procedures.cs" />
     <Compile Include="Fit\Model\StoryTableString.cs" />
     <Compile Include="Fit\Operators\CellOperationValue.cs" />

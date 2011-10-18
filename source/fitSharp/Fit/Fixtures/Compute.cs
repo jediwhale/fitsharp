@@ -10,12 +10,7 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Fixtures {
-    public class Compute: Interpreter, MutableDomainAdapter {
-        public object SystemUnderTest { get; private set; }
-
-        public void SetSystemUnderTest(object theSystemUnderTest) {
-            SystemUnderTest = theSystemUnderTest;
-        }
+    public class Compute: Interpreter {
 
         public void Interpret(CellProcessor processor, Tree<Cell> table) {
             new Traverse<Cell>()
@@ -32,7 +27,7 @@ namespace fitSharp.Fit.Fixtures {
                 parameterList.Add(new CellTreeLeaf(new GracefulName(headerRow.Branches[i].Value.Text).ToString()));
                 parameterList.Add(row.Branches[i]);
             }
-            var result = processor.Invoke(new TypedValue(SystemUnderTest), memberName,
+            var result = processor.Invoke(processor.CallStack.SystemUnderTest, memberName,
                                           new EnumeratedTree<Cell>(parameterList));
             new CellOperationImpl(processor).Check(result, row.Branches.Last());
         }
