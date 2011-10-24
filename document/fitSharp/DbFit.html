@@ -14,9 +14,24 @@ to be bound by the terms of this license. You must not remove this notice, or an
 <body>
 <div class="topbar"><a href="FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
 <div class="pagename">Db Fit</div>
-<div class="content"><a class="externallink" href="http://www.fitnesse.info/dbfit">DbFit</a> is a set of fixtures which enables Fit tests to execute directly against a database.<br>
+<div class="content"><a class="externallink" href="http://www.fitnesse.info/dbfit">DbFit</a> is a set of fixtures which enables <a href="Fit.html">Fit</a> tests to execute directly against a database.<br>
 <br>
-The .NET version is included with <span style="font-family:verdana,sans-serif"><i>fit</i>Sharp</span>.<br>
+The .NET version is included with <span style="font-family:verdana,sans-serif"><i>fit</i>Sharp</span>. We can use DbFit by including the following in a <a href="FitSharp/SuiteConfigurationFile.html">Suite Configuration File</a>. <pre class="code">&lt;suiteConfig>
+
+    &lt;ApplicationUnderTest>
+        &lt;addNamespace>dbfit.fixture&lt;/addNamespace>
+        &lt;addAssembly>C:\apps\fitSharp\dbfit.dll&lt;/addAssembly>
+
+        &lt!-- choose one or more of the following -->
+        &lt;addAssembly>C:\apps\fitSharp\dbfit.sqlserver.dll&lt;/addAssembly>
+        &lt;addAssembly>C:\apps\fitSharp\dbfit.mysql.dll&lt;/addAssembly>
+        &lt;addAssembly>C:\apps\fitSharp\dbfit.oracle.dll&lt;/addAssembly>
+        &lt;addAssembly>C:\apps\fitSharp\dbfit.sybase.dll&lt;/addAssembly>
+
+    &lt;/ApplicationUnderTest>
+    
+&lt;/suiteConfig>
+ </pre><br>
 </div>
 <div style="width:100%;text-align:right">
 <span class="footer">&copy; Copyright <a href="http://www.syterra.com">Syterra Software Inc.</a> All rights reserved.</span>
