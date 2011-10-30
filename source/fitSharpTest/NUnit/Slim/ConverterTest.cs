@@ -6,11 +6,12 @@
 using fitSharp.Machine.Model;
 using fitSharp.Slim.Operators;
 using fitSharp.Slim.Service;
+using fitSharp.Test.Double.Slim;
 using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Slim {
     [TestFixture] public class ConverterTest {
-        readonly Service processor = new Service();
+        readonly Service processor = Builder.Service();
 
         [Test] public void CustomTypeIsParsed() {
             var converter = new CustomConverter {Processor = processor};

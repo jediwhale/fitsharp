@@ -9,6 +9,7 @@ using fitSharp.Machine.Model;
 using fitSharp.Slim.Model;
 using fitSharp.Slim.Operators;
 using fitSharp.Slim.Service;
+using fitSharp.Test.Double.Slim;
 using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Slim {
@@ -16,7 +17,7 @@ namespace fitSharp.Test.NUnit.Slim {
         Service service;
 
         [SetUp] public void SetUp() {
-            service = new Service();
+            service = Builder.Service();
         }
 
         [Test] public void InstanceIsCreated() {
