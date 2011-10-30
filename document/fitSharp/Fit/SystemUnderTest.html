@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- fitSharp
+Copyright © Syterra Software Inc. All rights reserved.
+The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
+to be bound by the terms of this license. You must not remove this notice, or any other, from this software. -->
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+ <link href="../fitsharp1.css" type="text/css" rel="stylesheet">
+  <link href="fit.css" type="text/css" rel="stylesheet">
+  <title>System Under Test</title>
+</head>
+<body>
+<div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
+<div class="pagename">System Under Test</div>
+<div class="content">To validate the behavior of a system under test, we need to create instances of objects in the system, execute methods on those objects and check that the expected behavior has occurs. There are a variety of patterns to perform this validation with <span style="font-family:verdana,sans-serif"><i>fit</i>Sharp</span>.<br>
+<br>
+Every storytest has a test-level <a href="../Fit/SystemUnderTest.html">System Under Test</a>. This object can be set with the <a href="../Fit/WithKeyword.html">With Keyword</a>. When we use a custom flow fixture to control <a href="../Fit/FlowMode.html">Flow Mode</a>, we can also set this test-level <a href="../Fit/SystemUnderTest.html">System Under Test</a> in our fixture code.<br>
+<br>
+Some fixtures have a fixture-level <a href="../Fit/SystemUnderTest.html">System Under Test</a> property, which contains the object used by the fixture. This property may be set in our fixture code with SetSystemUnderTest(myObject) and often can be supplied to the fixture constructor.<br>
+<br>
+Some fixtures are created automatically by <span style="font-family:verdana,sans-serif"><i>fit</i>Sharp</span> when a result is returned by a method in <a href="../Fit/FlowMode.html">Flow Mode</a>. This result is used as the <a href="../Fit/SystemUnderTest.html">System Under Test</a> for the automatically-created fixture.<br>
+<br>
+Whenever a fixture is created, if the test-level <a href="../Fit/SystemUnderTest.html">System Under Test</a> has been set and the new fixture has a SetSystemUnderTest method, the test-level object is passed to the new fixture.<br>
+<br>
+The <a href="../Fit/UseFixture.html">Use Fixture</a> can also be used to create a new fixture and supply it with a <a href="../Fit/SystemUnderTest.html">System Under Test</a>.<br>
+<br>
+When we create a flow fixture in the body of a storytest that is already in <a href="../Fit/FlowMode.html">Flow Mode</a>, this fixture has a fixture-level <a href="../Fit/SystemUnderTest.html">System Under Test</a>.<br>
+<br>
+Some fixtures, like <a href="../Fit/ComputeFixture.html">Compute Fixture</a>, do not have a <a href="../Fit/SystemUnderTest.html">System Under Test</a> property and always use the fixture that creates them as a <a href="../Fit/DomainAdapter.html">Domain Adapter</a>.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>when test is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>with</td><td>new</td><td>sample domain</td><td>Bob</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>compute</td></tr>
+<tr><td>name</td></tr>
+<tr><td>Bob</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>do</td></tr>
+<tr><td>with</td><td>new</td><td>sample domain</td><td>Sue</td></tr>
+<tr><td>compute</td></tr>
+<tr><td>name</td></tr>
+<tr><td>Sue</td></tr>
+</table>
+</td><td>then result is</td><td><table border="1" cellpadding="2" cellspacing="0">
+<tr><td>with</td><td>new</td><td>sample domain</td><td>Bob</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>compute</td></tr>
+<tr><td>name</td></tr>
+<tr><td class="pass">Bob</td></tr>
+</table>
+
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>do</td></tr>
+<tr><td>with</td><td>new</td><td>sample domain</td><td>Sue</td></tr>
+<tr><td>compute</td></tr>
+<tr><td>name</td></tr>
+<tr><td class="pass">Sue</td></tr>
+</table></td></tr>
+</table>
+<br>
+Every object used by fixtures can be an instance of the system under test, or it can be a <a href="../Fit/DomainAdapter.html">Domain Adapter</a>.<br>
+<br>
+Multiple objects can be saved and re-used as <a href="../Fit/SymbolValues.html">Symbol Values</a>.<br>
+</div>
+<div style="width:100%;text-align:right">
+<span class="footer">&copy; Copyright <a href="http://www.syterra.com">Syterra Software Inc.</a> All rights reserved.</span>
+</div>
+
+</body>
+</html>

@@ -19,7 +19,7 @@ namespace fitSharp.Fit.Model {
             frames.Peek().ReturnValue = value;
         }
 
-        public TypedValue SystemUnderTest {
+        public TypedValue SystemUnderTest { //todo: rename? interpreter? mda?
             get { return frames.Peek().SystemUnderTest; }
             set { frames.Peek().SystemUnderTest = value; }
         }

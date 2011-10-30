@@ -16,7 +16,7 @@ to be bound by the terms of this license. You must not remove this notice, or an
 <div class="pagename">Flow Mode</div>
 <div class="content">In <a href="../Fit/FlowMode.html">Flow Mode</a>, a fixture processes all the tables in the story test, without repeating the fixture name in the first row of each table.<br>
 <br>
-Each row is interpreted as one of the following.<ul><li>One of the standard <a href="../Fit/FlowFixtureKeywords.html">Flow Fixture Keywords</a>.</li><li>A custom flow fixture keyword defined in the current fixture.</li><li>A method defined in the current fixture.</li><li>A method defined in the current fixture's System Under Test.</li><li>The name of a new fixture that will process the rest of the current table.</li></ul><br>
+Each row is interpreted as one of the following.<ul><li>One of the standard <a href="../Fit/FlowFixtureKeywords.html">Flow Fixture Keywords</a>.</li><li>A custom flow fixture keyword defined in the current fixture.</li><li>A method defined in the current fixture.</li><li>A method defined in the current fixture's <a href="../Fit/SystemUnderTest.html">System Under Test</a>.</li><li>The name of a new fixture that will process the rest of the current table.</li></ul><br>
 If the method invoked for a row returns certain types, the return value will be interpreted by a new fixture that will process the rest of the table.<br>
 <br>
 Any enumerable return type is processed by an <a href="../Fit/ArrayFixture.html">Array Fixture</a>.<br>
