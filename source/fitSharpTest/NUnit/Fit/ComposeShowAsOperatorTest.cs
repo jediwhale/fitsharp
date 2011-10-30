@@ -5,9 +5,9 @@
 
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
-using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
+using fitSharp.Test.Double.Fit;
 using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Fit
@@ -20,7 +20,7 @@ namespace fitSharp.Test.NUnit.Fit
         }
 
         [Test] public void ComposesAsRaw() {
-            var processor = new CellProcessorBase();
+            var processor = Builder.CellProcessor();
             processor.AddOperator(new TestCompose());
             var showAs = new ComposeShowAsOperator {Processor = processor};
             var subject = new ComposeShowAsOperator(new [] {CellAttribute.Raw}, "stuff");

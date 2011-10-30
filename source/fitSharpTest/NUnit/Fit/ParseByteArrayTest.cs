@@ -5,8 +5,8 @@
 
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
-using fitSharp.Fit.Service;
 using fitSharp.Machine.Model;
+using fitSharp.Test.Double.Fit;
 using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Fit {
@@ -21,7 +21,7 @@ namespace fitSharp.Test.NUnit.Fit {
         }
 
         static void CheckParse(string input, byte[] expected) {
-            var parser = new ParseByteArray { Processor =  new CellProcessorBase() };
+            var parser = new ParseByteArray { Processor =  Builder.CellProcessor() };
             Assert.IsTrue(parser.CanParse(typeof (byte[]), TypedValue.Void, new CellTreeLeaf(input)));
             TypedValue result = parser.Parse(typeof (byte[]), TypedValue.Void, new CellTreeLeaf(input));
             Assert.AreEqual(expected, result.Value);

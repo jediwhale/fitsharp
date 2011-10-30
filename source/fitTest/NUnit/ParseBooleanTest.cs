@@ -5,8 +5,8 @@
 
 using System;
 using fitSharp.Fit.Operators;
-using fitSharp.Fit.Service;
 using fitSharp.Machine.Model;
+using fitSharp.Test.Double.Fit;
 using NUnit.Framework;
 
 namespace fit.Test.NUnit {
@@ -14,7 +14,7 @@ namespace fit.Test.NUnit {
         private ParseBoolean parseBoolean;
 
         [SetUp] public void SetUp() {
-            parseBoolean = new ParseBoolean {Processor = new CellProcessorBase()};
+            parseBoolean = new ParseBoolean {Processor = Builder.CellProcessor()};
         }
 
         [Test]

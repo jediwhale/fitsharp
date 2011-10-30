@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Acceptance\Slim\SlimDomain.cs" />
+    <Compile Include="Double\Fit\Builder.cs" />
     <Compile Include="Double\FullTestConfig.cs" />
     <Compile Include="Double\Person.cs" />
     <Compile Include="Double\SampleClassTwo.cs" />

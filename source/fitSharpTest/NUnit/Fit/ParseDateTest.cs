@@ -6,8 +6,8 @@
 using System;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
-using fitSharp.Fit.Service;
 using fitSharp.Machine.Model;
+using fitSharp.Test.Double.Fit;
 using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Fit {
@@ -17,7 +17,7 @@ namespace fitSharp.Test.NUnit.Fit {
         string exceptionMessage;
 
         [SetUp] public void SetUp() {
-            parseDate = new ParseDate {Processor = new CellProcessorBase()};
+            parseDate = new ParseDate {Processor = Builder.CellProcessor()};
             exceptionMessage = string.Empty;
         }
 

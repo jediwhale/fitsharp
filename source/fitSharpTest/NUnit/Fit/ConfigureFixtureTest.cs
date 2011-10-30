@@ -5,18 +5,18 @@
 
 using fitSharp.Fit.Fixtures;
 using fitSharp.Fit.Model;
-using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
+using fitSharp.Test.Double.Fit;
 using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Fit {
     [TestFixture] public class ConfigureFixtureTest {
-        CellProcessorBase processor;
+        CellProcessor processor;
         ConfigureFixture fixture;
 
         [SetUp] public void SetUp() {
-            processor = new CellProcessorBase();
+            processor = Builder.CellProcessor();
             fixture = new ConfigureFixture();
         }
 
