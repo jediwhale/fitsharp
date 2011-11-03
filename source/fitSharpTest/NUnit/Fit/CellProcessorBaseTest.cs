@@ -5,15 +5,15 @@
 
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
-using fitSharp.Fit.Service;
 using fitSharp.Machine.Model;
+using fitSharp.Test.Double.Fit;
 using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Fit {
     [TestFixture] public class CellProcessorBaseTest {
         [Test] public void CachesParsedValue() {
             var cell = new CellTreeLeaf("<<symbol");
-            var processor = new CellProcessorBase();
+            var processor = Builder.CellProcessor();
             processor.Get<Symbols>().Save("symbol", "value");
             TypedValue result = processor.Parse(typeof (string), TypedValue.Void, cell);
             Assert.AreEqual("value", result.GetValue<string>());
@@ -24,7 +24,7 @@ namespace fitSharp.Test.NUnit.Fit {
         }
 
         [Test] public void WrapsValue() {
-            var processor = new CellProcessorBase();
+            var processor = Builder.CellProcessor();
             var result = processor.Operate<WrapOperator>(new TypedValue("hi"));
             Assert.AreEqual("hi", result.ValueString);
         }

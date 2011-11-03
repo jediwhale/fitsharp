@@ -5,8 +5,8 @@
 
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
-using fitSharp.Fit.Service;
 using fitSharp.Machine.Model;
+using fitSharp.Test.Double.Fit;
 using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Fit {
@@ -21,7 +21,7 @@ namespace fitSharp.Test.NUnit.Fit {
 
         private static void ParseCell(string cellContent, string symbolName) {
             var cell = new CellTreeLeaf(cellContent);
-            var processor = new CellProcessorBase();
+            var processor = Builder.CellProcessor();
             processor.Get<Symbols>().Save(symbolName, "value");
             new ParseSymbol{Processor = processor}.Parse(typeof (string), TypedValue.Void, cell);
             Assert.AreEqual(" value", cell.Value.GetAttribute(CellAttribute.InformationSuffix));

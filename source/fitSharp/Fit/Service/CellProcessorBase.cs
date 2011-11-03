@@ -22,9 +22,7 @@ namespace fitSharp.Fit.Service {
             return result;
         }
 
-        public CellProcessorBase(): this(new TypeDictionary(), new CellOperators()) {} //todo: test only -> factory
-
-        protected CellProcessorBase(Memory memory, CellOperators operators): base(memory) {
+        public CellProcessorBase(Memory memory, CellOperators operators): base(memory) {
             TestStatus = new TestStatus();
             CallStack = new CallStack();
 	        this.operators = operators;

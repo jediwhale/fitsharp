@@ -6,9 +6,9 @@
 using System;
 using fit.Test.Acceptance;
 using fitSharp.Fit.Operators;
-using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
+using fitSharp.Test.Double.Fit;
 using NUnit.Framework;
 using TestStatus=fitSharp.Fit.Model.TestStatus;
 
@@ -21,19 +21,19 @@ namespace fit.Test.NUnit {
         protected PersonFixture personFixture;
 
         public static bool IsMatch(ParseOperator<Cell> parseOperator, string input) {
-            var processor = new CellProcessorBase();
+            var processor = Builder.CellProcessor();
             ((CellOperator) parseOperator).Processor = processor;
             return parseOperator.CanParse(typeof (string), TypedValue.Void, TestUtils.CreateCell(input));
         }
 
         public static bool IsMatch(CompareOperator<Cell> compareOperator, object instance, Type type, string value) {
-            var processor = new CellProcessorBase();
+            var processor = Builder.CellProcessor();
             processor.AddOperator(new CompareDefault());
             return compareOperator.CanCompare(new TypedValue(instance, type), TestUtils.CreateCell(value));
         }
 
         public static bool IsMatch(CompareOperator<Cell> compareOperator, string value) {
-            var processor = new CellProcessorBase();
+            var processor = Builder.CellProcessor();
             processor.AddOperator(new CompareDefault());
             return compareOperator.CanCompare(new TypedValue(null, typeof(object)), TestUtils.CreateCell(value));
         }

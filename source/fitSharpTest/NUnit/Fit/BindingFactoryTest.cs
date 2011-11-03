@@ -5,6 +5,7 @@
 
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Service;
+using fitSharp.Test.Double.Fit;
 using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Fit {
@@ -15,7 +16,7 @@ namespace fitSharp.Test.NUnit.Fit {
         }
 
         static BindingOperation Bind(string input) {
-            return new BindingFactory(new CellProcessorBase(), null, new TestTarget()).Make(new CellTreeLeaf(input));
+            return new BindingFactory(Builder.CellProcessor(), null, new TestTarget()).Make(new CellTreeLeaf(input));
         }
 
         [Test] public void BindsCheckForQuestionSuffix() {

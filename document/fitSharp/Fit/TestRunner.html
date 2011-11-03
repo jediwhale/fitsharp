@@ -14,17 +14,19 @@ to be bound by the terms of this license. You must not remove this notice, or an
 <body>
 <div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
 <div class="pagename">Test Runner</div>
-<div class="content"><a href="../Fit/TestRunner.html">Test Runner</a> is a command line program that lets you execute FitNesse tests and suites in a batch mode.<br>
+<div class="content">TestRunner was a command line program that let us execute FitNesse tests and suites in a batch mode. The TestRunner protocol has been deprecated by FitNesse. To run FitNesse tests from the command line, we now use the FitNesse <a class="externallink" href="http://fitnesse.org/FitNesse.UserGuide.CommandLineRestCommands">Command Line REST Commands</a>.<br>
 <br>
-By default, <a href="../Fit/TestRunner.html">Test Runner</a> loads the assemblies specified by the FitNesse path command, but you can override this.<br>
+The following applies only to old versions of FitNesse and <span style="font-family:verdana,sans-serif"><i>fit</i>Sharp</span>.<br>
+<br>
+By default, TestRunner loads the assemblies specified by the FitNesse path command, but you can override this.<br>
 <br>
 Test results are written by default in a plain text format that can be formatted using a FitNesse Java class. See <a href="http://fitnesse.org/FitNesse.UserGuide.FormattingOption">http://fitnesse.org/FitNesse.UserGuide.FormattingOption</a>. Test results can also be written in XML format.<br>
 <br>
-To use:<pre class="code">    c:\program files\fitsharp\runner
-        -r fitnesse.fitserver.TestRunner,c:\program files\fitsharp\fit.dll
+To use:<pre class="code">    c:\apps\fitsharp\runner
+        -r fitnesse.fitserver.TestRunner
         [-a appconfig] [-c suiteconfig] [-debug] [-nopaths] [-results resultFile] [-format text|xml] [-suiteFilter filtertag] [-v]
-        host port pageName [assemblies]</pre>where:<ul><li>appconfig is the name of an App Config File</li><li>suiteconfig is the name of a <a href="../FitSharp/SuiteConfigurationFile.html">Suite Configuration File</a>,</li><li>debug prints trace information to the console,</li><li>nopaths prevents the addition of assemblies from the FitNesse path command,</li><li>resultFile is the name of a file (or 'stdout') where test results are written,</li><li>format specifies the format of the test results</li><li>filtertag is a tag that restricts the pages to be executed</li><li>v (verbose) prints test progress to the console</li><li>host is the name of the machine running the FitNesse wiki server,</li><li>port is the port used by the FitNesse wiki server,</li><li>pageName is the test page or test suite to be run,</li><li>assemblies is a list of additional assemblies to load, seperated by ';' </li></ul>Example:<pre class="code">    c:\program files\fitsharp\runner
-        -r fitnesse.fitserver.TestRunner,c:\program files\fitsharp\fit.dll
+        host port pageName [assemblies]</pre>where:<ul><li>appconfig is the name of an App Config File</li><li>suiteconfig is the name of a <a href="../FitSharp/SuiteConfigurationFile.html">Suite Configuration File</a>,</li><li>debug prints trace information to the console,</li><li>nopaths prevents the addition of assemblies from the FitNesse path command,</li><li>resultFile is the name of a file (or 'stdout') where test results are written,</li><li>format specifies the format of the test results</li><li>filtertag is a tag that restricts the pages to be executed</li><li>v (verbose) prints test progress to the console</li><li>host is the name of the machine running the FitNesse wiki server,</li><li>port is the port used by the FitNesse wiki server,</li><li>pageName is the test page or test suite to be run,</li><li>assemblies is a list of additional assemblies to load, seperated by ';' </li></ul>Example:<pre class="code">    c:\apps\fitsharp\runner
+        -r fitnesse.fitserver.TestRunner
         -results myResults.txt localhost 8080 MySuite</pre><br>
 </div>
 <div style="width:100%;text-align:right">

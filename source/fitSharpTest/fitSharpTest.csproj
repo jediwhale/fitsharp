@@ -47,9 +47,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Acceptance\Slim\SlimDomain.cs" />
+    <Compile Include="Double\Fit\Builder.cs" />
     <Compile Include="Double\FullTestConfig.cs" />
     <Compile Include="Double\Person.cs" />
     <Compile Include="Double\SampleClassTwo.cs" />
+    <Compile Include="Double\Slim\Builder.cs" />
     <Compile Include="Double\TestSocket.cs" />
     <Compile Include="NUnit\Fit\TagFilterTest.cs" />
     <Compile Include="NUnit\Machine\ArgumentParserTest.cs" />

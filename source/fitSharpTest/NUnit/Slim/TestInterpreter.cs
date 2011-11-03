@@ -7,13 +7,14 @@ using System;
 using System.Text;
 using fitSharp.IO;
 using fitSharp.Slim.Service;
+using fitSharp.Test.Double.Slim;
 
 namespace fitSharp.Test.NUnit.Slim {
     class TestInterpreter {
         public static string ExecuteInstructions(string instructionString) {
             var testSocket = new TestSocket(string.Format("{0:000000}:{1}", instructionString.Length, instructionString));
             var messenger = new Messenger(testSocket);
-            var interpreter = new Interpreter(messenger, string.Empty, new Service());
+            var interpreter = new Interpreter(messenger, string.Empty, Builder.Service());
             interpreter.ProcessInstructions();
             return testSocket.Output;
         }

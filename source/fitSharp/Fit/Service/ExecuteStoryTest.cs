@@ -18,6 +18,7 @@ namespace fitSharp.Fit.Service {
             return fixture;
         }
 
+        //todo: flag argument - yuck
         public static void DoTable(Tree<Cell> table, Interpreter activeFixture, CellProcessor processor, bool inFlow) {
             var activeFlowFixture = activeFixture as FlowInterpreter;
             if (activeFlowFixture != null) activeFlowFixture.DoSetUp(processor, table);

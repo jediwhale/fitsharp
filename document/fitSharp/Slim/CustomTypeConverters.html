@@ -14,7 +14,7 @@ to be bound by the terms of this license. You must not remove this notice, or an
 <body>
 <div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
 <div class="pagename">Custom Type Converters</div>
-<div class="content">If you have a fixture whose methods take or return a class that is not one of the standard <a href="../Slim.html">Slim</a> types, you can add a simple custom type converter very easily, using the generic converter fitSharp.Slim.Operators.Converter.<br>
+<div class="content">If we have a fixture whose methods take or return a class that is not one of the standard <a href="../Slim.html">Slim</a> types, we can add a simple custom type converter very easily, using the generic converter fitSharp.Slim.Operators.Converter.<br>
 <pre class="code">using fitSharp.Slim.Operators;
 
 public class MyCustomConverter: Converter&lt;CustomClass> {
@@ -26,18 +26,18 @@ public class MyCustomConverter: Converter&lt;CustomClass> {
     protected override string Compose(CustomClass input) {
         return ... string representation of custom class ...
     }
-}</pre> Then include your CustomConverter in the <a href="../FitSharp/SuiteConfigurationFile.html">Suite Configuration File</a> :<br>
+}</pre> Then we include our CustomConverter in the <a href="../FitSharp/SuiteConfigurationFile.html">Suite Configuration File</a> :<br>
 <pre class="code">&lt;?xml version="1.0" encoding="utf-8" ?>
-&lt;config>
+&lt;suiteConfig>
   &lt;ApplicationUnderTest>
-    &lt;addAssembly>mybuild\myassembly.dll&lt;/addAssembly>
+    &lt;addAssembly>C:\mypath\myassembly.dll&lt;/addAssembly>
     &lt;addNamespace>My.Namespace&lt;/addNamespace>
   &lt;/ApplicationUnderTest>
   
   &lt;fitSharp.Slim.Service.Service>
     &lt;addOperator>MyCustomConverter&lt;/addOperator>
   &lt;/fitSharp.Slim.Service.Service>
-&lt;/config>
+&lt;/suiteConfig>
 </pre></div>
 <div style="width:100%;text-align:right">
 <span class="footer">&copy; Copyright <a href="http://www.syterra.com">Syterra Software Inc.</a> All rights reserved.</span>

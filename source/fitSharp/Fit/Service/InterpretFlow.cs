@@ -85,10 +85,8 @@ namespace fitSharp.Fit.Service {
         }
 
         void ProcessRestOfTable(Interpreter childInterpreter, Tree<Cell> theRestOfTheRows) {
-            //todo: eliminate parent - use stack
-            processor.TestStatus.Parent = interpreter;
             processor.CallStack.Push();
-            processor.CallStack.SystemUnderTest = new TypedValue(interpreter.SystemUnderTest);
+            processor.CallStack.SystemUnderTest = new TypedValue(interpreter);
             try {
                 ExecuteStoryTest.DoTable(theRestOfTheRows, childInterpreter, processor, false);
             }

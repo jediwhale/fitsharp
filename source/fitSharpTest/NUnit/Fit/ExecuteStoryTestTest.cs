@@ -9,6 +9,7 @@ using fitSharp.Fit.Operators;
 using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
+using fitSharp.Test.Double.Fit;
 using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Fit {
@@ -18,7 +19,7 @@ namespace fitSharp.Test.NUnit.Fit {
         ExecuteStoryTest execute;
 
         [SetUp] public void SetUp() {
-            processor = new CellProcessorBase();
+            processor = Builder.CellProcessor();
             processor.AddOperator(new TestParseInterpreter());
             execute = new ExecuteStoryTest(processor, new StoryTestNullWriter());
             tables = new CellTree(new CellTree(new CellTree("myfixture")));

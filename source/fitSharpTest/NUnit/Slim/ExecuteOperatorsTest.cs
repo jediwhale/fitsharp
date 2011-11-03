@@ -8,6 +8,7 @@ using fitSharp.Machine.Model;
 using fitSharp.Slim.Model;
 using fitSharp.Slim.Operators;
 using fitSharp.Slim.Service;
+using fitSharp.Test.Double.Slim;
 using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Slim {
@@ -16,7 +17,7 @@ namespace fitSharp.Test.NUnit.Slim {
         private Tree<string> result;
 
         [SetUp] public void SetUp() {
-            processor = new Service();
+            processor = Builder.Service();
         }
 
         [Test] public void ExecuteDefaultReturnsException() {

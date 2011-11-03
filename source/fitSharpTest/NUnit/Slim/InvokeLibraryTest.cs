@@ -6,12 +6,13 @@
 using fitSharp.Machine.Model;
 using fitSharp.Slim.Operators;
 using fitSharp.Slim.Service;
+using fitSharp.Test.Double.Slim;
 using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Slim {
     [TestFixture] public class InvokeLibraryTest {
         [Test] public void SearchesLibraryInstancesForMethod() {
-            var processor = new Service();
+            var processor = Builder.Service();
             processor.PushLibraryInstance(new TypedValue(new SampleClass()));
             var runtime = new InvokeLibrary { Processor = processor };
             SampleClass.MethodCount = 0;

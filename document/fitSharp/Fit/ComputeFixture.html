@@ -16,7 +16,7 @@ to be bound by the terms of this license. You must not remove this notice, or an
 <div class="pagename">Compute Fixture</div>
 <div class="content">The Compute Fixture checks the results of a function.<br>
 <br>
-The second row of a Compute Fixture table is a header row: the last cell is the name of a function and the other cells are the names of the function parameters. The subsequent rows contain input values for the parameters and the expected value of the function's result. The Compute Fixture uses the current System Under Test to perform the requested function.<br>
+The second row of a Compute Fixture table is a header row: the last cell is the name of a function and the other cells are the names of the function parameters. The subsequent rows contain input values for the parameters and the expected value of the function's result. The Compute Fixture uses the enclosing fixture as a <a href="../Fit/DomainAdapter.html">Domain Adapter</a> to perform the requested function.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>when test is</td><td><br>
@@ -30,9 +30,15 @@ The second row of a Compute Fixture table is a header row: the last cell is the 
 <tr><td>x</td><td>samplex</td></tr>
 <tr><td>y</td><td>sampley</td></tr>
 </table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample do</td></tr>
+<tr><td>compute</td></tr>
+<tr><td>x</td><td>y</td><td>dividefloat</td></tr>
+<tr><td>1.32</td><td>1.1</td><td>1.2</td></tr>
+</table>
 </td><td>then result is</td><td><br>
 <table border="1" cellpadding="2" cellspacing="0">
-
 <tr><td>sample class two</td></tr>
 </table>
 <br>
@@ -42,6 +48,13 @@ The second row of a Compute Fixture table is a header row: the last cell is the 
 <tr><td>x</td><td class="pass">samplex</td></tr>
 <tr><td>y</td><td class="pass">sampley</td></tr>
 
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample do</td></tr>
+<tr><td>compute</td></tr>
+<tr><td>x</td><td>y</td><td>dividefloat</td></tr>
+<tr><td>1.32</td><td>1.1</td><td class="pass">1.2</td></tr>
 </table></td></tr>
 </table>
 <br>

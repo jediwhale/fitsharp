@@ -5,6 +5,7 @@
 
 using fitSharp.Fit.Service;
 using fitSharp.Fit.Model;
+using fitSharp.Test.Double.Fit;
 using NUnit.Framework;
 using fitSharp.Machine.Application;
 
@@ -72,7 +73,7 @@ namespace fit.Test.NUnit {
 
         [SetUp]
         public void SetUp() {
-            processor = new CellProcessorBase();
+            processor = Builder.CellProcessor();
             processor.Memory.GetItem<Context>().TestPagePath = @"\some\path.html";
 
             fixture = new Fixture { Processor = processor };
@@ -93,7 +94,7 @@ namespace fit.Test.NUnit {
         private Fixture fixture;
 
         [SetUp] public void SetUp() {
-            fixture = new Fixture { Processor = new CellProcessorBase() };
+            fixture = new Fixture { Processor = Builder.CellProcessor() };
         }
 
         [Test]

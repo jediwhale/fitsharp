@@ -5,8 +5,8 @@
 
 using fitSharp.Fit.Fixtures;
 using fitSharp.Fit.Model;
-using fitSharp.Fit.Service;
 using fitSharp.Machine.Model;
+using fitSharp.Test.Double.Fit;
 using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Fit {
@@ -20,7 +20,7 @@ namespace fitSharp.Test.NUnit.Fit {
         }
 
         private static void TestDefine(Tree<Cell> defineRow) {
-            var processor = new CellProcessorBase();
+            var processor = Builder.CellProcessor();
             var define = new Define();
             var input = new CellTree(defineRow, new CellTree("stuff"));
             define.Interpret(processor, input);

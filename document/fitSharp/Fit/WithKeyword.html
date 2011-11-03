@@ -14,12 +14,12 @@ to be bound by the terms of this license. You must not remove this notice, or an
 <body>
 <div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
 <div class="pagename">With Keyword</div>
-<div class="content">The With keyword is one of the <a href="../Fit/FlowFixtureKeywords.html">Flow Fixture Keywords</a>. It sets the System Under Test for the current fixture.<ul><li>with new <span style="font-style:italic">&lt;type&gt;</span> <span style="font-style:italic">&lt;parameters&gt;</span> - creates a new instance</li><li>with type <span style="font-style:italic">&lt;type&gt;</span> - finds a type</li><li>with <span style="font-style:italic">&lt;method&gt;</span> <span style="font-style:italic">&lt;parameters&gt;</span> - executes a method of the current fixture or System Under Test. </li><li>with <span style="font-style:italic">&lt;symbol-name&gt;</span> - retrieves an object saved with the <a href="../Fit/NameKeyword.html">Name Keyword</a>. </li><li>with current - uses the current System Under Test. This is for <a href="../Fit/UseFixture.html">Use Fixture</a>.</li></ul><br>
+<div class="content">The With keyword is one of the <a href="../Fit/FlowFixtureKeywords.html">Flow Fixture Keywords</a>. It sets the <a href="../Fit/SystemUnderTest.html">System Under Test</a> for the current fixture.<ul><li>with new <span style="font-style:italic">&lt;type&gt;</span> <span style="font-style:italic">&lt;parameters&gt;</span> - creates a new instance</li><li>with type <span style="font-style:italic">&lt;type&gt;</span> - finds a type</li><li>with <span style="font-style:italic">&lt;method&gt;</span> <span style="font-style:italic">&lt;parameters&gt;</span> - executes a method of the current fixture or <a href="../Fit/SystemUnderTest.html">System Under Test</a>. </li><li>with <span style="font-style:italic">&lt;symbol-name&gt;</span> - retrieves an object saved with the <a href="../Fit/NameKeyword.html">Name Keyword</a>. </li><li>with current - uses the current <a href="../Fit/SystemUnderTest.html">System Under Test</a>. This is for <a href="../Fit/UseFixture.html">Use Fixture</a>.</li></ul><br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>story test fixture</td></tr>
 </table>
 <br>
-Set the System Under Test to a new instance.<br>
+Set the <a href="../Fit/SystemUnderTest.html">System Under Test</a> to a new instance.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>check</td><td>test result</td><td><br>
@@ -32,7 +32,7 @@ Set the System Under Test to a new instance.<br>
 </td><td><br><table border="1" cellpadding="2" cellspacing="0"><tr><td>do</td></tr><tr><td>with</td><td>new</td><td>sample domain adapter</td></tr><tr><td>set</td><td>name</td><td>Bob</td></tr><tr><td>check</td><td>lower case name</td><td class="pass">bob</td></tr></table></td></tr>
 </table>
 <br>
-Set the System Under Test to a new instance with parameters.<br>
+Set the <a href="../Fit/SystemUnderTest.html">System Under Test</a> to a new instance with parameters.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>check</td><td>test result</td><td><br>
@@ -44,7 +44,7 @@ Set the System Under Test to a new instance with parameters.<br>
 </td><td><br><table border="1" cellpadding="2" cellspacing="0"><tr><td>do</td></tr><tr><td>with</td><td>new</td><td>sample domain</td><td>Bob</td></tr><tr><td>check</td><td>name</td><td class="pass">Bob</td></tr></table></td></tr>
 </table>
 <br>
-Set the System Under Test to the result of a method.<br>
+Set the <a href="../Fit/SystemUnderTest.html">System Under Test</a> to the result of a method.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>check</td><td>test result</td><td><br>
@@ -57,7 +57,7 @@ Set the System Under Test to the result of a method.<br>
 </td><td><br><table border="1" cellpadding="2" cellspacing="0"><tr><td>do</td></tr><tr><td>with</td><td>new</td><td>sample domain adapter</td></tr><tr><td>with</td><td>make sample domain</td><td>Joe</td></tr><tr><td>check</td><td>name</td><td class="pass">Joe</td></tr></table></td></tr>
 </table>
 <br>
-Set the System Under Test to a type.<br>
+Set the <a href="../Fit/SystemUnderTest.html">System Under Test</a> to a type.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>check</td><td>test result</td><td><br>
@@ -69,7 +69,7 @@ Set the System Under Test to a type.<br>
 </td><td><br><table border="1" cellpadding="2" cellspacing="0"><tr><td>do</td></tr><tr><td>with</td><td>type</td><td>sample domain</td></tr><tr><td>check</td><td>static method</td><td class="pass">hello</td></tr></table></td></tr>
 </table>
 <br>
-Set the System Under Test to a named object.<br>
+Set the <a href="../Fit/SystemUnderTest.html">System Under Test</a> to a named object.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>check</td><td>test result</td><td><br>
