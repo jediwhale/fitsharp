@@ -35,7 +35,7 @@ namespace fitSharp.Test.NUnit.Fit {
                 return false;
             }
             catch (Exception e) {
-                exceptionMessage = e.Message;
+                exceptionMessage = e.InnerException.Message;
                 return false;
             }
         }

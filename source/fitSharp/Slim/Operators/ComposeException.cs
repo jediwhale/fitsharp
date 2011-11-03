@@ -4,6 +4,7 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Exception;
@@ -19,6 +20,7 @@ namespace fitSharp.Slim.Operators {
             return typeof(System.Exception).IsAssignableFrom(instance.Type);
         }
 
+        //todo: clean up
         public Tree<string> Compose(TypedValue instance) {
             Tree<string> result = null;
             if (TryResult<MemberMissingException>(instance,
@@ -64,7 +66,9 @@ namespace fitSharp.Slim.Operators {
         private delegate string Format<T>(T exception);
 
         private static bool TryResult<T>(TypedValue exception, Format<T> formatter, ref Tree<string> result) where T: class {
-            var candidateException = exception.Value as T;
+            var baseException = exception.GetValueAs<System.Exception>();
+            if (baseException is TargetInvocationException) baseException = baseException.InnerException;
+            var candidateException = baseException as T;
             if (candidateException == null) return false;
             result = MakeResult(string.Format("message:<<{0}>> {1}", formatter(candidateException), candidateException));
             return true;

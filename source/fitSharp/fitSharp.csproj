@@ -52,7 +52,7 @@
     <Compile Include="Fit\Operators\CellOperationValue.cs" />
     <Compile Include="Fit\Operators\CellOperators.cs" />
     <Compile Include="Fit\Model\CellProcessor.cs" />
-    <Compile Include="Fit\Exception\IgnoredException.cs" />
+    <Compile Include="Machine\Exception\IgnoredException.cs" />
     <Compile Include="Fit\Fixtures\Define.cs" />
     <Compile Include="Fit\Operators\CheckDefault.cs" />
     <Compile Include="Fit\Operators\CheckSymbolSave.cs" />
@@ -76,7 +76,6 @@
     <Compile Include="Machine\Application\ArgumentParser.cs" />
     <Compile Include="Machine\Application\Context.cs" />
     <Compile Include="Machine\Application\Runnable.cs" />
-    <Compile Include="Machine\Application\Runner.cs" />
     <Compile Include="Machine\Application\SuiteConfiguration.cs" />
     <Compile Include="Machine\Engine\CreateDefault.cs" />
     <Compile Include="Machine\Engine\Culture.cs" />
@@ -87,6 +86,7 @@
     <Compile Include="Machine\Engine\ParameterList.cs" />
     <Compile Include="Machine\Engine\TypeDictionary.cs" />
     <Compile Include="Machine\Engine\Types.cs" />
+    <Compile Include="Machine\Exception\ValidationException.cs" />
     <Compile Include="Machine\Model\CellBase.cs" />
     <Compile Include="Fit\Model\CellSubstring.cs" />
     <Compile Include="Fit\Model\CellTree.cs" />

@@ -4,7 +4,6 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System.Linq;
-using fitSharp.Fit.Exception;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
 using fitSharp.Machine.Engine;

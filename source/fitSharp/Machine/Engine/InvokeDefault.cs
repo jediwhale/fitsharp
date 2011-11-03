@@ -5,6 +5,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
 
@@ -42,7 +43,10 @@ namespace fitSharp.Machine.Engine {
             try {
                 return member.Invoke(parameterList);
             }
-            catch (System.Exception e) {
+            catch (TargetInvocationException e) {
+                return TypedValue.MakeInvalid(e.InnerException);
+            }
+            catch (ValidationException e) {
                 return TypedValue.MakeInvalid(e);
             }
         }

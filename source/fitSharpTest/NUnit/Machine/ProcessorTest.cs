@@ -68,9 +68,18 @@ namespace fitSharp.Test.NUnit.Machine {
             Assert.IsTrue(result.Value is ApplicationException);
         }
 
-        [Test, ExpectedException(typeof(ApplicationException))] public void ExceptionIsThrown() {
+        [Test] public void ExceptionIsThrown() {
             var instance = new TypedValue(new SampleClass());
-            processor.InvokeWithThrow(instance, "throw", new TreeList<string>().AddBranchValue("oh no"));
+            try {
+                processor.InvokeWithThrow(instance, "throw", new TreeList<string>().AddBranchValue("oh no"));
+            }
+            catch (Exception e) {
+                var exceptionString = e.ToString();
+                Assert.IsTrue(exceptionString.Contains("System.ApplicationException"));
+                Assert.IsTrue(exceptionString.Contains(typeof(SampleClass).FullName ?? string.Empty));
+                return;
+            }
+            Assert.Fail("no exception");
         }
 
         [Test] public void OperatorIsRemoved() {

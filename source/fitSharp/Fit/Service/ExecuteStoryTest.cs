@@ -41,7 +41,7 @@ namespace fitSharp.Fit.Service {
                 InterpretTables(tables);
                 processor.Memory.Apply(i => i.As<SetUpTearDown>(s => s.TearDown()));
             }
-            catch (System.Exception e) {
+            catch (Exception e) {
                 processor.TestStatus.MarkException(heading, e);
             }
 			writer.WriteTest(tables, processor.TestStatus.Counts);
@@ -65,11 +65,11 @@ namespace fitSharp.Fit.Service {
                     try {
                         InterpretTable(table);
                     }
-                    catch (System.Exception e) {
+                    catch (Exception e) {
                         processor.TestStatus.MarkException(table.Branches[0].Branches[0].Value, e);
                     }
                 }
-                catch (System.Exception e) {
+                catch (Exception e) {
                     if (!typeof(AbandonException).IsAssignableFrom(e.GetType())) throw;
                 }
 
