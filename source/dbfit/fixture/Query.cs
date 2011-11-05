@@ -19,9 +19,10 @@ namespace dbfit.fixture
     public class Query : NamedCollectionFixtureBase
     {
         private readonly bool isOrdered;
+        private readonly bool isStandAlone;
 
         public Query(): base(new object[] {}) {
-            myArray = null;
+            isStandAlone = true;
         }
 
         public Query(IEnumerator enumerator, bool isOrdered): base(enumerator) {
@@ -35,7 +36,7 @@ namespace dbfit.fixture
 
         public override void DoTable(Parse table)
         {
-            if (myArray == null) SetCollection(DatabaseTest.GetDataTable(
+            if (isStandAlone) SetCollection(DatabaseTest.GetDataTable(
                 Symbols,
                 GetArgumentInput<String>(0),
                 DbEnvironmentFactory.DefaultEnvironment).Rows.GetEnumerator());

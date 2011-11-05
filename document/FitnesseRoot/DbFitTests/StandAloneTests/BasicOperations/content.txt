@@ -1,5 +1,5 @@
 !|DatabaseEnvironment|SQLSERVER|
-|Connect|SYTERRA-XPS\SQLEXPRESS|fituser|fituser|dbfit|
+|Connect|(local)|fituser|fituser|dbfit|
 
 |execute|delete from users|
 
