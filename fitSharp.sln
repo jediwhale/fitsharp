@@ -1,11 +1,5 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "fitSharpText", "fitSharpText", "{69DCFB68-FD05-422F-91E8-205AC1E301E5}"
-	ProjectSection(SolutionItems) = preProject
-		source\fitSharpText\fit.css = source\fitSharpText\fit.css
-		source\fitSharpText\TestActionFixture.txt = source\fitSharpText\TestActionFixture.txt
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "fitSharp", "source\fitSharp\fitSharp.csproj", "{204FF2CD-475F-4C6E-A6B5-6779364B33F8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "fitSharpTest", "source\fitSharpTest\fitSharpTest.csproj", "{8C5E0127-E52C-46B7-B253-BD88F5F29034}"
