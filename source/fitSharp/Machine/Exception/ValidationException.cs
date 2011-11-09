@@ -7,17 +7,15 @@ using System;
 using System.Runtime.Serialization;
 
 namespace fitSharp.Machine.Exception {
-    [Serializable]
-    public class TypeMissingException: ValidationException {
-        public string TypeName { get; private set; }
+    //todo: use return not exception
+    public class ValidationException: ApplicationException {
+        public ValidationException() {}
 
-        public TypeMissingException(SerializationInfo info, StreamingContext context)
+        public ValidationException(SerializationInfo info, StreamingContext context)
             : base(info, context) {}
 
-        public TypeMissingException(string typeName, string message)
-            : base(string.Format("Type '{0}' not found in assemblies:{1}{2}", typeName, Environment.NewLine, message)) {
-            TypeName = typeName;
-        }
-        
+        public ValidationException(string message) : base(message) {}
+
+        public ValidationException(string message, System.Exception innerException) : base(message, innerException) {}
     }
 }

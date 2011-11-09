@@ -5,6 +5,7 @@
 
 using System;
 using System.Reflection;
+using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
@@ -33,7 +34,8 @@ namespace fitSharp.Machine.Engine {
             try {
                 return TryInvoke(parameters);
             } catch (TargetInvocationException e) {
-                throw e.InnerException;
+                if (e.InnerException is ValidationException) throw e.InnerException;
+                throw;
             }
         }
 

@@ -5,6 +5,8 @@
 
 using System;
 using System.Globalization;
+using System.Reflection;
+using fitSharp.Machine.Exception;
 
 namespace fitSharp.Machine.Model {
     public struct TypedValue {
@@ -16,11 +18,16 @@ namespace fitSharp.Machine.Model {
         public T GetValue<T>() { return (T)Value;} 
         public T GetValueAs<T>() where T: class { return Value as T;}
 
-        public void As<T>(Action<T> action, Action notAction) where T: class {
-            if (!HasValue) return;
+        public R As<T, R>(Func<T, R> action, Func<R> notAction) where T: class {
+            if (!HasValue) return notAction();
             var valueAs = GetValueAs<T>();
-            if (valueAs != null) action(valueAs);
-            else notAction();
+            return valueAs != null ? action(valueAs) : notAction();
+        }
+
+        public void As<T>(Action<T> action, Action notAction) where T: class {
+            As<T, bool>(
+                t => { action(t); return true; },
+                () => { notAction(); return false; });
         }
 
         public void As<T>(Action<T> action) where T: class {
@@ -58,7 +65,9 @@ namespace fitSharp.Machine.Model {
         }
 
         public void ThrowExceptionIfNotValid() {
-            if (!IsValid) throw (System.Exception) Value;
+            if (IsValid) return;
+            var exception = GetValue<System.Exception>();
+            throw exception is ValidationException? exception : new TargetInvocationException(exception);
         }
 
         public bool IsException<T>() {

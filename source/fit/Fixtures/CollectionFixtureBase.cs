@@ -3,6 +3,7 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,10 +46,12 @@ namespace fitlibrary {
 
 	    protected IEnumerable<object> myArray {
 	        get {
+                if (SystemUnderTest == null) return null;
                 var genericResult = SystemUnderTest as IEnumerable<object>;
                 if (genericResult != null) return genericResult;
 	            var result = SystemUnderTest as IEnumerable;
-	            return result.Cast<object>().ToList();
+	            if (result != null) return result.Cast<object>().ToList();
+                throw new ApplicationException(string.Format("{0} is not IEnumerable", SystemUnderTest.GetType().FullName));
 	        }
             set { SetSystemUnderTest(value);  }
 	    }

@@ -67,6 +67,12 @@ Symbol values can also be assigned with the <a href="../Fit/NameKeyword.html">Na
 <br>
 Symbols can be erased with the <a href="../Fit/ClearSymbolsFixture.html">Clear Symbols Fixture</a>.<br>
 <br>
+We can also get and set symbol values in fixture code: <pre class="code">    if (Symbols.HasValue("stuff")) {
+        var mySymbol = Symbols.GetValue("stuff);
+    }
+
+    Symbols.Save("another") = "one";
+</pre><br>
 <span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">Notes:</span><br>
 <br>
 This is a seperate feature from the FitNesse wiki symbol feature.<br>

@@ -7,7 +7,6 @@ using fit;
 using System;
 using fit.Model;
 using fitlibrary.exception;
-using fitSharp.Fit.Exception;
 using fitSharp.Fit.Service;
 using fitSharp.Machine.Exception;
 
