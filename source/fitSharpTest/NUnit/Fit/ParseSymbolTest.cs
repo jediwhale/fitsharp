@@ -19,28 +19,12 @@ namespace fitSharp.Test.NUnit.Fit {
             ParseCell("<<symbol\n", " symbol ");
         }
 
-        [Test]
-        public void AddsSymbolValueToCellAttributesByte()
-        {
-            ParseCellByte("<<symbol", "symbol");
-        }
-
         private static void ParseCell(string cellContent, string symbolName) {
             var cell = new CellTreeLeaf(cellContent);
             var processor = Builder.CellProcessor();
             processor.Get<Symbols>().Save(symbolName, "value");
             new ParseSymbol{Processor = processor}.Parse(typeof (string), TypedValue.Void, cell);
             Assert.AreEqual(" value", cell.Value.GetAttribute(CellAttribute.InformationSuffix));
-        }
-
-        private static void ParseCellByte(string cellContent, string symbolName)
-        {
-            var cell = new CellTreeLeaf(cellContent);
-            var processor = Builder.CellProcessor();
-
-            processor.Get<Symbols>().Save(symbolName, new byte[] { 16, 32, 49 });
-            new ParseSymbol { Processor = processor }.Parse(typeof(byte[]), TypedValue.Void, cell);
-            Assert.AreEqual(new byte[] { 16, 32, 49 }, cell.Value.GetAttribute(CellAttribute.InformationSuffix));
         }
     }
 }

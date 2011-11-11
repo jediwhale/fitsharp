@@ -59,17 +59,8 @@ namespace fitSharp.Machine.Model {
             get {
                 if (IsVoid) return "void";
                 if (Value == null) return "null";
-
-
-                //if (this.Type.ToString() == "System.Byte[]")
-                //{
-                //    return System.BitConverter.ToString((byte[])Value);
-                //}
-                //else
-                //{
-                    var convertibleValue = Value as IConvertible;
-                    return convertibleValue == null ? Value.ToString() : convertibleValue.ToString(CultureInfo.InvariantCulture);
-                //}
+                var convertibleValue = Value as IConvertible;
+                return convertibleValue == null ? Value.ToString() : convertibleValue.ToString(CultureInfo.InvariantCulture);
             }
         }
 
