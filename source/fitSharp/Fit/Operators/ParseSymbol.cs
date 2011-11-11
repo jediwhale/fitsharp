@@ -20,7 +20,7 @@ namespace fitSharp.Fit.Operators {
             var result = new TypedValue(symbols.HasValue(symbol) ? symbols.GetValue(symbol) : null, type);
             parameters.Value.AddToAttribute(
                 CellAttribute.InformationSuffix,
-                result.Value == null ? "null" : result.Value.ToString()); //todo: dry
+                result.Value == null ? "null" : result.ValueString); //todo: dry
             return result;
         }
     }
