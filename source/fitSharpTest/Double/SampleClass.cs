@@ -28,6 +28,7 @@ namespace fitSharp.Test.Double {
         public string Property { get; set; }
 
         public string Field;
+        public byte[] Bytes;
 
         public string this[string input] {
             get { return "index" + input; }
