@@ -1,3 +1,4 @@
+
 *.suo
 *.user
 _ReSharper*/
@@ -17,3 +18,4 @@ my*/
 document/FitnesseRoot/ErrorLogs/
 document/FitnesseRoot/RecentChanges/
 document/FitnesseRoot/files/testResults/
+*.zip

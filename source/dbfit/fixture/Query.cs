@@ -43,6 +43,7 @@ namespace dbfit.fixture
             base.DoTable(table);
         }
 
+
         protected override ListMatchStrategy MatchStrategy {
             get { return new QueryMatchStrategy(Processor, myHeaderRow, isOrdered); }
         }

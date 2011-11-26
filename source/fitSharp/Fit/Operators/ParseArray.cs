@@ -14,7 +14,8 @@ namespace fitSharp.Fit.Operators {
         public bool CanParse(Type type, TypedValue instance, Tree<Cell> parameters) {
             return type != typeof (string)
                 && typeof (IEnumerable).IsAssignableFrom(type)
-                && parameters.Branches.Count == 0;
+                && parameters.Branches.Count == 0
+                && !parameters.Value.Text.StartsWith("<<");
         }
 
         public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
