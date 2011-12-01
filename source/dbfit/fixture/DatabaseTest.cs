@@ -90,6 +90,11 @@ namespace dbfit
             return new Query(GetDataTable(Symbols, query, environment), true);
         }
 
+        public Fixture OrderedQuery(String query, int resultSet)
+        {
+            return new Query(GetDataTable(Symbols, query, environment, resultSet), true);
+        }
+
         public Fixture Execute(String statement)
         {
             return new Execute(environment, statement);
