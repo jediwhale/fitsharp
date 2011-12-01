@@ -63,6 +63,24 @@ The symbol recall operator can be used in any input or expected value cell. The 
 </table></td></tr>
 </table>
 <br>
+We can save any value in a symbol, e.g. a byte array.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>when test is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample class</td></tr>
+<tr><td>set</td><td>bytes</td><td>0x010203</td></tr>
+<tr><td>check</td><td>bytes</td><td>>>bytesymbol</td></tr>
+<tr><td>check</td><td>bytes</td><td>&lt;&lt;bytesymbol</td></tr>
+</table>
+</td><td>then result is</td><td><table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample class</td></tr>
+<tr><td>set</td><td>bytes</td><td>0x010203</td></tr>
+<tr><td>check</td><td>bytes</td><td>>>bytesymbol<span class="fit_grey"> System.Byte[]</span></td></tr>
+<tr><td>check</td><td>bytes</td><td class="pass">&lt;&lt;bytesymbol<span class="fit_grey"> System.Byte[]</span></td></tr>
+</table></td></tr>
+</table>
+<br>
 Symbol values can also be assigned with the <a href="../Fit/NameKeyword.html">Name Keyword</a> and used with the <a href="../Fit/UseFixture.html">Use Fixture</a> and <a href="../Fit/WithKeyword.html">With Keyword</a>.<br>
 <br>
 Symbols can be erased with the <a href="../Fit/ClearSymbolsFixture.html">Clear Symbols Fixture</a>.<br>
@@ -72,10 +90,9 @@ We can also get and set symbol values in fixture code: <pre class="code">    if 
     }
 
     Symbols.Save("another") = "one";
-</pre><br>
-<span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">Notes:</span><br>
+</pre> <span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">Notes:</span><br>
 <br>
-This is a seperate feature from the FitNesse wiki symbol feature.<br>
+This is a separate feature from the FitNesse wiki symbol feature.<br>
 <br>
 </div>
 <div style="width:100%;text-align:right">

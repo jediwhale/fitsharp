@@ -17,7 +17,7 @@ namespace fitSharp.Slim.Operators {
         }
 
         public TypedValue Parse(Type type, TypedValue instance, Tree<string> parameters) {
-            var values = SlimTree.Parse(parameters.Value);
+            var values = parameters.IsLeaf ? SlimTree.Parse(parameters.Value) : parameters;
             if (type.IsArray) {
                 var array = Array.CreateInstance(type.GetElementType(), values.Branches.Count);
                 int i = 0;

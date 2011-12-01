@@ -23,7 +23,6 @@ namespace fitSharp.Fit.Operators {
             Add(new ParseType(), 0);
             Add(new ParseBlank(), 0);
             Add(new ParseNull(), 0);
-            Add(new ParseSymbol(), 0);
             Add(new ParseInterpreter(), 0);
 
             Add(new CheckDefault(), 0);
@@ -39,6 +38,7 @@ namespace fitSharp.Fit.Operators {
             Add(new ParseArray(), 2);
             Add(new ParseByteArray(), 2);
             Add(new ParseNullArray(), 2);
+            Add(new ParseSymbol(), 2);
             Add(new CompareError(), 2);
             Add(new CompareException(), 2);
             Add(new CompareFail(), 2);
