@@ -118,6 +118,15 @@ namespace fit.Test.NUnit {
             Assert.IsFalse(folders.FileExists(@"out\teardown.html"), "teardown.html should not exist in output directory");
         }
 
+        [Test]
+        public void StylesheetIsCreatedInOutputDirectory() {
+            AddTestFile(@"in\test.html");
+
+            RunSuite();
+
+            Assert.IsTrue(folders.FileExists(@"out\fit.css"), "fit.css should exist in output directory");
+        }
+
         private void RunSuite() {
             RunSuite(new NullReporter());
         }

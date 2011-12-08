@@ -6,6 +6,7 @@
 using System.IO;
 using fitSharp.Fit.Model;
 using fitSharp.IO;
+using System;
 
 namespace fitSharp.Fit.Runner {
 
@@ -32,6 +33,19 @@ namespace fitSharp.Fit.Runner {
         private readonly FolderModel myFolderModel;
         private string myContent;
 
+        private const string StyleName = "fit.css";
+        private static readonly string StyleContent =
+            ".pass {background-color: #AAFFAA;}" + Environment.NewLine +
+            ".fail {background-color: #FFAAAA;}" + Environment.NewLine +
+            ".error {background-color: #FFFFAA;}" + Environment.NewLine +
+            ".ignore {background-color: #CCCCCC;}" + Environment.NewLine +
+            ".fit_stacktrace {font-size: 0.7em;}" + Environment.NewLine +
+            ".fit_label {font-style: italic; color: #C08080;}" + Environment.NewLine +
+            ".fit_grey {color: #808080;}" + Environment.NewLine +
+            ".fit_extension {border: solid 1px grey;}" + Environment.NewLine +
+            ".fit_table {border: solid 1px grey; border-collapse: collapse; margin: 2px 0px;}" + Environment.NewLine +
+            "table.fit_table tr td {border: solid 1px grey; padding: 2px 2px 2px 2px;}" + Environment.NewLine;
+
         public StoryTestFile(string thePath, StoryTestFolder theFolder, FolderModel theFolderModel) {
             myPath = new StoryFileName(thePath);
             myFolder = theFolder;
@@ -57,6 +71,8 @@ namespace fitSharp.Fit.Runner {
         }
 
         public void WriteTest(PageResult result) {
+            MakeStylesheet();
+
             string outputFile = Path.Combine(myFolder.OutputPath, myPath.OutputFileName);
             myFolderModel.MakeFile(outputFile, result.Content);
             myFolder.ListFile(outputFile, result.TestCounts, result.ElapsedTime);
@@ -86,6 +102,13 @@ namespace fitSharp.Fit.Runner {
         private StoryTestString PlainContent {
             get {
                 return new StoryTestString(Content);
+            }
+        }
+
+        private void MakeStylesheet() {
+            string filePath = Path.Combine(myFolder.OutputPath, StyleName);
+            if (myFolderModel.FileContent(filePath) == null) {
+                myFolderModel.MakeFile(filePath, StyleContent);
             }
         }
     }
