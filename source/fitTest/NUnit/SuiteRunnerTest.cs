@@ -104,6 +104,20 @@ namespace fit.Test.NUnit {
             Assert.AreEqual(@"in\page.html", memory.GetItem<Context>().TestPagePath);
         }
 
+        [Test]
+        public void SetupAndTearDownAreNotCopiedToOutputDirectory() {
+            AddTestFile(@"in\setup.html");
+            AddTestFile(@"in\test.html");
+            AddTestFile(@"in\teardown.html");
+
+            RunSuite();
+
+            Assert.IsTrue(folders.FileExists(@"out\test.html"), "test.html should exist in output directory");
+
+            Assert.IsFalse(folders.FileExists(@"out\setup.html"), "setup.html should not exist in output directory");
+            Assert.IsFalse(folders.FileExists(@"out\teardown.html"), "teardown.html should not exist in output directory");
+        }
+
         private void RunSuite() {
             RunSuite(new NullReporter());
         }

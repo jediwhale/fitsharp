@@ -49,6 +49,10 @@ namespace fitSharp.Fit.Runner {
         }
 
         public void WriteNonTest() {
+            // Setup/teardown contents are already inlined into every executed page
+            if (myPath.IsSetUp || myPath.IsTearDown)
+                return;
+
             myFolderModel.CopyFile(myPath.Name, Path.Combine(myFolder.OutputPath, myPath.CopyFileName));
         }
 
