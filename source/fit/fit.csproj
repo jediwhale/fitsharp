@@ -99,7 +99,6 @@
     <Compile Include="Runner\FitServer.cs" />
     <Compile Include="Runner\PathParser.cs" />
     <Compile Include="Runner\Protocol.cs" />
-    <Compile Include="Runner\StoryTest.cs" />
     <Compile Include="Fixtures\UtilityFixtures.cs" />
     <Compile Include="Model\ListTree.cs" />
     <Compile Include="Model\ParseNode.cs" />
