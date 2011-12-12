@@ -6,7 +6,6 @@
 using System;
 using System.Reflection;
 using fit.Service;
-using fitSharp.Fit.Model;
 using fitSharp.Fit.Service;
 using fitSharp.IO;
 using fitSharp.Machine.Application;
@@ -43,7 +42,7 @@ namespace fitIf
             }
 
             public string Run(string input) {
-                var storyTest =
+                var storyTestText =
                     "<style type=\"text/css\">\n" +
                     ".pass {background-color: #AAFFAA;}\n" +
                     ".fail {background-color: #FFAAAA;}\n" +
@@ -59,10 +58,9 @@ namespace fitIf
                     "test@\n" +
                     input;
                 service = new Service(memory);
-                var test = service.Compose(new StoryTestString(storyTest));
                 var writer = new StoryTestStringWriter(service);
-                new ExecuteStoryTest(new Service(memory), writer)
-                    .DoTables(test);
+                var storyTest = new StoryTest(service, writer).WithInput(storyTestText);
+                storyTest.Execute();
                 return writer.Tables;
             }
 

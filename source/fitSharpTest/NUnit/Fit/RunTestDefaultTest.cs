@@ -13,37 +13,33 @@ using fitSharp.Test.Double.Fit;
 using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Fit {
-    [TestFixture] public class ExecuteStoryTestTest {
-        CellProcessorBase processor;
-        CellTree tables;
-        ExecuteStoryTest execute;
-
+    [TestFixture] public class RunTestDefaultTest {
         [SetUp] public void SetUp() {
             processor = Builder.CellProcessor();
             processor.AddOperator(new TestParseInterpreter());
-            execute = new ExecuteStoryTest(processor, new StoryTestNullWriter());
+            runTest = new RunTestDefault {Processor = processor};
             tables = new CellTree(new CellTree(new CellTree("myfixture")));
         }
     
         [Test] public void CreatesFixtureOnce() {
             SampleFixture.Count = 0;
-            execute.DoTables(tables);
+            runTest.RunTest(tables, writer);
             Assert.AreEqual(1, SampleFixture.Count);
         }
 
         [Test] public void SetsUpConfiguration() {
             processor.Configuration.GetItem<SampleItem>();
-            execute.DoTables(tables);
+            runTest.RunTest(tables, writer);
             Assert.IsTrue(processor.Configuration.GetItem<SampleItem>().IsSetUp);
         }
 
         [Test] public void TearsDownConfiguration() {
             processor.Configuration.GetItem<SampleItem>();
-            execute.DoTables(tables);
+            runTest.RunTest(tables, writer);
             Assert.IsTrue(processor.Configuration.GetItem<SampleItem>().IsTearDown);
         }
 
-        private class TestParseInterpreter: CellOperator, ParseOperator<Cell> {
+        class TestParseInterpreter: CellOperator, ParseOperator<Cell> {
             public bool CanParse(Type type, TypedValue instance, Tree<Cell> parameters) {
                 return typeof (Interpreter).IsAssignableFrom(type);
             }
@@ -53,7 +49,13 @@ namespace fitSharp.Test.NUnit.Fit {
             }
         }
 
-        private class SampleFixture: Interpreter {
+        CellProcessorBase processor;
+        CellTree tables;
+        RunTestDefault runTest;
+
+        readonly StoryTestNullWriter writer = new StoryTestNullWriter();
+
+        class SampleFixture: Interpreter {
             public static int Count;
 
             public SampleFixture() { Count++; }
@@ -61,7 +63,7 @@ namespace fitSharp.Test.NUnit.Fit {
             public void Interpret(CellProcessor processor, Tree<Cell> table) {}
         }
 
-        private class SampleItem: Copyable, SetUpTearDown {
+        class SampleItem: Copyable, SetUpTearDown {
             public bool IsSetUp;
             public bool IsTearDown;
             public Copyable Copy() {
