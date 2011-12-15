@@ -46,6 +46,7 @@
     <Compile Include="Fit\Fixtures\CommentFixture.cs" />
     <Compile Include="Fit\Fixtures\Compute.cs" />
     <Compile Include="Fit\Fixtures\ConfigureFixture.cs" />
+    <Compile Include="Fit\Fixtures\Include.cs" />
     <Compile Include="Fit\Model\CallStack.cs" />
     <Compile Include="Fit\Model\Procedures.cs" />
     <Compile Include="Fit\Model\StoryTableString.cs" />
@@ -133,7 +134,7 @@
     <Compile Include="Machine\Model\Cell.cs" />
     <Compile Include="Fit\Operators\CompareFloatingPoint.cs" />
     <Compile Include="Fit\Operators\ParseMemberName.cs" />
-    <Compile Include="Fit\Model\GracefulName.cs" />
+    <Compile Include="Machine\Model\GracefulName.cs" />
     <Compile Include="Machine\Model\MemberName.cs" />
     <Compile Include="Fit\Operators\CompareDefault.cs" />
     <Compile Include="Fit\Operators\CompareEndsWith.cs" />
