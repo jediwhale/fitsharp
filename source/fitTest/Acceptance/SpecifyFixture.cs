@@ -7,6 +7,7 @@ using fit.Operators;
 using fitlibrary;
 using fitlibrary.exception;
 using fitSharp.Fit.Model;
+using fitSharp.Fit.Service;
 using fitSharp.Machine.Model;
 
 namespace fit.Test.Acceptance {
@@ -16,8 +17,9 @@ namespace fit.Test.Acceptance {
             Parse expectedCell = GetExpectedCell(theTable);
 
             var writer = new StoryTestCopyWriter();
-            var storyTest = new StoryTest(new Parse("div", string.Empty, embeddedTables, null), writer);
-            storyTest.Execute(Processor.Configuration);
+            var storyTest = new StoryTest(Processor, writer)
+                .WithParsedInput(new Parse("div", string.Empty, embeddedTables, null));
+            storyTest.Execute(new Service.Service(Processor));
 
             SetEmbeddedTables(theTable, writer.ResultTables);
 

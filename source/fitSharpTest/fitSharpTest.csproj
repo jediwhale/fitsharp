@@ -53,6 +53,7 @@
     <Compile Include="Double\SampleClassTwo.cs" />
     <Compile Include="Double\Slim\Builder.cs" />
     <Compile Include="Double\TestSocket.cs" />
+    <Compile Include="NUnit\Fit\IncludeTest.cs" />
     <Compile Include="NUnit\Fit\TagFilterTest.cs" />
     <Compile Include="NUnit\Machine\ArgumentParserTest.cs" />
     <Compile Include="NUnit\Machine\OperatorsTest.cs" />
@@ -64,7 +65,7 @@
     <Compile Include="NUnit\Fit\ComposeShowAsOperatorTest.cs" />
     <Compile Include="NUnit\Fit\DefineTest.cs" />
     <Compile Include="NUnit\Fit\CellOperationDefaultTest.cs" />
-    <Compile Include="NUnit\Fit\ExecuteStoryTestTest.cs" />
+    <Compile Include="NUnit\Fit\RunTestDefaultTest.cs" />
     <Compile Include="Double\FolderTestModel.cs" />
     <Compile Include="NUnit\Fit\GracefulNameTest.cs" />
     <Compile Include="NUnit\Fit\ConfigureFixtureTest.cs" />

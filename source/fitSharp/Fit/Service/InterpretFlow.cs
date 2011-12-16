@@ -87,7 +87,7 @@ namespace fitSharp.Fit.Service {
             processor.CallStack.Push();
             processor.CallStack.SystemUnderTest = new TypedValue(interpreter);
             try {
-                ExecuteStoryTest.DoTable(theRestOfTheRows, childInterpreter, processor, false);
+                RunTestDefault.DoTable(theRestOfTheRows, childInterpreter, processor, false);
             }
             catch (System.Exception e) {
                 processor.TestStatus.MarkException(theRestOfTheRows.Branches[0].Branches[0].Value, e);

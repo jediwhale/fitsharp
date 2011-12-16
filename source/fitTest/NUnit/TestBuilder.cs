@@ -4,6 +4,8 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System.Text;
+using fitSharp.Fit.Model;
+using fitSharp.Fit.Service;
 
 namespace fit.Test.NUnit {
     public class TestBuilder {
@@ -22,8 +24,8 @@ namespace fit.Test.NUnit {
 
         public Parse Parse { get { return Parse.ParseRootFrom(source.ToString()); }}
 
-        public StoryTest MakeStoryTest() {
-            return new StoryTest(Parse);
+        public StoryTest MakeStoryTest(CellProcessor processor) {
+            return new StoryTest(processor,new StoryTestNullWriter()).WithParsedInput(Parse);
         }
     }
 }

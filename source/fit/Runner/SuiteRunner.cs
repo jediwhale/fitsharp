@@ -10,7 +10,6 @@ using fitSharp.Fit.Service;
 using fitSharp.IO;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
-using fitSharp.Machine.Model;
 
 namespace fit.Runner {
 	public class SuiteRunner {
@@ -94,21 +93,22 @@ namespace fit.Runner {
                 StoreCurrentlyExecutingPagePath(page.Name.Name);
 
 	            var service = new Service.Service(memory);
-	            Tree<Cell> result = service.Compose(new StoryTestString(input));
-	            if (result == null || result.Branches.Count == 0) {
+                var writer = new StoryTestStringWriter(service);
+                var storyTest = new StoryTest(service, writer).WithInput(input);
+
+                if (!storyTest.IsExecutable) {
                     page.WriteNonTest();
                     DoNoTest();
 	                return;
 	            }
 
-                var writer = new StoryTestStringWriter(service);
-                var storyTest = new StoryTest((Parse) result, writer);
                 if (page.Name.IsSuitePage) {
-	                storyTest.ExecuteOnConfiguration(memory);
+                    storyTest.Execute();
                 }
                 else {
-	                storyTest.Execute(memory);
+                    storyTest.Execute(new Service.Service(service));
                 }
+
                 var pageResult = new PageResult(page.Name.Name, writer.Tables, writer.Counts, elapsedTime);
                 page.WriteTest(pageResult);
                 handleCounts(writer.Counts);

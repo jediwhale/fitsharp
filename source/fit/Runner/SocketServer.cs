@@ -7,7 +7,6 @@ using System;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Service;
 using fitSharp.IO;
-using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fit.Runner {
@@ -38,20 +37,17 @@ namespace fit.Runner {
                 ProcessTestDocument(document, writer);
 		        IMaybeProcessingSuiteSetup = false;
 			}
-		    reporter.WriteLine("\ncompletion signal recieved");
+		    reporter.WriteLine("\ncompletion signal received");
 		}
 
         private void ProcessTestDocument(string document, StoryTestWriter writer) {
-			try
-			{
-                Tree<Cell> result = service.Compose(new StoryTestString(document));
-                var parse = result != null ? (Parse)result.Value : null;
-			    var storyTest = new StoryTest(parse, writer);
-			    reporter.WriteLine(parse.Leader);
-			    if (suiteSetupIdentifier.IsStartOf(parse.Leader) || IMaybeProcessingSuiteSetup)
-                    storyTest.ExecuteOnConfiguration(service.Memory);
+			try {
+			    var storyTest = new StoryTest(service, writer).WithInput(document);
+			    reporter.WriteLine(storyTest.Leader);
+			    if (suiteSetupIdentifier.IsStartOf(storyTest.Leader) || IMaybeProcessingSuiteSetup)
+                    storyTest.Execute();
                 else
-				    storyTest.Execute(service.Memory);
+                    storyTest.Execute(new Service.Service(service));
 			}
 			catch (Exception e)
 			{

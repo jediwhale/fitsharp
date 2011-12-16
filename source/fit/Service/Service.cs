@@ -22,6 +22,8 @@ namespace fit.Service {
             memory.GetItem<Operators>().AddNamespaces(ApplicationUnderTest);
         }
 
+        public Service(Processor<Cell> other): this(other.Memory.Copy()) {}
+
         public void AddCellHandler(string handlerName) {
             ((CellOperators)Operators).AddCellHandler(handlerName);
         }

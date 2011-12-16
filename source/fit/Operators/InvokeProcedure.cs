@@ -22,7 +22,7 @@ namespace fit.Operators {
         }
 
         private TypedValue Invoke(Parse procedure, TypedValue target, Tree<Cell> parameterValues) {
-            var fixture = ExecuteStoryTest.MakeDefaultFlowInterpreter(Processor, target);
+            var fixture = RunTestDefault.MakeDefaultFlowInterpreter(Processor, target);
 
             var parameters = new Parameters(procedure.Parts, parameterValues);
             var body = procedure.Parts.More.Parts.Parts != null

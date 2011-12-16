@@ -27,6 +27,7 @@ namespace fitSharp.Fit.Operators {
 
             Add(new CheckDefault(), 0);
             Add(new ExecuteDefault(), 0);
+            Add(new RunTestDefault(), 0);
             Add(new WrapDefault(), 0);
             Add(new CheckEmpty(), 0);
             Add(new CheckSymbolSave(), 0);

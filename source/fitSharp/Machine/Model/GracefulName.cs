@@ -5,9 +5,8 @@
 
 using System.Linq;
 using System.Text;
-using fitSharp.Machine.Model;
 
-namespace fitSharp.Fit.Model {
+namespace fitSharp.Machine.Model {
     public class GracefulName {
 
         readonly string originalName;

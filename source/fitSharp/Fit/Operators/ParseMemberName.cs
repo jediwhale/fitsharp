@@ -1,4 +1,4 @@
-﻿// Copyright © 2010 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2011 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -15,7 +15,6 @@ using fitSharp.Machine.Model;
 namespace fitSharp.Fit.Operators {
     public class ParseMemberName: CellOperator, ParseOperator<Cell> {
         private static readonly Dictionary<char, string> specialCharacterConversion;
-        private static readonly Dictionary<char, string> digitConversion;
 
         public bool CanParse(Type type, TypedValue instance, Tree<Cell> parameters) {
             return type == typeof(MemberName);
@@ -28,11 +27,7 @@ namespace fitSharp.Fit.Operators {
 
             if (nameParts.Length == 0) nameParts.Append("blank");
             string name = nameParts.ToString();
-            if (name.EndsWith("?")) name = name.Substring(0, name.Length - 1);
-            if (name.Length > 0 && char.IsDigit(name, 0)) {
-                name = digitConversion[name[0]] + name.Substring(1);
-            }
-            return new TypedValue(new MemberName(new GracefulName(name).IdentifierName.ToString()));
+            return new TypedValue(MemberName.Parse(name));
         }
 
         private static StringBuilder Append(StringBuilder nameParts, string name) {
@@ -80,19 +75,6 @@ namespace fitSharp.Fit.Operators {
                 {'}', "right brace"},
                 {'|', "bar"},
                 {'~', "tilde"}
-            };
-
-            digitConversion = new Dictionary<char, string> {
-                {'0', "zero"},
-                {'1', "one"},
-                {'2', "two"},
-                {'3', "three"},
-                {'4', "four"},
-                {'5', "five"},
-                {'6', "six"},
-                {'7', "seven"},
-                {'8', "eight"},
-                {'9', "nine"}
             };
         }
     }

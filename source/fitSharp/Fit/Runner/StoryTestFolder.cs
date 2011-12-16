@@ -110,13 +110,9 @@ namespace fitSharp.Fit.Runner {
                 myReport.Finish();
                 myFolderModel.MakeFile(Path.Combine(OutputPath, ourReportName), myReport.Content);
             }
-            if (IHaveFiles) {
-                MakeStylesheet();
-            }
         }
 
         public void ListFile(string theFileName, TestCounts counts, ElapsedTime elapsedTime) {
-            IHaveFiles = true;
             if (myReport != null) {
                 myReport.ListFile(theFileName, counts, elapsedTime);
             }
@@ -159,33 +155,13 @@ namespace fitSharp.Fit.Runner {
             return file == null ? string.Empty : file.Content;
         }
 
-        private void MakeStylesheet() {
-            string filePath = Path.Combine(OutputPath, ourStyleName);
-            if (myFolderModel.FileContent(filePath) == null) {
-                myFolderModel.MakeFile(filePath, ourStyleContent);
-            }
-        }
-
         private const string ourReportName = "reportIndex.html";
-        private const string ourStyleName = "fit.css";
-        private readonly string ourStyleContent =
-            ".pass {background-color: #AAFFAA;}" + Environment.NewLine +
-            ".fail {background-color: #FFAAAA;}" + Environment.NewLine +
-            ".error {background-color: #FFFFAA;}" + Environment.NewLine +
-            ".ignore {background-color: #CCCCCC;}" + Environment.NewLine +
-            ".fit_stacktrace {font-size: 0.7em;}" + Environment.NewLine +
-            ".fit_label {font-style: italic; color: #C08080;}" + Environment.NewLine +
-            ".fit_grey {color: #808080;}" + Environment.NewLine +
-            ".fit_extension {border: solid 1px grey;}" + Environment.NewLine +
-            ".fit_table {border: solid 1px grey; border-collapse: collapse; margin: 2px 0px;}" + Environment.NewLine +
-            "table.fit_table tr td {border: solid 1px grey; padding: 2px 2px 2px 2px;}" + Environment.NewLine;
 
         private string mySelection;
         private readonly StoryTestFolder myParent;
         private readonly FolderModel myFolderModel;
         private TestPageDecoration myDecoration;
         private readonly Report myReport;
-        private bool IHaveFiles;
 
         private class Report {
 	        

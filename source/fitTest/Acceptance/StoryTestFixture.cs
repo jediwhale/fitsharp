@@ -4,14 +4,16 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using fitlibrary;
+using fitSharp.Fit.Service;
 
 namespace fit.Test.Acceptance {
     public class StoryTestFixture: DoFixture {
 
         public Parse TestResult(Parse theTest) {
             var writer = new StoryTestCopyWriter();
-            var story = new StoryTest(new Parse("div", string.Empty, theTest, null), writer);
-            story.Execute(Processor.Configuration);
+            var storyTest = new StoryTest(Processor, writer)
+                .WithParsedInput(new Parse("div", string.Empty, theTest, null));
+            storyTest.Execute(new Service.Service(Processor));
             return writer.ResultTables;
         }
     }
