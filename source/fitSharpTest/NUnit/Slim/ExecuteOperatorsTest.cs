@@ -136,8 +136,8 @@ namespace fitSharp.Test.NUnit.Slim {
 
         private void ExecuteOperation(InvokeOperator<string> executeOperator, Tree<string> input, int branchCount) {
             TypedValue executeResult = TypedValue.Void;
-            if (executeOperator.CanInvoke(new TypedValue(new SlimInstruction()), string.Empty, input)) {
-                executeResult = executeOperator.Invoke(new TypedValue(new SlimInstruction()), string.Empty, input);
+            if (executeOperator.CanInvoke(new TypedValue(new SlimInstruction()), new MemberName(string.Empty), input)) {
+                executeResult = executeOperator.Invoke(new TypedValue(new SlimInstruction()), new MemberName(string.Empty), input);
             }
             result = executeResult.GetValue<Tree<string>>();
             Assert.IsFalse(result.IsLeaf);

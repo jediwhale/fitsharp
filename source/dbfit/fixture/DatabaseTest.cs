@@ -11,7 +11,7 @@ using dbfit.util;
 using fit;
 
 using fitlibrary;
-using fitSharp.Machine.Model;
+using fitSharp.Machine.Engine;
 
 namespace dbfit
 {

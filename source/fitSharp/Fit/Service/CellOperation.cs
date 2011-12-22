@@ -5,6 +5,7 @@
 
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
+using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Service {
@@ -63,7 +64,14 @@ namespace fitSharp.Fit.Service {
         }
 
         public TypedValue TryInvoke(object systemUnderTest, Tree<Cell> memberName, Tree<Cell> parameters, Cell targetCell) {
-            return processor.Operate<ExecuteOperator>(systemUnderTest, memberName, parameters, targetCell);
+            var beforeCounts = new TestCounts(processor.TestStatus.Counts);
+            var targetObjectProvider = systemUnderTest as TargetObjectProvider;
+            var name = processor.ParseTree<Cell, MemberName>(memberName);
+            var result = processor.Invoke(
+                    new TypedValue(targetObjectProvider != null ? targetObjectProvider.GetTargetObject() : systemUnderTest),
+                    name, parameters);
+            processor.TestStatus.MarkCellWithLastResults(new CellTree(targetCell), beforeCounts);
+            return result;
         }
 
         readonly CellProcessor processor;

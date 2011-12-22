@@ -35,8 +35,7 @@ namespace fitSharp.Fit.Service {
             var currentRow = table.Branches[rowNumber];
             try
             {
-                var specialActionName = InvokeSpecialAction.MakeName(
-                    processor.ParseTree<Cell, MemberName>(currentRow.Branches[0]).ToString());
+                var specialActionName = processor.ParseTree<Cell, MemberName>(currentRow.Branches[0]).AsSpecialAction();
                 var result = processor.Invoke(interpreter, specialActionName, currentRow.Branches[0]);
                 if (!result.IsValid) {
                      result = new CellOperationImpl(processor).TryInvoke(interpreter,

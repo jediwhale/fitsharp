@@ -7,7 +7,6 @@ using fit;
 using System;
 using fit.Model;
 using fitSharp.Fit.Model;
-using fitSharp.Fit.Operators;
 using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Exception;
@@ -29,18 +28,18 @@ namespace fitlibrary {
         
 	    public void DoSetUp(CellProcessor processor, Tree<Cell> table) {
 	        Prepare(processor, table.Branches[0]);
-            ExecuteOptionalMethod(InvokeSetUpTearDown.SetUpMethod, (Parse)table.Branches[0].Branches[0]);
+            ExecuteOptionalMethod(MemberName.SetUp, (Parse)table.Branches[0].Branches[0]);
 	    }
 
 	    public void DoTearDown(Tree<Cell> table) {
-            ExecuteOptionalMethod(InvokeSetUpTearDown.TearDownMethod, (Parse)table.Branches[0].Branches[0]);
+            ExecuteOptionalMethod(MemberName.TearDown, (Parse)table.Branches[0].Branches[0]);
 	    }
 
 	    protected void ProcessFlowRows(Parse table) {
             new InterpretFlow(1).DoTableFlow(Processor, this, table);
         }
 
-        void ExecuteOptionalMethod(string theMethodName, Parse theCell) {
+        void ExecuteOptionalMethod(MemberName theMethodName, Parse theCell) {
             try {
                 Processor.Invoke(this, theMethodName, theCell); //todo: invokewiththrow?
             }

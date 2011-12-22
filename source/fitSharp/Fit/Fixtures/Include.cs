@@ -14,7 +14,7 @@ namespace fitSharp.Fit.Fixtures {
             var keywords = new IncludeKeywords(processor);
             processor.InvokeWithThrow(
                 new TypedValue(keywords),
-                table.Branches[0].Branches[1].Value.Text,
+                new MemberName(table.Branches[0].Branches[1].Value.Text), 
                 new CellTree(table.Branches[0].Branches[2]));
             table.Branches[0].Branches[0].Value.SetAttribute(CellAttribute.Folded, keywords.Result);
         }

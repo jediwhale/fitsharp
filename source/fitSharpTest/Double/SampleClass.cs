@@ -25,6 +25,10 @@ namespace fitSharp.Test.Double {
             return "sample" + input;
         }
 
+        public string GenericMethod<T>(T input) {
+            return "sample" + input;
+        }
+
         public string Property { get; set; }
 
         public string Field;

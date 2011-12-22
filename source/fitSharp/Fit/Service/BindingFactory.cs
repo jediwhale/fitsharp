@@ -22,7 +22,7 @@ namespace fitSharp.Fit.Service {
         }
 
 		public BindingOperation Make(Tree<Cell> nameCell) {
-		    string name = nameCell.Value.Text.Trim();
+		    var name = nameCell.Value.Text.Trim();
 
 			if (NoOperationIsImpliedBy(name))
 			    return new NoBinding();
@@ -32,9 +32,8 @@ namespace fitSharp.Fit.Service {
 			if (CheckIsImpliedBy(name))
 			    return new CheckBinding(cellOperation, targetProvider, nameCell);
 
-            string memberName =  processor.ParseTree<Cell, MemberName>(nameCell).ToString();
-
-            RuntimeMember member = RuntimeType.FindInstance(targetProvider, new IdentifierName(memberName), 1);
+            var memberName =  processor.ParseTree<Cell, MemberName>(nameCell);
+            var member = RuntimeType.FindInstance(targetProvider, memberName, 1);
 
 		    if (member == null && newIdentifier.IsStartOf(name)) {
 		        string newMemberName = name.Substring(4);

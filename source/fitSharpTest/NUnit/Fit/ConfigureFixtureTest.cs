@@ -27,17 +27,20 @@ namespace fitSharp.Test.NUnit.Fit {
             Assert.AreEqual("<ul><li>stuff</li></ul>", item.Show);
         }
 
+        [Test] public void InvokesMethodWithParameters() {
+            fixture.Interpret(processor, new CellTree(new CellTree("configure", "symbols", "save value of System.String", "mysymbol", "", "myvalue")));
+            Assert.AreEqual("myvalue", processor.Memory.GetItem<Symbols>().GetValue("mysymbol"));
+        }
+
         static CellTree MakeTable(string method) {
             return new CellTree(new CellTree("configure", "logging", method));
         }
 
         [Test] public void DisplaysResultInTable() {
-            var item = processor.Configuration.GetItem<Logging>();
-            item.Start();
-            item.WriteItem("stuff");
-            var table = MakeTable("show");
+            processor.Memory.GetItem<Symbols>().Save("mysymbol", "myvalue");
+            var table = new CellTree(new CellTree("configure", "symbols", "getvalue", "mysymbol"));
             fixture.Interpret(processor, table);
-            Assert.AreEqual("<ul><li>stuff</li></ul>", table.Branches[0].Branches[2].Value.GetAttribute(CellAttribute.Folded));
+            Assert.AreEqual("myvalue", table.Branches[0].Branches[2].Value.GetAttribute(CellAttribute.Folded));
         }
     }
 }

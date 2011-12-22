@@ -62,8 +62,8 @@ namespace fitSharp.Fit.Service {
 
         public bool IsCheck { get { return false; } }
 
-        string GetMemberName(Tree<Cell> members) {
-            return processor.ParseTree<Cell, MemberName>(members).ToString();
+        MemberName GetMemberName(Tree<Cell> members) {
+            return processor.ParseTree<Cell, MemberName>(members);
         }
 
         static void ShowActual(Cell cell, object actual) {

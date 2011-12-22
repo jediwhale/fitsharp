@@ -48,6 +48,7 @@
     <Compile Include="Fit\Fixtures\ConfigureFixture.cs" />
     <Compile Include="Fit\Fixtures\Include.cs" />
     <Compile Include="Fit\Model\CallStack.cs" />
+    <Compile Include="Fit\Model\MethodRowSelector.cs" />
     <Compile Include="Fit\Model\Procedures.cs" />
     <Compile Include="Fit\Model\StoryTableString.cs" />
     <Compile Include="Fit\Operators\CellOperationValue.cs" />
@@ -56,6 +57,7 @@
     <Compile Include="Fit\Operators\RunTestDefault.cs" />
     <Compile Include="Fit\Operators\RunTestOperator.cs" />
     <Compile Include="Fit\Service\StoryTest.cs" />
+    <Compile Include="Machine\Engine\RuntimeMemberFactory.cs" />
     <Compile Include="Machine\Exception\IgnoredException.cs" />
     <Compile Include="Fit\Fixtures\Define.cs" />
     <Compile Include="Fit\Operators\CheckDefault.cs" />
@@ -63,9 +65,7 @@
     <Compile Include="Fit\Operators\CheckOperator.cs" />
     <Compile Include="Fit\Operators\ComposeDefault.cs" />
     <Compile Include="Fit\Operators\ComposeShowAsOperator.cs" />
-    <Compile Include="Fit\Operators\ExecuteOperator.cs" />
     <Compile Include="Fit\Operators\InvokeSpecialAction.cs" />
-    <Compile Include="Fit\Operators\ExecuteDefault.cs" />
     <Compile Include="Fit\Operators\InvokeSetUpTearDown.cs" />
     <Compile Include="Fit\Operators\ParseInterpreter.cs" />
     <Compile Include="Fit\Operators\ParseNullArray.cs" />
@@ -156,7 +156,7 @@
     <Compile Include="Machine\Model\SetUp.cs" />
     <Compile Include="Machine\Model\StringDifference.cs" />
     <Compile Include="Machine\Model\StringObjectMemory.cs" />
-    <Compile Include="Machine\Model\Symbols.cs" />
+    <Compile Include="Machine\Engine\Symbols.cs" />
     <Compile Include="Machine\Model\Traverse.cs" />
     <Compile Include="Parser\Characters.cs" />
     <Compile Include="Parser\CharacterType.cs" />

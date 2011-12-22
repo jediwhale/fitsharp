@@ -7,8 +7,6 @@ using System;
 
 namespace fitSharp.Machine.Model {
     public class IdentifierName: NameMatcher {
-        public static readonly IdentifierName Constructor = new IdentifierName(".ctor");
-        public static readonly IdentifierName Parse = new IdentifierName("Parse");
 
         public string MatchName { get; private set; }
         public string SourceName { get; private set; }

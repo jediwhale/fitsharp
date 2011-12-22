@@ -4,7 +4,6 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
-using fitSharp.Fit.Model;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
@@ -31,6 +30,7 @@ namespace fitSharp.Fit.Operators {
                                       ? MatchName
                                       : new GracefulName(MatchName).IdentifierName.ToString();
                 var typeIdentifier = new IdentifierName(baseName);
+                //todo: only use when looking for fixtures
                 var typeFixtureIdentifier = new IdentifierName(baseName + "fixture");
                 return typeIdentifier.Matches(candidateName) || typeFixtureIdentifier.Matches(candidateName);
             }

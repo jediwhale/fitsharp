@@ -29,7 +29,7 @@ namespace fitSharp.Test.NUnit.Machine {
         }
 
         private object Execute() {
-            return processor.Invoke(TypedValue.Void, string.Empty, new TreeList<string>()).Value;
+            return processor.Invoke(TypedValue.Void, new MemberName(string.Empty), new TreeList<string>()).Value;
         }
 
         [Test] public void SpecificOperatorIsFound() {
@@ -41,7 +41,7 @@ namespace fitSharp.Test.NUnit.Machine {
         }
 
         private object Execute(string parameter) {
-            return processor.Invoke(TypedValue.Void, string.Empty, new TreeList<string>(parameter)).Value;
+            return processor.Invoke(TypedValue.Void, new MemberName(string.Empty), new TreeList<string>(parameter)).Value;
         }
 
         [Test] public void TypeIsCreated() {
@@ -51,19 +51,19 @@ namespace fitSharp.Test.NUnit.Machine {
 
         [Test] public void MethodIsInvoked() {
             var instance = new TypedValue(new SampleClass());
-            TypedValue result = processor.Invoke(instance, "methodnoparms", new TreeList<string>());
+            TypedValue result = processor.Invoke(instance, new MemberName("methodnoparms"), new TreeList<string>());
             Assert.AreEqual("samplereturn", result.Value);
         }
 
         [Test] public void MethodWithParameterIsInvoked() {
             var instance = new TypedValue(new SampleClass());
-            TypedValue result = processor.Invoke(instance, "MethodWithParms", new TreeList<string>().AddBranchValue("stringparm0"));
+            TypedValue result = processor.Invoke(instance, new MemberName("MethodWithParms"), new TreeList<string>().AddBranchValue("stringparm0"));
             Assert.AreEqual("samplestringparm0", result.Value);
         }
 
         [Test] public void ExceptionReturnedAsValue() {
             var instance = new TypedValue(new SampleClass());
-            TypedValue result = processor.Invoke(instance, "throw", new TreeList<string>().AddBranchValue("oh no"));
+            TypedValue result = processor.Invoke(instance, new MemberName("throw"), new TreeList<string>().AddBranchValue("oh no"));
             Assert.IsTrue(!result.IsValid);
             Assert.IsTrue(result.Value is ApplicationException);
         }
@@ -71,7 +71,7 @@ namespace fitSharp.Test.NUnit.Machine {
         [Test] public void ExceptionIsThrown() {
             var instance = new TypedValue(new SampleClass());
             try {
-                processor.InvokeWithThrow(instance, "throw", new TreeList<string>().AddBranchValue("oh no"));
+                processor.InvokeWithThrow(instance, new MemberName("throw"), new TreeList<string>().AddBranchValue("oh no"));
             }
             catch (Exception e) {
                 var exceptionString = e.ToString();
@@ -103,11 +103,11 @@ namespace fitSharp.Test.NUnit.Machine {
         }
 
         private class DefaultTest: Operator<string, BasicProcessor>, InvokeOperator<string> {
-            public bool CanInvoke(TypedValue instance, string member, Tree<string> parameters) {
+            public bool CanInvoke(TypedValue instance, MemberName member, Tree<string> parameters) {
                 return true;
             }
 
-            public TypedValue Invoke(TypedValue instance, string member, Tree<string> parameters) {
+            public TypedValue Invoke(TypedValue instance, MemberName member, Tree<string> parameters) {
                 return new TypedValue("defaultexecute");
             }
         }
@@ -119,11 +119,11 @@ namespace fitSharp.Test.NUnit.Machine {
                 this.name = name;
             }
 
-            public bool CanInvoke(TypedValue instance, string member, Tree<string> parameters) {
+            public bool CanInvoke(TypedValue instance, MemberName member, Tree<string> parameters) {
                 return parameters.Value == name;
             }
 
-            public TypedValue Invoke(TypedValue instance, string member, Tree<string> parameters) {
+            public TypedValue Invoke(TypedValue instance, MemberName member, Tree<string> parameters) {
                 return new TypedValue("execute" + name);
             }
         }

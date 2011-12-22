@@ -12,12 +12,12 @@ using fitSharp.Machine.Model;
 namespace fit.Operators {
     public class InvokeProcedure: CellOperator, InvokeOperator<Cell>
     {
-        public bool CanInvoke(TypedValue instance, string memberName, Tree<Cell> parameters) {
-            return Processor.Get<Procedures>().HasValue(memberName);
+        public bool CanInvoke(TypedValue instance, MemberName memberName, Tree<Cell> parameters) {
+            return Processor.Get<Procedures>().HasValue(memberName.Name);
         }
 
-        public TypedValue Invoke(TypedValue instance, string memberName, Tree<Cell> parameters) {
-            var procedure = Processor.Get<Procedures>().GetValue(memberName);
+        public TypedValue Invoke(TypedValue instance, MemberName memberName, Tree<Cell> parameters) {
+            var procedure = Processor.Get<Procedures>().GetValue(memberName.Name);
             return Invoke((Parse)procedure, instance, parameters);
         }
 

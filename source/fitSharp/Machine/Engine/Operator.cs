@@ -45,7 +45,7 @@ namespace fitSharp.Machine.Engine {
     }
 
     public interface InvokeOperator<T> {
-        bool CanInvoke(TypedValue instance, string memberName, Tree<T> parameters);
-        TypedValue Invoke(TypedValue instance, string memberName, Tree<T> parameters);
+        bool CanInvoke(TypedValue instance, MemberName memberName, Tree<T> parameters);
+        TypedValue Invoke(TypedValue instance, MemberName memberName, Tree<T> parameters);
     }
 }

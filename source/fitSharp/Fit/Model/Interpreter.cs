@@ -21,8 +21,4 @@ namespace fitSharp.Fit.Model {
         void DoTableFlow(CellProcessor processor, FlowInterpreter interpreter, Tree<Cell> table);
     }
 
-    public interface MethodRowSelector {
-        Tree<Cell> SelectMethodCells(Tree<Cell> row);
-        Tree<Cell> SelectParameterCells(Tree<Cell> row);
-    }
 }

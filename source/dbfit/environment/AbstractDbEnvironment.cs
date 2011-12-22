@@ -8,8 +8,7 @@ using System.Data;
 using System.Text.RegularExpressions;
 using System.Text;
 using dbfit.util;
-using fitSharp.Fit.Model;
-using fitSharp.Machine.Model;
+using fitSharp.Machine.Engine;
 
 namespace dbfit
 {

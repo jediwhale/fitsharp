@@ -20,14 +20,14 @@ namespace fitSharp.Fit.Fixtures {
         }
 
         void ComputeRow(CellProcessor processor, Tree<Cell> row) {
-            var memberName = MemberName.NamedParameterPrefix + processor.ParseTree<Cell, MemberName>(headerRow.Branches.Last());
+            var memberName = processor.ParseTree<Cell, MemberName>(headerRow.Branches.Last()).WithNamedParameters();
 
             var parameterList = new List<Tree<Cell>>();
             for (var i = 0; i < headerRow.Branches.Count - 1; i++) {
                 parameterList.Add(new CellTreeLeaf(new GracefulName(headerRow.Branches[i].Value.Text).ToString()));
                 parameterList.Add(row.Branches[i]);
             }
-            var result = processor.Invoke(processor.CallStack.SystemUnderTest, memberName,
+            var result = processor.Invoke(processor.CallStack.SystemUnderTest, memberName, 
                                           new EnumeratedTree<Cell>(parameterList));
             new CellOperationImpl(processor).Check(result, row.Branches.Last());
         }

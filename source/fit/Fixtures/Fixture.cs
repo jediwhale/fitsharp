@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Service;
+using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fit

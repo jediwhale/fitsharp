@@ -12,13 +12,13 @@ namespace fitSharp.Slim.Operators {
         private const string defaultResult = "OK";
         private readonly IdentifierName identifier;
 
-        public bool CanInvoke(TypedValue instance, string memberName, Tree<string> parameters) {
+        public bool CanInvoke(TypedValue instance, MemberName memberName, Tree<string> parameters) {
             return instance.Type == typeof(SlimInstruction) && (
                 identifier.IsEmpty ||
                    (parameters.Branches.Count > 1 && identifier.Matches(parameters.Branches[1].Value)));
         }
 
-        public TypedValue Invoke(TypedValue instance, string memberName, Tree<string> parameters) {
+        public TypedValue Invoke(TypedValue instance, MemberName memberName, Tree<string> parameters) {
             try {
                 return new TypedValue(ExecuteOperation(parameters));
             }
@@ -61,7 +61,7 @@ namespace fitSharp.Slim.Operators {
             var savedInstances = Processor.Get<SavedInstances>();
             var instance = parameters.Branches[memberIndex].Value;
             object target = savedInstances.HasValue(instance) ? savedInstances.GetValue(instance) : new NullInstance();
-            TypedValue result = Processor.Invoke(target, parameters.Branches[memberIndex + 1].Value, ParameterTree(parameters, memberIndex + 2));
+            TypedValue result = Processor.Invoke(target, new MemberName(parameters.Branches[memberIndex + 1].Value), ParameterTree(parameters, memberIndex + 2));
             result.ThrowExceptionIfNotValid();
             return result;
         }

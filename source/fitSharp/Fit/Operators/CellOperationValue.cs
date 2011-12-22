@@ -52,8 +52,8 @@ namespace fitSharp.Fit.Operators {
             this.actualValue = actualValue;
         }
 
-        string GetMemberName(Processor<Cell> processor) {
-            return processor.ParseTree<Cell, MemberName>(memberName).ToString();
+        MemberName GetMemberName(Processor<Cell> processor) {
+            return processor.ParseTree<Cell, MemberName>(memberName);
         }
 
         readonly object systemUnderTest;

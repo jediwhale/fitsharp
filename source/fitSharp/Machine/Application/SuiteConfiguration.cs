@@ -29,7 +29,7 @@ namespace fitSharp.Machine.Application {
         }
 
         void LoadNode(string typeName, XmlNode methodNode) {
-            new BasicProcessor().InvokeWithThrow(AliasType(typeName, methodNode.Name), AliasMethod(typeName, methodNode.Name), NodeParameters(methodNode));
+            new BasicProcessor().InvokeWithThrow(AliasType(typeName, methodNode.Name), new MemberName(AliasMethod(typeName, methodNode.Name)), NodeParameters(methodNode));
         }
 
         TypedValue AliasType(string originalType, string originalMethod) {

@@ -28,7 +28,7 @@ namespace fitSharp.Test.NUnit.Slim {
         }
 
         private TypedValue DoInstruction(Instructions statement) {
-            return service.Invoke(new TypedValue(new SlimInstruction()), string.Empty, statement.Tree.Branches[0]);
+            return service.Invoke(new TypedValue(new SlimInstruction()), new MemberName(string.Empty), statement.Tree.Branches[0]);
         }
 
         [Test] public void OperatorIsAddedFromConfiguration() {
