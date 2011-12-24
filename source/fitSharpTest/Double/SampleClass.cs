@@ -4,6 +4,8 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
+using System.Linq;
+using fitSharp.Machine.Model;
 
 namespace fitSharp.Test.Double {
     public class SampleClass {
@@ -11,7 +13,11 @@ namespace fitSharp.Test.Double {
             return new SampleClass();
         }
 
-        public void VoidMethod() {}
+        public void CountMethod() {
+            Count++;
+        }
+
+        public int Count;
 
         public string MethodNoParms() {
             return "samplereturn";
@@ -29,6 +35,14 @@ namespace fitSharp.Test.Double {
             return "sample" + input;
         }
 
+        public string MethodWithParamArray(params string[] strings) {
+            return strings.Aggregate((current, next) => current + ", " + next);
+        }
+
+        public string MethodWithOptionalParms(string first = "hello", string second = "world") {
+            return first + " " + second;
+        }
+
         public string Property { get; set; }
 
         public string Field;
@@ -44,5 +58,13 @@ namespace fitSharp.Test.Double {
 
         public string Duplicate;
         private string _duplicate { get { return Duplicate.ToUpper();} }
+    }
+
+    public class SampleClassAdapter: DomainAdapter {
+        public SampleClassAdapter() { systemUnderTest = new SampleClass(); }
+        public object SystemUnderTest { get { return systemUnderTest; } }
+        public string MethodwithOptionalParms() { return systemUnderTest.MethodWithOptionalParms(); }
+        public string MethodwithOptionalParms(string first) { return systemUnderTest.MethodWithOptionalParms(first); }
+        readonly SampleClass systemUnderTest;
     }
 }

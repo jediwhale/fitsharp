@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- fitSharp
+Copyright © Syterra Software Inc. All rights reserved.
+The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
+to be bound by the terms of this license. You must not remove this notice, or any other, from this software. -->
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+ <link href="../fitsharp1.css" type="text/css" rel="stylesheet">
+  <link href="fit.css" type="text/css" rel="stylesheet">
+  <title>Method Execution</title>
+</head>
+<body>
+<div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
+<div class="pagename">Method Execution</div>
+<div class="content">We can execute methods on our <a href="../Fit/SystemUnderTest.html">System Under Test</a> using a row in <a href="../Fit/FlowMode.html">Flow Mode</a>.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>when test is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample class</td></tr>
+<tr><td>check</td><td>count</td><td>0</td></tr>
+<tr><td>count method</td></tr>
+<tr><td>check</td><td>count</td><td>1</td></tr>
+</table>
+</td><td>then result is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample class</td></tr>
+<tr><td>check</td><td>count</td><td class="pass">0</td></tr>
+<tr><td>count method</td></tr>
+<tr><td>check</td><td>count</td><td class="pass">1</td></tr>
+</table></td></tr>
+</table>
+<br>
+We can check return values and pass parameters.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>when test is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample class</td></tr>
+<tr><td>check</td><td>method no parms</td><td>samplereturn</td></tr>
+<tr><td>check</td><td>method with parms</td><td>my value</td><td>samplemy value</td></tr>
+</table>
+</td><td>then result is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample class</td></tr>
+<tr><td>check</td><td>method no parms</td><td class="pass">samplereturn</td></tr>
+<tr><td>check</td><td>method with parms</td><td>my value</td><td class="pass">samplemy value</td></tr>
+</table></td></tr>
+</table>
+<br>
+We can execute generic methods.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>when test is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample class</td></tr>
+<tr><td>check</td><td>generic method of System.Int32</td><td>123</td><td>sample123</td></tr>
+</table>
+</td><td>then result is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample class</td></tr>
+<tr><td>check</td><td>generic method of System.Int32</td><td>123</td><td class="pass">sample123</td></tr>
+</table></td></tr>
+</table>
+<br>
+We can access properties, fields and indexers.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>when test is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample class</td></tr>
+<tr><td>set</td><td>property</td><td>something</td></tr>
+<tr><td>check</td><td>property</td><td>something</td></tr>
+<tr><td>set</td><td>field</td><td>else</td></tr>
+<tr><td>check</td><td>field</td><td>else</td></tr>
+<tr><td>check</td><td>anything</td><td>indexanything</td></tr>
+</table>
+</td><td>then result is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample class</td></tr>
+<tr><td>set</td><td>property</td><td>something</td></tr>
+<tr><td>check</td><td>property</td><td class="pass">something</td></tr>
+<tr><td>set</td><td>field</td><td>else</td></tr>
+<tr><td>check</td><td>field</td><td class="pass">else</td></tr>
+<tr><td>check</td><td>anything</td><td class="pass">indexanything</td></tr>
+</table></td></tr>
+</table>
+<br>
+</div>
+<div style="width:100%;text-align:right">
+<span class="footer">&copy; Copyright <a href="http://www.syterra.com">Syterra Software Inc.</a> All rights reserved.</span>
+</div>
+
+</body>
+</html>

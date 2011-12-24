@@ -19,11 +19,12 @@ namespace fitSharp.Test.NUnit.Machine {
         }
 
         [Test] public void VoidMethodIsInvoked() {
-            RuntimeMember method = GetMethod("voidmethod", 0);
+            RuntimeMember method = GetMethod("countmethod", 0);
             Assert.IsNotNull(method);
             TypedValue result = method.Invoke(new object[] {});
             Assert.AreEqual(null, result.Value);
             Assert.AreEqual(typeof(void), result.Type);
+            Assert.AreEqual(1, instance.Count);
         }
 
         RuntimeMember GetMethod(string memberName, int count) {
