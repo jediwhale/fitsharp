@@ -16,16 +16,44 @@ to be bound by the terms of this license. You must not remove this notice, or an
 <div class="pagename">Include Fixture</div>
 <div class="content"><br>
 <br>
+basic include text<br>
+<br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>when test is</td><td><br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>include</td><td>text</td><td>stuff</td></tr>
+<tr><td>include</td><td>string</td><td>stuff</td></tr>
 </table>
 </td><td>then result is</td><td><br /><table border="1" cellpadding="2" cellspacing="0">
-<tr><td>include<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension">stuff</div></div></td><td>text</td><td>stuff</td></tr>
+<tr><td>include<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension">stuff</div></div></td><td>string</td><td>stuff</td></tr>
 </table></td></tr>
 </table>
 <br>
+include and execute<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>when test is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>include</td><td>text of fitSharp.Fit.Model.StoryTestString</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample class</td></tr>
+<tr><td>check</td><td>count</td><td>0</td></tr>
+</table>
+</td></tr>
+</table>
+</td><td>then result is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>include<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension"><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample class</td></tr>
+<tr><td>check</td><td>count</td><td class="pass">0</td></tr>
+</table></div></div></td><td>text of fitSharp.Fit.Model.StoryTestString</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample class</td></tr>
+<tr><td>check</td><td>count</td><td>0</td></tr>
+</table>
+</td></tr>
+</table></td></tr>
+</table>
 </div>
 <div style="width:100%;text-align:right">
 <span class="footer">&copy; Copyright <a href="http://www.syterra.com">Syterra Software Inc.</a> All rights reserved.</span>

@@ -8,6 +8,7 @@ using fit;
 using fit.Model;
 using fitlibrary.exception;
 using System;
+using fitSharp.Fit.Model;
 using fitSharp.Machine.Exception;
 
 namespace fitlibrary {
@@ -49,7 +50,7 @@ namespace fitlibrary {
                     Parse expectedCell = theRow.Parts.At(myParameterCount + j + 1);
 
                     try {
-                        CellOperation.Check(GetTargetObject(), new CellRange(memberCells),
+                        Processor.Check(GetTargetObject(), new CellRange(memberCells),
                                             myValues.GetCells(new CellRange(theRow.Parts, myParameterCount).Cells),
                                             expectedCell);
                     }

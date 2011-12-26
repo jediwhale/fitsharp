@@ -8,7 +8,6 @@ using System.Linq;
 using System.Collections.Generic;
 using fit.Model;
 using fitSharp.Fit.Model;
-using fitSharp.Fit.Service;
 using fitSharp.Machine.Model;
 
 namespace fit.Operators {
@@ -90,7 +89,7 @@ namespace fit.Operators {
                     int i = 0;
                     foreach (Parse cell in new CellRange(markRow.Parts).Cells) {
                         if (actualValues[i].Type != typeof(void) || cell.Text.Length > 0) {
-                             new CellOperationImpl(processor).Check(actualValues[i], cell);
+                             processor.Check(actualValues[i], cell);
 
                         }
                         i++;

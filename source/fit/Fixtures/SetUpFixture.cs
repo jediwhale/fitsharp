@@ -7,7 +7,7 @@ using fit;
 using System;
 using fit.Model;
 using fitlibrary.exception;
-using fitSharp.Fit.Service;
+using fitSharp.Fit.Model;
 using fitSharp.Machine.Exception;
 
 namespace fitlibrary {
@@ -31,7 +31,7 @@ namespace fitlibrary {
             try {
                 if (theRow.Parts.Size != headerCells.Size)
                     throw new FitFailureException(String.Format("Row should be {0} cells wide.", headerCells.Size));
-                CellOperation.Invoke(this, new CellRange(headerCells), new CellRange(theRow.Parts), theRow.Parts);
+                Processor.ExecuteWithThrow(this, new CellRange(headerCells), new CellRange(theRow.Parts), theRow.Parts);
             }
             catch (MemberMissingException e) {
                 TestStatus.MarkException(headerCells, e);

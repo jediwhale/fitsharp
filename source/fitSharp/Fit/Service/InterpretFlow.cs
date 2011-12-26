@@ -38,7 +38,7 @@ namespace fitSharp.Fit.Service {
                 var specialActionName = processor.ParseTree<Cell, MemberName>(currentRow.Branches[0]).AsSpecialAction();
                 var result = processor.Invoke(interpreter, specialActionName, currentRow.Branches[0]);
                 if (!result.IsValid) {
-                     result = new CellOperationImpl(processor).TryInvoke(interpreter,
+                     result = processor.Execute(interpreter,
                          interpreter.MethodRowSelector.SelectMethodCells(currentRow),
                          interpreter.MethodRowSelector.SelectParameterCells(currentRow),
                          currentRow.Branches[0].Value);

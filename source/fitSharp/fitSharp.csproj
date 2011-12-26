@@ -54,6 +54,8 @@
     <Compile Include="Fit\Operators\CellOperationValue.cs" />
     <Compile Include="Fit\Operators\CellOperators.cs" />
     <Compile Include="Fit\Model\CellProcessor.cs" />
+    <Compile Include="Fit\Operators\ExecuteDefault.cs" />
+    <Compile Include="Fit\Operators\ExecuteOperator.cs" />
     <Compile Include="Fit\Operators\RunTestDefault.cs" />
     <Compile Include="Fit\Operators\RunTestOperator.cs" />
     <Compile Include="Fit\Service\StoryTest.cs" />
@@ -117,7 +119,6 @@
     <Compile Include="Fit\Runner\TestPageDecoration.cs" />
     <Compile Include="Fit\Service\Binding.cs" />
     <Compile Include="Fit\Service\BindingFactory.cs" />
-    <Compile Include="Fit\Service\CellOperation.cs" />
     <Compile Include="Fit\Service\CellProcessorBase.cs" />
     <Compile Include="Fit\Model\Interpreter.cs" />
     <Compile Include="Fit\Service\NullResultWriter.cs" />

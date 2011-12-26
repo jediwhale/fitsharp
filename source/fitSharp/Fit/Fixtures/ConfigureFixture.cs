@@ -5,7 +5,6 @@
 
 using System.Linq;
 using fitSharp.Fit.Model;
-using fitSharp.Fit.Service;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Fixtures {
@@ -16,10 +15,9 @@ namespace fitSharp.Fit.Fixtures {
             var facility = processor.Memory.GetItem(table.Branches[0].Branches[1].Value.Text);
             var currentRow = new EnumeratedTree<Cell>(table.Branches[0].Branches.Skip(2));
             var selector = new DoRowSelector();
-            var result = new CellOperationImpl(processor).TryInvoke(facility, selector.SelectMethodCells(currentRow),
+            var result = processor.ExecuteWithThrow(facility, selector.SelectMethodCells(currentRow),
                                                                     selector.SelectParameterCells(currentRow),
                                                                     currentRow.Branches[0].Value);
-            result.ThrowExceptionIfNotValid();
             if (result.IsVoid) return;
             table.Branches[0].Branches[2].Value.SetAttribute(CellAttribute.Folded, result.ValueString);
         }

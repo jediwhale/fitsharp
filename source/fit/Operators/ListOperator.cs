@@ -7,8 +7,8 @@ using System;
 using System.Collections;
 using System.Linq;
 using fit.Model;
+using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
-using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
@@ -37,7 +37,7 @@ namespace fit.Operators {
             return new TypedValue(
                 new CellRange(dataRows).Cells.Aggregate(new ArrayList(), (list, row) => {
                     list.Add(
-                        new CellOperationImpl(Processor).Invoke(instance.Value, new CellRange(headerCells),
+                        Processor.ExecuteWithThrow(instance.Value, new CellRange(headerCells),
                                                                 new CellRange(row.Parts), row.Parts).Value);
                     return list;
                 }));

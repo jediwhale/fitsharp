@@ -27,10 +27,8 @@ namespace fitSharp.Fit.Service {
 			if (NoOperationIsImpliedBy(name))
 			    return new NoBinding();
 
-		    var cellOperation = new CellOperationImpl(processor);
-
 			if (CheckIsImpliedBy(name))
-			    return new CheckBinding(cellOperation, targetProvider, nameCell);
+			    return new CheckBinding(processor, targetProvider, nameCell);
 
             var memberName =  processor.ParseTree<Cell, MemberName>(nameCell);
             var member = RuntimeType.FindInstance(targetProvider, memberName, 1);

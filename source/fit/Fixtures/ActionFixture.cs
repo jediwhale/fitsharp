@@ -24,7 +24,7 @@ namespace fit
 			try
 			{
 				targetObject = this;
-			    CellOperation.Invoke(this, cells);
+			    Processor.ExecuteWithThrow(this, cells);
 				targetObject = actor;
 			}
 			catch (Exception e)
@@ -49,12 +49,12 @@ namespace fit
 
 		public virtual void Press()
 		{
-			CellOperation.Invoke(actor, cells.More, new CellTree(), cells.More);
+			Processor.ExecuteWithThrow(actor, cells.More, new CellTree(), cells.More);
 		}
 
 		public virtual void Check()
 		{
-			CellOperation.Check(GetTarget(actor), cells.More, cells.More.More);
+			Processor.Check(GetTarget(actor), cells.More, cells.More.More);
 		}
 
 		public override object GetTargetObject() {

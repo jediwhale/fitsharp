@@ -56,7 +56,7 @@ namespace fitSharp.Fit.Service {
             else {
                 var beforeCounts = new TestCounts(processor.TestStatus.Counts);
                 processor.InvokeWithThrow(instance, GetMemberName(memberCell), new CellTree(cell));
-                processor.TestStatus.MarkCellWithLastResults(cell, beforeCounts);
+                processor.TestStatus.MarkCellWithLastResults(cell.Value, beforeCounts);
             }
         }
 
@@ -76,18 +76,18 @@ namespace fitSharp.Fit.Service {
     }
 
     public class CheckBinding: BindingOperation {
-        private readonly CellOperation operation;
+        private readonly CellProcessor processor;
         private readonly TargetObjectProvider targetProvider;
         private readonly Tree<Cell> memberCell;
 
-        public CheckBinding(CellOperation operation, TargetObjectProvider targetProvider, Tree<Cell> memberCell) {
-            this.operation = operation;
+        public CheckBinding(CellProcessor processor, TargetObjectProvider targetProvider, Tree<Cell> memberCell) {
+            this.processor = processor;
             this.memberCell = memberCell;
             this.targetProvider = targetProvider;
         }
 
         public void Do(Tree<Cell> cell) {
-            operation.Check(targetProvider.GetTargetObject(), memberCell, cell);
+            processor.Check(targetProvider.GetTargetObject(), memberCell, cell);
         }
 
         public bool IsCheck { get { return true; } }

@@ -5,7 +5,8 @@
 
 using System.Text;
 using fit.Test.Acceptance;
-using fitSharp.Fit.Service;
+using fitSharp.Fit.Model;
+using fitSharp.Fit.Operators;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using Moq;
@@ -84,11 +85,11 @@ namespace fit.Test.NUnit {
         [Test] public void PressInvokesMethodOnActor() {
             var method = new Parse("td", "method", null, null);
             var cells = new Parse("td", "press", null, method);
-            var cellOperation = new Mock<CellOperation>();
+            var processor = new Mock<CellProcessor>();
             var actor = new Fixture();
-            var actionFixture = new MyActionFixture(actor, cells) {CellOperation = cellOperation.Object};
+            var actionFixture = new MyActionFixture(actor, cells) {Processor = processor.Object};
             actionFixture.Press();
-            cellOperation.Verify(o => o.TryInvoke(actor, method, It.Is<Tree<Cell>>(t => t.IsLeaf), method));
+            processor.Verify(o => o.Operate<ExecuteOperator>(actor, method, It.Is<Tree<Cell>>(t => t.IsLeaf), method));
         }
 
         class MyActionFixture: ActionFixture {

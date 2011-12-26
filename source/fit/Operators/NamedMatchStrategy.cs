@@ -7,7 +7,6 @@ using System;
 using fit.Model;
 using fitlibrary.exception;
 using fitSharp.Fit.Model;
-using fitSharp.Fit.Service;
 using fitSharp.Machine.Model;
 
 namespace fit.Operators {
@@ -45,11 +44,11 @@ namespace fit.Operators {
         }
 
         TypedValue InvokeMethod(object theActualRow, Tree<Cell> headerCell) {
-            return new CellOperationImpl(Processor).TryInvoke(theActualRow, headerCell);
+            return Processor.Execute(theActualRow, headerCell, new CellTree());
         }
 
         TypedValue InvokeIndexerWithRawHeaderValue(object theActualRow, Parse headerCell) {
-            return new CellOperationImpl(Processor).TryInvoke(theActualRow,
+            return Processor.Execute(theActualRow,
                                                               new CellTreeLeaf("getitem"),
                                                               new CellRange(headerCell, 1));
         }

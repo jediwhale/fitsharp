@@ -55,7 +55,7 @@ namespace fitlibrary {
         public void AddNamedFixture(string name, object fixture) { Processor.Get<Symbols>().Save(name, fixture); }
 
         public void DoCheckOperation(Parse expectedValue, CellRange cells) {
-            CellOperation.Check(GetTargetObject(),
+            Processor.Check(GetTargetObject(),
                                         MethodRowSelector.SelectMethodCells(cells),
                                         MethodRowSelector.SelectParameterCells(cells),
                                         expectedValue);
@@ -65,7 +65,7 @@ namespace fitlibrary {
             try {
                 CellRange cells = CellRange.GetMethodCellRange(theCells, 0);
                 return
-                    CellOperation.Invoke(this,  MethodRowSelector.SelectMethodCells(cells), MethodRowSelector.SelectParameterCells(cells), theCells.More).
+                    Processor.ExecuteWithThrow(this,  MethodRowSelector.SelectMethodCells(cells), MethodRowSelector.SelectParameterCells(cells), theCells.More).
                         Value;
             }
             catch (ParseException<Cell> e) {

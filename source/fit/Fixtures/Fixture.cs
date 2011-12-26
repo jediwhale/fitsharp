@@ -17,7 +17,6 @@ namespace fit
 	{
 	    static CellProcessor symbolProcessor; // compatibility with obsolete static symbol methods
 
-	    CellOperation cellOperation;
 	    CellProcessor processor;
 
 	    protected object mySystemUnderTest;
@@ -32,14 +31,6 @@ namespace fit
 
 	    public TestStatus TestStatus { get { return Processor.TestStatus; } }
         public Symbols Symbols { get { return Processor.Get<Symbols>(); } }
-
-	    public CellOperation CellOperation {
-	        get {
-                if (cellOperation == null) cellOperation = new CellOperationImpl(Processor);
-	            return cellOperation;
-	        }
-            set { cellOperation = value;}
-	    }
 
         public Fixture() {}
 

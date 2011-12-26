@@ -13,6 +13,7 @@ namespace fitSharp.Fit.Operators {
 
         public CellOperators() {
             Add(new ComposeDefault(), 0);
+            Add(new ExecuteDefault(), 0);
             Add(new InvokeDataRow<Cell, CellProcessor>(), 0);
             Add(new InvokeSetUpTearDown(), 0);
             Add(new ParseDefault(), 0);

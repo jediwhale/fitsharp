@@ -5,6 +5,7 @@
 
 using System.Collections;
 using fitlibrary.tree;
+using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
 
@@ -34,14 +35,14 @@ namespace fit.Test.NUnit {
         [Test] public void MarksSameStringCellAsRight() {
             var cell = new Parse("td", "something", null, null);
             var fixture = new Fixture {Processor = new Service.Service()};
-            fixture.CellOperation.Check(new TypedValue("something"), cell);
+            fixture.Processor.Check(new TypedValue("something"), cell);
             Assert.AreEqual("\n<td class=\"pass\">something</td>", cell.ToString());
         }
     
         [Test] public void MarksSameArrayCellAsRight() {
             var cell = new Parse("td", "something,more", null, null);
             var fixture = new Fixture {Processor = new Service.Service()};
-            fixture.CellOperation.Check(new TypedValue(new [] {"something", "more"}), cell);
+            fixture.Processor.Check(new TypedValue(new [] {"something", "more"}), cell);
             Assert.AreEqual("\n<td class=\"pass\">something,more</td>", cell.ToString());
         }
     
@@ -52,7 +53,7 @@ namespace fit.Test.NUnit {
         [Test] public void MarksDifferentStringCellAsWrong() {
             var cell = new Parse("td", "something else", null, null);
             var fixture = new Fixture {Processor = new Service.Service()};
-            fixture.CellOperation.Check(new TypedValue("something"), cell);
+            fixture.Processor.Check(new TypedValue("something"), cell);
             Assert.AreEqual(fitSharp.Fit.Model.TestStatus.Wrong, cell.GetAttribute(CellAttribute.Status));
             Assert.AreEqual("something", cell.GetAttribute(CellAttribute.Actual));
             Assert.IsTrue(cell.HasAttribute(CellAttribute.Difference));
@@ -74,7 +75,7 @@ namespace fit.Test.NUnit {
             var actual = new ArrayList {new Name("joe", "smith")};
             Parse table = Parse.ParseFrom("<table><tr><td><table><tr><td>first</td><td>last</td></tr><tr><td>joe</td><td>smith</td></tr></table></td></tr></table>");
             var fixture = new Fixture {Processor = new Service.Service()};
-            fixture.CellOperation.Check(new TypedValue(actual), table.Parts.Parts);
+            fixture.Processor.Check(new TypedValue(actual), table.Parts.Parts);
             Assert.AreEqual("<td><table><tr><td>first</td><td>last</td></tr><tr><td class=\"pass\">joe</td><td class=\"pass\">smith</td></tr></table></td>", table.Parts.Parts.ToString());
         }
 
@@ -82,7 +83,7 @@ namespace fit.Test.NUnit {
             var actual = new ArrayList {new Name("joe", "smith")};
             Parse table = Parse.ParseFrom("<table><tr><td><table><tr><td>first</td><td>last</td><td>address</td></tr><tr><td>joe</td><td>smith</td><td></td></tr></table></td></tr></table>");
             var fixture = new Fixture {Processor = new Service.Service()};
-            fixture.CellOperation.Check(new TypedValue(actual), table.Parts.Parts);
+            fixture.Processor.Check(new TypedValue(actual), table.Parts.Parts);
             Assert.AreEqual("<td><table><tr><td>first</td><td>last</td><td class=\"error\">address<hr /><pre><div class=\"fit_stacktrace\">fitlibrary.exception.FitFailureException: Column 'address' not used.</div></pre></td></tr><tr><td class=\"pass\">joe</td><td class=\"pass\">smith</td><td></td></tr></table></td>", table.Parts.Parts.ToString());
         }
 

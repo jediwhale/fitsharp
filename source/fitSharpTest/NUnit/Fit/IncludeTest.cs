@@ -20,7 +20,7 @@ namespace fitSharp.Test.NUnit.Fit {
             processor.AddOperator(new MockRunTestOperator());
             processor.AddOperator(new MockComposeStoryTestString());
             processor.AddOperator(new MockParseStoryTestString());
-            var includeTable = new CellTree(new CellTree("include", "text", input));
+            var includeTable = new CellTree(new CellTree("include", "string", input));
             new Include().Interpret(processor, includeTable);
             Assert.IsTrue(includeTable.Branches[0].Branches[0].Value.HasAttribute(CellAttribute.Folded));
             Assert.AreEqual(result, includeTable.Branches[0].Branches[0].Value.GetAttribute(CellAttribute.Folded));

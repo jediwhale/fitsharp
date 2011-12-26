@@ -5,7 +5,6 @@
 
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
-using fitSharp.Fit.Service;
 using fitSharp.Machine.Model;
 using Moq;
 using NUnit.Framework;
@@ -14,7 +13,7 @@ using TestStatus=fitSharp.Fit.Model.TestStatus;
 namespace fitSharp.Test.NUnit.Fit {
     [TestFixture] public class CellOperationDefaultTest {
         Mock<CellProcessor> processor;
-        CellOperation invoke;
+        ExecuteDefault execute;
         CheckDefault check;
         TypedValue target;
         TypedValue result;
@@ -71,7 +70,7 @@ namespace fitSharp.Test.NUnit.Fit {
         }
 
         TypedValue Execute(Tree<Cell> targetCell) {
-            return invoke.TryInvoke(target.Value, new CellTreeLeaf(memberName), new CellTree(), 
+            return execute.Execute(target.Value, new CellTreeLeaf(memberName), new CellTree(), 
                 targetCell == null ? null : targetCell.Value);
         }
 
@@ -79,7 +78,7 @@ namespace fitSharp.Test.NUnit.Fit {
             this.memberName = memberName;
             testStatus = new TestStatus();
             processor = new Mock<CellProcessor>();
-            invoke = new CellOperationImpl(processor.Object);
+            execute = new ExecuteDefault() { Processor = processor.Object};
             check = new CheckDefault {Processor = processor.Object};
 
             target = new TypedValue("target");

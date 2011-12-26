@@ -4,8 +4,8 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using fit.Model;
+using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
-using fitSharp.Fit.Service;
 using NUnit.Framework;
 using TestStatus=fitSharp.Fit.Model.TestStatus;
 
@@ -67,7 +67,7 @@ namespace fit.Test.NUnit {
             Parse cell = TestUtils.CreateCell("do");
             service = new Service.Service();
             var fixture = new FixtureWithExecutableMethod {Processor = service};
-            fixture.CellOperation.TryInvoke(fixture, new CellRange(cell, 1));
+            fixture.Processor.Execute(fixture, new CellRange(cell, 1), new CellTree());
             Assert.AreEqual(1, FixtureWithExecutableMethod.Calls);
         }
 

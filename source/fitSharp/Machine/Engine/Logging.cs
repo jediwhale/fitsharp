@@ -102,6 +102,7 @@ namespace fitSharp.Machine.Engine {
             }
 
             public void Append(string newMessage, int depth) {
+                if (subItems == null) return;
                 if (depth > 1) subItems.Last().Append(newMessage, depth - 1);
                 else subItems.Last().AppendMessage(newMessage);
             }

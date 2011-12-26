@@ -45,7 +45,7 @@ namespace fit.Test.NUnit {
         }
 
         public static void DoCheck(Fixture fixture, Tree<Cell> range, Parse cell) {
-            fixture.CellOperation.Check(fixture.GetTargetObject(), range, cell);
+            fixture.Processor.Check(fixture.GetTargetObject(), range, cell);
         }
 
         public static TestCounts MakeTestCounts() {

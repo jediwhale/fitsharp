@@ -5,7 +5,6 @@
 
 using System.Collections.Generic;
 using fitSharp.Fit.Model;
-using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
@@ -29,7 +28,7 @@ namespace fitSharp.Fit.Fixtures {
             }
             var result = processor.Invoke(processor.CallStack.SystemUnderTest, memberName, 
                                           new EnumeratedTree<Cell>(parameterList));
-            new CellOperationImpl(processor).Check(result, row.Branches.Last());
+            processor.Check(result, row.Branches.Last());
         }
 
         Tree<Cell> headerRow;

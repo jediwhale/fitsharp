@@ -88,16 +88,15 @@ namespace fitSharp.Fit.Model {
                 MarkWrong(cell);
         }
 
-        public void MarkCellWithLastResults(Tree<Cell> parameters) {
-            MarkCellWithLastResults(parameters, c => { });
+        public void MarkCellWithLastResults(Cell cell) {
+            MarkCellWithLastResults(cell, c => { });
         }
 
-        public void MarkCellWithLastResults(Tree<Cell> parameters, TestCounts beforeCounts) {
-            MarkCellWithLastResults(parameters, c => MarkWithCounts(c, beforeCounts));
+        public void MarkCellWithLastResults(Cell cell, TestCounts beforeCounts) {
+            MarkCellWithLastResults(cell, c => MarkWithCounts(c, beforeCounts));
         }
 
-        void MarkCellWithLastResults(Tree<Cell> parameters, Action<Cell> markWithCounts) {
-            var cell = parameters == null ? null : parameters.Value;
+        void MarkCellWithLastResults(Cell cell, Action<Cell> markWithCounts) {
             if (cell != null && !string.IsNullOrEmpty(LastAction)) {
                 cell.SetAttribute(CellAttribute.Folded, LastAction);
                 markWithCounts(cell);
