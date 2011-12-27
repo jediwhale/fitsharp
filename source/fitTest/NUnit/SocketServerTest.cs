@@ -5,8 +5,8 @@
 
 using System.Reflection;
 using fit.Runner;
-using fitSharp.Fit.Model;
-using fitSharp.Fit.Service;
+using fitSharp.Fit.Engine;
+using fitSharp.Fit.Fixtures;
 using fitSharp.IO;
 using fitSharp.Test.Double;
 using NUnit.Framework;

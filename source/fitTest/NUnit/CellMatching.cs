@@ -5,7 +5,7 @@
 
 using System.Collections;
 using fitlibrary.tree;
-using fitSharp.Fit.Model;
+using fitSharp.Fit.Engine;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
 

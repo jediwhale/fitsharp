@@ -8,7 +8,7 @@ using fit;
 using fit.Model;
 using fitlibrary.exception;
 using System;
-using fitSharp.Fit.Model;
+using fitSharp.Fit.Engine;
 using fitSharp.Machine.Exception;
 
 namespace fitlibrary {
@@ -45,7 +45,7 @@ namespace fitlibrary {
 
                 for (int j = 0; j < expectedCount; j++) {
                     var memberCells = new List<Parse> { headerCells.At(j) };
-                    foreach (Parse cell in methodSuffixCells.Cells) memberCells.Add(cell);
+                    memberCells.AddRange(methodSuffixCells.Cells);
 
                     Parse expectedCell = theRow.Parts.At(myParameterCount + j + 1);
 

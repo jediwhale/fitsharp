@@ -7,6 +7,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using fit.Model;
+using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
 
@@ -136,10 +137,7 @@ namespace fit.Operators {
             public int UnmatchedCount { get; private set; }
 
             public object Match(int theIndex) {
-                foreach (ActualItem item in myActuals) {
-                    if (item.MatchRow == theIndex) return item.Value;
-                }
-                return null;
+                return myActuals.Where(item => item.MatchRow == theIndex).Select(item => item.Value).FirstOrDefault();
             }
 
             public int FindMatch(Matches theMatcher, int theExpectedRow, Parse theExpectedCells) {

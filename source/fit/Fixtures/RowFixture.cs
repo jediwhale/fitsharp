@@ -6,8 +6,7 @@
 using System;
 using System.Collections;
 using fit.Model;
-using fitSharp.Fit.Model;
-using fitSharp.Fit.Service;
+using fitSharp.Fit.Engine;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 

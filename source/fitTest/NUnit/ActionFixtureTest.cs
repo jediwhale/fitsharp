@@ -5,8 +5,7 @@
 
 using System.Text;
 using fit.Test.Acceptance;
-using fitSharp.Fit.Model;
-using fitSharp.Fit.Operators;
+using fitSharp.Fit.Engine;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using Moq;

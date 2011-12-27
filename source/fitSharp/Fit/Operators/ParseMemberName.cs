@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using fitSharp.Fit.Model;
+using fitSharp.Fit.Engine;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Exception;

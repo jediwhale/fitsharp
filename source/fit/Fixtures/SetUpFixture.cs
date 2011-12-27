@@ -7,7 +7,7 @@ using fit;
 using System;
 using fit.Model;
 using fitlibrary.exception;
-using fitSharp.Fit.Model;
+using fitSharp.Fit.Engine;
 using fitSharp.Machine.Exception;
 
 namespace fitlibrary {

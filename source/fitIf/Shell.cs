@@ -6,7 +6,7 @@
 using System;
 using System.Reflection;
 using fit.Service;
-using fitSharp.Fit.Service;
+using fitSharp.Fit.Fixtures;
 using fitSharp.IO;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;

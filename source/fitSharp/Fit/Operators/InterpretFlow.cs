@@ -4,13 +4,12 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System.Linq;
-using fitSharp.Fit.Model;
-using fitSharp.Fit.Operators;
+using fitSharp.Fit.Engine;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
 
-namespace fitSharp.Fit.Service {
+namespace fitSharp.Fit.Operators {
     public class InterpretFlow: InterpretTableFlow {
         public InterpretFlow(): this(0) {}
 

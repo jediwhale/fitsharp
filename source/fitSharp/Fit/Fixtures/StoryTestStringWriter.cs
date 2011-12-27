@@ -5,11 +5,12 @@
 
 using System;
 using System.Text;
+using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
-namespace fitSharp.Fit.Service {
+namespace fitSharp.Fit.Fixtures {
     public class StoryTestStringWriter: StoryTestWriter {
         public StoryTestStringWriter(CellProcessor processor) {
             this.processor = processor;

@@ -8,6 +8,7 @@ using System.Collections;
 using System.Xml;
 using fit;
 using fit.Operators;
+using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
 

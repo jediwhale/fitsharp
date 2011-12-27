@@ -4,7 +4,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using fitlibrary;
-using fitSharp.Fit.Service;
+using fitSharp.Fit.Fixtures;
 
 namespace fit.Test.Acceptance {
     public class StoryTestFixture: DoFixture {

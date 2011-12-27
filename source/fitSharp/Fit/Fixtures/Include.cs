@@ -4,8 +4,8 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System.Linq;
+using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
-using fitSharp.Fit.Service;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Fixtures {
