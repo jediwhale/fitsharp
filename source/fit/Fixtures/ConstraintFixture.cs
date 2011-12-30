@@ -1,12 +1,12 @@
-// Copyright © 2009 Syterra Software Inc.
+// Copyright © 2011 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using fit;
-using fit.Model;
 using fitlibrary.exception;
 using fitSharp.Fit.Engine;
+using fitSharp.Fit.Model;
 using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
 
@@ -15,7 +15,7 @@ namespace fitlibrary {
 	public class ConstraintFixture: DoFixtureBase {
 
         private readonly bool expectedCondition;
-	    private CellRange memberNameCells;
+	    private Tree<Cell> memberNameCells;
 	    private int rowWidth;
         private ValueArray valueCells;
 
@@ -29,7 +29,7 @@ namespace fitlibrary {
 	    public string RepeatString { get; set; }
 
 	    public override void DoRows(Parse rows) {
-            memberNameCells = new CellRange(rows.Parts);
+            memberNameCells = rows;
 	        rowWidth = rows.Parts.Size;
             valueCells = new ValueArray(RepeatString);
             base.DoRows(rows.More);
@@ -42,7 +42,7 @@ namespace fitlibrary {
 	        else {
 	            try {
 	                TypedValue result = Processor.ExecuteWithThrow(this, memberNameCells,
-	                    valueCells.GetCells(new CellRange(row.Parts).Cells), row.Parts);
+	                    valueCells.GetCells(row.Branches), row.Parts);
 	                if (result.Type != typeof (bool)) {
 	                    throw new InvalidMethodException(string.Format("Method does not return boolean."));
 	                }

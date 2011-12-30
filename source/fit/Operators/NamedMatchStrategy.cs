@@ -1,10 +1,9 @@
-﻿// Copyright © 2010 Syterra Software Inc.
+﻿// Copyright © 2011 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System;
-using fit.Model;
 using fitlibrary.exception;
 using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
@@ -27,7 +26,7 @@ namespace fit.Operators {
             if (myColumnsUsed == null) myColumnsUsed = new bool[myHeaderRow.Parts.Size];
             var result = new TypedValue[myHeaderRow.Parts.Size];
             int column = 0;
-            foreach (Parse headerCell in new CellRange(myHeaderRow.Parts).Cells) {
+            foreach (Parse headerCell in myHeaderRow.Branches) {
                 TypedValue actual = InvokeMethod(theActualRow, headerCell);
                 if (!actual.IsValid) {
                     actual = InvokeIndexerWithRawHeaderValue(theActualRow, headerCell);
@@ -48,10 +47,8 @@ namespace fit.Operators {
             return Processor.Execute(theActualRow, headerCell, new CellTree());
         }
 
-        TypedValue InvokeIndexerWithRawHeaderValue(object theActualRow, Parse headerCell) {
-            return Processor.Execute(theActualRow,
-                                                              new CellTreeLeaf("getitem"),
-                                                              new CellRange(headerCell, 1));
+        TypedValue InvokeIndexerWithRawHeaderValue(object theActualRow, Tree<Cell> headerCell) {
+            return Processor.Execute(theActualRow, new CellTreeLeaf("getitem"), new CellTree(headerCell));
         }
 
         public bool IsExpectedSize(Parse theExpectedCells, object theActualRow) {

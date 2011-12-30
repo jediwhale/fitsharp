@@ -172,7 +172,6 @@
     <Compile Include="NUnit\TableFixtureTest.cs" />
     <Compile Include="NUnit\TestBuilder.cs" />
     <Compile Include="NUnit\TestUtils.cs" />
-    <Compile Include="NUnit\ValueArrayTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

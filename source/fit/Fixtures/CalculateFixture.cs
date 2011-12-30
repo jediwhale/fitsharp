@@ -1,14 +1,16 @@
-// Copyright © 2009 Syterra Software Inc.
+// Copyright © 2011 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System.Collections.Generic;
+using System.Linq;
 using fit;
 using fit.Model;
 using fitlibrary.exception;
 using System;
 using fitSharp.Fit.Engine;
+using fitSharp.Fit.Model;
 using fitSharp.Machine.Exception;
 
 namespace fitlibrary {
@@ -51,7 +53,7 @@ namespace fitlibrary {
 
                     try {
                         Processor.Check(GetTargetObject(), new CellRange(memberCells),
-                                            myValues.GetCells(new CellRange(theRow.Parts, myParameterCount).Cells),
+                                            myValues.GetCells(theRow.Branches.Take(myParameterCount)),
                                             expectedCell);
                     }
                     catch (MemberMissingException e) {

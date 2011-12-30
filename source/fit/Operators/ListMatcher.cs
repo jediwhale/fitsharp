@@ -88,7 +88,7 @@ namespace fit.Operators {
                 else if (actuals.Match(row) != null) {
                     TypedValue[] actualValues = strategy.ActualValues(actuals.Match(row));
                     int i = 0;
-                    foreach (Parse cell in new CellRange(markRow.Parts).Cells) {
+                    foreach (Parse cell in markRow.Branches) {
                         if (actualValues[i].Type != typeof(void) || cell.Text.Length > 0) {
                              processor.Check(actualValues[i], cell);
 

@@ -91,7 +91,6 @@
     <Compile Include="Fixtures\XmlFixture.cs" />
     <Compile Include="Model\ParseTable.cs" />
     <Compile Include="Model\ScientificDouble.cs" />
-    <Compile Include="Model\ValueArray.cs" />
     <Compile Include="Operators\ListOperator.cs" />
     <Compile Include="Operators\ParseModelOperator.cs" />
     <Compile Include="Operators\ParseTable.cs" />
