@@ -33,9 +33,11 @@ namespace fit.Runner {
 
         int Run(Memory memory, IList<string> arguments) {
             ParseArguments(memory, arguments);
+            var fileSystem = new FileSystemModel(memory.GetItem<Settings>().CodePageNumber);
+            memory.GetItem<Context>().PageSource = fileSystem;
             myRunner = new SuiteRunner(memory, myProgressReporter);
             myRunner.Run(
-                CreateStoryTestFolder(memory),
+                CreateStoryTestFolder(memory, fileSystem),
                 selectedFile);
             return myRunner.TestCounts.FailCount;
         }
@@ -59,8 +61,8 @@ namespace fit.Runner {
                 throw new FormatException("Missing output folder");
         }
     
-        StoryTestFolder CreateStoryTestFolder(Memory memory) {
-            var storyTestFolder = new StoryTestFolder(memory, new FileSystemModel(memory.GetItem<Settings>().CodePageNumber));
+        StoryTestFolder CreateStoryTestFolder(Memory memory, FolderModel folderModel) {
+            var storyTestFolder = new StoryTestFolder(memory, folderModel);
 
             string tagList = memory.GetItem<Settings>().TagList;
             if (!string.IsNullOrEmpty(tagList))

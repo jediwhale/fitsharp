@@ -6,6 +6,7 @@
 using System.Text;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Service;
+using fitSharp.IO;
 using fitSharp.Test.Double;
 using NUnit.Framework;
 using TestStatus=fitSharp.Fit.Model.TestStatus;
@@ -30,7 +31,7 @@ namespace fitSharp.Test.NUnit.Fit {
             _strategy = new XmlResultWriter(TEST_RESULT_FILE_NAME, _folderModel);
             _strategy.Close();
             Assert.IsTrue(_folderModel.FileExists(TEST_RESULT_FILE_NAME));
-            Assert.AreEqual("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<testResults />", _folderModel.FileContent(TEST_RESULT_FILE_NAME));
+            Assert.AreEqual("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<testResults />", _folderModel.GetPageContent(TEST_RESULT_FILE_NAME));
         }
 
         [Test]
@@ -51,7 +52,7 @@ namespace fitSharp.Test.NUnit.Fit {
             _strategy.Close();
             Assert.AreEqual(
                 BuildPageResultString(pageName, "<![CDATA[<table border=\"1\" cellspacing=\"0\">\r\n<tr><td>Text</td>\r\n</tr>\r\n</table>]]>", 1, 2, 3, 4),
-                _folderModel.FileContent(TEST_RESULT_FILE_NAME));
+                _folderModel.GetPageContent(TEST_RESULT_FILE_NAME));
         }
 
         [Test]
@@ -64,7 +65,7 @@ namespace fitSharp.Test.NUnit.Fit {
             _strategy.Close();
             Assert.AreEqual(
                 BuildPageResultString(pageName, "<![CDATA[<table><tr><td>Text</td></tr>&#2;</table>]]>", 1, 2, 3, 4),
-                _folderModel.FileContent(TEST_RESULT_FILE_NAME));
+                _folderModel.GetPageContent(TEST_RESULT_FILE_NAME));
         }
 
         [Test]
@@ -74,7 +75,7 @@ namespace fitSharp.Test.NUnit.Fit {
             _strategy.WriteFinalCount(MakeTestCounts());
             _strategy.Close();
             Assert.AreEqual(BuildFinalCountsString(1, 2, 3, 4),
-                            _folderModel.FileContent(TEST_RESULT_FILE_NAME));
+                            _folderModel.GetPageContent(TEST_RESULT_FILE_NAME));
         }
 
         static string BuildPageResultString(string pageName, string content, int right, int wrong, int ignores, int exceptions)

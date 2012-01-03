@@ -8,14 +8,21 @@ using fitSharp.Fit.Engine;
 using fitSharp.Fit.Fixtures;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
-using fitSharp.Fit.Service;
+using fitSharp.IO;
+using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
+using fitSharp.Test.Double;
 using fitSharp.Test.Double.Fit;
 using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Fit {
     [TestFixture] public class IncludeTest {
+        [SetUp] public void SetUp() {
+            processor = Builder.CellProcessor();
+            includeAction = new IncludeAction(processor);
+        }
+
         [Test] public void ParsesAndExecutesIncludedText() {
             var processor = Builder.CellProcessor();
             processor.AddOperator(new MockRunTestOperator());
@@ -27,6 +34,40 @@ namespace fitSharp.Test.NUnit.Fit {
             Assert.AreEqual(result, includeTable.Branches[0].Branches[0].Value.GetAttribute(CellAttribute.Folded));
         }
 
+        [Test] public void IncludesPage() {
+            MakePage(pageName);
+            includeAction.Page(pageName);
+            Assert.AreEqual(pageContent, includeAction.Result);
+        }
+
+        [Test] public void IncludesPageRelativeToCurrent() {
+            MakePage(System.IO.Path.Combine(currentPath, pageName));
+            Context.TestPagePath = new FilePath(System.IO.Path.Combine(currentPath, currentPage));
+            includeAction.Page(IncludeAction.PageBase.FromCurrent, pageName);
+            Assert.AreEqual(pageContent, includeAction.Result);
+        }
+
+        [Test] public void IncludesPageRelativeToSuite() {
+            MakePage(System.IO.Path.Combine(currentPath, pageName));
+            Context.SuitePath = new DirectoryPath(currentPath);
+            includeAction.Page(IncludeAction.PageBase.FromSuite, pageName);
+            Assert.AreEqual(pageContent, includeAction.Result);
+        }
+
+        void MakePage(string pagePath) {
+            var pageSource = new FolderTestModel();
+            pageSource.MakeFile(pagePath, pageContent);
+            processor.Get<Context>().PageSource = pageSource;
+        }
+
+        Context Context { get { return processor.Get<Context>(); } }
+        CellProcessor processor;
+        IncludeAction includeAction;
+
+        const string currentPage = "currentPage";
+        const string currentPath = "currentPath";
+        const string pageContent = "pageContent";
+        const string pageName = "pageName";
         const string input = "stuff";
         const string result = "more stuff";
         static readonly Tree<Cell> parsedInput = new CellTree("something");

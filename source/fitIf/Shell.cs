@@ -37,7 +37,7 @@ namespace fitIf
         class Runner: MarshalByRefObject {
             public void SetUp(string[] commandLineArguments) {
                 var argumentParser = new ArgumentParser();
-                argumentParser.AddArgumentHandler("c", value => new SuiteConfiguration(memory).LoadXml(new FileSystemModel().FileContent(value)));
+                argumentParser.AddArgumentHandler("c", value => new SuiteConfiguration(memory).LoadXml(new FileSystemModel().GetPageContent(value)));
                 argumentParser.Parse(commandLineArguments);
             }
 

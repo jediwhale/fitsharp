@@ -32,8 +32,8 @@ namespace fit.Test.NUnit {
 
             RunSuite();
 
-            int tearDown = folders.FileContent(@"out\reportIndex.html").IndexOf("suiteteardown.html");
-            int otherFile = folders.FileContent(@"out\reportIndex.html").IndexOf("zzzz.html");
+            int tearDown = folders.GetPageContent(@"out\reportIndex.html").IndexOf("suiteteardown.html");
+            int otherFile = folders.GetPageContent(@"out\reportIndex.html").IndexOf("zzzz.html");
             Assert.IsTrue(otherFile < tearDown);
         }
 
@@ -96,12 +96,12 @@ namespace fit.Test.NUnit {
 
         [Test]
         public void TestPagePathIsStoredInMemoryWhenPageExecutes() {
-            Assert.IsNullOrEmpty(memory.GetItem<Context>().TestPagePath);
+            Assert.IsNull(memory.GetItem<Context>().TestPagePath);
 
             AddTestFile(@"in\page.html");
             RunSuite();
 
-            Assert.AreEqual(@"in\page.html", memory.GetItem<Context>().TestPagePath);
+            Assert.AreEqual(@"in\page.html", memory.GetItem<Context>().TestPagePath.ToString());
         }
 
         [Test]

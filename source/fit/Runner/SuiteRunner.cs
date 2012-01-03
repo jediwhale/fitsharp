@@ -121,7 +121,7 @@ namespace fit.Runner {
             }
 
             private void StoreCurrentlyExecutingPagePath(string path) {
-                memory.GetItem<Context>().TestPagePath = path;
+                memory.GetItem<Context>().TestPagePath = new FilePath(path);
             }
 
             readonly ResultWriter resultWriter;

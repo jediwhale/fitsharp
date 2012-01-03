@@ -46,7 +46,9 @@
     <Compile Include="Fit\Fixtures\CommentFixture.cs" />
     <Compile Include="Fit\Fixtures\Compute.cs" />
     <Compile Include="Fit\Fixtures\ConfigureFixture.cs" />
+    <Compile Include="Fit\Fixtures\FileSystem.cs" />
     <Compile Include="Fit\Fixtures\Include.cs" />
+    <Compile Include="Fit\Fixtures\IncludeAction.cs" />
     <Compile Include="Fit\Model\CallStack.cs" />
     <Compile Include="Fit\Model\MethodRowSelector.cs" />
     <Compile Include="Fit\Model\Procedures.cs" />
@@ -61,6 +63,7 @@
     <Compile Include="Fit\Operators\RunTestDefault.cs" />
     <Compile Include="Fit\Engine\RunTestOperator.cs" />
     <Compile Include="Fit\Fixtures\StoryTest.cs" />
+    <Compile Include="IO\PageSource.cs" />
     <Compile Include="Machine\Engine\RuntimeMemberFactory.cs" />
     <Compile Include="Machine\Exception\IgnoredException.cs" />
     <Compile Include="Fit\Fixtures\Define.cs" />

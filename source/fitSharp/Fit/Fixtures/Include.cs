@@ -11,39 +11,13 @@ using fitSharp.Machine.Model;
 namespace fitSharp.Fit.Fixtures {
     public class Include: Interpreter {
         public void Interpret(CellProcessor processor, Tree<Cell> table) {
-            var keywords = new IncludeKeywords(processor);
+            var action = new IncludeAction(processor);
             var currentRow = new EnumeratedTree<Cell>(table.Branches[0].Branches.Skip(1));
-            var selector = new DoRowSelector();
-            processor.ExecuteWithThrow(keywords, selector.SelectMethodCells(currentRow),
+            var selector = new SequenceRowSelector();
+            processor.ExecuteWithThrow(action, selector.SelectMethodCells(currentRow),
                                                                     selector.SelectParameterCells(currentRow),
                                                                     currentRow.Branches[0].Value);
-            table.Branches[0].Branches[0].Value.SetAttribute(CellAttribute.Folded, keywords.Result);
-        }
-
-        class IncludeKeywords {
-            public IncludeKeywords(CellProcessor processor) {
-                this.processor = processor;
-            }
-
-            public string Result { get; private set; }
-
-            public void Text<T>(T storyTestSource) {
-                String(storyTestSource.ToString());
-            }
-
-            public void String(string storyTestText) {
-                var writer = new StoryTestStringWriter(processor);
-                var storyTest = new StoryTest(processor, writer).WithInput(storyTestText);
-                if (storyTest.IsExecutable) {
-                    storyTest.Execute();
-                    Result = writer.Tables;
-                }
-                else {
-                    Result = storyTestText;
-                }
-            }
-
-            readonly CellProcessor processor;
+            table.Branches[0].Branches[0].Value.SetAttribute(CellAttribute.Folded, action.Result);
         }
     }
 }

@@ -1,4 +1,4 @@
-// Copyright © 2010 Syterra Software Inc. All rights reserved.
+// Copyright © 2011 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -21,8 +21,8 @@ namespace fitSharp.IO {
         }
 
         public void MakeFile(string thePath, string theContent) {
-            if (!Directory.Exists(Path.GetDirectoryName(thePath))) {
-                Directory.CreateDirectory(Path.GetDirectoryName(thePath));
+            if (!Directory.Exists(System.IO.Path.GetDirectoryName(thePath))) {
+                Directory.CreateDirectory(System.IO.Path.GetDirectoryName(thePath));
             }
             TextWriter writer = new StreamWriter(thePath, false, encoding);
             writer.Write(theContent);
@@ -33,11 +33,11 @@ namespace fitSharp.IO {
             return new StreamWriter(thePath);
         }
 
-        public string FileContent(string thePath)
+        public string GetPageContent(Path thePath)
         {
             try {
-                using (FileStream file = new FileStream(thePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
-                    using (StreamReader reader = new StreamReader(file, encoding)) {
+                using (var file = new FileStream(thePath.ToString(), FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
+                    using (var reader = new StreamReader(file, encoding)) {
                         return reader.ReadToEnd();
                     }
                 }
@@ -50,6 +50,10 @@ namespace fitSharp.IO {
             }
 
             return null;
+        }
+
+        public Path MakePath(string pageName) {
+            return new FilePath(pageName);
         }
 
         public string[] GetFiles(string thePath) {
@@ -67,7 +71,7 @@ namespace fitSharp.IO {
                 File.Delete(theOutputPath);
             }
             catch (DirectoryNotFoundException) {
-                Directory.CreateDirectory(Path.GetDirectoryName(theOutputPath));
+                Directory.CreateDirectory(System.IO.Path.GetDirectoryName(theOutputPath));
             }
             File.Copy(theInputPath, theOutputPath);
         }
