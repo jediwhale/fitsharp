@@ -78,6 +78,32 @@ This is a simple test.<br>
 </table></td></tr>
 </table>
 <br>
+include page from current<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>when test is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>include</td><td>page from current</td><td>SampleInputFiles\SampleSubNoTest\SampleNoTest.html</td></tr>
+</table>
+</td><td>then result is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>include<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension">This has no tests.</div></div></td><td>page from current</td><td>SampleInputFiles\SampleSubNoTest\SampleNoTest.html</td></tr>
+</table></td></tr>
+</table>
+<br>
+include page from suite<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>when test is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>include</td><td>page from suite</td><td>Fit\SampleInputFiles\SampleSubNoTest\SampleNoTest.html</td></tr>
+</table>
+</td><td>then result is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>include<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension">This has no tests.</div></div></td><td>page from suite</td><td>Fit\SampleInputFiles\SampleSubNoTest\SampleNoTest.html</td></tr>
+</table></td></tr>
+</table>
+<br>
 </div>
 <div style="width:100%;text-align:right">
 <span class="footer">&copy; Copyright <a href="http://www.syterra.com">Syterra Software Inc.</a> All rights reserved.</span>

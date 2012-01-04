@@ -64,6 +64,7 @@
     <Compile Include="Fit\Engine\RunTestOperator.cs" />
     <Compile Include="Fit\Fixtures\StoryTest.cs" />
     <Compile Include="IO\PageSource.cs" />
+    <Compile Include="IO\Path.cs" />
     <Compile Include="Machine\Engine\RuntimeMemberFactory.cs" />
     <Compile Include="Machine\Exception\IgnoredException.cs" />
     <Compile Include="Fit\Fixtures\Define.cs" />

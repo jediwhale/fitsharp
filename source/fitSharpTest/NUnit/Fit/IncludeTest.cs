@@ -43,14 +43,14 @@ namespace fitSharp.Test.NUnit.Fit {
         [Test] public void IncludesPageRelativeToCurrent() {
             MakePage(System.IO.Path.Combine(currentPath, pageName));
             Context.TestPagePath = new FilePath(System.IO.Path.Combine(currentPath, currentPage));
-            includeAction.Page(IncludeAction.PageBase.FromCurrent, pageName);
+            includeAction.PageFromCurrent(pageName);
             Assert.AreEqual(pageContent, includeAction.Result);
         }
 
         [Test] public void IncludesPageRelativeToSuite() {
             MakePage(System.IO.Path.Combine(currentPath, pageName));
             Context.SuitePath = new DirectoryPath(currentPath);
-            includeAction.Page(IncludeAction.PageBase.FromSuite, pageName);
+            includeAction.PageFromSuite(pageName);
             Assert.AreEqual(pageContent, includeAction.Result);
         }
 

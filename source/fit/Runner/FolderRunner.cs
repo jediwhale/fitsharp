@@ -35,6 +35,7 @@ namespace fit.Runner {
             ParseArguments(memory, arguments);
             var fileSystem = new FileSystemModel(memory.GetItem<Settings>().CodePageNumber);
             memory.GetItem<Context>().PageSource = fileSystem;
+            memory.GetItem<Context>().SuitePath = new DirectoryPath(memory.GetItem<Settings>().InputFolder);
             myRunner = new SuiteRunner(memory, myProgressReporter);
             myRunner.Run(
                 CreateStoryTestFolder(memory, fileSystem),

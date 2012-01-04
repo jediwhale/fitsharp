@@ -3,10 +3,7 @@
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
-using System;
-using System.Collections.Generic;
 using fitSharp.Fit.Engine;
-using fitSharp.IO;
 using fitSharp.Machine.Application;
 
 namespace fitSharp.Fit.Fixtures {
@@ -24,12 +21,18 @@ namespace fitSharp.Fit.Fixtures {
         public string Result { get; private set; }
 
         public void Page(string pageName) {
-            Page(PageBase.FromWorking, pageName);
+            var pageSource = processor.Get<Context>().PageSource;
+            String(pageSource.GetPageContent(pageSource.MakePath(pageName)));
         }
 
-        public void Page(PageBase pageBase, string pageName) {
+        public void PageFromCurrent(string pageName) {
             var pageSource = processor.Get<Context>().PageSource;
-            String(pageBaseActions[pageBase](processor, pageSource.MakePath(pageName)));
+            String(pageSource.GetPageContent(processor.Get<Context>().TestPagePath.WithSubPath(pageSource.MakePath(pageName))));
+        }
+
+        public void PageFromSuite(string pageName) {
+            var pageSource = processor.Get<Context>().PageSource;
+            String(pageSource.GetPageContent(processor.Get<Context>().SuitePath.WithSubPath(pageSource.MakePath(pageName))));
         }
 
         public void Text<T>(T storyTestSource) {
@@ -48,27 +51,6 @@ namespace fitSharp.Fit.Fixtures {
             }
         }
 
-        static string WorkingPageBase(CellProcessor processor, Path pageName) {
-            return processor.Get<Context>().PageSource.GetPageContent(pageName);
-        }
-
-        static string CurrentPageBase(CellProcessor processor, Path pageName) {
-            var pageSource = processor.Get<Context>().PageSource;
-            return pageSource.GetPageContent(processor.Get<Context>().TestPagePath.WithSubPath(pageName));
-        }
-
-        static string SuitePageBase(CellProcessor processor, Path pageName) {
-            var pageSource = processor.Get<Context>().PageSource;
-            return pageSource.GetPageContent(processor.Get<Context>().SuitePath.WithSubPath(pageName));
-        }
-
         readonly CellProcessor processor;
-
-        readonly Dictionary<PageBase, Func<CellProcessor, Path, string>> pageBaseActions
-            = new Dictionary<PageBase, Func<CellProcessor, Path, string>> {
-            {PageBase.FromWorking, WorkingPageBase},
-            {PageBase.FromCurrent, CurrentPageBase},
-            {PageBase.FromSuite, SuitePageBase}
-        };
     }
 }

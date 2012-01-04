@@ -14,30 +14,4 @@ namespace fitSharp.IO {
             return pageSource.GetPageContent(pageSource.MakePath(pageName));
         }
     }
-
-    public interface Path {
-        Path WithSubPath(Path subPath);
-    }
-
-    public class FilePath: Path {
-        public FilePath(string filePath) { this.filePath = filePath; }
-        public override string ToString() { return filePath; }
-
-        public Path WithSubPath(Path subPath) {
-            return new FilePath(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(filePath), subPath.ToString()));
-        }
-
-        readonly string filePath;
-    }
-
-    public class DirectoryPath: Path {
-        public DirectoryPath(string directoryPath) { this.directoryPath = directoryPath; }
-        public override string ToString() { return directoryPath; }
-
-        public Path WithSubPath(Path subPath) {
-            return new FilePath(System.IO.Path.Combine(directoryPath, subPath.ToString()));
-        }
-
-        readonly string directoryPath;
-    }
 }
