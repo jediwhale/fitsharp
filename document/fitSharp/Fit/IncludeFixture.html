@@ -14,48 +14,9 @@ to be bound by the terms of this license. You must not remove this notice, or an
 <body>
 <div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
 <div class="pagename">Include Fixture</div>
-<div class="content"><br>
+<div class="content">This fixture lets us include other pages within a story test page.<br>
 <br>
-basic include text<br>
-<br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>when test is</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>include</td><td>string</td><td>stuff</td></tr>
-</table>
-</td><td>then result is</td><td><br /><table border="1" cellpadding="2" cellspacing="0">
-<tr><td>include<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension">stuff</div></div></td><td>string</td><td>stuff</td></tr>
-</table></td></tr>
-</table>
-<br>
-include and execute<br>
-<br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>when test is</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>include</td><td>text of fitSharp.Fit.Model.StoryTestString</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>sample class</td></tr>
-<tr><td>check</td><td>count</td><td>0</td></tr>
-</table>
-</td></tr>
-</table>
-</td><td>then result is</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>include<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension"><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>sample class</td></tr>
-<tr><td>check</td><td>count</td><td class="pass">0</td></tr>
-</table></div></div></td><td>text of fitSharp.Fit.Model.StoryTestString</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>sample class</td></tr>
-<tr><td>check</td><td>count</td><td>0</td></tr>
-</table>
-</td></tr>
-</table></td></tr>
-</table>
-<br>
-include page<br>
+We can include a page using an absolute path or a relative path from the working directory. If the page contains test tables, they are executed.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>when test is</td><td><br>
@@ -78,7 +39,7 @@ This is a simple test.<br>
 </table></td></tr>
 </table>
 <br>
-include page from current<br>
+We can include pages with a relative path from the currently executing page.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>when test is</td><td><br>
@@ -91,7 +52,7 @@ include page from current<br>
 </table></td></tr>
 </table>
 <br>
-include page from suite<br>
+We can include pages with a relative path from the top-level currently executing suite.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>when test is</td><td><br>
