@@ -16,7 +16,7 @@ namespace fitSharp.Fit.Operators {
         }
 
         public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
-            var classCell = parameters.Branches[0].Value;
+            var classCell = parameters.ValueAt(0);
             var interpreter = CreateInterpreter(classCell.Text.Trim(), instance);
             return new TypedValue(interpreter);
         }

@@ -12,7 +12,7 @@ namespace fitSharp.Slim.Operators {
 
         protected override Tree<string> ExecuteOperation(Tree<string> parameters) {
             TypedValue result = InvokeMember(parameters, 3);
-            Processor.Get<Symbols>().Save(parameters.Branches[2].Value, result.Value);
+            Processor.Get<Symbols>().Save(parameters.ValueAt(2), result.Value);
             return Result(parameters, Processor.Compose(result));
         }
     }

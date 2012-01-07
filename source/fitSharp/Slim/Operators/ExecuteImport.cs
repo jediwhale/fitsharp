@@ -10,7 +10,7 @@ namespace fitSharp.Slim.Operators {
         public ExecuteImport() : base("import") {}
 
         protected override Tree<string> ExecuteOperation(Tree<string> parameters) {
-            Processor.AddNamespace(parameters.Branches[2].Value);
+            Processor.AddNamespace(parameters.ValueAt(2));
             return DefaultResult(parameters);
         }
     }

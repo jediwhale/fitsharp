@@ -19,8 +19,8 @@ namespace fit.Test.NUnit {
             var constraint = new ConstraintFixture {Processor = processor.Object};
             processor.Setup(p => p.TestStatus).Returns(new TestStatus());
             processor.Setup(o => o.Operate<ExecuteOperator>(constraint,
-                It.Is<Tree<Cell>>(c => c.Branches[0].Value.Text == "method"),
-                It.Is<Tree<Cell>>(c => c.Branches[0].Value.Text == "value"),
+                It.Is<Tree<Cell>>(c => c.ValueAt(0).Text == "method"),
+                It.Is<Tree<Cell>>(c => c.ValueAt(0).Text == "value"),
                 It.Is<Cell>(c => c.Text == "value")))
                 .Returns(new TypedValue(true));
             constraint.DoTable(table);

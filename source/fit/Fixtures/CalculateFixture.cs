@@ -3,7 +3,6 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-using System.Collections.Generic;
 using System.Linq;
 using fit;
 using fit.Model;
@@ -46,13 +45,16 @@ namespace fitlibrary {
                 CheckRowSize(theRow.Parts);
 
                 for (int j = 0; j < expectedCount; j++) {
-                    var memberCells = new List<Parse> { headerCells.At(j) };
-                    memberCells.AddRange(methodSuffixCells.Cells);
+                    var memberCells = new CellTree();
+                    memberCells.AddBranch(headerCells.At(j));
+                    foreach (var suffixCell in methodSuffixCells.Cells) {
+                        memberCells.AddBranch(suffixCell);
+                    }
 
                     Parse expectedCell = theRow.Parts.At(myParameterCount + j + 1);
 
                     try {
-                        Processor.Check(GetTargetObject(), new CellRange(memberCells),
+                        Processor.Check(GetTargetObject(), memberCells,
                                             myValues.GetCells(theRow.Branches.Take(myParameterCount)),
                                             expectedCell);
                     }

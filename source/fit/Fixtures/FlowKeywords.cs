@@ -51,7 +51,7 @@ namespace fit.Fixtures {
         }
 
         public void Return(Parse cells) {
-            var result = new MethodPhrase(cells).Evaluate(fixture);
+            var result = new MethodPhrase(new CellRange(cells)).Evaluate(fixture);
             fixture.Processor.CallStack.SetReturn(new TypedValue(result));
         }
 
@@ -93,7 +93,7 @@ namespace fit.Fixtures {
                 throw new TableStructureException("missing cells for name.");
 
             object namedValue = ourWithIdentifier.Equals(restOfTheCells.More.Text)
-                                    ? new MethodPhrase(restOfTheCells.More).Evaluate(fixture)
+                                    ? new MethodPhrase(new CellRange(restOfTheCells.More)).Evaluate(fixture)
                                     : fixture.ExecuteEmbeddedMethod(restOfTheCells);
             fixture.Symbols.Save(restOfTheCells.Text, namedValue);
             fixture.TestStatus.MarkRight(restOfTheCells);
@@ -123,7 +123,7 @@ namespace fit.Fixtures {
 
         public void Start(Parse theCells) {
             try {
-                fixture.SetSystemUnderTest(new MethodPhrase(theCells).EvaluateNew(fixture));
+                fixture.SetSystemUnderTest(new MethodPhrase(new CellRange(theCells)).EvaluateNew(fixture.Processor));
             }
             catch (Exception e) {
                 fixture.TestStatus.MarkException(theCells, e);
@@ -131,12 +131,11 @@ namespace fit.Fixtures {
         }
 
         public void With(Parse theCells) {
-            fixture.SetSystemUnderTest(new MethodPhrase(theCells).Evaluate(fixture));
+            fixture.SetSystemUnderTest(new MethodPhrase(new CellRange(theCells)).Evaluate(fixture));
         }
 
         void AddCell(Parse theCells, object theNewValue) {
             theCells.Last.More = (Parse)fixture.Processor.Compose(theNewValue);
         }
-
     }
 }

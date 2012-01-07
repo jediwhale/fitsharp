@@ -31,7 +31,7 @@ namespace fitSharp.Fit.Fixtures {
         }
 
         public string Leader {
-            get { return ParsedInput.Branches[0].Value.GetAttribute(CellAttribute.Leader); }
+            get { return ParsedInput.ValueAt(0).GetAttribute(CellAttribute.Leader); }
         }
 
         public void Execute() {

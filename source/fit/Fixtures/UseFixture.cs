@@ -4,10 +4,10 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using fit.Fixtures;
+using fit.Model;
 using fitlibrary;
 using fitlibrary.exception;
 using fitSharp.Fit.Engine;
-using fitSharp.Fit.Model;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
@@ -26,9 +26,6 @@ namespace fit {
         }
 
         Interpreter GetNamedFixture(string theName) {
-            //var parent = Processor.TestStatus.Parent;
-            //if (parent == null) return null;
-
             if (!Symbols.HasValue(theName)) return null;
 
             var result =  Processor.Operate<WrapOperator>(new TypedValue(Symbols.GetValue(theName)));
@@ -45,7 +42,7 @@ namespace fit {
                 var adapter = fixture as MutableDomainAdapter;
                 if (adapter != null) {
                     Fixture parent = Processor.CallStack.SystemUnderTest.GetValueAs<FlowFixtureBase>();
-                    adapter.SetSystemUnderTest(new MethodPhrase(theRestOfTheCells).Evaluate(parent ?? this));
+                    adapter.SetSystemUnderTest(new MethodPhrase(new CellRange(theRestOfTheCells)).Evaluate(parent ?? this));
                 }
             }
             return fixture;

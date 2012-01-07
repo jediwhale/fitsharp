@@ -6,7 +6,6 @@
 using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
-using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
@@ -57,7 +56,7 @@ namespace fit.Operators {
             public Parse Substitute(Parse source) {
                 int i = 2;
                 foreach (Tree<Cell> parameterValue in values.Branches) {
-                    if (names.Branches[i].Value.Text == source.Value.Text) {
+                    if (names.ValueAt(i).Text == source.Value.Text) {
                         return ((Parse) parameterValue).DeepCopy(s => null, s=> s == parameterValue ? null : s.More, s => s.Parts);
                     }
                     i += 2;

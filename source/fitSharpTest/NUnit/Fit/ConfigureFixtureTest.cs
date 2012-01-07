@@ -41,7 +41,7 @@ namespace fitSharp.Test.NUnit.Fit {
             processor.Memory.GetItem<Symbols>().Save("mysymbol", "myvalue");
             var table = new CellTree(new CellTree("configure", "symbols", "getvalue", "mysymbol"));
             fixture.Interpret(processor, table);
-            Assert.AreEqual("myvalue", table.Branches[0].Branches[2].Value.GetAttribute(CellAttribute.Folded));
+            Assert.AreEqual("myvalue", table.ValueAt(0, 2).GetAttribute(CellAttribute.Folded));
         }
     }
 }

@@ -84,7 +84,7 @@ namespace fitSharp.Test.NUnit.Slim {
                 new SlimTree().AddBranchValue("step").AddBranchValue("callAndAssign").AddBranchValue("symbol").AddBranchValue(
                     "variable").AddBranchValue("sampleMethod");
             ExecuteOperation(executeCallAndAssign, input, 2);
-            Assert.AreEqual("testresult", result.Branches[1].Value);
+            Assert.AreEqual("testresult", result.ValueAt(1));
             Assert.AreEqual("testresult", processor.Get<Symbols>().GetValue("symbol"));
         }
 
@@ -93,7 +93,7 @@ namespace fitSharp.Test.NUnit.Slim {
             var executeCall = new ExecuteCall { Processor = processor };
             var input = new SlimTree().AddBranchValue("step").AddBranchValue("call").AddBranchValue("variable").AddBranchValue("DomainMethod");
             ExecuteOperation(executeCall, input, 2);
-            Assert.AreEqual("domainstuff", result.Branches[1].Value);
+            Assert.AreEqual("domainstuff", result.ValueAt(1));
         }
 
         [Test] public void ExecuteCallOnMissingInstanceUsesLibrary() {
@@ -110,7 +110,7 @@ namespace fitSharp.Test.NUnit.Slim {
         [Test] public void ExecuteGetFixtureReturnsActorInstance() {
             MakeSampleClass("sampleData");
             CallActorMethod("getFixture");
-            Assert.AreEqual("Sample=sampleData", result.Branches[1].Value);
+            Assert.AreEqual("Sample=sampleData", result.ValueAt(1));
         }
 
         [Test] public void ExecutePushAndPopFixtureReturnsActorInstance() {
@@ -119,7 +119,7 @@ namespace fitSharp.Test.NUnit.Slim {
             MakeSampleClass("otherData");
             CallActorMethod("popFixture");
             CallActorMethod("info");
-            Assert.AreEqual("sampleData", result.Branches[1].Value);
+            Assert.AreEqual("sampleData", result.ValueAt(1));
         }
 
         private void MakeSampleClass(string sampleData) {
@@ -142,11 +142,11 @@ namespace fitSharp.Test.NUnit.Slim {
             result = executeResult.GetValue<Tree<string>>();
             Assert.IsFalse(result.IsLeaf);
             Assert.AreEqual(branchCount, result.Branches.Count);
-            Assert.AreEqual("step", result.Branches[0].Value);
+            Assert.AreEqual("step", result.ValueAt(0));
         }
 
         private void CheckForException(string exceptionText) {
-            Assert.IsTrue(result.Branches[1].Value.StartsWith("__EXCEPTION__:" + exceptionText));
+            Assert.IsTrue(result.ValueAt(1).StartsWith("__EXCEPTION__:" + exceptionText));
         }
     }
 }

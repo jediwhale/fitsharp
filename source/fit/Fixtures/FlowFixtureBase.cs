@@ -63,10 +63,17 @@ namespace fitlibrary {
         }
 
         public object ExecuteEmbeddedMethod(Parse theCells) {
+            return ExecuteFlowRowMethod(new CellRange(theCells));
+        }
+
+        public object ExecuteFlowRowMethod(Tree<Cell> row) {
             try {
-                CellRange cells = CellRange.GetMethodCellRange(theCells, 0);
+                var cells = row.Skip(1);
                 return
-                    Processor.ExecuteWithThrow(this,  MethodRowSelector.SelectMethodCells(cells), MethodRowSelector.SelectParameterCells(cells), theCells.More).
+                    Processor.ExecuteWithThrow(this,
+                            MethodRowSelector.SelectMethodCells(cells),
+                            MethodRowSelector.SelectParameterCells(cells),
+                            row.ValueAt(1)).
                         Value;
             }
             catch (ParseException<Cell> e) {

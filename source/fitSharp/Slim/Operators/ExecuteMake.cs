@@ -12,11 +12,11 @@ namespace fitSharp.Slim.Operators {
         public ExecuteMake(): base("make") {}
 
         protected override Tree<string> ExecuteOperation(Tree<string> parameters) {
-            var singleSymbol = Processor.LoadSymbol(parameters.Branches[3].Value);
+            var singleSymbol = Processor.LoadSymbol(parameters.ValueAt(3));
             var newInstance = singleSymbol.IsObject
                 ? singleSymbol
-                : Processor.Create(parameters.Branches[3].Value, ParameterTree(parameters, 4));
-            string name = parameters.Branches[2].Value; 
+                : Processor.Create(parameters.ValueAt(3), ParameterTree(parameters, 4));
+            string name = parameters.ValueAt(2); 
             Processor.Get<SavedInstances>().Save(name, newInstance.Value);
             if (name.StartsWith("library")) {
                 Processor.PushLibraryInstance(newInstance);

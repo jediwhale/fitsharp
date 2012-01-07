@@ -23,9 +23,9 @@ namespace fitSharp.Slim.Operators {
                                       (IDictionary) Activator.CreateInstance(type),
                                       (dictionary, row) => {
                                           dictionary.Add(
-                                              Processor.Parse(type.GetGenericArguments()[0], row.Branches[0].Value.Text)
+                                              Processor.Parse(type.GetGenericArguments()[0], row.ValueAt(0).Text)
                                                   .Value,
-                                              Processor.Parse(type.GetGenericArguments()[1], row.Branches[1].Value.Text)
+                                              Processor.Parse(type.GetGenericArguments()[1], row.ValueAt(1).Text)
                                                   .Value);
                                           return dictionary;
                                       }));

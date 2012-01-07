@@ -30,8 +30,8 @@ namespace fitSharp.Test.NUnit.Fit {
             processor.AddOperator(new MockParseStoryTestString());
             var includeTable = new CellTree(new CellTree("include", "string", input));
             new Include().Interpret(processor, includeTable);
-            Assert.IsTrue(includeTable.Branches[0].Branches[0].Value.HasAttribute(CellAttribute.Folded));
-            Assert.AreEqual(result, includeTable.Branches[0].Branches[0].Value.GetAttribute(CellAttribute.Folded));
+            Assert.IsTrue(includeTable.ValueAt(0, 0).HasAttribute(CellAttribute.Folded));
+            Assert.AreEqual(result, includeTable.ValueAt(0, 0).GetAttribute(CellAttribute.Folded));
         }
 
         [Test] public void IncludesPage() {

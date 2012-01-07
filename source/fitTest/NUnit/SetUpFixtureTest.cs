@@ -18,8 +18,8 @@ namespace fit.Test.NUnit {
             var setUp = new SetUpFixture {Processor = processor.Object};
             setUp.DoTable(table);
             processor.Verify(o => o.Operate<ExecuteOperator>(setUp,
-                It.Is<Tree<Cell>>(c => c.Branches[0].Value.Text == "method"),
-                It.Is<Tree<Cell>>(c => c.Branches[0].Value.Text == "value"),
+                It.Is<Tree<Cell>>(c => c.ValueAt(0).Text == "method"),
+                It.Is<Tree<Cell>>(c => c.ValueAt(0).Text == "value"),
                 It.Is<Cell>(c => c.Text == "value")));
         }
     }

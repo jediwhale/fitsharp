@@ -5,7 +5,6 @@
 
 using System;
 using System.Reflection;
-using fit.Model;
 using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Service;
@@ -32,9 +31,9 @@ namespace fit.Test.NUnit {
             return new Parse("td", value, null, null);
         }
 
-        public static CellRange CreateCellRange(string value)
+        public static Tree<Cell> CreateCellRange(string value)
 		{
-            return new CellRange(CreateCell(value));
+            return new CellTree(value);
 		}
 
         public static bool IsMatch(CompareOperator<Cell> compareOperator, object instance, Type type, string value) {

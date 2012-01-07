@@ -40,11 +40,11 @@ namespace fitSharp.Fit.Operators {
                      result = processor.Execute(interpreter,
                          interpreter.MethodRowSelector.SelectMethodCells(currentRow),
                          interpreter.MethodRowSelector.SelectParameterCells(currentRow),
-                         currentRow.Branches[0].Value);
+                         currentRow.ValueAt(0));
 
                 }
                 if (!result.IsValid) {
-                    if (result.IsException<MemberMissingException>() && currentRow.Branches[0].Value.Text.Length > 0) {
+                    if (result.IsException<MemberMissingException>() && currentRow.ValueAt(0).Text.Length > 0) {
                         var newFixture = processor.ParseTree<Cell, Interpreter>(currentRow);
                         var adapter = newFixture as MutableDomainAdapter;
                         if (adapter != null) adapter.SetSystemUnderTest(interpreter.SystemUnderTest);
@@ -76,7 +76,7 @@ namespace fitSharp.Fit.Operators {
                 hasFinishedTable = true;
 	        }
             catch (System.Exception e) {
-                processor.TestStatus.MarkException(currentRow.Branches[0].Value, e);
+                processor.TestStatus.MarkException(currentRow.ValueAt(0), e);
                 hasFinishedTable = true;
             }
         }
@@ -88,7 +88,7 @@ namespace fitSharp.Fit.Operators {
                 RunTestDefault.DoTable(theRestOfTheRows, childInterpreter, processor, false);
             }
             catch (System.Exception e) {
-                processor.TestStatus.MarkException(theRestOfTheRows.Branches[0].Branches[0].Value, e);
+                processor.TestStatus.MarkException(theRestOfTheRows.ValueAt(0, 0), e);
             }
             processor.CallStack.PopReturn();
             hasFinishedTable = true;

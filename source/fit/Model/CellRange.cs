@@ -1,5 +1,4 @@
-// FitNesse.NET
-// Copyright © 2006,2009 Syterra Software Inc.
+// Copyright © 2011 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -11,10 +10,6 @@ using fitSharp.Machine.Model;
 namespace fit.Model {
     public class CellRange: Tree<Cell> {
         private readonly IEnumerable<Parse> cells;
-
-        public CellRange(IEnumerable<Parse> cells) {
-            this.cells = cells;
-        }
 
         public CellRange(Parse theCells): this(theCells, theCells != null ? theCells.Size : 0) {}
 
@@ -31,7 +26,7 @@ namespace fit.Model {
 
         public IEnumerable<Parse> Cells {
             get {
-                foreach (Parse cell in cells) yield return cell;
+                return cells;
             }
         }
 
