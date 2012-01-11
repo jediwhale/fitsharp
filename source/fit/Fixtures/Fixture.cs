@@ -1,4 +1,4 @@
-// Copyright © 2011 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+// Copyright © 2012 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -15,11 +15,9 @@ namespace fit
 {
 	public class Fixture: MutableDomainAdapter, TargetObjectProvider, Interpreter
 	{
-	    static CellProcessor symbolProcessor; // compatibility with obsolete static symbol methods
+        public Fixture() {}
 
-	    CellProcessor processor;
-
-	    protected object mySystemUnderTest;
+        public Fixture(object systemUnderTest): this() { mySystemUnderTest = systemUnderTest; }
 
 	    public CellProcessor Processor {
 	        get { return processor; }
@@ -31,11 +29,6 @@ namespace fit
 
 	    public TestStatus TestStatus { get { return Processor.TestStatus; } }
         public Symbols Symbols { get { return Processor.Get<Symbols>(); } }
-
-        public Fixture() {}
-
-        public Fixture(object systemUnderTest): this() { mySystemUnderTest = systemUnderTest; }
-
         public virtual bool IsVisible { get { return true; } }
 
 	    public void Prepare(CellProcessor processor, Tree<Cell> row) {
@@ -153,6 +146,7 @@ namespace fit
 	    public string[] Args { get; private set; }
 
 	    public void GetArgsForRow(Tree<Cell> row) {
+	        argumentRow = row;
 	        Args = row.Branches.Skip(1).Aggregate(new List<string>(),
                 (list, cell) => {
                     list.Add(cell.Value.Text);
@@ -160,12 +154,12 @@ namespace fit
                 }).ToArray();
 		}
 
-        public object GetArgumentInput(int theIndex, Type theType) {
-            return Processor.Parse(theType, new TypedValue(this), new CellTreeLeaf(Args[theIndex])).Value;
+        public object GetArgumentInput(int index, Type type) {
+            return Processor.Parse(type, new TypedValue(this), argumentRow.Branches[index + 1]).Value;
         }
 
-        public V GetArgumentInput<V>(int theIndex) {
-            return Processor.Parse(typeof(V), new TypedValue(this), new CellTreeLeaf(Args[theIndex])).GetValue<V>();
+        public V GetArgumentInput<V>(int index) {
+            return Processor.Parse(typeof(V), new TypedValue(this), argumentRow.Branches[index + 1]).GetValue<V>();
         }
 
 	    public object SystemUnderTest {
@@ -175,5 +169,12 @@ namespace fit
         public void SetSystemUnderTest(object theSystemUnderTest) {
             mySystemUnderTest = theSystemUnderTest;
         }
+
+	    static CellProcessor symbolProcessor; // compatibility with obsolete static symbol methods
+
+	    protected object mySystemUnderTest;
+
+	    CellProcessor processor;
+	    Tree<Cell> argumentRow;
 	}
 }
