@@ -1,4 +1,4 @@
-﻿// Copyright © 2011 Syterra Software Inc.
+﻿// Copyright © 2012 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -20,9 +20,8 @@ namespace fit.Operators
         }
 
         public bool Compare(TypedValue actual, Tree<Cell> expected) {
-            var cell = (Parse)expected.Value;
-            var matcher = new ListMatcher(Processor, new ArrayMatchStrategy(Processor, cell.Parts.Parts));
-            return matcher.IsEqual(actual.GetValue<IEnumerable>().Cast<object>(), cell);
+            var matcher = new ListMatcher(Processor, new ArrayMatchStrategy(Processor, expected.Branches[0].Branches[0]));
+            return matcher.IsEqual(actual.GetValue<IEnumerable>().Cast<object>(), expected);
         }
     }
 }

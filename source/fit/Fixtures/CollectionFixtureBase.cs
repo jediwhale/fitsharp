@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using fit;
 using fit.Operators;
+using fitSharp.Fit.Engine;
 
 namespace fitlibrary {
 

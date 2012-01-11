@@ -1,4 +1,4 @@
-// Copyright © 2011 Syterra Software Inc.
+// Copyright © 2012 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -8,30 +8,9 @@ using System.Linq;
 using System.Collections.Generic;
 using fit.Model;
 using fitSharp.Fit.Engine;
-using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
 
 namespace fit.Operators {
-    public interface ListMatchStrategy {
-        bool IsOrdered { get; }
-        TypedValue[] ActualValues(object theActualRow);
-        bool IsExpectedSize(Parse theExpectedCells, object theActualRow);
-        bool FinalCheck(TestStatus testStatus);
-        bool SurplusAllowed {get;}
-        bool CellMatches(TypedValue actualValue, Parse expectedCell, int columnNumber);
-    }
-
-    public class CellMatcher {
-        public CellProcessor Processor { get; private set; }
-
-        public CellMatcher(CellProcessor processor) {
-            Processor = processor;
-        }
-
-        public virtual bool CellMatches(TypedValue actualValue, Parse expectedCell, int columnNumber) {
-            return Processor.Compare(actualValue, expectedCell);
-        }
-    }
 
     public class ListMatcher {
         readonly CellProcessor processor;
@@ -42,11 +21,11 @@ namespace fit.Operators {
             this.processor = processor;
         }
 
-        public bool IsEqual(IEnumerable<object> theActualValue, Parse theExpectedValueCell) {
+        public bool IsEqual(IEnumerable<object> theActualValue, Tree<Cell> theExpectedValueCell) {
             var actuals = new Actuals(theActualValue, strategy);
             int expectedRow = 0;
-            foreach (Parse currentRow in new CellRange(theExpectedValueCell.Parts.Parts.More).Cells) {
-                int match = actuals.FindMatch(RowMatches, expectedRow, currentRow.Parts);
+            foreach (Parse currentRow in theExpectedValueCell.Branches[0].Branches.Skip(1)) {
+                int match = actuals.FindMatch(RowMatches, expectedRow, currentRow);
                 if (match < 0 || (match != expectedRow && strategy.IsOrdered)) return false;
                 expectedRow++;
             }
@@ -62,7 +41,7 @@ namespace fit.Operators {
             int expectedRow = 0;
             foreach (Parse currentRow in new CellRange(theTableRows.More).Cells) {
                 try {
-                    int match = actuals.FindMatch(RowMatches, expectedRow, currentRow.Parts);
+                    int match = actuals.FindMatch(RowMatches, expectedRow, currentRow);
                     if (match < 0) {
                         MarkAsIncorrect(currentRow, "missing");
                         result = false;
@@ -109,15 +88,14 @@ namespace fit.Operators {
             processor.TestStatus.MarkWrong(theRow);
         }
 
-        bool RowMatches(Parse theExpectedCells, object theActualRow) {
-            if (!strategy.IsExpectedSize(theExpectedCells, theActualRow)) return false;
-            Parse expectedCell = theExpectedCells;
+        bool RowMatches(Tree<Cell> expectedCells, object theActualRow) {
+            if (!strategy.IsExpectedSize(expectedCells.Branches.Count, theActualRow)) return false;
             int i = 0;
             foreach (TypedValue actualValue in strategy.ActualValues(theActualRow)) {
-                if (actualValue.Type != typeof(void) || expectedCell.Text.Length > 0) {
-                    if (!strategy.CellMatches(actualValue, expectedCell, i)) return false;
+                if (actualValue.Type != typeof(void) || expectedCells.ValueAt(i).Text.Length > 0) {
+                    if (!strategy.CellMatches(actualValue, expectedCells.Branches[i], i)) return false;
                 }
-                expectedCell = expectedCell.More;
+                //expectedCell = expectedCell.More;
                 i++;
             }
             return true;
