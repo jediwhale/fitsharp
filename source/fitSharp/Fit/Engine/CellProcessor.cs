@@ -12,6 +12,6 @@ namespace fitSharp.Fit.Engine {
     public interface CellProcessor: Processor<Cell> {
 	    TestStatus TestStatus { get; set; }
         CallStack CallStack { get; }
-        Tree<Cell> MakeCell(string text, IEnumerable<Tree<Cell>> branches);
+        Tree<Cell> MakeCell(string text, string tag, IEnumerable<Tree<Cell>> branches);
     }
 }

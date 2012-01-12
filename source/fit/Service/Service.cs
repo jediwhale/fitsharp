@@ -1,10 +1,9 @@
-﻿// Copyright © 2011 Syterra Software Inc.
+﻿// Copyright © 2012 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using fitSharp.Fit.Operators;
 using fitSharp.Fit.Service;
@@ -32,10 +31,11 @@ namespace fit.Service {
             ((CellOperators)Operators).RemoveCellHandler(handlerName);
         }
 
-        public override Tree<Cell> MakeCell(string text, IEnumerable<Tree<Cell>> branches) {
-            var result = new Parse("td", text, null, null);
-            var firstBranch = branches.FirstOrDefault();
-            if (firstBranch != null) result.Parts = (Parse) firstBranch;
+        public override Tree<Cell> MakeCell(string text, string tag, IEnumerable<Tree<Cell>> branches) {
+            var result = new Parse(tag, text, null, null);
+            foreach (var branch in branches) {
+                result.Add(branch);
+            }
             return result;
         }
     }

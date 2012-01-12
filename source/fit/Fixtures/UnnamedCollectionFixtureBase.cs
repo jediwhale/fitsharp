@@ -19,7 +19,7 @@ namespace fitlibrary {
         public UnnamedCollectionFixtureBase(IEnumerable<object[]> theActualValues): base(theActualValues) {}
 
         public override void DoTable(Parse theTable) {
-            CompareRows(theTable.Parts);
+            CompareRows(theTable, 0);
         }
 
         protected override ListMatchStrategy MatchStrategy {

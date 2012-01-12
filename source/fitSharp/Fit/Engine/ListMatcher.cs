@@ -6,11 +6,9 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using fit.Model;
-using fitSharp.Fit.Engine;
 using fitSharp.Machine.Model;
 
-namespace fit.Operators {
+namespace fitSharp.Fit.Engine {
 
     public class ListMatcher {
         readonly CellProcessor processor;
@@ -24,7 +22,7 @@ namespace fit.Operators {
         public bool IsEqual(IEnumerable<object> theActualValue, Tree<Cell> theExpectedValueCell) {
             var actuals = new Actuals(theActualValue, strategy);
             int expectedRow = 0;
-            foreach (Parse currentRow in theExpectedValueCell.Branches[0].Branches.Skip(1)) {
+            foreach (var currentRow in theExpectedValueCell.Branches[0].Branches.Skip(1)) {
                 int match = actuals.FindMatch(RowMatches, expectedRow, currentRow);
                 if (match < 0 || (match != expectedRow && strategy.IsOrdered)) return false;
                 expectedRow++;
@@ -32,14 +30,14 @@ namespace fit.Operators {
             return (actuals.UnmatchedCount == 0);
         }
 
-        public bool MarkCell(IEnumerable<object> theActualValue, Parse theTableRows) {
+        public bool MarkCell(IEnumerable<object> theActualValue, Tree<Cell> table, int rowsToSkip) {
             var actuals = new Actuals(theActualValue, strategy);
-            if (theTableRows.More == null && actuals.UnmatchedCount == 0) {
-                processor.TestStatus.MarkRight(theTableRows);
+            if (table.Branches.Count == rowsToSkip + 1 && actuals.UnmatchedCount == 0) {
+                processor.TestStatus.MarkRight(table.ValueAt(rowsToSkip));
             }
             bool result = true;
             int expectedRow = 0;
-            foreach (Parse currentRow in new CellRange(theTableRows.More).Cells) {
+            foreach (var currentRow in table.Branches.Skip(rowsToSkip + 1)) {
                 try {
                     int match = actuals.FindMatch(RowMatches, expectedRow, currentRow);
                     if (match < 0) {
@@ -49,17 +47,17 @@ namespace fit.Operators {
                     expectedRow++;
                 }
                 catch (Exception e) {
-                    processor.TestStatus.MarkException(currentRow.Parts, e);
+                    processor.TestStatus.MarkException(currentRow.ValueAt(0), e);
                     return false;
                 }
             }
             if (actuals.UnmatchedCount > 0 && !strategy.SurplusAllowed) {
-                actuals.ShowSurplus(processor, theTableRows.Last);
+                actuals.ShowSurplus(processor, table);
                 result = false;
             }
 
-            Parse markRow = theTableRows.More;
             for (int row = 0; row < expectedRow; row++) {
+                var markRow = table.Branches[rowsToSkip + row + 1];
                 if (strategy.IsOrdered && actuals.IsOutOfOrder(row)) {
                     MarkAsIncorrect(markRow, "out of order");
                     result = false;
@@ -67,25 +65,24 @@ namespace fit.Operators {
                 else if (actuals.Match(row) != null) {
                     TypedValue[] actualValues = strategy.ActualValues(actuals.Match(row));
                     int i = 0;
-                    foreach (Parse cell in markRow.Branches) {
-                        if (actualValues[i].Type != typeof(void) || cell.Text.Length > 0) {
+                    foreach (var cell in markRow.Branches) {
+                        if (actualValues[i].Type != typeof(void) || cell.Value.Text.Length > 0) {
                              processor.Check(actualValues[i], cell);
 
                         }
                         i++;
                     }
                 }
-                markRow = markRow.More;
             }
 
             if (!strategy.FinalCheck(processor.TestStatus)) return false;
             return result;
         }
 
-        void MarkAsIncorrect(Parse theRow, string theReason) {
-            Parse firstCell = theRow.Parts;
+        void MarkAsIncorrect(Tree<Cell> theRow, string theReason) {
+            var firstCell = theRow.ValueAt(0);
             firstCell.SetAttribute(CellAttribute.Label, theReason);
-            processor.TestStatus.MarkWrong(theRow);
+            processor.TestStatus.MarkWrong(theRow.Value);
         }
 
         bool RowMatches(Tree<Cell> expectedCells, object theActualRow) {
@@ -95,7 +92,6 @@ namespace fit.Operators {
                 if (actualValue.Type != typeof(void) || expectedCells.ValueAt(i).Text.Length > 0) {
                     if (!strategy.CellMatches(actualValue, expectedCells.Branches[i], i)) return false;
                 }
-                //expectedCell = expectedCell.More;
                 i++;
             }
             return true;
@@ -105,7 +101,7 @@ namespace fit.Operators {
             readonly List<ActualItem> myActuals;
             readonly ListMatchStrategy myStrategy;
 
-            public delegate bool Matches(Parse theExpectedCells, object theActual);
+            public delegate bool Matches(Tree<Cell> theExpectedCells, object theActual);
             public Actuals(IEnumerable<object> theActualValues, ListMatchStrategy theStrategy) {
                 myActuals = new List<ActualItem>(theActualValues.Select(o => new ActualItem(o)));
                 myStrategy = theStrategy;
@@ -118,7 +114,7 @@ namespace fit.Operators {
                 return myActuals.Where(item => item.MatchRow == theIndex).Select(item => item.Value).FirstOrDefault();
             }
 
-            public int FindMatch(Matches theMatcher, int theExpectedRow, Parse theExpectedCells) {
+            public int FindMatch(Matches theMatcher, int theExpectedRow, Tree<Cell> theExpectedCells) {
                 int result = -1;
                 if (myActuals.Count == 0) return result;
                 int lastMatched = -1;
@@ -140,17 +136,15 @@ namespace fit.Operators {
                 return result;
             }
 
-            public void ShowSurplus(CellProcessor processor, Parse theLastRow) {
-                Parse lastRow = theLastRow;
+            public void ShowSurplus(CellProcessor processor, Tree<Cell> table) {
                 for (int i = 0; i < myActuals.Count;) {
                     ActualItem surplus = myActuals[i];
                     if (surplus.MatchRow != null) {
                         i++;
                         continue;
                     }
-                    Parse surplusRow = MakeSurplusRow(processor, surplus.Value);
-                    lastRow.More = surplusRow;
-                    lastRow = surplusRow;
+                    var surplusRow = MakeSurplusRow(processor, surplus.Value);
+                    table.Add(surplusRow);
                     myActuals.RemoveAt(i);
                 }
             }
@@ -161,19 +155,17 @@ namespace fit.Operators {
                      myActuals[theExpectedRow].MatchRow != -1);
             }
 
-            Parse MakeSurplusRow(CellProcessor processor, object theSurplusRow) {
-                Parse cells = null;
+            Tree<Cell> MakeSurplusRow(CellProcessor processor, object theSurplusRow) {
+                var cells = new List<Tree<Cell>>();
                 foreach (TypedValue actualValue in myStrategy.ActualValues(theSurplusRow)) {
-                    var cell = (Parse) processor.Compose(actualValue.IsVoid ? new TypedValue(string.Empty) : actualValue);
-                    if (cells == null) {
-                        cell.SetAttribute(CellAttribute.Label, "surplus");
-                        cells = cell;
+                    var cell = processor.Compose(actualValue.IsVoid ? new TypedValue(string.Empty) : actualValue);
+                    if (cells.Count == 0) {
+                        cell.Value.SetAttribute(CellAttribute.Label, "surplus");
                     }
-                    else
-                        cells.Last.More = cell;
+                    cells.Add(cell);
                 }
-                var row = new Parse("tr", null, cells, null);
-                processor.TestStatus.MarkWrong(row);
+                var row = processor.MakeCell(string.Empty, "tr", cells);
+                processor.TestStatus.MarkWrong(row.Value);
                 return row;
             }
 

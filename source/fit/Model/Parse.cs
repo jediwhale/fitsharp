@@ -1,4 +1,4 @@
-// Copyright © 2011 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+// Copyright © 2012 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -250,7 +250,19 @@ namespace fit
 	    public Cell Value { get { return this; } }
 	    public bool IsLeaf { get { return Parts == null; } }
 	    public ReadList<Tree<Cell>> Branches { get { return new ParseList(this); } }
-        public Parse ParseCell { get { return this; }}
+
+	    public void Add(Tree<Cell> branch) {
+	        var parseBranch = (Parse) branch;
+	        parseBranch.More = null;
+            if (Parts == null) {
+                Parts = parseBranch;
+            }
+            else {
+                Parts.Last.More = parseBranch;
+            }
+	    }
+
+	    public Parse ParseCell { get { return this; }}
 	}
 
     public class ParseList: ReadList<Tree<Cell>> {

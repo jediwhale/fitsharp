@@ -17,7 +17,7 @@ namespace fitSharp.Fit.Service {
 	    public TestStatus TestStatus { get; set; }
         public CallStack CallStack { get; private set; }
 
-        public virtual Tree<Cell> MakeCell(string text, IEnumerable<Tree<Cell>> branches) {
+        public virtual Tree<Cell> MakeCell(string text, string tag, IEnumerable<Tree<Cell>> branches) {
             var result = new CellTree(new CellBase(text));
             foreach (var branch in branches) result.AddBranch(branch);
             return result;

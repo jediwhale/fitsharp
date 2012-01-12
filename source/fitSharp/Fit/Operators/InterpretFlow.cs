@@ -1,8 +1,9 @@
-﻿// Copyright © 2011 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2012 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
+using System.Collections.Generic;
 using System.Linq;
 using fitSharp.Fit.Engine;
 using fitSharp.Machine.Engine;
@@ -48,7 +49,7 @@ namespace fitSharp.Fit.Operators {
                         var newFixture = processor.ParseTree<Cell, Interpreter>(currentRow);
                         var adapter = newFixture as MutableDomainAdapter;
                         if (adapter != null) adapter.SetSystemUnderTest(interpreter.SystemUnderTest);
-                        ProcessRestOfTable(newFixture, processor.MakeCell(string.Empty, table.Branches.Skip(rowNumber)));
+                        ProcessRestOfTable(newFixture, MakeTableWithRows(table, rowNumber));
                     }
                     else {
                         result.ThrowExceptionIfNotValid();
@@ -66,7 +67,7 @@ namespace fitSharp.Fit.Operators {
                     else {
                         //todo: change wrapping re sut & call stack?
                         processor.Operate<WrapOperator>(result)
-                            .As<Interpreter>(i => ProcessRestOfTable(i, processor.MakeCell(string.Empty, table.Branches.Skip(rowNumber))));
+                            .As<Interpreter>(i => ProcessRestOfTable(i, MakeTableWithRows(table, rowNumber)));
                     }
                 }
             }
@@ -79,6 +80,11 @@ namespace fitSharp.Fit.Operators {
                 processor.TestStatus.MarkException(currentRow.ValueAt(0), e);
                 hasFinishedTable = true;
             }
+        }
+
+        Tree<Cell> MakeTableWithRows(Tree<Cell> table, int rowNumber) {
+            var rows = new List<Tree<Cell>>(table.Branches.Skip(rowNumber));
+            return processor.MakeCell(string.Empty, "table", rows);
         }
 
         void ProcessRestOfTable(Interpreter childInterpreter, Tree<Cell> theRestOfTheRows) {

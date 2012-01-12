@@ -1,4 +1,4 @@
-// Copyright © 2011 Syterra Software Inc. Includes work © 2003-2006 Rick Mugridge, University of Auckland, New Zealand.
+// Copyright © 2012 Syterra Software Inc. Includes work © 2003-2006 Rick Mugridge, University of Auckland, New Zealand.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -8,8 +8,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using fit;
-using fit.Operators;
 using fitSharp.Fit.Engine;
+using fitSharp.Machine.Model;
 
 namespace fitlibrary {
 
@@ -40,9 +40,9 @@ namespace fitlibrary {
 
 	    protected abstract ListMatchStrategy MatchStrategy {get;}
 
-        protected void CompareRows(Parse theTableRows) {
+        protected void CompareRows(Tree<Cell> table, int rowsToSkip) {
             var matcher = new ListMatcher(Processor, MatchStrategy);
-            matcher.MarkCell(myArray, theTableRows);
+            matcher.MarkCell(myArray, table, rowsToSkip);
         }
 
 	    protected IEnumerable<object> myArray {

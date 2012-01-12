@@ -1,4 +1,4 @@
-// Copyright © 2011 Syterra Software Inc.
+// Copyright © 2012 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -19,10 +19,11 @@ namespace fitlibrary {
 
 	    protected NamedCollectionFixtureBase(IEnumerator theEnumerator): base(theEnumerator) {}
 
-        public override void DoRows(Parse theRows) {
-            if (theRows == null) throw new TableStructureException("Header row missing.");
-            myHeaderRow = theRows;
-            CompareRows(theRows);
+        public override void DoTable(Parse table) {
+            var rows = table.Parts.More;
+            if (rows == null) throw new TableStructureException("Header row missing.");
+            myHeaderRow = rows;
+            CompareRows(table, 1);
         }
 
         protected Parse myHeaderRow;

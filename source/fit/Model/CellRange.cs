@@ -1,16 +1,15 @@
-// Copyright © 2011 Syterra Software Inc.
+// Copyright © 2012 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
+using System;
 using System.Collections.Generic;
 using fitlibrary.exception;
 using fitSharp.Machine.Model;
 
 namespace fit.Model {
     public class CellRange: Tree<Cell> {
-        private readonly IEnumerable<Parse> cells;
-
         public CellRange(Parse theCells): this(theCells, theCells != null ? theCells.Size : 0) {}
 
         public CellRange(Parse theCells, int theCellCount) {
@@ -31,8 +30,8 @@ namespace fit.Model {
         }
 
         public Cell Value { get { return null; } }
-
         public bool IsLeaf { get { return false; } }
+        public void Add(Tree<Cell> branch) { throw new InvalidOperationException("cell range is read only."); }
 
         public ReadList<Tree<Cell>> Branches {
             get {
@@ -51,5 +50,7 @@ namespace fit.Model {
             }
             return new CellRange(restOfTheRow, restOfTheRow.Size - excludedCellCount);
         }
+
+        readonly IEnumerable<Parse> cells;
     }
 }

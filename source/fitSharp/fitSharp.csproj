@@ -42,6 +42,7 @@
     <Compile Include="Fit\Application\Configurable.cs" />
     <Compile Include="Fit\Application\ConfigurationList.cs" />
     <Compile Include="Fit\Application\FileExclusions.cs" />
+    <Compile Include="Fit\Engine\ListMatcher.cs" />
     <Compile Include="Fit\Engine\ListMatchStrategy.cs" />
     <Compile Include="Fit\Fixtures\ClearSymbols.cs" />
     <Compile Include="Fit\Fixtures\CommentFixture.cs" />

@@ -75,7 +75,6 @@
     <Compile Include="Fixtures\FlowFixtureBase.cs" />
     <Compile Include="Fixtures\GridFixture.cs" />
     <Compile Include="Fixtures\ImportFixture.cs" />
-    <Compile Include="Operators\ListMatcher.cs" />
     <Compile Include="Fixtures\NamedCollectionFixtureBase.cs" />
     <Compile Include="Fixtures\RowFixture.cs" />
     <Compile Include="Fixtures\SequenceFixture.cs" />
