@@ -126,6 +126,56 @@ Encoded text is handled.<br>
 <td><span class="fit_grey">&lt;stuff&gt;</span> <span class="fit_label">surplus</span></td></tr></table></td></tr>
 </table>
 <br>
+Closest match is used.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>setup sample array</td></tr>
+<tr><td>column a</td><td>column b</td></tr>
+<tr><td>a</td><td>b</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>when test is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample array</td></tr>
+<tr><td>column a</td><td>column b</td></tr>
+<tr><td>a</td><td>x</td></tr>
+</table>
+</td><td>then result is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample array</td></tr>
+<tr><td>column a</td><td>column b</td></tr>
+<tr><td class="pass">a</td><td class="fail">x <span class="fit_label">expected</span><hr />b <span class="fit_label">actual</span><hr />At 0 expected x was b</td></tr>
+</table></td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>setup sample array</td></tr>
+<tr><td>column a</td><td>column b</td></tr>
+<tr><td>a</td><td>x</td></tr>
+<tr><td>a</td><td>b</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>when test is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample array</td></tr>
+<tr><td>column a</td><td>column b</td></tr>
+<tr><td>a</td><td>b</td></tr>
+</table>
+</td><td>then result is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample array</td></tr>
+<tr><td>column a</td><td>column b</td></tr>
+<tr><td class="pass">a</td><td class="pass">b</td></tr>
+<tr class="fail">
+<td><span class="fit_grey">a</span> <span class="fit_label">surplus</span></td>
+<td><span class="fit_grey">x</span></td></tr></table></td></tr>
+</table></td></tr>
+</table>
+<br>
+<br>
+<br>
 </div>
 <div style="width:100%;text-align:right">
 <span class="footer">&copy; Copyright <a href="http://www.syterra.com">Syterra Software Inc.</a> All rights reserved.</span>
