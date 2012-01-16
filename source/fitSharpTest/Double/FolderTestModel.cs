@@ -1,20 +1,18 @@
-// Copyright © 2010 Syterra Software Inc. All rights reserved.
+// Copyright © 2011 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using fitSharp.IO;
+using Path=fitSharp.IO.Path;
 
 namespace fitSharp.Test.Double
 {
     public class FolderTestModel: FolderModel, ProgressReporter {
-        public FolderTestModel() {
-            myFiles = new Hashtable();
-        }
-
         public void MakeFile(string thePath, string theContent) {
             myFiles[thePath] = theContent;
         }
@@ -25,8 +23,12 @@ namespace fitSharp.Test.Double
             return writer;
         }
 
-        public string FileContent(string thePath) {
-            return (myFiles.ContainsKey(thePath) ? myFiles[thePath].ToString() : null);
+        public string GetPageContent(Path thePath) {
+            return (myFiles.ContainsKey(thePath.ToString()) ? myFiles[thePath.ToString()].ToString() : null);
+        }
+
+        public Path MakePath(string pageName) {
+            return new FilePath(pageName);
         }
 
         public bool FileExists(string thePath) {
@@ -57,11 +59,11 @@ namespace fitSharp.Test.Double
         }
 
         public void CopyFile(string theInputPath, string theOutputPath) {
-            MakeFile(theOutputPath, FileContent(theInputPath));
+            MakeFile(theOutputPath, GetPageContent(MakePath(theInputPath)));
         }
         
         public void Write(string theMessage) {}
 
-        private readonly Hashtable myFiles;
+        readonly Dictionary<string, object> myFiles = new Dictionary<string, object>();
     }
 }

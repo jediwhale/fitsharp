@@ -58,8 +58,8 @@ namespace fitSharp.Test.NUnit.Slim {
             var result = Compose(new ComposeList(), new List<object> {"a", 1.23}, typeof (List<object>));
             Assert.IsNotNull(result);
             Assert.AreEqual(2, result.Branches.Count);
-            Assert.AreEqual("a", result.Branches[0].Value); 
-            Assert.AreEqual("1.23", result.Branches[1].Value); 
+            Assert.AreEqual("a", result.ValueAt(0)); 
+            Assert.AreEqual("1.23", result.ValueAt(1)); 
         }
 
         [Test] public void ArrayIsComposedAsTree() {
@@ -67,8 +67,8 @@ namespace fitSharp.Test.NUnit.Slim {
             var result = Compose(new ComposeList(), new object[] {"a", 1.23}, typeof (List<object>));
             Assert.IsNotNull(result);
             Assert.AreEqual(2, result.Branches.Count);
-            Assert.AreEqual("a", result.Branches[0].Value); 
-            Assert.AreEqual("1.23", result.Branches[1].Value); 
+            Assert.AreEqual("a", result.ValueAt(0)); 
+            Assert.AreEqual("1.23", result.ValueAt(1)); 
         }
 
         [Test] public void NestedListIsComposedAsTree() {
@@ -77,9 +77,9 @@ namespace fitSharp.Test.NUnit.Slim {
             var result = Compose(new ComposeList(), new List<object> {"a", new List<object> {"b", "c"}}, typeof (List<object>));
             Assert.IsNotNull(result);
             Assert.AreEqual(2, result.Branches.Count);
-            Assert.AreEqual("a", result.Branches[0].Value);
-            Assert.AreEqual("b", result.Branches[1].Branches[0].Value); 
-            Assert.AreEqual("c", result.Branches[1].Branches[1].Value); 
+            Assert.AreEqual("a", result.ValueAt(0));
+            Assert.AreEqual("b", result.ValueAt(1, 0)); 
+            Assert.AreEqual("c", result.ValueAt(1, 1)); 
         }
 
         [Test] public void ExceptionIsComposed() {

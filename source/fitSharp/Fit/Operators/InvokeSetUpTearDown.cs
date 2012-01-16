@@ -9,19 +9,16 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
     public class InvokeSetUpTearDown: CellOperator, InvokeOperator<Cell> {
-        public const string SetUpMethod = "#setup";
-        public const string TearDownMethod = "#teardown";
 
-        public bool CanInvoke(TypedValue instance, string memberName, Tree<Cell> parameters) {
-            return memberName == SetUpMethod || memberName == TearDownMethod;
+        public bool CanInvoke(TypedValue instance, MemberName memberName, Tree<Cell> parameters) {
+            return memberName == MemberName.SetUp || memberName == MemberName.TearDown;
         }
 
-        public TypedValue Invoke(TypedValue instance, string prefixedMemberName, Tree<Cell> parameters) {
-            var memberName = prefixedMemberName.Substring(1);
-            var member = RuntimeType.FindDirectInstance(instance.Value, new IdentifierName(memberName), 0);
+        public TypedValue Invoke(TypedValue instance, MemberName memberName, Tree<Cell> parameters) {
+            var member = RuntimeType.FindDirectInstance(instance.Value, memberName, 0);
             return member != null
                             ? member.Invoke(new object[] {})
-                            : TypedValue.MakeInvalid(new MemberMissingException(instance.Type, memberName, 0));
+                            : TypedValue.MakeInvalid(new MemberMissingException(instance.Type, memberName.Name, 0));
         }
     }
 }

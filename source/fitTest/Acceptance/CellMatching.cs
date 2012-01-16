@@ -6,7 +6,8 @@
 using System;
 using System.Web;
 using fitlibrary;
-using fitSharp.Fit.Model;
+using fitSharp.Fit.Engine;
+using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fit.Test.Acceptance {

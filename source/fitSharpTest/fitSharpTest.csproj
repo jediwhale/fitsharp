@@ -54,7 +54,9 @@
     <Compile Include="Double\Slim\Builder.cs" />
     <Compile Include="Double\TestSocket.cs" />
     <Compile Include="NUnit\Fit\IncludeTest.cs" />
+    <Compile Include="NUnit\Fit\ParseMemberNameTest.cs" />
     <Compile Include="NUnit\Fit\TagFilterTest.cs" />
+    <Compile Include="NUnit\Fit\ValueArrayTest.cs" />
     <Compile Include="NUnit\Machine\ArgumentParserTest.cs" />
     <Compile Include="NUnit\Machine\OperatorsTest.cs" />
     <Compile Include="NUnit\Machine\StringDifferenceTest.cs" />

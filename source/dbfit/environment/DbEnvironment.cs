@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Data;
-using fitSharp.Machine.Model;
+using fitSharp.Machine.Engine;
 
 namespace dbfit {
     /// <summary>

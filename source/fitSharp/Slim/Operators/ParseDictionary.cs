@@ -18,14 +18,14 @@ namespace fitSharp.Slim.Operators {
         }
 
         public TypedValue Parse(Type type, TypedValue instance, Tree<string> parameters) {
-            Tree<CellBase> table = new HtmlTables().Parse(parameters.Value);
+            var table = new HtmlTables().Parse(parameters.Value);
             return new TypedValue(table.Branches[0].Branches.Aggregate(
                                       (IDictionary) Activator.CreateInstance(type),
                                       (dictionary, row) => {
                                           dictionary.Add(
-                                              Processor.Parse(type.GetGenericArguments()[0], row.Branches[0].Value.Text)
+                                              Processor.Parse(type.GetGenericArguments()[0], row.ValueAt(0).Text)
                                                   .Value,
-                                              Processor.Parse(type.GetGenericArguments()[1], row.Branches[1].Value.Text)
+                                              Processor.Parse(type.GetGenericArguments()[1], row.ValueAt(1).Text)
                                                   .Value);
                                           return dictionary;
                                       }));

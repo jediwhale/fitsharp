@@ -11,33 +11,33 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
     public class InvokeDefault<T,P>: Operator<T, P>, InvokeOperator<T> where P: class, Processor<T> {
-        public bool CanInvoke(TypedValue instance, string memberName, Tree<T> parameters) {
+        public bool CanInvoke(TypedValue instance, MemberName memberName, Tree<T> parameters) {
             return true;
         }
 
-        public TypedValue Invoke(TypedValue instance, string memberName, Tree<T> parameters) {
+        public TypedValue Invoke(TypedValue instance, MemberName memberName, Tree<T> parameters) {
             RuntimeMember member;
             var parameterNames = new List<string>();
             int parameterCount;
 
-            if (memberName.StartsWith(MemberName.NamedParameterPrefix)) {
+            if (memberName.HasNamedParameters) {
                 parameterNames = parameters.Branches.Alternate().Aggregate(new List<string>(),
                                                           (names, parameter) => {
                                                               names.Add(Processor.ParseTree<T, string>(parameter));
                                                               return names;
                                                           });
                 parameterCount = parameterNames.Count;
-                member = RuntimeType.FindInstance(instance.Value, new IdentifierName(memberName.Substring(MemberName.NamedParameterPrefix.Length)), parameterNames);
+                member = RuntimeType.FindInstance(instance.Value, memberName, parameterNames);
             }
             else {
                 parameterCount = parameters.Branches.Count;
-                member = RuntimeType.FindInstance(instance.Value, new IdentifierName(memberName), parameterCount);
+                member = RuntimeType.FindInstance(instance.Value, memberName, parameterCount);
             }
 
             if (member == null)
-                return TypedValue.MakeInvalid(new MemberMissingException(instance.Type, new IdentifierName(memberName).SourceName, parameterCount));
+                return TypedValue.MakeInvalid(new MemberMissingException(instance.Type, memberName.Name, parameterCount));
 
-            var parameterList = memberName.StartsWith(MemberName.NamedParameterPrefix)
+            var parameterList = memberName.HasNamedParameters
                 ? new ParameterList<T>(Processor).GetNamedParameterList(instance, parameters, member, parameterNames)
                 : new ParameterList<T>(Processor).GetParameterList(instance, parameters, member);
             try {

@@ -1,5 +1,5 @@
 using System;
-using fitSharp.Machine.Model;
+using fitSharp.Machine.Engine;
 
 namespace dbfit.fixture
 {

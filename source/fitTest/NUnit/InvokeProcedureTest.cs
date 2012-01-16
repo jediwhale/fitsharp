@@ -4,6 +4,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using fit.Operators;
+using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
@@ -27,46 +28,46 @@ namespace fit.Test.NUnit {
         }
 
         [Test] public void InvokeForMembersIsntHandled() {
-            Assert.IsFalse(invokeProcedure.CanInvoke(TypedValue.Void, "member", new CellTree()));
+            Assert.IsFalse(invokeProcedure.CanInvoke(TypedValue.Void, new MemberName("member"), new CellTree()));
         }
 
         [Test] public void InvokeForProceduresIsHandled() {
             cellProcessor.Get<Procedures>().Save("procedure", new CellTree());
-            Assert.IsTrue(invokeProcedure.CanInvoke(TypedValue.Void, "procedure", new CellTree()));
+            Assert.IsTrue(invokeProcedure.CanInvoke(TypedValue.Void, new MemberName("procedure"), new CellTree()));
         }
 
         [Test] public void ProcedureIsExecuted() {
             cellProcessor.Get<Procedures>().Save("procedure", Parse.ParseFrom(noParameterProcedureHtml));
             var sample = new Sample();
-            invokeProcedure.Invoke(new TypedValue(sample), "procedure", new CellTree());
+            invokeProcedure.Invoke(new TypedValue(sample), new MemberName("procedure"), new CellTree());
             Assert.AreEqual("hi", sample.Text);
         }
 
         [Test] public void ProcedureExecutionIsLogged() {
             cellProcessor.Get<Procedures>().Save("procedure", Parse.ParseFrom(noParameterProcedureHtml));
             var sample = new Sample();
-            invokeProcedure.Invoke(new TypedValue(sample), "procedure", new CellTree());
+            invokeProcedure.Invoke(new TypedValue(sample), new MemberName("procedure"), new CellTree());
             Assert.AreEqual("<table><tr><td>settext</td></tr></table>", cellProcessor.TestStatus.LastAction);
         }
 
         [Test] public void ProcedureIsExecutedOnACopyOfBody() {
             cellProcessor.Get<Procedures>().Save("procedure", Parse.ParseFrom(errorProcedureHtml));
             var sample = new Sample();
-            invokeProcedure.Invoke(new TypedValue(sample), "procedure", new CellTree());
+            invokeProcedure.Invoke(new TypedValue(sample), new MemberName("procedure"), new CellTree());
             Assert.AreEqual(errorProcedureHtml, cellProcessor.Get<Procedures>().GetValue("procedure").ToString());
         }
 
         [Test] public void ParameterValueIsSubstituted() {
             cellProcessor.Get<Procedures>().Save("procedure", Parse.ParseFrom(oneParameterProcedureHtml));
             var sample = new Sample();
-            invokeProcedure.Invoke(new TypedValue(sample), "procedure", new Parse("tr", "", new Parse("td", "actual", null, null), null));
+            invokeProcedure.Invoke(new TypedValue(sample), new MemberName("procedure"), new Parse("tr", "", new Parse("td", "actual", null, null), null));
             Assert.AreEqual("actual", sample.Text);
         }
 
         [Test] public void TwoParameterValuesAreSubstituted() {
             cellProcessor.Get<Procedures>().Save("procedure", Parse.ParseFrom(twoParameterProcedureHtml));
             var sample = new Sample();
-            invokeProcedure.Invoke(new TypedValue(sample), "procedure", new Parse("tr", "",
+            invokeProcedure.Invoke(new TypedValue(sample), new MemberName("procedure"), new Parse("tr", "",
                 new Parse("td", "actual1", null, new Parse("td", "actual2", null, null)),
                 null));
             Assert.AreEqual("actual1actual2", sample.Text);

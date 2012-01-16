@@ -12,6 +12,7 @@ using fitSharp.Fit.Application;
 using fitSharp.IO;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
+using Path = System.IO.Path;
 
 namespace fitSharp.Fit.Runner {
     public interface StoryTestSuite {

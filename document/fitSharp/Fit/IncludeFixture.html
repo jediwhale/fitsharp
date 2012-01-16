@@ -14,15 +14,54 @@ to be bound by the terms of this license. You must not remove this notice, or an
 <body>
 <div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
 <div class="pagename">Include Fixture</div>
-<div class="content"><br>
+<div class="content">This fixture lets us include other pages within a story test page.<br>
+<br>
+We can include a page using an absolute path or a relative path from the working directory. If the page contains test tables, they are executed.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>when test is</td><td><br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>include</td><td>text</td><td>stuff</td></tr>
+<tr><td>include</td><td>page</td><td>document\fitSharp\Fit\SampleInputFiles\SampleSimpleTest.html</td></tr>
 </table>
-</td><td>then result is</td><td><br /><table border="1" cellpadding="2" cellspacing="0">
-<tr><td>include<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension">stuff</div></div></td><td>text</td><td>stuff</td></tr>
+</td><td>then result is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>include<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension"><html>
+<head>
+  <link href="fit.css" type="text/css" rel="stylesheet"></head>
+<body><div id=""fit_tags"" style="color:gray; font-weight:bold; margin-bottom:1em;">Tags: SampleTag</div><br>
+This is a simple test.<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>SampleDo</td></tr>
+<tr><td>check</td><td>one</td><td class="pass">1</td></tr>
+</table>
+</body>
+</html></div></div></td><td>page</td><td>document\fitSharp\Fit\SampleInputFiles\SampleSimpleTest.html</td></tr>
+</table></td></tr>
+</table>
+<br>
+We can include pages with a relative path from the currently executing page.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>when test is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>include</td><td>page from current</td><td>SampleInputFiles\SampleSubNoTest\SampleNoTest.html</td></tr>
+</table>
+</td><td>then result is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>include<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension">This has no tests.</div></div></td><td>page from current</td><td>SampleInputFiles\SampleSubNoTest\SampleNoTest.html</td></tr>
+</table></td></tr>
+</table>
+<br>
+We can include pages with a relative path from the top-level currently executing suite.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>when test is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>include</td><td>page from suite</td><td>Fit\SampleInputFiles\SampleSubNoTest\SampleNoTest.html</td></tr>
+</table>
+</td><td>then result is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>include<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension">This has no tests.</div></div></td><td>page from suite</td><td>Fit\SampleInputFiles\SampleSubNoTest\SampleNoTest.html</td></tr>
 </table></td></tr>
 </table>
 <br>

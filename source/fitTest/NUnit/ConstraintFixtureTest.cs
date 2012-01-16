@@ -4,8 +4,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using fitlibrary;
-using fitSharp.Fit.Model;
-using fitSharp.Fit.Service;
+using fitSharp.Fit.Engine;
 using fitSharp.Machine.Model;
 using Moq;
 using NUnit.Framework;
@@ -16,13 +15,12 @@ namespace fit.Test.NUnit {
         [Test] public void MethodIsInvokedForEachRow() {
             Parse table =
                 Parse.ParseFrom("<table><tr><td></td></tr><tr><td>method</td></tr><tr><td>value</td></tr></table>");
-            var cellOperation = new Mock<CellOperation>();
             var processor = new Mock<CellProcessor>();
-            var constraint = new ConstraintFixture {CellOperation = cellOperation.Object, Processor = processor.Object};
+            var constraint = new ConstraintFixture {Processor = processor.Object};
             processor.Setup(p => p.TestStatus).Returns(new TestStatus());
-            cellOperation.Setup(o => o.TryInvoke(constraint,
-                It.Is<Tree<Cell>>(c => c.Branches[0].Value.Text == "method"),
-                It.Is<Tree<Cell>>(c => c.Branches[0].Value.Text == "value"),
+            processor.Setup(o => o.Operate<ExecuteOperator>(constraint,
+                It.Is<Tree<Cell>>(c => c.ValueAt(0).Text == "method"),
+                It.Is<Tree<Cell>>(c => c.ValueAt(0).Text == "value"),
                 It.Is<Cell>(c => c.Text == "value")))
                 .Returns(new TypedValue(true));
             constraint.DoTable(table);

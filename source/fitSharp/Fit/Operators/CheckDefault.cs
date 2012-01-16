@@ -3,6 +3,7 @@
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
+using fitSharp.Fit.Engine;
 using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
 
@@ -24,7 +25,7 @@ namespace fitSharp.Fit.Operators {
                 }
             }
             catch (IgnoredException) {}
-            Processor.TestStatus.MarkCellWithLastResults(expectedCell);
+            Processor.TestStatus.MarkCellWithLastResults(expectedCell.Value);
             return TypedValue.Void;
         }
     }

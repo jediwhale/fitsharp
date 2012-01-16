@@ -12,13 +12,13 @@ namespace fitSharp.Slim.Operators {
         private const string defaultResult = "OK";
         private readonly IdentifierName identifier;
 
-        public bool CanInvoke(TypedValue instance, string memberName, Tree<string> parameters) {
+        public bool CanInvoke(TypedValue instance, MemberName memberName, Tree<string> parameters) {
             return instance.Type == typeof(SlimInstruction) && (
                 identifier.IsEmpty ||
-                   (parameters.Branches.Count > 1 && identifier.Matches(parameters.Branches[1].Value)));
+                   (parameters.Branches.Count > 1 && identifier.Matches(parameters.ValueAt(1))));
         }
 
-        public TypedValue Invoke(TypedValue instance, string memberName, Tree<string> parameters) {
+        public TypedValue Invoke(TypedValue instance, MemberName memberName, Tree<string> parameters) {
             try {
                 return new TypedValue(ExecuteOperation(parameters));
             }
@@ -39,13 +39,13 @@ namespace fitSharp.Slim.Operators {
 
         protected static Tree<string> Result(Tree<string> parameters, Tree<string> result) {
             return new SlimTree()
-                .AddBranchValue(parameters.Branches[0].Value)
+                .AddBranchValue(parameters.ValueAt(0))
                 .AddBranch(result);
         }
 
         protected static Tree<string> Result(Tree<string> parameters, string result) {
             return new SlimTree()
-                .AddBranchValue(parameters.Branches[0].Value)
+                .AddBranchValue(parameters.ValueAt(0))
                 .AddBranchValue(result);
         }
 
@@ -59,9 +59,9 @@ namespace fitSharp.Slim.Operators {
 
         protected TypedValue InvokeMember(Tree<string> parameters, int memberIndex) {
             var savedInstances = Processor.Get<SavedInstances>();
-            var instance = parameters.Branches[memberIndex].Value;
+            var instance = parameters.ValueAt(memberIndex);
             object target = savedInstances.HasValue(instance) ? savedInstances.GetValue(instance) : new NullInstance();
-            TypedValue result = Processor.Invoke(target, parameters.Branches[memberIndex + 1].Value, ParameterTree(parameters, memberIndex + 2));
+            TypedValue result = Processor.Invoke(target, new MemberName(parameters.ValueAt(memberIndex + 1)), ParameterTree(parameters, memberIndex + 2));
             result.ThrowExceptionIfNotValid();
             return result;
         }

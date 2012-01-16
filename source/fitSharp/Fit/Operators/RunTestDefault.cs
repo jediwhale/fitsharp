@@ -4,8 +4,8 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
+using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
-using fitSharp.Fit.Service;
 using fitSharp.IO;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Exception;
@@ -48,7 +48,7 @@ namespace fitSharp.Fit.Operators {
                 processor.TestStatus = new TestStatus();
  			    processor.TestStatus.Summary["run date"] = DateTime.Now;
 			    processor.TestStatus.Summary["run elapsed time"] = new ElapsedTime();
-                Cell heading = tables.Branches[0].Branches[0].Branches[0].Value;
+                Cell heading = tables.Branches[0].ValueAt(0, 0);
                 try {
                     processor.Memory.Apply(i => i.As<SetUpTearDown>(s => s.SetUp()));
                     InterpretTables(tables);
@@ -68,7 +68,7 @@ namespace fitSharp.Fit.Operators {
                             InterpretTable(table);
                         }
                         catch (Exception e) {
-                            processor.TestStatus.MarkException(table.Branches[0].Branches[0].Value, e);
+                            processor.TestStatus.MarkException(table.ValueAt(0, 0), e);
                         }
                     }
                     catch (Exception e) {
@@ -84,7 +84,7 @@ namespace fitSharp.Fit.Operators {
 		    }
 
             void InterpretTable(Tree<Cell> table) {
-                Cell heading = table.Branches[0].Branches[0].Value;
+                Cell heading = table.ValueAt(0, 0);
                 if (heading == null || processor.TestStatus.IsAbandoned) return;
                 if (flowFixture == null && processor.TestStatus.TableCount == 1) GetStartingFixture(table);
                 if (flowFixture == null) {

@@ -6,7 +6,7 @@
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
 
-namespace fitSharp.Fit.Service {
+namespace fitSharp.Fit.Engine {
     public interface StoryTestWriter {
         void WriteTable(Tree<Cell> table);
         void WriteTest(Tree<Cell> test, TestCounts counts);

@@ -1,17 +1,15 @@
-// Copyright © 2011 Syterra Software Inc. Includes work Copyright (C) Gojko Adzic 2006-2008 http://gojko.net
+// Copyright © 2012 Syterra Software Inc. Includes work Copyright (C) Gojko Adzic 2006-2008 http://gojko.net
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System;
 using System.Collections;
-using System.Data.Common;
 using System.Data;
-using dbfit.util;
 using fit;
 using fit.Operators;
 using fitlibrary;
-using fitSharp.Fit.Model;
+using fitSharp.Fit.Engine;
 using fitSharp.Machine.Model;
 
 namespace dbfit.fixture
@@ -57,9 +55,9 @@ namespace dbfit.fixture
             public override bool IsOrdered {get { return isOrdered; }}
             public override bool SurplusAllowed {get {return false;}}
 
-            public override bool CellMatches(TypedValue actualValue, Parse expectedCell, int columnNumber) {
-                if (myHeaderRow.Parts.At(columnNumber).Text.EndsWith("?")) return true;
-                if (expectedCell.Text.Length == 0) return true;
+            public override bool CellMatches(TypedValue actualValue, Tree<Cell> expectedCell, int columnNumber) {
+                if (myHeaderRow.Branches[columnNumber].Value.Text.EndsWith("?")) return true;
+                if (expectedCell.Value.Text.Length == 0) return true;
                 return base.CellMatches(actualValue, expectedCell, columnNumber);
             }
         }

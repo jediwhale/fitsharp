@@ -1,4 +1,4 @@
-// Copyright © 2010 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+// Copyright © 2012 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -177,6 +177,16 @@ namespace fit.Test.NUnit {
             TreeList<CellBase> source = MakeRootNode();
             for (int i = 0; i < 2; i++) AddBranch(source, "leaf" + i);
             AssertCopyFromResult(source, "leader<tag stuff><leaftag>leaf0</leaftag><leaftag>leaf1</leaftag></tag>trailer");
+        }
+
+        [Test] public void BranchesAreAdded() {
+            var parse = new Parse("tr", string.Empty, null, null);
+            parse.Add(new Parse("td", "first", null, null));
+            Assert.AreEqual("first", parse.Parts.Body);
+            parse.Add(new Parse("td", "second", null, null));
+            Assert.AreEqual("second", parse.Parts.More.Body);
+            parse.Add(new Parse("td", "third", null, null));
+            Assert.AreEqual("third", parse.Parts.Last.Body);
         }
     }
 }

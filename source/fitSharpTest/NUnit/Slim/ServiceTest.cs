@@ -28,7 +28,7 @@ namespace fitSharp.Test.NUnit.Slim {
         }
 
         private TypedValue DoInstruction(Instructions statement) {
-            return service.Invoke(new TypedValue(new SlimInstruction()), string.Empty, statement.Tree.Branches[0]);
+            return service.Invoke(new TypedValue(new SlimInstruction()), new MemberName(string.Empty), statement.Tree.Branches[0]);
         }
 
         [Test] public void OperatorIsAddedFromConfiguration() {
@@ -37,7 +37,7 @@ namespace fitSharp.Test.NUnit.Slim {
             var statement = new Instructions().MakeCommand("sampleCommand");
             service = new Service(configuration);
             var result = DoInstruction(statement).GetValue<Tree<string>>();
-            Assert.AreEqual("sampleResult", result.Branches[1].Value);
+            Assert.AreEqual("sampleResult", result.ValueAt(1));
         }
 
         [Test] public void ParseSymbolIsDoneFirst() {
@@ -53,7 +53,7 @@ namespace fitSharp.Test.NUnit.Slim {
             DoInstruction(statement);
             statement = new Instructions().ExecuteMethod("makesample");
             var result = DoInstruction(statement).GetValue<SlimTree>();
-            Assert.AreEqual("mysample", result.Branches[1].Value);
+            Assert.AreEqual("mysample", result.ValueAt(1));
         }
 
         class SampleConverter: Converter<SampleClass> {

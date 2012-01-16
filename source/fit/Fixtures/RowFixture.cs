@@ -6,7 +6,7 @@
 using System;
 using System.Collections;
 using fit.Model;
-using fitSharp.Fit.Service;
+using fitSharp.Fit.Engine;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
@@ -56,7 +56,7 @@ namespace fit
                 }
                 else {
                     CheckCalled();
-                    CellOperation.Check(GetTargetObject(), headerCell, cell);
+                    Processor.Check(GetTargetObject(), headerCell, cell);
 
                 }
 				cell = cell.More;
@@ -75,7 +75,7 @@ namespace fit
 			SetTargetObject(extraObject);
             foreach (Parse headerCell in new CellRange(headerCells).Cells)
 			{
-		        TypedValue actual = CellOperation.Invoke(this, headerCell);
+		        TypedValue actual = Processor.ExecuteWithThrow(this, headerCell);
                 var newCell = (Parse)Processor.Compose(actual.Value ?? "null");
 				if (cell == null)
 					cell = newCell;
@@ -116,7 +116,7 @@ namespace fit
 
 		bool IsMatch(Parse row, int col)
 		{
-		    TypedValue actual = CellOperation.Invoke(this, headerCells.At(col));
+		    TypedValue actual = Processor.ExecuteWithThrow(this, headerCells.At(col));
 		    return Processor.Compare(actual, GetCellForColumn(row, col));
 		}
 

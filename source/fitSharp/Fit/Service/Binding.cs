@@ -4,6 +4,7 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
+using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
@@ -56,14 +57,14 @@ namespace fitSharp.Fit.Service {
             else {
                 var beforeCounts = new TestCounts(processor.TestStatus.Counts);
                 processor.InvokeWithThrow(instance, GetMemberName(memberCell), new CellTree(cell));
-                processor.TestStatus.MarkCellWithLastResults(cell, beforeCounts);
+                processor.TestStatus.MarkCellWithLastResults(cell.Value, beforeCounts);
             }
         }
 
         public bool IsCheck { get { return false; } }
 
-        string GetMemberName(Tree<Cell> members) {
-            return processor.ParseTree<Cell, MemberName>(members).ToString();
+        MemberName GetMemberName(Tree<Cell> members) {
+            return processor.ParseTree<Cell, MemberName>(members);
         }
 
         static void ShowActual(Cell cell, object actual) {
@@ -76,18 +77,18 @@ namespace fitSharp.Fit.Service {
     }
 
     public class CheckBinding: BindingOperation {
-        private readonly CellOperation operation;
+        private readonly CellProcessor processor;
         private readonly TargetObjectProvider targetProvider;
         private readonly Tree<Cell> memberCell;
 
-        public CheckBinding(CellOperation operation, TargetObjectProvider targetProvider, Tree<Cell> memberCell) {
-            this.operation = operation;
+        public CheckBinding(CellProcessor processor, TargetObjectProvider targetProvider, Tree<Cell> memberCell) {
+            this.processor = processor;
             this.memberCell = memberCell;
             this.targetProvider = targetProvider;
         }
 
         public void Do(Tree<Cell> cell) {
-            operation.Check(targetProvider.GetTargetObject(), memberCell, cell);
+            processor.Check(targetProvider.GetTargetObject(), memberCell, cell);
         }
 
         public bool IsCheck { get { return true; } }

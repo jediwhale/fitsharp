@@ -4,8 +4,8 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System.Text;
-using fitSharp.Fit.Model;
-using fitSharp.Fit.Service;
+using fitSharp.Fit.Engine;
+using fitSharp.Fit.Fixtures;
 
 namespace fit.Test.NUnit {
     public class TestBuilder {

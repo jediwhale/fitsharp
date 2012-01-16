@@ -9,6 +9,7 @@ using fitSharp.Machine.Exception;
 namespace fitSharp.Machine.Model {
     public class StringObjectMemory {
         public void Save(string id, object item) { items[id.Trim()] = item; }
+        public void SaveValue<T>(string id, T value) { Save(id, value); }
         public void Clear() { items.Clear(); }
         public bool HasValue(string id) { return items.ContainsKey(id.Trim()); }
 

@@ -6,8 +6,8 @@
 using fit.Operators;
 using fitlibrary;
 using fitlibrary.exception;
+using fitSharp.Fit.Fixtures;
 using fitSharp.Fit.Model;
-using fitSharp.Fit.Service;
 using fitSharp.Machine.Model;
 
 namespace fit.Test.Acceptance {

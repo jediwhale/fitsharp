@@ -5,7 +5,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Reflection;
 using System.Threading;
 using fitSharp.IO;
@@ -74,7 +73,7 @@ namespace fitSharp.Machine.Application {
         void ParseArguments(IList<string> commandLineArguments) {
             var argumentParser = new ArgumentParser();
             argumentParser.AddArgumentHandler("a", value => memory.GetItem<AppDomainSetup>().ConfigurationFile = value);
-            argumentParser.AddArgumentHandler("c", value => new SuiteConfiguration(memory).LoadXml(folderModel.FileContent(value)));
+            argumentParser.AddArgumentHandler("c", value => new SuiteConfiguration(memory).LoadXml(folderModel.GetPageContent(value)));
             argumentParser.AddArgumentHandler("r", value => memory.GetItem<Settings>().Runner = value);
             argumentParser.SetUnusedHandler(value => extraArguments.Add(value));
             argumentParser.Parse(commandLineArguments);

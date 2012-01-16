@@ -63,7 +63,7 @@ namespace fitSharp.Test.NUnit.Slim {
             Assert.AreEqual(results.Count, result.Branches.Count);
             for (var i = 0; i < results.Count; i++) {
                 var itemList = results[i] as IList<object>;
-                if (itemList == null) Assert.AreEqual(results[i], result.Branches[i].Value);
+                if (itemList == null) Assert.AreEqual(results[i], result.ValueAt(i));
                 else ValidateTree(result.Branches[i], itemList);
             }
         }

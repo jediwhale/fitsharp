@@ -3,15 +3,16 @@
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
+using fitSharp.Machine.Model;
 using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Slim {
     [TestFixture] public class DocumentTest {
 
         [Test] public void ParsesBracketsAsList() {
-            fitSharp.Slim.Service.Document document =ParseAsList("[000002:000004:some:000005:stuff]", 2);
-            Assert.AreEqual("some",document.Content.Branches[0].Value);
-            Assert.AreEqual("stuff",document.Content.Branches[1].Value);
+            fitSharp.Slim.Service.Document document = ParseAsList("[000002:000004:some:000005:stuff]", 2);
+            Assert.AreEqual("some",document.Content.ValueAt(0));
+            Assert.AreEqual("stuff",document.Content.ValueAt(1));
         }
 
         static fitSharp.Slim.Service.Document ParseAsList(string input, int expectedCount) {

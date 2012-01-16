@@ -17,7 +17,7 @@ namespace fitSharp.Machine.Engine {
             if (type.IsAssignableFrom(typeof(string))) {
                 return new TypedValue(parameters.Value.ToString(), typeof(string));
             }
-            RuntimeMember parse = new RuntimeType(type).FindStatic(IdentifierName.Parse, new[] {typeof (string)});
+            RuntimeMember parse = new RuntimeType(type).FindStatic(MemberName.ParseMethod, new[] {typeof (string)});
             if (parse != null && parse.ReturnType == type) {
                 return parse.Invoke(new object[] {parameters.Value.ToString()});
             }

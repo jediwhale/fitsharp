@@ -4,6 +4,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System;
+using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
@@ -24,7 +25,7 @@ namespace fit
 			try
 			{
 				targetObject = this;
-			    CellOperation.Invoke(this, cells);
+			    Processor.ExecuteWithThrow(this, cells);
 				targetObject = actor;
 			}
 			catch (Exception e)
@@ -49,12 +50,12 @@ namespace fit
 
 		public virtual void Press()
 		{
-			CellOperation.Invoke(actor, cells.More, new CellTree(), cells.More);
+			Processor.ExecuteWithThrow(actor, cells.More, new CellTree(), cells.More);
 		}
 
 		public virtual void Check()
 		{
-			CellOperation.Check(GetTarget(actor), cells.More, cells.More.More);
+			Processor.Check(GetTarget(actor), cells.More, cells.More.More);
 		}
 
 		public override object GetTargetObject() {

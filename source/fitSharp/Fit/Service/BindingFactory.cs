@@ -3,6 +3,7 @@
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
+using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
@@ -22,19 +23,16 @@ namespace fitSharp.Fit.Service {
         }
 
 		public BindingOperation Make(Tree<Cell> nameCell) {
-		    string name = nameCell.Value.Text.Trim();
+		    var name = nameCell.Value.Text.Trim();
 
 			if (NoOperationIsImpliedBy(name))
 			    return new NoBinding();
 
-		    var cellOperation = new CellOperationImpl(processor);
-
 			if (CheckIsImpliedBy(name))
-			    return new CheckBinding(cellOperation, targetProvider, nameCell);
+			    return new CheckBinding(processor, targetProvider, nameCell);
 
-            string memberName =  processor.ParseTree<Cell, MemberName>(nameCell).ToString();
-
-            RuntimeMember member = RuntimeType.FindInstance(targetProvider, new IdentifierName(memberName), 1);
+            var memberName =  processor.ParseTree<Cell, MemberName>(nameCell);
+            var member = RuntimeType.FindInstance(targetProvider, memberName, 1);
 
 		    if (member == null && newIdentifier.IsStartOf(name)) {
 		        string newMemberName = name.Substring(4);

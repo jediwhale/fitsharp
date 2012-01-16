@@ -5,7 +5,6 @@
 
 using fitSharp.Machine.Model;
 using fitSharp.Slim.Operators;
-using fitSharp.Slim.Service;
 using fitSharp.Test.Double.Slim;
 using NUnit.Framework;
 
@@ -16,7 +15,7 @@ namespace fitSharp.Test.NUnit.Slim {
             processor.PushLibraryInstance(new TypedValue(new SampleClass()));
             var runtime = new InvokeLibrary { Processor = processor };
             SampleClass.MethodCount = 0;
-            runtime.Invoke(new TypedValue("stuff"), "samplemethod", new TreeList<string>());
+            runtime.Invoke(new TypedValue("stuff"), new MemberName("samplemethod"), new TreeList<string>());
             Assert.AreEqual(1, SampleClass.MethodCount);
         }
     }

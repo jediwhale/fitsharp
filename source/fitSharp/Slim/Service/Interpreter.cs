@@ -64,9 +64,9 @@ namespace fitSharp.Slim.Service {
         private Tree<string> ExecuteInstructions(Tree<string> instructions) {
             var results = new SlimTree();
             foreach (Tree<string> statement in instructions.Branches) {
-                var result = processor.Invoke(new SlimInstruction(), string.Empty, statement).GetValue<Tree<string>>();
+                var result = processor.Invoke(new SlimInstruction(), new MemberName(string.Empty), statement).GetValue<Tree<string>>();
                 results.AddBranchValue(result);
-                if (ComposeException.WasAborted(result.Branches[1].Value)) break;
+                if (ComposeException.WasAborted(result.ValueAt(1))) break;
             }
             return results;
         }

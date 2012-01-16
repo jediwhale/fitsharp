@@ -7,27 +7,29 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using fitSharp.Fit.Model;
+using fitSharp.Fit.Engine;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
+using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
     public class ParseMemberName: CellOperator, ParseOperator<Cell> {
-        private static readonly Dictionary<char, string> specialCharacterConversion;
-
         public bool CanParse(Type type, TypedValue instance, Tree<Cell> parameters) {
             return type == typeof(MemberName);
         }
 
         public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
-            StringBuilder nameParts = Processor.Get<Settings>().BehaviorHas("fitlibrary1")
+            var nameParts = Processor.Get<Settings>().BehaviorHas("fitlibrary1")
                 ? parameters.Leaves().Aggregate(new StringBuilder(), (t, cell) => AppendWithConversion(t, cell.Text))
                 : parameters.Leaves().Aggregate(new StringBuilder(), (t, cell) => Append(t, cell.Text));
 
             if (nameParts.Length == 0) nameParts.Append("blank");
-            string name = nameParts.ToString();
-            return new TypedValue(MemberName.Parse(name));
+            var name = nameParts.ToString();
+            if (name.Length > 0 && char.IsDigit(name, 0)) {
+                name = digitConversion[name[0]] + name.Substring(1);
+            }
+            return new TypedValue(MakeMemberName(name));
         }
 
         private static StringBuilder Append(StringBuilder nameParts, string name) {
@@ -42,8 +44,37 @@ namespace fitSharp.Fit.Operators {
                                                                           : t.Append(specialCharacterConversion[character])));
         }
 
-        static ParseMemberName() {
-            specialCharacterConversion = new Dictionary<char, string> {
+        MemberName MakeMemberName(string name) {
+            if (name.EndsWith("?")) name = name.Substring(0, name.Length - 1);
+            var ofPosition = name.IndexOf(" of ", StringComparison.OrdinalIgnoreCase);
+            if (ofPosition > 0 && ofPosition < name.Length - 4) {
+                var genericTypes = name.Substring(ofPosition + 4);
+                try {
+                    var genericType = Processor.ParseString<Cell, Type>(genericTypes);
+                    var baseName = name.Substring(0, ofPosition);
+                    return new MemberName(name, baseName, new[] {genericType});
+                }
+                catch (TypeMissingException) {
+                    return new MemberName(name);
+                }
+            }
+            return new MemberName(name);
+        }
+
+        static readonly Dictionary<char, string> digitConversion = new Dictionary<char, string> {
+                {'0', "zero"},
+                {'1', "one"},
+                {'2', "two"},
+                {'3', "three"},
+                {'4', "four"},
+                {'5', "five"},
+                {'6', "six"},
+                {'7', "seven"},
+                {'8', "eight"},
+                {'9', "nine"}
+            };
+
+        static readonly Dictionary<char, string> specialCharacterConversion = new Dictionary<char, string> {
                 {'!', "bang"},
                 {'"', "quote"},
                 {'#', "hash"},
@@ -76,6 +107,5 @@ namespace fitSharp.Fit.Operators {
                 {'|', "bar"},
                 {'~', "tilde"}
             };
-        }
     }
 }

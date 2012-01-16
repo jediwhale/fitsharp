@@ -1,4 +1,4 @@
-// Copyright © 2006,2008,2010 Syterra Software Inc.
+// Copyright © 2012 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -55,7 +55,7 @@ namespace fitlibrary.tree {
 
             IEnumerator theseChildren = thisTree.GetChildren().GetEnumerator();
             foreach (Tree treeChild in otherTree.GetChildren()) {
-                theseChildren.MoveNext();
+                if (!theseChildren.MoveNext()) return false;
                 if (!Equals(theseChildren.Current, treeChild)) return false;
             }
             return !theseChildren.MoveNext();

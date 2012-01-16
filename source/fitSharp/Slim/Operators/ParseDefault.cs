@@ -15,7 +15,7 @@ namespace fitSharp.Slim.Operators {
         }
 
         public TypedValue Parse(Type type, TypedValue instance, Tree<string> parameters) {
-            RuntimeMember parse = new RuntimeType(type).FindStatic(IdentifierName.Parse, new[] {typeof (string), typeof(IFormatProvider)});
+            RuntimeMember parse = new RuntimeType(type).FindStatic(MemberName.ParseMethod, new[] {typeof (string), typeof(IFormatProvider)});
             if (parse != null && parse.ReturnType == type) {
                 return parse.Invoke(new object[] {parameters.Value, CultureInfo.InvariantCulture});
             }

@@ -45,7 +45,6 @@
     <Compile Include="Fixtures\CombinationFixture.cs" />
     <Compile Include="Fixtures\ConfigurationSetupFixture.cs" />
     <Compile Include="Fixtures\ConstraintFixture.cs" />
-    <Compile Include="Fixtures\FileSystem.cs" />
     <Compile Include="Fixtures\FlowKeywords.cs" />
     <Compile Include="Fixtures\RowEntryFixture.cs" />
     <Compile Include="Operators\ArrayMatchStrategy.cs" />
@@ -76,7 +75,6 @@
     <Compile Include="Fixtures\FlowFixtureBase.cs" />
     <Compile Include="Fixtures\GridFixture.cs" />
     <Compile Include="Fixtures\ImportFixture.cs" />
-    <Compile Include="Operators\ListMatcher.cs" />
     <Compile Include="Fixtures\NamedCollectionFixtureBase.cs" />
     <Compile Include="Fixtures\RowFixture.cs" />
     <Compile Include="Fixtures\SequenceFixture.cs" />
@@ -91,7 +89,6 @@
     <Compile Include="Fixtures\XmlFixture.cs" />
     <Compile Include="Model\ParseTable.cs" />
     <Compile Include="Model\ScientificDouble.cs" />
-    <Compile Include="Model\ValueArray.cs" />
     <Compile Include="Operators\ListOperator.cs" />
     <Compile Include="Operators\ParseModelOperator.cs" />
     <Compile Include="Operators\ParseTable.cs" />

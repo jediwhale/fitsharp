@@ -4,7 +4,7 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System.Collections.Generic;
-using fitSharp.Fit.Model;
+using fitSharp.Fit.Engine;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
@@ -13,8 +13,8 @@ namespace fitSharp.Fit.Operators {
 
         public CellOperators() {
             Add(new ComposeDefault(), 0);
+            Add(new ExecuteDefault(), 0);
             Add(new InvokeDataRow<Cell, CellProcessor>(), 0);
-            Add(new InvokeSpecialAction(), 0);
             Add(new InvokeSetUpTearDown(), 0);
             Add(new ParseDefault(), 0);
             Add(new ParseMemberName(), 0);
@@ -26,7 +26,6 @@ namespace fitSharp.Fit.Operators {
             Add(new ParseInterpreter(), 0);
 
             Add(new CheckDefault(), 0);
-            Add(new ExecuteDefault(), 0);
             Add(new RunTestDefault(), 0);
             Add(new WrapDefault(), 0);
             Add(new CheckEmpty(), 0);
@@ -36,6 +35,7 @@ namespace fitSharp.Fit.Operators {
             Add(new CompareEmpty(), 0);
             Add(new CompareNumeric(), 0);
 
+            Add(new InvokeSpecialAction(), 2);
             Add(new ParseArray(), 2);
             Add(new ParseByteArray(), 2);
             Add(new ParseNullArray(), 2);

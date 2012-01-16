@@ -1,4 +1,4 @@
-﻿// Copyright © 2011 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2012 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -14,10 +14,9 @@ namespace fitSharp.Slim.Model {
         }
 
         public string Value { get { return tree.Value; } }
-
         public bool IsLeaf { get { return false; } }
-
         public ReadList<Tree<string>> Branches { get { return tree.Branches; } }
+        public void Add(Tree<string> branch) { tree.Add(branch); }
 
         public SlimTree AddBranchValue(object branch) {
             tree.AddBranch(branch as Tree<string> ?? new SlimLeaf(branch.ToString()));
@@ -73,6 +72,7 @@ namespace fitSharp.Slim.Model {
 
         public bool IsLeaf { get { return true; } }
 
-        public ReadList<Tree<string>> Branches { get { throw new NotImplementedException("Leaf node has no branches."); } }
+        public ReadList<Tree<string>> Branches { get { throw new InvalidOperationException("Leaf node has no branches."); } }
+        public void Add(Tree<string> branch) { throw new InvalidOperationException("Leaf node has no branches."); }
     }
 }

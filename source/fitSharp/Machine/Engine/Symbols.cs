@@ -5,9 +5,6 @@
 
 using fitSharp.Machine.Model;
 
-namespace fitSharp.Fit.Operators {
-    public interface WrapOperator {
-        bool CanWrap(TypedValue result);
-        TypedValue Wrap(TypedValue result);
-    }
+namespace fitSharp.Machine.Engine {
+    public class Symbols: StringObjectMemory {}
 }

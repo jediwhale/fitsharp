@@ -7,8 +7,8 @@ using System;
 using System.Collections;
 using System.Linq;
 using fit.Model;
+using fitSharp.Fit.Engine;
 using fitSharp.Fit.Operators;
-using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
@@ -21,7 +21,7 @@ namespace fit.Operators {
         public TypedValue Check(CellOperationValue actualValue, Tree<Cell> expectedCell) {
             var cell = (Parse)expectedCell.Value;
             var matcher = new ListMatcher(Processor, new ArrayMatchStrategy(Processor, cell.Parts.Parts));
-            matcher.MarkCell(actualValue.GetActual<IEnumerable>(Processor).Cast<object>(), cell.Parts.Parts); //todo: encapsulate part in celloperationcontext??
+            matcher.MarkCell(actualValue.GetActual<IEnumerable>(Processor).Cast<object>(), cell.Parts, 0); //todo: encapsulate part in celloperationcontext??
             return TypedValue.Void;
         }
 
@@ -37,7 +37,7 @@ namespace fit.Operators {
             return new TypedValue(
                 new CellRange(dataRows).Cells.Aggregate(new ArrayList(), (list, row) => {
                     list.Add(
-                        new CellOperationImpl(Processor).Invoke(instance.Value, new CellRange(headerCells),
+                        Processor.ExecuteWithThrow(instance.Value, new CellRange(headerCells),
                                                                 new CellRange(row.Parts), row.Parts).Value);
                     return list;
                 }));

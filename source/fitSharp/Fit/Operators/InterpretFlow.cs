@@ -1,16 +1,16 @@
-﻿// Copyright © 2011 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2012 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
+using System.Collections.Generic;
 using System.Linq;
-using fitSharp.Fit.Model;
-using fitSharp.Fit.Operators;
+using fitSharp.Fit.Engine;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
 
-namespace fitSharp.Fit.Service {
+namespace fitSharp.Fit.Operators {
     public class InterpretFlow: InterpretTableFlow {
         public InterpretFlow(): this(0) {}
 
@@ -35,22 +35,21 @@ namespace fitSharp.Fit.Service {
             var currentRow = table.Branches[rowNumber];
             try
             {
-                var specialActionName = InvokeSpecialAction.MakeName(
-                    processor.ParseTree<Cell, MemberName>(currentRow.Branches[0]).ToString());
+                var specialActionName = processor.ParseTree<Cell, MemberName>(currentRow.Branches[0]).AsSpecialAction();
                 var result = processor.Invoke(interpreter, specialActionName, currentRow.Branches[0]);
                 if (!result.IsValid) {
-                     result = new CellOperationImpl(processor).TryInvoke(interpreter,
+                     result = processor.Execute(interpreter,
                          interpreter.MethodRowSelector.SelectMethodCells(currentRow),
                          interpreter.MethodRowSelector.SelectParameterCells(currentRow),
-                         currentRow.Branches[0].Value);
+                         currentRow.ValueAt(0));
 
                 }
                 if (!result.IsValid) {
-                    if (result.IsException<MemberMissingException>() && currentRow.Branches[0].Value.Text.Length > 0) {
+                    if (result.IsException<MemberMissingException>() && currentRow.ValueAt(0).Text.Length > 0) {
                         var newFixture = processor.ParseTree<Cell, Interpreter>(currentRow);
                         var adapter = newFixture as MutableDomainAdapter;
                         if (adapter != null) adapter.SetSystemUnderTest(interpreter.SystemUnderTest);
-                        ProcessRestOfTable(newFixture, processor.MakeCell(string.Empty, table.Branches.Skip(rowNumber)));
+                        ProcessRestOfTable(newFixture, MakeTableWithRows(table, rowNumber));
                     }
                     else {
                         result.ThrowExceptionIfNotValid();
@@ -68,7 +67,7 @@ namespace fitSharp.Fit.Service {
                     else {
                         //todo: change wrapping re sut & call stack?
                         processor.Operate<WrapOperator>(result)
-                            .As<Interpreter>(i => ProcessRestOfTable(i, processor.MakeCell(string.Empty, table.Branches.Skip(rowNumber))));
+                            .As<Interpreter>(i => ProcessRestOfTable(i, MakeTableWithRows(table, rowNumber)));
                     }
                 }
             }
@@ -78,9 +77,14 @@ namespace fitSharp.Fit.Service {
                 hasFinishedTable = true;
 	        }
             catch (System.Exception e) {
-                processor.TestStatus.MarkException(currentRow.Branches[0].Value, e);
+                processor.TestStatus.MarkException(currentRow.ValueAt(0), e);
                 hasFinishedTable = true;
             }
+        }
+
+        Tree<Cell> MakeTableWithRows(Tree<Cell> table, int rowNumber) {
+            var rows = new List<Tree<Cell>>(table.Branches.Skip(rowNumber));
+            return processor.MakeCell(string.Empty, "table", rows);
         }
 
         void ProcessRestOfTable(Interpreter childInterpreter, Tree<Cell> theRestOfTheRows) {
@@ -90,7 +94,7 @@ namespace fitSharp.Fit.Service {
                 RunTestDefault.DoTable(theRestOfTheRows, childInterpreter, processor, false);
             }
             catch (System.Exception e) {
-                processor.TestStatus.MarkException(theRestOfTheRows.Branches[0].Branches[0].Value, e);
+                processor.TestStatus.MarkException(theRestOfTheRows.ValueAt(0, 0), e);
             }
             processor.CallStack.PopReturn();
             hasFinishedTable = true;

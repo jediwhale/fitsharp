@@ -3,19 +3,12 @@
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
-using System.Collections.Generic;
-using fitSharp.Machine.Engine;
+using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
 
-namespace fitSharp.Fit.Model
-{
-    public interface CellProcessor: Processor<Cell> {
-	    TestStatus TestStatus { get; set; }
-        CallStack CallStack { get; }
-        Tree<Cell> MakeCell(string text, IEnumerable<Tree<Cell>> branches);
-    }
-
-    public static class CellProcessorExtension {
-        public static V Get<V>(this CellProcessor processor) where V: new() { return processor.Memory.GetItem<V>(); }
+namespace fitSharp.Fit.Engine {
+    public interface CheckOperator {
+        bool CanCheck(CellOperationValue actualValue, Tree<Cell> expectedCell);
+        TypedValue Check(CellOperationValue actualValue, Tree<Cell> expectedCell);
     }
 }

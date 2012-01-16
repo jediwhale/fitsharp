@@ -74,75 +74,22 @@
 <table border="1" cellspacing="0">
 <tr><td colspan="2"><i>nested</i></td></tr>
 <tr><td><i>name</i></td><td><i>elements</i></td></tr>
-<tr class="fail"><td>apple <span class="fit_label">missing</span></td><td><table border="1" cellspacing="0">
-<tr><td><i>identity</i></td><td><i>count</i></td></tr>
-<tr><td>a</td><td>1</td></tr>
-</table></td></tr>
-<tr class="fail"><td>orange <span class="fit_label">missing</span></td><td><table border="1" cellspacing="0">
+<tr><td class="pass">apple</td><td><table border="1" cellspacing="0">
+<tr><td class="error"><i>identity</i><hr /><pre><div class="fit_stacktrace">fitlibrary.exception.FitFailureException: Column 'identity' not used.</div></pre></td><td><i>count</i></td></tr>
+<tr><td class="fail">a <span class="fit_label">expected</span><hr />void <span class="fit_label">actual</span></td><td class="pass">1</td></tr>
+<tr class="fail">
+<td><span class="fit_grey"></span> <span class="fit_label">surplus</span></td>
+<td><span class="fit_grey">2</span></td></tr></table></td></tr>
+<tr><td class="pass">orange</td><td><table border="1" cellspacing="0">
 <tr><td><i>id</i></td></tr>
-<tr><td>d</td></tr>
+<tr class="fail"><td>d <span class="fit_label">missing</span></td></tr>
+<tr class="fail">
+<td><span class="fit_grey">c</span> <span class="fit_label">surplus</span></td></tr></table></td></tr>
+<tr><td class="pass">pear</td><td><table border="1" cellspacing="0">
+<tr><td><i>id</i></td><td><i>count</i></td></tr>
+<tr class="fail"><td>a <span class="fit_label">missing</span></td><td>1</td></tr>
 </table></td></tr>
-<tr class="fail"><td>pear <span class="fit_label">missing</span></td><td><table border="1" cellspacing="0">
-<tr><td><i>id</i></td><td><i>count</i></td></tr>
-<tr><td>a</td><td>1</td></tr>
-</table></td></tr>
-<tr class="fail">
-<td><span class="fit_grey">apple</span> <span class="fit_label">surplus</span></td>
-<td><span class="fit_grey">System.Collections.ArrayList</span></td></tr>
-
-<tr class="fail">
-<td><span class="fit_grey">orange</span> <span class="fit_label">surplus</span></td>
-<td><span class="fit_grey">System.Collections.ArrayList</span></td></tr>
-<tr class="fail">
-<td><span class="fit_grey">pear</span> <span class="fit_label">surplus</span></td>
-<td><span class="fit_grey">System.Collections.ArrayList</span></td></tr></table></td>
-</tr>
-</table>
-<br>(.NET: different matching algorithm.)<br><br>(.NET Added test.)<br><br><table border="1" cellspacing="0">
-<tr><td colspan="2">Specify</td>
-</tr>
-<tr><td><table border="1" cellspacing="0">
-<tr><td>NestedLists</td></tr>
-</table>
-<table border="1" cellspacing="0">
-<tr><td colspan="2"><i>nested</i></td></tr>
-<tr><td><i>elements</i></td><td><i>name</i></td></tr>
-<tr><td><table border="1" cellspacing="0">
-<tr><td><i>id</i></td></tr>
-<tr><td>c</td></tr>
-</table></td><td>apple</td></tr>
-<tr><td><table border="1" cellspacing="0">
-<tr><td><i>id</i></td><td><i>count</i></td></tr>
-<tr><td>a</td><td>1</td></tr>
-<tr><td>b</td><td>2</td></tr>
-</table></td><td>apple</td></tr>
-<tr><td><table border="1" cellspacing="0">
-<tr><td><i>id</i></td><td><i>count</i></td></tr>
-</table></td><td>pear</td></tr>
-</table></td>
-<td><table border="1" cellspacing="0">
-<tr><td>NestedLists</td></tr>
-</table>
-<table border="1" cellspacing="0">
-<tr><td colspan="2"><i>nested</i></td></tr>
-<tr><td><i>elements</i></td><td><i>name</i></td></tr>
-<tr class="fail"><td><table border="1" cellspacing="0">
-<tr><td><i>id</i></td></tr>
-<tr><td>c</td></tr>
-</table> <span class="fit_label">missing</span></td><td>apple</td></tr>
-<tr><td><table border="1" cellspacing="0">
-<tr><td><i>id</i></td><td><i>count</i></td></tr>
-<tr><td class="pass">a</td><td class="pass">1</td></tr>
-<tr><td class="pass">b</td><td class="pass">2</td></tr>
-</table></td><td class="pass">apple</td></tr>
-<tr><td><table border="1" cellspacing="0">
-<tr class="pass"><td><i>id</i></td><td><i>count</i></td></tr>
-</table></td><td class="pass">pear</td></tr>
-<tr class="fail">
-<td><span class="fit_grey">System.Collections.ArrayList</span> <span class="fit_label">surplus</span></td>
-<td><span class="fit_grey">orange</span></td></tr>
 </table></td>
 </tr>
 </table>
-<hr><br>[<a href="../../FrontPage.html">Front Page</a>] [<a href="../../RecentChanges.html">Recent Changes</a>]
 </body></html>

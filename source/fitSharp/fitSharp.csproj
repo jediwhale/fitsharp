@@ -42,41 +42,53 @@
     <Compile Include="Fit\Application\Configurable.cs" />
     <Compile Include="Fit\Application\ConfigurationList.cs" />
     <Compile Include="Fit\Application\FileExclusions.cs" />
+    <Compile Include="Fit\Engine\ListMatcher.cs" />
+    <Compile Include="Fit\Engine\ListMatchStrategy.cs" />
     <Compile Include="Fit\Fixtures\ClearSymbols.cs" />
     <Compile Include="Fit\Fixtures\CommentFixture.cs" />
     <Compile Include="Fit\Fixtures\Compute.cs" />
     <Compile Include="Fit\Fixtures\ConfigureFixture.cs" />
+    <Compile Include="Fit\Fixtures\Debug.cs" />
+    <Compile Include="Fit\Fixtures\FileSystem.cs" />
     <Compile Include="Fit\Fixtures\Include.cs" />
+    <Compile Include="Fit\Fixtures\IncludeAction.cs" />
     <Compile Include="Fit\Model\CallStack.cs" />
+    <Compile Include="Fit\Model\MethodRowSelector.cs" />
     <Compile Include="Fit\Model\Procedures.cs" />
     <Compile Include="Fit\Model\StoryTableString.cs" />
-    <Compile Include="Fit\Operators\CellOperationValue.cs" />
+    <Compile Include="Fit\Engine\CellOperationValue.cs" />
+    <Compile Include="Fit\Model\ValueArray.cs" />
+    <Compile Include="Fit\Engine\CellMatcher.cs" />
     <Compile Include="Fit\Operators\CellOperators.cs" />
-    <Compile Include="Fit\Model\CellProcessor.cs" />
+    <Compile Include="Fit\Engine\CellProcessor.cs" />
+    <Compile Include="Fit\Engine\CellProcessorExtension.cs" />
+    <Compile Include="Fit\Operators\ExecuteDefault.cs" />
+    <Compile Include="Fit\Engine\ExecuteOperator.cs" />
     <Compile Include="Fit\Operators\RunTestDefault.cs" />
-    <Compile Include="Fit\Operators\RunTestOperator.cs" />
-    <Compile Include="Fit\Service\StoryTest.cs" />
+    <Compile Include="Fit\Engine\RunTestOperator.cs" />
+    <Compile Include="Fit\Fixtures\StoryTest.cs" />
+    <Compile Include="IO\PageSource.cs" />
+    <Compile Include="IO\Path.cs" />
+    <Compile Include="Machine\Engine\RuntimeMemberFactory.cs" />
     <Compile Include="Machine\Exception\IgnoredException.cs" />
     <Compile Include="Fit\Fixtures\Define.cs" />
     <Compile Include="Fit\Operators\CheckDefault.cs" />
     <Compile Include="Fit\Operators\CheckSymbolSave.cs" />
-    <Compile Include="Fit\Operators\CheckOperator.cs" />
+    <Compile Include="Fit\Engine\CheckOperator.cs" />
     <Compile Include="Fit\Operators\ComposeDefault.cs" />
     <Compile Include="Fit\Operators\ComposeShowAsOperator.cs" />
-    <Compile Include="Fit\Operators\ExecuteOperator.cs" />
     <Compile Include="Fit\Operators\InvokeSpecialAction.cs" />
-    <Compile Include="Fit\Operators\ExecuteDefault.cs" />
     <Compile Include="Fit\Operators\InvokeSetUpTearDown.cs" />
     <Compile Include="Fit\Operators\ParseInterpreter.cs" />
     <Compile Include="Fit\Operators\ParseNullArray.cs" />
     <Compile Include="Fit\Operators\ParseStoryTestString.cs" />
     <Compile Include="Fit\Operators\WrapDefault.cs" />
-    <Compile Include="Fit\Operators\WrapOperator.cs" />
+    <Compile Include="Fit\Engine\WrapOperator.cs" />
     <Compile Include="Fit\Runner\StoryTestPageFilter.cs" />
     <Compile Include="Fit\Runner\TagFilter.cs" />
-    <Compile Include="Fit\Service\InterpretFlow.cs" />
-    <Compile Include="Fit\Service\StoryTestStringWriter.cs" />
-    <Compile Include="Fit\Service\StoryTestWriter.cs" />
+    <Compile Include="Fit\Operators\InterpretFlow.cs" />
+    <Compile Include="Fit\Fixtures\StoryTestStringWriter.cs" />
+    <Compile Include="Fit\Engine\StoryTestWriter.cs" />
     <Compile Include="Machine\Application\ArgumentParser.cs" />
     <Compile Include="Machine\Application\Context.cs" />
     <Compile Include="Machine\Application\Runnable.cs" />
@@ -117,9 +129,8 @@
     <Compile Include="Fit\Runner\TestPageDecoration.cs" />
     <Compile Include="Fit\Service\Binding.cs" />
     <Compile Include="Fit\Service\BindingFactory.cs" />
-    <Compile Include="Fit\Service\CellOperation.cs" />
     <Compile Include="Fit\Service\CellProcessorBase.cs" />
-    <Compile Include="Fit\Model\Interpreter.cs" />
+    <Compile Include="Fit\Engine\Interpreter.cs" />
     <Compile Include="Fit\Service\NullResultWriter.cs" />
     <Compile Include="Fit\Service\ResultWriter.cs" />
     <Compile Include="Fit\Service\XmlResultWriter.cs" />
@@ -156,7 +167,7 @@
     <Compile Include="Machine\Model\SetUp.cs" />
     <Compile Include="Machine\Model\StringDifference.cs" />
     <Compile Include="Machine\Model\StringObjectMemory.cs" />
-    <Compile Include="Machine\Model\Symbols.cs" />
+    <Compile Include="Machine\Engine\Symbols.cs" />
     <Compile Include="Machine\Model\Traverse.cs" />
     <Compile Include="Parser\Characters.cs" />
     <Compile Include="Parser\CharacterType.cs" />
@@ -226,9 +237,7 @@
     <Compile Include="Swim\ResultCell.cs" />
     <Compile Include="Swim\ResultPage.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Fit\Engine\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

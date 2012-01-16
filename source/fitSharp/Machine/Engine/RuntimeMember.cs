@@ -61,12 +61,7 @@ namespace fitSharp.Machine.Engine {
         }
 
         public override TypedValue TryInvoke(object[] parameters) {
-            Type type = info.DeclaringType;
-            object result = type.InvokeMember(info.Name,
-                                              BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
-                                              | BindingFlags.InvokeMethod | BindingFlags.Static,
-                                              null, instance, parameters);
-
+            var result = Info.Invoke(instance, parameters);
             return new TypedValue(result, Info.ReturnType != typeof(void) && result != null ? result.GetType() : Info.ReturnType); //todo: push this into TypedValue
         }
 

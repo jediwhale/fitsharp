@@ -16,7 +16,45 @@ to be bound by the terms of this license. You must not remove this notice, or an
 <div class="pagename">Configure Fixture</div>
 <div class="content">The Configure Fixture lets us issue commands to control different facilities of the Fit framework. The format of a configure command is:<ul><li>configure <span style="font-style:italic">&lt;facility&gt;</span> <span style="font-style:italic">&lt;command&gt;</span></li></ul><span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">Logging</span><br>
 <br>
-This is currently the only facility hooked up to the Configure Fixture. The logging facility can capture an execution trace of the core <span style="font-family:verdana,sans-serif"><i>fit</i>Sharp</span> engine and display it. In its present form it is probably mostly useful to <span style="font-family:verdana,sans-serif"><i>fit</i>Sharp</span> framework developers only. We can issue these commands:<ul><li>configure logging start</li><li>configure logging stop</li><li>configure logging show </li></ul></div>
+The logging facility can capture an execution trace of the core <span style="font-family:verdana,sans-serif"><i>fit</i>Sharp</span> engine and display it. In its present form it is probably mostly useful to <span style="font-family:verdana,sans-serif"><i>fit</i>Sharp</span> framework developers only. We can issue these commands:<ul><li>configure logging start</li><li>configure logging stop</li><li>configure logging show </li></ul><span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">Symbols</span><br>
+<br>
+We can set, display and clear <a href="../Fit/SymbolValues.html">Symbol Values</a>.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>when test is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>configure</td><td>symbols</td><td>save</td><td>mysymbol</td><td>value of System.String</td><td>myvalue</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>configure</td><td>symbols</td><td>get value</td><td>mysymbol</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>configure</td><td>symbols</td><td>clear</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>configure</td><td>symbols</td><td>has value</td><td>mysymbol</td></tr>
+</table>
+</td><td>then result is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>configure</td><td>symbols</td><td>save</td><td>mysymbol</td><td>value of System.String</td><td>myvalue</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>configure</td><td>symbols</td><td>get value<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension">myvalue</div></div></td><td>mysymbol</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>configure</td><td>symbols</td><td>clear</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>configure</td><td>symbols</td><td>has value<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension">False</div></div></td><td>mysymbol</td></tr>
+</table></td></tr>
+</table>
+</div>
 <div style="width:100%;text-align:right">
 <span class="footer">&copy; Copyright <a href="http://www.syterra.com">Syterra Software Inc.</a> All rights reserved.</span>
 </div>

@@ -11,7 +11,7 @@ namespace fitSharp.Slim.Exception {
         public Tree<string> Instruction { get; private set; }
 
         public InstructionException(Tree<string> instruction)
-            : base(string.Format("Unrecognized operation '{0}'", instruction.Branches[1].Value)) {
+            : base(string.Format("Unrecognized operation '{0}'", instruction.ValueAt(1))) {
             Instruction = instruction;
         }
     }

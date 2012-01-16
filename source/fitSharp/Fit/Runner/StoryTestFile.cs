@@ -7,6 +7,7 @@ using System.IO;
 using fitSharp.Fit.Model;
 using fitSharp.IO;
 using System;
+using Path = System.IO.Path;
 
 namespace fitSharp.Fit.Runner {
 
@@ -86,7 +87,7 @@ namespace fitSharp.Fit.Runner {
 
         public string Content {
             get {
-                if (myContent == null) myContent = myFolderModel.FileContent(myPath.Name);
+                if (myContent == null) myContent = myFolderModel.GetPageContent(myPath.Name);
                 return myContent;
             }
         }
@@ -107,7 +108,7 @@ namespace fitSharp.Fit.Runner {
 
         private void MakeStylesheet() {
             string filePath = Path.Combine(myFolder.OutputPath, StyleName);
-            if (myFolderModel.FileContent(filePath) == null) {
+            if (myFolderModel.GetPageContent(filePath) == null) {
                 myFolderModel.MakeFile(filePath, StyleContent);
             }
         }

@@ -3,8 +3,9 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
+using fitSharp.Fit.Engine;
 using fitSharp.Fit.Service;
-using fitSharp.Fit.Model;
+using fitSharp.IO;
 using fitSharp.Test.Double.Fit;
 using NUnit.Framework;
 using fitSharp.Machine.Application;
@@ -74,7 +75,7 @@ namespace fit.Test.NUnit {
         [SetUp]
         public void SetUp() {
             processor = Builder.CellProcessor();
-            processor.Memory.GetItem<Context>().TestPagePath = @"\some\path.html";
+            processor.Memory.GetItem<Context>().TestPagePath = new FilePath(@"\some\path.html");
 
             fixture = new Fixture { Processor = processor };
         }
@@ -84,7 +85,7 @@ namespace fit.Test.NUnit {
             // I admit this test is a little forced, but I have another test verifying that
             // the context is populated by SuiteRunner, so it makes sense to test
             // that the fixture sees the change, too. To me, anyway.
-            Assert.AreEqual(@"\some\path.html", fixture.Processor.Get<Context>().TestPagePath);
+            Assert.AreEqual(@"\some\path.html", fixture.Processor.Get<Context>().TestPagePath.ToString());
         }
     }
 

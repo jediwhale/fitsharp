@@ -3,10 +3,8 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-using System.Linq;
 using fit;
 using fitSharp.Fit.Model;
-using fitSharp.Machine.Model;
 
 namespace fitlibrary {
 
@@ -22,15 +20,5 @@ namespace fitlibrary {
 	    public override MethodRowSelector MethodRowSelector {
 	        get { return new SequenceRowSelector(); }
 	    }
-
-        class SequenceRowSelector: MethodRowSelector {
-            public Tree<Cell> SelectMethodCells(Tree<Cell> row) {
-                return new CellTree(row.Branches.Take(1));
-            }
-
-            public Tree<Cell> SelectParameterCells(Tree<Cell> row) {
-                return new CellTree(row.Branches.Skip(1));
-            }
-        }
     }
 }

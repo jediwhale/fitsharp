@@ -3,6 +3,7 @@
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
+using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
 using fitSharp.Machine.Model;
@@ -13,7 +14,7 @@ using TestStatus=fitSharp.Fit.Model.TestStatus;
 namespace fitSharp.Test.NUnit.Fit {
     [TestFixture] public class CellOperationDefaultTest {
         Mock<CellProcessor> processor;
-        ExecuteDefault invoke;
+        ExecuteDefault execute;
         CheckDefault check;
         TypedValue target;
         TypedValue result;
@@ -70,7 +71,7 @@ namespace fitSharp.Test.NUnit.Fit {
         }
 
         TypedValue Execute(Tree<Cell> targetCell) {
-            return invoke.Execute(target.Value, new CellTreeLeaf(memberName), new CellTree(), 
+            return execute.Execute(target.Value, new CellTreeLeaf(memberName), new CellTree(), 
                 targetCell == null ? null : targetCell.Value);
         }
 
@@ -78,7 +79,7 @@ namespace fitSharp.Test.NUnit.Fit {
             this.memberName = memberName;
             testStatus = new TestStatus();
             processor = new Mock<CellProcessor>();
-            invoke = new ExecuteDefault {Processor = processor.Object};
+            execute = new ExecuteDefault() { Processor = processor.Object};
             check = new CheckDefault {Processor = processor.Object};
 
             target = new TypedValue("target");
@@ -90,11 +91,11 @@ namespace fitSharp.Test.NUnit.Fit {
                 .Setup(p => p.Parse(typeof (MemberName), It.IsAny<TypedValue>(), It.Is<CellTreeLeaf>(c => c.Text == memberName)))
                 .Returns(new TypedValue(new MemberName(memberName)));
             processor
-                .Setup(p => p.Invoke(target, "member", It.Is<Tree<Cell>>(c => c.Branches.Count == 0)))
+                .Setup(p => p.Invoke(target, It.Is<MemberName>(m => m.Name == "member"), It.Is<Tree<Cell>>(c => c.Branches.Count == 0)))
                 .Returns(result);
             processor
-                .Setup(p => p.Invoke(It.Is<TypedValue>(v => v.ValueString == "target"), "procedure", It.IsAny<Tree<Cell>>()))
-                .Returns((TypedValue t, string s, Tree<Cell> c) => {
+                .Setup(p => p.Invoke(It.Is<TypedValue>(v => v.ValueString == "target"), It.Is<MemberName>(m => m.Name == "procedure"), It.IsAny<Tree<Cell>>()))
+                .Returns((TypedValue t, MemberName m, Tree<Cell> c) => {
                     testStatus.Counts.AddCount(TestStatus.Right);
                     testStatus.LastAction = "blah blah";
                     return result;
@@ -102,5 +103,6 @@ namespace fitSharp.Test.NUnit.Fit {
             processor.Setup(p => p.Compare(It.IsAny<TypedValue>(), It.IsAny<Tree<Cell>>())).Returns(true);
             processor.Setup(p => p.TestStatus).Returns(testStatus);
         }
+
     }
 }

@@ -21,7 +21,7 @@ namespace fitSharp.Machine.Engine {
         bool Compare(TypedValue instance, Tree<T> parameters);
         Tree<T> Compose(TypedValue instance);
         TypedValue Parse(Type type, TypedValue instance, Tree<T> parameters);
-        TypedValue Invoke(TypedValue instance, string memberName, Tree<T> parameters);
+        TypedValue Invoke(TypedValue instance, MemberName memberName, Tree<T> parameters);
 
         TypedValue Operate<O>(params object[] parameters) where O : class;
     }
@@ -35,14 +35,14 @@ namespace fitSharp.Machine.Engine {
             return processor.Create(membername, new TreeList<T>());
         }
 
-        public static TypedValue InvokeWithThrow<T>(this Processor<T> processor, TypedValue instance, string memberName,
+        public static TypedValue InvokeWithThrow<T>(this Processor<T> processor, TypedValue instance, MemberName memberName,
                                                     Tree<T> parameters) {
             TypedValue result = processor.Invoke(instance, memberName, parameters);
             result.ThrowExceptionIfNotValid();
             return result;
         }
 
-        public static TypedValue Invoke<T>(this Processor<T> processor, object instance, string memberName,
+        public static TypedValue Invoke<T>(this Processor<T> processor, object instance, MemberName memberName,
                                            Tree<T> parameters) {
             return processor.Invoke(new TypedValue(instance), memberName, parameters);
         }
@@ -167,7 +167,7 @@ namespace fitSharp.Machine.Engine {
                 logging.Start(operationName);
                 logging.LogParameters(parameters);
                 var candidate = Operators.FindOperator<O>(parameters);
-                var member = RuntimeType.FindDirectInstance(candidate, new IdentifierName(operationName), parameters.Length);
+                var member = RuntimeType.FindDirectInstance(candidate, new MemberName(operationName), parameters.Length);
                 var result = member.Invoke(parameters).GetValue<TypedValue>();
                 logging.LogResult(candidate, result);
                 return result;
@@ -178,7 +178,7 @@ namespace fitSharp.Machine.Engine {
         }
 
 
-        public TypedValue Invoke(TypedValue instance, string memberName, Tree<T> parameters) {
+        public TypedValue Invoke(TypedValue instance, MemberName memberName, Tree<T> parameters) {
             return DoLoggedOperation(
                 instance.Type != typeof (Logging)
                     ? string.Format("invoke {0} {1}", instance.ValueString, memberName)
