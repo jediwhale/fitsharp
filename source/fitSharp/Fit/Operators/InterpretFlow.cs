@@ -89,7 +89,7 @@ namespace fitSharp.Fit.Operators {
 
         void ProcessRestOfTable(Interpreter childInterpreter, Tree<Cell> theRestOfTheRows) {
             processor.CallStack.Push();
-            processor.CallStack.SystemUnderTest = new TypedValue(interpreter);
+            processor.CallStack.DomainAdapter = new TypedValue(interpreter);
             try {
                 RunTestDefault.DoTable(theRestOfTheRows, childInterpreter, processor, false);
             }
