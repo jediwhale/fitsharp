@@ -1,9 +1,10 @@
-﻿// Copyright © 2011 Syterra Software Inc.
+﻿// Copyright © 2012 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System;
+using System.Collections.Generic;
 using fit.exception;
 using fit.Model;
 using fitlibrary;
@@ -48,6 +49,10 @@ namespace fit.Fixtures {
                 }
             }
             catch (IgnoredException) {}
+        }
+
+        public List<object> CheckFieldsFor(Parse cells) {
+            return new List<object> { fixture.ExecuteEmbeddedMethod(cells) };
         }
 
         public void Return(Parse cells) {
