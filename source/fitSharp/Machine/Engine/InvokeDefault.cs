@@ -27,11 +27,11 @@ namespace fitSharp.Machine.Engine {
                                                               return names;
                                                           });
                 parameterCount = parameterNames.Count;
-                member = RuntimeType.FindInstance(instance.Value, memberName, parameterNames);
+                member = MemberQuery.FindInstance(Processor.FindMember, instance.Value, memberName, parameterNames);
             }
             else {
                 parameterCount = parameters.Branches.Count;
-                member = RuntimeType.FindInstance(instance.Value, memberName, parameterCount);
+                member = MemberQuery.FindInstance(Processor.FindMember, instance.Value, memberName, parameterCount);
             }
 
             if (member == null)

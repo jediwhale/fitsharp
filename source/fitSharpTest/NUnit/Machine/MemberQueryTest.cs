@@ -1,17 +1,17 @@
-﻿// Copyright © 2010 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2012 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
-using System.Collections.Generic;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using fitSharp.Test.Double;
+using fitSharp.Test.Double.Fit;
 using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Machine {
-    [TestFixture] public class RuntimeTypeTest {
+    [TestFixture] public class MemberQueryTest {
         SampleClass instance;
 
         [SetUp] public void SetUp() {
@@ -28,7 +28,21 @@ namespace fitSharp.Test.NUnit.Machine {
         }
 
         RuntimeMember GetMethod(string memberName, int count) {
-            return RuntimeType.FindInstance(instance, new MemberName(memberName), count);
+            return MemberQuery.FindInstance(MemberQuery.FindMember, instance, new MemberName(memberName), count);
+        }
+
+        [Test] public void MethodIsInvokedViaProcessor() {
+            RuntimeMember method = GetMethodFromProcessor(instance, "countmethod", 0);
+            Assert.IsNotNull(method);
+            TypedValue result = method.Invoke(new object[] {});
+            Assert.AreEqual(null, result.Value);
+            Assert.AreEqual(typeof(void), result.Type);
+            Assert.AreEqual(1, instance.Count);
+        }
+
+        static RuntimeMember GetMethodFromProcessor(object targetInstance, string memberName, int parameterCount) {
+            var processor = Builder.CellProcessor();
+            return MemberQuery.FindInstance(processor.FindMember, targetInstance, new MemberName(memberName), parameterCount);
         }
 
         [Test] public void MethodWithReturnIsInvoked() {
@@ -55,7 +69,7 @@ namespace fitSharp.Test.NUnit.Machine {
 
         [Test] public void GenericMethodWithParmsIsInvoked() {
             var member = new MemberName("genericmethodofsystemint32", "genericmethod", new[] { typeof(int)});
-            var method = RuntimeType.FindInstance(instance, member, 1);
+            var method = MemberQuery.FindInstance(MemberQuery.FindMember, instance, member, 1);
             Assert.IsNotNull(method);
             var result = method.Invoke(new object[] {123});
             Assert.AreEqual("sample123", result.Value.ToString());
@@ -122,14 +136,15 @@ namespace fitSharp.Test.NUnit.Machine {
 
         [Test] public void QueryableMemberIsInvoked() {
             var queryable = new QueryableClass();
-            RuntimeMember method = RuntimeType.FindInstance(queryable, new MemberName("dynamic"), 1);
+            RuntimeMember method = GetMethodFromProcessor(queryable, "dynamic", 1);
+            //MemberQuery.FindInstance(MemberQuery.FindMember, queryable, new MemberName("dynamic"), 1);
             TypedValue result = method.Invoke(new object[] {"stuff"});
             Assert.AreEqual("dynamicstuff", result.Value);
         }
 
         class QueryableClass: MemberQueryable {
-            public RuntimeMember Find(IdentifierName memberName, int parameterCount, IList<Type> parameterTypes) {
-                return new QueryableMember(memberName.ToString());
+            public RuntimeMember Find(MemberQuery query) {
+                return new QueryableMember(query.IdentifierName.ToString());
             }
 
             class QueryableMember: RuntimeMember {
@@ -162,11 +177,11 @@ namespace fitSharp.Test.NUnit.Machine {
         }
 
         [Test] public void MethodwithMisMatchedParameterNamesIsNotFound() {
-            Assert.IsNull(RuntimeType.FindInstance(instance, new MemberName("methodwithparms"), new [] {"garbage"}));
+            Assert.IsNull(MemberQuery.FindInstance(MemberQuery.FindMember, instance, new MemberName("methodwithparms"), new [] {"garbage"}));
         }
 
         [Test] public void MethodwithMatchedParameterNamesIsFound() {
-            Assert.IsNotNull(RuntimeType.FindInstance(instance, new MemberName("methodwithparms"), new [] {"input"}));
+            Assert.IsNotNull(MemberQuery.FindInstance(MemberQuery.FindMember, instance, new MemberName("methodwithparms"), new [] {"input"}));
         }
     }
 }
