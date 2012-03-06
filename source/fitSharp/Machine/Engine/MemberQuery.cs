@@ -5,7 +5,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using fitSharp.Machine.Model;
 
@@ -75,14 +74,6 @@ namespace fitSharp.Machine.Engine {
         public RuntimeMember Find(object instance) {
             object target = instance;
             while (target != null) {
-                /*var queryable = target as MemberQueryable;
-                if (queryable != null) {
-                    RuntimeMember queryableMember = queryable.Find(new IdentifierName(memberName.Name), parameterCount, parameterTypes);
-                    if (queryableMember != null) return queryableMember;
-                }*/
-
-                //RuntimeMember member = FindMember(target);
-                //if (member != null) return member;
                 var member = finder(new TypedValue(target), this);
                 if (member.HasValue) return member.GetValue<RuntimeMember>();
 
@@ -102,41 +93,22 @@ namespace fitSharp.Machine.Engine {
 
         public RuntimeMember FindMember(object instance) {
             var targetType = instance as Type ?? instance.GetType();
-            return FindMemberByName(instance, targetType) ?? FindIndexerMember(instance, targetType);
+            var matcher = new BasicMemberMatcher(instance, parameterCount, parameterTypes, parameterIdNames);
+            return FindMatchingMember(targetType, matcher) ?? FindIndexerMember(instance, targetType);
         }
 
-        RuntimeMember FindMemberByName(object instance, Type targetType) {
-            return FindMemberByName(instance, targetType, BindingFlags.Public)
-                    ?? FindMemberByName(instance, targetType, BindingFlags.NonPublic);
+        public RuntimeMember FindMatchingMember(Type targetType, MemberMatcher matcher) {
+            return FindMatchingMember(targetType, BindingFlags.Public, matcher)
+                   ?? FindMatchingMember(targetType, BindingFlags.NonPublic, matcher);
         }
 
-        RuntimeMember FindMemberByName(object instance, Type targetType, BindingFlags accessFlag) {
-            foreach (MemberInfo memberInfo in targetType.GetMembers(flags | accessFlag | BindingFlags.FlattenHierarchy)) {
-                var runtimeMemberFactory = RuntimeMemberFactory.MakeFactory(memberName, memberInfo);
-                if (!runtimeMemberFactory.Matches(memberName)) continue;
-                var runtimeMember = runtimeMemberFactory.MakeMember(instance);
-                if (Matches(runtimeMember)) return runtimeMember;
+        RuntimeMember FindMatchingMember(Type targetType, BindingFlags accessFlag, MemberMatcher matcher) {
+            foreach (var memberInfo in targetType.GetMembers(flags | accessFlag | BindingFlags.FlattenHierarchy)) {
+                if (!matcher.IsMatch(memberName, memberInfo)) continue;
+                return matcher.RuntimeMember;
+
             }
             return null;
-        }
-
-        bool Matches(RuntimeMember runtimeMember) {
-            if (!runtimeMember.MatchesParameterCount(parameterCount)) return false;
-            if (parameterTypes != null) {
-                for (int i = 0; i < parameterCount; i++) {
-                    if (runtimeMember.GetParameterType(i) != parameterTypes[i]) return false;
-                }
-            }
-            return
-                parameterIdNames == null ||
-                parameterIdNames.All(name => HasMatchingParameter(runtimeMember, name));
-        }
-
-        bool HasMatchingParameter(RuntimeMember runtimeMember, NameMatcher name) {
-            for (var i = 0; i < parameterCount; i++) {
-                if (name.Matches(runtimeMember.GetParameterName(i))) return true;
-            }
-            return false;
         }
 
         RuntimeMember FindIndexerMember(object instance, Type targetType) {

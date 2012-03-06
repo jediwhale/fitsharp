@@ -15,6 +15,7 @@ namespace fitSharp.Machine.Model {
         public MemberName(string name): this(name, name, new Type[] {}) {}
 
         public MemberName(string name, string baseName, Type[] genericTypes) {
+            OriginalName = name;
             Name = new GracefulName(name).IdentifierName.ToString();
             BaseName = new GracefulName(baseName).IdentifierName.ToString();
             GenericTypes = genericTypes;
@@ -31,6 +32,7 @@ namespace fitSharp.Machine.Model {
         }
 
         public string Name { get; private set; }
+        public string OriginalName { get; private set; }
         public string BaseName { get; private set; }
         public Type[] GenericTypes { get; private set; }
         public bool HasNamedParameters { get; private set; }

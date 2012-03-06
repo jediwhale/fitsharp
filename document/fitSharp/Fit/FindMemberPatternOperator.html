@@ -9,32 +9,43 @@ to be bound by the terms of this license. You must not remove this notice, or an
   <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
  <link href="../fitsharp1.css" type="text/css" rel="stylesheet">
   <link href="fit.css" type="text/css" rel="stylesheet">
-  <title>Object Factory Test</title>
+  <title>Find Member Pattern Operator</title>
 </head>
 <body>
 <div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
-<div class="pagename">Object Factory Test</div>
-<div class="content"><br>
+<div class="pagename">Find Member Pattern Operator</div>
+<div class="content">The Find Member Pattern operator looks for members with a MemberPattern attribute containing a regular expression that matches the contents of a member cell.<br>
+<br>
+With this class: <pre class="code">public class SampleClass {
+  [MemberPattern("do (.*) with (.*)")]
+  public void DoStuff(string what, string withWhom) {
+    Field = "I did " + what + " with " + withWhom;
+  }
+  public string Field;
+}</pre><br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>fit.Test.FitUnit.ObjectFactoryTest</td></tr>
+<tr><td>when test is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>configure</td><td>processor</td><td>add operator</td><td>findmemberpattern</td></tr>
 </table>
 <br>
-A fixture is created from a loaded assembly.<br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>configure</td><td>applicationundertest</td></tr>
-<tr><td>add assembly</td><td>build\debug\testTarget.dll</td></tr>
-<tr><td>add namespace</td><td>fitSharp.TestTarget</td></tr>
+<tr><td>with</td><td>new</td><td>fitSharp.Test.Double.SampleClass</td></tr>
+<tr><td>do math with sally</td></tr>
+<tr><td>check</td><td>field</td><td>I did math with sally</td></tr>
+</table>
+</td><td>then result is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>configure</td><td>processor</td><td>add operator</td><td>findmemberpattern</td></tr>
 </table>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>check</td><td>create instance</td><td>sampletargettype</td><td>fitSharp.TestTarget.SampleTargetType</td></tr>
+<tr><td>with</td><td>new</td><td>fitSharp.Test.Double.SampleClass</td></tr>
+<tr><td>do math with sally</td></tr>
+<tr><td>check</td><td>field</td><td class="pass">I did math with sally</td></tr>
+</table></td></tr>
 </table>
 <br>
-A duplicate copy of an assembly is ignored.<br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>add copy of assembly</td><td>build\debug\testTarget.dll</td></tr>
-<tr><td>check</td><td>create instance</td><td>sampletargettype</td><td>fitSharp.TestTarget.SampleTargetType</td></tr>
-</table>
 </div>
 <div style="width:100%;text-align:right">
 <span class="footer">&copy; Copyright <a href="http://www.syterra.com">Syterra Software Inc.</a> All rights reserved.</span>

@@ -64,13 +64,17 @@
     <Compile Include="Fit\Engine\CellProcessorExtension.cs" />
     <Compile Include="Fit\Operators\ExecuteDefault.cs" />
     <Compile Include="Fit\Engine\ExecuteOperator.cs" />
+    <Compile Include="Fit\Operators\FindMemberPattern.cs" />
     <Compile Include="Fit\Operators\FindMemberQueryable.cs" />
+    <Compile Include="Fit\Operators\MemberPatternAttribute.cs" />
     <Compile Include="Fit\Operators\RunTestDefault.cs" />
     <Compile Include="Fit\Engine\RunTestOperator.cs" />
     <Compile Include="Fit\Fixtures\StoryTest.cs" />
     <Compile Include="IO\PageSource.cs" />
     <Compile Include="IO\Path.cs" />
     <Compile Include="Machine\Engine\FindMemberDefault.cs" />
+    <Compile Include="Machine\Engine\BasicMemberMatcher.cs" />
+    <Compile Include="Machine\Engine\MemberMatcher.cs" />
     <Compile Include="Machine\Engine\MemberQuery.cs" />
     <Compile Include="Machine\Engine\RuntimeMemberFactory.cs" />
     <Compile Include="Machine\Exception\IgnoredException.cs" />

@@ -30,12 +30,12 @@ namespace fitSharp.Fit.Operators {
             Add(new WrapDefault(), 0);
             Add(new CheckEmpty(), 0);
             Add(new CheckSymbolSave(), 0);
-            Add(new FindMemberQueryable(), 0);
 
             Add(new CompareDefault(), 0);
             Add(new CompareEmpty(), 0);
             Add(new CompareNumeric(), 0);
 
+            Add(new FindMemberQueryable(), 2);
             Add(new InvokeSpecialAction(), 2);
             Add(new ParseArray(), 2);
             Add(new ParseByteArray(), 2);
