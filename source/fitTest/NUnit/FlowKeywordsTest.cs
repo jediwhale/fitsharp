@@ -1,4 +1,4 @@
-﻿// Copyright © 2011 Syterra Software Inc.
+﻿// Copyright © 2012 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -32,6 +32,13 @@ namespace fit.Test.NUnit {
             keywords.ShowAs(table.Parts.Parts);
             Assert.IsTrue(table.Parts.Parts.Last.HasAttribute(CellAttribute.Raw));
             Assert.AreEqual("<table><tr><td>show as</td><td>raw</td><td>stuff</td>\n<td>some stuff</td></tr></table>", table.ToString());
+        }
+
+        [Test] public void CheckFieldsForWrapsResultInList() {
+            var table = Parse.ParseFrom("<table><tr><td>check fields</td><td>stuff</td></tr></table>");
+            var result = keywords.CheckFieldsFor(table.Parts.Parts);
+            Assert.AreEqual(1, result.Count);
+            Assert.AreEqual("some stuff", result[0]);
         }
 
         private class TestDoFixture: DoFixture {

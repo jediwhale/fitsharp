@@ -5,6 +5,7 @@
 
 using System;
 using System.Linq;
+using fitSharp.Fit.Operators;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Test.Double {
@@ -58,6 +59,11 @@ namespace fitSharp.Test.Double {
 
         public string Duplicate;
         private string _duplicate { get { return Duplicate.ToUpper();} }
+
+        [MemberPattern("do (.*) with (.*)")]
+        public void DoStuff(string what, string withWhom) {
+            Field = "I did " + what + " with " + withWhom;
+        }
     }
 
     public class SampleClassAdapter: DomainAdapter {

@@ -17,9 +17,7 @@ to be bound by the terms of this license. You must not remove this notice, or an
 <div class="content">The <a href="../Fit/StringHandler.html">String Handler</a> compares strings with options to ignore white space and ignore case. Cell prefixes can be used to identify the cells that use the handler, or it can be used on all cells with string types.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>configuration setup</td></tr>
-<tr><td>service</td></tr>
-<tr><td>add operator</td><td>CompareString</td></tr>
+<tr><td>configure</td><td>processor</td><td>add operator</td><td>CompareString</td></tr>
 </table>
 <br>
 The default option is to ignore whitespace.<br>
@@ -34,9 +32,7 @@ The default option is to ignore whitespace.<br>
 A cell prefix can be configured to identify the cells to be compared by the handler.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>configuration setup</td></tr>
-<tr><td>get item</td><td>fitSharp.Fit.Operators.CompareString</td></tr>
-<tr><td>add</td><td>w-</td></tr>
+<tr><td>configure</td><td>fitSharp.Fit.Operators.CompareString</td><td>add</td><td>w-</td></tr>
 </table>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
@@ -49,8 +45,7 @@ A cell prefix can be configured to identify the cells to be compared by the hand
 Comparison options can be configured for a cell prefix.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>configuration setup</td></tr>
-<tr><td>get item</td><td>fitSharp.Fit.Operators.CompareString</td></tr>
+<tr><td>configure</td><td>fitSharp.Fit.Operators.CompareString</td></tr>
 <tr><td>add</td><td>i-,IgnoreCase</td></tr>
 <tr><td>add</td><td>w*,IgnoreWhitespace</td></tr>
 <tr><td>add</td><td>b!,IgnoreCase,IgnoreWhitespace</td></tr>
@@ -69,9 +64,7 @@ Comparison options can be configured for a cell prefix.<br>
 Comparison options can be configured for an empty prefix.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>configuration setup</td></tr>
-<tr><td>get item</td><td>fitSharp.Fit.Operators.CompareString</td></tr>
-<tr><td>add</td><td>,IgnoreCase</td></tr>
+<tr><td>configure</td><td>fitSharp.Fit.Operators.CompareString</td><td>add</td><td>,IgnoreCase</td></tr>
 </table>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">

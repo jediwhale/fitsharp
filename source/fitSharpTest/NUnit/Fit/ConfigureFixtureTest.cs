@@ -1,4 +1,4 @@
-﻿// Copyright © 2011 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2012 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -22,7 +22,7 @@ namespace fitSharp.Test.NUnit.Fit {
         }
 
         [Test] public void InvokesMethodOnConfigurationItem() {
-            fixture.Interpret(processor, MakeTable("start"));
+            fixture.Interpret(processor, MakeTable("logging", "start"));
             var item = processor.Configuration.GetItem<Logging>();
             item.WriteItem("stuff");
             Assert.AreEqual("<ul><li>stuff</li></ul>", item.Show);
@@ -33,8 +33,8 @@ namespace fitSharp.Test.NUnit.Fit {
             Assert.AreEqual("myvalue", processor.Memory.GetItem<Symbols>().GetValue("mysymbol"));
         }
 
-        static CellTree MakeTable(string method) {
-            return new CellTree(new CellTree("configure", "logging", method));
+        static CellTree MakeTable(string facility, string method) {
+            return new CellTree(new CellTree("configure", facility, method));
         }
 
         [Test] public void DisplaysResultInTable() {
@@ -42,6 +42,18 @@ namespace fitSharp.Test.NUnit.Fit {
             var table = new CellTree(new CellTree("configure", "symbols", "getvalue", "mysymbol"));
             fixture.Interpret(processor, table);
             Assert.AreEqual("myvalue", table.ValueAt(0, 2).GetAttribute(CellAttribute.Folded));
+        }
+
+        [Test] public void InvokesMethodOnProcessor() {
+            var table = MakeTable("processor", "tostring");
+            fixture.Interpret(processor, table);
+            Assert.AreEqual("fitSharp.Fit.Service.CellProcessorBase", table.ValueAt(0, 2).GetAttribute(CellAttribute.Folded));
+        }
+
+        [Test] public void InvokesMethodInEachRow() {
+            var table = new CellTree(new CellTree("configure", "processor"), new CellTree("tostring"));
+            fixture.Interpret(processor, table);
+            Assert.AreEqual("fitSharp.Fit.Service.CellProcessorBase", table.ValueAt(1, 0).GetAttribute(CellAttribute.Folded));
         }
     }
 }

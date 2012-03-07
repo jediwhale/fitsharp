@@ -45,5 +45,8 @@ namespace fitSharp.Fit.Engine {
             return processor.ExecuteWithThrow(target, memberName, new CellTree(), new CellBase(string.Empty));
         }
 
+        public static T GetSystemUnderTest<T>(this CellProcessor processor) where T: class {
+            return processor.CallStack.GetSystemUnderTest<T>();
+        }
     }
 }

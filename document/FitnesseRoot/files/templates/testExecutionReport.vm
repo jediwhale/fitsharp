@@ -1,5 +1,4 @@
-#set ($page_title="Test Execution Report")
-#parse("pageHead.vm")
+<div class="main">
 #if($testExecutionReport)
 <table border="1" cellspacing="0">
   <tr>
@@ -19,21 +18,26 @@
         <a name="$testResult.RelativePageName">$testResult.RelativePageName</a>
       </span></strong>
     </td>
-    <td>
+    <td class="numeric">
       $testResult.Right Right
     </td>
-    <td>
+    <td class="numeric">
       $testResult.Wrong Wrong
     </td>
-    <td>
+    <td class="numeric">
       $testResult.Ignores Ignores
     </td>
-    <td>
+    <td class="numeric">
       $testResult.Exceptions Exceptions
     </td>
+    #if($testExecutionReport.hasRunTimes())
+    <td class="numeric">
+      $testResult.runTimeInMillis ms
+    </td>
+    #end
   </tr>
 </table>
 <div>$testResult.Content</div>
 #end
 #end
-  #parse("pageFooter.vm")
+</div>

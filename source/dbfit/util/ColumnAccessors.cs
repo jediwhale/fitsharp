@@ -1,4 +1,4 @@
-﻿// Copyright © 2010 Syterra Software Inc. Includes work Copyright (C) Gojko Adzic 2006-2008 http://gojko.net
+﻿// Copyright © 2012 Syterra Software Inc. Includes work Copyright (C) Gojko Adzic 2006-2008 http://gojko.net
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -16,13 +16,13 @@ namespace dbfit.util {
             accessors[key] = accessor;
         }
 
-        public RuntimeMember Find(IdentifierName memberName, int parameterCount, Func<KeyValuePair<string, Accessor>, bool> filter) {
+        public RuntimeMember Find(MemberQuery query, Func<KeyValuePair<string, Accessor>, bool> filter) {
             foreach (KeyValuePair<string, Accessor> accessor in accessors) {
                 if (!filter(accessor)) continue;
-                if (parameterCount == 1) return new SetterMember(accessor.Value);
-                if (parameterCount == 0) return new GetterMember(accessor.Value);
+                if (query.IsSetter) return new SetterMember(accessor.Value);
+                if (query.IsGetter) return new GetterMember(accessor.Value);
             }
-            throw new ArgumentException(string.Format("Missing member '{0}'", memberName.SourceName));
+            throw new ArgumentException(string.Format("Missing member '{0}'", query));
         }
 
         private class SetterMember: RuntimeMember {

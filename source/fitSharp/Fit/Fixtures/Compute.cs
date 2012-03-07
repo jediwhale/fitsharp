@@ -27,7 +27,7 @@ namespace fitSharp.Fit.Fixtures {
                 parameterList.Add(new CellTreeLeaf(new GracefulName(headerRow.ValueAt(i).Text).ToString()));
                 parameterList.Add(row.Branches[i]);
             }
-            var result = processor.Invoke(processor.CallStack.SystemUnderTest, memberName, 
+            var result = processor.Invoke(processor.CallStack.DomainAdapter, memberName, 
                                           new EnumeratedTree<Cell>(parameterList));
             processor.Check(result, row.Branches.Last());
         }

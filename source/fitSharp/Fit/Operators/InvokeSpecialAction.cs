@@ -21,11 +21,11 @@ namespace fitSharp.Fit.Operators {
             var runtimeType = Processor.ApplicationUnderTest.FindType("fit.Fixtures.FlowKeywords");
             var runtimeMember = runtimeType.GetConstructor(1);
             var flowKeywords = runtimeMember.Invoke(new [] {instance.Value});
-            var member = RuntimeType.FindDirectInstance(flowKeywords.Value, memberName, new[] {type});
+            var member = MemberQuery.FindDirectInstance(flowKeywords.Value, memberName, new[] {type});
             if (member != null)
                 return member.Invoke(new object[] {parameters.Value});
 
-            member = RuntimeType.FindDirectInstance(instance.Value, memberName, new[] {type});
+            member = MemberQuery.FindDirectInstance(instance.Value, memberName, new[] {type});
             return member != null
                             ? member.Invoke(new object[] {parameters.Value})
                             : TypedValue.MakeInvalid(new MemberMissingException(instance.Type, memberName.Name, 1));

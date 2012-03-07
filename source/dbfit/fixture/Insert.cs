@@ -1,4 +1,4 @@
-// Copyright © 2010 Syterra Software Inc. Includes work Copyright (C) Gojko Adzic 2006-2008 http://gojko.net
+// Copyright © 2012 Syterra Software Inc. Includes work Copyright (C) Gojko Adzic 2006-2008 http://gojko.net
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -112,8 +112,9 @@ namespace dbfit.fixture {
             accessors = paramAccessors.ToArray();
 		}
 
-	    public RuntimeMember Find(IdentifierName memberName, int parameterCount, IList<Type> parameterTypes) {
-	        return columnAccessors.Find(memberName, parameterCount, accessor => memberName.Matches(accessor.Key));
+	    public RuntimeMember Find(MemberQuery query) {
+	        var memberName = query.IdentifierName;
+	        return columnAccessors.Find(query, accessor => memberName.Matches(accessor.Key));
 	    }
 	}
 }

@@ -34,7 +34,7 @@ namespace fitSharp.Fit.Operators {
 
         Interpreter WithSystemUnderTest(Interpreter interpreter, TypedValue systemUnderTest) {
             if (!systemUnderTest.IsVoid) {
-                Processor.CallStack.SystemUnderTest = systemUnderTest;
+                Processor.CallStack.DomainAdapter = systemUnderTest;
                 var adapter = interpreter as MutableDomainAdapter;
                 if (adapter != null) adapter.SetSystemUnderTest(systemUnderTest.Value);
             }

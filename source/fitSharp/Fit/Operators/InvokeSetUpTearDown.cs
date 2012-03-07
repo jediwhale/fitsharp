@@ -15,7 +15,7 @@ namespace fitSharp.Fit.Operators {
         }
 
         public TypedValue Invoke(TypedValue instance, MemberName memberName, Tree<Cell> parameters) {
-            var member = RuntimeType.FindDirectInstance(instance.Value, memberName, 0);
+            var member = MemberQuery.FindDirectInstance(instance.Value, memberName, 0);
             return member != null
                             ? member.Invoke(new object[] {})
                             : TypedValue.MakeInvalid(new MemberMissingException(instance.Type, memberName.Name, 0));

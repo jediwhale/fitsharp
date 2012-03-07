@@ -32,7 +32,7 @@ namespace fitSharp.Fit.Service {
 			    return new CheckBinding(processor, targetProvider, nameCell);
 
             var memberName =  processor.ParseTree<Cell, MemberName>(nameCell);
-            var member = RuntimeType.FindInstance(targetProvider, memberName, 1);
+            var member = MemberQuery.FindInstance(processor.FindMember, targetProvider, memberName, 1);
 
 		    if (member == null && newIdentifier.IsStartOf(name)) {
 		        string newMemberName = name.Substring(4);

@@ -53,6 +53,7 @@
     <Compile Include="Double\SampleClassTwo.cs" />
     <Compile Include="Double\Slim\Builder.cs" />
     <Compile Include="Double\TestSocket.cs" />
+    <Compile Include="NUnit\Fit\FindMemberPatternTest.cs" />
     <Compile Include="NUnit\Fit\IncludeTest.cs" />
     <Compile Include="NUnit\Fit\ParseMemberNameTest.cs" />
     <Compile Include="NUnit\Fit\TagFilterTest.cs" />
@@ -94,7 +95,7 @@
     <Compile Include="NUnit\Machine\IdentifierNameTest.cs" />
     <Compile Include="NUnit\Machine\LanguageNameTest.cs" />
     <Compile Include="NUnit\Machine\ProcessorTest.cs" />
-    <Compile Include="NUnit\Machine\RuntimeTypeTest.cs" />
+    <Compile Include="NUnit\Machine\MemberQueryTest.cs" />
     <Compile Include="Double\SampleClass.cs" />
     <Compile Include="NUnit\Machine\ShellTest.cs" />
     <Compile Include="NUnit\Machine\TreeTest.cs" />

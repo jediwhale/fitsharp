@@ -52,6 +52,8 @@ namespace fitSharp.Machine.Model {
         public bool IsValid { get { return !IsInvalid; } }
         public bool IsObject { get { return IsValid && ! IsVoid; } }
         public bool HasValue { get { return IsObject && !IsNull; } }
+        public bool HasValueAs<T>() where T: class { return HasValue && GetValueAs<T>() != null;
+    }
         public bool IsNull { get { return IsObject && (Value == null || Type == typeof(DBNull)); } }
         public bool IsNullOrEmpty { get { return IsObject && (IsNull || Value.ToString().Length == 0); } }
 
