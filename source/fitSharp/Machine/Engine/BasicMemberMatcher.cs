@@ -11,18 +11,23 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
     public class BasicMemberMatcher: MemberMatcher {
-        public BasicMemberMatcher(object instance, int parameterCount, IList<Type> parameterTypes, IList<IdentifierName> parameterIdNames) {
+        public BasicMemberMatcher(object instance, MemberName memberName, int parameterCount, IList<Type> parameterTypes, IList<IdentifierName> parameterIdNames) {
             this.instance = instance;
+            this.memberName = memberName;
             this.parameterIdNames = parameterIdNames;
             this.parameterTypes = parameterTypes;
             this.parameterCount = parameterCount;
         }
 
-        public bool IsMatch(MemberName memberName, MemberInfo memberInfo) {
-            var runtimeMemberFactory = RuntimeMemberFactory.MakeFactory(memberName, memberInfo);
-            if (!runtimeMemberFactory.Matches(memberName)) return false;
-            RuntimeMember = runtimeMemberFactory.MakeMember(instance);
-            return Matches(RuntimeMember);
+        public Maybe<RuntimeMember> Match(IEnumerable<MemberInfo> members) {
+            foreach (var memberInfo in members) {
+                var runtimeMemberFactory = RuntimeMemberFactory.MakeFactory(memberName, memberInfo);
+                if (!runtimeMemberFactory.Matches(memberName)) continue;
+                var runtimeMember = runtimeMemberFactory.MakeMember(instance);
+                if (!Matches(runtimeMember)) continue;
+                return new Maybe<RuntimeMember>(runtimeMember);
+            }
+            return Maybe<RuntimeMember>.Nothing;
         }
 
         bool Matches(RuntimeMember runtimeMember) {
@@ -44,9 +49,8 @@ namespace fitSharp.Machine.Engine {
             return false;
         }
 
-        public RuntimeMember RuntimeMember { get; private set; }
-
         readonly object instance;
+        readonly MemberName memberName;
         readonly int parameterCount;
         readonly IList<Type> parameterTypes;
         readonly IList<IdentifierName> parameterIdNames;

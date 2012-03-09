@@ -16,7 +16,7 @@ namespace fitSharp.Machine.Engine {
             Type = type;
         }
 
-        public RuntimeMember FindStatic(MemberName memberName, Type[] parameterTypes) {
+        public Maybe<RuntimeMember> FindStatic(MemberName memberName, Type[] parameterTypes) {
             return new MemberQuery(memberName, parameterTypes.Length)
                 .WithParameterTypes(parameterTypes)
                 .StaticOnly()
@@ -24,12 +24,13 @@ namespace fitSharp.Machine.Engine {
         }
 
         public RuntimeMember GetConstructor(int parameterCount) {
-            RuntimeMember runtimeMember = new MemberQuery(MemberName.Constructor, parameterCount).FindMember(Type);
-            if (runtimeMember == null) throw new ConstructorMissingException(Type, parameterCount);
-            return runtimeMember;
+            foreach (var runtimeMember in new MemberQuery(MemberName.Constructor, parameterCount).FindMember(Type).Value) {
+                return runtimeMember;
+            }
+            throw new ConstructorMissingException(Type, parameterCount);
         }
 
-        public RuntimeMember FindConstructor(Type[] parameterTypes) {
+        public Maybe<RuntimeMember> FindConstructor(Type[] parameterTypes) {
             return new MemberQuery(MemberName.Constructor, parameterTypes.Length)
                 .WithParameterTypes(parameterTypes)
                 .FindMember(Type);

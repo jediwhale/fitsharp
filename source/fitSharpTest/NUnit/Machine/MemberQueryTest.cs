@@ -76,10 +76,12 @@ namespace fitSharp.Test.NUnit.Machine {
         }
 
         [Test] public void StaticMethodWithParmsIsInvoked() {
-            RuntimeMember method = new RuntimeType(instance.GetType()).FindStatic(MemberName.ParseMethod, new [] {typeof(string)});
-            Assert.IsNotNull(method);
-            TypedValue result = method.Invoke(new object[] {"input"});
-            Assert.AreEqual(typeof(SampleClass), result.Type);
+            foreach (var method in new RuntimeType(instance.GetType()).FindStatic(MemberName.ParseMethod, new [] {typeof(string)}).Value) {
+                TypedValue result = method.Invoke(new object[] {"input"});
+                Assert.AreEqual(typeof (SampleClass), result.Type);
+                return;
+            }
+            Assert.Fail("no method");
         }
 
         [Test] public void ConstructorIsInvoked() {

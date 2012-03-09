@@ -171,7 +171,7 @@ namespace fitSharp.Machine.Engine {
                 logging.Start(operationName);
                 logging.LogParameters(parameters);
                 var candidate = Operators.FindOperator<O>(parameters);
-                var member = MemberQuery.FindDirectInstance(candidate, new MemberName(operationName), parameters.Length);
+                var member = MemberQuery.GetDirectInstance(candidate, new MemberName(operationName), parameters.Length);
                 var result = member.Invoke(parameters).GetValue<TypedValue>();
                 logging.LogResult(candidate, result);
                 return result;

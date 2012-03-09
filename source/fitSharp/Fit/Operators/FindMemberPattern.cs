@@ -4,6 +4,7 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using fitSharp.Machine.Engine;
@@ -16,33 +17,35 @@ namespace fitSharp.Fit.Operators {
         }
 
         public TypedValue FindMember(TypedValue instance, MemberQuery query) {
-            var member = query.FindMatchingMember(instance.Type, new PatternMemberMatcher(instance.Value)) 
-                    ?? query.FindMember(instance.Value);
-            return new TypedValue(member, typeof(RuntimeMember));
+            var member = query.FindMatchingMember(instance.Type, new PatternMemberMatcher(instance.Value, query.MemberName)) 
+                    .OrMaybe(() => query.FindMember(instance.Value));
+            return member.TypedValue;
         }
 
         class PatternMemberMatcher: MemberMatcher {
-            public PatternMemberMatcher(object instance) {
+            public PatternMemberMatcher(object instance, MemberName memberName) {
                 this.instance = instance;
+                this.memberName = memberName;
             }
 
-            public bool IsMatch(MemberName memberName, MemberInfo memberInfo) {
-                if (!Attribute.IsDefined(memberInfo, typeof(MemberPatternAttribute), true)) return false;
-                var attribute = (MemberPatternAttribute)Attribute.GetCustomAttribute(memberInfo, typeof (MemberPatternAttribute), true);
-                var match = new Regex(attribute.Pattern).Match(memberName.OriginalName);
-                if (!match.Success) return false;
-                var runtimeMemberFactory = RuntimeMemberFactory.MakeFactory(memberName, memberInfo);
+            public Maybe<RuntimeMember> Match(IEnumerable<MemberInfo> members) {
+                foreach (var memberInfo in members) {
+                    if (!Attribute.IsDefined(memberInfo, typeof(MemberPatternAttribute), true)) continue;
+                    var attribute = (MemberPatternAttribute)Attribute.GetCustomAttribute(memberInfo, typeof (MemberPatternAttribute), true);
+                    var match = new Regex(attribute.Pattern).Match(memberName.OriginalName);
+                    if (!match.Success) continue;
+                    var runtimeMemberFactory = RuntimeMemberFactory.MakeFactory(memberName, memberInfo);
 
-                var parameters = new object[match.Groups.Count - 1];
-                for (var i = 0; i < parameters.Length; i++) parameters[i] = match.Groups[i+1].Value;
+                    var parameters = new object[match.Groups.Count - 1];
+                    for (var i = 0; i < parameters.Length; i++) parameters[i] = match.Groups[i+1].Value;
 
-                RuntimeMember = new PatternRuntimeMember(runtimeMemberFactory.MakeMember(instance), parameters);
-                return true;
+                    return new Maybe<RuntimeMember>(new PatternRuntimeMember(runtimeMemberFactory.MakeMember(instance), parameters));
+                }
+                return Maybe<RuntimeMember>.Nothing;
             }
-
-            public RuntimeMember RuntimeMember { get; private set; }
 
             readonly object instance;
+            readonly MemberName memberName;
         }
 
         class PatternRuntimeMember: RuntimeMember {

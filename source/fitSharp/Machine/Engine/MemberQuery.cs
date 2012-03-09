@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
@@ -26,11 +27,18 @@ namespace fitSharp.Machine.Engine {
                 .Find(instance);
         }
 
-        public static RuntimeMember FindDirectInstance(object instance, MemberName memberName, int parameterCount) {
+        public static Maybe<RuntimeMember> FindDirectInstance(object instance, MemberName memberName, int parameterCount) {
             return new MemberQuery(memberName, parameterCount).FindMember(instance);
         }
 
-        public static RuntimeMember FindDirectInstance(object instance, MemberName memberName, Type[] parameterTypes) {
+        public static RuntimeMember GetDirectInstance(object instance, MemberName memberName, int parameterCount) {
+            foreach (var member in new MemberQuery(memberName, parameterCount).FindMember(instance).Value) {
+                return member;
+            }
+            throw new MemberMissingException(instance.GetType(), memberName.Name, parameterCount);
+        }
+
+        public static Maybe<RuntimeMember> FindDirectInstance(object instance, MemberName memberName, Type[] parameterTypes) {
             return new MemberQuery(memberName, parameterTypes.Length)
                 .WithParameterTypes(parameterTypes)
                 .FindMember(instance);
@@ -67,6 +75,7 @@ namespace fitSharp.Machine.Engine {
         }
 
         public IdentifierName IdentifierName { get { return new IdentifierName(memberName.Name); } }
+        public MemberName MemberName { get { return memberName; } }
         public bool IsGetter { get { return parameterCount == 0; } }
         public bool IsSetter { get { return parameterCount == 1; } }
         public override string ToString() { return memberName.ToString(); }
@@ -88,39 +97,35 @@ namespace fitSharp.Machine.Engine {
         }
 
         public static TypedValue FindMember(TypedValue instance, MemberQuery query) {
-            return new TypedValue(query.FindMember(instance.Value), typeof(RuntimeMember));
+            return query.FindMember(instance.Value).TypedValue;
         }
 
-        public RuntimeMember FindMember(object instance) {
+        public Maybe<RuntimeMember> FindMember(object instance) {
             var targetType = instance as Type ?? instance.GetType();
-            var matcher = new BasicMemberMatcher(instance, parameterCount, parameterTypes, parameterIdNames);
-            return FindMatchingMember(targetType, matcher) ?? FindIndexerMember(instance, targetType);
+            var matcher = new BasicMemberMatcher(instance, memberName, parameterCount, parameterTypes, parameterIdNames);
+            return FindMatchingMember(targetType, matcher)
+                    .OrMaybe(() => FindIndexerMember(instance, targetType));
         }
 
-        public RuntimeMember FindMatchingMember(Type targetType, MemberMatcher matcher) {
+        public Maybe<RuntimeMember> FindMatchingMember(Type targetType, MemberMatcher matcher) {
             return FindMatchingMember(targetType, BindingFlags.Public, matcher)
-                   ?? FindMatchingMember(targetType, BindingFlags.NonPublic, matcher);
+                    .OrMaybe(() => FindMatchingMember(targetType, BindingFlags.NonPublic, matcher));
         }
 
-        RuntimeMember FindMatchingMember(Type targetType, BindingFlags accessFlag, MemberMatcher matcher) {
-            foreach (var memberInfo in targetType.GetMembers(flags | accessFlag | BindingFlags.FlattenHierarchy)) {
-                if (!matcher.IsMatch(memberName, memberInfo)) continue;
-                return matcher.RuntimeMember;
-
-            }
-            return null;
+        Maybe<RuntimeMember> FindMatchingMember(Type targetType, BindingFlags accessFlag, MemberMatcher matcher) {
+            return matcher.Match(targetType.GetMembers(flags | accessFlag | BindingFlags.FlattenHierarchy));
         }
 
-        RuntimeMember FindIndexerMember(object instance, Type targetType) {
-            if (parameterCount != 0) return null;
-            foreach (MemberInfo memberInfo in targetType.GetMembers(flags | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.FlattenHierarchy)) {
+        Maybe<RuntimeMember> FindIndexerMember(object instance, Type targetType) {
+            if (parameterCount != 0) return Maybe<RuntimeMember>.Nothing;
+            foreach (var memberInfo in targetType.GetMembers(flags | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.FlattenHierarchy)) {
                 if (memberInfo.Name != "get_Item") continue;
                 RuntimeMember indexerMember = new IndexerMember(memberInfo, instance, memberName.Name);
                 if (indexerMember.MatchesParameterCount(1) && indexerMember.GetParameterType(0) == typeof(string)) {
-                    return indexerMember;
+                    return new Maybe<RuntimeMember>(indexerMember);
                 }
             }
-            return null;
+            return Maybe<RuntimeMember>.Nothing;
         }
 
         readonly MemberName memberName;

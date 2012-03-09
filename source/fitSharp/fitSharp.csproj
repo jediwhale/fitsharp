@@ -153,6 +153,7 @@
     <Compile Include="Fit\Operators\CompareFloatingPoint.cs" />
     <Compile Include="Fit\Operators\ParseMemberName.cs" />
     <Compile Include="Machine\Model\GracefulName.cs" />
+    <Compile Include="Machine\Model\Maybe.cs" />
     <Compile Include="Machine\Model\MemberName.cs" />
     <Compile Include="Fit\Operators\CompareDefault.cs" />
     <Compile Include="Fit\Operators\CompareEndsWith.cs" />

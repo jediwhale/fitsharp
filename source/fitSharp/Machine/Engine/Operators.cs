@@ -84,7 +84,7 @@ namespace fitSharp.Machine.Engine {
                     anOperator.Processor = Processor;
                     var candidate = anOperator as O;
                     if (candidate == null) continue;
-                    var member = MemberQuery.FindDirectInstance(candidate, new MemberName("Can" + operationName), parameters.Length);
+                    var member = MemberQuery.GetDirectInstance(candidate, new MemberName("Can" + operationName), parameters.Length);
                     if (!member.Invoke(parameters).GetValue<bool>()) continue;
                     return candidate;
                 }
