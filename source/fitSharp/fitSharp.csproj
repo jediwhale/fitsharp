@@ -74,8 +74,10 @@
     <Compile Include="IO\Path.cs" />
     <Compile Include="Machine\Engine\FindMemberDefault.cs" />
     <Compile Include="Machine\Engine\BasicMemberMatcher.cs" />
+    <Compile Include="Machine\Engine\IndexerMemberMatcher.cs" />
     <Compile Include="Machine\Engine\MemberMatcher.cs" />
     <Compile Include="Machine\Engine\MemberQuery.cs" />
+    <Compile Include="Machine\Engine\MemberSpecification.cs" />
     <Compile Include="Machine\Engine\RuntimeMemberFactory.cs" />
     <Compile Include="Machine\Exception\IgnoredException.cs" />
     <Compile Include="Fit\Fixtures\Define.cs" />

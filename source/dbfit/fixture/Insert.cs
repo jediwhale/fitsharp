@@ -10,9 +10,9 @@ using System.Data.Common;
 
 using fit;
 using dbfit.util;
+using fitSharp.Fit.Operators;
 using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
-using fitSharp.Machine.Model;
 
 namespace dbfit.fixture {
 	public class Insert: ColumnFixture, MemberQueryable {
@@ -112,9 +112,8 @@ namespace dbfit.fixture {
             accessors = paramAccessors.ToArray();
 		}
 
-	    public RuntimeMember Find(MemberQuery query) {
-	        var memberName = query.IdentifierName;
-	        return columnAccessors.Find(query, accessor => memberName.Matches(accessor.Key));
+	    public RuntimeMember Find(MemberSpecification specification) {
+	        return columnAccessors.Find(specification, accessor => specification.MatchesIdentifierName(accessor.Key));
 	    }
 	}
 }

@@ -4,6 +4,7 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
+using fitSharp.Fit.Operators;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using fitSharp.Test.Double;
@@ -139,14 +140,14 @@ namespace fitSharp.Test.NUnit.Machine {
         [Test] public void QueryableMemberIsInvoked() {
             var queryable = new QueryableClass();
             RuntimeMember method = GetMethodFromProcessor(queryable, "dynamic", 1);
-            //MemberQuery.FindInstance(MemberQuery.FindMember, queryable, new MemberName("dynamic"), 1);
             TypedValue result = method.Invoke(new object[] {"stuff"});
             Assert.AreEqual("dynamicstuff", result.Value);
         }
 
         class QueryableClass: MemberQueryable {
-            public RuntimeMember Find(MemberQuery query) {
-                return new QueryableMember(query.IdentifierName.ToString());
+            public RuntimeMember Find(MemberSpecification specification) {
+                Assert.IsTrue(specification.MatchesIdentifierName("dynamic"));
+                return new QueryableMember("dynamic");
             }
 
             class QueryableMember: RuntimeMember {

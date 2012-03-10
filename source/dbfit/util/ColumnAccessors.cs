@@ -16,13 +16,13 @@ namespace dbfit.util {
             accessors[key] = accessor;
         }
 
-        public RuntimeMember Find(MemberQuery query, Func<KeyValuePair<string, Accessor>, bool> filter) {
+        public RuntimeMember Find(MemberSpecification specification, Func<KeyValuePair<string, Accessor>, bool> filter) {
             foreach (KeyValuePair<string, Accessor> accessor in accessors) {
                 if (!filter(accessor)) continue;
-                if (query.IsSetter) return new SetterMember(accessor.Value);
-                if (query.IsGetter) return new GetterMember(accessor.Value);
+                if (specification.IsSetter) return new SetterMember(accessor.Value);
+                if (specification.IsGetter) return new GetterMember(accessor.Value);
             }
-            throw new ArgumentException(string.Format("Missing member '{0}'", query));
+            throw new ArgumentException(string.Format("Missing member '{0}'", specification));
         }
 
         private class SetterMember: RuntimeMember {

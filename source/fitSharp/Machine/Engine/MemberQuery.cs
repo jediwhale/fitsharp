@@ -10,11 +10,6 @@ using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
-    public interface MemberQueryable {
-        RuntimeMember Find(MemberQuery query);
-    }
-
-
     public class MemberQuery {
         public static RuntimeMember FindInstance(Func<TypedValue, MemberQuery, TypedValue> finder, object instance, MemberName memberName, int parameterCount) {
             return new MemberQuery(memberName, parameterCount).Using(finder).Find(instance);
@@ -46,21 +41,18 @@ namespace fitSharp.Machine.Engine {
 
         public MemberQuery(MemberName memberName, int parameterCount) {
             this.memberName = memberName;
-            this.parameterCount = parameterCount;
+            specification = new MemberSpecification(memberName, parameterCount);
             flags = BindingFlags.Instance | BindingFlags.Static;
             finder = FindMember;
         }
 
         public MemberQuery WithParameterTypes(IList<Type> parameterTypes) {
-            this.parameterTypes = parameterTypes;
+            specification.WithParameterTypes(parameterTypes);
             return this;
         }
 
         public MemberQuery WithParameterNames(IEnumerable<string> parameterNames) {
-            parameterIdNames = new List<IdentifierName>();
-            foreach (string name in parameterNames) {
-                parameterIdNames.Add(new IdentifierName(name));
-            }
+            specification.WithParameterNames(parameterNames);
             return this;
         }
 
@@ -74,11 +66,8 @@ namespace fitSharp.Machine.Engine {
             return this;
         }
 
-        public IdentifierName IdentifierName { get { return new IdentifierName(memberName.Name); } }
+        public MemberSpecification Specification { get { return specification; } }
         public MemberName MemberName { get { return memberName; } }
-        public bool IsGetter { get { return parameterCount == 0; } }
-        public bool IsSetter { get { return parameterCount == 1; } }
-        public override string ToString() { return memberName.ToString(); }
 
         public RuntimeMember Find(object instance) {
             object target = instance;
@@ -102,8 +91,7 @@ namespace fitSharp.Machine.Engine {
 
         public Maybe<RuntimeMember> FindMember(object instance) {
             var targetType = instance as Type ?? instance.GetType();
-            var matcher = new BasicMemberMatcher(instance, memberName, parameterCount, parameterTypes, parameterIdNames);
-            return FindMatchingMember(targetType, matcher)
+            return FindBasicMember(instance, targetType)
                     .OrMaybe(() => FindIndexerMember(instance, targetType));
         }
 
@@ -112,28 +100,24 @@ namespace fitSharp.Machine.Engine {
                     .OrMaybe(() => FindMatchingMember(targetType, BindingFlags.NonPublic, matcher));
         }
 
+        Maybe<RuntimeMember> FindBasicMember(object instance, Type targetType) {
+            var matcher = new BasicMemberMatcher(instance, memberName, specification);
+            return FindMatchingMember(targetType, matcher);
+        }
+
+        Maybe<RuntimeMember> FindIndexerMember(object instance, Type targetType) {
+            var matcher = new IndexerMemberMatcher(instance, memberName, specification);
+            return FindMatchingMember(targetType, matcher);
+        }
+
         Maybe<RuntimeMember> FindMatchingMember(Type targetType, BindingFlags accessFlag, MemberMatcher matcher) {
             return matcher.Match(targetType.GetMembers(flags | accessFlag | BindingFlags.FlattenHierarchy));
         }
 
-        Maybe<RuntimeMember> FindIndexerMember(object instance, Type targetType) {
-            if (parameterCount != 0) return Maybe<RuntimeMember>.Nothing;
-            foreach (var memberInfo in targetType.GetMembers(flags | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.FlattenHierarchy)) {
-                if (memberInfo.Name != "get_Item") continue;
-                RuntimeMember indexerMember = new IndexerMember(memberInfo, instance, memberName.Name);
-                if (indexerMember.MatchesParameterCount(1) && indexerMember.GetParameterType(0) == typeof(string)) {
-                    return new Maybe<RuntimeMember>(indexerMember);
-                }
-            }
-            return Maybe<RuntimeMember>.Nothing;
-        }
-
         readonly MemberName memberName;
-        readonly int parameterCount;
+        readonly MemberSpecification specification;
 
         Func<TypedValue, MemberQuery, TypedValue> finder;
         BindingFlags flags;
-        IList<Type> parameterTypes;
-        IList<IdentifierName> parameterIdNames;
     }
 }

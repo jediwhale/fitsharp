@@ -3,35 +3,28 @@
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
-using System;
 using System.Collections.Generic;
 using System.Reflection;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
-    public class BasicMemberMatcher: MemberMatcher {
-        public BasicMemberMatcher(object instance, MemberName memberName, MemberSpecification specification) {
-            this.instance = instance;
+    public class IndexerMemberMatcher: MemberMatcher {
+        public IndexerMemberMatcher(object instance, MemberName memberName, MemberSpecification specification) {
             this.memberName = memberName;
             this.specification = specification;
+            this.instance = instance;
         }
 
         public Maybe<RuntimeMember> Match(IEnumerable<MemberInfo> members) {
+            if (!specification.IsGetter) return Maybe<RuntimeMember>.Nothing;
             foreach (var memberInfo in members) {
-                var runtimeMemberFactory = RuntimeMemberFactory.MakeFactory(memberName, memberInfo);
-                if (!runtimeMemberFactory.Matches(memberName)) continue;
-                var runtimeMember = runtimeMemberFactory.MakeMember(instance);
-                if (!Matches(runtimeMember)) continue;
-                return new Maybe<RuntimeMember>(runtimeMember);
+                if (memberInfo.Name != "get_Item") continue;
+                RuntimeMember indexerMember = new IndexerMember(memberInfo, instance, memberName.Name);
+                if (indexerMember.MatchesParameterCount(1) && indexerMember.GetParameterType(0) == typeof(string)) {
+                    return new Maybe<RuntimeMember>(indexerMember);
+                }
             }
             return Maybe<RuntimeMember>.Nothing;
-        }
-
-        bool Matches(RuntimeMember runtimeMember) {
-            return
-                specification.MatchesParameterCount(runtimeMember) &&
-                specification.MatchesParameterTypes(runtimeMember) &&
-                specification.MatchesParameterNames(runtimeMember);
         }
 
         readonly object instance;
