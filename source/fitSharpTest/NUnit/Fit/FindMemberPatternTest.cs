@@ -13,15 +13,23 @@ using NUnit.Framework;
 namespace fitSharp.Test.NUnit.Fit {
     [TestFixture] public class FindMemberPatternTest {
 
-        [Test] public void MethodWithMemberPatternAttributeIsFound() {
+        [Test] public void MethodWithMemberPatternAttributeIsInvoked() {
+            InvokeMemberPattern("do math with sally", "I did math with sally");
+        }
+
+        static void InvokeMemberPattern(string memberPattern, string expectedResult) {
             var processor = Builder.CellProcessor();
             var findMember = new FindMemberPattern { Processor = processor };
             var instance = new SampleClass();
-            var query = new MemberQuery(new MemberName("do math with sally"), 0);
+            var query = new MemberQuery(new MemberName(memberPattern), 0);
             var member = findMember.FindMember(new TypedValue(instance), query);
-            Assert.IsNotNull(member.Value);
+            Assert.IsTrue(member.HasValueAs<RuntimeMember>());
             member.GetValueAs<RuntimeMember>().Invoke(new object[] {});
-            Assert.AreEqual("I did math with sally", instance.Field);
+            Assert.AreEqual(expectedResult, instance.Field);
+        }
+
+        [Test] public void MethodWithMemberPatternAttributeParsesParameters() {
+            InvokeMemberPattern("do math 3 times", "I did math math math");
         } 
     }
 }

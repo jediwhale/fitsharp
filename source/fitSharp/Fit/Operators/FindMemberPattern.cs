@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using fitSharp.Fit.Engine;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
@@ -17,13 +18,14 @@ namespace fitSharp.Fit.Operators {
         }
 
         public TypedValue FindMember(TypedValue instance, MemberQuery query) {
-            var member = query.FindMatchingMember(instance.Type, new PatternMemberMatcher(instance.Value, query.MemberName)) 
+            var member = query.FindMatchingMember(instance.Type, new PatternMemberMatcher(Processor, instance.Value, query.MemberName)) 
                     .OrMaybe(() => query.FindMember(instance.Value));
             return member.TypedValue;
         }
 
         class PatternMemberMatcher: MemberMatcher {
-            public PatternMemberMatcher(object instance, MemberName memberName) {
+            public PatternMemberMatcher(CellProcessor processor, object instance, MemberName memberName) {
+                this.processor = processor;
                 this.instance = instance;
                 this.memberName = memberName;
             }
@@ -36,25 +38,31 @@ namespace fitSharp.Fit.Operators {
                     if (!match.Success) continue;
                     var runtimeMemberFactory = RuntimeMemberFactory.MakeFactory(memberName, memberInfo);
 
-                    var parameters = new object[match.Groups.Count - 1];
+                    var parameters = new string[match.Groups.Count - 1];
                     for (var i = 0; i < parameters.Length; i++) parameters[i] = match.Groups[i+1].Value;
 
-                    return new Maybe<RuntimeMember>(new PatternRuntimeMember(runtimeMemberFactory.MakeMember(instance), parameters));
+                    return new Maybe<RuntimeMember>(new PatternRuntimeMember(processor, runtimeMemberFactory.MakeMember(instance), parameters));
                 }
                 return Maybe<RuntimeMember>.Nothing;
             }
 
+            readonly CellProcessor processor;
             readonly object instance;
             readonly MemberName memberName;
         }
 
         class PatternRuntimeMember: RuntimeMember {
-            public PatternRuntimeMember(RuntimeMember baseMember, object[] patternParameters) {
+            public PatternRuntimeMember(CellProcessor processor, RuntimeMember baseMember, string[] patternParameters) {
                 this.baseMember = baseMember;
+                this.processor = processor;
                 this.patternParameters = patternParameters;
             }
 
-            public TypedValue Invoke(object[] parameters) {
+            public TypedValue Invoke(object[] invokeParameters) {
+                var parameters = new object[patternParameters.Length];
+                for (var i = 0; i < patternParameters.Length; i++) {
+                    parameters[i] = processor.ParseString(GetParameterType(i), patternParameters[i]).Value;
+                }
                 return baseMember.Invoke(patternParameters);
             }
 
@@ -79,7 +87,8 @@ namespace fitSharp.Fit.Operators {
             }
 
             readonly RuntimeMember baseMember;
-            readonly object[] patternParameters;
+            readonly string[] patternParameters;
+            readonly CellProcessor processor;
         }
     }
 }
