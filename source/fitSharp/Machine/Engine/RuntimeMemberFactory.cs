@@ -1,18 +1,17 @@
-// Copyright © 2011 Syterra Software Inc. All rights reserved.
+// Copyright © 2012 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
 using System.Reflection;
-using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
     public abstract class RuntimeMemberFactory {
-        public static RuntimeMemberFactory MakeFactory(MemberName memberName, MemberInfo memberInfo) {
+        public static RuntimeMemberFactory MakeFactory(MemberSpecification specification, MemberInfo memberInfo) {
             switch (memberInfo.MemberType) {
                 case MemberTypes.Method:
-                    return new MethodMemberFactory(memberInfo, memberName.GenericTypes);
+                    return new MethodMemberFactory(memberInfo, specification);
                 case MemberTypes.Field:
                     return new FieldMemberFactory(memberInfo);
                 case MemberTypes.Property:
@@ -24,11 +23,8 @@ namespace fitSharp.Machine.Engine {
             }
         }
 
-        public virtual bool Matches(MemberName memberName) {
-            var identifier = new IdentifierName(memberName.Name);
-            if (identifier.Matches(info.Name)) return true;
-            if (!identifier.MatchName.StartsWith("set") && !identifier.MatchName.StartsWith("get")) return false;
-            return new IdentifierName(identifier.MatchName.Substring(3)).Matches(info.Name);
+        public virtual bool Matches(MemberSpecification specification) {
+            return specification.MatchesGetSetName(info.Name);
         }
 
         public abstract RuntimeMember MakeMember(object instance);
@@ -41,25 +37,25 @@ namespace fitSharp.Machine.Engine {
     }
 
     public class MethodMemberFactory: RuntimeMemberFactory {
-        public MethodMemberFactory(MemberInfo info, Type[] genericTypes) : base(info) {
-            this.genericTypes = genericTypes;
+        public MethodMemberFactory(MemberInfo info, MemberSpecification specification) : base(info) {
+            this.specification = specification;
         }
 
-        public override bool Matches(MemberName memberName) {
+        public override bool Matches(MemberSpecification specification) {
             return Info.IsGenericMethod
-                ? new IdentifierName(memberName.BaseName).Matches(info.Name)
-                : base.Matches(memberName);
+                ? specification.MatchesBaseName(info.Name)
+                : base.Matches(specification);
         }
 
         public override RuntimeMember MakeMember(object instance) {
             return Info.IsGenericMethod
-                       ? new MethodMember(Info.MakeGenericMethod(genericTypes), instance)
+                       ? new MethodMember(specification.MakeGenericMethod(Info), instance)
                        : new MethodMember(info, instance);
         }
 
         MethodInfo Info { get { return (MethodInfo) info; } }
 
-        readonly Type[] genericTypes;
+        readonly MemberSpecification specification;
     }
 
     public class PropertyMemberFactory: RuntimeMemberFactory {
@@ -80,7 +76,7 @@ namespace fitSharp.Machine.Engine {
     public class UnsupportedMemberFactory: RuntimeMemberFactory {
         public UnsupportedMemberFactory(MemberInfo info) : base(info) {}
 
-        public override bool Matches(MemberName memberName) { return false; }
+        public override bool Matches(MemberSpecification specification) { return false; }
 
         public override RuntimeMember MakeMember(object instance) { throw new InvalidOperationException(); }
     }

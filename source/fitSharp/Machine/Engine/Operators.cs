@@ -5,7 +5,6 @@
 
 using System;
 using System.Collections.Generic;
-using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
     public delegate bool CanDoOperation<in T>(T anOperator);
@@ -84,7 +83,8 @@ namespace fitSharp.Machine.Engine {
                     anOperator.Processor = Processor;
                     var candidate = anOperator as O;
                     if (candidate == null) continue;
-                    var member = MemberQuery.GetDirectInstance(candidate, new MemberName("Can" + operationName), parameters.Length);
+                    var member = MemberQuery.GetDirectInstance(candidate,
+                            new MemberSpecification("Can" + operationName, parameters.Length));
                     if (!member.Invoke(parameters).GetValue<bool>()) continue;
                     return candidate;
                 }

@@ -6,7 +6,6 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Text.RegularExpressions;
 using fitSharp.Fit.Engine;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
@@ -18,28 +17,28 @@ namespace fitSharp.Fit.Operators {
         }
 
         public TypedValue FindMember(TypedValue instance, MemberQuery query) {
-            var member = query.FindMatchingMember(instance.Type, new PatternMemberMatcher(Processor, instance.Value, query.MemberName)) 
+            var member = query.FindMatchingMember(instance.Type, new PatternMemberMatcher(Processor, instance.Value, query.Specification)) 
                     .OrMaybe(() => query.FindMember(instance.Value));
             return member.TypedValue;
         }
 
         class PatternMemberMatcher: MemberMatcher {
-            public PatternMemberMatcher(CellProcessor processor, object instance, MemberName memberName) {
+            public PatternMemberMatcher(CellProcessor processor, object instance, MemberSpecification specification) {
                 this.processor = processor;
+                this.specification = specification;
                 this.instance = instance;
-                this.memberName = memberName;
             }
 
             public Maybe<RuntimeMember> Match(IEnumerable<MemberInfo> members) {
                 foreach (var memberInfo in members) {
                     if (!Attribute.IsDefined(memberInfo, typeof(MemberPatternAttribute), true)) continue;
                     var attribute = (MemberPatternAttribute)Attribute.GetCustomAttribute(memberInfo, typeof (MemberPatternAttribute), true);
-                    var match = new Regex(attribute.Pattern).Match(memberName.OriginalName);
+                    var match = specification.MatchRegexName(attribute.Pattern);
                     if (!match.Success) continue;
-                    var runtimeMemberFactory = RuntimeMemberFactory.MakeFactory(memberName, memberInfo);
+                    var runtimeMemberFactory = RuntimeMemberFactory.MakeFactory(specification, memberInfo);
 
                     var parameters = new string[match.Groups.Count - 1];
-                    for (var i = 0; i < parameters.Length; i++) parameters[i] = match.Groups[i+1].Value;
+                    foreach (var i in parameters.Length.Count()) parameters[i] = match.Groups[i+1].Value;
 
                     return new Maybe<RuntimeMember>(new PatternRuntimeMember(processor, runtimeMemberFactory.MakeMember(instance), parameters));
                 }
@@ -48,7 +47,7 @@ namespace fitSharp.Fit.Operators {
 
             readonly CellProcessor processor;
             readonly object instance;
-            readonly MemberName memberName;
+            readonly MemberSpecification specification;
         }
 
         class PatternRuntimeMember: RuntimeMember {
@@ -60,10 +59,10 @@ namespace fitSharp.Fit.Operators {
 
             public TypedValue Invoke(object[] invokeParameters) {
                 var parameters = new object[patternParameters.Length];
-                for (var i = 0; i < patternParameters.Length; i++) {
+                foreach (var i in patternParameters.Length.Count()) {
                     parameters[i] = processor.ParseString(GetParameterType(i), patternParameters[i]).Value;
                 }
-                return baseMember.Invoke(patternParameters);
+                return baseMember.Invoke(parameters);
             }
 
             public bool MatchesParameterCount(int count) {

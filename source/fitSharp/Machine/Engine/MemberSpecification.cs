@@ -6,6 +6,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Text.RegularExpressions;
+using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
@@ -15,12 +18,24 @@ namespace fitSharp.Machine.Engine {
             this.memberName = memberName;
         }
 
+        public MemberSpecification(string memberName, int parameterCount) {
+            this.parameterCount = parameterCount;
+            this.memberName = new MemberName(memberName);
+        }
+
+        public MemberSpecification(MemberName memberName) {
+            parameterCount = 0;
+            this.memberName = memberName;
+        }
+
         public MemberSpecification WithParameterTypes(IList<Type> parameterTypes) {
             this.parameterTypes = parameterTypes;
+            parameterCount = parameterTypes.Count;
             return this;
         }
 
         public MemberSpecification WithParameterNames(IEnumerable<string> parameterNames) {
+            parameterCount = parameterNames.Count();
             parameterIdNames = new List<IdentifierName>();
             foreach (var name in parameterNames) {
                 parameterIdNames.Add(new IdentifierName(name));
@@ -30,10 +45,26 @@ namespace fitSharp.Machine.Engine {
 
         public bool IsGetter { get { return parameterCount == 0; } }
         public bool IsSetter { get { return parameterCount == 1; } }
+        public string MemberName { get { return memberName.Name; } }
         public override string ToString() { return memberName.ToString(); }
 
         public bool MatchesIdentifierName(string name) {
             return new IdentifierName(memberName.Name).Matches(name);
+        }
+
+        public bool MatchesBaseName(string name) {
+            return new IdentifierName(memberName.BaseName).Matches(name);
+        }
+
+        public Match MatchRegexName(string pattern) {
+            return new Regex(pattern).Match(memberName.OriginalName);
+        }
+
+        public bool MatchesGetSetName(string name) {
+            var identifier = new IdentifierName(memberName.Name);
+            if (identifier.Matches(name)) return true;
+            if (!identifier.MatchName.StartsWith("set") && !identifier.MatchName.StartsWith("get")) return false;
+            return new IdentifierName(identifier.MatchName.Substring(3)).Matches(name);
         }
 
         public bool MatchesParameterCount(RuntimeMember runtimeMember) {
@@ -61,8 +92,16 @@ namespace fitSharp.Machine.Engine {
             return false;
         }
 
+        public MethodInfo MakeGenericMethod(MethodInfo baseMethod) {
+            return baseMethod.MakeGenericMethod(memberName.GenericTypes);
+        }
+
+        public MemberMissingException MemberMissingException(Type type) {
+            return new MemberMissingException(type, memberName.Name, parameterCount);
+        }
+
         readonly MemberName memberName;
-        readonly int parameterCount;
+        int parameterCount;
         IList<Type> parameterTypes;
         IList<IdentifierName> parameterIdNames;
     }

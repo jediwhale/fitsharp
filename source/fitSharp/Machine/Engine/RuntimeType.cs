@@ -17,22 +17,23 @@ namespace fitSharp.Machine.Engine {
         }
 
         public Maybe<RuntimeMember> FindStatic(MemberName memberName, Type[] parameterTypes) {
-            return new MemberQuery(memberName, parameterTypes.Length)
-                .WithParameterTypes(parameterTypes)
+            return new MemberQuery(
+                    new MemberSpecification(memberName, parameterTypes.Length).WithParameterTypes(parameterTypes))
                 .StaticOnly()
                 .FindMember(Type);
         }
 
         public RuntimeMember GetConstructor(int parameterCount) {
-            foreach (var runtimeMember in new MemberQuery(MemberName.Constructor, parameterCount).FindMember(Type).Value) {
+            foreach (var runtimeMember in new MemberQuery(new MemberSpecification(MemberName.Constructor, parameterCount)).
+                    FindMember(Type).Value) {
                 return runtimeMember;
             }
             throw new ConstructorMissingException(Type, parameterCount);
         }
 
         public Maybe<RuntimeMember> FindConstructor(Type[] parameterTypes) {
-            return new MemberQuery(MemberName.Constructor, parameterTypes.Length)
-                .WithParameterTypes(parameterTypes)
+            return new MemberQuery(
+                    new MemberSpecification(MemberName.Constructor, parameterTypes.Length).WithParameterTypes(parameterTypes))
                 .FindMember(Type);
         }
 

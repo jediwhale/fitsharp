@@ -4,56 +4,30 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
-using System.Collections.Generic;
 using System.Reflection;
-using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
     public class MemberQuery {
-        public static RuntimeMember FindInstance(Func<TypedValue, MemberQuery, TypedValue> finder, object instance, MemberName memberName, int parameterCount) {
-            return new MemberQuery(memberName, parameterCount).Using(finder).Find(instance);
+        public static RuntimeMember FindInstance(Func<TypedValue, MemberQuery, TypedValue> finder, object instance, MemberSpecification specification) {
+            return new MemberQuery(specification).Using(finder).Find(instance);
         }
 
-        public static RuntimeMember FindInstance(Func<TypedValue, MemberQuery, TypedValue> finder, object instance, MemberName memberName, IList<string> parameterNames) {
-            return new MemberQuery(memberName, parameterNames.Count)
-                .WithParameterNames(parameterNames)
-                .Using(finder)
-                .Find(instance);
+        public static Maybe<RuntimeMember> FindDirectInstance(object instance, MemberSpecification specification) {
+            return new MemberQuery(specification).FindMember(instance);
         }
 
-        public static Maybe<RuntimeMember> FindDirectInstance(object instance, MemberName memberName, int parameterCount) {
-            return new MemberQuery(memberName, parameterCount).FindMember(instance);
-        }
-
-        public static RuntimeMember GetDirectInstance(object instance, MemberName memberName, int parameterCount) {
-            foreach (var member in new MemberQuery(memberName, parameterCount).FindMember(instance).Value) {
+        public static RuntimeMember GetDirectInstance(object instance, MemberSpecification specification) {
+            foreach (var member in FindDirectInstance(instance, specification).Value) {
                 return member;
             }
-            throw new MemberMissingException(instance.GetType(), memberName.Name, parameterCount);
+            throw specification.MemberMissingException(instance.GetType());
         }
 
-        public static Maybe<RuntimeMember> FindDirectInstance(object instance, MemberName memberName, Type[] parameterTypes) {
-            return new MemberQuery(memberName, parameterTypes.Length)
-                .WithParameterTypes(parameterTypes)
-                .FindMember(instance);
-        }
-
-        public MemberQuery(MemberName memberName, int parameterCount) {
-            this.memberName = memberName;
-            specification = new MemberSpecification(memberName, parameterCount);
+        public MemberQuery(MemberSpecification specification) {
+            this.specification = specification;
             flags = BindingFlags.Instance | BindingFlags.Static;
             finder = FindMember;
-        }
-
-        public MemberQuery WithParameterTypes(IList<Type> parameterTypes) {
-            specification.WithParameterTypes(parameterTypes);
-            return this;
-        }
-
-        public MemberQuery WithParameterNames(IEnumerable<string> parameterNames) {
-            specification.WithParameterNames(parameterNames);
-            return this;
         }
 
         public MemberQuery StaticOnly() {
@@ -67,7 +41,6 @@ namespace fitSharp.Machine.Engine {
         }
 
         public MemberSpecification Specification { get { return specification; } }
-        public MemberName MemberName { get { return memberName; } }
 
         public RuntimeMember Find(object instance) {
             object target = instance;
@@ -101,12 +74,12 @@ namespace fitSharp.Machine.Engine {
         }
 
         Maybe<RuntimeMember> FindBasicMember(object instance, Type targetType) {
-            var matcher = new BasicMemberMatcher(instance, memberName, specification);
+            var matcher = new BasicMemberMatcher(instance, specification);
             return FindMatchingMember(targetType, matcher);
         }
 
         Maybe<RuntimeMember> FindIndexerMember(object instance, Type targetType) {
-            var matcher = new IndexerMemberMatcher(instance, memberName, specification);
+            var matcher = new IndexerMemberMatcher(instance, specification);
             return FindMatchingMember(targetType, matcher);
         }
 
@@ -114,9 +87,7 @@ namespace fitSharp.Machine.Engine {
             return matcher.Match(targetType.GetMembers(flags | accessFlag | BindingFlags.FlattenHierarchy));
         }
 
-        readonly MemberName memberName;
         readonly MemberSpecification specification;
-
         Func<TypedValue, MemberQuery, TypedValue> finder;
         BindingFlags flags;
     }

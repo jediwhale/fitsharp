@@ -9,8 +9,7 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
     public class IndexerMemberMatcher: MemberMatcher {
-        public IndexerMemberMatcher(object instance, MemberName memberName, MemberSpecification specification) {
-            this.memberName = memberName;
+        public IndexerMemberMatcher(object instance, MemberSpecification specification) {
             this.specification = specification;
             this.instance = instance;
         }
@@ -19,7 +18,7 @@ namespace fitSharp.Machine.Engine {
             if (!specification.IsGetter) return Maybe<RuntimeMember>.Nothing;
             foreach (var memberInfo in members) {
                 if (memberInfo.Name != "get_Item") continue;
-                RuntimeMember indexerMember = new IndexerMember(memberInfo, instance, memberName.Name);
+                RuntimeMember indexerMember = new IndexerMember(memberInfo, instance, specification.MemberName);
                 if (indexerMember.MatchesParameterCount(1) && indexerMember.GetParameterType(0) == typeof(string)) {
                     return new Maybe<RuntimeMember>(indexerMember);
                 }
@@ -28,7 +27,6 @@ namespace fitSharp.Machine.Engine {
         }
 
         readonly object instance;
-        readonly MemberName memberName;
         readonly MemberSpecification specification;
     }
 }

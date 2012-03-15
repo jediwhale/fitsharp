@@ -21,7 +21,7 @@ namespace fitSharp.Test.NUnit.Fit {
             var processor = Builder.CellProcessor();
             var findMember = new FindMemberPattern { Processor = processor };
             var instance = new SampleClass();
-            var query = new MemberQuery(new MemberName(memberPattern), 0);
+            var query = new MemberQuery(new MemberSpecification(new MemberName(memberPattern), 0));
             var member = findMember.FindMember(new TypedValue(instance), query);
             Assert.IsTrue(member.HasValueAs<RuntimeMember>());
             member.GetValueAs<RuntimeMember>().Invoke(new object[] {});
