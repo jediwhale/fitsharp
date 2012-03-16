@@ -6,8 +6,8 @@
 using fitSharp.Fit.Operators;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
+using fitSharp.Samples.Fit;
 using fitSharp.Test.Double;
-using fitSharp.Test.Double.Fit;
 using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Fit {

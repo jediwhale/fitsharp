@@ -14,7 +14,7 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
     public class ApplicationUnderTest: Copyable {
-        const int cacheSize = 50;
+        const int cacheSize = 100;
         readonly Assemblies assemblies;
         readonly Namespaces namespaces;
         readonly List<Type> cache = new List<Type>();
@@ -81,12 +81,15 @@ namespace fitSharp.Machine.Engine {
             return new RuntimeType(type);
         }
 
-
         Type SearchForType(NameMatcher typeName, IEnumerable<Type> types) {
             foreach (Type type in types) {
                 if (typeName.Matches(type.FullName)) return type;
                 if (type.Namespace == null || !namespaces.IsRegistered(type.Namespace)) continue;
                 if (typeName.Matches(type.Name)) return type;
+                //var aNamespace = type.Namespace;
+                //if (aNamespace != null && namespaces.IsRegistered(aNamespace) && typeName.Matches(type.Name))
+                //    return type;
+                //if (typeName.Matches(type.FullName)) return type;
             }
             return null;
         }

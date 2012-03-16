@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using fitlibrary.tree;
-using fitSharp.Test.Double;
+using fitSharp.Samples;
 
 namespace fit.Test.Double {
     public class SampleDomain {

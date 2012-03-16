@@ -36,7 +36,7 @@ namespace fitSharp.Fit.Operators {
                 return MakeInterpreter("fitlibrary.ArrayFixture", typeof(IEnumerable), result.Value);
             if (typeof (IEnumerator).IsAssignableFrom(result.Type))
                 return MakeInterpreter("fitlibrary.ArrayFixture", typeof(IEnumerator), result.Value);
-            return MakeInterpreter("fitlibrary.DoFixture", typeof (object), result.Value);
+            return MakeInterpreter(ParseInterpreter.DefaultFlowInterpreter, typeof (object), result.Value);
         }
 
         TypedValue MakeInterpreter(string fixtureName, Type parameterType, object parameter) {

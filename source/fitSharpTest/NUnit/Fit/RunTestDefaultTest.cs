@@ -10,7 +10,7 @@ using fitSharp.Fit.Operators;
 using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
-using fitSharp.Test.Double.Fit;
+using fitSharp.Samples.Fit;
 using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Fit {
@@ -46,7 +46,9 @@ namespace fitSharp.Test.NUnit.Fit {
             }
 
             public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
-                return new TypedValue(new SampleFixture());
+                return parameters.ValueAt(0).Text == ParseInterpreter.DefaultFlowInterpreter
+                    ? new TypedValue(new SampleFlow())
+                    : new TypedValue(new SampleFixture());
             }
         }
 
@@ -62,6 +64,15 @@ namespace fitSharp.Test.NUnit.Fit {
             public SampleFixture() { Count++; }
 
             public void Interpret(CellProcessor processor, Tree<Cell> table) {}
+        }
+
+        class SampleFlow: FlowInterpreter {
+            public void Interpret(CellProcessor processor, Tree<Cell> table) {}
+            public object SystemUnderTest { get { throw new NotImplementedException(); } }
+            public bool IsInFlow(int tableCount) { return true; }
+            public void DoSetUp(CellProcessor processor, Tree<Cell> table) {}
+            public void DoTearDown(Tree<Cell> table) {}
+            public MethodRowSelector MethodRowSelector { get { throw new NotImplementedException(); } }
         }
 
         class SampleItem: Copyable, SetUpTearDown {

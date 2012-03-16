@@ -5,7 +5,7 @@
 
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Service;
-using fitSharp.Test.Double.Fit;
+using fitSharp.Samples.Fit;
 using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Fit {

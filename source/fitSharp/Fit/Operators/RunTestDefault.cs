@@ -36,7 +36,7 @@ namespace fitSharp.Fit.Operators {
             return fixture;
         }
 
-        static readonly CellTree defaultFlowTable = new CellTree(new CellTree("fitlibrary.DoFixture"));
+        static readonly CellTree defaultFlowTable = new CellTree(new CellTree(ParseInterpreter.DefaultFlowInterpreter));
 
         class ExecuteStoryTest {
             public ExecuteStoryTest(CellProcessor processor, StoryTestWriter writer) {
@@ -62,6 +62,7 @@ namespace fitSharp.Fit.Operators {
 
             void InterpretTables(Tree<Cell> theTables) {
 		        processor.TestStatus.TableCount = 1;
+                //flowFixture = MakeDefaultFlowInterpreter(processor, TypedValue.Void);
                 foreach (Tree<Cell> table in theTables.Branches) {
                     try {
                         try {
@@ -94,6 +95,7 @@ namespace fitSharp.Fit.Operators {
                     DoTable(table, activeFixture, processor, flowFixture != null);
                 }
                 else {
+                    // need way to switch flowfixture if current one is willing to reliquish control
                     new InterpretFlow().DoTableFlow(processor, flowFixture, table);
                 }
             }

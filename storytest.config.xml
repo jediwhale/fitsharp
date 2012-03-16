@@ -22,6 +22,7 @@
         <addNamespace>fitSharp.Test.Acceptance.Slim</addNamespace>
         <addAssembly>build\debug\fitsharptest.dll</addAssembly>
         <addAssembly>build\debug\fittest.dll</addAssembly>
+        <addAssembly>build\debug\samples.dll</addAssembly>
     </ApplicationUnderTest>
     
     <Culture>

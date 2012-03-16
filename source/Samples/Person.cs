@@ -5,7 +5,7 @@
 
 using System.Text;
 
-namespace fitSharp.Test.Double
+namespace fitSharp.Samples
 {
     public class Person
     {

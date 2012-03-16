@@ -10,7 +10,7 @@ using System.Threading;
 using fitSharp.IO;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
-using fitSharp.Test.Double;
+using fitSharp.Samples;
 using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Machine {

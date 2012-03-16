@@ -11,6 +11,8 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
     public class ParseInterpreter: CellOperator, ParseOperator<Cell> {
+        public const string DefaultFlowInterpreter = "fitlibrary.DoFixture";
+
         public bool CanParse(Type type, TypedValue instance, Tree<Cell> parameters) {
             return typeof (Interpreter).IsAssignableFrom(type);
         }
@@ -29,7 +31,7 @@ namespace fitSharp.Fit.Operators {
             if (className.Length == 0 || !char.IsLetter(className[0])) return new CommentFixture();
 
             var result = Processor.Create(className);
-            return result.GetValueAs<Interpreter>() ?? WithSystemUnderTest(Processor.Create("fitlibrary.DoFixture").GetValueAs<Interpreter>(), result);
+            return result.GetValueAs<Interpreter>() ?? WithSystemUnderTest(Processor.Create(DefaultFlowInterpreter).GetValueAs<Interpreter>(), result);
         }
 
         Interpreter WithSystemUnderTest(Interpreter interpreter, TypedValue systemUnderTest) {

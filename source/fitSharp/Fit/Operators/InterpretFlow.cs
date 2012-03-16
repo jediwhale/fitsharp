@@ -47,8 +47,12 @@ namespace fitSharp.Fit.Operators {
                 if (!result.IsValid) {
                     if (result.IsException<MemberMissingException>() && currentRow.ValueAt(0).Text.Length > 0) {
                         var newFixture = processor.ParseTree<Cell, Interpreter>(currentRow);
+                        // if its first row and new one isinflow 
+                        //   callback to see if switch?  or just callback on new fixture created?
+                        // if callback is no switch
                         var adapter = newFixture as MutableDomainAdapter;
                         if (adapter != null) adapter.SetSystemUnderTest(interpreter.SystemUnderTest);
+                        // endif
                         ProcessRestOfTable(newFixture, MakeTableWithRows(table, rowNumber));
                     }
                     else {

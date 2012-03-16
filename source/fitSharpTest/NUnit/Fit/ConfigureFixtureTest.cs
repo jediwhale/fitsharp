@@ -8,7 +8,7 @@ using fitSharp.Fit.Fixtures;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
-using fitSharp.Test.Double.Fit;
+using fitSharp.Samples.Fit;
 using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Fit {

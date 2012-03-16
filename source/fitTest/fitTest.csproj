@@ -127,6 +127,7 @@
     <Compile Include="Double\SampleRowDomain.cs" />
     <Compile Include="Double\SampleSetUpDomainFixture.cs" />
     <Compile Include="Double\SampleTree.cs" />
+    <Compile Include="Double\SummarySample.cs" />
     <Compile Include="FitUnit\ConfigurationTest.cs" />
     <Compile Include="FitUnit\ObjectFactoryTest.cs" />
     <Compile Include="FitUnit\ScannerTest.cs" />
@@ -175,10 +176,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\fitSharpTest\fitSharpTest.csproj">
-      <Project>{8C5E0127-E52C-46B7-B253-BD88F5F29034}</Project>
-      <Name>fitSharpTest</Name>
-    </ProjectReference>
     <ProjectReference Include="..\fitSharp\fitSharp.csproj">
       <Project>{204FF2CD-475F-4C6E-A6B5-6779364B33F8}</Project>
       <Name>fitSharp</Name>
@@ -186,6 +183,10 @@
     <ProjectReference Include="..\fit\fit.csproj">
       <Project>{C83FBAF8-9569-406B-A75A-56BC7D993ABC}</Project>
       <Name>fit</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Samples\Samples.csproj">
+      <Project>{A2546656-E446-4EF3-90DF-B958045F217C}</Project>
+      <Name>Samples</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

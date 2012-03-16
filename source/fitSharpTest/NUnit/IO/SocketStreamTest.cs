@@ -4,7 +4,7 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using fitSharp.IO;
-using fitSharp.Test.Double;
+using fitSharp.Samples;
 using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.IO {
