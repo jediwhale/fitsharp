@@ -9,6 +9,7 @@ using fit.exception;
 using fit.Model;
 using fitlibrary;
 using fitlibrary.exception;
+using fitSharp.Fit.Engine;
 using fitSharp.Fit.Fixtures;
 using fitSharp.Fit.Operators;
 using fitSharp.Machine.Exception;
@@ -17,17 +18,14 @@ using fitSharp.Machine.Model;
 
 namespace fit.Fixtures {
     public class FlowKeywords {
-        private static readonly IdentifierName ourWithIdentifier = new IdentifierName("with");
- 
-        private readonly FlowFixtureBase fixture;
-
-        public FlowKeywords(FlowFixtureBase fixture) {
+        public FlowKeywords(FlowInterpreter fixture, CellProcessor processor) {
             this.fixture = fixture;
+            this.processor = processor;
         }
 
         public void AbandonStoryTest(Parse theCells) {
-            fixture.TestStatus.MarkIgnore(theCells);
-            fixture.TestStatus.IsAbandoned = true;
+            processor.TestStatus.MarkIgnore(theCells);
+            processor.TestStatus.IsAbandoned = true;
             throw new AbandonStoryTestException();
         }
 
@@ -39,29 +37,36 @@ namespace fit.Fixtures {
             try {
                 CellRange methodCells = CellRange.GetMethodCellRange(theCells, 1);
                 try {
-                    fixture.DoCheckOperation(theCells.Last, methodCells);
+                    DoCheckOperation(theCells.Last, methodCells);
                 }
                 catch (MemberMissingException e) {
-                    fixture.TestStatus.MarkException(theCells.More, e);
+                    processor.TestStatus.MarkException(theCells.More, e);
                 }
                 catch (Exception e) {
-                    fixture.TestStatus.MarkException(theCells.Last, e);
+                    processor.TestStatus.MarkException(theCells.Last, e);
                 }
             }
             catch (IgnoredException) {}
         }
 
+        void DoCheckOperation(Tree<Cell> expectedValue, Tree<Cell> cells) {
+            processor.Check(fixture,
+                    fixture.MethodRowSelector.SelectMethodCells(cells),
+                    fixture.MethodRowSelector.SelectParameterCells(cells),
+                    expectedValue);
+        }
+
         public List<object> CheckFieldsFor(Parse cells) {
-            return new List<object> { fixture.ExecuteEmbeddedMethod(cells) };
+            return new List<object> { ExecuteEmbeddedMethod(cells) };
         }
 
         public void Return(Parse cells) {
-            var result = new MethodPhrase(new CellRange(cells)).Evaluate(fixture);
-            fixture.Processor.CallStack.SetReturn(new TypedValue(result));
+            var result = new MethodPhrase(new CellRange(cells)).Evaluate(fixture, processor);
+            processor.CallStack.SetReturn(new TypedValue(result));
         }
 
         public void Set(Parse theCells) {
-            fixture.ExecuteEmbeddedMethod(theCells);
+            ExecuteEmbeddedMethod(theCells);
         }
 
         public CommentFixture Comment(Parse cells) {
@@ -74,21 +79,21 @@ namespace fit.Fixtures {
 
         public void Ensure(Parse theCells) {
             try {
-                fixture.TestStatus.ColorCell(theCells, (bool) fixture.ExecuteEmbeddedMethod(theCells));
+                processor.TestStatus.ColorCell(theCells, (bool) ExecuteEmbeddedMethod(theCells));
             }
             catch (IgnoredException) {}
             catch (Exception e) {
-                fixture.TestStatus.MarkException(theCells, e);
+                processor.TestStatus.MarkException(theCells, e);
             }
         }
 
         public void Not(Parse theCells) {
             try {
-                fixture.TestStatus.ColorCell(theCells, !(bool) fixture.ExecuteEmbeddedMethod(theCells));
+                processor.TestStatus.ColorCell(theCells, !(bool) ExecuteEmbeddedMethod(theCells));
             }
             catch (IgnoredException) {}
             catch (Exception) {
-                fixture.TestStatus.MarkRight(theCells);
+                processor.TestStatus.MarkRight(theCells);
             }
         }
 
@@ -98,10 +103,10 @@ namespace fit.Fixtures {
                 throw new TableStructureException("missing cells for name.");
 
             object namedValue = ourWithIdentifier.Equals(restOfTheCells.More.Text)
-                                    ? new MethodPhrase(new CellRange(restOfTheCells.More)).Evaluate(fixture)
-                                    : fixture.ExecuteEmbeddedMethod(restOfTheCells);
-            fixture.Symbols.Save(restOfTheCells.Text, namedValue);
-            fixture.TestStatus.MarkRight(restOfTheCells);
+                                    ? new MethodPhrase(new CellRange(restOfTheCells.More)).Evaluate(fixture, processor)
+                                    : ExecuteEmbeddedMethod(restOfTheCells);
+            processor.Get<Symbols>().Save(restOfTheCells.Text, namedValue);
+            processor.TestStatus.MarkRight(restOfTheCells);
         }
 
         public void Note(Parse theCells) {}
@@ -112,15 +117,15 @@ namespace fit.Fixtures {
 
         public void Show(Parse theCells) {
             try {
-                AddCell(theCells, fixture.ExecuteEmbeddedMethod(theCells));
+                AddCell(theCells, ExecuteEmbeddedMethod(theCells));
             }
             catch (IgnoredException) {}
         }
 
         public void ShowAs(Parse cells) {
             try {
-                var attributes = fixture.Processor.Parse<Cell, CellAttribute[]>(cells.More);
-                var value = fixture.ExecuteEmbeddedMethod(cells.More);
+                var attributes = processor.Parse<Cell, CellAttribute[]>(cells.More);
+                var value = ExecuteEmbeddedMethod(cells.More);
                 AddCell(cells, new ComposeShowAsOperator(attributes, value));
             }
             catch (IgnoredException) {}
@@ -128,19 +133,28 @@ namespace fit.Fixtures {
 
         public void Start(Parse theCells) {
             try {
-                fixture.SetSystemUnderTest(new MethodPhrase(new CellRange(theCells)).EvaluateNew(fixture.Processor));
+                fixture.SetSystemUnderTest(new MethodPhrase(new CellRange(theCells)).EvaluateNew(processor));
             }
             catch (Exception e) {
-                fixture.TestStatus.MarkException(theCells, e);
+                processor.TestStatus.MarkException(theCells, e);
             }
         }
 
         public void With(Parse theCells) {
-            fixture.SetSystemUnderTest(new MethodPhrase(new CellRange(theCells)).Evaluate(fixture));
+            fixture.SetSystemUnderTest(new MethodPhrase(new CellRange(theCells)).Evaluate(fixture, processor));
         }
 
         void AddCell(Parse theCells, object theNewValue) {
-            theCells.Last.More = (Parse)fixture.Processor.Compose(theNewValue);
+            theCells.Last.More = (Parse)processor.Compose(theNewValue);
         }
+
+        public object ExecuteEmbeddedMethod(Parse theCells) {
+            return fixture.ExecuteFlowRowMethod(processor, new CellRange(theCells));
+        }
+
+        static readonly IdentifierName ourWithIdentifier = new IdentifierName("with");
+
+        readonly FlowInterpreter fixture;
+        readonly CellProcessor processor;
     }
 }

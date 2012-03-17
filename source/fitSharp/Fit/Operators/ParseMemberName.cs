@@ -1,4 +1,4 @@
-﻿// Copyright © 2011 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2012 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -10,7 +10,6 @@ using System.Text;
 using fitSharp.Fit.Engine;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
-using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
@@ -48,17 +47,15 @@ namespace fitSharp.Fit.Operators {
             if (name.EndsWith("?")) name = name.Substring(0, name.Length - 1);
             var ofPosition = name.IndexOf(" of ", StringComparison.OrdinalIgnoreCase);
             if (ofPosition > 0 && ofPosition < name.Length - 4) {
-                var genericTypes = name.Substring(ofPosition + 4);
-                try {
-                    var genericType = Processor.ParseString<Cell, Type>(genericTypes);
-                    var baseName = name.Substring(0, ofPosition);
-                    return new MemberName(name, baseName, new[] {genericType});
-                }
-                catch (TypeMissingException) {
-                    return new MemberName(name);
-                }
+                var genericType = name.Substring(ofPosition + 4);
+                var baseName = name.Substring(0, ofPosition);
+                return new MemberName(name, baseName, MakeGenericTypes(new[] {genericType}));
             }
             return new MemberName(name);
+        }
+
+        IEnumerable<Type> MakeGenericTypes(IEnumerable<string> typeNames) {
+            return typeNames.Select(name => Processor.ParseString<Cell, Type>(name));
         }
 
         static readonly Dictionary<char, string> digitConversion = new Dictionary<char, string> {

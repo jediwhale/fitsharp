@@ -11,7 +11,7 @@ using NUnit.Framework;
 
 namespace fit.Test.NUnit {
     [TestFixture] public class InvokeProcedureTest {
-        const string noParameterProcedureHtml = "<table><tr><td>define</td><td>procedure</td></tr><tr><td>settext</td></tr></table>";
+        const string noParameterProcedureHtml = "<br><table border=1><tr><td>define</td><td>procedure</td></tr><tr><td>settext</td></tr></table>";
         const string errorProcedureHtml = "<table><tr><td>define</td><td>procedure</td></tr><tr><td>garbage</td></tr></table>";
         const string oneParameterProcedureHtml =
             "<table><tr><td>define</td><td>procedure</td><td>parm</td></tr><tr><td>settext</td><td>parm</td></tr></table>";
@@ -47,7 +47,7 @@ namespace fit.Test.NUnit {
             cellProcessor.Get<Procedures>().Save("procedure", Parse.ParseFrom(noParameterProcedureHtml));
             var sample = new Sample();
             invokeProcedure.Invoke(new TypedValue(sample), new MemberName("procedure"), new CellTree());
-            Assert.AreEqual("<table><tr><td>settext</td></tr></table>", cellProcessor.TestStatus.LastAction);
+            Assert.AreEqual("<br><table border=1><tr><td>settext</td></tr></table>", cellProcessor.TestStatus.LastAction);
         }
 
         [Test] public void ProcedureIsExecutedOnACopyOfBody() {

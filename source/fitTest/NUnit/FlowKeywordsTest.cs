@@ -17,7 +17,7 @@ namespace fit.Test.NUnit {
 
         [SetUp] public void SetUp() {
             fixture = new TestDoFixture { Processor = new Service.Service() };
-            keywords = new FlowKeywords(fixture);
+            keywords = new FlowKeywords(fixture, fixture.Processor);
         }
 
         [Test] public void NameKeywordAssignsASymbol() {

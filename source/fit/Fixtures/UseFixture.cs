@@ -42,7 +42,7 @@ namespace fit {
                 var adapter = fixture as MutableDomainAdapter;
                 if (adapter != null) {
                     Fixture parent = Processor.CallStack.DomainAdapter.GetValueAs<FlowFixtureBase>();
-                    adapter.SetSystemUnderTest(new MethodPhrase(new CellRange(theRestOfTheCells)).Evaluate(parent ?? this));
+                    adapter.SetSystemUnderTest(new MethodPhrase(new CellRange(theRestOfTheCells)).Evaluate(parent ?? this, Processor));
                 }
             }
             return fixture;

@@ -20,8 +20,8 @@ namespace fitSharp.Fit.Operators {
             var type = Processor.ApplicationUnderTest.FindType("fit.Parse").Type;
 
             var runtimeType = Processor.ApplicationUnderTest.FindType("fit.Fixtures.FlowKeywords");
-            var runtimeMember = runtimeType.GetConstructor(1);
-            var flowKeywords = runtimeMember.Invoke(new [] {instance.Value});
+            var runtimeMember = runtimeType.GetConstructor(2);
+            var flowKeywords = runtimeMember.Invoke(new [] {instance.Value, Processor});
             foreach (var member in FindMember(flowKeywords, memberName, type).Value) {
                 return member.Invoke(new object[] {parameters.Value});
             }

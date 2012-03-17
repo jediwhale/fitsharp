@@ -93,7 +93,7 @@ namespace fitSharp.Machine.Engine {
         }
 
         public MethodInfo MakeGenericMethod(MethodInfo baseMethod) {
-            return baseMethod.MakeGenericMethod(memberName.GenericTypes);
+            return baseMethod.MakeGenericMethod(memberName.GenericTypes.ToArray());
         }
 
         public MemberMissingException MemberMissingException(Type type) {
