@@ -77,7 +77,7 @@ namespace fitSharp.Fit.Operators {
 	            processor.TestStatus.MarkException(e.Subject, e);
                 hasFinishedTable = true;
 	        }
-            catch (Exception e) {
+            catch (System.Exception e) {
                 processor.TestStatus.MarkException(currentRow.ValueAt(0), e);
                 hasFinishedTable = true;
             }
@@ -95,7 +95,7 @@ namespace fitSharp.Fit.Operators {
             try {
                 DoTable(theRestOfTheRows, childInterpreter, isFlow);
             }
-            catch (Exception e) {
+            catch (System.Exception e) {
                 processor.TestStatus.MarkException(theRestOfTheRows.ValueAt(0, 0), e);
             }
             processor.CallStack.PopReturn();

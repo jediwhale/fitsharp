@@ -36,7 +36,7 @@ namespace fitSharp.Fit.Operators {
                     InterpretTables(tables);
                     processor.Memory.Apply(i => i.As<SetUpTearDown>(s => s.TearDown()));
                 }
-                catch (Exception e) {
+                catch (System.Exception e) {
                     processor.TestStatus.MarkException(heading, e);
                 }
 			    writer.WriteTest(tables, processor.TestStatus.Counts);
@@ -50,11 +50,11 @@ namespace fitSharp.Fit.Operators {
                         try {
                             InterpretTable(table);
                         }
-                        catch (Exception e) {
+                        catch (System.Exception e) {
                             processor.TestStatus.MarkException(table.ValueAt(0, 0), e);
                         }
                     }
-                    catch (Exception e) {
+                    catch (System.Exception e) {
                         if (!typeof(AbandonException).IsAssignableFrom(e.GetType())) throw;
                     }
 

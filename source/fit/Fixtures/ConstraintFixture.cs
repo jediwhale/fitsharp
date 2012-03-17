@@ -6,6 +6,7 @@
 using fit;
 using fitlibrary.exception;
 using fitSharp.Fit.Engine;
+using fitSharp.Fit.Exception;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
@@ -44,7 +45,7 @@ namespace fitlibrary {
 	                TypedValue result = Processor.ExecuteWithThrow(this, memberNameCells,
 	                    valueCells.GetCells(row.Branches), row.Parts);
 	                if (result.Type != typeof (bool)) {
-	                    throw new InvalidMethodException(string.Format("Method does not return boolean."));
+	                    throw new InvalidMethodException("Method does not return boolean.");
 	                }
 	                if (result.GetValue<bool>() == expectedCondition) {
 	                    TestStatus.MarkRight(row);

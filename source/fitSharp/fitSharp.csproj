@@ -45,6 +45,7 @@
     <Compile Include="Fit\Engine\DefaultFlowInterpreter.cs" />
     <Compile Include="Fit\Engine\ListMatcher.cs" />
     <Compile Include="Fit\Engine\ListMatchStrategy.cs" />
+    <Compile Include="Fit\Exception\InvalidMethodException.cs" />
     <Compile Include="Fit\Fixtures\ClearSymbols.cs" />
     <Compile Include="Fit\Fixtures\CommentFixture.cs" />
     <Compile Include="Fit\Fixtures\Compute.cs" />
