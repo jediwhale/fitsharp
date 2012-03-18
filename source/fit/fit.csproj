@@ -61,7 +61,6 @@
     <Compile Include="Service\Service.cs" />
     <Compile Include="Exception\FitFailureException.cs" />
     <Compile Include="Exception\RowWidthException.cs" />
-    <Compile Include="Exception\TableStructureException.cs" />
     <Compile Include="Fixtures\ActionFixture.cs" />
     <Compile Include="Fixtures\ArrayFixture.cs" />
     <Compile Include="Fixtures\BoundFixture.cs" />
@@ -84,7 +83,6 @@
     <Compile Include="Fixtures\TableFixture.cs" />
     <Compile Include="Fixtures\UnnamedCollectionFixtureBase.cs" />
     <Compile Include="Fixtures\UseFixture.cs" />
-    <Compile Include="Fixtures\MethodPhrase.cs" />
     <Compile Include="Fixtures\XmlFixture.cs" />
     <Compile Include="Model\ParseTable.cs" />
     <Compile Include="Model\ScientificDouble.cs" />
