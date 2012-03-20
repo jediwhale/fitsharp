@@ -89,7 +89,6 @@
     <Compile Include="NUnit\Machine\DefaultParseTest.cs" />
     <Compile Include="NUnit\Machine\InvokeDefaultTest.cs" />
     <Compile Include="NUnit\Machine\IdentifierNameTest.cs" />
-    <Compile Include="NUnit\Machine\LanguageNameTest.cs" />
     <Compile Include="NUnit\Machine\ProcessorTest.cs" />
     <Compile Include="NUnit\Machine\MemberQueryTest.cs" />
     <Compile Include="Double\SampleClass.cs" />

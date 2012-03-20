@@ -14,6 +14,7 @@
         <addNamespace>fit.Test.Acceptance</addNamespace>
         <addNamespace>fit.Test.Double</addNamespace>
         <addNamespace>fitSharp.Test.Double</addNamespace>
+        <addNamespace>fitSharp.Samples</addNamespace>
         <addNamespace>fit.Runner</addNamespace>
         <addNamespace>fitSharp.Fit.Runner</addNamespace>
         <addNamespace>fitSharp.Fit.Model</addNamespace>

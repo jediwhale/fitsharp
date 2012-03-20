@@ -5,7 +5,7 @@
 
 using System;
 using System.Collections.Generic;
-using fitlibrary.exception;
+using fitSharp.Fit.Exception;
 using fitSharp.Machine.Model;
 
 namespace fit.Model {

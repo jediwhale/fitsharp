@@ -43,10 +43,7 @@ namespace fitSharp.Fit.Engine {
 
         public object EvaluateNew(CellProcessor processor) {
             if (cells.Branches.Count < 2) throw MakeException("missing cells");
-            return processor.Create(
-                    cells.ValueAt(1).Text,
-                    cells.Skip(2))
-                .Value;
+            return processor.Create(cells.Branches[1], cells.Skip(2)).Value;
         }
 
         static readonly IdentifierName newIdentifier = new IdentifierName("new"); 

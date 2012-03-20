@@ -45,6 +45,7 @@
     <Compile Include="Fit\Engine\DefaultFlowInterpreter.cs" />
     <Compile Include="Fit\Engine\ListMatcher.cs" />
     <Compile Include="Fit\Engine\ListMatchStrategy.cs" />
+    <Compile Include="Fit\Exception\FitFailureException.cs" />
     <Compile Include="Fit\Exception\InvalidMethodException.cs" />
     <Compile Include="Fit\Exception\TableStructureException.cs" />
     <Compile Include="Fit\Fixtures\ClearSymbols.cs" />
@@ -56,6 +57,7 @@
     <Compile Include="Fit\Fixtures\Include.cs" />
     <Compile Include="Fit\Fixtures\IncludeAction.cs" />
     <Compile Include="Fit\Engine\MethodPhrase.cs" />
+    <Compile Include="Fit\Fixtures\UseFixture.cs" />
     <Compile Include="Fit\Model\CallStack.cs" />
     <Compile Include="Fit\Model\MethodRowSelector.cs" />
     <Compile Include="Fit\Model\Procedures.cs" />
@@ -159,6 +161,7 @@
     <Compile Include="Fit\Operators\CompareFloatingPoint.cs" />
     <Compile Include="Fit\Operators\ParseMemberName.cs" />
     <Compile Include="Machine\Model\GracefulName.cs" />
+    <Compile Include="Machine\Model\GracefulNameMatcher.cs" />
     <Compile Include="Machine\Model\Maybe.cs" />
     <Compile Include="Machine\Model\MemberName.cs" />
     <Compile Include="Fit\Operators\CompareDefault.cs" />
@@ -171,7 +174,6 @@
     <Compile Include="Fit\Operators\ParseBoolean.cs" />
     <Compile Include="Fit\Operators\ParseDefault.cs" />
     <Compile Include="Fit\Operators\ParseNull.cs" />
-    <Compile Include="Fit\Operators\ParseType.cs" />
     <Compile Include="Machine\Engine\Memory.cs" />
     <Compile Include="Machine\Application\Shell.cs" />
     <Compile Include="Machine\Engine\ApplicationUnderTest.cs" />
@@ -209,7 +211,6 @@
     <Compile Include="Machine\Model\DomainAdapter.cs" />
     <Compile Include="Machine\Model\EnumeratedTree.cs" />
     <Compile Include="Machine\Model\IdentifierName.cs" />
-    <Compile Include="Machine\Model\LanguageName.cs" />
     <Compile Include="Machine\Model\NameMatcher.cs" />
     <Compile Include="Machine\Model\Tree.cs" />
     <Compile Include="Machine\Model\TreeList.cs" />

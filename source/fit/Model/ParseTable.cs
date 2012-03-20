@@ -3,7 +3,7 @@
 // Based on designs from Fit (c) 2002 Cunningham & Cunningham, Inc., FitNesse by Object Mentor Inc., FitLibrary (c) 2003-2006 Rick Mugridge, University of Auckland, New Zealand.
 
 using fit;
-using fitlibrary.exception;
+using fitSharp.Fit.Exception;
 
 namespace fitlibrary.table {
 
