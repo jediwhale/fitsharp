@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using fit.exception;
 using fit.Model;
 using fitlibrary;
@@ -124,12 +125,22 @@ namespace fit.Fixtures {
 
         public void ShowAs(Parse cells) {
             try {
-                var attributes = processor.Parse<Cell, CellAttribute[]>(cells.More);
+                var attributes = GetAttributes(processor.Parse<Cell, string>(cells.More));
                 var value = ExecuteEmbeddedMethod(cells.More);
                 AddCell(cells, new ComposeShowAsOperator(attributes, value));
             }
             catch (IgnoredException) {}
         }
+
+        static IEnumerable<CellAttribute> GetAttributes(string list) {
+            return list.Split(',').Select(item => showAsAttributes[item.Trim().ToLower()]);
+        }
+
+        static readonly Dictionary<string, CellAttribute> showAsAttributes = new Dictionary<string, CellAttribute> {
+            {"folded", CellAttribute.Folded},
+            {"formatted", CellAttribute.Formatted},
+            {"raw", CellAttribute.Raw}
+        };
 
         public void Start(Parse theCells) {
             try {

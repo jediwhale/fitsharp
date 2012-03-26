@@ -63,6 +63,7 @@
     <Compile Include="Fit\Model\Procedures.cs" />
     <Compile Include="Fit\Model\StoryTableString.cs" />
     <Compile Include="Fit\Engine\CellOperationValue.cs" />
+    <Compile Include="Fit\Model\Syntax.cs" />
     <Compile Include="Fit\Model\ValueArray.cs" />
     <Compile Include="Fit\Engine\CellMatcher.cs" />
     <Compile Include="Fit\Operators\CellOperators.cs" />
@@ -118,6 +119,7 @@
     <Compile Include="Machine\Engine\TypeDictionary.cs" />
     <Compile Include="Machine\Engine\Types.cs" />
     <Compile Include="Machine\Exception\ValidationException.cs" />
+    <Compile Include="Machine\Model\CellAttribute.cs" />
     <Compile Include="Machine\Model\CellBase.cs" />
     <Compile Include="Fit\Model\CellSubstring.cs" />
     <Compile Include="Fit\Model\CellTree.cs" />
