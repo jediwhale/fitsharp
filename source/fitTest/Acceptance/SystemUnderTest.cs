@@ -6,7 +6,7 @@
 using System;
 using System.Collections;
 using fitlibrary;
-using fitlibrary.exception;
+using fitSharp.Fit.Exception;
 
 namespace fit.Test.Acceptance {
     public class SystemUnderTest {

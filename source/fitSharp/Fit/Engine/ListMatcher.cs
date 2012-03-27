@@ -55,7 +55,7 @@ namespace fitSharp.Fit.Engine {
                     actuals.FindMatch(BestMatch, expectedRow, currentRow);
                     expectedRow++;
                 }
-                catch (Exception e) {
+                catch (System.Exception e) {
                     processor.TestStatus.MarkException(currentRow.ValueAt(0), e);
                     return false;
                 }

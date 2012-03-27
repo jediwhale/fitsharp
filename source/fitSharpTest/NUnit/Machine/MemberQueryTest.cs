@@ -4,10 +4,11 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
+using fitSharp.Fit.Operators;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
+using fitSharp.Samples.Fit;
 using fitSharp.Test.Double;
-using fitSharp.Test.Double.Fit;
 using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Machine {
@@ -28,7 +29,8 @@ namespace fitSharp.Test.NUnit.Machine {
         }
 
         RuntimeMember GetMethod(string memberName, int count) {
-            return MemberQuery.FindInstance(MemberQuery.FindMember, instance, new MemberName(memberName), count);
+            return MemberQuery.FindInstance(MemberQuery.FindMember, instance,
+                    new MemberSpecification(new MemberName(memberName), count));
         }
 
         [Test] public void MethodIsInvokedViaProcessor() {
@@ -42,7 +44,8 @@ namespace fitSharp.Test.NUnit.Machine {
 
         static RuntimeMember GetMethodFromProcessor(object targetInstance, string memberName, int parameterCount) {
             var processor = Builder.CellProcessor();
-            return MemberQuery.FindInstance(processor.FindMember, targetInstance, new MemberName(memberName), parameterCount);
+            return MemberQuery.FindInstance(processor.FindMember, targetInstance,
+                    new MemberSpecification(new MemberName(memberName), parameterCount));
         }
 
         [Test] public void MethodWithReturnIsInvoked() {
@@ -69,17 +72,20 @@ namespace fitSharp.Test.NUnit.Machine {
 
         [Test] public void GenericMethodWithParmsIsInvoked() {
             var member = new MemberName("genericmethodofsystemint32", "genericmethod", new[] { typeof(int)});
-            var method = MemberQuery.FindInstance(MemberQuery.FindMember, instance, member, 1);
+            var method = MemberQuery.FindInstance(MemberQuery.FindMember, instance,
+                    new MemberSpecification(member, 1));
             Assert.IsNotNull(method);
             var result = method.Invoke(new object[] {123});
             Assert.AreEqual("sample123", result.Value.ToString());
         }
 
         [Test] public void StaticMethodWithParmsIsInvoked() {
-            RuntimeMember method = new RuntimeType(instance.GetType()).FindStatic(MemberName.ParseMethod, new [] {typeof(string)});
-            Assert.IsNotNull(method);
-            TypedValue result = method.Invoke(new object[] {"input"});
-            Assert.AreEqual(typeof(SampleClass), result.Type);
+            foreach (var method in new RuntimeType(instance.GetType()).FindStatic(MemberName.ParseMethod, new [] {typeof(string)}).Value) {
+                TypedValue result = method.Invoke(new object[] {"input"});
+                Assert.AreEqual(typeof (SampleClass), result.Type);
+                return;
+            }
+            Assert.Fail("no method");
         }
 
         [Test] public void ConstructorIsInvoked() {
@@ -137,14 +143,14 @@ namespace fitSharp.Test.NUnit.Machine {
         [Test] public void QueryableMemberIsInvoked() {
             var queryable = new QueryableClass();
             RuntimeMember method = GetMethodFromProcessor(queryable, "dynamic", 1);
-            //MemberQuery.FindInstance(MemberQuery.FindMember, queryable, new MemberName("dynamic"), 1);
             TypedValue result = method.Invoke(new object[] {"stuff"});
             Assert.AreEqual("dynamicstuff", result.Value);
         }
 
         class QueryableClass: MemberQueryable {
-            public RuntimeMember Find(MemberQuery query) {
-                return new QueryableMember(query.IdentifierName.ToString());
+            public RuntimeMember Find(MemberSpecification specification) {
+                Assert.IsTrue(specification.MatchesIdentifierName("dynamic"));
+                return new QueryableMember("dynamic");
             }
 
             class QueryableMember: RuntimeMember {
@@ -177,11 +183,13 @@ namespace fitSharp.Test.NUnit.Machine {
         }
 
         [Test] public void MethodwithMisMatchedParameterNamesIsNotFound() {
-            Assert.IsNull(MemberQuery.FindInstance(MemberQuery.FindMember, instance, new MemberName("methodwithparms"), new [] {"garbage"}));
+            Assert.IsNull(MemberQuery.FindInstance(MemberQuery.FindMember, instance,
+                new MemberSpecification("methodwithparms", 1).WithParameterNames(new [] {"garbage"})));
         }
 
         [Test] public void MethodwithMatchedParameterNamesIsFound() {
-            Assert.IsNotNull(MemberQuery.FindInstance(MemberQuery.FindMember, instance, new MemberName("methodwithparms"), new [] {"input"}));
+            Assert.IsNotNull(MemberQuery.FindInstance(MemberQuery.FindMember, instance,
+                new MemberSpecification("methodwithparms", 1).WithParameterNames(new [] {"input"})));
         }
     }
 }

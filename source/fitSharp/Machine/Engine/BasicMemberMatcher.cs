@@ -3,52 +3,36 @@
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
     public class BasicMemberMatcher: MemberMatcher {
-        public BasicMemberMatcher(object instance, int parameterCount, IList<Type> parameterTypes, IList<IdentifierName> parameterIdNames) {
+        public BasicMemberMatcher(object instance, MemberSpecification specification) {
             this.instance = instance;
-            this.parameterIdNames = parameterIdNames;
-            this.parameterTypes = parameterTypes;
-            this.parameterCount = parameterCount;
+            this.specification = specification;
         }
 
-        public bool IsMatch(MemberName memberName, MemberInfo memberInfo) {
-            var runtimeMemberFactory = RuntimeMemberFactory.MakeFactory(memberName, memberInfo);
-            if (!runtimeMemberFactory.Matches(memberName)) return false;
-            RuntimeMember = runtimeMemberFactory.MakeMember(instance);
-            return Matches(RuntimeMember);
+        public Maybe<RuntimeMember> Match(IEnumerable<MemberInfo> members) {
+            foreach (var memberInfo in members) {
+                var runtimeMemberFactory = RuntimeMemberFactory.MakeFactory(specification, memberInfo);
+                if (!runtimeMemberFactory.Matches(specification)) continue;
+                var runtimeMember = runtimeMemberFactory.MakeMember(instance);
+                if (!Matches(runtimeMember)) continue;
+                return new Maybe<RuntimeMember>(runtimeMember);
+            }
+            return Maybe<RuntimeMember>.Nothing;
         }
 
         bool Matches(RuntimeMember runtimeMember) {
-            if (!runtimeMember.MatchesParameterCount(parameterCount)) return false;
-            if (parameterTypes != null) {
-                for (int i = 0; i < parameterCount; i++) {
-                    if (runtimeMember.GetParameterType(i) != parameterTypes[i]) return false;
-                }
-            }
             return
-                parameterIdNames == null ||
-                parameterIdNames.All(name => HasMatchingParameter(runtimeMember, name));
+                specification.MatchesParameterCount(runtimeMember) &&
+                specification.MatchesParameterTypes(runtimeMember) &&
+                specification.MatchesParameterNames(runtimeMember);
         }
-
-        bool HasMatchingParameter(RuntimeMember runtimeMember, NameMatcher name) {
-            for (var i = 0; i < parameterCount; i++) {
-                if (name.Matches(runtimeMember.GetParameterName(i))) return true;
-            }
-            return false;
-        }
-
-        public RuntimeMember RuntimeMember { get; private set; }
 
         readonly object instance;
-        readonly int parameterCount;
-        readonly IList<Type> parameterTypes;
-        readonly IList<IdentifierName> parameterIdNames;
+        readonly MemberSpecification specification;
     }
 }

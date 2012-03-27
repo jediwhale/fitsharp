@@ -20,7 +20,7 @@ namespace fitSharp.Fit.Operators {
             Add(new ParseMemberName(), 0);
             Add(new ParseBoolean(), 0);
             Add(new ParseDate(), 0);
-            Add(new ParseType(), 0);
+            Add(new ParseType<Cell, CellProcessor>(), 0);
             Add(new ParseBlank(), 0);
             Add(new ParseNull(), 0);
             Add(new ParseInterpreter(), 0);

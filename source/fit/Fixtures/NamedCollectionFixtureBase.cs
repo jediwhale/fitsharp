@@ -6,7 +6,7 @@
 using fit;
 using System.Collections;
 using System.Collections.Generic;
-using fitlibrary.exception;
+using fitSharp.Fit.Exception;
 
 namespace fitlibrary {
 

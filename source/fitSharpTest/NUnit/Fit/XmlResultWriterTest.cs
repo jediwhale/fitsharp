@@ -7,7 +7,7 @@ using System.Text;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Service;
 using fitSharp.IO;
-using fitSharp.Test.Double;
+using fitSharp.Samples;
 using NUnit.Framework;
 using TestStatus=fitSharp.Fit.Model.TestStatus;
 

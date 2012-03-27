@@ -7,6 +7,10 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
+    public interface MemberQueryable {
+        RuntimeMember Find(MemberSpecification specification);
+    }
+
     public class FindMemberQueryable: CellOperator, FindMemberOperator<Cell> {
         public bool CanFindMember(TypedValue instance, MemberQuery query) {
             return typeof(MemberQueryable).IsAssignableFrom(instance.Type);
@@ -14,7 +18,7 @@ namespace fitSharp.Fit.Operators {
 
         public TypedValue FindMember(TypedValue instance, MemberQuery query) {
             return new TypedValue(
-                instance.GetValueAs<MemberQueryable>().Find(query),
+                instance.GetValueAs<MemberQueryable>().Find(query.Specification),
                 typeof(RuntimeMember));
         }
     }

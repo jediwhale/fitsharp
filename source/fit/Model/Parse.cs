@@ -30,37 +30,37 @@ namespace fit
 	    public Parse Parts { get; set; }
 
 	    string body {
-	        get { return GetAttribute(CellAttribute.Body); }
-            set { SetAttribute(CellAttribute.Body, value); }
+	        get { return this.GetAttribute(CellAttribute.Body); }
+            set { this.SetAttribute(CellAttribute.Body, value); }
 	    }
 
 	    string tag {
-	        get { return GetAttribute(CellAttribute.StartTag); }
-            set { SetAttribute(CellAttribute.StartTag, value); }
+	        get { return this.GetAttribute(CellAttribute.StartTag); }
+            set { this.SetAttribute(CellAttribute.StartTag, value); }
 	    }
 
 	    public string End {
-	        get { return GetAttribute(CellAttribute.EndTag); }
-            private set { SetAttribute(CellAttribute.EndTag, value); }
+	        get { return this.GetAttribute(CellAttribute.EndTag); }
+            private set { this.SetAttribute(CellAttribute.EndTag, value); }
 	    }
 
 	    public string Leader {
-	        get { return GetAttribute(CellAttribute.Leader); }
-            private set { SetAttribute(CellAttribute.Leader, value); }
+	        get { return this.GetAttribute(CellAttribute.Leader); }
+            private set { this.SetAttribute(CellAttribute.Leader, value); }
 	    }
 
 	    public string Trailer {
-	        get { return GetAttribute(CellAttribute.Trailer); }
-            set { SetAttribute(CellAttribute.Trailer, value); }
+	        get { return this.GetAttribute(CellAttribute.Trailer); }
+            set { this.SetAttribute(CellAttribute.Trailer, value); }
 	    }
 
 	    public string Tag {
             get {
 	            int space = tag.IndexOf(' ');
 	            if (space < 0) space = tag.Length - 1;
-	            return !HasAttribute(CellAttribute.Status)
+	            return !this.HasAttribute(CellAttribute.Status)
                     ? tag
-                    : string.Format("{0} class=\"{1}\"{2}", tag.Substring(0, space), GetAttribute(CellAttribute.Status), tag.Substring(space));
+                    : string.Format("{0} class=\"{1}\"{2}", tag.Substring(0, space), this.GetAttribute(CellAttribute.Status), tag.Substring(space));
             }
         }
 
@@ -76,7 +76,7 @@ namespace fit
 
 		public virtual void AddToBody(string text)
 		{
-		    AddToAttribute(CellAttribute.InformationSuffix, text);
+		    this.SetAttribute(CellAttribute.InformationSuffix, text);
 		}
 
         Parse(CellBase source): base(source) {}
@@ -110,10 +110,6 @@ namespace fit
             Parts = other.Parts;
             More = other.More;
         }
-
-	    static string Label(string text) {
-			return " <span class=\"fit_label\">" + text + "</span>";
-		}
 
 		public virtual int Size
 		{

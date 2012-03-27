@@ -5,7 +5,7 @@
 
 using fit.Operators;
 using fitlibrary;
-using fitlibrary.exception;
+using fitSharp.Fit.Exception;
 using fitSharp.Fit.Fixtures;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;

@@ -3,33 +3,38 @@
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
 namespace fitSharp.Machine.Model {
-    public enum CellAttribute {
-        Actual,
-        Add,
-        Body,
-        Difference,
-        EndTag,
-        Exception,
-        Folded,
-        Formatted,
-        InformationPrefix,
-        InformationSuffix,
-        Label,
-        Leader,
-        Raw,
-        StartTag,
-        Status,
-        Trailer
-    }
 
     public interface Cell {
         string Text { get; }
-        bool HasAttribute(CellAttribute key);
-        string GetAttribute(CellAttribute key);
-        void SetAttribute(CellAttribute key, string value);
-        void ClearAttribute(CellAttribute key);
-        void AddToAttribute(CellAttribute key, string value);
+        IDictionary<CellAttribute, CellAttributeValue> Attributes { get; }
         TypedValue ParsedValue { get; set; }
+    }
+
+    public static class CellExtension {
+        public static void SetAttribute(this Cell cell, CellAttribute key, string value) {
+            if (!cell.HasAttribute(key)) cell.Attributes.Add(key, CellAttributeValue.Make(key));
+            cell.Attributes[key].SetValue(value);
+        }
+
+        public static void ClearAttribute(this Cell cell, CellAttribute key) {
+            cell.Attributes.Remove(key);
+        }
+
+        public static string GetAttribute(this Cell cell, CellAttribute key) {
+            return cell.Attributes.ContainsKey(key) ? cell.Attributes[key].Value : string.Empty;
+        }
+
+        public static bool HasAttribute(this Cell cell, CellAttribute key) {
+            return cell.Attributes.ContainsKey(key);
+        }
+
+        public static void FormatAttribute(this Cell cell, CellAttribute key, StringBuilder input) {
+            if (cell.Attributes.ContainsKey(key)) cell.Attributes[key].Format(cell, input);
+        }
     }
 }

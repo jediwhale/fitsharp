@@ -8,9 +8,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using fitSharp.IO;
-using Path=fitSharp.IO.Path;
+using Path = fitSharp.IO.Path;
 
-namespace fitSharp.Test.Double
+namespace fitSharp.Samples
 {
     public class FolderTestModel: FolderModel, ProgressReporter {
         public void MakeFile(string thePath, string theContent) {

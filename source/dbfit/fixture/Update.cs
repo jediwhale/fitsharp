@@ -9,6 +9,7 @@ using System.Data;
 using System.Data.Common;
 using dbfit.util;
 using fit;
+using fitSharp.Fit.Operators;
 using fitSharp.Machine.Engine;
 
 namespace dbfit.fixture {
@@ -109,13 +110,12 @@ namespace dbfit.fixture {
 			updateAccList.CopyTo(updateAccessors, 0);			
 		}
 
-	    public RuntimeMember Find(MemberQuery query) {
-	        var memberName = query.IdentifierName;
-	        return columnAccessors.Find(query, accessor => {
-	            string accessorName = accessor.Key.EndsWith("=")
+	    public RuntimeMember Find(MemberSpecification specification) {
+	        return columnAccessors.Find(specification, accessor => {
+	            var accessorName = accessor.Key.EndsWith("=")
 	                                      ? accessor.Key.Substring(0, accessor.Key.Length - 1)
 	                                      : accessor.Key;
-	            if (!memberName.Matches(accessorName)) return false;
+	            if (!specification.MatchesIdentifierName(accessorName)) return false;
 	            if (currentHeader != null && currentHeader.Text.EndsWith("=") && !accessor.Key.EndsWith("=")) return false;
 	            if (currentHeader != null && !currentHeader.Text.EndsWith("=") && accessor.Key.EndsWith("=")) return false;
 	            return true;

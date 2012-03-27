@@ -18,7 +18,7 @@ namespace fitSharp.Fit.Operators {
             var value = actualValue.GetActual(Processor);
             Processor.Get<Symbols>().Save(expectedCell.Value.Text.Substring(2), value);
 
-            expectedCell.Value.AddToAttribute(CellAttribute.InformationSuffix, value == null ? "null" : value.ToString());
+            expectedCell.Value.SetAttribute(CellAttribute.InformationSuffix, value == null ? "null" : value.ToString());
             return TypedValue.Void;
         }
     }

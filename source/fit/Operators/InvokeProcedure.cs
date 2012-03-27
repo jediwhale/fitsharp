@@ -22,7 +22,7 @@ namespace fit.Operators {
         }
 
         private TypedValue Invoke(Parse procedure, TypedValue target, Tree<Cell> parameterValues) {
-            var fixture = RunTestDefault.MakeDefaultFlowInterpreter(Processor, target);
+            var fixture = new DefaultFlowInterpreter(target.Value);
 
             var parameters = new Parameters(procedure.Parts, parameterValues);
             var body = procedure.Parts.More.Parts.Parts != null
@@ -40,7 +40,7 @@ namespace fit.Operators {
 
         void ExecuteProcedure(FlowInterpreter flowInterpreter, Tree<Cell> body) {
             foreach (var table in body.Branches) {
-                new InterpretFlow().DoTableFlow(Processor, flowInterpreter, table);
+                new InterpretFlow(Processor, flowInterpreter).DoTableFlow(table, 0);
             }
         }
 

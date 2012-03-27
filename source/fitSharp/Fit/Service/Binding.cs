@@ -68,7 +68,7 @@ namespace fitSharp.Fit.Service {
         }
 
         static void ShowActual(Cell cell, object actual) {
-            cell.AddToAttribute(
+            cell.SetAttribute(
                 CellAttribute.InformationSuffix,
                 actual == null ? "null"
 	            : actual.ToString().Length == 0 ? "blank"

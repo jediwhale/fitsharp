@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using fitSharp.IO;
 
-namespace fitSharp.Test.Double {
+namespace fitSharp.Samples {
     public class TestSocket: SocketModel {
         private readonly List<byte> buffer = new List<byte>();
         private readonly List<int> lengths = new List<int>();

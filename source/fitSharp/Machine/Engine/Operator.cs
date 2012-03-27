@@ -40,8 +40,8 @@ namespace fitSharp.Machine.Engine {
     }*/
 
     public interface CreateOperator<T> {
-        bool CanCreate(string memberName, Tree<T> parameters);
-        TypedValue Create(string memberName, Tree<T> parameters);
+        bool CanCreate(NameMatcher memberName, Tree<T> parameters);
+        TypedValue Create(NameMatcher memberName, Tree<T> parameters);
     }
 
     public interface InvokeOperator<T> {

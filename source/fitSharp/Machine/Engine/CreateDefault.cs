@@ -8,12 +8,12 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
     public class CreateDefault<T,P>: Operator<T, P>, CreateOperator<T> where P: class, Processor<T> {
-        public bool CanCreate(string memberName, Tree<T> parameters) {
+        public bool CanCreate(NameMatcher memberName, Tree<T> parameters) {
             return true;
         }
 
-        public TypedValue Create(string memberName, Tree<T> parameters) {
-            var runtimeType = Processor.ParseString<T, RuntimeType>(memberName);
+        public TypedValue Create(NameMatcher memberName, Tree<T> parameters) {
+            var runtimeType = Processor.ApplicationUnderTest.FindType(memberName);
             return parameters.Branches.Count == 0
                          ? CreateWithoutParameters(runtimeType)
                          : CreateWithParameters(parameters, runtimeType);

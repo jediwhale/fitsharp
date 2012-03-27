@@ -3,10 +3,11 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
+using fit.Test.Double;
 using fitSharp.Fit.Engine;
 using fitSharp.Fit.Service;
 using fitSharp.IO;
-using fitSharp.Test.Double.Fit;
+using fitSharp.Samples.Fit;
 using NUnit.Framework;
 using fitSharp.Machine.Application;
 

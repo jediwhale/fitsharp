@@ -1,4 +1,4 @@
-﻿// Copyright © 2011 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2012 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -6,11 +6,14 @@
 using System;
 using fitSharp.Fit.Engine;
 using fitSharp.Fit.Fixtures;
+using fitSharp.Fit.Model;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
     public class ParseInterpreter: CellOperator, ParseOperator<Cell> {
+        public const string DefaultFlowInterpreter = "fitlibrary.DoFixture";
+
         public bool CanParse(Type type, TypedValue instance, Tree<Cell> parameters) {
             return typeof (Interpreter).IsAssignableFrom(type);
         }
@@ -28,8 +31,8 @@ namespace fitSharp.Fit.Operators {
         Interpreter MakeInterpreter(string className) {
             if (className.Length == 0 || !char.IsLetter(className[0])) return new CommentFixture();
 
-            var result = Processor.Create(className);
-            return result.GetValueAs<Interpreter>() ?? WithSystemUnderTest(Processor.Create("fitlibrary.DoFixture").GetValueAs<Interpreter>(), result);
+            var result = Processor.Create(new GracefulNameMatcher(className, className + "fixture"), new CellTree());
+            return result.GetValueAs<Interpreter>() ?? WithSystemUnderTest(Processor.Create(DefaultFlowInterpreter).GetValueAs<Interpreter>(), result);
         }
 
         Interpreter WithSystemUnderTest(Interpreter interpreter, TypedValue systemUnderTest) {
@@ -40,5 +43,6 @@ namespace fitSharp.Fit.Operators {
             }
             return interpreter;
         }
+
     }
 }

@@ -1,42 +1,40 @@
-// Copyright © 2011 Syterra Software Inc.
-// This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
-// This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+// Copyright © 2012 Syterra Software Inc. All rights reserved.
+// The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+// which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
+// to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
-using fitlibrary;
-using fitlibrary.exception;
-using fitSharp.Fit.Engine;
+using fitSharp.Fit.Exception;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
-namespace fit.Fixtures {
+namespace fitSharp.Fit.Engine {
     public class MethodPhrase {
         public MethodPhrase(Tree<Cell> theCells) {
             cells = theCells;
             keyword = cells.ValueAt(0).Text;
         }
 
-        public object Evaluate(Fixture theFixture) {
+        public object Evaluate(DomainAdapter theFixture, CellProcessor processor) {
             var cellCount = cells.Branches.Count;
             if (cellCount < 2) throw MakeException("missing cells");
             var identifier = cells.ValueAt(1).Text;
             if (newIdentifier.Equals(identifier)) {
-                return new MethodPhrase(cells.Skip(1)).EvaluateNew(theFixture.Processor);
+                return new MethodPhrase(cells.Skip(1)).EvaluateNew(processor);
             }
             if (typeIdentifier.Equals(identifier)) {
                 if (cellCount < 3) throw MakeException("missing cells");
-                return theFixture.Processor.ParseTree(typeof (Type), cells.Branches[2]).Value;
+                return processor.ParseTree(typeof (Type), cells.Branches[2]).Value;
             }
             if (currentIdentifier.Equals(identifier)) {
                 return theFixture.SystemUnderTest;
             }
-            var fixture = theFixture as FlowFixtureBase;
+            var fixture = theFixture as FlowInterpreter;
             if (fixture == null) throw MakeException("flow fixture required");
 
-            return fixture.Symbols.HasValue(identifier)
-                ? fixture.Symbols.GetValue(identifier)
-                : fixture.ExecuteFlowRowMethod(cells);
+            return processor.Get<Symbols>().HasValue(identifier)
+                ? processor.Get<Symbols>().GetValue(identifier)
+                : fixture.ExecuteFlowRowMethod(processor, cells);
         }
 
         TableStructureException MakeException(string reason) {
@@ -45,10 +43,7 @@ namespace fit.Fixtures {
 
         public object EvaluateNew(CellProcessor processor) {
             if (cells.Branches.Count < 2) throw MakeException("missing cells");
-            return processor.Create(
-                    cells.ValueAt(1).Text,
-                    cells.Skip(2))
-                .Value;
+            return processor.Create(cells.Branches[1], cells.Skip(2)).Value;
         }
 
         static readonly IdentifierName newIdentifier = new IdentifierName("new"); 

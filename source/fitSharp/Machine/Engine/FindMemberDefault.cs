@@ -12,7 +12,7 @@ namespace fitSharp.Machine.Engine {
         }
 
         public TypedValue FindMember(TypedValue instance, MemberQuery query) {
-            return new TypedValue(query.FindMember(instance.Value), typeof(RuntimeMember));
+            return query.FindMember(instance.Value).TypedValue;
         }
     }
 }

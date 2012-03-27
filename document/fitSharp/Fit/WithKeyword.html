@@ -83,14 +83,14 @@ Set the <a href="../Fit/SystemUnderTest.html">System Under Test</a> to a named o
 </td><td><br><table border="1" cellpadding="2" cellspacing="0"><tr><td>do</td></tr><tr><td>with</td><td>new</td><td>sample domain</td><td>Joe</td></tr><tr><td>name</td><td class="pass">joesname</td><td>name</td></tr><tr><td>with</td><td>joesname</td></tr><tr><td>check</td><td>tolower</td><td class="pass">joe</td></tr></table></td></tr>
 </table>
 <br>
-For named objects or methods, the enclosing fixture must be a flow fixture.<br>
+The enclosing fixture must provide a method.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>check</td><td>test result</td><td><br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>use</td><td>column</td><td>with</td><td>my method</td></tr>
 </table>
-</td><td><br><table border="1" cellpadding="2" cellspacing="0"><tr><td class="error">use<hr /><pre><div class="fit_stacktrace">fitlibrary.exception.TableStructureException: This table is invalid for this fixture: flow fixture required for with.</div></pre></td><td>column</td><td>with</td><td>my method</td></tr></table></td></tr>
+</td><td><br><table border="1" cellpadding="2" cellspacing="0"><tr><td class="error">use<hr /><pre><div class="fit_stacktrace">Member 'mymethod' with 0 parameter(s) not found</div></pre></td><td>column</td><td>with</td><td>my method</td></tr></table></td></tr>
 </table>
 <br>
 Errors are reported if information is missing.<br>
@@ -112,7 +112,7 @@ Errors are reported if information is missing.<br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>with</td><td>type</td></tr>
 </table>
-</td><td><br><table border="1" cellpadding="2" cellspacing="0"><tr><td>do</td></tr></table><br><table border="1" cellpadding="2" cellspacing="0"><tr><td class="error">with<hr /><pre><div class="fit_stacktrace">fitlibrary.exception.TableStructureException: This table is invalid for this fixture: missing cells for with.</div></pre></td></tr></table><br><table border="1" cellpadding="2" cellspacing="0"><tr><td class="error">with<hr /><pre><div class="fit_stacktrace">fitlibrary.exception.TableStructureException: This table is invalid for this fixture: missing cells for new.</div></pre></td><td>new</td></tr></table><br><table border="1" cellpadding="2" cellspacing="0"><tr><td class="error">with<hr /><pre><div class="fit_stacktrace">fitlibrary.exception.TableStructureException: This table is invalid for this fixture: missing cells for with.</div></pre></td><td>type</td></tr></table></td></tr>
+</td><td><br><table border="1" cellpadding="2" cellspacing="0"><tr><td>do</td></tr></table><br><table border="1" cellpadding="2" cellspacing="0"><tr><td class="error">with<hr /><pre><div class="fit_stacktrace">This table is invalid for this fixture: missing cells for with.</div></pre></td></tr></table><br><table border="1" cellpadding="2" cellspacing="0"><tr><td class="error">with<hr /><pre><div class="fit_stacktrace">This table is invalid for this fixture: missing cells for new.</div></pre></td><td>new</td></tr></table><br><table border="1" cellpadding="2" cellspacing="0"><tr><td class="error">with<hr /><pre><div class="fit_stacktrace">This table is invalid for this fixture: missing cells for with.</div></pre></td><td>type</td></tr></table></td></tr>
 </table>
 </div>
 <div style="width:100%;text-align:right">

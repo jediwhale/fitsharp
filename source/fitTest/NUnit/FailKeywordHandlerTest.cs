@@ -4,7 +4,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using fitSharp.Fit.Operators;
-using fitSharp.Test.Double;
+using fitSharp.Samples;
 using NUnit.Framework;
 
 namespace fit.Test.NUnit {

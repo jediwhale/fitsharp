@@ -21,7 +21,7 @@ namespace fitSharp.Fit.Operators {
             object actualValue = actual.Value;
 
             var cell = expected.Value;
-            cell.AddToAttribute(CellAttribute.InformationSuffix, actualValue.ToString());
+            cell.SetAttribute(CellAttribute.InformationSuffix, actualValue.ToString());
 
             var expectedPattern = new Regex(compareValue.Substring(1, compareValue.Length-2));
             return expectedPattern.IsMatch(actualValue.ToString());

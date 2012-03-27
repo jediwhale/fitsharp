@@ -14,6 +14,7 @@
         <addNamespace>fit.Test.Acceptance</addNamespace>
         <addNamespace>fit.Test.Double</addNamespace>
         <addNamespace>fitSharp.Test.Double</addNamespace>
+        <addNamespace>fitSharp.Samples</addNamespace>
         <addNamespace>fit.Runner</addNamespace>
         <addNamespace>fitSharp.Fit.Runner</addNamespace>
         <addNamespace>fitSharp.Fit.Model</addNamespace>
@@ -22,6 +23,7 @@
         <addNamespace>fitSharp.Test.Acceptance.Slim</addNamespace>
         <addAssembly>build\debug\fitsharptest.dll</addAssembly>
         <addAssembly>build\debug\fittest.dll</addAssembly>
+        <addAssembly>build\debug\samples.dll</addAssembly>
     </ApplicationUnderTest>
     
     <Culture>

@@ -1,11 +1,8 @@
-// Copyright © 2012 Syterra Software Inc. All rights reserved.
-// The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
-// which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
-// to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
-
 using System;
+using System.Collections.Generic;
 using System.Reflection;
-using System.Text.RegularExpressions;
+using fitSharp.Fit.Engine;
+using fitSharp.Fit.Exception;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
@@ -16,43 +13,55 @@ namespace fitSharp.Fit.Operators {
         }
 
         public TypedValue FindMember(TypedValue instance, MemberQuery query) {
-            var member = query.FindMatchingMember(instance.Type, new PatternMemberMatcher(instance.Value)) 
-                    ?? query.FindMember(instance.Value);
-            return new TypedValue(member, typeof(RuntimeMember));
+            var member = query.FindMatchingMember(instance.Type, new PatternMemberMatcher(Processor, instance.Value, query.Specification)) 
+                    .OrMaybe(() => query.FindMember(instance.Value));
+            return member.TypedValue;
         }
 
         class PatternMemberMatcher: MemberMatcher {
-            public PatternMemberMatcher(object instance) {
+            public PatternMemberMatcher(CellProcessor processor, object instance, MemberSpecification specification) {
+                this.processor = processor;
+                this.specification = specification;
                 this.instance = instance;
             }
 
-            public bool IsMatch(MemberName memberName, MemberInfo memberInfo) {
-                if (!Attribute.IsDefined(memberInfo, typeof(MemberPatternAttribute), true)) return false;
-                var attribute = (MemberPatternAttribute)Attribute.GetCustomAttribute(memberInfo, typeof (MemberPatternAttribute), true);
-                var match = new Regex(attribute.Pattern).Match(memberName.OriginalName);
-                if (!match.Success) return false;
-                var runtimeMemberFactory = RuntimeMemberFactory.MakeFactory(memberName, memberInfo);
+            public Maybe<RuntimeMember> Match(IEnumerable<MemberInfo> members) {
+                foreach (var memberInfo in members) {
+                    if (!Attribute.IsDefined(memberInfo, typeof(MemberPatternAttribute), true)) continue;
+                    var attribute = (MemberPatternAttribute)Attribute.GetCustomAttribute(memberInfo, typeof (MemberPatternAttribute), true);
+                    var match = specification.MatchRegexName(attribute.Pattern);
+                    if (!match.Success) continue;
+                    var runtimeMemberFactory = RuntimeMemberFactory.MakeFactory(specification, memberInfo);
 
-                var parameters = new object[match.Groups.Count - 1];
-                for (var i = 0; i < parameters.Length; i++) parameters[i] = match.Groups[i+1].Value;
+                    var parameters = new string[match.Groups.Count - 1];
+                    foreach (var i in parameters.Length.Count()) parameters[i] = match.Groups[i+1].Value;
 
-                RuntimeMember = new PatternRuntimeMember(runtimeMemberFactory.MakeMember(instance), parameters);
-                return true;
+                    return new Maybe<RuntimeMember>(new PatternRuntimeMember(processor, runtimeMemberFactory.MakeMember(instance), parameters));
+                }
+                return Maybe<RuntimeMember>.Nothing;
             }
 
-            public RuntimeMember RuntimeMember { get; private set; }
-
+            readonly CellProcessor processor;
             readonly object instance;
+            readonly MemberSpecification specification;
         }
 
         class PatternRuntimeMember: RuntimeMember {
-            public PatternRuntimeMember(RuntimeMember baseMember, object[] patternParameters) {
+            public PatternRuntimeMember(CellProcessor processor, RuntimeMember baseMember, string[] patternParameters) {
                 this.baseMember = baseMember;
+                this.processor = processor;
                 this.patternParameters = patternParameters;
             }
 
-            public TypedValue Invoke(object[] parameters) {
-                return baseMember.Invoke(patternParameters);
+            public TypedValue Invoke(object[] invokeParameters) {
+                if (!baseMember.MatchesParameterCount(patternParameters.Length)) {
+                    throw new InvalidMethodException(string.Format("Member pattern for {0} has {1} parameters.", baseMember.Name, patternParameters.Length));
+                }
+                var parameters = new object[patternParameters.Length];
+                foreach (var i in patternParameters.Length.Count()) {
+                    parameters[i] = processor.ParseString(GetParameterType(i), patternParameters[i]).Value;
+                }
+                return baseMember.Invoke(parameters);
             }
 
             public bool MatchesParameterCount(int count) {
@@ -76,7 +85,8 @@ namespace fitSharp.Fit.Operators {
             }
 
             readonly RuntimeMember baseMember;
-            readonly object[] patternParameters;
+            readonly string[] patternParameters;
+            readonly CellProcessor processor;
         }
     }
 }

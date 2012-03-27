@@ -64,6 +64,12 @@ namespace fitSharp.Test.Double {
         public void DoStuff(string what, string withWhom) {
             Field = "I did " + what + " with " + withWhom;
         }
+
+        [MemberPattern("do (.*) (.*) times")]
+        public void DoTimes(string what, int times) {
+            Field = "I did";
+            for (var i = 0; i < times; i++) Field = Field + " " + what;
+        }
     }
 
     public class SampleClassAdapter: DomainAdapter {

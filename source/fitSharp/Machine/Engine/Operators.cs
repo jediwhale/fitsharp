@@ -5,7 +5,7 @@
 
 using System;
 using System.Collections.Generic;
-using fitSharp.Machine.Model;
+using System.Linq;
 
 namespace fitSharp.Machine.Engine {
     public delegate bool CanDoOperation<in T>(T anOperator);
@@ -61,16 +61,9 @@ namespace fitSharp.Machine.Engine {
         }
 
         public void Do<O>(CanDoOperation<O> canDoOperation, DoOperation<O> doOperation) where O: class {
-            for (int priority = operators.Count - 1; priority >= 0; priority--) {
-                for (int i = operators[priority].Count - 1; i >= 0; i--) {
-                    Operator<T, P> anOperator = operators[priority][i];
-                    anOperator.Processor = Processor;
-                    var candidate = anOperator as O;
-                    if (candidate == null) continue;
-                    if (!canDoOperation(candidate)) continue;
-                    doOperation(candidate);
-                    return;
-                }
+            foreach (var candidate in Values<O>().Where(candidate => canDoOperation(candidate))) {
+                doOperation(candidate);
+                return;
             }
             throw new ApplicationException(string.Format("No default for {0}", typeof(T).Name));
         }
@@ -78,18 +71,29 @@ namespace fitSharp.Machine.Engine {
         public O FindOperator<O>(object[] parameters) where O: class {
             var operationType = typeof (O).Name;
             var operationName = operationType.Substring(0, operationType.IndexOf("Operator"));
+            foreach (var candidate in
+                    Values<O>().Where(candidate => CanDoOperation(candidate, operationName, parameters))) {
+                return candidate;
+            }
+            throw new ApplicationException(string.Format("No default for {0}", typeof (O).Name));
+        }
+
+        static bool CanDoOperation<O>(O candidate, string operationName, object[] parameters) {
+            var member = MemberQuery.GetDirectInstance(candidate,
+                    new MemberSpecification("Can" + operationName, parameters.Length));
+            return member.Invoke(parameters).GetValue<bool>();
+        }
+
+        IEnumerable<O> Values<O>() where O: class {
             for (var priority = operators.Count - 1; priority >= 0; priority--) {
                 for (var i = operators[priority].Count - 1; i >= 0; i--) {
                     var anOperator = operators[priority][i];
-                    anOperator.Processor = Processor;
                     var candidate = anOperator as O;
                     if (candidate == null) continue;
-                    var member = MemberQuery.FindDirectInstance(candidate, new MemberName("Can" + operationName), parameters.Length);
-                    if (!member.Invoke(parameters).GetValue<bool>()) continue;
-                    return candidate;
+                    anOperator.Processor = Processor;
+                    yield return candidate;
                 }
             }
-            throw new ApplicationException(string.Format("No default for {0}", typeof (O).Name));
         }
     }
 }

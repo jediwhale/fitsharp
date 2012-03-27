@@ -47,12 +47,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Acceptance\Slim\SlimDomain.cs" />
-    <Compile Include="Double\Fit\Builder.cs" />
+    <Compile Include="Double\Fit\Parse.cs" />
     <Compile Include="Double\FullTestConfig.cs" />
-    <Compile Include="Double\Person.cs" />
     <Compile Include="Double\SampleClassTwo.cs" />
     <Compile Include="Double\Slim\Builder.cs" />
-    <Compile Include="Double\TestSocket.cs" />
     <Compile Include="NUnit\Fit\FindMemberPatternTest.cs" />
     <Compile Include="NUnit\Fit\IncludeTest.cs" />
     <Compile Include="NUnit\Fit\ParseMemberNameTest.cs" />
@@ -69,7 +67,6 @@
     <Compile Include="NUnit\Fit\DefineTest.cs" />
     <Compile Include="NUnit\Fit\CellOperationDefaultTest.cs" />
     <Compile Include="NUnit\Fit\RunTestDefaultTest.cs" />
-    <Compile Include="Double\FolderTestModel.cs" />
     <Compile Include="NUnit\Fit\GracefulNameTest.cs" />
     <Compile Include="NUnit\Fit\ConfigureFixtureTest.cs" />
     <Compile Include="NUnit\Fit\ParseByteArrayTest.cs" />
@@ -79,7 +76,6 @@
     <Compile Include="NUnit\Fit\XmlResultWriterTest.cs" />
     <Compile Include="NUnit\IO\ElapsedTimeTest.cs" />
     <Compile Include="NUnit\IO\SocketStreamTest.cs" />
-    <Compile Include="Double\TestClock.cs" />
     <Compile Include="NUnit\Machine\ApplicationUnderTestTest.cs" />
     <Compile Include="NUnit\Machine\TraverseTest.cs" />
     <Compile Include="NUnit\Machine\TypeDictionaryTest.cs" />
@@ -93,7 +89,6 @@
     <Compile Include="NUnit\Machine\DefaultParseTest.cs" />
     <Compile Include="NUnit\Machine\InvokeDefaultTest.cs" />
     <Compile Include="NUnit\Machine\IdentifierNameTest.cs" />
-    <Compile Include="NUnit\Machine\LanguageNameTest.cs" />
     <Compile Include="NUnit\Machine\ProcessorTest.cs" />
     <Compile Include="NUnit\Machine\MemberQueryTest.cs" />
     <Compile Include="Double\SampleClass.cs" />
@@ -117,6 +112,10 @@
     <ProjectReference Include="..\fitSharp\fitSharp.csproj">
       <Project>{204FF2CD-475F-4C6E-A6B5-6779364B33F8}</Project>
       <Name>fitSharp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Samples\Samples.csproj">
+      <Project>{A2546656-E446-4EF3-90DF-B958045F217C}</Project>
+      <Name>Samples</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

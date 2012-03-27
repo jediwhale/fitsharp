@@ -16,7 +16,7 @@ namespace fitSharp.Fit.Operators {
 
         public TypedValue Check(CellOperationValue actualValue, Tree<Cell> expectedCell) {
 	        var actualCell = Processor.Compose(actualValue.GetTypedActual(Processor));
-	        expectedCell.Value.AddToAttribute(CellAttribute.InformationSuffix,
+	        expectedCell.Value.SetAttribute(CellAttribute.InformationSuffix,
                 actualCell.Value.Text.Length == 0 ? "blank" : actualCell.Value.Text); // slightly quirky behavior from original fitnesse.net
             return TypedValue.Void;
         }

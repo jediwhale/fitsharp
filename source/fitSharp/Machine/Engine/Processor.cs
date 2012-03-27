@@ -35,6 +35,23 @@ namespace fitSharp.Machine.Engine {
             return processor.Create(membername, new TreeList<T>());
         }
 
+        public static TypedValue Create<T>(this Processor<T> processor, Tree<T> memberNameCell) {
+            return processor.Create(memberNameCell, new TreeList<T>());
+        }
+
+        public static TypedValue Create<T>(this Processor<T> processor, string memberName, Tree<T> parameters) {
+            return processor.Create(new GracefulNameMatcher(memberName), parameters);
+        }
+
+        public static TypedValue Create<T>(this Processor<T> processor, Tree<T> memberNameCell, Tree<T> parameters) {
+            var memberName = processor.ParseTree<T, string>(memberNameCell);
+            return processor.Create(memberName, parameters);
+        }
+
+        public static TypedValue Create<T>(this Processor<T> processor, NameMatcher memberName, Tree<T> parameters) {
+            return processor.Operate<CreateOperator<T>>(memberName, parameters);
+        }
+
         public static TypedValue InvokeWithThrow<T>(this Processor<T> processor, TypedValue instance, MemberName memberName,
                                                     Tree<T> parameters) {
             TypedValue result = processor.Invoke(instance, memberName, parameters);
@@ -69,10 +86,6 @@ namespace fitSharp.Machine.Engine {
 
         public static V ParseString<T, V>(this Processor<T> processor, string input) {
             return processor.ParseString(typeof (V), input).GetValue<V>();
-        }
-
-        public static TypedValue Create<T>(this Processor<T> processor, string memberName, Tree<T> parameters) {
-            return processor.Operate<CreateOperator<T>>(memberName, parameters);
         }
 
         public static TypedValue FindMember<T>(this Processor<T> processor, TypedValue instance, MemberQuery query) {
@@ -171,7 +184,8 @@ namespace fitSharp.Machine.Engine {
                 logging.Start(operationName);
                 logging.LogParameters(parameters);
                 var candidate = Operators.FindOperator<O>(parameters);
-                var member = MemberQuery.FindDirectInstance(candidate, new MemberName(operationName), parameters.Length);
+                var member = MemberQuery.GetDirectInstance(candidate,
+                        new MemberSpecification(operationName, parameters.Length));
                 var result = member.Invoke(parameters).GetValue<TypedValue>();
                 logging.LogResult(candidate, result);
                 return result;
