@@ -1,0 +1,37 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- fitSharp
+Copyright © Syterra Software Inc. All rights reserved.
+The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
+to be bound by the terms of this license. You must not remove this notice, or any other, from this software. -->
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+ <link href="../fitsharp1.css" type="text/css" rel="stylesheet">
+  <link href="fit.css" type="text/css" rel="stylesheet">
+  <title>Parse Default</title>
+</head>
+<body>
+<div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
+<div class="pagename">Parse Default</div>
+<div class="content">The parse default behavior uses a static Parse method or a unary string constructor.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>when input is</td><td>'sample domain'<br>
+set guidfield 01234567-89ab-cdef-0123-456789abcdef<br>
+check guidfield {01234567-89ab-cdef-0123-456789abcdef}</td><td>then output is</td><td><div><table><tr><td><span class="fit_SUT">sample domain</span></td> </tr></table><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">guidfield</span></td> <td>01234567-89ab-cdef-0123-456789abcdef</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">guidfield</span></td> <td class="pass">{01234567-89ab-cdef-0123-456789abcdef}</td> </tr></table></div></td></tr>
+</table>
+<br>
+An exception is raised when there is no way to parse the input.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>when input is</td><td>'sample domain'<br>
+set calendar '24 Sept 2003'</td><td>then output is</td><td><div><table><tr><td><span class="fit_SUT">sample domain</span></td> </tr></table><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">calendar</span></td> <td class="error">24 Sept 2003<hr /><pre><div class="fit_stacktrace">Can't parse System.Globalization.Calendar because it doesn't have a static Parse method</div></pre></td> </tr></table></div></td></tr>
+</table>
+</div>
+<div style="width:100%;text-align:right">
+<span class="footer">&copy; Copyright <a href="http://www.syterra.com">Syterra Software Inc.</a> All rights reserved.</span>
+</div>
+
+</body>
+</html>

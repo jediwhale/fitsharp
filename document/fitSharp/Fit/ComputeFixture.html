@@ -19,45 +19,19 @@ to be bound by the terms of this license. You must not remove this notice, or an
 The second row of a Compute Fixture table is a header row: the last cell is the name of a function and the other cells are the names of the function parameters. The subsequent rows contain input values for the parameters and the expected value of the function's result. The Compute Fixture uses the enclosing fixture as a <a href="../Fit/DomainAdapter.html">Domain Adapter</a> to perform the requested function.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>when test is</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>sample class two</td></tr>
-</table>
+<tr><td>when input is</td><td>'sample class two'<br>
 <br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>compute</td></tr>
-<tr><td>input</td><td>method with parms</td></tr>
-<tr><td>x</td><td>samplex</td></tr>
-<tr><td>y</td><td>sampley</td></tr>
-</table>
+|compute<br>
+input 'method with parms'<br>
+x samplex<br>
+y sampley<br>
 <br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>sample do</td></tr>
-<tr><td>compute</td></tr>
-<tr><td>x</td><td>y</td><td>dividefloat</td></tr>
-<tr><td>1.32</td><td>1.1</td><td>1.2</td></tr>
+|'sample do'<br>
+compute<br>
+x y dividefloat<br>
+1.32 1.1 1.2</td><td>then output is</td><td><div><table><tr><td><span class="fit_SUT">sample class two</span></td> </tr></table></div><br /><table class="fit_table"><tr><td><span class="fit_interpreter">compute</span></td> </tr><tr><td>input</td> <td><span class="fit_member">method with parms</span></td> </tr><tr><td>x</td> <td class="pass">samplex</td> </tr><tr><td>y</td> <td class="pass">sampley</td> </tr></table><br /><table class="fit_table"><tr><td><span class="fit_interpreter">sample do</span></td> </tr><tr><td><span class="fit_interpreter">compute</span></td> </tr><tr><td>x</td> <td>y</td> <td><span class="fit_member">dividefloat</span></td> </tr><tr><td>1.32</td> <td>1.1</td> <td class="pass">1.2</td> </tr></table></td></tr>
+</table></div></td></tr>
 </table>
-</td><td>then result is</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>sample class two</td></tr>
-</table>
-<br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>compute</td></tr>
-<tr><td>input</td><td>method with parms</td></tr>
-<tr><td>x</td><td class="pass">samplex</td></tr>
-<tr><td>y</td><td class="pass">sampley</td></tr>
-
-</table>
-<br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>sample do</td></tr>
-<tr><td>compute</td></tr>
-<tr><td>x</td><td>y</td><td>dividefloat</td></tr>
-<tr><td>1.32</td><td>1.1</td><td class="pass">1.2</td></tr>
-</table></td></tr>
-</table>
-<br>
 </div>
 <div style="width:100%;text-align:right">
 <span class="footer">&copy; Copyright <a href="http://www.syterra.com">Syterra Software Inc.</a> All rights reserved.</span>

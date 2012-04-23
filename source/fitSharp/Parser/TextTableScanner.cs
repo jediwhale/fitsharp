@@ -81,7 +81,7 @@ namespace fitSharp.Parser {
         Token MakeDelimitedWord() {
             source.Start();
             source.MoveWhile(() => isWordContent(source));
-            var result = new Token(TokenType.Word, source.FromStart.TrimEnd());
+            var result = new Token(TokenType.Word, source.FromStart.TrimEnd().Replace('_', ' '));
             if (source.Type == CharacterType.Separator) source.MoveNext();
             return result;
         }

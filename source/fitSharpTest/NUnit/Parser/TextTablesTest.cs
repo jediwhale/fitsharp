@@ -1,9 +1,10 @@
-﻿// Copyright © 2011 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2012 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System.Text;
+using System.Web;
 using fitSharp.Machine.Model;
 using fitSharp.Parser;
 using NUnit.Framework;
@@ -26,6 +27,10 @@ namespace fitSharp.Test.NUnit.Parser {
             AssertParse("<<stuff", " <div> <table><tr> <td> &lt;&lt;stuff</td> </tr></table></div>");
         }
 
+        [Test, Ignore] public void BackSlashesInCellContent() {
+            AssertParse("'stuff\\'\\\\morestuff'", " <div> <table><tr> <td> stuff'\\morestuff</td> </tr></table></div>");
+        }
+
         [Test] public void HandlesLeadingNewlines() {
             AssertParse("\n\n\nstuff", "<br /><br /><br /> <div> <table><tr> <td> stuff</td> </tr></table></div>");
         }
@@ -35,6 +40,21 @@ namespace fitSharp.Test.NUnit.Parser {
                 " <div> <table><tr> <td> more</td>  <td> stuff</td> </tr></table></div>");
         }
 
+        [Test] public void ParsesQuotedWordAsSingleCell() {
+            AssertParse("'more stuff'",
+                " <div> <table><tr> <td> more stuff</td> </tr></table></div>");
+        }
+
+        [Test] public void RemovesUnderscores() {
+            AssertParse("more_stuff",
+                " <div> <table><tr> <td> more stuff</td> </tr></table></div>");
+        }
+
+        [Test] public void KeepsQuotedUnderscores() {
+            AssertParse("'more_stuff'",
+                " <div> <table><tr> <td> more_stuff</td> </tr></table></div>");
+        }
+
         [Test] public void ParsesLinesAsSeparateRows() {
             AssertParse("more 'good'\nstuff",
                 " <div> <table><tr> <td> more</td>  <td> good</td> </tr></table> <table><tr> <td> stuff</td> </tr></table></div>");
@@ -42,6 +62,10 @@ namespace fitSharp.Test.NUnit.Parser {
 
         [Test] public void ParsesNestedTable() {
             AssertParse("one [\n two\n] three", " <div> <table><tr> <td> one</td>  <td> <div> <table><tr> <td> two</td> </tr></table></div></td>  <td> three</td> </tr></table></div>");
+        }
+
+        [Test] public void ParsesNestedTableInFirstCell() {
+            AssertParse("one\n[\n two\n]\nthree", " <div> <table><tr> <td> one</td> </tr></table> <table><tr> <td> <div> <table><tr> <td> two</td> </tr></table></div></td> </tr></table> <table><tr> <td> three</td> </tr></table></div>");
         }
 
         [Test] public void ParsesBlankLinesAsSeparateTables() {
@@ -81,11 +105,7 @@ namespace fitSharp.Test.NUnit.Parser {
             return new TextTables(new TextTableScanner(input, c => c.IsLetter)).Parse();
         }
 
-        static string Format(Tree<CellBase> tree) {
-            return Format(tree, " ");
-        }
-
-        static string Format(Tree<CellBase> tree, string separator) {
+        static string Format(Tree<CellBase> tree, string separator = " ") {
             var result = new StringBuilder();
             if (!string.IsNullOrEmpty(tree.Value.GetAttribute(CellAttribute.Leader)))
                 result.AppendFormat("{0}{1}", tree.Value.GetAttribute(CellAttribute.Leader), separator);

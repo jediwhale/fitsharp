@@ -59,6 +59,7 @@ namespace fitSharp.Fit.Operators {
         public static string Body(Cell cell) {
             var body = new StringBuilder();
             cell.FormatAttribute(CellAttribute.Body, body);
+            cell.FormatAttribute(CellAttribute.Syntax, body);
             cell.FormatAttribute(CellAttribute.Formatted, body);
             cell.FormatAttribute(CellAttribute.Add, body);
             cell.FormatAttribute(CellAttribute.InformationPrefix, body);

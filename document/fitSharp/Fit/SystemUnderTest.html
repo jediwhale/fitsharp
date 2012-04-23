@@ -31,42 +31,17 @@ When we create a flow fixture in the body of a storytest that is already in <a h
 Some fixtures, like <a href="../Fit/ComputeFixture.html">Compute Fixture</a>, do not have a <a href="../Fit/SystemUnderTest.html">System Under Test</a> property and always use the fixture that creates them as a <a href="../Fit/DomainAdapter.html">Domain Adapter</a>.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>when test is</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>with</td><td>new</td><td>sample domain</td><td>Bob</td></tr>
-</table>
+<tr><td>when input is</td><td>with new 'sample domain' Bob<br>
 <br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>compute</td></tr>
-<tr><td>name</td></tr>
-<tr><td>Bob</td></tr>
-</table>
+|compute<br>
+name<br>
+Bob<br>
 <br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>do</td></tr>
-<tr><td>with</td><td>new</td><td>sample domain</td><td>Sue</td></tr>
-<tr><td>compute</td></tr>
-<tr><td>name</td></tr>
-<tr><td>Sue</td></tr>
-</table>
-</td><td>then result is</td><td><table border="1" cellpadding="2" cellspacing="0">
-<tr><td>with</td><td>new</td><td>sample domain</td><td>Bob</td></tr>
-</table>
-<br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>compute</td></tr>
-<tr><td>name</td></tr>
-<tr><td class="pass">Bob</td></tr>
-</table>
-
-<br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>do</td></tr>
-<tr><td>with</td><td>new</td><td>sample domain</td><td>Sue</td></tr>
-<tr><td>compute</td></tr>
-<tr><td>name</td></tr>
-<tr><td class="pass">Sue</td></tr>
-</table></td></tr>
+|do<br>
+with new 'sample domain' Sue<br>
+compute<br>
+name<br>
+Sue</td><td>then output is</td><td><div><table><tr><td><span class="fit_keyword">with</span></td> <td><span class="fit_keyword">new</span></td> <td><span class="fit_SUT">sample domain</span></td> <td>Bob</td> </tr></table></div><br /><table class="fit_table"><tr><td><span class="fit_interpreter">compute</span></td> </tr><tr><td><span class="fit_member">name</span></td> </tr><tr><td class="pass">Bob</td> </tr></table><br /><table class="fit_table"><tr><td><span class="fit_interpreter">do</span></td> </tr><tr><td><span class="fit_keyword">with</span></td> <td><span class="fit_keyword">new</span></td> <td><span class="fit_SUT">sample domain</span></td> <td>Sue</td> </tr><tr><td><span class="fit_interpreter">compute</span></td> </tr><tr><td><span class="fit_member">name</span></td> </tr><tr><td class="pass">Sue</td> </tr></table></td></tr>
 </table>
 <br>
 Every object used by fixtures can be an instance of the system under test, or it can be a <a href="../Fit/DomainAdapter.html">Domain Adapter</a>.<br>

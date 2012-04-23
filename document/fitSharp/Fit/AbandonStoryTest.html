@@ -15,59 +15,36 @@ to be bound by the terms of this license. You must not remove this notice, or an
 <div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
 <div class="pagename">Abandon Story Test</div>
 <div class="content"><br>
-An exception AbandonStoryTestException can be thrown anywhere in fixture or <a href="../Fit/DomainAdapter.html">Domain Adapter</a> code to stop execution of the current story test. The exception can be constructed with a custom message which will appear in the test result. <pre class="code"> throw new AbandonStoryTestException();
+We can throw an exception AbandonStoryTestException anywhere in fixture or <a href="../Fit/DomainAdapter.html">Domain Adapter</a> code to stop execution of the current story test. The exception can be constructed with a custom message which will appear in the test result. <pre class="code"> throw new AbandonStoryTestException();
  throw new AbandonStoryTestException("my message");</pre><br>
-If a story test is executing in <a href="../Fit/FlowMode.html">Flow Mode</a>, the <a href="../Fit/AbandonStoryTestKeyword.html">Abandon Story Test Keyword</a> can also be used to stop execution.<br>
+If a story test is executing in <a href="../Fit/FlowMode.html">Flow Mode</a>, we can also use the <a href="../Fit/AbandonStoryTestKeyword.html">Abandon Story Test Keyword</a> to stop execution.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>story test fixture</td></tr>
-</table>
+<tr><td>when input is</td><td>'sample domain adapter'<br>
 <br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>check</td><td>test result</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>sample domain adapter</td></tr>
-</table>
+'throw abandon'<br>
 <br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>throw abandon</td></tr>
+'other stuff'<br>
+'thats not processed'</td><td>then output is</td><td><div><table><tr><td><span class="fit_SUT">sample domain adapter</span></td> </tr></table></div><br /><div><table><tr><td class="error"><span class="fit_member">throw abandon</span><hr /><pre><div class="fit_stacktrace">Story test abandoned.</div></pre></td> </tr></table></div><br /><div><table><tr><td>other stuff</td> </tr></table><table><tr><td>thats not processed</td> </tr></table></div></td></tr>
 </table>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>other stuff</td></tr>
-<tr><td>thats not processed</td></tr>
-</table>
-</td><td><table border="1" cellpadding="2" cellspacing="0"><tr><td>sample domain adapter</td></tr></table><br><table border="1" cellpadding="2" cellspacing="0"><tr><td class="error">throw abandon<hr /><pre><div class="fit_stacktrace">fit.exception.AbandonStoryTestException: Story test abandoned.</div></pre></td></tr></table><br><table border="1" cellpadding="2" cellspacing="0"><tr><td>other stuff</td></tr><tr><td>thats not processed</td></tr></table></td></tr>
+<tr><td>when input is</td><td>'sample domain adapter'<br>
+<br>
+'throw abandon' 'my message'<br>
+<br>
+'other stuff'<br>
+'thats not processed'</td><td>then output is</td><td><div><table><tr><td><span class="fit_SUT">sample domain adapter</span></td> </tr></table></div><br /><div><table><tr><td class="error"><span class="fit_member">throw abandon</span><hr /><pre><div class="fit_stacktrace">my message</div></pre></td><td>my message</td> </tr></table></div><br /><div><table><tr><td>other stuff</td> </tr></table><table><tr><td>thats not processed</td> </tr></table></div></td></tr>
 </table>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>check</td><td>test result</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>sample domain adapter</td></tr>
-<tr><td>throw abandon</td><td>my stuff</td></tr>
-</table>
+<tr><td>when input is</td><td>use column with new 'sample domain adapter'<br>
+'throw abandon?'<br>
+x<br>
+y<br>
 <br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>other stuff</td></tr>
-<tr><td>thats not processed</td></tr>
-</table>
-</td><td><table border="1" cellpadding="2" cellspacing="0"><tr><td>sample domain adapter</td></tr><tr><td class="error">throw abandon<hr /><pre><div class="fit_stacktrace">fit.exception.AbandonStoryTestException: my stuff</div></pre></td><td>my stuff</td></tr></table><br><table border="1" cellpadding="2" cellspacing="0"><tr><td>other stuff</td></tr><tr><td>thats not processed</td></tr></table></td></tr>
-</table>
-<br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>check</td><td>test result</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>use</td><td>column</td><td>with</td><td>new</td><td>sample domain adapter</td></tr>
-<tr><td>throw abandon?</td></tr>
-<tr><td>x</td></tr>
-<tr><td>y</td></tr>
-</table>
-<br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>other stuff</td></tr>
-<tr><td>thats not processed</td></tr>
-</table>
-</td><td><table border="1" cellpadding="2" cellspacing="0"><tr><td>use</td><td>column</td><td>with</td><td>new</td><td>sample domain adapter</td></tr><tr><td>throw abandon?</td></tr><tr><td class="error">x<hr /><pre><div class="fit_stacktrace">fit.exception.AbandonStoryTestException: Story test abandoned.</div></pre></td></tr><tr><td>y</td></tr></table><br><table border="1" cellpadding="2" cellspacing="0"><tr><td>other stuff</td></tr><tr><td>thats not processed</td></tr></table></td></tr>
+'other stuff'<br>
+'thats not processed'</td><td>then output is</td><td><div><table><tr><td><span class="fit_interpreter">use</span></td> <td><span class="fit_interpreter">column</span></td> <td><span class="fit_keyword">with</span></td> <td><span class="fit_keyword">new</span></td> <td><span class="fit_SUT">sample domain adapter</span></td> </tr></table><table><tr><td><span class="fit_member">throw abandon?</span></td> </tr></table><table><tr><td class="error">x<hr /><pre><div class="fit_stacktrace">Story test abandoned.</div></pre></td> </tr></table><table><tr><td>y</td> </tr></table></div><br /><div><table><tr><td>other stuff</td> </tr></table><table><tr><td>thats not processed</td> </tr></table></div></td></tr>
 </table>
 </div>
 <div style="width:100%;text-align:right">

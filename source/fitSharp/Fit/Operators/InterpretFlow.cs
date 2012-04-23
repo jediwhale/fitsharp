@@ -37,9 +37,12 @@ namespace fitSharp.Fit.Operators {
             var currentRow = table.Branches[rowNumber];
             try {
                 var specialActionName = processor.ParseTree<Cell, MemberName>(currentRow.Branches[0]).AsSpecialAction();
+                currentRow.ValueAt(0).SetAttribute(CellAttribute.Syntax, CellAttributeValue.SyntaxKeyword);
                 var result = processor.Invoke(interpreter, specialActionName, currentRow.Branches[0]);
+
                 if (!result.IsValid) {
-                     result = processor.Execute(interpreter,
+                    currentRow.ValueAt(0).ClearAttribute(CellAttribute.Syntax);
+                    result = processor.Execute(interpreter,
                          interpreter.MethodRowSelector.SelectMethodCells(currentRow),
                          interpreter.MethodRowSelector.SelectParameterCells(currentRow),
                          currentRow.ValueAt(0));
@@ -47,10 +50,14 @@ namespace fitSharp.Fit.Operators {
                 }
                 if (!result.IsValid) {
                     if (result.IsException<MemberMissingException>()) {
+                        foreach (var cell in interpreter.MethodRowSelector.SelectMethodCells(currentRow).Branches) {
+                            cell.Value.ClearAttribute(CellAttribute.Syntax);
+                        }
                         var newFixture = processor.ParseTree<Cell, Interpreter>(currentRow);
                         var newFlow = onNewFixture(newFixture, rowNumber);
                         var adapter = newFixture as MutableDomainAdapter;
-                        if (adapter != null && interpreter.SystemUnderTest != null) adapter.SetSystemUnderTest(interpreter.SystemUnderTest);
+                        if (adapter != null && adapter.SystemUnderTest == null && interpreter.SystemUnderTest != null)
+                            adapter.SetSystemUnderTest(interpreter.SystemUnderTest);
                         ProcessRestOfTable(newFixture, MakeTableWithRows(table, rowNumber), newFlow);
                     }
                     else {

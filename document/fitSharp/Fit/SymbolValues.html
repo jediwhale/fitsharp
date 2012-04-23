@@ -19,66 +19,34 @@ to be bound by the terms of this license. You must not remove this notice, or an
 The symbol save operator can be used in any expected value cell. Instead of comparing the actual value to an expected value, the actual value is saved with the symbol name.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>when test is</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>sample class</td></tr>
-<tr><td>set</td><td>field</td><td>something</td></tr>
-<tr><td>check</td><td>field</td><td>>>mysymbol</td></tr>
-<tr><td>set</td><td>field</td><td>null</td></tr>
-<tr><td>check</td><td>field</td><td>>>nullsymbol</td></tr>
-</table>
-</td><td>then result is</td><td><table border="1" cellpadding="2" cellspacing="0">
-<tr><td>sample class</td></tr>
-<tr><td>set</td><td>field</td><td>something</td></tr>
-<tr><td>check</td><td>field</td><td>>>mysymbol<span class="fit_grey"> something</span></td></tr>
-<tr><td>set</td><td>field</td><td>null</td></tr>
-<tr><td>check</td><td>field</td><td>>>nullsymbol<span class="fit_grey"> null</span></td></tr>
-</table></td></tr>
+<tr><td>when input is</td><td>'sample class'<br>
+set field something<br>
+check field >>mysymbol<br>
+set field null<br>
+check field >>nullsymbol</td><td>then output is</td><td><div><table><tr><td><span class="fit_SUT">sample class</span></td> </tr></table><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">field</span></td> <td>something</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">field</span></td> <td>&gt;&gt;mysymbol<span class="fit_grey"> something</span></td> </tr></table><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">field</span></td> <td>null</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">field</span></td> <td>&gt;&gt;nullsymbol<span class="fit_grey"> null</span></td> </tr></table></div></td></tr>
 </table>
 <br>
 The symbol recall operator can be used in any input or expected value cell. The value used will be the last value saved with the symbol name.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>when test is</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>sample class</td></tr>
-<tr><td>set</td><td>field</td><td>something</td></tr>
-<tr><td>check</td><td>field</td><td>&lt;&lt;mysymbol</td></tr>
-<tr><td>set</td><td>field</td><td>null</td></tr>
-<tr><td>check</td><td>field</td><td>&lt;&lt;nullsymbol</td></tr>
-<tr><td>set</td><td>field</td><td>&lt;&lt;mysymbol</td></tr>
-<tr><td>check</td><td>field</td><td>something</td></tr>
-<tr><td>set</td><td>field</td><td>&lt;&lt;nullsymbol</td></tr>
-<tr><td>check</td><td>field</td><td>null</td></tr>
-</table>
-</td><td>then result is</td><td><table border="1" cellpadding="2" cellspacing="0">
-<tr><td>sample class</td></tr>
-<tr><td>set</td><td>field</td><td>something</td></tr>
-<tr><td>check</td><td>field</td><td class="pass">&lt;&lt;mysymbol<span class="fit_grey"> something</span></td></tr>
-<tr><td>set</td><td>field</td><td>null</td></tr>
-<tr><td>check</td><td>field</td><td class="pass">&lt;&lt;nullsymbol<span class="fit_grey"> null</span></td></tr><tr><td>set</td><td>field</td><td>&lt;&lt;mysymbol<span class="fit_grey"> something</span></td></tr>
-<tr><td>check</td><td>field</td><td class="pass">something</td></tr>
-<tr><td>set</td><td>field</td><td>&lt;&lt;nullsymbol<span class="fit_grey"> null</span></td></tr>
-<tr><td>check</td><td>field</td><td class="pass">null</td></tr>
-</table></td></tr>
+<tr><td>when input is</td><td>'sample class'<br>
+set field something<br>
+check field &lt;&lt;mysymbol<br>
+set field null<br>
+check field &lt;&lt;nullsymbol<br>
+set field &lt;&lt;mysymbol<br>
+check field something<br>
+set field &lt;&lt;nullsymbol<br>
+check field null</td><td>then output is</td><td><div><table><tr><td><span class="fit_SUT">sample class</span></td> </tr></table><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">field</span></td> <td>something</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">field</span></td> <td class="pass">&lt;&lt;mysymbol<span class="fit_grey"> something</span></td> </tr></table><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">field</span></td> <td>null</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">field</span></td> <td class="pass">&lt;&lt;nullsymbol<span class="fit_grey"> null</span></td> </tr></table><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">field</span></td> <td>&lt;&lt;mysymbol<span class="fit_grey"> something</span></td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">field</span></td> <td class="pass">something</td> </tr></table><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">field</span></td> <td>&lt;&lt;nullsymbol<span class="fit_grey"> null</span></td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">field</span></td> <td class="pass">null</td> </tr></table></div></td></tr>
 </table>
 <br>
 We can save any value in a symbol, e.g. a byte array.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>when test is</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>sample class</td></tr>
-<tr><td>set</td><td>bytes</td><td>0x010203</td></tr>
-<tr><td>check</td><td>bytes</td><td>>>bytesymbol</td></tr>
-<tr><td>check</td><td>bytes</td><td>&lt;&lt;bytesymbol</td></tr>
-</table>
-</td><td>then result is</td><td><table border="1" cellpadding="2" cellspacing="0">
-<tr><td>sample class</td></tr>
-<tr><td>set</td><td>bytes</td><td>0x010203</td></tr>
-<tr><td>check</td><td>bytes</td><td>>>bytesymbol<span class="fit_grey"> System.Byte[]</span></td></tr>
-<tr><td>check</td><td>bytes</td><td class="pass">&lt;&lt;bytesymbol<span class="fit_grey"> System.Byte[]</span></td></tr>
-</table></td></tr>
+<tr><td>when input is</td><td>'sample class'<br>
+set bytes 0x010203<br>
+check bytes >>bytesymbol<br>
+check bytes &lt;&lt;bytesymbol</td><td>then output is</td><td><div><table><tr><td><span class="fit_SUT">sample class</span></td> </tr></table><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">bytes</span></td> <td>0x010203</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">bytes</span></td> <td>&gt;&gt;bytesymbol<span class="fit_grey"> System.Byte[]</span></td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">bytes</span></td> <td class="pass">&lt;&lt;bytesymbol<span class="fit_grey"> System.Byte[]</span></td> </tr></table></div></td></tr>
 </table>
 <br>
 Symbol values can also be assigned with the <a href="../Fit/NameKeyword.html">Name Keyword</a> and the <a href="../Fit/ConfigureFixture.html">Configure Fixture</a> and used with the <a href="../Fit/UseFixture.html">Use Fixture</a> and <a href="../Fit/WithKeyword.html">With Keyword</a>.<br>

@@ -15,104 +15,59 @@ to be bound by the terms of this license. You must not remove this notice, or an
 <div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
 <div class="pagename">With Keyword</div>
 <div class="content">The With keyword is one of the <a href="../Fit/FlowFixtureKeywords.html">Flow Fixture Keywords</a>. It sets the <a href="../Fit/SystemUnderTest.html">System Under Test</a> for the current fixture.<ul><li>with new <span style="font-style:italic">&lt;type&gt;</span> <span style="font-style:italic">&lt;parameters&gt;</span> - creates a new instance</li><li>with type <span style="font-style:italic">&lt;type&gt;</span> - finds a type</li><li>with <span style="font-style:italic">&lt;method&gt;</span> <span style="font-style:italic">&lt;parameters&gt;</span> - executes a method of the current fixture or <a href="../Fit/SystemUnderTest.html">System Under Test</a>. </li><li>with <span style="font-style:italic">&lt;symbol-name&gt;</span> - retrieves an object saved with the <a href="../Fit/NameKeyword.html">Name Keyword</a>. </li><li>with current - uses the current <a href="../Fit/SystemUnderTest.html">System Under Test</a>. This is for <a href="../Fit/UseFixture.html">Use Fixture</a>.</li></ul><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>story test fixture</td></tr>
-</table>
-<br>
 Set the <a href="../Fit/SystemUnderTest.html">System Under Test</a> to a new instance.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>check</td><td>test result</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>do</td></tr>
-<tr><td>with</td><td>new</td><td>sample domain adapter</td></tr>
-<tr><td>set</td><td>name</td><td>Bob</td></tr>
-<tr><td>check</td><td>lower case name</td><td>bob</td></tr>
-</table>
-</td><td><br><table border="1" cellpadding="2" cellspacing="0"><tr><td>do</td></tr><tr><td>with</td><td>new</td><td>sample domain adapter</td></tr><tr><td>set</td><td>name</td><td>Bob</td></tr><tr><td>check</td><td>lower case name</td><td class="pass">bob</td></tr></table></td></tr>
+<tr><td>when input is</td><td>with new 'sample domain adapter'<br>
+set name Bob<br>
+check 'lower case name' bob</td><td>then output is</td><td><div><table><tr><td><span class="fit_keyword">with</span></td> <td><span class="fit_keyword">new</span></td> <td><span class="fit_SUT">sample domain adapter</span></td> </tr></table><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">name</span></td> <td>Bob</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">lower case name</span></td> <td class="pass">bob</td> </tr></table></div></td></tr>
 </table>
 <br>
 Set the <a href="../Fit/SystemUnderTest.html">System Under Test</a> to a new instance with parameters.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>check</td><td>test result</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>do</td></tr>
-<tr><td>with</td><td>new</td><td>sample domain</td><td>Bob</td></tr>
-<tr><td>check</td><td>name</td><td>Bob</td></tr>
-</table>
-</td><td><br><table border="1" cellpadding="2" cellspacing="0"><tr><td>do</td></tr><tr><td>with</td><td>new</td><td>sample domain</td><td>Bob</td></tr><tr><td>check</td><td>name</td><td class="pass">Bob</td></tr></table></td></tr>
+<tr><td>when input is</td><td>with new 'sample domain' Bob<br>
+check name Bob</td><td>then output is</td><td><div><table><tr><td><span class="fit_keyword">with</span></td> <td><span class="fit_keyword">new</span></td> <td><span class="fit_SUT">sample domain</span></td> <td>Bob</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">name</span></td> <td class="pass">Bob</td> </tr></table></div></td></tr>
 </table>
 <br>
 Set the <a href="../Fit/SystemUnderTest.html">System Under Test</a> to the result of a method.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>check</td><td>test result</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>do</td></tr>
-<tr><td>with</td><td>new</td><td>sample domain adapter</td></tr>
-<tr><td>with</td><td>make sample domain</td><td>Joe</td></tr>
-<tr><td>check</td><td>name</td><td>Joe</td></tr>
-</table>
-</td><td><br><table border="1" cellpadding="2" cellspacing="0"><tr><td>do</td></tr><tr><td>with</td><td>new</td><td>sample domain adapter</td></tr><tr><td>with</td><td>make sample domain</td><td>Joe</td></tr><tr><td>check</td><td>name</td><td class="pass">Joe</td></tr></table></td></tr>
+<tr><td>when input is</td><td>'sample domain adapter'<br>
+with 'make sample domain' Joe<br>
+check name Joe</td><td>then output is</td><td><div><table><tr><td><span class="fit_SUT">sample domain adapter</span></td> </tr></table><table><tr><td><span class="fit_keyword">with</span></td> <td><span class="fit_member">make sample domain</span></td> <td>Joe</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">name</span></td> <td class="pass">Joe</td> </tr></table></div></td></tr>
 </table>
 <br>
 Set the <a href="../Fit/SystemUnderTest.html">System Under Test</a> to a type.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>check</td><td>test result</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>do</td></tr>
-<tr><td>with</td><td>type</td><td>sample domain</td></tr>
-<tr><td>check</td><td>static method</td><td>hello</td></tr>
-</table>
-</td><td><br><table border="1" cellpadding="2" cellspacing="0"><tr><td>do</td></tr><tr><td>with</td><td>type</td><td>sample domain</td></tr><tr><td>check</td><td>static method</td><td class="pass">hello</td></tr></table></td></tr>
+<tr><td>when input is</td><td>with type 'sample domain'<br>
+check 'static method' hello</td><td>then output is</td><td><div><table><tr><td><span class="fit_keyword">with</span></td> <td><span class="fit_keyword">type</span></td> <td><span class="fit_SUT">sample domain</span></td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">static method</span></td> <td class="pass">hello</td> </tr></table></div></td></tr>
 </table>
 <br>
 Set the <a href="../Fit/SystemUnderTest.html">System Under Test</a> to a named object.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>check</td><td>test result</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>do</td></tr>
-<tr><td>with</td><td>new</td><td>sample domain</td><td>Joe</td></tr>
-<tr><td>name</td><td>joesname</td><td>name</td></tr>
-<tr><td>with</td><td>joesname</td></tr>
-<tr><td>check</td><td>tolower</td><td>joe</td></tr>
-</table>
-</td><td><br><table border="1" cellpadding="2" cellspacing="0"><tr><td>do</td></tr><tr><td>with</td><td>new</td><td>sample domain</td><td>Joe</td></tr><tr><td>name</td><td class="pass">joesname</td><td>name</td></tr><tr><td>with</td><td>joesname</td></tr><tr><td>check</td><td>tolower</td><td class="pass">joe</td></tr></table></td></tr>
+<tr><td>when input is</td><td>with new 'sample domain' Joe<br>
+name joesname name<br>
+with joesname<br>
+check tolower joe</td><td>then output is</td><td><div><table><tr><td><span class="fit_keyword">with</span></td> <td><span class="fit_keyword">new</span></td> <td><span class="fit_SUT">sample domain</span></td> <td>Joe</td> </tr></table><table><tr><td><span class="fit_keyword">name</span></td> <td class="pass">joesname</td> <td><span class="fit_member">name</span></td> </tr></table><table><tr><td><span class="fit_keyword">with</span></td> <td>joesname</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">tolower</span></td> <td class="pass">joe</td> </tr></table></div></td></tr>
 </table>
 <br>
 The enclosing fixture must provide a method.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>check</td><td>test result</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>use</td><td>column</td><td>with</td><td>my method</td></tr>
-</table>
-</td><td><br><table border="1" cellpadding="2" cellspacing="0"><tr><td class="error">use<hr /><pre><div class="fit_stacktrace">Member 'mymethod' with 0 parameter(s) not found</div></pre></td><td>column</td><td>with</td><td>my method</td></tr></table></td></tr>
+<tr><td>when input is</td><td>use column with 'my method'</td><td>then output is</td><td><div><table><tr><td class="error"><span class="fit_interpreter">use</span><hr /><pre><div class="fit_stacktrace">Member 'mymethod' with 0 parameter(s) not found for type 'fitSharp.Fit.Engine.DefaultFlowInterpreter'.</div></pre></td> <td><span class="fit_interpreter">column</span></td> <td><span class="fit_keyword">with</span></td> <td><span class="fit_member">my method</span></td> </tr></table></div></td></tr>
 </table>
 <br>
 Errors are reported if information is missing.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>check</td><td>test result</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>do</td></tr>
-</table>
+<tr><td>when input is</td><td>with<br>
 <br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>with</td></tr>
-</table>
+with new<br>
 <br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>with</td><td>new</td></tr>
-</table>
-<br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>with</td><td>type</td></tr>
-</table>
-</td><td><br><table border="1" cellpadding="2" cellspacing="0"><tr><td>do</td></tr></table><br><table border="1" cellpadding="2" cellspacing="0"><tr><td class="error">with<hr /><pre><div class="fit_stacktrace">This table is invalid for this fixture: missing cells for with.</div></pre></td></tr></table><br><table border="1" cellpadding="2" cellspacing="0"><tr><td class="error">with<hr /><pre><div class="fit_stacktrace">This table is invalid for this fixture: missing cells for new.</div></pre></td><td>new</td></tr></table><br><table border="1" cellpadding="2" cellspacing="0"><tr><td class="error">with<hr /><pre><div class="fit_stacktrace">This table is invalid for this fixture: missing cells for with.</div></pre></td><td>type</td></tr></table></td></tr>
+with type</td><td>then output is</td><td><div><table><tr><td class="error"><span class="fit_keyword">with</span><hr /><pre><div class="fit_stacktrace">This table is invalid for this fixture: missing cells for with.</div></pre></td> </tr></table></div><br /><div><table><tr><td class="error"><span class="fit_keyword">with</span><hr /><pre><div class="fit_stacktrace">This table is invalid for this fixture: missing cells for new.</div></pre></td> <td><span class="fit_keyword">new</span></td> </tr></table></div><br /><div><table><tr><td class="error"><span class="fit_keyword">with</span><hr /><pre><div class="fit_stacktrace">This table is invalid for this fixture: missing cells for with.</div></pre></td> <td><span class="fit_keyword">type</span></td> </tr></table></div></td></tr>
 </table>
 </div>
 <div style="width:100%;text-align:right">

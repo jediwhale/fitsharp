@@ -3,10 +3,11 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
+using fit.Test.Double;
 using fitlibrary;
 
 namespace fit.Test.Acceptance {
     public class DirectCombination: CombinationFixture {
-        public DirectCombination(): base(new TimesCombination()) {}
+        public DirectCombination(): base(new SampleCombinationFixture()) {}
     }
 }

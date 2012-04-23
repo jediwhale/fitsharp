@@ -16,6 +16,8 @@ namespace fitSharp.Fit.Fixtures {
                 ? processor
                 : processor.Memory.GetItem(table.ValueAt(0, 1).Text);
 
+            table.ValueAt(0, 1).SetAttribute(CellAttribute.Syntax, CellAttributeValue.SyntaxSUT);
+
             if (table.Branches[0].Branches.Count > 2) {
                 var currentRow = table.Branches[0].Skip(2);
                 Execute(processor, facility, currentRow);

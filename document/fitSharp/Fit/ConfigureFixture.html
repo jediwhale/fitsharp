@@ -21,38 +21,14 @@ The logging facility can capture an execution trace of the core <span style="fon
 We can set, display and clear <a href="../Fit/SymbolValues.html">Symbol Values</a>.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>when test is</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>configure</td><td>symbols</td><td>save</td><td>mysymbol</td><td>value of System.String</td><td>myvalue</td></tr>
-</table>
+<tr><td>when input is</td><td>configure symbols save mysymbol 'value of System.String' myvalue<br>
 <br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>configure</td><td>symbols</td><td>get value</td><td>mysymbol</td></tr>
-</table>
+configure symbols 'get value' mysymbol<br>
 <br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>configure</td><td>symbols</td><td>clear</td></tr>
-</table>
+configure symbols clear<br>
 <br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>configure</td><td>symbols</td><td>has value</td><td>mysymbol</td></tr>
-</table>
-</td><td>then result is</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>configure</td><td>symbols</td><td>save</td><td>mysymbol</td><td>value of System.String</td><td>myvalue</td></tr>
-</table>
-<br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>configure</td><td>symbols</td><td>get value<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension">myvalue</div></div></td><td>mysymbol</td></tr>
-</table>
-<br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>configure</td><td>symbols</td><td>clear</td></tr>
-</table>
-<br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>configure</td><td>symbols</td><td>has value<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension">False</div></div></td><td>mysymbol</td></tr>
-</table></td></tr>
+configure symbols 'has value' mysymbol</td><td>then output is</td><td><div><table><tr><td><span class="fit_interpreter">configure</span></td> <td><span class="fit_SUT">symbols</span></td> <td><span class="fit_member">save</span></td> <td>mysymbol</td> <td><span class="fit_member">value of System.String</span></td> <td>myvalue</td> </tr></table></div><br /><div><table><tr><td><span class="fit_interpreter">configure</span></td> <td><span class="fit_SUT">symbols</span></td> <td><span class="fit_member">get value</span><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension">myvalue</div></div></td> <td>mysymbol</td> </tr></table></div><br /><div><table><tr><td><span class="fit_interpreter">configure</span></td> <td><span class="fit_SUT">symbols</span></td> <td><span class="fit_member">clear</span></td> </tr></table></div><br /><div><table><tr><td><span class="fit_interpreter">configure</span></td> <td><span class="fit_SUT">symbols</span></td> <td><span class="fit_member">has value</span><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension">False</div></div></td> <td>mysymbol</td> </tr></table></div></td></tr>
+</table></div></td></tr>
 </table>
 </div>
 <div style="width:100%;text-align:right">

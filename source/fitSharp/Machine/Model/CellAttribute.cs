@@ -25,10 +25,16 @@ namespace fitSharp.Machine.Model {
         Raw,
         StartTag,
         Status,
+        Syntax,
         Trailer
     }
 
     public class CellAttributeValue {
+        public const string SyntaxInterpreter = "interpreter";
+        public const string SyntaxKeyword = "keyword";
+        public const string SyntaxMember = "member";
+        public const string SyntaxSUT = "SUT";
+
         public static CellAttributeValue Make(CellAttribute attribute) {
             return factories.ContainsKey(attribute)
                 ? factories[attribute](attribute)
@@ -46,7 +52,8 @@ namespace fitSharp.Machine.Model {
                 {CellAttribute.InformationPrefix, key => new InformationPrefixValue()},
                 {CellAttribute.InformationSuffix, key => new InformationSuffixValue()},
                 {CellAttribute.Label, key => new LabelValue()},
-                {CellAttribute.Status, key => new StatusValue()}
+                {CellAttribute.Status, key => new StatusValue()},
+                {CellAttribute.Syntax, key => new SyntaxValue()}
         };
 
         public string Value { get; protected set; }
@@ -145,6 +152,13 @@ namespace fitSharp.Machine.Model {
 	            var space = input.ToString().IndexOf(' ');
 	            if (space < 0) space = input.Length - 1;
                 input.Insert(space, string.Format(" class=\"{0}\"", Value));
+            }
+        }
+
+        class SyntaxValue: CellAttributeValue {
+            public override void Format(Cell cell, StringBuilder input) {
+                input.Insert(0, String.Format("<span class=\"fit_{0}\">", Value));
+                input.Append("</span>");
             }
         }
     }

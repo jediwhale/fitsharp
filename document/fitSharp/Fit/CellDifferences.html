@@ -17,57 +17,24 @@ to be bound by the terms of this license. You must not remove this notice, or an
 <div class="content">When a value from the system under test does not match an expected value in a cell, the actual value is displayed and the cell is marked as an error.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>when test is</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>sample domain</td></tr>
-</table>
+<tr><td>when input is</td><td>'sample domain'<br>
 <br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>set</td><td>integer field</td><td>2</td></tr>
-<tr><td>check</td><td>integer field</td><td>3</td></tr>
-</table>
+set 'integer field' 2<br>
+check 'integer field' 3<br>
 <br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>set</td><td>strings</td><td>some,thing</td></tr>
-<tr><td>check</td><td>strings</td><td>or,other</td></tr>
-</table>
-</td><td>then result is</td><td><table border="1" cellpadding="2" cellspacing="0">
-<tr><td>sample domain</td></tr>
-
-</table>
-<br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>set</td><td>integer field</td><td>2</td></tr>
-<tr><td>check</td><td>integer field</td><td class="fail">3 <span class="fit_label">expected</span><hr />2 <span class="fit_label">actual</span></td></tr>
-</table>
-<br>
-<table border="1" cellpadding="2" cellspacing="0">
-
-<tr><td>set</td><td>strings</td><td>some,thing</td></tr>
-<tr><td>check</td><td>strings</td><td class="fail">or,other <span class="fit_label">expected</span><hr />some, thing <span class="fit_label">actual</span></td></tr>
-</table></td></tr>
+set strings some,thing <br>
+check strings or,other</td><td>then output is</td><td><div><table><tr><td><span class="fit_SUT">sample domain</span></td> </tr></table></div><br /><div><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">integer field</span></td> <td>2</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">integer field</span></td> <td class="fail">3 <span class="fit_label">expected</span><hr />2 <span class="fit_label">actual</span></td> </tr></table></div><br /><div><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">strings</span></td> <td>some,thing</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">strings</span></td> <td class="fail">or,other <span class="fit_label">expected</span><hr />some, thing <span class="fit_label">actual</span></td> </tr></table></div></td></tr>
+</table></div></td></tr>
 </table>
 <br>
 If the values being compared are strings, a message describing the difference is displayed.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>when test is</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>sample domain</td></tr>
-</table>
+<tr><td>when input is</td><td>'sample domain'<br>
 <br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>set</td><td>string field</td><td>Bob</td></tr>
-<tr><td>check</td><td>string field</td><td>Bub</td></tr>
-</table>
-</td><td>then result is</td><td><table border="1" cellpadding="2" cellspacing="0">
-<tr><td>sample domain</td></tr>
-</table>
-<br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>set</td><td>string field</td><td>Bob</td></tr>
-<tr><td>check</td><td>string field</td><td class="fail">Bub <span class="fit_label">expected</span><hr />Bob <span class="fit_label">actual</span><hr />At 1 expected u was o</td></tr>
-</table></td></tr>
+set 'string field' Bob<br>
+check 'string field' Bub</td><td>then output is</td><td><div><table><tr><td><span class="fit_SUT">sample domain</span></td> </tr></table></div><br /><div><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">string field</span></td> <td>Bob</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">string field</span></td> <td class="fail">Bub <span class="fit_label">expected</span><hr />Bob <span class="fit_label">actual</span><hr />At 1 expected u was o</td> </tr></table></div></td></tr>
+</table></div></td></tr>
 </table>
 </div>
 <div style="width:100%;text-align:right">

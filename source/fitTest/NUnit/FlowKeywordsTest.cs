@@ -31,7 +31,6 @@ namespace fit.Test.NUnit {
             var table = Parse.ParseFrom("<table><tr><td>show as</td><td>raw</td><td>stuff</td></tr></table>");
             keywords.ShowAs(table.Parts.Parts);
             Assert.IsTrue(table.Parts.Parts.Last.HasAttribute(CellAttribute.Raw));
-            Assert.AreEqual("<table><tr><td>show as</td><td>raw</td><td>stuff</td>\n<td>some stuff</td></tr></table>", table.ToString());
         }
 
         [Test] public void CheckFieldsForWrapsResultInList() {

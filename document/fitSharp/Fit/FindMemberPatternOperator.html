@@ -24,26 +24,11 @@ With this class: <pre class="code">public class SampleClass {
   public string Field;
 }</pre><br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>when test is</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>configure</td><td>processor</td><td>add operator</td><td>findmemberpattern</td></tr>
-</table>
+<tr><td>when input is</td><td>configure processor 'add operator' findmemberpattern<br>
 <br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>with</td><td>new</td><td>fitSharp.Test.Double.SampleClass</td></tr>
-<tr><td>do math with sally</td></tr>
-<tr><td>check</td><td>field</td><td>I did math with sally</td></tr>
-</table>
-</td><td>then result is</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>configure</td><td>processor</td><td>add operator</td><td>findmemberpattern</td></tr>
-</table>
-<br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>with</td><td>new</td><td>fitSharp.Test.Double.SampleClass</td></tr>
-<tr><td>do math with sally</td></tr>
-<tr><td>check</td><td>field</td><td class="pass">I did math with sally</td></tr>
-</table></td></tr>
+with new fitSharp.Test.Double.SampleClass<br>
+'do math with sally'<br>
+check field 'I did math with sally'</td><td>then output is</td><td><div><table><tr><td><span class="fit_interpreter">configure</span></td> <td><span class="fit_SUT">processor</span></td> <td><span class="fit_member">add operator</span></td> <td>findmemberpattern</td> </tr></table></div><br /><div><table><tr><td><span class="fit_keyword">with</span></td> <td><span class="fit_keyword">new</span></td> <td><span class="fit_SUT">fitSharp.Test.Double.SampleClass</span></td> </tr></table><table><tr><td><span class="fit_member">do math with sally</span></td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">field</span></td> <td class="pass">I did math with sally</td> </tr></table></div></td></tr>
 </table>
 <br>
 </div>

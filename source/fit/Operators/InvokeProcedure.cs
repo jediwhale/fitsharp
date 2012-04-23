@@ -1,4 +1,4 @@
-﻿// Copyright © 2011 Syterra Software Inc.
+﻿// Copyright © 2012 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -31,6 +31,7 @@ namespace fit.Operators {
                     parameters.Substitute,
                     s => s == procedure ? null : s.More,
                     s => s == procedure ? s.Parts.More : s.Parts));
+            body.ValueAt(0).ClearAttribute(CellAttribute.Leader);
 
             Processor.CallStack.Push();
             ExecuteProcedure(fixture, body);

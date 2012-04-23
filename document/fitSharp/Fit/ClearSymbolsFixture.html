@@ -19,28 +19,17 @@ to be bound by the terms of this license. You must not remove this notice, or an
 The ClearSymbols fixture erases all <a href="../Fit/SymbolValues.html">Symbol Values</a>.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>story test fixture</td></tr>
-</table>
+<tr><td>when input is</td><td>'sample domain'<br>
 <br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>check</td><td>test result</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>string</td></tr>
-<tr><td>field</td><td>field?</td></tr>
-<tr><td>hello</td><td>>>mysymbol</td></tr>
-<tr><td>&lt;&lt;mysymbol</td><td>hello</td></tr>
-</table>
+set name Bob<br>
+check name >>mysymbol<br>
+check name &lt;&lt;mysymbol<br>
 <br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>clear symbols</td></tr>
-</table>
+'clear symbols'<br>
 <br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>string</td></tr>
-<tr><td>field</td><td>field?</td></tr>
-<tr><td>&lt;&lt;mysymbol</td><td>null</td></tr>
-</table>
-</td><td><table border="1" cellpadding="2" cellspacing="0"><tr><td>string</td></tr><tr><td>field</td><td>field?</td></tr><tr><td>hello</td><td>>>mysymbol<span class="fit_grey"> hello</span></td></tr><tr><td>&lt;&lt;mysymbol<span class="fit_grey"> hello</span></td><td class="pass">hello</td></tr></table><br><table border="1" cellpadding="2" cellspacing="0"><tr><td>clear symbols</td></tr></table><br><table border="1" cellpadding="2" cellspacing="0"><tr><td>string</td></tr><tr><td>field</td><td>field?</td></tr><tr><td>&lt;&lt;mysymbol<span class="fit_grey"> null</span></td><td class="pass">null</td></tr></table></td></tr>
+set name null<br>
+check name &lt;&lt;mysymbol</td><td>then output is</td><td><div><table><tr><td><span class="fit_SUT">sample domain</span></td> </tr></table></div><br /><div><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">name</span></td> <td>Bob</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">name</span></td> <td>&gt;&gt;mysymbol<span class="fit_grey"> Bob</span></td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">name</span></td> <td class="pass">&lt;&lt;mysymbol<span class="fit_grey"> Bob</span></td> </tr></table></div><br /><div><table><tr><td><span class="fit_interpreter">clear symbols</span></td> </tr></table></div><br /><div><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">name</span></td> <td>null</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">name</span></td> <td class="pass">&lt;&lt;mysymbol<span class="fit_grey"> null</span></td> </tr></table></div></td></tr>
+</table></div></td></tr>
 </table>
 </div>
 <div style="width:100%;text-align:right">

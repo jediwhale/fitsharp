@@ -59,5 +59,12 @@ namespace fitSharp.Samples
         }
 
         public bool IsTalented { get; private set; }
+
+        public Name FullName { get { return new Name{First = FirstName, Last = LastName}; } }
+
+        public class Name {
+            public string First;
+            public string Last;
+        }
     }
 }

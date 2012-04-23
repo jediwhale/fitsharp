@@ -28,6 +28,9 @@ namespace fitSharp.Fit.Operators {
             if (name.Length > 0 && char.IsDigit(name, 0)) {
                 name = digitConversion[name[0]] + name.Substring(1);
             }
+
+            foreach (var cell in parameters.Leaves()) cell.SetAttribute(CellAttribute.Syntax, CellAttributeValue.SyntaxMember);
+
             return new TypedValue(MakeMemberName(name));
         }
 
