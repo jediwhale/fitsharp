@@ -75,7 +75,7 @@ namespace fitSharp.Machine.Model {
             public override void Format(Cell cell, StringBuilder input) {
                 if (cell.HasAttribute(CellAttribute.Formatted) || cell.HasAttribute(CellAttribute.Raw)) return;
                 var encodedInput = HttpUtility.HtmlEncode(input.ToString());
-                input.Clear();
+                input.Length = 0;
                 input.AppendFormat("<span class=\"fit_grey\">{0}</span>", encodedInput);
             }
         }
@@ -96,7 +96,7 @@ namespace fitSharp.Machine.Model {
             public override void Format(Cell cell, StringBuilder input) {
                 if (string.IsNullOrEmpty(Value)) {
                     var originalInput = input.ToString();
-                    input.Clear();
+                    input.Length = 0;
                     input.Append(Folded(originalInput));
                 }
                 else {
@@ -116,7 +116,7 @@ namespace fitSharp.Machine.Model {
         class FormattedValue: CellAttributeValue {
             public override void Format(Cell cell, StringBuilder input) {
                 var encodedInput = HttpUtility.HtmlEncode(input.ToString());
-                input.Clear();
+                input.Length = 0;
                 input.AppendFormat("<pre>{0}</pre>", encodedInput);
             }
         }
