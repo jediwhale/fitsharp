@@ -61,7 +61,6 @@
     <Compile Include="Acceptance\SampleTable.cs" />
     <Compile Include="Acceptance\ExecuteExampleFixture.cs" />
     <Compile Include="Acceptance\FolderRunnerStory.cs" />
-    <Compile Include="Acceptance\GridStory.cs" />
     <Compile Include="Acceptance\InfoFixture.cs" />
     <Compile Include="Acceptance\NestedLists.cs" />
     <Compile Include="Acceptance\PathParserFixture.cs" />
