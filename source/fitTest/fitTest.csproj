@@ -55,13 +55,11 @@
     <Compile Include="Acceptance\CellHandlerStory.cs" />
     <Compile Include="Acceptance\CellMatching.cs" />
     <Compile Include="Acceptance\CellParsing.cs" />
-    <Compile Include="Acceptance\Coloring.cs" />
     <Compile Include="Acceptance\ColorInspectorFixture.cs" />
     <Compile Include="Acceptance\StoryTestCopyWriter.cs" />
     <Compile Include="Acceptance\CountFixture.cs" />
     <Compile Include="Acceptance\SampleTable.cs" />
     <Compile Include="Acceptance\ExecuteExampleFixture.cs" />
-    <Compile Include="Acceptance\FixtureWithNoNullaryConstructor.cs" />
     <Compile Include="Acceptance\FolderRunnerStory.cs" />
     <Compile Include="Acceptance\GridStory.cs" />
     <Compile Include="Acceptance\InfoFixture.cs" />
