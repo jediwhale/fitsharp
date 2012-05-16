@@ -16,60 +16,111 @@ to be bound by the terms of this license. You must not remove this notice, or an
 <div class="pagename">Grid Fixture</div>
 <div class="content">Grid Fixture compares a two-dimensional array of objects to its table of expected values. The values are compared positionally; there is no header row with member names.<br>
 <br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>fit version</td><td>fitlibrary1</td></tr>
-</table>
+Matching cells are marked.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>story test fixture</td></tr>
-</table>
-<br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>check</td><td>test result</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>grid story</td></tr>
-</table>
-<br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>make grid</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>setup sample grid</td></tr>
 <tr><td>0</td><td>1</td><td>2</td></tr>
 <tr><td>a</td><td>b</td><td>c</td></tr>
-<tr><td>d</td><td>d</td><td>e</td></tr>
-<tr><td>f</td><td>f</td><td>f</td></tr>
+<tr><td>d</td><td>e</td><td>f</td></tr>
 </table>
-</td></tr>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>when test is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample grid</td></tr>
 <tr><td>a</td><td>b</td><td>c</td></tr>
-<tr><td>d</td><td>d</td><td>e</td></tr>
-<tr><td>f</td><td>f</td><td>f</td></tr>
+<tr><td>d</td><td>e</td><td>f</td></tr>
 </table>
-</td><td><table border="1" cellpadding="2" cellspacing="0"><tr><td>grid story</td></tr></table><br><table border="1" cellpadding="2" cellspacing="0"><tr><td>make grid</td><td><br><table border="1" cellpadding="2" cellspacing="0"><tr><td>0</td><td>1</td><td>2</td></tr><tr><td>a</td><td>b</td><td>c</td></tr><tr><td>d</td><td>d</td><td>e</td></tr><tr><td>f</td><td>f</td><td>f</td></tr></table></td></tr><tr><td class="pass">a</td><td class="pass">b</td><td class="pass">c</td></tr><tr><td class="pass">d</td><td class="pass">d</td><td class="pass">e</td></tr><tr><td class="pass">f</td><td class="pass">f</td><td class="pass">f</td></tr></table></td></tr>
+</td><td>then result is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">sample grid</span></td></tr>
+<tr><td class="pass">a</td><td class="pass">b</td><td class="pass">c</td></tr>
+<tr><td class="pass">d</td><td class="pass">e</td><td class="pass">f</td></tr>
+</table></td></tr>
+</table>
+<br>
+Mismatched cells are reported.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>when test is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample grid</td></tr>
+<tr><td>a</td><td>b</td><td>x</td></tr>
+<tr><td>d</td><td>d</td><td>f</td></tr>
+</table>
+</td><td>then result is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">sample grid</span></td></tr>
+<tr><td class="pass">a</td><td class="pass">b</td><td class="fail">x <span class="fit_label">expected</span><hr />c <span class="fit_label">actual</span><hr />At 0 expected x was c</td></tr>
+<tr><td class="pass">d</td><td class="fail">d <span class="fit_label">expected</span><hr />e <span class="fit_label">actual</span><hr />At 0 expected d was e</td><td class="pass">f</td></tr>
+</table></td></tr>
+</table>
+<br>
+Missing and surplus rows are reported.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>when test is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample grid</td></tr>
+<tr><td>x</td><td>y</td><td>z</td></tr>
+<tr><td>d</td><td>e</td><td>f</td></tr>
+</table>
+</td><td>then result is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">sample grid</span></td></tr>
+<tr class="fail"><td>x <span class="fit_label">missing</span></td><td>y</td><td>z</td></tr>
+<tr><td class="pass">d</td><td class="pass">e</td><td class="pass">f</td></tr>
+<tr class="fail">
+<td><span class="fit_grey">a</span> <span class="fit_label">surplus</span></td>
+<td><span class="fit_grey">b</span></td>
+<td><span class="fit_grey">c</span></td></tr></table></td></tr>
+</table>
+<br>
+An empty grid is matched.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>setup sample grid</td></tr>
+<tr><td>0</td><td>1</td><td>2</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>when test is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample grid</td></tr>
+</table>
+</td><td>then result is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr class="pass"><td><span class="fit_interpreter">sample grid</span></td></tr>
+</table></td></tr>
 </table>
 <br>
 Duplicate rows are handled.<br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>check</td><td>test result</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>grid story</td></tr>
-</table>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>make grid</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>setup sample grid</td></tr>
 <tr><td>0</td><td>1</td><td>2</td></tr>
 <tr><td>a</td><td>b</td><td>c</td></tr>
 <tr><td>d</td><td>d</td><td>e</td></tr>
 <tr><td>d</td><td>d</td><td>e</td></tr>
 </table>
-</td></tr>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>when test is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample grid</td></tr>
 <tr><td>a</td><td>b</td><td>c</td></tr>
 <tr><td>d</td><td>d</td><td>e</td></tr>
 <tr><td>d</td><td>d</td><td>e</td></tr>
 </table>
-</td><td><table border="1" cellpadding="2" cellspacing="0"><tr><td>grid story</td></tr></table><br><table border="1" cellpadding="2" cellspacing="0"><tr><td>make grid</td><td><br><table border="1" cellpadding="2" cellspacing="0"><tr><td>0</td><td>1</td><td>2</td></tr><tr><td>a</td><td>b</td><td>c</td></tr><tr><td>d</td><td>d</td><td>e</td></tr><tr><td>d</td><td>d</td><td>e</td></tr></table></td></tr><tr><td class="pass">a</td><td class="pass">b</td><td class="pass">c</td></tr><tr><td class="pass">d</td><td class="pass">d</td><td class="pass">e</td></tr><tr><td class="pass">d</td><td class="pass">d</td><td class="pass">e</td></tr></table></td></tr>
+</td><td>then result is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">sample grid</span></td></tr>
+<tr><td class="pass">a</td><td class="pass">b</td><td class="pass">c</td></tr>
+<tr><td class="pass">d</td><td class="pass">d</td><td class="pass">e</td></tr>
+<tr><td class="pass">d</td><td class="pass">d</td><td class="pass">e</td></tr>
+</table></td></tr>
 </table>
-<br>
-<br>
 </div>
 <div style="width:100%;text-align:right">
 <span class="footer">&copy; Copyright <a href="http://www.syterra.com">Syterra Software Inc.</a> All rights reserved.</span>

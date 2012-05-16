@@ -14,45 +14,26 @@ to be bound by the terms of this license. You must not remove this notice, or an
 <body>
 <div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
 <div class="pagename">Configure Fixture</div>
-<div class="content">The Configure Fixture lets us issue commands to control different facilities of the Fit framework. The format of a configure command is:<ul><li>configure <span style="font-style:italic">&lt;facility&gt;</span> <span style="font-style:italic">&lt;command&gt;</span></li></ul><span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">Logging</span><br>
+<div class="content">The Configure Fixture lets us issue commands to control different facilities of the Fit framework. The format of a configure command is:<ul><li>configure <span style="font-style:italic">&lt;facility&gt;</span> <span style="font-style:italic">&lt;command&gt;</span></li></ul>We can issue multiple commands with 'configure <span style="font-style:italic">&lt;facility&gt;</span>' in the first row and a command in each of the subsequent rows.<br>
 <br>
-The logging facility can capture an execution trace of the core <span style="font-family:verdana,sans-serif"><i>fit</i>Sharp</span> engine and display it. In its present form it is probably mostly useful to <span style="font-family:verdana,sans-serif"><i>fit</i>Sharp</span> framework developers only. We can issue these commands:<ul><li>configure logging start</li><li>configure logging stop</li><li>configure logging show </li></ul><span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">Symbols</span><br>
+These are the facilties that we can configure.<br>
+<br>
+<span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">ApplicationUnderTest</span><br>
+<br>
+The commands are:<ul><li>addAssembly <span style="font-style:italic">&lt;assemblyName&gt;</span></li><li>addNamespace <span style="font-style:italic">&lt;namespaceName&gt;</span></li><li>removeNamespace <span style="font-style:italic">&lt;namespaceName&gt;</span></li></ul><span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">Logging</span><br>
+<br>
+The logging facility can capture an execution trace of the core <span style="font-family:verdana,sans-serif"><i>fit</i>Sharp</span> engine and display it. In its present form it is probably mostly useful to <span style="font-family:verdana,sans-serif"><i>fit</i>Sharp</span> framework developers only. We can issue these commands:<ul><li>start</li><li>stop</li><li>show</li></ul><span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">Processor</span><br>
+<br>
+The commands are:<ul><li>addOperator <span style="font-style:italic">&lt;operatorClassName&gt;</span></li><li>removeOperator <span style="font-style:italic">&lt;operatorClassName&gt;</span></li></ul><span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">Symbols</span><br>
 <br>
 We can set, display and clear <a href="../Fit/SymbolValues.html">Symbol Values</a>.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>when test is</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>configure</td><td>symbols</td><td>save</td><td>mysymbol</td><td>value of System.String</td><td>myvalue</td></tr>
-</table>
-<br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>configure</td><td>symbols</td><td>get value</td><td>mysymbol</td></tr>
-</table>
-<br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>configure</td><td>symbols</td><td>clear</td></tr>
-</table>
-<br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>configure</td><td>symbols</td><td>has value</td><td>mysymbol</td></tr>
-</table>
-</td><td>then result is</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>configure</td><td>symbols</td><td>save</td><td>mysymbol</td><td>value of System.String</td><td>myvalue</td></tr>
-</table>
-<br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>configure</td><td>symbols</td><td>get value<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension">myvalue</div></div></td><td>mysymbol</td></tr>
-</table>
-<br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>configure</td><td>symbols</td><td>clear</td></tr>
-</table>
-<br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>configure</td><td>symbols</td><td>has value<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension">False</div></div></td><td>mysymbol</td></tr>
-</table></td></tr>
+<tr><td>when input is</td><td>configure symbols<br>
+save mysymbol 'value of System.String' myvalue<br>
+'get value' mysymbol<br>
+clear<br>
+'has value' mysymbol</td><td>then output is</td><td><div><table><tr><td><span class="fit_interpreter">configure</span></td> <td><span class="fit_SUT">symbols</span></td> </tr></table><table><tr><td><span class="fit_member">save</span></td> <td>mysymbol</td> <td><span class="fit_member">value of System.String</span></td> <td>myvalue</td> </tr></table><table><tr><td><span class="fit_member">get value</span><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension">myvalue</div></div></td> <td>mysymbol</td> </tr></table><table><tr><td><span class="fit_member">clear</span></td> </tr></table><table><tr><td><span class="fit_member">has value</span><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension">False</div></div></td> <td>mysymbol</td> </tr></table></div></td></tr>
 </table>
 </div>
 <div style="width:100%;text-align:right">

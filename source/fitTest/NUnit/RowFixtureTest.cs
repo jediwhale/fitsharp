@@ -1,4 +1,4 @@
-// Copyright © 2011 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+// Copyright © 2012 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -90,12 +90,11 @@ namespace fit.Test.NUnit {
             TestUtils.CheckCounts(resultCounts, right, wrong, ignores, exceptions);
         }
 
-        string RunTest(Fixture fixture, Parse parse) {
+        void RunTest(Fixture fixture, Parse parse) {
             fixture.Processor = processor;
             fixture.DoTable(parse.Parts);
             resultCounts = fixture.TestStatus.Counts;
             testResult = new ParseStoryTestString().Parse(typeof(StoryTableString), new TypedValue(), parse.Parts).ValueString;
-            return testResult;
         }
 
         [Test]
@@ -406,17 +405,14 @@ namespace fit.Test.NUnit {
                                                 "<tr><td>7</td><td>nullest</td><td>Jonesey</td></tr>" +
                                                 "<tr><td>2</td><td>Phil</td><td>blank</td></tr>" +
                                                 "</table>";
-            const string processedInspectorFixtureHtml = "<table>" +
-                                                         "<tr><td colspan=\"3\">people row fixture</td></tr>" +
-                                                         "<tr><td>id</td><td>first name</td><td>last name</td></tr>" +
-                                                         "<tr><td class=\"fail\">7 <span class=\"fit_label\">missing</span></td><td>nullest</td><td>Jonesey</td></tr>" +
-                                                         "<tr><td class=\"pass\">2</td><td class=\"pass\">Phil</td><td class=\"pass\">blank</td></tr>" +
-                                                         "\n<tr>\n<td class=\"fail\"><span class=\"fit_grey\">1</span> <span class=\"fit_label\">surplus</span></td>\n<td><span class=\"fit_grey\">null</span></td>\n<td><span class=\"fit_grey\">Jones</span></td></tr>" +
-                                                         "</table>";
-
-            var result = RunTest(new PeopleLoaderFixture(), new TestBuilder(loaderFixtureHtml).Parse)
-                         + RunTest(new PeopleRowFixture(), new TestBuilder(inspectorFixtureHtml).Parse);
-            Assert.AreEqual(loaderFixtureHtml + processedInspectorFixtureHtml, result);
+            var testTable = new TestBuilder(inspectorFixtureHtml).Parse;
+            RunTest(new PeopleLoaderFixture(), new TestBuilder(loaderFixtureHtml).Parse);
+            RunTest(new PeopleRowFixture(), testTable);
+            Assert.AreEqual(
+                "<tr><td class=\"fail\">7 <span class=\"fit_label\">missing</span></td><td>nullest</td><td>Jonesey</td></tr>" +
+                "<tr><td class=\"pass\">2</td><td class=\"pass\">Phil</td><td class=\"pass\">blank</td></tr>" +
+                "\n<tr>\n<td class=\"fail\"><span class=\"fit_grey\">1</span> <span class=\"fit_label\">surplus</span></td>\n<td><span class=\"fit_grey\">null</span></td>\n<td><span class=\"fit_grey\">Jones</span></td></tr>",
+                testTable.Parts.Parts.More.More.ToString());
         }
 
         [Test]
@@ -428,24 +424,16 @@ namespace fit.Test.NUnit {
                                           "<tr><td>field</td><td>save!</td></tr>" +
                                           "<tr><td>a,b,c</td><td></td></tr>" +
                                           "</table>";
-            const string processedSetUpTableHtml = "<table>" +
-                                                   "<tr><td colspan=\"3\">ArrayOfStringsFixture</td></tr>" +
-                                                   "<tr><td>field</td><td>save!</td></tr>" +
-                                                   "<tr><td>a,b,c</td><td><span class=\"fit_grey\"> void</span></td></tr>" +
-                                                   "</table>";
             const string tableHtml = "<table>" +
                                      "<tr><td colspan=\"3\">ArrayOfStringsRowFixture</td></tr>" +
                                      "<tr><td>field</td></tr>" +
                                      "<tr><td>a,b,c</td></tr>" +
                                      "</table>";
-            const string expected = "<table>" +
-                                    "<tr><td colspan=\"3\">ArrayOfStringsRowFixture</td></tr>" +
-                                    "<tr><td>field</td></tr>" +
-                                    "<tr><td class=\"pass\">a,b,c</td></tr>" +
-                                    "</table>";
-            var result = RunTest(new ArrayOfStringsFixture(), new TestBuilder(setUpTableHtml).Parse)
-                         + RunTest(new ArrayOfStringsRowFixture(), new TestBuilder(tableHtml).Parse);
-            Assert.AreEqual(processedSetUpTableHtml + expected, result);
+            var testTable = new TestBuilder(tableHtml).Parse;
+            RunTest(new ArrayOfStringsFixture(), new TestBuilder(setUpTableHtml).Parse);
+            RunTest(new ArrayOfStringsRowFixture(), testTable);
+            Assert.AreEqual(TestStatus.Right,
+                            testTable.Parts.Parts.More.More.Parts.Value.GetAttribute(CellAttribute.Status));
         }
 
         [Test]

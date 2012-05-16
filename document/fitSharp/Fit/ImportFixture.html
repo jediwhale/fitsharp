@@ -18,66 +18,24 @@ to be bound by the terms of this license. You must not remove this notice, or an
 <br>
 <a href="../Fit/ImportFixture.html">Import Fixture</a> adds to the list of namespaces that are searched for fixture classes.<br>
 <br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>story test fixture</td></tr>
-</table>
-<br>
 By default, the fully qualified name of the fixture class is required.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>check</td><td>test result</td><td><table border="1" cellpadding="2" cellspacing="0">
-<tr><td>ArithmeticColumnFixture</td></tr>
-<tr><td>x</td><td>y</td><td>plus?</td></tr>
-<tr><td>1</td><td>2</td><td>3</td></tr>
-</table></td><td><table border="1" cellpadding="2" cellspacing="0">
-<tr><td class="error">ArithmeticColumnFixture<hr/> <span class="fit_stacktrace">Type 'ArithmeticColumnFixture' not found in assemblies</span></td></tr>
-<tr><td>x</td><td>y</td><td>plus?</td></tr>
-<tr><td>1</td><td>2</td><td>3</td></tr>
-</table></td></tr>
+<tr><td>when input is</td><td>|ArithmeticColumnFixture<br>
+x y plus?<br>
+1 2 3</td><td>then output is</td><td><table class="fit_table"><tr><td class="error">ArithmeticColumnFixture<hr /><pre><div class="fit_stacktrace">Type 'ArithmeticColumnFixture' not found in assemblies</div></pre></td> </tr><tr><td>x</td> <td>y</td> <td>plus?</td> </tr><tr><td>1</td> <td>2</td> <td>3</td> </tr></table></td></tr>
 </table>
 <br>
 By importing the namespace, only the fixture class name is required.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>check</td><td>test result</td><td><table border="1" cellpadding="2" cellspacing="0">
-<tr><td>do</td></tr></table>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>import</td></tr>
-<tr><td> eg </td></tr>
-</table><table border="1" cellpadding="2" cellspacing="0">
-<tr><td>ArithmeticColumnFixture</td></tr>
-<tr><td>x</td><td>y</td><td>plus?</td></tr>
-<tr><td>1</td><td>2</td><td>3</td></tr>
-</table></td><td><table border="1" cellpadding="2" cellspacing="0">
-<tr><td>do</td></tr></table><table border="1" cellpadding="2" cellspacing="0">
-<tr><td>import</td></tr>
-<tr><td> eg </td></tr>
-</table><table border="1" cellpadding="2" cellspacing="0">
-<tr><td>ArithmeticColumnFixture</td></tr>
-<tr><td>x</td><td>y</td><td>plus?</td></tr>
-<tr><td>1</td><td>2</td><td class="pass">3</td></tr>
-</table></td></tr>
+<tr><td>when input is</td><td>import<br>
+eg<br>
+<br>
+|ArithmeticColumnFixture<br>
+x y plus?<br>
+1 2 3</td><td>then output is</td><td><div><table><tr><td><span class="fit_interpreter">import</span></td> </tr></table><table><tr><td>eg</td> </tr></table></div><br /><table class="fit_table"><tr><td><span class="fit_interpreter">ArithmeticColumnFixture</span></td> </tr><tr><td><span class="fit_member">x</span></td> <td><span class="fit_member">y</span></td> <td><span class="fit_member">plus?</span></td> </tr><tr><td>1</td> <td>2</td> <td class="pass">3</td> </tr></table></td></tr>
 </table>
-<br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>check</td><td>test result</td><td><table border="1" cellpadding="2" cellspacing="0">
-<tr><td>Import</td></tr>
-<tr><td> eg </td></tr>
-</table><table border="1" cellpadding="2" cellspacing="0">
-<tr><td>ArithmeticColumnFixture</td></tr>
-<tr><td>x</td><td>y</td><td>plus?</td></tr>
-<tr><td>1</td><td>2</td><td>3</td></tr>
-</table></td><td><table border="1" cellpadding="2" cellspacing="0">
-<tr><td>Import</td></tr>
-<tr><td> eg </td></tr>
-</table><table border="1" cellpadding="2" cellspacing="0">
-<tr><td>ArithmeticColumnFixture</td></tr>
-<tr><td>x</td><td>y</td><td>plus?</td></tr>
-<tr><td>1</td><td>2</td><td class="pass">3</td></tr>
-</table></td></tr>
-</table>
-<br>
-<br>
 </div>
 <div style="width:100%;text-align:right">
 <span class="footer">&copy; Copyright <a href="http://www.syterra.com">Syterra Software Inc.</a> All rights reserved.</span>

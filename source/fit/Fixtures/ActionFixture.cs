@@ -8,6 +8,7 @@ using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
+using fitSharp.Machine.Model;
 
 namespace fit
 {
@@ -39,6 +40,7 @@ namespace fit
 		public virtual void Start()
 		{
 		    actor = Processor.Create(cells.More).Value;
+		    cells.More.Value.SetAttribute(CellAttribute.Syntax, CellAttributeValue.SyntaxSUT);
 		    var fixture = actor as Fixture;
             if (fixture != null) fixture.Processor = Processor;
 		}

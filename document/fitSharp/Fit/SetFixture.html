@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- fitSharp
+Copyright © Syterra Software Inc. All rights reserved.
+The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
+to be bound by the terms of this license. You must not remove this notice, or any other, from this software. -->
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+ <link href="../fitsharp1.css" type="text/css" rel="stylesheet">
+  <link href="fit.css" type="text/css" rel="stylesheet">
+  <title>Set Fixture</title>
+</head>
+<body>
+<div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
+<div class="pagename">Set Fixture</div>
+<div class="content">Set Fixture compares an actual collection of objects to its table of expected values. It is the same as <a href="../Fit/ArrayFixture.html">Array Fixture</a>, except order is not significant. <br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>setup sample array</td></tr>
+<tr><td>column a</td><td>column b</td></tr>
+<tr><td>a</td><td>x</td></tr>
+<tr><td>a</td><td>y</td></tr>
+<tr><td>b</td><td>y</td></tr>
+</table>
+<br>
+Matching cells are marked.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>when test is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample set</td></tr>
+<tr><td>column a</td><td>column b</td></tr>
+<tr><td>a</td><td>x</td></tr>
+<tr><td>a</td><td>y</td></tr>
+<tr><td>b</td><td>y</td></tr>
+</table>
+</td><td>then result is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">sample set</span></td></tr>
+<tr><td><span class="fit_member">column a</span></td><td><span class="fit_member">column b</span></td></tr>
+<tr><td class="pass">a</td><td class="pass">x</td></tr>
+<tr><td class="pass">a</td><td class="pass">y</td></tr>
+<tr><td class="pass">b</td><td class="pass">y</td></tr>
+</table></td></tr>
+</table>
+<br>
+Order is ignored.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>when test is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample set</td></tr>
+<tr><td>column a</td><td>column b</td></tr>
+<tr><td>a</td><td>y</td></tr>
+<tr><td>b</td><td>y</td></tr>
+<tr><td>a</td><td>x</td></tr>
+</table>
+</td><td>then result is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">sample set</span></td></tr>
+<tr><td><span class="fit_member">column a</span></td><td><span class="fit_member">column b</span></td></tr>
+<tr><td class="pass">a</td><td class="pass">y</td></tr>
+<tr><td class="pass">b</td><td class="pass">y</td></tr>
+<tr><td class="pass">a</td><td class="pass">x</td></tr>
+</table></td></tr>
+</table>
+<br>
+Mismatched cells and rows are reported.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>when test is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample set</td></tr>
+<tr><td>column a</td><td>column b</td></tr>
+<tr><td>a</td><td>x</td></tr>
+<tr><td>n</td><td>o</td></tr>
+<tr><td>b</td><td>z</td></tr>
+</table>
+</td><td>then result is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">sample set</span></td></tr>
+<tr><td><span class="fit_member">column a</span></td><td><span class="fit_member">column b</span></td></tr>
+<tr><td class="pass">a</td><td class="pass">x</td></tr>
+<tr class="fail"><td>n <span class="fit_label">missing</span></td><td>o</td></tr>
+<tr><td class="pass">b</td><td class="fail">z <span class="fit_label">expected</span><hr />y <span class="fit_label">actual</span><hr />At 0 expected z was y</td></tr>
+<tr class="fail">
+<td><span class="fit_grey">a</span> <span class="fit_label">surplus</span></td>
+<td><span class="fit_grey">y</span></td></tr></table></td></tr>
+</table>
+</div>
+<div style="width:100%;text-align:right">
+<span class="footer">&copy; Copyright <a href="http://www.syterra.com">Syterra Software Inc.</a> All rights reserved.</span>
+</div>
+
+</body>
+</html>
+<br>

@@ -1,4 +1,4 @@
-﻿// Copyright © 2011 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+﻿// Copyright © 2012 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -23,9 +23,8 @@ namespace fit.Test.NUnit {
             var service = new Service.Service();
             service.AddNamespace("fitlibrary");
             service.ApplicationUnderTest.AddAssembly("fit.dll");
-            const string tables = "<table><tr><td>do</td></tr></table><table><tr><td>do</td></tr></table>";
-            RunTest(service, tables);
-            Assert.AreEqual(tables, resultTables);
+            RunTest(service, "<table><tr><td>do</td></tr></table><table><tr><td>do</td></tr></table>");
+            Assert.AreEqual("<table><tr><td><span class=\"fit_interpreter\">do</span></td></tr></table><table><tr><td><span class=\"fit_interpreter\">do</span></td></tr></table>", resultTables);
         }
 
         [Test] public void RegularTestUseCopyOfMemory() {

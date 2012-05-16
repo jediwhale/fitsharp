@@ -18,7 +18,7 @@ to be bound by the terms of this license. You must not remove this notice, or an
 |xxx|xxx|
 
 |fixtureB|
-|xxx|xxx|</pre> Do Fixture and Sequence Fixture (and any fixture derived from Flow Fixture Base) can also operate in <a href="../Fit/FlowMode.html">Flow Mode</a>, processing all the tables on the story test page without repeating the fixture name in each table. These fixtures are known as flow fixtures. When a flow fixture appears in the first cell of the first table, it operates in <a href="../Fit/FlowMode.html">Flow Mode</a>. <pre class="test">|flowFixtureA|
+|xxx|xxx|</pre> <a href="../Fit/DoFixture.html">Do Fixture</a> and Sequence Fixture (and any fixture derived from Flow Fixture Base) can also operate in <a href="../Fit/FlowMode.html">Flow Mode</a>, processing all the tables on the story test page without repeating the fixture name in each table. These fixtures are known as flow fixtures. When a flow fixture appears in the first cell of the first table, it operates in <a href="../Fit/FlowMode.html">Flow Mode</a>. <pre class="test">|flowFixtureA|
 |xxx|xxx|
 
 |xxx|xxx|</pre> If a flow fixture appears after the first table, it operates in standard mode. <pre class="test">|fixtureA|
@@ -44,7 +44,7 @@ to be bound by the terms of this license. You must not remove this notice, or an
 |myGreedyFixture|
 |xxx|xxx|
 
-|xxx|xxx|</pre> In the tables above, the fixture class name appears in the first cell. If this cell contains a class name that doesn't inherit from Fixture, then a Do Fixture is created with the class as its <a href="../Fit/SystemUnderTest.html">System Under Test</a>. <pre class="test">|myDomainClass|
+|xxx|xxx|</pre> In the tables above, the fixture class name appears in the first cell. If this cell contains a class name that doesn't inherit from Fixture, then a <a href="../Fit/DoFixture.html">Do Fixture</a> is created with the class as its <a href="../Fit/SystemUnderTest.html">System Under Test</a>. <pre class="test">|myDomainClass|
 |xxx|xxx|</pre> is a shorthand for <pre class="test">|do|
 |start|myDomainClass|
 |xxx|xxx|</pre> If the first cell isn't a class name at all, a Do Fixture is still created. In this case, the first cell will have to be one of the <a href="../Fit/FlowFixtureKeywords.html">Flow Fixture Keywords</a> or a procedure from a <a href="../Fit/DefineFixture.html">Define Fixture</a> in a Suite Set Up page. <pre class="test">|with|new|myDomainClass|xxx|xxx|

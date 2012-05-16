@@ -17,77 +17,37 @@ to be bound by the terms of this license. You must not remove this notice, or an
 <div class="content">We can execute methods on our <a href="../Fit/SystemUnderTest.html">System Under Test</a> using a row in <a href="../Fit/FlowMode.html">Flow Mode</a>.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>when test is</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>sample class</td></tr>
-<tr><td>check</td><td>count</td><td>0</td></tr>
-<tr><td>count method</td></tr>
-<tr><td>check</td><td>count</td><td>1</td></tr>
-</table>
-</td><td>then result is</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>sample class</td></tr>
-<tr><td>check</td><td>count</td><td class="pass">0</td></tr>
-<tr><td>count method</td></tr>
-<tr><td>check</td><td>count</td><td class="pass">1</td></tr>
-</table></td></tr>
+<tr><td>when input is</td><td>'sample class'<br>
+check count 0<br>
+'count method'<br>
+check count 1</td><td>then output is</td><td><div><table><tr><td><span class="fit_SUT">sample class</span></td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">count</span></td> <td class="pass">0</td> </tr></table><table><tr><td><span class="fit_member">count method</span></td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">count</span></td> <td class="pass">1</td> </tr></table></div></td></tr>
 </table>
 <br>
 We can check return values and pass parameters.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>when test is</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>sample class</td></tr>
-<tr><td>check</td><td>method no parms</td><td>samplereturn</td></tr>
-<tr><td>check</td><td>method with parms</td><td>my value</td><td>samplemy value</td></tr>
-</table>
-</td><td>then result is</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>sample class</td></tr>
-<tr><td>check</td><td>method no parms</td><td class="pass">samplereturn</td></tr>
-<tr><td>check</td><td>method with parms</td><td>my value</td><td class="pass">samplemy value</td></tr>
-</table></td></tr>
+<tr><td>when input is</td><td>'sample class'<br>
+check 'method no parms' samplereturn<br>
+check 'method with parms' 'my value' 'samplemy value'</td><td>then output is</td><td><div><table><tr><td><span class="fit_SUT">sample class</span></td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">method no parms</span></td> <td class="pass">samplereturn</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">method with parms</span></td> <td>my value</td> <td class="pass">samplemy value</td> </tr></table></div></td></tr>
 </table>
 <br>
 We can execute generic methods.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>when test is</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>sample class</td></tr>
-<tr><td>check</td><td>generic method of System.Int32</td><td>123</td><td>sample123</td></tr>
-</table>
-</td><td>then result is</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>sample class</td></tr>
-<tr><td>check</td><td>generic method of System.Int32</td><td>123</td><td class="pass">sample123</td></tr>
-</table></td></tr>
+<tr><td>when input is</td><td>'sample class'<br>
+check 'generic method of System.Int32' 123 sample123</td><td>then output is</td><td><div><table><tr><td><span class="fit_SUT">sample class</span></td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">generic method of System.Int32</span></td> <td>123</td> <td class="pass">sample123</td> </tr></table></div></td></tr>
 </table>
 <br>
 We can access properties, fields and indexers.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>when test is</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>sample class</td></tr>
-<tr><td>set</td><td>property</td><td>something</td></tr>
-<tr><td>check</td><td>property</td><td>something</td></tr>
-<tr><td>set</td><td>field</td><td>else</td></tr>
-<tr><td>check</td><td>field</td><td>else</td></tr>
-<tr><td>check</td><td>anything</td><td>indexanything</td></tr>
+<tr><td>when input is</td><td>'sample class'<br>
+set property something<br>
+check property something<br>
+set field else<br>
+check field else<br>
+check anything indexanything</td><td>then output is</td><td><div><table><tr><td><span class="fit_SUT">sample class</span></td> </tr></table><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">property</span></td> <td>something</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">property</span></td> <td class="pass">something</td> </tr></table><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">field</span></td> <td>else</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">field</span></td> <td class="pass">else</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">anything</span></td> <td class="pass">indexanything</td> </tr></table></div></td></tr>
 </table>
-</td><td>then result is</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>sample class</td></tr>
-<tr><td>set</td><td>property</td><td>something</td></tr>
-<tr><td>check</td><td>property</td><td class="pass">something</td></tr>
-<tr><td>set</td><td>field</td><td>else</td></tr>
-<tr><td>check</td><td>field</td><td class="pass">else</td></tr>
-<tr><td>check</td><td>anything</td><td class="pass">indexanything</td></tr>
-</table></td></tr>
-</table>
-<br>
 </div>
 <div style="width:100%;text-align:right">
 <span class="footer">&copy; Copyright <a href="http://www.syterra.com">Syterra Software Inc.</a> All rights reserved.</span>

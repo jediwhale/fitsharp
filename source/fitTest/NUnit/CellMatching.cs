@@ -1,4 +1,4 @@
-// Copyright © 2011 Syterra Software Inc.
+// Copyright © 2012 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -7,6 +7,7 @@ using System.Collections;
 using fitlibrary.tree;
 using fitSharp.Fit.Engine;
 using fitSharp.Machine.Model;
+using TestStatus=fitSharp.Fit.Model.TestStatus;
 using NUnit.Framework;
 
 namespace fit.Test.NUnit {
@@ -76,7 +77,9 @@ namespace fit.Test.NUnit {
             Parse table = Parse.ParseFrom("<table><tr><td><table><tr><td>first</td><td>last</td></tr><tr><td>joe</td><td>smith</td></tr></table></td></tr></table>");
             var fixture = new Fixture {Processor = new Service.Service()};
             fixture.Processor.Check(new TypedValue(actual), table.Parts.Parts);
-            Assert.AreEqual("<td><table><tr><td>first</td><td>last</td></tr><tr><td class=\"pass\">joe</td><td class=\"pass\">smith</td></tr></table></td>", table.Parts.Parts.ToString());
+            var passRow = table.Parts.Parts.Parts.Parts.More;
+            Assert.AreEqual(TestStatus.Right, passRow.Parts.Value.GetAttribute(CellAttribute.Status));
+            Assert.AreEqual(TestStatus.Right, passRow.Parts.More.Value.GetAttribute(CellAttribute.Status));
         }
 
         [Test] public void MarksExtraTableHeaderAsError() {
@@ -84,7 +87,8 @@ namespace fit.Test.NUnit {
             Parse table = Parse.ParseFrom("<table><tr><td><table><tr><td>first</td><td>last</td><td>address</td></tr><tr><td>joe</td><td>smith</td><td></td></tr></table></td></tr></table>");
             var fixture = new Fixture {Processor = new Service.Service()};
             fixture.Processor.Check(new TypedValue(actual), table.Parts.Parts);
-            Assert.AreEqual("<td><table><tr><td>first</td><td>last</td><td class=\"error\">address<hr /><pre><div class=\"fit_stacktrace\">fitSharp.Fit.Exception.FitFailureException: Column 'address' not used.</div></pre></td></tr><tr><td class=\"pass\">joe</td><td class=\"pass\">smith</td><td></td></tr></table></td>", table.Parts.Parts.ToString());
+            var errorCell = table.Parts.Parts.Parts.Parts.Parts.More.More.Value;
+            Assert.IsTrue(errorCell.HasAttribute(CellAttribute.Exception));
         }
 
         private class Name {

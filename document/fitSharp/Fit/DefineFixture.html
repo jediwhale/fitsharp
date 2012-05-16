@@ -17,135 +17,47 @@ to be bound by the terms of this license. You must not remove this notice, or an
 <div class="content">The Define fixture creates reusable test procedures that can be run by other fixtures. See <a href="../Fit/FixturesUsingProcedures.html">Fixtures Using Procedures</a>.<br>
 <br>
 We declare the procedure name in the first row of the Define table and write the procedure body as the rest of the table: <pre class="code">|define|changename|
-|set|name|Bob|</pre> We can also declare parameters in the first row. This uses the Do Fixture style, where alternating cells make up the procedure name and the parameter names: <pre class="code">|define|check field|fieldname|is|expected|
+|set|name|Bob|</pre> We can also declare parameters in the first row. This uses the <a href="../Fit/DoFixture.html">Do Fixture</a> style, where alternating cells make up the procedure name and the parameter names: <pre class="code">|define|check field|fieldname|is|expected|
 |check|fieldname|expected|</pre> To invoke the procedure, we use the procedure name in any place where we'd use a fixture or domain method name. The test results include an expandable section showing the details of the procedure execution. This is what it looks like:<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>when test is</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>define</td><td>changename</td></tr>
-<tr><td>set</td><td>name</td><td>Bob</td></tr>
-</table>
+<tr><td>when input is</td><td>define changename<br>
+set name Bob<br>
 <br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>define</td><td>check field</td><td>fieldname</td><td>is</td><td>expected</td></tr>
-<tr><td>check</td><td>fieldname</td><td>expected</td></tr>
-</table>
+define 'check field' fieldname is expected<br>
+check fieldname expected<br>
 <br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>sample domain</td></tr>
-<tr><td>changename</td></tr>
-<tr><td>check field</td><td>name</td><td>is</td><td>Bob</td></tr>
-</table>
-</td><td>then result is</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>define</td><td>changename</td></tr>
-<tr><td>set</td><td>name</td><td>Bob</td></tr>
-</table>
-<br>
-<table border="1" cellpadding="2" cellspacing="0">
-
-<tr><td>define</td><td>check field</td><td>fieldname</td><td>is</td><td>expected</td></tr>
-<tr><td>check</td><td>fieldname</td><td>expected</td></tr>
-</table>
-<br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>sample domain</td></tr>
-<tr><td>changename<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension"><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>set</td><td>name</td><td>Bob</td></tr>
-</table></div></div></td></tr>
-<tr><td class="pass">check field<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension">
-<br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>check</td><td>name</td><td class="pass">Bob</td></tr>
-</table></div></div></td><td>name</td><td>is</td><td>Bob</td></tr>
-</table>
-</td></tr>
+'sample domain'<br>
+changename<br>
+'check field' name is Bob</td><td>then output is</td><td><div><table><tr><td><span class="fit_interpreter">define</span></td> <td><span class="fit_member">changename</span></td> </tr></table><table><tr><td>set</td> <td>name</td> <td>Bob</td> </tr></table></div><br /><div><table><tr><td><span class="fit_interpreter">define</span></td> <td><span class="fit_member">check field</span></td> <td>fieldname</td> <td><span class="fit_member">is</span></td> <td>expected</td> </tr></table><table><tr><td>check</td> <td>fieldname</td> <td>expected</td> </tr></table></div><br /><div><table><tr><td><span class="fit_SUT">sample domain</span></td> </tr></table><table><tr><td><span class="fit_member">changename</span><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension"><div><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">name</span></td> <td>Bob</td> </tr></table></div></div></div></td> </tr></table><table><tr><td class="pass"><span class="fit_member">check field</span><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension"><div><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">name</span></td> <td class="pass">Bob</td> </tr></table></div></div></div></td> <td>name</td> <td><span class="fit_member">is</span></td> <td>Bob</td> </tr></table></div></td></tr>
+</table></div></td></tr>
 </table>
 <br>
 We can define a multi-table procedure body by placing nested tables in the first cell of the second row of the Define table.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>when test is</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>define</td><td>testname</td><td>newname</td></tr>
-<tr><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>set</td><td>name</td><td>newname</td></tr>
-</table>
+<tr><td>when input is</td><td>|define testname newname<br>
+[<br>
 <br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>check</td><td>name</td><td>newname</td></tr>
-</table>
-</td></tr>
-</table>
+|set name newname<br>
 <br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>sample domain</td></tr>
-<tr><td>testname</td><td>Bob</td></tr>
-</table>
-</td><td>then result is</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>define</td><td>testname</td><td>newname</td></tr>
-<tr><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>set</td><td>name</td><td>newname</td></tr>
-</table>
+|check name newname<br>
+]<br>
 <br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>check</td><td>name</td><td>newname</td></tr>
-
-</table>
-</td></tr>
-</table>
-<br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>sample domain</td></tr>
-<tr><td class="pass">testname<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension"><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>set</td><td>name</td><td>Bob</td></tr>
-</table>
-<br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>check</td><td>name</td><td class="pass">Bob</td></tr>
-</table></div></div></td><td>Bob</td></tr>
-</table>
-</td></tr>
+'sample domain'<br>
+testname Bob</td><td>then output is</td><td><table class="fit_table"><tr><td><span class="fit_interpreter">define</span></td> <td><span class="fit_member">testname</span></td> <td>newname</td> </tr><tr><td><br /><table class="fit_table"><tr><td>set</td> <td>name</td> <td>newname</td> </tr></table><br /><table class="fit_table"><tr><td>check</td> <td>name</td> <td>newname</td> </tr></table></td> </tr></table><br /><div><table><tr><td><span class="fit_SUT">sample domain</span></td> </tr></table><table><tr><td class="pass"><span class="fit_member">testname</span><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension"><table class="fit_table"><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">name</span></td> <td>Bob</td> </tr></table><br /><table class="fit_table"><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">name</span></td> <td class="pass">Bob</td> </tr></table></div></div></td> <td>Bob</td> </tr></table></div></td></tr>
 </table>
 <br>
 To return a value from a procedure, we use the return keyword.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>when test is</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>define</td><td>changename</td><td>newname</td></tr>
-<tr><td>set</td><td>name</td><td>newname</td></tr>
-<tr><td>return</td><td>name</td></tr>
-</table>
+<tr><td>when input is</td><td>define changename newname<br>
+set name newname<br>
+return name<br>
 <br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>sampledomain</td></tr>
-<tr><td>show</td><td>changename</td><td>Bob</td></tr>
-</table>
-</td><td>then result is</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-
-<tr><td>define</td><td>changename</td><td>newname</td></tr>
-<tr><td>set</td><td>name</td><td>newname</td></tr>
-<tr><td>return</td><td>name</td></tr>
-</table>
-<br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>sampledomain</td></tr>
-<tr><td>show</td><td>changename<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension"><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>set</td><td>name</td><td>Bob</td></tr>
-<tr><td>return</td><td>name</td></tr>
-</table></div></div></td><td>Bob</td>
-<td><span class="fit_grey">Bob</span></td></tr>
-</table></td></tr>
-</table></td></tr>
+'sample domain'<br>
+show changename Bob</td><td>then output is</td><td><div><table><tr><td><span class="fit_interpreter">define</span></td> <td><span class="fit_member">changename</span></td> <td>newname</td> </tr></table><table><tr><td>set</td> <td>name</td> <td>newname</td> </tr></table><table><tr><td>return</td> <td>name</td> </tr></table></div><br /><div><table><tr><td><span class="fit_SUT">sample domain</span></td> </tr></table><table><tr><td><span class="fit_keyword">show</span></td> <td><span class="fit_member">changename</span><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension"><div><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">name</span></td> <td>Bob</td> </tr></table><table><tr><td><span class="fit_keyword">return</span></td> <td><span class="fit_member">name</span></td> </tr></table></div></div></div></td> <td>Bob</td>
+<td><span class="fit_grey">Bob</span></td></tr></table></div></td></tr>
 </table>
 </div>
 <div style="width:100%;text-align:right">

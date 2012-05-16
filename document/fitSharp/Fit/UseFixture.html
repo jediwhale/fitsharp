@@ -16,78 +16,43 @@ to be bound by the terms of this license. You must not remove this notice, or an
 <div class="pagename">Use Fixture</div>
 <div class="content">The <a href="../Fit/UseFixture.html">Use Fixture</a> selects a fixture and <a href="../Fit/SystemUnderTest.html">System Under Test</a> to process the remainder of the current table. The fixture can be one saved with the <a href="../Fit/NameKeyword.html">Name Keyword</a> or a new fixture. The <a href="../Fit/SystemUnderTest.html">System Under Test</a> can be set using the <a href="../Fit/WithKeyword.html">With Keyword</a>.<br>
 <ul><li>use <span style="font-style:italic">&lt;symbol-name&gt;</span></li><li>use <span style="font-style:italic">&lt;fixture-name&gt;</span></li><li>use <span style="font-style:italic">&lt;name&gt;</span> <a href="../Fit/WithKeyword.html">with</a> <span style="font-style:italic">&lt;with-phrase&gt;</span></li></ul><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>story test fixture</td></tr>
-</table>
-<br>
 The fixture to use can be one saved with the <a href="../Fit/NameKeyword.html">Name Keyword</a>.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>check</td><td>test result</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>sample do</td></tr>
-<tr><td>name</td><td>my sample</td><td>make sample do</td><td>hello</td></tr>
-</table>
+<tr><td>when input is</td><td>'sample do'<br>
+name 'my sample' 'make sample do' hello<br>
 <br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>use</td><td>my sample</td></tr>
-<tr><td>check</td><td>text</td><td>hello</td></tr>
-</table>
-</td><td><br><table border="1" cellpadding="2" cellspacing="0"><tr><td>sample do</td></tr><tr><td>name</td><td class="pass">my sample</td><td>make sample do</td><td>hello</td></tr></table><br><table border="1" cellpadding="2" cellspacing="0"><tr><td>use</td><td>my sample</td></tr><tr><td>check</td><td>text</td><td class="pass">hello</td></tr></table></td></tr>
+use 'my sample'<br>
+check text hello</td><td>then output is</td><td><div><table><tr><td><span class="fit_interpreter">sample do</span></td> </tr></table><table><tr><td><span class="fit_keyword">name</span></td> <td class="pass">my sample</td> <td><span class="fit_member">make sample do</span></td> <td>hello</td> </tr></table></div><br /><div><table><tr><td><span class="fit_interpreter">use</span></td> <td>my sample</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">text</span></td> <td class="pass">hello</td> </tr></table></div></td></tr>
 </table>
 <br>
 The fixture to use can be a new fixture.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>check</td><td>test result</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>use</td><td>sample do</td></tr>
-<tr><td>check</td><td>one</td><td>1</td></tr>
-</table>
-</td><td><br><table border="1" cellpadding="2" cellspacing="0"><tr><td>use</td><td>sample do</td></tr><tr><td>check</td><td>one</td><td class="pass">1</td></tr></table></td></tr>
+<tr><td>when input is</td><td>use 'sample do'<br>
+check one 1</td><td>then output is</td><td><div><table><tr><td><span class="fit_interpreter">use</span></td> <td><span class="fit_interpreter">sample do</span></td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">one</span></td> <td class="pass">1</td> </tr></table></div></td></tr>
 </table>
 <br>
 The <a href="../Fit/SystemUnderTest.html">System Under Test</a> can be set using the <a href="../Fit/WithKeyword.html">With Keyword</a>.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>check</td><td>test result</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>sample domain</td></tr>
-<tr><td>set</td><td>name</td><td>Bob</td></tr>
-</table>
+<tr><td>when input is</td><td>'sample domain'<br>
+set name Bob<br>
 <br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>use</td><td>do</td><td>with</td><td>current</td></tr>
-<tr><td>check</td><td>name</td><td>Bob</td></tr>
-</table>
-</td><td><br><table border="1" cellpadding="2" cellspacing="0"><tr><td>sample domain</td></tr><tr><td>set</td><td>name</td><td>Bob</td></tr></table><br><table border="1" cellpadding="2" cellspacing="0"><tr><td>use</td><td>do</td><td>with</td><td>current</td></tr><tr><td>check</td><td>name</td><td class="pass">Bob</td></tr></table></td></tr>
+use do with current<br>
+check name Bob</td><td>then output is</td><td><div><table><tr><td><span class="fit_SUT">sample domain</span></td> </tr></table><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">name</span></td> <td>Bob</td> </tr></table></div><br /><div><table><tr><td><span class="fit_interpreter">use</span></td> <td><span class="fit_interpreter">do</span></td> <td><span class="fit_keyword">with</span></td> <td><span class="fit_keyword">current</span></td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">name</span></td> <td class="pass">Bob</td> </tr></table></div></td></tr>
 </table>
 <br>
 An error is reported if the fixture is not found or the fixture name is missing.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>check</td><td>test result</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>do</td></tr>
-</table>
+<tr><td>when input is</td><td>use garbage<br>
 <br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>use</td><td>garbage</td></tr>
-</table>
+use<br>
 <br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>use</td></tr>
-</table>
-<br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>with</td><td>new</td><td>sample domain</td><td>Joe</td></tr>
-<tr><td>name</td><td>joesname</td><td>name</td></tr>
-</table>
-<br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>use</td><td>joesname</td></tr>
-</table>
-</td><td><br><table border="1" cellpadding="2" cellspacing="0"><tr><td>do</td></tr></table><br><table border="1" cellpadding="2" cellspacing="0"><tr><td class="error">use<hr /><pre><div class="fit_stacktrace">Type 'garbage' not found in assemblies</div></pre></td><td>garbage</td></tr></table><br><table border="1" cellpadding="2" cellspacing="0"><tr><td class="error">use<hr /><pre><div class="fit_stacktrace">This table is invalid for this fixture: Missing cells for use.</div></pre></td></tr></table><br><table border="1" cellpadding="2" cellspacing="0"><tr><td>with</td><td>new</td><td>sample domain</td><td>Joe</td></tr><tr><td>name</td><td class="pass">joesname</td><td>name</td></tr></table><br><table border="1" cellpadding="2" cellspacing="0"><tr><td class="error">use<hr /><pre><div class="fit_stacktrace">Result is not a Fixture.</div></pre></td><td>joesname</td></tr></table></td></tr>
+with new 'sample domain' Joe<br>
+name joesname name<br>
+use joesname</td><td>then output is</td><td><div><table><tr><td class="error"><span class="fit_interpreter">use</span><hr /><pre><div class="fit_stacktrace">Type 'garbage' not found in assemblies</div></pre></td> <td>garbage</td> </tr></table></div><br /><div><table><tr><td class="error"><span class="fit_interpreter">use</span><hr /><pre><div class="fit_stacktrace">This table is invalid for this fixture: Missing cells for use.</div></pre></td> </tr></table></div><br /><div><table><tr><td><span class="fit_keyword">with</span></td> <td><span class="fit_keyword">new</span></td> <td><span class="fit_SUT">sample domain</span></td> <td>Joe</td> </tr></table><table><tr><td><span class="fit_keyword">name</span></td> <td class="pass">joesname</td> <td><span class="fit_member">name</span></td> </tr></table><table><tr><td class="error"><span class="fit_interpreter">use</span><hr /><pre><div class="fit_stacktrace">Result is not a Fixture.</div></pre></td> <td>joesname</td> </tr></table></div></td></tr>
 </table>
 </div>
 <div style="width:100%;text-align:right">

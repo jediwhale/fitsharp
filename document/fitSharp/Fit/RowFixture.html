@@ -27,7 +27,7 @@ A <a href="../Fit/RowFixture.html">Row Fixture</a> table has a set of field name
 <tr><td>SampleRowFixture</td></tr>
 </table>
 </td><td><table cellspacing="0" cellpadding="1" border="1">
-<tr><td class="error">SampleRowFixture<hr><pre><div class="fit_stacktrace">System.ApplicationException: Header row missing.</div></pre></td></tr>
+<tr><td class="error"><span class="fit_interpreter">SampleRowFixture</span><hr><pre><div class="fit_stacktrace">System.ApplicationException: Header row missing.</div></pre></td></tr>
 </table>
 </td></tr>
 </table>
@@ -40,15 +40,13 @@ All subsequent rows must be at least the same width as the header row. Extra cel
 <tr><td>name1</td><td>name2</td></tr>
 <tr><td>too short</td></tr>
 <tr><td>too</td><td>too</td><td>long</td></tr>
-</table>
-</td><td><table cellspacing="0" cellpadding="1" border="1">
-<tr><td>SampleRowFixture</td></tr>
-<tr><td>name1</td><td>name2</td></tr>
+</table></td><td><table cellspacing="0" cellpadding="1" border="1">
+<tr><td><span class="fit_interpreter">SampleRowFixture</span></td></tr>
+<tr><td><span class="fit_member">name1</span></td><td><span class="fit_member">name2</span></td></tr>
 <tr><td class="pass">too short</td>
 <td class="fail"> <span class="fit_label">missing</span></td></tr>
 <tr><td class="pass">too</td><td class="pass">too</td><td>long</td></tr>
-</table>
-</td></tr>
+</table></td></tr>
 </table>
 <br>
 An error is reported if a field name in the second row does not exist in the target object.<br>
@@ -57,13 +55,10 @@ An error is reported if a field name in the second row does not exist in the tar
 <tr><td>check</td><td>test result</td><td><table cellspacing="0" cellpadding="1" border="1">
 <tr><td>SampleRowFixture</td></tr>
 <tr><td>bad name</td></tr>
-</table>
-</td><td><table cellspacing="0" cellpadding="1" border="1">
-<tr><td class="error">SampleRowFixture<hr><pre><div class="fit_stacktrace">Member 'badname' with 0 parameter(s) not found for type 'fit.Test.Double.SampleRowFixture+TwoNames'.
-</div></pre></td></tr>
-<tr><td>bad name</td></tr>
-</table>
-</td></tr>
+</table></td><td><table cellspacing="0" cellpadding="1" border="1">
+<tr><td class="error"><span class="fit_interpreter">SampleRowFixture</span><hr /><pre><div class="fit_stacktrace">Member 'badname' with 0 parameter(s) not found for type 'fit.Test.Double.SampleRowFixture+TwoNames'.</div></pre></td></tr>
+<tr><td><span class="fit_member">bad name</span></td></tr>
+</table></td></tr>
 </table>
 <br>
 Encoded text is handled.<br>
@@ -75,10 +70,15 @@ Encoded text is handled.<br>
 <tr><td>too</td><td>too</td></tr>
 <tr><td>&lt;extra&gt;</td><td>&lt;stuff&gt;</td></tr>
 </table>
-</td><td><table border="1" cellpadding="2" cellspacing="0"><tr><td>sample row</td></tr><tr><td>name1</td><td>name2</td></tr><tr><td class="pass">too</td><td class="pass">too</td></tr><tr><td class="fail">&lt;extra&gt; <span class="fit_label">missing</span></td><td>&lt;stuff&gt;</td></tr>
+</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">sample row</span></td></tr>
+<tr><td><span class="fit_member">name1</span></td><td><span class="fit_member">name2</span></td></tr>
+<tr><td class="pass">too</td><td class="pass">too</td></tr>
+<tr><td class="fail">&lt;extra&gt; <span class="fit_label">missing</span></td><td>&lt;stuff&gt;</td></tr>
 <tr>
-<td class="fail"> <span class="fit_grey">too short</span> <span class="fit_label">surplus</span></td>
-<td> <span class="fit_grey">&lt;stuff&gt;</span></td></tr></table></td></tr>
+<td class="fail"><span class="fit_grey">too short</span> <span class="fit_label">surplus</span></td>
+<td><span class="fit_grey">&lt;stuff&gt;</span></td></tr></table></td></tr>
 </table>
 </div>
 <div style="width:100%;text-align:right">

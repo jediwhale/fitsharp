@@ -1,0 +1,60 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- fitSharp
+Copyright © Syterra Software Inc. All rights reserved.
+The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
+to be bound by the terms of this license. You must not remove this notice, or any other, from this software. -->
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+ <link href="../fitsharp1.css" type="text/css" rel="stylesheet">
+  <link href="fit.css" type="text/css" rel="stylesheet">
+  <title>Compare Fail</title>
+</head>
+<body>
+<div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
+<div class="pagename">Compare Fail</div>
+<div class="content"><br>
+The fail keyword is primarily used for fixture testing. It tests that a cell is correctly failing.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>sample domain</td></tr>
+</table>
+<br>
+A failing integer comparison is handled.<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>set</td><td>integer field</td><td>3</td></tr>
+<tr><td>check</td><td>integer field</td><td>fail[4]</td></tr>
+</table>
+<br>
+A failing string comparison is handled.<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>set</td><td>string field</td><td>hello</td></tr>
+<tr><td>check</td><td>string field</td><td>fail[world]</td></tr>
+</table>
+<br>
+A failing object comparison is handled.<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>set</td><td>person field</td><td>Joe Smith</td></tr>
+<tr><td>check</td><td>person field</td><td>fail[Joe Smithe]</td></tr>
+</table>
+<br>
+Nested handlers are processed.<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>set</td><td>integer field</td><td>3</td></tr>
+<tr><td>check</td><td>integer field</td><td>fail[>3]</td></tr>
+</table>
+<br>
+A nested fail keyword is handled.<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>set</td><td>integer field</td><td>3</td></tr>
+<tr><td>check</td><td>integer field</td><td>fail[fail[3]]</td></tr>
+</table>
+<br>
+</div>
+<div style="width:100%;text-align:right">
+<span class="footer">&copy; Copyright <a href="http://www.syterra.com">Syterra Software Inc.</a> All rights reserved.</span>
+</div>
+
+</body>
+</html>

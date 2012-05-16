@@ -61,7 +61,19 @@ namespace fitSharp.Machine.Engine {
         }
 
         public override TypedValue TryInvoke(object[] parameters) {
-            var result = Info.Invoke(instance, parameters);
+            object result;
+            if (Info.IsGenericMethod) {
+                result = Info.Invoke(instance, parameters);
+            }
+            else {
+                //todo: hack to  pick different overloaded member if parameter type (via parse symbol) is different
+                //todo: breaks generic method execution
+                var type = info.DeclaringType;
+                result = type.InvokeMember(info.Name,
+                                               BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
+                                               | BindingFlags.InvokeMethod | BindingFlags.Static,
+                                               null, instance, parameters);
+            }
             return new TypedValue(result, Info.ReturnType != typeof(void) && result != null ? result.GetType() : Info.ReturnType); //todo: push this into TypedValue
         }
 

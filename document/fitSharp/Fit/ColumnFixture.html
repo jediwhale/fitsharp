@@ -28,12 +28,11 @@ to be bound by the terms of this license. You must not remove this notice, or an
 </table>
 </td><td>then result is</td><td><br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>execute example</td></tr>
-<tr><td>int field</td><td>int field?</td></tr>
+<tr><td><span class="fit_interpreter">execute example</span></td></tr>
+<tr><td><span class="fit_member">int field</span></td><td><span class="fit_member">int field?</span></td></tr>
 <tr><td>1</td><td class="pass">2</td></tr>
 <tr><td>2</td><td class="pass">4</td></tr>
-</table>
-</td></tr>
+</table></td></tr>
 </table>
 <br>
 Column fixtures can use a <a href="../Fit/DomainAdapter.html">Domain Adapter</a>.<br>
@@ -47,11 +46,10 @@ Column fixtures can use a <a href="../Fit/DomainAdapter.html">Domain Adapter</a>
 </table>
 </td><td>then result is</td><td><br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>use</td><td>column</td><td>with</td><td>new</td><td>sampledomainadapter</td></tr>
-<tr><td>name</td><td>lower case name?</td></tr>
+<tr><td><span class="fit_interpreter">use</span></td><td><span class="fit_interpreter">column</span></td><td><span class="fit_keyword">with</span></td><td><span class="fit_keyword">new</span></td><td><span class="fit_SUT">sampledomainadapter</span></td></tr>
+<tr><td><span class="fit_member">name</span></td><td><span class="fit_member">lower case name?</span></td></tr>
 <tr><td>Bill</td><td class="pass">bill</td></tr>
-</table>
-</td></tr>
+</table></td></tr>
 </table>
 <br>
 To create objects, a column heading uses a "new" prefix. An object is created using the data cell as a constructor parameter. The newly-created object becomes the <a href="../Fit/SystemUnderTest.html">System Under Test</a>.<br>
@@ -65,11 +63,10 @@ To create objects, a column heading uses a "new" prefix. An object is created us
 </table>
 </td><td>then result is</td><td><br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>column</td></tr>
-<tr><td>new sample domain</td><td>name?</td></tr>
+<tr><td><span class="fit_interpreter">column</span></td></tr>
+<tr><td><span class="fit_member">new sample domain</span></td><td><span class="fit_member">name?</span></td></tr>
 <tr><td>Bob</td><td class="pass">Bob</td></tr>
-</table>
-</td></tr>
+</table></td></tr>
 </table>
 <br>
 A member name beginning with "new" does not create a new object.<br>
@@ -83,11 +80,10 @@ A member name beginning with "new" does not create a new object.<br>
 </table>
 </td><td>then result is</td><td><br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>use</td><td>column</td><td>with</td><td>new</td><td>sample domain</td></tr>
-<tr><td>new name</td><td>new name?</td></tr>
+<tr><td><span class="fit_interpreter">use</span></td><td><span class="fit_interpreter">column</span></td><td><span class="fit_keyword">with</span></td><td><span class="fit_keyword">new</span></td><td><span class="fit_SUT">sample domain</span></td></tr>
+<tr><td><span class="fit_member">new name</span></td><td><span class="fit_member">new name?</span></td></tr>
 <tr><td>Ted</td><td class="pass">Ted</td></tr>
-</table>
-</td></tr>
+</table></td></tr>
 </table>
 </div>
 <div style="width:100%;text-align:right">

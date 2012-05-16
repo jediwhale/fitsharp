@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- fitSharp
+Copyright © Syterra Software Inc. All rights reserved.
+The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
+to be bound by the terms of this license. You must not remove this notice, or any other, from this software. -->
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+ <link href="../fitsharp1.css" type="text/css" rel="stylesheet">
+  <link href="fit.css" type="text/css" rel="stylesheet">
+  <title>Xml Fixture</title>
+</head>
+<body>
+<div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
+<div class="pagename">Xml Fixture</div>
+<div class="content">XmlFixture compares an XML document to the expected values in the table.<br>
+<br>
+There is one row for each element. The first non-empty cell is the element name. The next cell is the concatentation of all child text nodes of the element, if any. The remaining cells are attribute name and value pairs for all attributes of the element, if any. If no text, the attribute cells follow immediately after the element name. The element tree structure is indicated by leading empty cells.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>when test is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>xml fixture under test</td></tr>
+<tr><td>root</td></tr>
+<tr><td></td><td>child1</td><td>some text</td></tr>
+<tr><td></td><td>child2</td><td>text1text2</td><td>item1</td><td>value1</td><td>item2</td><td>value2</td></tr>
+<tr><td></td><td></td><td>leaf</td><td>name</td><td>value</td></tr>
+<tr><td></td><td>child3</td></tr>
+</table>
+</td><td>then result is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">xml fixture under test</span></td></tr>
+<tr><td class="pass">root</td></tr>
+<tr><td></td><td class="pass">child1</td><td class="pass">some text</td></tr>
+<tr><td></td><td class="pass">child2</td><td class="pass">text1text2</td><td class="pass">item1</td><td class="pass">value1</td><td class="pass">item2</td><td class="pass">value2</td></tr>
+<tr><td></td><td></td><td class="pass">leaf</td><td class="pass">name</td><td class="pass">value</td></tr>
+<tr><td></td><td class="pass">child3</td></tr>
+</table></td></tr>
+</table>
+<br>
+Missing and surplus elements are reported.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>when test is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>xml fixture under test</td></tr>
+<tr><td>root</td></tr>
+<tr><td></td><td>child1</td><td>some text</td></tr>
+<tr><td></td><td>child1a</td></tr>
+<tr><td></td><td>child2</td><td>text1text2</td><td>item1</td><td>value1</td><td>item2</td><td>value2</td></tr>
+<tr><td></td><td></td><td>leaf</td><td>name</td><td>value</td></tr>
+</table>
+</td><td>then result is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">xml fixture under test</span></td></tr>
+<tr><td class="pass">root</td></tr>
+<tr><td></td><td class="pass">child1</td><td class="pass">some text</td></tr>
+<tr class="fail"><td> <span class="fit_label">missing</span></td><td>child1a</td></tr>
+<tr><td></td><td class="pass">child2</td><td class="pass">text1text2</td><td class="pass">item1</td><td class="pass">value1</td><td class="pass">item2</td><td class="pass">value2</td></tr>
+<tr><td></td><td></td><td class="pass">leaf</td><td class="pass">name</td><td class="pass">value</td></tr>
+<tr class="fail">
+<td><span class="fit_grey"></span> <span class="fit_label">surplus</span></td>
+<td><span class="fit_grey">child3</span></td></tr></table></td></tr>
+</table>
+<br>
+Out of order elements are reported.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>when test is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>xml fixture under test</td></tr>
+<tr><td>root</td></tr>
+<tr><td></td><td>child1</td><td>some text</td></tr>
+<tr><td></td><td>child2</td><td>text1text2</td><td>item1</td><td>value1</td><td>item2</td><td>value2</td></tr>
+<tr><td></td><td>child3</td></tr>
+<tr><td></td><td></td><td>leaf</td><td>name</td><td>value</td></tr>
+</table>
+</td><td>then result is</td><td><br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">xml fixture under test</span></td></tr>
+<tr><td class="pass">root</td></tr>
+<tr><td></td><td class="pass">child1</td><td class="pass">some text</td></tr>
+<tr><td></td><td class="pass">child2</td><td class="pass">text1text2</td><td class="pass">item1</td><td class="pass">value1</td><td class="pass">item2</td><td class="pass">value2</td></tr>
+<tr class="fail"><td> <span class="fit_label">out of order</span></td><td>child3</td></tr>
+<tr class="fail"><td> <span class="fit_label">out of order</span></td><td></td><td>leaf</td><td>name</td><td>value</td></tr>
+</table></td></tr>
+</table>
+</div>
+<div style="width:100%;text-align:right">
+<span class="footer">&copy; Copyright <a href="http://www.syterra.com">Syterra Software Inc.</a> All rights reserved.</span>
+</div>
+
+</body>
+</html>

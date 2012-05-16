@@ -1,4 +1,4 @@
-﻿// Copyright © 2011 Syterra Software Inc.
+﻿// Copyright © 2012 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -47,7 +47,7 @@ namespace fit.Test.NUnit {
             cellProcessor.Get<Procedures>().Save("procedure", Parse.ParseFrom(noParameterProcedureHtml));
             var sample = new Sample();
             invokeProcedure.Invoke(new TypedValue(sample), new MemberName("procedure"), new CellTree());
-            Assert.AreEqual("<br><table border=1><tr><td>settext</td></tr></table>", cellProcessor.TestStatus.LastAction);
+            Assert.AreEqual("<table border=1><tr><td><span class=\"fit_member\">settext</span></td></tr></table>", cellProcessor.TestStatus.LastAction);
         }
 
         [Test] public void ProcedureIsExecutedOnACopyOfBody() {

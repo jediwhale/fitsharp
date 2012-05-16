@@ -1,9 +1,8 @@
-// Copyright © 2011 Syterra Software Inc. All rights reserved.
+// Copyright © 2012 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
-using System.IO;
 using fitSharp.Fit.Model;
 using fitSharp.IO;
 using System;
@@ -18,12 +17,9 @@ namespace fitSharp.Fit.Runner {
         void WriteTest(PageResult result);
         void WriteNonTest();
         string TestContent { get; }
-        //void ExecuteStoryPage(StoryTestPageExecutor executor);
     }
 
     public interface StoryTestPageExecutor {
-        //todo: too many args
-        //void Do(StoryPageName pageName, StoryTestString pageContent, Action<PageResult> handleResult, Action handleNoTest);
         void Do(StoryTestPage page);
         void DoNoTest();
     }
@@ -45,7 +41,11 @@ namespace fitSharp.Fit.Runner {
             ".fit_grey {color: #808080;}" + Environment.NewLine +
             ".fit_extension {border: solid 1px grey;}" + Environment.NewLine +
             ".fit_table {border: solid 1px grey; border-collapse: collapse; margin: 2px 0px;}" + Environment.NewLine +
-            "table.fit_table tr td {border: solid 1px grey; padding: 2px 2px 2px 2px;}" + Environment.NewLine;
+            "table.fit_table tr td {border: solid 1px grey; padding: 2px 2px 2px 2px;}" + Environment.NewLine +
+            ".fit_interpreter {font-style: italic; color: #808020;}" + Environment.NewLine +
+            ".fit_keyword {color: #1010A0;}" + Environment.NewLine +
+            ".fit_member {color: #208080;}" + Environment.NewLine +
+            ".fit_SUT {color: #808020;}" + Environment.NewLine;
 
         public StoryTestFile(string thePath, StoryTestFolder theFolder, FolderModel theFolderModel) {
             myPath = new StoryFileName(thePath);

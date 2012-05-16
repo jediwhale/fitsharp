@@ -18,90 +18,42 @@ to be bound by the terms of this license. You must not remove this notice, or an
 A fixture can be saved and then used.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>when test is</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>sample do</td></tr>
-<tr><td>name</td><td>savex</td><td>make sample do</td><td>xxx</td></tr>
-<tr><td>name</td><td>savey</td><td>make sample do</td><td>yyy</td></tr>
-</table>
+<tr><td>when input is</td><td>'sample do'<br>
+name savex 'make sample do' xxx<br>
+name savey 'make sample do' yyy<br>
 <br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>use</td><td>savey</td></tr>
-<tr><td>check</td><td>text</td><td>yyy</td></tr>
-</table>
+use savey<br>
+check text yyy<br>
 <br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>use</td><td>savex</td></tr>
-<tr><td>check</td><td>text</td><td>xxx</td></tr>
-</table>
-</td><td>then result is</td><td><br><table border="1" cellpadding="2" cellspacing="0"><tr><td>sample do</td></tr><tr><td>name</td><td class="pass">savex</td><td>make sample do</td><td>xxx</td></tr><tr><td>name</td><td class="pass">savey</td><td>make sample do</td><td>yyy</td></tr></table><br><table border="1" cellpadding="2" cellspacing="0"><tr><td>use</td><td>savey</td></tr><tr><td>check</td><td>text</td><td class="pass">yyy</td></tr></table><br><table border="1" cellpadding="2" cellspacing="0"><tr><td>use</td><td>savex</td></tr><tr><td>check</td><td>text</td><td class="pass">xxx</td></tr></table></td></tr>
+use savex<br>
+check text xxx</td><td>then output is</td><td><div><table><tr><td><span class="fit_interpreter">sample do</span></td> </tr></table><table><tr><td><span class="fit_keyword">name</span></td> <td class="pass">savex</td> <td><span class="fit_member">make sample do</span></td> <td>xxx</td> </tr></table><table><tr><td><span class="fit_keyword">name</span></td> <td class="pass">savey</td> <td><span class="fit_member">make sample do</span></td> <td>yyy</td> </tr></table></div><br /><div><table><tr><td><span class="fit_interpreter">use</span></td> <td>savey</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">text</span></td> <td class="pass">yyy</td> </tr></table></div><br /><div><table><tr><td><span class="fit_interpreter">use</span></td> <td>savex</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">text</span></td> <td class="pass">xxx</td> </tr></table></div></td></tr>
 </table>
 <br>
 A domain object can be saved, and is wrapped in a Do fixture when used.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>when test is</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>do</td></tr>
-<tr><td>name</td><td>savebob</td><td>with</td><td>new</td><td>sample domain</td><td>Bob</td></tr>
-</table>
+<tr><td>when input is</td><td>name savebob with new 'sample domain' Bob<br>
 <br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>use</td><td>savebob</td></tr>
-<tr><td>check</td><td>name</td><td>Bob</td></tr>
-</table>
-</td><td>then result is</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>do</td></tr>
-<tr><td>name</td><td class="pass">savebob</td><td>with</td><td>new</td><td>sample domain</td><td>Bob</td></tr>
-</table>
-<br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>use</td><td>savebob</td></tr>
-<tr><td>check</td><td>name</td><td class="pass">Bob</td></tr>
-</table>
-</td></tr>
+use savebob<br>
+check name Bob</td><td>then output is</td><td><div><table><tr><td><span class="fit_keyword">name</span></td> <td class="pass">savebob</td> <td><span class="fit_keyword">with</span></td> <td><span class="fit_keyword">new</span></td> <td><span class="fit_SUT">sample domain</span></td> <td>Bob</td> </tr></table></div><br /><div><table><tr><td><span class="fit_interpreter">use</span></td> <td>savebob</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">name</span></td> <td class="pass">Bob</td> </tr></table></div></td></tr>
 </table>
 <br>
 Errors are reported when the method is invalid or cells are missing.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>when test is</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>do</td></tr>
-</table>
+<tr><td>when input is</td><td>name stuff garbage<br>
 <br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>name</td><td>stuff</td><td>garbage</td></tr>
-</table>
+name stuff<br>
 <br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>name</td><td>stuff</td></tr>
-</table>
-<br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>name</td></tr>
-</table>
-</td><td>then result is</td><td><br><table border="1" cellpadding="2" cellspacing="0"><tr><td>do</td></tr></table><br><table border="1" cellpadding="2" cellspacing="0"><tr><td class="error">name<hr /><pre><div class="fit_stacktrace">Member 'garbage' with 0 parameter(s) not found for type 'fitlibrary.DoFixture'.
-</div></pre></td><td>stuff</td><td>garbage</td></tr></table><br><table border="1" cellpadding="2" cellspacing="0"><tr><td class="error">name<hr /><pre><div class="fit_stacktrace">This table is invalid for this fixture: missing cells for name.</div></pre></td><td>stuff</td></tr></table><br><table border="1" cellpadding="2" cellspacing="0"><tr><td class="error">name<hr /><pre><div class="fit_stacktrace">This table is invalid for this fixture: missing cells for name.</div></pre></td></tr></table></td></tr>
+name</td><td>then output is</td><td><div><table><tr><td class="error"><span class="fit_keyword">name</span><hr /><pre><div class="fit_stacktrace">Member 'garbage' with 0 parameter(s) not found for type 'fitSharp.Fit.Engine.DefaultFlowInterpreter'.</div></pre></td> <td>stuff</td> <td><span class="fit_member">garbage</span></td> </tr></table></div><br /><div><table><tr><td class="error"><span class="fit_keyword">name</span><hr /><pre><div class="fit_stacktrace">This table is invalid for this fixture: missing cells for name.</div></pre></td> <td>stuff</td> </tr></table></div><br /><div><table><tr><td class="error"><span class="fit_keyword">name</span><hr /><pre><div class="fit_stacktrace">This table is invalid for this fixture: missing cells for name.</div></pre></td> </tr></table></div></td></tr>
 </table>
 <br>
 Objects are assigned to symbols.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>when test is</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>sample do</td></tr>
-<tr><td>name</td><td>savebob</td><td>with</td><td>new</td><td>sample domain</td><td>Bob</td></tr>
-<tr><td>check</td><td>get name</td><td>&lt;&lt;savebob</td><td>Bob</td></tr>
-</table>
-</td><td>then result is</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>sample do</td></tr>
-<tr><td>name</td><td class="pass">savebob</td><td>with</td><td>new</td><td>sample domain</td><td>Bob</td></tr>
-<tr><td>check</td><td>get name</td><td>&lt;&lt;savebob<span class="fit_grey"> fit.Test.Double.SampleDomain</span></td><td class="pass">Bob</td></tr>
-</table>
-</td></tr>
+<tr><td>when input is</td><td>'sample do'<br>
+name savebob with new 'sample domain' Bob<br>
+check 'get name' &lt;&lt;savebob Bob</td><td>then output is</td><td><div><table><tr><td><span class="fit_interpreter">sample do</span></td> </tr></table><table><tr><td><span class="fit_keyword">name</span></td> <td class="pass">savebob</td> <td><span class="fit_keyword">with</span></td> <td><span class="fit_keyword">new</span></td> <td><span class="fit_SUT">sample domain</span></td> <td>Bob</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">get name</span></td> <td>&lt;&lt;savebob<span class="fit_grey"> fit.Test.Double.SampleDomain</span></td> <td class="pass">Bob</td> </tr></table></div></td></tr>
 </table>
 <br>
 </div>

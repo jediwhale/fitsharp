@@ -14,65 +14,34 @@ to be bound by the terms of this license. You must not remove this notice, or an
 <body>
 <div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
 <div class="pagename">Show As Keyword</div>
-<div class="content">The Show As keyword is one of the <a href="../Fit/FlowFixtureKeywords.html">Flow Fixture Keywords</a>. It executes a method on the <a href="../Fit/SystemUnderTest.html">System Under Test</a> and displays the result using one or more cell attributes.<br>
+<div class="content">The Show As keyword is one of the <a href="../Fit/FlowFixtureKeywords.html">Flow Fixture Keywords</a>. It executes a method on the <a href="../Fit/SystemUnderTest.html">System Under Test</a> and adds a cell to the row to display the result using one or more cell attributes.<br>
 <br>
 The Raw attribute displays the result directly with no encoding.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>when test is</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>sample do</td></tr>
-<tr><td>set</td><td>text</td><td>&lt;b>stuff&lt;/b></td></tr>
-<tr><td>show as</td><td>raw</td><td>text</td></tr>
-</table>
-</td><td>then result is</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>sample do</td></tr>
-<tr><td>set</td><td>text</td><td>&lt;b>stuff&lt;/b></td></tr>
-<tr><td>show as</td><td>raw</td><td>text</td>
-<td><b>stuff</b></td></tr>
-</table></td></tr>
+<tr><td>when input is</td><td>'sample do'<br>
+set text &lt;b>stuff&lt;/b><br>
+'show as' raw text</td><td>then output is</td><td><div><table><tr><td><span class="fit_interpreter">sample do</span></td> </tr></table><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">text</span></td> <td>&lt;b&gt;stuff&lt;/b&gt;</td> </tr></table><table><tr><td><span class="fit_keyword">show as</span></td> <td>raw</td> <td><span class="fit_member">text</span></td> 
+<td><b>stuff</b></td></tr></table></div></td></tr>
 </table>
 <br>
 The Formatted attribute displays the result encoded with formatting preserved.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>when test is</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>sample do</td></tr>
-<tr><td>set</td><td>text</td><td>&lt;b>more&lt;/b><br>
-stuff</td></tr>
-<tr><td>show as</td><td>formatted</td><td>text</td></tr>
-</table>
-</td><td>then result is</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>sample do</td></tr>
-<tr><td>set</td><td>text</td><td>&lt;b>more&lt;/b><br>
-stuff</td></tr>
-<tr><td>show as</td><td>formatted</td><td>text</td>
-<td><pre>&lt;b&gt;more&lt;/b&gt;
-stuff</pre></td></tr>
-</table></td></tr>
+<tr><td>when input is</td><td>'sample do'<br>
+set text '&lt;b>more&lt;/b> stuff'<br>
+'show as' formatted text</td><td>then output is</td><td><div><table><tr><td><span class="fit_interpreter">sample do</span></td> </tr></table><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">text</span></td> <td>&lt;b&gt;more&lt;/b&gt; stuff</td> </tr></table><table><tr><td><span class="fit_keyword">show as</span></td> <td>formatted</td> <td><span class="fit_member">text</span></td> 
+<td><pre>&lt;b&gt;more&lt;/b&gt; stuff</pre></td></tr></table></div></td></tr>
 </table>
 <br>
 The Folded attribute displays the result in a collapsible section.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>when test is</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>sample do</td></tr>
-<tr><td>set</td><td>text</td><td>stuff</td></tr>
-<tr><td>show as</td><td>folded</td><td>text</td></tr>
+<tr><td>when input is</td><td>'sample do'<br>
+set text stuff<br>
+'show as' folded text</td><td>then output is</td><td><div><table><tr><td><span class="fit_interpreter">sample do</span></td> </tr></table><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">text</span></td> <td>stuff</td> </tr></table><table><tr><td><span class="fit_keyword">show as</span></td> <td>folded</td> <td><span class="fit_member">text</span></td> 
+<td><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension"><span class="fit_grey">stuff</span></div></div></td></tr></table></div></td></tr>
 </table>
-</td><td>then result is</td><td><br>
-<table border="1" cellpadding="2" cellspacing="0">
-<tr><td>sample do</td></tr>
-<tr><td>set</td><td>text</td><td>stuff</td></tr>
-<tr><td>show as</td><td>folded</td><td>text</td>
-<td><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension"><span class="fit_grey">stuff</span></div></div></td></tr>
-</table></td></tr>
-</table>
-<br>
 </div>
 <div style="width:100%;text-align:right">
 <span class="footer">&copy; Copyright <a href="http://www.syterra.com">Syterra Software Inc.</a> All rights reserved.</span>

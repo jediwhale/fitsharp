@@ -20,18 +20,18 @@ namespace fitSharp.Fit.Operators {
 
         public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
             var classCell = parameters.ValueAt(0);
-            var interpreter = CreateInterpreter(classCell.Text.Trim(), instance);
+            var interpreter = WithSystemUnderTest(MakeInterpreter(classCell), instance);
             return new TypedValue(interpreter);
         }
 
-        Interpreter CreateInterpreter(string className, TypedValue instance) {
-            return WithSystemUnderTest(MakeInterpreter(className), instance);
-        }
-
-        Interpreter MakeInterpreter(string className) {
+        Interpreter MakeInterpreter(Cell classCell) {
+            var className = classCell.Text.Trim();
             if (className.Length == 0 || !char.IsLetter(className[0])) return new CommentFixture();
 
             var result = Processor.Create(new GracefulNameMatcher(className, className + "fixture"), new CellTree());
+            classCell.SetAttribute(CellAttribute.Syntax,
+                result.HasValueAs<Interpreter>() ? CellAttributeValue.SyntaxInterpreter : CellAttributeValue.SyntaxSUT);
+
             return result.GetValueAs<Interpreter>() ?? WithSystemUnderTest(Processor.Create(DefaultFlowInterpreter).GetValueAs<Interpreter>(), result);
         }
 

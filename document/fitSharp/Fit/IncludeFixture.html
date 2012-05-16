@@ -25,17 +25,18 @@ We can include a page using an absolute path or a relative path from the working
 </table>
 </td><td>then result is</td><td><br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>include<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension"><html>
+<tr><td><span class="fit_interpreter">include</span><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension"><html>
 <head>
   <link href="fit.css" type="text/css" rel="stylesheet"></head>
 <body><div id=""fit_tags"" style="color:gray; font-weight:bold; margin-bottom:1em;">Tags: SampleTag</div><br>
 This is a simple test.<br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>SampleDo</td></tr>
-<tr><td>check</td><td>one</td><td class="pass">1</td></tr>
+<tr><td><span class="fit_interpreter">SampleDo</span></td></tr>
+<tr><td><span class="fit_keyword">check</span></td><td><span class="fit_member">one</span></td><td class="pass">1</td></tr>
+
 </table>
 </body>
-</html></div></div></td><td>page</td><td>document\fitSharp\Fit\SampleInputFiles\SampleSimpleTest.html</td></tr>
+</html></div></div></td><td><span class="fit_member">page</span></td><td>document\fitSharp\Fit\SampleInputFiles\SampleSimpleTest.html</td></tr>
 </table></td></tr>
 </table>
 <br>
@@ -48,7 +49,7 @@ We can include pages with a relative path from the currently executing page.<br>
 </table>
 </td><td>then result is</td><td><br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>include<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension">This has no tests.</div></div></td><td>page from current</td><td>SampleInputFiles\SampleSubNoTest\SampleNoTest.html</td></tr>
+<tr><td><span class="fit_interpreter">include</span><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension">This has no tests.</div></div></td><td><span class="fit_member">page from current</span></td><td>SampleInputFiles\SampleSubNoTest\SampleNoTest.html</td></tr>
 </table></td></tr>
 </table>
 <br>
@@ -61,7 +62,7 @@ We can include pages with a relative path from the top-level currently executing
 </table>
 </td><td>then result is</td><td><br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>include<span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension">This has no tests.</div></div></td><td>page from suite</td><td>Fit\SampleInputFiles\SampleSubNoTest\SampleNoTest.html</td></tr>
+<tr><td><span class="fit_interpreter">include</span><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension">This has no tests.</div></div></td><td><span class="fit_member">page from suite</span></td><td>Fit\SampleInputFiles\SampleSubNoTest\SampleNoTest.html</td></tr>
 </table></td></tr>
 </table>
 <br>

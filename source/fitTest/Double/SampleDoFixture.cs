@@ -4,10 +4,14 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using fitlibrary;
+using fitSharp.Samples;
 
 namespace fit.Test.Double {
     public class SampleDoFixture: DoFixture {
-        public SampleDoFixture() {}
+        public SampleDoFixture(): base(new SampleDomain()) {
+            Log.Clear();
+        }
+
         public SampleDoFixture(string theText) {Text = theText;}
 
         public string Text;
@@ -22,7 +26,12 @@ namespace fit.Test.Double {
             return result;
         }
 
-        public int One() { return 1; }
+        public int One() {
+            Log.Write("One()");
+            return 1;
+        }
+
+        public bool Summary { get { return true; } }
 
         public RowFixture MakeSampleRow() {
             return new SampleRowFixture();
@@ -45,5 +54,22 @@ namespace fit.Test.Double {
         }
 
         public string GetName(SampleDomain sample) { return sample.Name; }
+
+        public void CheckDigit(Parse cells) {
+            var cell = cells.More;
+            if (char.IsDigit(cell.Text, 0)) {
+                Right(cell);
+            } else {
+                Wrong(cell);
+            }
+        }
+
+        public void SetUp() {
+            Log.Write("SetUp()");
+        }
+
+        public void TearDown() {
+            Log.Write("TearDown()");
+        }
     }
 }
