@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Text;
 using System.Text.RegularExpressions;
 using dbfit.util;
 
@@ -64,6 +65,49 @@ namespace dbfit
             @"select c.[name], TYPE_NAME(c.system_type_id) as [Type], c.max_length, 
             0 As is_output, 0 As is_cursor_ref, c.precision, c.scale
             from " + dbName + " sys.columns c where c.object_id = OBJECT_ID(@objname) order by column_id" );
+        }
+
+        public override String BuildInsertCommand(String tableName, DbParameterAccessor[] accessors)
+        {
+            StringBuilder sb = new StringBuilder("insert into ");
+            sb.Append(tableName).Append("(");
+            String comma = "";
+            StringBuilder values = new StringBuilder();
+            foreach (DbParameterAccessor accessor in accessors)
+            {
+                sb.Append(comma);
+                values.Append(comma);
+                sb.Append("[").Append(accessor.DbParameter.SourceColumn).Append("]");
+                values.Append(ParameterPrefix).Append(accessor.DbParameter.ParameterName);
+                comma = ",";
+            }
+            sb.Append(") values (");
+            sb.Append(values);
+            sb.Append(")");
+            return sb.ToString();
+        }
+
+        public override String BuildUpdateCommand(String tableName, DbParameterAccessor[] updateAccessors, DbParameterAccessor[] selectAccessors)
+        {
+            if (updateAccessors.Length == 0)
+            {
+                throw new ApplicationException("must have at least one field to update. Have you forgotten = after the column name?");
+            }
+            System.Text.StringBuilder s = new System.Text.StringBuilder("update ").Append(tableName).Append(" set ");
+            for (int i = 0; i < updateAccessors.Length; i++)
+            {
+                if (i > 0) s.Append(", ");
+                s.Append("[").Append(updateAccessors[i].DbParameter.SourceColumn).Append("]").Append("=");
+                s.Append(this.ParameterPrefix).Append(updateAccessors[i].DbParameter.ParameterName);
+            }
+            s.Append(" where ");
+            for (int i = 0; i < selectAccessors.Length; i++)
+            {
+                if (i > 0) s.Append(" and ");
+                s.Append("[").Append(selectAccessors[i].DbParameter.SourceColumn).Append("]").Append("=");
+                s.Append(this.ParameterPrefix).Append(selectAccessors[i].DbParameter.ParameterName);
+            }
+            return s.ToString();
         }
 
         private  Dictionary<string, DbParameterAccessor> ReadIntoParams(String objname, String query)

@@ -52,11 +52,16 @@
     <Compile Include="DbConnectionPropertiesTest.cs" />
     <Compile Include="NameNormaliserTest.cs" />
     <Compile Include="QueryTest.cs" />
+    <Compile Include="SqlServerEnvironmentTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\dbfitOracle\dbfitOracle.csproj">
       <Project>{E60C59D8-84BC-4C69-802F-26C62A0CF0F4}</Project>
       <Name>dbfitOracle</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\dbfitSqlServer\dbfitSqlServer.csproj">
+      <Project>{CD6AFAC1-097D-4B7F-AAA5-D8DEA23F21F5}</Project>
+      <Name>dbfitSqlServer</Name>
     </ProjectReference>
     <ProjectReference Include="..\dbfit\dbfit.csproj">
       <Project>{87CB489E-7C38-4E50-BBE7-23229CF7D58C}</Project>
