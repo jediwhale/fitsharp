@@ -55,6 +55,7 @@
     <Compile Include="Operators\InvokeProcedure.cs" />
     <Compile Include="Runner\FitSocket.cs" />
     <Compile Include="Runner\FolderRunner.cs" />
+    <Compile Include="Runner\HttpRunner.cs" />
     <Compile Include="Runner\SocketServer.cs" />
     <Compile Include="Runner\SuiteRunner.cs" />
     <Compile Include="Service\Operators.cs" />
