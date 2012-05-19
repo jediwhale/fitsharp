@@ -138,22 +138,23 @@ namespace dbfit
             {
                 throw new ApplicationException("must have at least one field to update. Have you forgotten = after the column name?");
             }
-            System.Text.StringBuilder s = new System.Text.StringBuilder("update ").Append(tableName).Append(" set ");
-            for (int i = 0; i < updateAccessors.Length; i++)
+            var s = new StringBuilder("update ").Append(tableName).Append(" set ");
+            for (var i = 0; i < updateAccessors.Length; i++)
             {
                 if (i > 0) s.Append(", ");
-                s.Append(updateAccessors[i].DbParameter.SourceColumn).Append("=");
-                s.Append(this.ParameterPrefix).Append(updateAccessors[i].DbParameter.ParameterName);
+                s.Append(BuildColumnName(updateAccessors[i].DbParameter.SourceColumn)).Append("=");
+                s.Append(ParameterPrefix).Append(updateAccessors[i].DbParameter.ParameterName);
             }
             s.Append(" where ");
-            for (int i = 0; i < selectAccessors.Length; i++)
+            for (var i = 0; i < selectAccessors.Length; i++)
             {
                 if (i > 0) s.Append(" and ");
-                s.Append(selectAccessors[i].DbParameter.SourceColumn).Append("=");
-                s.Append(this.ParameterPrefix).Append(selectAccessors[i].DbParameter.ParameterName);
+                s.Append(BuildColumnName(selectAccessors[i].DbParameter.SourceColumn)).Append("=");
+                s.Append(ParameterPrefix).Append(selectAccessors[i].DbParameter.ParameterName);
             }
             return s.ToString();
         }
+
         public  virtual string[] ExtractParamNames(string commandText)
         {
             //dotnet2 does not support sets, so a set is simmulated with a hashmap
@@ -178,25 +179,27 @@ namespace dbfit
                 return 0;
             }
         }
+
         public virtual String BuildInsertCommand(String tableName, DbParameterAccessor[] accessors)
         {
-            StringBuilder sb = new StringBuilder("insert into ");
+            var sb = new StringBuilder("insert into ");
             sb.Append(tableName).Append("(");
-            String comma = "";
-            StringBuilder values = new StringBuilder();
-            foreach (DbParameterAccessor accessor in accessors)
+            var separator = "";
+            var values = new StringBuilder();
+            foreach (var accessor in accessors)
             {
-                sb.Append(comma);
-                values.Append(comma);
-                sb.Append(accessor.DbParameter.SourceColumn);
+                sb.Append(separator);
+                values.Append(separator);
+                sb.Append(BuildColumnName(accessor.DbParameter.SourceColumn));
                 values.Append(ParameterPrefix).Append(accessor.DbParameter.ParameterName);
-                comma = ",";
+                separator = ",";
             }
             sb.Append(") values (");
             sb.Append(values);
             sb.Append(")");
             return sb.ToString();
         }
+
         #endregion
 
         #region inherited methods from IDbEnvironment that have no default implementation
@@ -212,6 +215,6 @@ namespace dbfit
         public abstract String IdentitySelectStatement(String tableName);
 #endregion
 
+        protected virtual string BuildColumnName(string sourceColumnName) { return sourceColumnName; }
     }
-
 }
