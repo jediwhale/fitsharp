@@ -1,8 +1,9 @@
-﻿// Copyright © 2011 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2012 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -44,15 +45,31 @@ namespace fitSharp.Machine.Engine {
 
         public void Start() {
             writeStrategy = new WriteToMemory();
+            isStarted = true;
+            if (StartEvent != null) StartEvent();
         }
 
         public void Stop() {
             writeStrategy = new DoNotWrite();
+            isStarted = false;
+            if (StopEvent != null) StopEvent();
         }
+
+        public void Add(Logger logger) { logger.Register(this); }
+
+        public void BeginCell(Cell cell) { if (BeginCellEvent != null && isStarted) BeginCellEvent(cell); }
+        public void EndCell(Cell cell) { if (EndCellEvent != null&& isStarted) EndCellEvent(cell); }
+
+        public event Action StartEvent;
+        public event Action StopEvent;
+        public event Action<Cell> BeginCellEvent;
+        public event Action<Cell> EndCellEvent;
 
         public Copyable Copy() {
             return new Logging(item);
         }
+
+        bool isStarted;
 
         interface WriteStrategy {
             void StartWrite(string message, LogItem item);

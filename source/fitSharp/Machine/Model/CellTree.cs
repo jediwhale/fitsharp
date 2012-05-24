@@ -6,9 +6,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using fitSharp.Machine.Model;
 
-namespace fitSharp.Fit.Model {
+namespace fitSharp.Machine.Model {
     public class CellTree: TreeList<Cell> {
         public CellTree() {}
 

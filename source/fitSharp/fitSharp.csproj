@@ -58,6 +58,7 @@
     <Compile Include="Fit\Fixtures\IncludeAction.cs" />
     <Compile Include="Fit\Engine\MethodPhrase.cs" />
     <Compile Include="Fit\Fixtures\UseFixture.cs" />
+    <Compile Include="Fit\Loggers\ElapsedTime.cs" />
     <Compile Include="Fit\Model\CallStack.cs" />
     <Compile Include="Fit\Model\MethodRowSelector.cs" />
     <Compile Include="Fit\Model\Procedures.cs" />
@@ -83,6 +84,7 @@
     <Compile Include="Machine\Engine\FindMemberDefault.cs" />
     <Compile Include="Machine\Engine\BasicMemberMatcher.cs" />
     <Compile Include="Machine\Engine\IndexerMemberMatcher.cs" />
+    <Compile Include="Machine\Engine\Logger.cs" />
     <Compile Include="Machine\Engine\MemberMatcher.cs" />
     <Compile Include="Machine\Engine\MemberQuery.cs" />
     <Compile Include="Machine\Engine\MemberSpecification.cs" />
@@ -123,7 +125,7 @@
     <Compile Include="Machine\Model\CellAttribute.cs" />
     <Compile Include="Machine\Model\CellBase.cs" />
     <Compile Include="Fit\Model\CellSubstring.cs" />
-    <Compile Include="Fit\Model\CellTree.cs" />
+    <Compile Include="Machine\Model\CellTree.cs" />
     <Compile Include="Fit\Model\PageResult.cs" />
     <Compile Include="Fit\Model\StoryTestString.cs" />
     <Compile Include="Fit\Model\TargetObjectProvider.cs" />

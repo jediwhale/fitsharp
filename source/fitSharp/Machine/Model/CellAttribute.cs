@@ -26,6 +26,7 @@ namespace fitSharp.Machine.Model {
         StartTag,
         Status,
         Syntax,
+        Title,
         Trailer
     }
 
@@ -53,7 +54,8 @@ namespace fitSharp.Machine.Model {
                 {CellAttribute.InformationSuffix, key => new InformationSuffixValue()},
                 {CellAttribute.Label, key => new LabelValue()},
                 {CellAttribute.Status, key => new StatusValue()},
-                {CellAttribute.Syntax, key => new SyntaxValue()}
+                {CellAttribute.Syntax, key => new SyntaxValue()},
+                {CellAttribute.Title, key => new TitleValue()}
         };
 
         public string Value { get; protected set; }
@@ -159,6 +161,14 @@ namespace fitSharp.Machine.Model {
             public override void Format(Cell cell, StringBuilder input) {
                 input.Insert(0, String.Format("<span class=\"fit_{0}\">", Value));
                 input.Append("</span>");
+            }
+        }
+
+        class TitleValue: CellAttributeValue {
+            public override void Format(Cell cell, StringBuilder input) {
+	            var space = input.ToString().IndexOf(' ');
+	            if (space < 0) space = input.Length - 1;
+                input.Insert(space, string.Format(" title=\"{0}\"", Value));
             }
         }
     }

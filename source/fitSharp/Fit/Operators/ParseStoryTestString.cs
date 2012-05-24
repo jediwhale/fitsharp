@@ -53,6 +53,7 @@ namespace fitSharp.Fit.Operators {
             var tag = new StringBuilder();
             cell.FormatAttribute(CellAttribute.StartTag, tag);
             cell.FormatAttribute(CellAttribute.Status, tag);
+            cell.FormatAttribute(CellAttribute.Title, tag);
             return tag.ToString();
         }
 

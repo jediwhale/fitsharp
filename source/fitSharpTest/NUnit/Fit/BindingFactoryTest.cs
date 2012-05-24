@@ -5,6 +5,7 @@
 
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Service;
+using fitSharp.Machine.Model;
 using fitSharp.Samples.Fit;
 using NUnit.Framework;
 

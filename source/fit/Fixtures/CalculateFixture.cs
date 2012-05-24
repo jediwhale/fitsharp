@@ -12,6 +12,7 @@ using fitSharp.Fit.Engine;
 using fitSharp.Fit.Exception;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Exception;
+using fitSharp.Machine.Model;
 
 namespace fitlibrary {
 
