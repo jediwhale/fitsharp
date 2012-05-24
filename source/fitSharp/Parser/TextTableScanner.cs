@@ -1,4 +1,4 @@
-﻿// Copyright © 2010 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2012 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -10,10 +10,10 @@ namespace fitSharp.Parser {
     public class TextTableScanner {
         readonly IEnumerator<Token> enumerator;
         readonly Characters source;
-        readonly Func<Characters, bool> isWordContent;
+        readonly Func<CharacterType, bool> isWordContent;
         public CharacterType StartOfLine { get; private set;}
 
-        public TextTableScanner(string input, Func<Characters, bool> isWordContent) {
+        public TextTableScanner(string input, Func<CharacterType, bool> isWordContent) {
             enumerator = Tokens.GetEnumerator();
             source = new Characters(input);
             this.isWordContent = isWordContent;
@@ -38,9 +38,9 @@ namespace fitSharp.Parser {
         }
 
         Token MakeTestToken() {
-            source.MoveWhile(() => source.Type == CharacterType.WhiteSpace);
+            source.Until(() => source.Type != CharacterType.WhiteSpace);
             return
-                source.Type == CharacterType.End || source.Type == CharacterType.EndTest ? MakeEndOfTest() :
+                source.AtEnd || source.Type == CharacterType.EndTest ? MakeEndOfTest() :
                 source.Type == CharacterType.Newline ? MakeNewline() :
                 source.Type == CharacterType.BeginCell ? MakeToken(TokenType.BeginCell) :
                 source.Type == CharacterType.EndCell ? MakeToken(TokenType.EndCell) :
@@ -49,11 +49,11 @@ namespace fitSharp.Parser {
         }
 
         Token MakeEndOfTest() {
-            source.Start();
-            source.MoveWhile(() => source.Type != CharacterType.End && source.Type != CharacterType.BeginTest);
-            if (source.Type == CharacterType.End) return new Token(TokenType.End, source.FromStart);
+            var content = source.Until(() => source.Type == CharacterType.BeginTest);
+            if (source.AtEnd) return new Token(TokenType.End, content);
+            content += source.Content;
             source.MoveNext();
-            return new Token(TokenType.Leader, source.FromStart);
+            return new Token(TokenType.Leader, content);
         }
 
         Token MakeNewline() {
@@ -69,19 +69,15 @@ namespace fitSharp.Parser {
         }
 
         Token MakeQuotedWord() {
-            string quote = source.Content;
+            var quote = source.Content;
             source.MoveNext();
-            source.Start();
-            source.MoveWhile(() => source.Content != quote && source.Type != CharacterType.End);
-            var result = new Token(TokenType.Word, source.FromStart);
+            var result = new Token(TokenType.Word, source.Until(() => source.Type == CharacterType.Quote && source.Content == quote));
             source.MoveNext();
             return result;
         }
 
         Token MakeDelimitedWord() {
-            source.Start();
-            source.MoveWhile(() => isWordContent(source));
-            var result = new Token(TokenType.Word, source.FromStart.TrimEnd().Replace('_', ' '));
+            var result = new Token(TokenType.Word, source.Until(() => !isWordContent(source.Type)).TrimEnd().Replace('_', ' '));
             if (source.Type == CharacterType.Separator) source.MoveNext();
             return result;
         }

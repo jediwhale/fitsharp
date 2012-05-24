@@ -1,4 +1,4 @@
-﻿// Copyright © 2011 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2012 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -14,7 +14,7 @@ namespace fitSharp.Test.NUnit.Parser {
         }
 
         static void AssertRawScan(string input, string expected) {
-            var scanner = new TextTableScanner(input, c => c.IsLetterOrWhitespace);
+            var scanner = new TextTableScanner(input, c => c == CharacterType.Letter || c == CharacterType.WhiteSpace);
             var result = new StringBuilder();
             foreach (Token token in scanner.Tokens) {
                 if (result.Length > 0) result.Append(",");
@@ -100,5 +100,12 @@ namespace fitSharp.Test.NUnit.Parser {
             AssertScan("I\\'m\nstuff", "Word=I'm,Newline=<br />,Word=stuff");
         }
 
+        [Test] public void IgnoresEscapedQuotewithinquotedWord() {
+            AssertScan("'I\\'m'", "Word=I'm");
+        }
+
+        [Test] public void EscapesEscapeCharacter() {
+            AssertScan("I\\\\m", "Word=I\\m");
+        }
     }
 }

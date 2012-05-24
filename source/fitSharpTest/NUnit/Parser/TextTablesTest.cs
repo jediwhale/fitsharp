@@ -4,7 +4,6 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System.Text;
-using System.Web;
 using fitSharp.Machine.Model;
 using fitSharp.Parser;
 using NUnit.Framework;
@@ -27,8 +26,8 @@ namespace fitSharp.Test.NUnit.Parser {
             AssertParse("<<stuff", " <div> <table><tr> <td> &lt;&lt;stuff</td> </tr></table></div>");
         }
 
-        [Test, Ignore] public void BackSlashesInCellContent() {
-            AssertParse("'stuff\\'\\\\morestuff'", " <div> <table><tr> <td> stuff'\\morestuff</td> </tr></table></div>");
+        [Test] public void BackSlashesInCellContent() {
+            AssertParse("'stuff\\'\\\\morestuff'", " <div> <table><tr> <td> stuff&#39;\\morestuff</td> </tr></table></div>");
         }
 
         [Test] public void HandlesLeadingNewlines() {
@@ -102,7 +101,7 @@ namespace fitSharp.Test.NUnit.Parser {
         }
 
         static Tree<CellBase> ParseRaw(string input) {
-            return new TextTables(new TextTableScanner(input, c => c.IsLetter)).Parse();
+            return new TextTables(new TextTableScanner(input, c => c == CharacterType.Letter)).Parse();
         }
 
         static string Format(Tree<CellBase> tree, string separator = " ") {
