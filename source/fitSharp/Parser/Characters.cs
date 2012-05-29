@@ -4,79 +4,87 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace fitSharp.Parser {
     public class Characters {
         public const string TextStoryTestBegin = "test@";
-        readonly string input;
-        int next;
-        int length;
+        Substring current;
 
-        public bool AtEnd { get { return next >= input.Length; } }
+        public bool AtEnd { get { return current.AtEnd; } }
 
         public CharacterType Type { get; private set; }
-        public string Content { get { return length == 0 ? string.Empty : input.Substring(next, length); } }
+        public string Content { get { return current.ToString(); } }
 
         public Characters(string input) {
-            this.input = input.Replace("\r", string.Empty);
-            next = -1;
-            length = 1;
+            current = new Substring(input.Replace("\r", string.Empty), 0, 0);
             MoveNext();
         }
 
         public void MoveNext() {
-            next += length;
-            if (AtEnd) {
-                length = 0;
+            current = current.After;
+            if (current.AtEnd) {
                 return;
             }
-            length = 1;
-            if (next < input.Length - 1 && input[next] == '\\') {
-                next++;
+            if (current.StartsWith("\\")) {
                 Type = CharacterType.Letter;
+                current = current.Skip(1).Truncate(1);
             }
-            else if (input[next] == '[' && next + 1 < input.Length && input[next+1] == '\n') {
+            else if (current.StartsWith("[\n")) {
                 Type = CharacterType.BeginCell;
-                length = 2;
+                current = current.Truncate(2);
             }
-            else if (input[next] == '\n' && next + 1 < input.Length && input[next+1] == ']') {
+            else if (current.StartsWith("\n]")) {
                 Type = CharacterType.EndCell;
-                length = 2;
+                current = current.Truncate(2);
             }
-            else if (input[next] == '\n') Type = CharacterType.Newline;
-            else if (char.IsWhiteSpace(input[next])) Type = CharacterType.WhiteSpace;
-            else if (input[next] == '"' || input[next] == '\'') Type = CharacterType.Quote;
-            else if (input[next] == '|') Type = CharacterType.Separator;
-            else if (string.Compare("<br", 0, input, next, 3, StringComparison.OrdinalIgnoreCase) == 0
-                && input.IndexOf(">", next + 3, StringComparison.Ordinal) >= 0) {
+            else if (current.StartsWith("\n")) {
                 Type = CharacterType.Newline;
-                length = input.IndexOf(">", next + 3, StringComparison.Ordinal) - next + 1;
+                current = current.Truncate(1);
             }
-            else if (string.Compare(TextStoryTestBegin, 0, input, next, 5, StringComparison.OrdinalIgnoreCase) == 0) {
+            else if (current.StartsWith("\"") || current.StartsWith("'")) {
+                Type = CharacterType.Quote;
+                current = current.Truncate(1);
+            }
+            else if (current.StartsWith("|")) {
+                Type = CharacterType.Separator;
+                current = current.Truncate(1);
+            }
+            else if (current.StartsWith(TextStoryTestBegin, StringComparison.OrdinalIgnoreCase)) {
                 Type = CharacterType.BeginTest;
-                length = 5;
+                current = current.Truncate(5);
             }
-            else if (string.Compare("@test", 0, input, next, 5, StringComparison.OrdinalIgnoreCase) == 0) {
+            else if (current.StartsWith("@test", StringComparison.OrdinalIgnoreCase)) {
                 Type = CharacterType.EndTest;
-                length = 5;
+                current = current.Truncate(5);
             }
-            else Type = CharacterType.Letter;
+            else if (char.IsWhiteSpace(current[0])) {
+                Type = CharacterType.WhiteSpace;
+                current = current.Truncate(1);
+            }
+            else if (current.StartsWith("<br", StringComparison.OrdinalIgnoreCase)
+                && current.Contains(">")) {
+                Type = CharacterType.Newline;
+                current = current.TruncateAfter(">");
+            }
+            else {
+                Type = CharacterType.Letter;
+                current = current.Truncate(1);
+            }
         }
 
         public string Until(Func<bool> condition) {
-            var startPosition = next;
+            var start = current;
             while (!AtEnd && !condition()) MoveNext();
-            return FromPosition(startPosition);
+            return FromPosition(start);
         }
 
-        string FromPosition(int startPosition) {
-            if (next <= startPosition) return string.Empty;
+        string FromPosition(Substring start) {
+            var from = start.Truncate(current).ToString();
             var result = new StringBuilder();
-            for (var current = startPosition; current < next; current++) {
-                if (current < next - 1 && input[current] == '\\') current++;
-                result.Append(input[current]);
+            for (var index = 0; index < from.Length; index++) {
+                if (index < from.Length - 1 && from[index] == '\\') index++;
+                result.Append(from[index]);
             }
             return result.ToString();
         }

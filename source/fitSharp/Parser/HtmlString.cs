@@ -1,8 +1,9 @@
-// Copyright © 2010 Syterra Software Inc. All rights reserved.
+// Copyright © 2012 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
+using System.Linq;
 using System.Text;
 
 namespace fitSharp.Parser {
@@ -15,9 +16,8 @@ namespace fitSharp.Parser {
         
         public string ToPlainText() {
             string result = myHtml != null ? UnEscape(UnFormat(myHtml)): string.Empty;
-            foreach (char c in result) {
-                if (c != ' ')
-                    return result;
+            if (result.Any(c => c != ' ')) {
+                return result;
             }
             return string.Empty;
         }
@@ -28,7 +28,7 @@ namespace fitSharp.Parser {
             while (true) {
                 scan.FindTokenPair("<", ">", ourValidTagFilter);
                 result.Append(scan.Leader);
-                if (scan.Body.Length == 0) break;
+                if (scan.Body.IsEmpty) break;
                 if (IsStandard) result.AppendTag(GetTag(scan.Body));
             }
             return result.ToString();
@@ -41,11 +41,15 @@ namespace fitSharp.Parser {
         static readonly TokenBodyFilter ourValidTagFilter = IsValidTag;
 	    
         static string GetTag(Substring theInput) {
+            var current = theInput;
             var tag = new StringBuilder();
-            int i = 0;
-            if (theInput[0] == '/') tag.Append(theInput[i++]);
-            while (i < theInput.Length && char.IsLetter(theInput[i])) {
-                tag.Append(theInput[i++]);
+            if (theInput[0] == '/') {
+                tag.Append('/');
+                current = current.Skip(1);
+            }
+            while (!current.IsEmpty && char.IsLetter(current[0])) {
+                tag.Append(current[0]);
+                current = current.Skip(1);
             }
             return tag.ToString().ToLower();
         }
@@ -56,7 +60,7 @@ namespace fitSharp.Parser {
             while (true) {
                 scan.FindTokenPair("&", ";");
                 result.Append(scan.Leader);
-                if (scan.Body.Length == 0) break;
+                if (scan.Body.IsEmpty) break;
                 if (scan.Body.Equals("lt")) result.Append('<');
                 else if (scan.Body.Equals("gt")) result.Append('>');
                 else if (scan.Body.Equals("amp")) result.Append('&');
@@ -85,8 +89,9 @@ namespace fitSharp.Parser {
             }
 	        
             public void Append(Substring theInput) {
-                for (int i = 0; i < theInput.Length; i++) {
-                    char input = theInput[i];
+                var current = theInput;
+                while (!current.IsEmpty) {
+                    var input = current[0];
                     if (isStandard && input != '\u00a0' && char.IsWhiteSpace(input)) {
                         if (!myWhitespace) {
                             myText.Append(' ');
@@ -107,9 +112,9 @@ namespace fitSharp.Parser {
                             case '\u00a0':
                                 input = ' '; break;
                             case '&':
-                                if (theInput.Contains(i + 1, "nbsp;")) {
+                                if (current.ContainsAt(1, "nbsp;")) {
                                     input = ' ';
-                                    i += 5;
+                                    current = current.Skip(5);
                                 }
                                 break;
                         }
@@ -117,6 +122,7 @@ namespace fitSharp.Parser {
                         myWhitespace = false;
                         myLastTag = string.Empty;
                     }
+                    current = current.Skip(1);
                 }
             }
 	        
