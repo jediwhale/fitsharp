@@ -30,7 +30,6 @@ namespace fitSharp.Test.NUnit.Parser {
     
         [Test, ExpectedException(typeof(ApplicationException))] public void ParseTableWithBody() {
             new HtmlTables().Parse("leader<Table foo=2>body</table>trailer");
-
         }
     
         [Test] public void ParseTwoTables() {
@@ -87,7 +86,51 @@ namespace fitSharp.Test.NUnit.Parser {
             Assert.AreEqual(" <table> <tr> <td> <ul> <li> content</li></ul> <table> <tr> <td> content</td></tr></table></td></tr></table>", result);
         }
 
-        static string Format(Tree<CellBase> theParseTree, string theSeparator) {
+        [Test] public void ParseContentWithoutTables() {
+            // This is somewhat redundant with ParseNoTables, but I added 
+            // it to make sure I understand the behavior of Format()
+            var result = new HtmlTables().Parse("<p>Hello world!</p>");
+            Assert.AreEqual(string.Empty, Format(result, " "));
+        }
+
+        [Test] public void ParseCommentedTablesIgnored() {
+            var result = new HtmlTables().Parse("leader<!--<table><tr><td>ignored</td></tr></table>-->trailer");
+            Assert.AreEqual(string.Empty, Format(result, " "));
+        }
+
+        [Test] public void ParseCommentedTableAsLeader() {
+            var result = new HtmlTables().Parse("<!--<table><tr><td>ignored</td></tr></table>--><table><tr><td>foo</td></tr></table>");
+            Assert.AreEqual(" <!--<table><tr><td>ignored</td></tr></table>--> <table> <tr> <td> foo</td></tr></table>", Format(result, " "));
+        }
+
+        [Test] public void ParseCommentWedgedBetweenTables() {
+            var result = new HtmlTables().Parse("<table><tr><td>leader</td></tr></table><!--<table><tr><td>ignored</td></tr></table>--><table><tr><td>trailer</td></tr></table>");
+            Assert.AreEqual(" <table> <tr> <td> leader</td></tr></table> <!--<table><tr><td>ignored</td></tr></table>--> <table> <tr> <td> trailer</td></tr></table>", Format(result, " "));
+        }
+
+        [Test] public void ParseCommentTarnishedTableElement() {
+            var result = new HtmlTables().Parse("<!--table><tr><td>ignored</td></tr></table--><table><tr><td>trailer</td></tr></table>");
+            Assert.AreEqual(" <!--table><tr><td>ignored</td></tr></table--> <table> <tr> <td> trailer</td></tr></table>", Format(result, " "));
+        }
+
+        [Test] public void ParseCommentUnclosed() {
+            var result = new HtmlTables().Parse("<table><tr><td>leader</td></tr></table><!--<table><tr><td>ignored</td></tr></table><table><tr><td>trailer</td></tr></table>");
+            Assert.AreEqual(" <table> <tr> <td> leader</td></tr></table> <!--<table><tr><td>ignored</td></tr></table><table><tr><td>trailer</td></tr></table>", Format(result, " "));
+        }
+
+        [Test] public void ParseCommentInsideTable() {
+            var result = new HtmlTables().Parse("<table><tr><td>first</td></tr><!--<tr><td>first</td></tr>--></table>");
+            Assert.AreEqual(" <table> <tr> <td> first</td></tr> <!--<tr><td>first</td></tr>--></table>", Format(result, " "));
+        }
+
+        [Test]
+        public void ParseCommentSeveralCommentBlocks() {
+            var result = new HtmlTables().Parse("<!--first--><p>other content</p><!--<table><tr><td>first</td></tr></table>-->");
+            Assert.AreEqual(string.Empty, Format(result, " "));
+        }
+
+        static string Format(Tree<CellBase> theParseTree, string theSeparator)
+        {
             var result = new StringBuilder();
             foreach (Tree<CellBase> branch in theParseTree.Branches)
                 result.AppendFormat("{0}{1}", theSeparator, FormatCell(branch, theSeparator));

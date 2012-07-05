@@ -89,8 +89,8 @@ namespace fitSharp.Parser {
             }
         }
 
-	    static string HtmlToText(string theHtml) {
-	        return new HtmlString(theHtml).ToPlainText();
+        static string HtmlToText(string theHtml) {
+            return new HtmlString(theHtml).ToPlainText();
         }
 
         class AlternationParser: ElementParser {
@@ -133,7 +133,7 @@ namespace fitSharp.Parser {
 
             public void GoToNextToken(string theToken) {
                 Token = string.Empty;
-                int start = myInput.IndexOf("<" + theToken, myPosition, StringComparison.OrdinalIgnoreCase);
+                int start = IndexOfSkipComments(myInput, "<" + theToken, myPosition);
                 if (start < 0 || start > EndPosition) return;
                 Leader = myInput.Substring(myPosition, start - myPosition);
                 int end = myInput.IndexOf('>', start);
@@ -143,11 +143,41 @@ namespace fitSharp.Parser {
             }
 
             public int FindPosition(string theToken) {
-                int start = myInput.IndexOf("<" + theToken, myPosition, Math.Min(EndPosition, myInput.Length) - myPosition, StringComparison.OrdinalIgnoreCase);
+                int start = IndexOfSkipComments(myInput, "<" + theToken, myPosition, Math.Min(EndPosition, myInput.Length) - myPosition);
                 if (start < 0 || start > EndPosition) return -1;
                 int end = myInput.IndexOf('>', start);
                 if (end < 0) return -1;
                 return start;
+            }
+
+            private int IndexOfSkipComments(string input, string value, int position) {
+                return IndexOfSkipComments(input, value, position, input.Length - position);
+            }
+
+            private int IndexOfSkipComments(string input, string value, int position, int count) {
+                int valueIndex = input.IndexOf(value, position, count, StringComparison.OrdinalIgnoreCase);
+                if (valueIndex == -1)
+                    return -1;
+
+                // Scan backwards to see find the last comment that begins before the value we're looking for
+                int commentIndex = input.LastIndexOf("<!--", valueIndex, valueIndex - position + 1);
+                if (commentIndex != -1 && commentIndex < valueIndex) {
+                    // From found comment, look for closing token
+                    int endCommentIndex = input.IndexOf("-->", commentIndex + 4);
+                    if (endCommentIndex == -1) {
+                        // Unclosed comment
+                        return -1;
+                    }
+
+                    // If value is between opening and closing comment tokens, value is enclosed in a comment.
+                    // Find next value after said comment.
+                    if (endCommentIndex > valueIndex) {
+                        int afterComment = endCommentIndex + 3;
+                        return IndexOfSkipComments(input, value, afterComment, count - (afterComment - position));
+                    }
+                }
+
+                return valueIndex;
             }
 
             public string Trailer {
