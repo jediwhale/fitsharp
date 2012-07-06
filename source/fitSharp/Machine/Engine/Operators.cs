@@ -27,7 +27,13 @@ namespace fitSharp.Machine.Engine {
         public P Processor { private get; set; }
 
         public Operator<T, P> Add(string operatorName) {
-            return Add((Operator<T, P>)(Processor == null ? new BasicProcessor(createMemory).Create(operatorName).Value : Processor.Create(operatorName).Value));
+            return Add(CreateOperator(operatorName));
+        }
+
+        public Operator<T, P> AddFirst(string operatorName) {
+            // Add an operator at the current highest priority
+            int priority = (operators.Count == 0) ? 0 : operators.Count - 1;
+            return Add(CreateOperator(operatorName), priority);
         }
 
         public Operator<T, P> Add(Operator<T, P> anOperator) { return Add(anOperator, 1); }
@@ -36,6 +42,10 @@ namespace fitSharp.Machine.Engine {
             AddPriorityList(priority);
             operators[priority].Add(anOperator);
             return anOperator;
+        }
+
+        private Operator<T, P> CreateOperator(string operatorName) {
+            return (Operator<T, P>)(Processor == null ? new BasicProcessor(createMemory).Create(operatorName).Value : Processor.Create(operatorName).Value);
         }
 
         private void AddPriorityList(int priority) {
