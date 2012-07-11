@@ -114,6 +114,10 @@ namespace fitSharp.Machine.Engine {
             Operators.Add(operatorName);
         }
 
+        public void AddOperatorFirst(string operatorName) {
+            Operators.AddFirst(operatorName);
+        }
+
         public void AddOperator(Operator<T, P> anOperator) {
             Operators.Add(anOperator);
         }
