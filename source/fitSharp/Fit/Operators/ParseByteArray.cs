@@ -13,18 +13,18 @@ namespace fitSharp.Fit.Operators
         private readonly IdentifierName prefix = new IdentifierName("0x");
 
         public bool CanParse(Type type, TypedValue instance, Tree<Cell> parameters) {
-            return type == typeof (byte[]) && prefix.IsStartOf(parameters.Value.Text);
+            return type == typeof(byte[]) && prefix.IsStartOf(parameters.Value.Content);
         }
 
         public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
-            string input = parameters.Value.Text;
-			input = input.Replace(" ", string.Empty);
-			input = input.Substring(2);
-			var result = new byte[input.Length / 2];
-			for (int i = 0; i < input.Length; i += 2) {
-			    string currentByte = input.Substring(i, 2);
-			    result[i/2] = Byte.Parse(currentByte, System.Globalization.NumberStyles.HexNumber);
-			}
+            string input = parameters.Value.Content;
+            input = input.Replace(" ", string.Empty);
+            input = input.Substring(2);
+            var result = new byte[input.Length / 2];
+            for (int i = 0; i < input.Length; i += 2) {
+                string currentByte = input.Substring(i, 2);
+                result[i/2] = Byte.Parse(currentByte, System.Globalization.NumberStyles.HexNumber);
+            }
             return new TypedValue(result);
         }
     }
