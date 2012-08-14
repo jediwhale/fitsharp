@@ -12,20 +12,26 @@ using fitSharp.Samples.Fit;
 using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Fit {
-    [TestFixture] public class ParseSymbolTest {
-        [Test] public void AddsSymbolValueToCellAttributes() {
-            ParseCell("<<symbol", "symbol");
+    [TestFixture] public class ParseSymbolTest : ParseOperatorTest<ParseSymbol> {
+        [Test] public void CanParse() {
+            Assert.IsTrue(CanParse<string>("<<symbol"), "<<symbol");
+            Assert.IsTrue(CanParse<string>("\t<<symbol\r\n"), "\t<<symbol\r\n");
+            Assert.IsFalse(CanParse<string>("<nosymbol"), "<nosymbol");
+            Assert.IsFalse(CanParse<string>("nosymbol<<"), "nosymbol<<");
         }
 
-        [Test] public void SymbolNameIsTrimmed() {
-            ParseCell("<<symbol\n", " symbol ");
+        [Test] public void Parse() {
+            Parser.Processor.Get<Symbols>().Save("symbol", "symbol value");
+
+            Assert.AreEqual("symbol value", Parse<string>("<<symbol"), "<<symbol");
+            Assert.AreEqual("symbol value", Parse<string>("\t<<symbol\r\n"), "\t<<symbol\r\n");
         }
 
-        private static void ParseCell(string cellContent, string symbolName) {
-            var cell = new CellTreeLeaf(cellContent);
-            var processor = Builder.CellProcessor();
-            processor.Get<Symbols>().Save(symbolName, "value");
-            new ParseSymbol{Processor = processor}.Parse(typeof (string), TypedValue.Void, cell);
+        [Test] public void ParseAddsInformationSuffix() {
+            Parser.Processor.Get<Symbols>().Save("symbol", "value");
+
+            var cell = new CellTreeLeaf("<<symbol");
+            Parser.Parse(typeof(string), TypedValue.Void, cell);
             Assert.AreEqual(" value", cell.Value.GetAttribute(CellAttribute.InformationSuffix));
         }
     }

@@ -11,12 +11,12 @@ using fitSharp.Machine.Model;
 namespace fitSharp.Fit.Operators {
     public class ParseSymbol: CellOperator, ParseOperator<Cell> {
         public bool CanParse(Type type, TypedValue instance, Tree<Cell> parameters) {
-            return parameters.Value != null && parameters.Value.Text.StartsWith("<<");
+            return parameters.Value != null && parameters.Value.Content.StartsWith("<<");
         }
 
         public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
             var symbols = Processor.Get<Symbols>();
-            var symbol = parameters.Value.Text.Substring(2);
+            var symbol = parameters.Value.Content.Substring(2);
             var result = new TypedValue(symbols.HasValue(symbol) ? symbols.GetValue(symbol) : null, type);
             parameters.Value.SetAttribute(
                 CellAttribute.InformationSuffix,

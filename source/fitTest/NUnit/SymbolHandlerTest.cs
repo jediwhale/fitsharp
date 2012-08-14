@@ -77,7 +77,7 @@ namespace fit.Test.NUnit {
             TestUtils.DoCheck(stringFixture, TestUtils.CreateCellRange("Field"), cell);
             Assert.AreEqual("<<def<span class=\"fit_grey\"> ghi</span> <span class=\"fit_label\">expected</span><hr />xyz <span class=\"fit_label\">actual</span><hr />At 0 expected g was x", cell.Body);
             TestUtils.VerifyCounts(stringFixture, 0, 1, 0, 0);
-        }	
+        }
 
         [Test]
         public void CellContentWhenRecalling_Input()
@@ -178,6 +178,14 @@ namespace fit.Test.NUnit {
             personFixture.Field = person2;
             TestUtils.DoCheck(personFixture, TestUtils.CreateCellRange("Field"), cell);
             TestUtils.VerifyCounts(personFixture, 0, 1, 0, 0);
+        }
+
+        [Test]
+        public void SymbolNamesWithWhitespace() {
+            StoreSymbol("\r\n\tfoo\r\n", "bar");
+            Assert.AreEqual("bar", LoadSymbol("foo"));
+            Assert.AreEqual("bar", LoadSymbol("\r\n\tfoo\r\n"));
+            Assert.AreEqual("bar", LoadSymbol("foo\r\n"));
         }
 
         private object LoadSymbol(string symbolName) {
