@@ -24,7 +24,7 @@ namespace fitSharp.Fit.Operators {
 			    Array array = Array.CreateInstance(type.GetElementType(), strings.Length);
 			    for (int i = 0; i < strings.Length; i++) {
                     //todo: use cellsubstring?
-			        array.SetValue(Processor.ParseString(type.GetElementType(), strings[i]).Value, i);
+			        array.SetValue(Processor.ParseString(type.GetElementType(), strings[i].Trim()).Value, i);
 			    }
                 return new TypedValue(array);
             }
@@ -32,7 +32,7 @@ namespace fitSharp.Fit.Operators {
             Type resultType = typeof (List<>).MakeGenericType(new[] {elementType});
             var list = (IList) Activator.CreateInstance(resultType);
             foreach (string element in strings) {
-                list.Add(Processor.ParseString(elementType, element).Value);
+                list.Add(Processor.ParseString(elementType, element.Trim()).Value);
             }
             return new TypedValue(list);
         }

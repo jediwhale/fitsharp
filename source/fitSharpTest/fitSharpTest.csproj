@@ -55,6 +55,10 @@
     <Compile Include="NUnit\Fit\FindMemberPatternTest.cs" />
     <Compile Include="NUnit\Fit\IncludeTest.cs" />
     <Compile Include="NUnit\Fit\ParseMemberNameTest.cs" />
+    <Compile Include="NUnit\Fit\ParseNullArrayTest.cs" />
+    <Compile Include="NUnit\Fit\ParseNullTest.cs" />
+    <Compile Include="NUnit\Fit\ParseOperatorTest.cs" />
+    <Compile Include="NUnit\Fit\ParseQuotedStringTest.cs" />
     <Compile Include="NUnit\Fit\TagFilterTest.cs" />
     <Compile Include="NUnit\Fit\ValueArrayTest.cs" />
     <Compile Include="NUnit\Machine\ArgumentParserTest.cs" />

@@ -10,6 +10,7 @@ namespace fitSharp.Machine.Model {
         readonly Dictionary<CellAttribute, CellAttributeValue> attributes = new Dictionary<CellAttribute, CellAttributeValue>();
 
         public string Text { get; private set; }
+        public string Content { get { return Text.Trim(); } }
 
         public IDictionary<CellAttribute, CellAttributeValue> Attributes { get { return attributes; } }
 
