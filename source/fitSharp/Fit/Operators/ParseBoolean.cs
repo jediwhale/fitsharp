@@ -9,32 +9,33 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
     public class ParseBoolean: CellOperator, ParseOperator<Cell> {
-	    private static readonly IdentifierName ourTrueIdentifier = new IdentifierName("true");
-	    private static readonly IdentifierName ourYesIdentifier = new IdentifierName("yes");
-	    private static readonly IdentifierName ourYIdentifier = new IdentifierName("y");
-	    private static readonly IdentifierName ourFalseIdentifier = new IdentifierName("false");
-	    private static readonly IdentifierName ourNoIdentifier = new IdentifierName("no");
-	    private static readonly IdentifierName ourNIdentifier = new IdentifierName("n");
+        private static readonly IdentifierName ourTrueIdentifier = new IdentifierName("true");
+        private static readonly IdentifierName ourYesIdentifier = new IdentifierName("yes");
+        private static readonly IdentifierName ourYIdentifier = new IdentifierName("y");
+        private static readonly IdentifierName ourFalseIdentifier = new IdentifierName("false");
+        private static readonly IdentifierName ourNoIdentifier = new IdentifierName("no");
+        private static readonly IdentifierName ourNIdentifier = new IdentifierName("n");
 
         public bool CanParse(Type type, TypedValue instance, Tree<Cell> parameters) {
             return type == typeof(bool);
         }
 
         public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
-            return new TypedValue(ImpliesTrue(parameters.Value.Text)
+            string content = parameters.Value.Content;
+            return new TypedValue(ImpliesTrue(content)
                        ? true
-                       : ImpliesFalse(parameters.Value.Text)
+                       : ImpliesFalse(content)
                              ? false
-                             : bool.Parse(parameters.Value.Text));
+                             : bool.Parse(content));
         }
 
-		private static bool ImpliesTrue(string possibleTrue) {
-		    return ourYIdentifier.Equals(possibleTrue) || ourYesIdentifier.Equals(possibleTrue) || ourTrueIdentifier.Equals(possibleTrue);
-		}
+        private static bool ImpliesTrue(string possibleTrue) {
+            return ourYIdentifier.Equals(possibleTrue) || ourYesIdentifier.Equals(possibleTrue) || ourTrueIdentifier.Equals(possibleTrue);
+        }
 
-		private static bool ImpliesFalse(string possibleFalse) {
-		    return
-		        ourNIdentifier.Equals(possibleFalse) || ourNoIdentifier.Equals(possibleFalse) || ourFalseIdentifier.Equals(possibleFalse);
-		}
+        private static bool ImpliesFalse(string possibleFalse) {
+            return
+                ourNIdentifier.Equals(possibleFalse) || ourNoIdentifier.Equals(possibleFalse) || ourFalseIdentifier.Equals(possibleFalse);
+        }
     }
 }
