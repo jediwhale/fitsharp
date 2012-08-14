@@ -21,36 +21,31 @@ namespace fit.Test.NUnit {
         [Test]
         public void ParseValidStrings() {
             var validTrueStrings = new [] {
-                "Y", "y",
-                "YES", "yes", "YeS", "yEs",
-                "true", "TRUE", "TrUe", "tRuE"
+                "Y", "y", "\n\ty\n",
+                "YES", "yes", "YeS", "yEs", "\n\tyes\n",
+                "true", "TRUE", "TrUe", "tRuE", "\n\ttrue\n"
             };
             var validFalseStrings = new [] {
-                "N", "n",
-                "NO", "no", "No", "nO",
-                "false", "FALSE", "fAlSe", "FaLsE"
+                "N", "n", "\n\tn\n",
+                "NO", "no", "No", "nO", "\n\tno\n",
+                "false", "FALSE", "fAlSe", "FaLsE", "\n\tfalse\n"
             };
             foreach (string validString in validTrueStrings) {
-                Assert.IsTrue(Parse(validString));
+                Assert.IsTrue(Parse(validString), "Parsing '" + validString + "'");
             }
             foreach (string validString in validFalseStrings) {
-                Assert.IsFalse(Parse(validString));
+                Assert.IsFalse(Parse(validString), "Parsing '" + validString + "'");
             }
         }
 
-        [Test] public void ParseInvalidString() {
-            try {
-                Parse("garbage");
-            }
-            catch (Exception e) {
-                Assert.IsTrue(e is FormatException);
-                return;
-            }
-            Assert.Fail();
+        [Test, ExpectedException(typeof(FormatException))] public void ParseInvalidString() {
+            Parse("garbage");
         }
 
         private bool Parse(string validString) {
-            Assert.IsTrue(parseBoolean.CanParse(typeof (bool), TypedValue.Void, TestUtils.CreateCell(validString)));
+            if (!parseBoolean.CanParse(typeof (bool), TypedValue.Void, TestUtils.CreateCell(validString)))
+                return false;
+
             TypedValue result = parseBoolean.Parse(typeof (bool), TypedValue.Void, TestUtils.CreateCell(validString));
             return result.GetValue<bool>();
         }
