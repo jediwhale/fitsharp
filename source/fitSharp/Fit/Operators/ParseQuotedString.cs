@@ -10,13 +10,16 @@ using fitSharp.Machine.Model;
 namespace fitSharp.Fit.Operators {
     public class ParseQuotedString: CellOperator, ParseOperator<Cell> {
         public bool CanParse(Type type, TypedValue instance, Tree<Cell> parameters) {
-            return type == typeof(string)
-                && parameters.Value.Text.StartsWith("'")
-                && parameters.Value.Text.EndsWith("'");
+            if (type != typeof(string))
+                return false;
+
+            string content = parameters.Value.Content;
+            return content.StartsWith("'") && content.EndsWith("'");
         }
 
         public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
-            return new TypedValue(parameters.Value.Text.Substring(1, parameters.Value.Text.Length - 2));
+            string content = parameters.Value.Content;
+            return new TypedValue(content.Substring(1, content.Length - 2));
         }
     }
 }
