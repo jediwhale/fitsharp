@@ -11,15 +11,18 @@ using fitSharp.Fit.Operators;
 namespace fitSharp.Test.NUnit.Fit {
     public class ParseOperatorTest<ParseOperatorType>
         where ParseOperatorType : CellOperator, ParseOperator<Cell>, new() {
-        ParseOperatorType parser;
 
-        public ParseOperatorTest() {
-            // Parse operators are stateless, so no need to use SetUp.
-            parser = new ParseOperatorType { Processor = Builder.CellProcessor() };
+        public ParseOperatorType Parser { get; private set; }
+
+        [SetUp]
+        public void SetUp() {
+            // Parse operators are stateless, but the processor may be mutated
+            // by Parse(), so recreate for every test
+            Parser = new ParseOperatorType { Processor = Builder.CellProcessor() };
         }
 
         protected bool CanParse<T>(string cellContent) {
-            return parser.CanParse(typeof(T), TypedValue.Void, new CellTreeLeaf(cellContent));
+            return Parser.CanParse(typeof(T), TypedValue.Void, new CellTreeLeaf(cellContent));
         }
 
         protected T Parse<T>(string cellContent) where T : class {
@@ -27,7 +30,7 @@ namespace fitSharp.Test.NUnit.Fit {
         }
 
         protected T Parse<T>(string cellContent, TypedValue instance) where T : class {
-            TypedValue result = parser.Parse(typeof(string), TypedValue.Void, new CellTreeLeaf(cellContent));
+            TypedValue result = Parser.Parse(typeof(string), TypedValue.Void, new CellTreeLeaf(cellContent));
             return result.GetValueAs<T>();
         }
     }
