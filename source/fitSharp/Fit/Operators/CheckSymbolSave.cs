@@ -11,12 +11,12 @@ using fitSharp.Machine.Model;
 namespace fitSharp.Fit.Operators {
     public class CheckSymbolSave: CellOperator, CheckOperator {
         public bool CanCheck(CellOperationValue actualValue, Tree<Cell> expectedCell) {
-            return expectedCell.Value.Text.StartsWith(">>");
+            return expectedCell.Value.Content.StartsWith(">>");
         }
 
         public TypedValue Check(CellOperationValue actualValue, Tree<Cell> expectedCell) {
             var value = actualValue.GetActual(Processor);
-            Processor.Get<Symbols>().Save(expectedCell.Value.Text.Substring(2), value);
+            Processor.Get<Symbols>().Save(expectedCell.Value.Content.Substring(2), value);
 
             expectedCell.Value.SetAttribute(CellAttribute.InformationSuffix, value == null ? "null" : value.ToString());
             return TypedValue.Void;
