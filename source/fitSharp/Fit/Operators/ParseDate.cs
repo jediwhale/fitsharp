@@ -14,10 +14,10 @@ namespace fitSharp.Fit.Operators {
 
         public bool CanParse(Type type, TypedValue instance, Tree<Cell> parameters) {
             if (type != typeof(DateTime)) return false;
-            Cell cell = parameters.Value;
-            if (!today.IsStartOf(cell.Text)) return false;
-            if (cell.Text.Length > today.Length) {
-                string modifier = cell.Text.Substring(today.Length).Trim();
+            string text = parameters.Value.Content;
+            if (!today.IsStartOf(text)) return false;
+            if (text.Length > today.Length) {
+                string modifier = text.Substring(today.Length).Trim();
                 if (!modifier.StartsWith("+") && !modifier.StartsWith("-")) return false;
             }
             return true;
@@ -25,9 +25,10 @@ namespace fitSharp.Fit.Operators {
 
         public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
             Cell cell = parameters.Value;
+            string text = cell.Content;
             int daysToAdd = 0;
-            if (cell.Text.Length > today.Length) {
-                string modifier = cell.Text.Substring(today.Length).Trim();
+            if (text.Length > today.Length) {
+                string modifier = text.Substring(today.Length).Trim();
                 var rest = new CellSubstring(cell, modifier.Substring(1));
                 daysToAdd = Processor.Parse<Cell, int>(rest);
                 if (modifier.StartsWith("-")) {
