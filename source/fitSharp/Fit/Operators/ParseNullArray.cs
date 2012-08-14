@@ -12,7 +12,7 @@ namespace fitSharp.Fit.Operators {
         private static readonly IdentifierName nullIdentifier = new IdentifierName("null");
 
         public bool CanParse(Type type, TypedValue instance, Tree<Cell> parameters) {
-            return type.IsArray && parameters.Value != null && nullIdentifier.Equals(parameters.Value.Text);
+            return type.IsArray && parameters.Value != null && nullIdentifier.Equals(parameters.Value.Content);
         }
 
         public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
