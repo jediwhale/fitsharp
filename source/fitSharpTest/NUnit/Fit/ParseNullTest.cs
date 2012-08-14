@@ -5,8 +5,7 @@ using fitSharp.Samples.Fit;
 using fitSharp.Fit.Operators;
 
 namespace fitSharp.Test.NUnit.Fit {
-    [TestFixture]
-    public class ParseNullTest {
+    [TestFixture] public class ParseNullTest {
         ParseNull parser;
 
         [SetUp] public void SetUp() {
