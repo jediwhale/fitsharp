@@ -15,6 +15,7 @@ namespace fitSharp.Test.NUnit.Fit
         ParseOperatorType parser;
 
         public ParseOperatorTest() {
+            // Parse operators are stateless, so no need to use SetUp.
             parser = new ParseOperatorType { Processor = Builder.CellProcessor() };
         }
 

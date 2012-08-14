@@ -7,8 +7,7 @@ using fitSharp.Machine.Engine;
 
 namespace fitSharp.Test.NUnit.Fit
 {
-    [TestFixture]
-    public class ParseNullTest : ParseOperatorTest<ParseNull> {
+    [TestFixture] public class ParseNullTest : ParseOperatorTest<ParseNull> {
         [Test] public void CanParse() {
             Assert.IsTrue(CanParse<string>("null"), "null");
             Assert.IsTrue(CanParse<string>("NULL"), "NULL");

@@ -7,8 +7,7 @@ using fitSharp.Fit.Operators;
 
 namespace fitSharp.Test.NUnit.Fit
 {
-    [TestFixture]
-    public class ParseNullArrayTest : ParseOperatorTest<ParseNullArray> {
+    [TestFixture] public class ParseNullArrayTest : ParseOperatorTest<ParseNullArray> {
         [Test] public void CanParse() {
             Assert.IsTrue(CanParse<object[]>("null"), "null");
             Assert.IsTrue(CanParse<object[]>("\r\n null \r\n\t"), "null with whitespace");
