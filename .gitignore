@@ -12,7 +12,7 @@ site/
 mwiki/
 my*.*
 *.pdb
-testoutput/
+test/
 my*/
 document/FitnesseRoot/ErrorLogs/
 document/FitnesseRoot/RecentChanges/

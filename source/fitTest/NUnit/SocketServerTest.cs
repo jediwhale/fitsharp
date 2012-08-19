@@ -60,6 +60,7 @@ namespace fit.Test.NUnit {
             socket.PutByteString(Protocol.FormatInteger(0));
             var server = new SocketServer(new FitSocket(socket, new NullReporter()), service, new NullReporter(), false);
             server.ProcessTestDocuments(new StoryTestStringWriter(service).ForTables(s => resultTables += s));
+            Assert.IsFalse(socket.isOpen);
         }
     }
 

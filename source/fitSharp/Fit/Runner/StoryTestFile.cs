@@ -22,6 +22,7 @@ namespace fitSharp.Fit.Runner {
     public interface StoryTestPageExecutor {
         void Do(StoryTestPage page);
         void DoNoTest();
+        bool SuiteIsAbandoned { get; }
     }
 
     public class StoryTestFile: StoryTestPage {

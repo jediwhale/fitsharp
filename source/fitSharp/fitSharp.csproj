@@ -45,6 +45,7 @@
     <Compile Include="Fit\Engine\DefaultFlowInterpreter.cs" />
     <Compile Include="Fit\Engine\ListMatcher.cs" />
     <Compile Include="Fit\Engine\ListMatchStrategy.cs" />
+    <Compile Include="Fit\Exception\AbandonSuiteException.cs" />
     <Compile Include="Fit\Exception\FitFailureException.cs" />
     <Compile Include="Fit\Exception\InvalidMethodException.cs" />
     <Compile Include="Fit\Exception\TableStructureException.cs" />

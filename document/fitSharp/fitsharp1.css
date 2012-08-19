@@ -41,6 +41,7 @@ a.externallink {
 table {background-color:white;}
 pre.code {}
 pre.test { margin-left: 10%; }
+div.test { margin-left: 10%; font-family: monospace; }
 
 .pass {background-color: #AAFFAA;}
 .fail {background-color: #FFAAAA;}

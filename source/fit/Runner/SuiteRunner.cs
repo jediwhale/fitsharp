@@ -1,4 +1,4 @@
-// Copyright © 2011 Syterra Software Inc.
+// Copyright © 2012 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -56,13 +56,17 @@ namespace fit.Runner {
                 catch (Exception e) {
 	                myReporter.Write(e.ToString());
 	            }
+                if (executor.SuiteIsAbandoned) break;
             }
 
-	        foreach (StoryTestSuite childSuite in theSuite.Suites) {
-                RunFolder(childSuite, dryRun);
-	        }
-	        StoryTestPage suiteTearDown = theSuite.SuiteTearDown;
-            if (suiteTearDown != null) executor.Do(suiteTearDown);
+            if (!executor.SuiteIsAbandoned) {
+                foreach (StoryTestSuite childSuite in theSuite.Suites) {
+                    RunFolder(childSuite, dryRun);
+                }
+                StoryTestPage suiteTearDown = theSuite.SuiteTearDown;
+                if (suiteTearDown != null) executor.Do(suiteTearDown);
+            }
+
 	        if (!dryRun) theSuite.Finish();
 	    }
 
@@ -103,6 +107,8 @@ namespace fit.Runner {
 	                return;
 	            }
 
+                storyTest.OnAbandonSuite(() => { SuiteIsAbandoned = true; });
+
                 if (page.Name.IsSuitePage) {
                     storyTest.Execute();
                 }
@@ -124,6 +130,8 @@ namespace fit.Runner {
                 memory.GetItem<Context>().TestPagePath = new FilePath(path);
             }
 
+            public bool SuiteIsAbandoned { get; private set; }
+
             readonly ResultWriter resultWriter;
             readonly Memory memory;
             readonly Action<TestCounts> handleCounts;
@@ -140,6 +148,8 @@ namespace fit.Runner {
             }
 
             public void DoNoTest() {}
+
+            public bool SuiteIsAbandoned { get { return false; } }
 
             readonly ProgressReporter reporter;
         }

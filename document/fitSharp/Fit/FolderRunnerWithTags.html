@@ -24,7 +24,8 @@ The test files used in the following examples are from <a href="../Fit/SampleInp
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>with</td><td>file system</td></tr>
-<tr><td>make empty folder</td><td>testoutput</td></tr>
+<tr><td>make empty folder</td><td>test</td></tr>
+<tr><td>make empty folder</td><td>test\output</td></tr>
 <tr><td>alias folder</td><td>document\fitsharp\Fit\SampleOutputFiles</td><td>as</td><td>out</td></tr>
 </table>
 <br>
@@ -45,14 +46,14 @@ Checks whether the result html generated is as expected. We are concerned about 
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>with</td><td>file system</td></tr>
-<tr><td>ensure</td><td>file</td><td>testoutput\SampleSimpleTest.html</td><td>same as</td><td>out\SampleSimpleTest.html</td></tr>
+<tr><td>ensure</td><td>file</td><td>test\output\SampleSimpleTest.html</td><td>same as</td><td>out\SampleSimpleTest.html</td></tr>
 </table>
 <br>
 Wildcards are evaluated in tag filters.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>with</td><td>file system</td></tr>
-<tr><td>make empty folder</td><td>testoutput</td></tr>
+<tr><td>make empty folder</td><td>test\output</td></tr>
 </table>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
@@ -64,7 +65,7 @@ The wildcard filter should have matched the tagged SampleSimpleTest page again.<
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>with</td><td>file system</td></tr>
-<tr><td>ensure</td><td>file</td><td>testoutput\SampleSimpleTest.html</td><td>same as</td><td>out\SampleSimpleTest.html</td><td></td></tr>
+<tr><td>ensure</td><td>file</td><td>test\output\SampleSimpleTest.html</td><td>same as</td><td>out\SampleSimpleTest.html</td><td></td></tr>
 </table>
 </div>
 <div style="width:100%;text-align:right">
