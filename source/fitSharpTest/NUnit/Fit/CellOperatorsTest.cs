@@ -10,6 +10,16 @@ using fitSharp.Machine.Model;
 using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Fit {
+    public class TestOperator : CellOperator, ParseOperator<Cell> {
+        public bool CanParse(System.Type type, TypedValue instance, Tree<Cell> parameters) {
+            return true;
+        }
+
+        public TypedValue Parse(System.Type type, TypedValue instance, Tree<Cell> parameters) {
+            return TypedValue.Void;
+        }
+    }
+
     [TestFixture] public class CellOperatorsTest {
         [Test] public void LoadsOperatorByName() {
             var operators = new CellOperators();
@@ -22,6 +32,16 @@ namespace fitSharp.Test.NUnit.Fit {
             var operators = new CellOperators();
             var result = operators.FindOperator<WrapOperator>(new object[] {null});
             Assert.AreEqual(typeof(WrapDefault), result.GetType());
+        }
+
+        [Test] public void AddedFirstGetsExecutedFirst() {
+            var operators = new CellOperators();
+            var registered = operators.AddFirst("fitsharp.Test.NUnit.Fit.TestOperator");
+
+            ParseOperator<Cell> executed = null;
+            operators.Do<ParseOperator<Cell>>(o => true, o => { executed = o; });
+
+            Assert.AreSame(registered, executed);
         }
     }
 }
