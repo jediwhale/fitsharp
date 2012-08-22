@@ -50,6 +50,8 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>xcopy "$(TargetPath)*" "$(SolutionDir)build\$(ConfigurationName)\" /I /Y</PostBuildEvent>
+    <PostBuildEvent>xcopy "$(TargetPath)*" "$(SolutionDir)build\$(ConfigurationName)\" /I /Y
+xcopy "$(TargetPath)*" "$(SolutionDir)source\fitSharpTest\bin\$(ConfigurationName)\" /I /Y
+</PostBuildEvent>
   </PropertyGroup>
 </Project>
