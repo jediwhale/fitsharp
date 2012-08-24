@@ -5,7 +5,7 @@
     </Settings>
     
     <ApplicationUnderTest>
-        <addAssembly>c:\users\mikes\desktop\code\fitsharp\build\debug\fittest.dll</addAssembly>
+        <addAssembly>build\debug\fittest.dll</addAssembly>
         <addNamespace>fit.Test.Double</addNamespace>
     </ApplicationUnderTest>
     

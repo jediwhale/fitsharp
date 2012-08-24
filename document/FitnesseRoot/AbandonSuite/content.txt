@@ -1,4 +1,4 @@
-!define TEST_RUNNER {c:\users\mikes\desktop\code\fitSharp\build\debug\Runner.exe}
-!define COMMAND_PATTERN {%m -c c:\users\mikes\desktop\code\fitsharp\abandonsuite.config.xml %p}
+!define TEST_RUNNER {build\debug\Runner.exe}
+!define COMMAND_PATTERN {%m -c abandonsuite.config.xml %p}
 
 !contents
