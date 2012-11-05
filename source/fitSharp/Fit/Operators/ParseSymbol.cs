@@ -17,11 +17,17 @@ namespace fitSharp.Fit.Operators {
         public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
             var symbols = Processor.Get<Symbols>();
             var symbol = parameters.Value.Content.Substring(2);
-            var result = new TypedValue(symbols.HasValue(symbol) ? symbols.GetValue(symbol) : null, type);
+            var result = symbols.HasValue(symbol) ? MakeTypedValue(symbols.GetValue(symbol), type) : new TypedValue(null, type);
             parameters.Value.SetAttribute(
                 CellAttribute.InformationSuffix,
                 result.Value == null ? "null" : result.Value.ToString()); //todo: dry
             return result;
+        }
+
+        TypedValue MakeTypedValue(object value, Type type) {
+            return value == null || type.IsAssignableFrom(value.GetType())
+                ? new TypedValue(value, type)
+                : Processor.ParseString(type, value.ToString());
         }
     }
 }

@@ -34,5 +34,10 @@ namespace fitSharp.Test.NUnit.Fit {
             TypedValue result = Parser.Parse(typeof(string), TypedValue.Void, new CellTreeLeaf(cellContent));
             return result.GetValueAs<T>();
         }
+
+        protected T ParseAs<T>(string cellContent) {
+            var result = Parser.Parse(typeof(T), TypedValue.Void, new CellTreeLeaf(cellContent));
+            return result.GetValue<T>();
+        }
     }
 }

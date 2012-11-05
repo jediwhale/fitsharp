@@ -13,6 +13,7 @@ namespace fitSharp.Test.NUnit.Fit {
     [TestFixture] public class ParseSymbolTest : ParseOperatorTest<ParseSymbol> {
         [Test] public void CanParse() {
             Assert.IsTrue(CanParse<string>("<<symbol"), "<<symbol");
+            Assert.IsFalse(CanParse<string>("no<<symbol"), "no<<symbol");
             Assert.IsTrue(CanParse<string>("\t<<symbol\r\n"), "\t<<symbol\r\n");
             Assert.IsFalse(CanParse<string>("<nosymbol"), "<nosymbol");
             Assert.IsFalse(CanParse<string>("nosymbol<<"), "nosymbol<<");
@@ -23,6 +24,11 @@ namespace fitSharp.Test.NUnit.Fit {
 
             Assert.AreEqual("symbol value", Parse<string>("<<symbol"), "<<symbol");
             Assert.AreEqual("symbol value", Parse<string>("\t<<symbol\r\n"), "\t<<symbol\r\n");
+        }
+
+        [Test] public void ParsesTypeFromString() {
+            Parser.Processor.Get<Symbols>().Save("symbol", "123.45");
+            Assert.AreEqual(123.45, ParseAs<double>("<<symbol"));
         }
 
         [Test] public void ParseAddsInformationSuffix() {

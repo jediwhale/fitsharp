@@ -1,3 +1,4 @@
+*.gpState
 *.suo
 *.user
 _ReSharper*/

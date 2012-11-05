@@ -15,16 +15,12 @@ namespace fit.Test.NUnit {
     public class SymbolHandlerTest: CellOperatorTest
     {
         [Test] public void TestRegisterAndGet() {
-            Assert.IsTrue(IsMatch(new ParseSymbol(), "<<xyz"));
             Assert.IsFalse(IsMatch(new CheckSymbolSave(), "x<<yz"));
-            Assert.IsFalse(IsMatch(new ParseSymbol(), "x<<yz"));
             Assert.IsTrue(IsMatch(new CheckSymbolSave(), ">>xyz"));
             Assert.IsFalse(IsMatch(new CheckSymbolSave(), "x>>yz"));
-            Assert.IsFalse(IsMatch(new ParseSymbol(), "x>>yz"));
 
             // Make sure we recognize symbols even in formatted content
             Assert.IsTrue(IsMatch(new CheckSymbolSave(), "\n    >>xyz\n"));
-            Assert.IsTrue(IsMatch(new ParseSymbol(), "\n    <<xyz\n"));
         }
 
         [Test] public void TestWhitespaceEnclosedSave() {
@@ -34,15 +30,6 @@ namespace fit.Test.NUnit {
           TestUtils.DoCheck(stringFixture, TestUtils.CreateCellRange("Field"), cell);
 
           Assert.AreEqual("abc", LoadSymbol("xyz"));
-        }
-
-        [Test] public void TestWhitespaceEnclosedRecall() {
-          Parse cell = TestUtils.CreateCell("\n    <<xyz\n");
-          MakeStringFixture();
-          StoreSymbol("xyz", "ghi");
-          TestUtils.DoInput(stringFixture, TestUtils.CreateCellRange("Field"), cell);
-
-          Assert.AreEqual("ghi", stringFixture.Field);
         }
 
         [Test]
@@ -63,16 +50,6 @@ namespace fit.Test.NUnit {
             stringFixture.Field = "abc";
             TestUtils.DoCheck(stringFixture, TestUtils.CreateCellRange("Field"), cell);
             Assert.AreEqual(">>xyz<span class=\"fit_grey\"> abc</span>", cell.Body);
-        }
-
-        [Test]
-        public void TestRecallString() {
-            Parse cell = TestUtils.CreateCell("<<def");
-            MakeStringFixture();
-            StoreSymbol("def", "ghi");
-            TestUtils.DoInput(stringFixture, TestUtils.CreateCellRange("Field"), cell);
-            Assert.AreEqual("ghi", stringFixture.Field);
-            TestUtils.VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
 
         [Test]
