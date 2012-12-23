@@ -27,8 +27,8 @@ namespace fitSharp.Test.NUnit.Fit {
         }
 
         [Test] public void ParsesTypeFromString() {
-            Parser.Processor.Get<Symbols>().Save("symbol", "123.45");
-            Assert.AreEqual(123.45, ParseAs<double>("<<symbol"));
+            Parser.Processor.Get<Symbols>().Save("symbol", 123.45d.ToString());
+            Assert.AreEqual(123.45d, ParseAs<double>("<<symbol"));
         }
 
         [Test] public void ParseAddsInformationSuffix() {
