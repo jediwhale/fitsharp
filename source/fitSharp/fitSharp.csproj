@@ -196,6 +196,7 @@
     <Compile Include="Parser\TextTables.cs" />
     <Compile Include="Parser\TextTableScanner.cs" />
     <Compile Include="Parser\Token.cs" />
+    <Compile Include="Slim\Operators\ComposeDictionary.cs" />
     <Compile Include="Slim\Operators\Converter.cs" />
     <Compile Include="Machine\Engine\DefaultParse.cs" />
     <Compile Include="Machine\Engine\InvokeDefault.cs" />
