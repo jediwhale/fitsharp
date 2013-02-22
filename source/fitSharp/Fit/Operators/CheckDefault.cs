@@ -1,4 +1,4 @@
-﻿// Copyright © 2012 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2013 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -15,6 +15,7 @@ namespace fitSharp.Fit.Operators {
         }
 
         public TypedValue Check(CellOperationValue actualValue, Tree<Cell> expectedCell) {
+            var result = false;
             try {
                 Processor.Get<Logging>().BeginCell(expectedCell.Value);
                 TypedValue actual;
@@ -27,6 +28,7 @@ namespace fitSharp.Fit.Operators {
 
                 if (Processor.Compare(actual, expectedCell)) {
                     Processor.TestStatus.MarkRight(expectedCell.Value);
+                    result = true;
                 }
                 else {
                     var actualCell = Processor.Compose(actual);
@@ -35,7 +37,7 @@ namespace fitSharp.Fit.Operators {
             }
             catch (IgnoredException) {}
             Processor.TestStatus.MarkCellWithLastResults(expectedCell.Value);
-            return TypedValue.Void;
+            return new TypedValue(result);
         }
     }
 }

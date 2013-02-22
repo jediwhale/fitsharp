@@ -1,4 +1,4 @@
-﻿// Copyright © 2012 Syterra Software Inc.
+﻿// Copyright © 2013 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -6,8 +6,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using fit.exception;
 using fit.Model;
+using fitSharp.Machine.Application;
 using fitlibrary;
 using fitSharp.Fit.Engine;
 using fitSharp.Fit.Exception;
@@ -35,10 +37,17 @@ namespace fit.Fixtures {
         }
 
         public void Check(Parse theCells) {
+            DoCheckOperation(theCells);
+        }
+
+        TypedValue DoCheckOperation(Parse theCells) {
             try {
                 CellRange methodCells = CellRange.GetMethodCellRange(theCells, 1);
                 try {
-                    DoCheckOperation(theCells.Last, methodCells);
+                    return processor.Check(fixture,
+                                fixture.MethodRowSelector.SelectMethodCells(methodCells),
+                                fixture.MethodRowSelector.SelectParameterCells(methodCells),
+                                theCells.Last);
                 }
                 catch (MemberMissingException e) {
                     processor.TestStatus.MarkException(theCells.More, e);
@@ -48,13 +57,7 @@ namespace fit.Fixtures {
                 }
             }
             catch (IgnoredException) {}
-        }
-
-        void DoCheckOperation(Tree<Cell> expectedValue, Tree<Cell> cells) {
-            processor.Check(fixture,
-                    fixture.MethodRowSelector.SelectMethodCells(cells),
-                    fixture.MethodRowSelector.SelectParameterCells(cells),
-                    expectedValue);
+            return TypedValue.Void;
         }
 
         public List<object> CheckFieldsFor(Parse cells) {
@@ -148,6 +151,22 @@ namespace fit.Fixtures {
             }
             catch (Exception e) {
                 processor.TestStatus.MarkException(theCells, e);
+            }
+        }
+
+        const int defaultWaitTime = 1000;
+
+        public void WaitUntil(Parse cells) {
+            var wait = processor.Memory.GetItem<Settings>().WaitTime;
+            if (wait == 0) wait = defaultWaitTime;
+            var sleep = 0;
+            for (var count = 0; count < 100; count++) {
+                var result = DoCheckOperation(cells);
+                if (!result.HasValue || result.GetValue<bool>()) break;
+                var sleepThisTime = (wait*count)/100 - sleep;
+                if (sleepThisTime <= 0) continue;
+                Thread.Sleep(sleepThisTime);
+                sleep += sleepThisTime;
             }
         }
 
