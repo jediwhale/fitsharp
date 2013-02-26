@@ -6,10 +6,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using fit.exception;
 using fit.Model;
-using fitSharp.Machine.Application;
 using fitlibrary;
 using fitSharp.Fit.Engine;
 using fitSharp.Fit.Exception;
@@ -37,17 +35,21 @@ namespace fit.Fixtures {
         }
 
         public void Check(Parse theCells) {
-            DoCheckOperation(theCells);
+            DoCheckOperation(theCells, false);
         }
 
-        TypedValue DoCheckOperation(Parse theCells) {
+        void DoCheckOperation(Parse theCells, bool isVolatile) {
             try {
                 CellRange methodCells = CellRange.GetMethodCellRange(theCells, 1);
                 try {
-                    return processor.Check(fixture,
-                                fixture.MethodRowSelector.SelectMethodCells(methodCells),
-                                fixture.MethodRowSelector.SelectParameterCells(methodCells),
-                                theCells.Last);
+                    processor.Operate<CheckOperator>(
+                        CellOperationValue.Make(
+                            fixture,
+                            fixture.MethodRowSelector.SelectMethodCells(methodCells),
+                            fixture.MethodRowSelector.SelectParameterCells(methodCells),
+                            isVolatile),
+                        theCells.Last);
+
                 }
                 catch (MemberMissingException e) {
                     processor.TestStatus.MarkException(theCells.More, e);
@@ -57,7 +59,6 @@ namespace fit.Fixtures {
                 }
             }
             catch (IgnoredException) {}
-            return TypedValue.Void;
         }
 
         public List<object> CheckFieldsFor(Parse cells) {
@@ -154,20 +155,8 @@ namespace fit.Fixtures {
             }
         }
 
-        const int defaultWaitTime = 1000;
-
         public void WaitUntil(Parse cells) {
-            var wait = processor.Memory.GetItem<Settings>().WaitTime;
-            if (wait == 0) wait = defaultWaitTime;
-            var sleep = 0;
-            for (var count = 0; count < 100; count++) {
-                var result = DoCheckOperation(cells);
-                if (!result.HasValue || result.GetValue<bool>()) break;
-                var sleepThisTime = (wait*count)/100 - sleep;
-                if (sleepThisTime <= 0) continue;
-                Thread.Sleep(sleepThisTime);
-                sleep += sleepThisTime;
-            }
+            DoCheckOperation(cells, true);
         }
 
         public void With(Parse theCells) {

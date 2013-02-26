@@ -71,6 +71,7 @@
     <Compile Include="Fit\Operators\CellOperators.cs" />
     <Compile Include="Fit\Engine\CellProcessor.cs" />
     <Compile Include="Fit\Engine\CellProcessorExtension.cs" />
+    <Compile Include="Fit\Operators\CheckVolatile.cs" />
     <Compile Include="Fit\Operators\ExecuteDefault.cs" />
     <Compile Include="Fit\Engine\ExecuteOperator.cs" />
     <Compile Include="Fit\Operators\FindMemberPattern.cs" />

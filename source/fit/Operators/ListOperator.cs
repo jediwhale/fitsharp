@@ -1,4 +1,4 @@
-// Copyright © 2013 Syterra Software Inc.
+// Copyright © 2011 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -21,8 +21,8 @@ namespace fit.Operators {
         public TypedValue Check(CellOperationValue actualValue, Tree<Cell> expectedCell) {
             var cell = (Parse)expectedCell.Value;
             var matcher = new ListMatcher(Processor, new ArrayMatchStrategy(Processor, cell.Parts.Parts));
-            return new TypedValue(
-                matcher.MarkCell(actualValue.GetActual<IEnumerable>(Processor).Cast<object>(), cell.Parts, 0)); //todo: encapsulate part in celloperationcontext??
+            matcher.MarkCell(actualValue.GetActual<IEnumerable>(Processor).Cast<object>(), cell.Parts, 0); //todo: encapsulate part in celloperationcontext??
+            return TypedValue.Void;
         }
 
         public bool CanParse(Type type, TypedValue instance, Tree<Cell> parameters) {

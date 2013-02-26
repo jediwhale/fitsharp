@@ -1,10 +1,11 @@
-// Copyright © 2013 Syterra Software Inc.
+// Copyright © 2011 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System;
 using fitSharp.Fit.Engine;
+using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
@@ -16,7 +17,6 @@ namespace fit.Operators {
         }
 
         public TypedValue Check(CellOperationValue actualValue, Tree<Cell> expectedCell) {
-            var result = false;
             var cell = (Parse) expectedCell.Value;
             var expectedTable = new FixtureTable(cell.Parts);
             var tables = actualValue.GetActual<Parse>(Processor);
@@ -24,13 +24,12 @@ namespace fit.Operators {
             string differences = actualTable.Differences(expectedTable);
             if (differences.Length == 0) {
 				Processor.TestStatus.MarkRight(expectedCell.Value);
-                result = true;
             }
             else {
                 Processor.TestStatus.MarkWrong(expectedCell.Value, differences);
                 cell.More = new Parse("td", string.Empty, tables, null);
             }
-            return new TypedValue(result);
+            return TypedValue.Void;
         }
 
         public bool CanParse(Type type, TypedValue instance, Tree<Cell> parameters) {

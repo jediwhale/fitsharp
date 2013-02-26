@@ -1,4 +1,4 @@
-﻿// Copyright © 2013 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2012 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -32,18 +32,15 @@ namespace fitSharp.Fit.Model {
             Counts = new TestCounts();
         }
 
-        public void MarkRight(Cell cell) {
-            MarkCell(cell, Right);
-        }
 
-        void MarkCell(Cell cell, string cellStatus) {
-            if (cell.GetAttribute(CellAttribute.Status) == cellStatus) return;
-            cell.SetAttribute(CellAttribute.Status, cellStatus);
-            AddCount(cellStatus);
+        public void MarkRight(Cell cell) {
+            cell.SetAttribute(CellAttribute.Status, Right);
+            AddCount(Right);
         }
 
         public void MarkWrong(Cell cell) {
-            MarkCell(cell, Wrong);
+            cell.SetAttribute(CellAttribute.Status, Wrong);
+            AddCount(Wrong);
         }
 
         public void MarkWrong(Cell cell, string actual) {
@@ -52,7 +49,8 @@ namespace fitSharp.Fit.Model {
         }
 
         public void MarkIgnore(Cell cell) {
-            MarkCell(cell, Ignore);
+            cell.SetAttribute(CellAttribute.Status, Ignore);
+            AddCount(Ignore);
         }
 
         public void MarkException(Cell cell, System.Exception exception) {
@@ -64,7 +62,8 @@ namespace fitSharp.Fit.Model {
 
             if (cell.GetAttribute(CellAttribute.Status) != Exception) {
                 cell.SetAttribute(CellAttribute.Exception, exception.ToString());
-                MarkCell(cell, Exception);
+                cell.SetAttribute(CellAttribute.Status, Exception);
+                AddCount(Exception);
             }
 
             if (abandonException == null) return;
