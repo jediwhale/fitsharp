@@ -2,13 +2,17 @@
 <testResults>
   <result>
     <relativePageName>document\fitSharp\Fit\SampleInputFiles\SampleSimpleTest.html</relativePageName>
-    <content><![CDATA[<div id="fit_tags" style="color:gray; font-weight:bold; margin-bottom:1em;">Tags: SampleTag</div><br>
+    <content><![CDATA[<html>
+<head>
+  <link href="fit.css" type="text/css" rel="stylesheet"></head>
+<body><div id=""fit_tags"" style="color:gray; font-weight:bold; margin-bottom:1em;">Tags: SampleTag</div><br>
 This is a simple test.<br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td><span class="fit_interpreter">SampleDo</span></td></tr>
 <tr><td><span class="fit_keyword">check</span></td><td><span class="fit_member">one</span></td><td class="pass">1</td></tr>
 </table>
-]]></content>
+</body>
+</html>]]></content>
     <counts>
       <right>1</right>
       <wrong>0</wrong>
