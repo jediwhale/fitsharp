@@ -25,14 +25,14 @@ The test files used in the following examples are from <a href="../Fit/SampleInp
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>with</td><td>file system</td></tr>
 <tr><td>make empty folder</td><td>testoutput</td></tr>
-<tr><td>alias folder</td><td>document\fitsharp\Fit\SampleOutputFiles</td><td>as</td><td>out</td></tr>
+<tr><td>alias folder</td><td>..\..\document\fitsharp\Fit\SampleOutputFiles</td><td>as</td><td>out</td></tr>
 </table>
 <br>
 <a href="../Fit/FolderRunner.html">Folder Runner</a>, with -t followed by tagList, executes all pages with given tags.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>with</td><td>new</td><td>folder runner story</td></tr>
-<tr><td>run</td><td>-c,document\fitSharp\Fit\SampleInputFiles\SampleConfig.xml,-t,SampleTag</td></tr>
+<tr><td>run</td><td>-c,..\..\document\fitSharp\Fit\SampleInputFiles\SampleConfig.xml,-t,SampleTag</td></tr>
 </table>
 <br>
 Test result counts are accumulated for all files processed. Note that the suite setup and suite teardown are included, which makes the number of assertions larger than expected.<br>
@@ -57,7 +57,7 @@ Wildcards are evaluated in tag filters.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>with</td><td>new</td><td>folder runner story</td></tr>
-<tr><td>run</td><td>-c,document\fitSharp\Fit\SampleInputFiles\SampleConfig.xml,-t,Samp*T?g</td></tr>
+<tr><td>run</td><td>-c,..\..\document\fitSharp\Fit\SampleInputFiles\SampleConfig.xml,-t,Samp*T?g</td></tr>
 </table>
 <br>
 The wildcard filter should have matched the tagged SampleSimpleTest page again.<br>
