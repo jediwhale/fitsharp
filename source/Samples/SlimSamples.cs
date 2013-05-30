@@ -247,5 +247,9 @@ namespace fitnesse.slim.test {
         public string FirstHash(Dictionary<string, string> hash) {
           return hash.Keys.ElementAt(0);
         }
+
+        public Dictionary<string, string> SomeDictionary() {
+            return new Dictionary<string, string>{{"name", "bob"}, {"address", "here"}};
+        }
     }
 }

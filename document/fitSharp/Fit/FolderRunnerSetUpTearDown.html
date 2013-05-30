@@ -46,7 +46,8 @@ The test files used in the following examples are from <a href="../Fit/SampleInp
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>with</td><td>file system</td></tr>
-<tr><td>make empty folder</td><td>testoutput</td></tr>
+<tr><td>make empty folder</td><td>test</td></tr>
+<tr><td>make empty folder</td><td>test\output</td></tr>
 <tr><td>alias folder</td><td>document\fitSharp\Fit\SampleOutputFiles</td><td>as</td><td>out</td></tr>
 <tr><td>alias folder</td><td>document\fitSharp\Fit\SampleInputFiles</td><td>as</td><td>in</td></tr>
 </table>
@@ -60,19 +61,19 @@ The decoration occurs before the FIT tests are executed.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>with</td><td>file system</td></tr>
-<tr><td>ensure</td><td>file</td><td>testoutput\SampleSubDecorated\SampleSimpleTest.html</td><td>same as</td><td>out\SampleSimpleDecorated.html</td></tr>
+<tr><td>ensure</td><td>file</td><td>test\output\SampleSubDecorated\SampleSimpleTest.html</td><td>same as</td><td>out\SampleSimpleDecorated.html</td></tr>
 </table>
 <br>
 Only files which contain HTML tables are decorated.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>ensure</td><td>file</td><td>testoutput\SampleSubDecorated\SampleNoTest.html</td><td>same as</td><td>in\SampleSubDecorated\SampleNoTest.html</td></tr>
+<tr><td>ensure</td><td>file</td><td>test\output\SampleSubDecorated\SampleNoTest.html</td><td>same as</td><td>in\SampleSubDecorated\SampleNoTest.html</td></tr>
 </table>
 <br>
 The decoration from parent directories is added to the current directory's decoration. Set up decoration is parent-first, tear down decoration is parent last.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>ensure</td><td>file</td><td>testoutput\SampleSubDecorated\SampleSub\SampleSimpleTest.html</td><td>same as</td><td>out\SampleNestedDecorated.html</td></tr>
+<tr><td>ensure</td><td>file</td><td>test\output\SampleSubDecorated\SampleSub\SampleSimpleTest.html</td><td>same as</td><td>out\SampleNestedDecorated.html</td></tr>
 </table>
 </div>
 <div style="width:100%;text-align:right">

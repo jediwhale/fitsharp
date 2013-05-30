@@ -35,6 +35,7 @@ namespace fitSharp.Fit.Operators {
             Add(new CompareEmpty(), 0);
             Add(new CompareNumeric(), 0);
 
+            Add(new CheckVolatile(), 2);
             Add(new FindMemberQueryable(), 2);
             Add(new InvokeSpecialAction(), 2);
             Add(new ParseArray(), 2);

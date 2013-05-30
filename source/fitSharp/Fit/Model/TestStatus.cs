@@ -1,10 +1,11 @@
-﻿// Copyright © 2011 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2012 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
 using System.Collections;
+using fitSharp.Fit.Exception;
 using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
 
@@ -20,6 +21,7 @@ namespace fitSharp.Fit.Model {
 
         public int TableCount { get; set; }
         public bool IsAbandoned { get; set; }
+        public bool SuiteIsAbandoned { get; private set; }
         public string LastAction { get; set; }
         public Hashtable Summary { get; private set; }
         public TestCounts Counts { get; private set; }
@@ -54,7 +56,7 @@ namespace fitSharp.Fit.Model {
         public void MarkException(Cell cell, System.Exception exception) {
             if (exception is IgnoredException) return;
 
-            System.Exception abandonException = GetAbandonStoryTestException(exception);
+            System.Exception abandonException = GetAbandonException(exception);
 
             if (abandonException != null && IsAbandoned) throw abandonException;
 
@@ -67,6 +69,7 @@ namespace fitSharp.Fit.Model {
             if (abandonException == null) return;
 
             IsAbandoned = true;
+            if (abandonException is AbandonSuiteException) SuiteIsAbandoned = true;
             throw abandonException;
         }
 
@@ -74,7 +77,7 @@ namespace fitSharp.Fit.Model {
             Counts.AddCount(cellStatus);
         }
 
-        static System.Exception GetAbandonStoryTestException(System.Exception exception) {
+        static System.Exception GetAbandonException(System.Exception exception) {
             for (System.Exception e = exception; e != null; e = e.InnerException) {
                 if (typeof(AbandonException).IsAssignableFrom(e.GetType())) return e;
             }

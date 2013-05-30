@@ -11,7 +11,7 @@ namespace fitSharp.Fit.Engine {
 
         public static void Check(this CellProcessor processor, object systemUnderTest, Tree<Cell> memberName, Tree<Cell> parameters, Tree<Cell> expectedCell) {
             processor.Operate<CheckOperator>(
-                CellOperationValue.Make(systemUnderTest, memberName, parameters),
+                CellOperationValue.Make(systemUnderTest, memberName, parameters, false),
                 expectedCell);
         }
 

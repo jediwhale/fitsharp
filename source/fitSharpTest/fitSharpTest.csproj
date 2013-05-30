@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Acceptance\FitNesseStory.cs" />
     <Compile Include="Acceptance\Slim\SlimDomain.cs" />
     <Compile Include="Double\Fit\Parse.cs" />
     <Compile Include="Double\FullTestConfig.cs" />
@@ -55,7 +56,13 @@
     <Compile Include="NUnit\Fit\FindMemberPatternTest.cs" />
     <Compile Include="NUnit\Fit\IncludeTest.cs" />
     <Compile Include="NUnit\Fit\ParseMemberNameTest.cs" />
+    <Compile Include="NUnit\Fit\ParseNullArrayTest.cs" />
+    <Compile Include="NUnit\Fit\ParseNullTest.cs" />
+    <Compile Include="NUnit\Fit\ParseOperatorTest.cs" />
+    <Compile Include="NUnit\Fit\ParseQuotedStringTest.cs" />
+    <Compile Include="NUnit\Fit\StoryTestFileTest.cs" />
     <Compile Include="NUnit\Fit\TagFilterTest.cs" />
+    <Compile Include="NUnit\Fit\TestStatusTest.cs" />
     <Compile Include="NUnit\Fit\ValueArrayTest.cs" />
     <Compile Include="NUnit\Machine\ArgumentParserTest.cs" />
     <Compile Include="NUnit\Machine\OperatorsTest.cs" />

@@ -22,7 +22,7 @@ namespace fitSharp.Slim.Operators {
         public TypedValue Parse(Type type, TypedValue instance, Tree<string> parameters) {
             var singleSymbol = Processor.LoadSymbol(parameters.Value);
             if (singleSymbol.IsObject) {
-                if (!singleSymbol.IsNull && singleSymbol.Type == type) return singleSymbol;
+                if (!singleSymbol.IsNull && type.IsAssignableFrom(singleSymbol.Type)) return singleSymbol;
             }
             string decodedInput = ReplaceSymbols(parameters.Value);
             return Processor.Parse(type, decodedInput);

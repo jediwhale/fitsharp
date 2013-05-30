@@ -56,6 +56,13 @@ namespace fitSharp.Test.NUnit.Fit {
             Assert.AreEqual(DateTime.Now.Date, result);
         }
 
+        [Test] public void DateMatchesKeywordWithWhitespace() {
+            Assert.IsTrue(TryParse(typeof(DateTime), "\r\n\t today\r\n\t "));
+            Assert.AreEqual(DateTime.Now.Date, result);
+        }
+
+        // TODO(kimgr): This seems like it does the same as DateMatchesKeyword
+        // above. What's the intent?
         [Test] public void DateDoesNotMatchKeyword() {
             Assert.IsTrue(TryParse(typeof(DateTime), "today"));
             Assert.AreEqual(DateTime.Now.Date, result);
@@ -79,6 +86,11 @@ namespace fitSharp.Test.NUnit.Fit {
 
         [Test] public void OtherModifierIsNotParsed() {
             Assert.IsFalse(TryParse(typeof(DateTime), "today:2"));
+        }
+
+        [Test] public void EmptyModifierIsNotParsed() {
+            Assert.IsFalse(TryParse(typeof(DateTime), "today+"));
+            Assert.IsFalse(TryParse(typeof(DateTime), "today-"));
         }
 
         [Test] public void NonNumericModifierIsNotParsed() {

@@ -1,8 +1,9 @@
-// Copyright © 2011 Syterra Software Inc. All rights reserved.
+// Copyright © 2012 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
+using System;
 using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Engine;
@@ -26,6 +27,11 @@ namespace fitSharp.Fit.Fixtures {
             return this;
         }
 
+        public StoryTest OnAbandonSuite(Action onAbandonSuite) {
+            abandonSuite = onAbandonSuite;
+            return this;
+        }
+
         public bool IsExecutable {
             get { return ParsedInput != null && ParsedInput.Branches.Count > 0; }
         }
@@ -40,6 +46,7 @@ namespace fitSharp.Fit.Fixtures {
 
         public void Execute(CellProcessor cellProcessor) {
             cellProcessor.Operate<RunTestOperator>(ParsedInput, writer);
+            if (cellProcessor.TestStatus.SuiteIsAbandoned) abandonSuite();
         }
 
         Tree<Cell> ParsedInput {
@@ -55,6 +62,7 @@ namespace fitSharp.Fit.Fixtures {
         string input;
         Tree<Cell> parsedInput;
         private bool isParsed;
+        private Action abandonSuite = () => {};
 
         readonly CellProcessor processor;
         readonly StoryTestWriter writer;

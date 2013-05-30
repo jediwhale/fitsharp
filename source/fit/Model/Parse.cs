@@ -94,7 +94,7 @@ namespace fit
             Parts = theParts;
         }
 
-		public Parse(string tag, string body, Parse parts, Parse more): base(string.IsNullOrEmpty(body) ? string.Empty : body.Trim())
+		public Parse(string tag, string body, Parse parts, Parse more): base(string.IsNullOrEmpty(body) ? string.Empty : body)
 		{
 			Leader = "\n";
 			this.tag = "<" + tag + ">";

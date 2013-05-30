@@ -11,6 +11,7 @@ namespace fitSharp.Machine.Model {
 
     public interface Cell {
         string Text { get; }
+        string Content { get; }
         IDictionary<CellAttribute, CellAttributeValue> Attributes { get; }
         TypedValue ParsedValue { get; set; }
     }

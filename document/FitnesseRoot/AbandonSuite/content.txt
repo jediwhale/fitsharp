@@ -1,0 +1,4 @@
+!define TEST_RUNNER {build\debug\Runner.exe}
+!define COMMAND_PATTERN {%m -c abandonsuite.config.xml %p}
+
+!contents

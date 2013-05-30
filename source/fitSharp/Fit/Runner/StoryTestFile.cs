@@ -1,4 +1,4 @@
-// Copyright © 2012 Syterra Software Inc. All rights reserved.
+// Copyright © 2013 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -6,6 +6,7 @@
 using fitSharp.Fit.Model;
 using fitSharp.IO;
 using System;
+using fitSharp.Parser;
 using Path = System.IO.Path;
 
 namespace fitSharp.Fit.Runner {
@@ -22,6 +23,7 @@ namespace fitSharp.Fit.Runner {
     public interface StoryTestPageExecutor {
         void Do(StoryTestPage page);
         void DoNoTest();
+        bool SuiteIsAbandoned { get; }
     }
 
     public class StoryTestFile: StoryTestPage {
@@ -46,6 +48,8 @@ namespace fitSharp.Fit.Runner {
             ".fit_keyword {color: #1010A0;}" + Environment.NewLine +
             ".fit_member {color: #208080;}" + Environment.NewLine +
             ".fit_SUT {color: #808020;}" + Environment.NewLine;
+
+        private const string styleSheetLink = "<link href=\"fit.css\" type=\"text/css\" rel=\"stylesheet\">";
 
         public StoryTestFile(string thePath, StoryTestFolder theFolder, FolderModel theFolderModel) {
             myPath = new StoryFileName(thePath);
@@ -75,8 +79,18 @@ namespace fitSharp.Fit.Runner {
             MakeStylesheet();
 
             string outputFile = Path.Combine(myFolder.OutputPath, myPath.OutputFileName);
-            myFolderModel.MakeFile(outputFile, result.Content);
+            myFolderModel.MakeFile(outputFile, AddStyleSheetLink(result.Content));
             myFolder.ListFile(outputFile, result.TestCounts, result.ElapsedTime);
+        }
+
+        static string AddStyleSheetLink(string input) {
+            var scanner = new Scanner(input);
+            while (true) {
+                scanner.FindTokenPair("<link", ">");
+                if (scanner.Body.IsEmpty) break;
+                if (scanner.Body.Contains("fit.css")) return input;
+            }
+            return styleSheetLink + input;
         }
 
         private bool HasTestName {

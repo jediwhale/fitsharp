@@ -1,9 +1,10 @@
-﻿// Copyright © 2012 Syterra Software Inc.
+﻿// Copyright © 2013 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using fit.Fixtures;
+using fitSharp.Machine.Application;
 using fitlibrary;
 using fitSharp.Fit.Engine;
 using fitSharp.Machine.Engine;
@@ -40,8 +41,31 @@ namespace fit.Test.NUnit {
             Assert.AreEqual("some stuff", result[0]);
         }
 
+        [Test] public void ChecksExpectedValue() {
+            var table = Parse.ParseFrom("<table><tr><td>check</td><td>stuff</td><td>some stuff</td></tr></table>");
+            keywords.Check(table.Parts.Parts);
+            Assert.AreEqual(fitSharp.Fit.Model.TestStatus.Right, table.Parts.Parts.Last.GetAttribute(CellAttribute.Status));
+        }
+
+        [Test] public void WaitUntilRepeatsExpectedValueCheck() {
+            var table = Parse.ParseFrom("<table><tr><td>wait until</td><td>next count</td><td>2</td></tr></table>");
+            keywords.WaitUntil(table.Parts.Parts);
+            Assert.AreEqual(fitSharp.Fit.Model.TestStatus.Right, table.Parts.Parts.Last.GetAttribute(CellAttribute.Status));
+        }
+
+        [Test] public void WaitUntilRepeatsUpToLimit() {
+            fixture.Processor.Memory.GetItem<Settings>().WaitTime = 10;
+            var table = Parse.ParseFrom("<table><tr><td>wait until</td><td>next count</td><td>101</td></tr></table>");
+            keywords.WaitUntil(table.Parts.Parts);
+            Assert.AreEqual(fitSharp.Fit.Model.TestStatus.Wrong, table.Parts.Parts.Last.GetAttribute(CellAttribute.Status));
+        }
+
         private class TestDoFixture: DoFixture {
             public string Stuff = "some stuff";
+            private int count;
+            public int NextCount() {
+                return count++;
+            }
         }
     }
 }

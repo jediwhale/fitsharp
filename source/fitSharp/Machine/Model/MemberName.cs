@@ -1,4 +1,4 @@
-﻿// Copyright © 2012 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2013 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -22,11 +22,6 @@ namespace fitSharp.Machine.Model {
             GenericTypes = genericTypes;
         }
 
-        public MemberName AsSpecialAction() {
-            IsSpecialAction = true;
-            return this;
-        }
-
         public MemberName WithNamedParameters() {
             HasNamedParameters = true;
             return this;
@@ -37,7 +32,6 @@ namespace fitSharp.Machine.Model {
         public string BaseName { get; private set; }
         public IEnumerable<Type> GenericTypes { get; private set; }
         public bool HasNamedParameters { get; private set; }
-        public bool IsSpecialAction { get; private set; }
         public override string ToString() { return Name; }
     }
 }

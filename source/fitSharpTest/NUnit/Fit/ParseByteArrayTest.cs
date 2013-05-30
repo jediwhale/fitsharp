@@ -20,6 +20,11 @@ namespace fitSharp.Test.NUnit.Fit {
             CheckParse("0x 10 20 31", new byte[] {16, 32, 49});
         }
 
+        [Test]
+        public void ParsesHexStringWithLeadingAndTrailingWhitespace() {
+            CheckParse("\r\n\t 0xFE\r\n\t ", new byte[] { 254 });
+        }
+
         static void CheckParse(string input, byte[] expected) {
             var parser = new ParseByteArray { Processor =  Builder.CellProcessor() };
             Assert.IsTrue(parser.CanParse(typeof (byte[]), TypedValue.Void, new CellTreeLeaf(input)));

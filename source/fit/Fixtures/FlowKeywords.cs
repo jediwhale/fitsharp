@@ -1,4 +1,4 @@
-﻿// Copyright © 2012 Syterra Software Inc.
+﻿// Copyright © 2013 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -35,10 +35,21 @@ namespace fit.Fixtures {
         }
 
         public void Check(Parse theCells) {
+            DoCheckOperation(theCells, false);
+        }
+
+        void DoCheckOperation(Parse theCells, bool isVolatile) {
             try {
                 CellRange methodCells = CellRange.GetMethodCellRange(theCells, 1);
                 try {
-                    DoCheckOperation(theCells.Last, methodCells);
+                    processor.Operate<CheckOperator>(
+                        CellOperationValue.Make(
+                            fixture,
+                            fixture.MethodRowSelector.SelectMethodCells(methodCells),
+                            fixture.MethodRowSelector.SelectParameterCells(methodCells),
+                            isVolatile),
+                        theCells.Last);
+
                 }
                 catch (MemberMissingException e) {
                     processor.TestStatus.MarkException(theCells.More, e);
@@ -48,13 +59,6 @@ namespace fit.Fixtures {
                 }
             }
             catch (IgnoredException) {}
-        }
-
-        void DoCheckOperation(Tree<Cell> expectedValue, Tree<Cell> cells) {
-            processor.Check(fixture,
-                    fixture.MethodRowSelector.SelectMethodCells(cells),
-                    fixture.MethodRowSelector.SelectParameterCells(cells),
-                    expectedValue);
         }
 
         public List<object> CheckFieldsFor(Parse cells) {
@@ -149,6 +153,10 @@ namespace fit.Fixtures {
             catch (Exception e) {
                 processor.TestStatus.MarkException(theCells, e);
             }
+        }
+
+        public void WaitUntil(Parse cells) {
+            DoCheckOperation(cells, true);
         }
 
         public void With(Parse theCells) {

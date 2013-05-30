@@ -1,0 +1,12 @@
+<suiteConfig>
+
+    <Settings>
+        <runner>fitnesse.fitserver.FitServer</runner>
+    </Settings>
+    
+    <ApplicationUnderTest>
+        <addAssembly>build\debug\fittest.dll</addAssembly>
+        <addNamespace>fit.Test.Double</addNamespace>
+    </ApplicationUnderTest>
+    
+</suiteConfig>

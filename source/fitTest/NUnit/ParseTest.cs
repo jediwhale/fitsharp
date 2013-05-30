@@ -127,8 +127,7 @@ namespace fit.Test.NUnit {
         }
 
         [Test]
-        public void TestText() 
-        {
+        public void TestText() {
             Parse p = Parse.ParseFrom("<table><tr><td>a&lt;b</td></tr></table>").Parts.Parts;
             Assert.AreEqual("a&lt;b", p.Body);
             Assert.AreEqual("a<b", p.Text);
@@ -138,6 +137,15 @@ namespace fit.Test.NUnit {
             Assert.AreEqual("\ta>b & b>c & ", p.Text);
             p = Parse.ParseFrom("<table><tr><TD><P><FONT FACE=\"Arial\" SIZE=2>GroupTestFixture</FONT></TD></tr></table>").Parts.Parts;
             Assert.AreEqual("GroupTestFixture",p.Text);
+        }
+
+        [Test]
+        public void TestContent() {
+            Parse p = Parse.ParseFrom("<table><tr><td>\r\n\t a \r\n\t</td></tr></table>").Parts.Parts;
+            Assert.AreEqual("a", p.Content);
+
+            p = Parse.ParseFrom("<table><tr><td>\r\n\t a \r\n\tb</td></tr></table>").Parts.Parts;
+            Assert.AreEqual("a \r\n\tb", p.Content);
         }
 
         [Test] public void CopyFromLeaf() {

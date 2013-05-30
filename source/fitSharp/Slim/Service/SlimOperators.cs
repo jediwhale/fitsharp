@@ -24,6 +24,7 @@ namespace fitSharp.Slim.Service {
             Add(new ParseType<string, SlimProcessor>(), 0);
             Add(new ParseList(), 0);
             Add(new ParseDictionary(), 0);
+            Add(new ComposeDictionary(), 0);
             Add(new ParseSymbol(), 2);
 
             Add(new ComposeException(), 0);

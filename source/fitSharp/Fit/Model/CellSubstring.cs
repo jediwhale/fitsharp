@@ -11,6 +11,7 @@ namespace fitSharp.Fit.Model {
         readonly Cell baseCell;
 
         public string Text { get; private set; }
+        public string Content { get { return Text; } } // TODO(kimgr): is this right, or should we trim here too?
 
         public IDictionary<CellAttribute, CellAttributeValue> Attributes { get { return baseCell.Attributes; } }
 

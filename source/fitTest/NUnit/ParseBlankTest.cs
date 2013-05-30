@@ -24,6 +24,7 @@ namespace fit.Test.NUnit {
         public void MatchesBlankString()
         {
             Assert.IsTrue(IsMatch(new ParseBlank(), "blank"));
+            Assert.IsTrue(IsMatch(new ParseBlank(), "\r\n\t blank \r\n\t"));
             Assert.IsFalse(IsMatch(new ParseBlank(), "is blank"));
         }
 

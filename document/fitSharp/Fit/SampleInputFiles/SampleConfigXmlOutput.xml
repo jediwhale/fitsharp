@@ -7,9 +7,9 @@
 
     <fitSharp.Machine.Application.Settings>
         <inputFolder>document\fitSharp\Fit\SampleInputFiles</inputFolder>
-        <outputFolder>testoutput</outputFolder>
+        <outputFolder>test\output</outputFolder>
         <runner>fit.Runner.FolderRunner</runner>
-        <xmlOutput>testoutput\XmlOutput.xml</xmlOutput>
+        <xmlOutput>test\output\XmlOutput.xml</xmlOutput>
     </fitSharp.Machine.Application.Settings>
 
     <fitSharp.Fit.Application.FileExclusions>

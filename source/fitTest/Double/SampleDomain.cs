@@ -52,6 +52,10 @@ namespace fit.Test.Double {
             return "hello";
         }
 
+        public string StringsAt(int index) {
+            return Strings[index];
+        }
+
         public bool Check(int x, int y) {
             return x == y;
         }

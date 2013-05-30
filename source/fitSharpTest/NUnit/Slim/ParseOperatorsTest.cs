@@ -17,12 +17,45 @@ using fitSharp.Test.Double.Slim;
 using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Slim {
+
+    public interface IObject {}
+    public class ConcreteObject : IObject
+    {
+        public string Name { get; set; }
+        public string Description { get; set; }
+
+        public static IObject NewInstance()
+        {
+            return new ConcreteObject {Name = "testname", Description = "testdescription"};
+        }
+    }
+    
     [TestFixture] public class ParseOperatorsTest {
         Service processor;
 
         [SetUp] public void SetUp() {
             processor = Builder.Service();
         }
+
+        #region Test changes to ParseSymbol#Parse
+
+        [Test]
+        public void ParseSymbolReplacesWithValueAsImplementation()
+        {
+            var testvalue = ConcreteObject.NewInstance();
+            processor.Get<Symbols>().Save("symbol", testvalue);
+            Assert.AreEqual(testvalue, Parse(new ParseSymbol { Processor = processor }, typeof(ConcreteObject), new SlimLeaf("$symbol")));
+        }
+
+        [Test]
+        public void ParseSymbolReplacesWithValueAsInterface() {
+            var testvalue = ConcreteObject.NewInstance();
+            processor.Get<Symbols>().Save("symbol", testvalue);
+            Assert.AreEqual(testvalue, Parse(new ParseSymbol { Processor = processor }, typeof(IObject), new SlimLeaf("$symbol")));
+        }
+
+        #endregion
+
 
         [Test] public void ParseSymbolReplacesWithValue() {
             processor.Get<Symbols>().Save("symbol", "testvalue");
