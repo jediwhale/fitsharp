@@ -22,7 +22,7 @@
 </Target>
 
 <Target Name="storytests">
-    <Exec WorkingDirectory=".\build\$(Config)" Command="runner -c ..\..\storytest.config.xml" />
+    <Exec Command=".\build\debug\runner -c storytest.config.xml" />
 </Target>
 
 <Target Name="dbfittests">

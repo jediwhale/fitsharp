@@ -26,15 +26,15 @@ The test files used in the following examples are from <a href="../Fit/SampleInp
 <tr><td>with</td><td>file system</td></tr>
 <tr><td>make empty folder</td><td>testoutput</td></tr>
 <tr><td>make empty folder</td><td>testoutput\overidden</td></tr>
-<tr><td>alias folder</td><td>..\..\document\fitSharp\Fit\SampleOutputFiles</td><td>as</td><td>out</td></tr>
-<tr><td>alias folder</td><td>..\..\document\fitSharp\Fit\SampleInputFiles</td><td>as</td><td>in</td></tr>
+<tr><td>alias folder</td><td>document\fitSharp\Fit\SampleOutputFiles</td><td>as</td><td>out</td></tr>
+<tr><td>alias folder</td><td>document\fitSharp\Fit\SampleInputFiles</td><td>as</td><td>in</td></tr>
 </table>
 <br>
 <a href="../Fit/FolderRunner.html">Folder Runner</a> runs the FIT tests from the files in an input directory and writes the results to an output directory.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>with</td><td>new</td><td>folder runner story</td></tr>
-<tr><td>run</td><td>-c,..\..\document\fitSharp\Fit\SampleInputFiles\SampleConfig.xml</td></tr>
+<tr><td>run</td><td>-c,document\fitSharp\Fit\SampleInputFiles\SampleConfig.xml</td></tr>
 </table>
 <br>
 Test result counts are accumulated for all files processed.<br>
@@ -76,8 +76,8 @@ A file reportIndex.html is created in the output directory with the FIT results 
 A file fit.css is created in the output directories with the styles used by FIT to highlight test results. (This is a bit inconsistent because the test files must already have a link to this stylesheet file.)<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
-<tr><td>ensure</td><td>file</td><td>testoutput\fit.css</td><td>same as</td><td>..\..\document\fitSharp\fit.css</td></tr>
-<tr><td>ensure</td><td>file</td><td>testoutput\SampleSubFolder\fit.css</td><td>same as</td><td>..\..\document\fitSharp\fit.css</td></tr>
+<tr><td>ensure</td><td>file</td><td>testoutput\fit.css</td><td>same as</td><td>document\fitSharp\fit.css</td></tr>
+<tr><td>ensure</td><td>file</td><td>testoutput\SampleSubFolder\fit.css</td><td>same as</td><td>document\fitSharp\fit.css</td></tr>
 </table>
 <br>
 If a file fit.css already exists in the input directory, it is copied to the output directory and not overwritten with the standard version.<br>
@@ -100,7 +100,7 @@ The input can be a single file. In this case, the suite setup and teardown are n
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>with</td><td>new</td><td>folder runner story</td></tr>
-<tr><td>run</td><td>-c,..\..\document\fitSharp\Fit\SampleInputFiles\SampleConfig.xml ,-i,..\..\document\fitSharp\Fit\SampleInputFiles\SampleSubFolder\SampleFailingTest.html</td></tr>
+<tr><td>run</td><td>-c,document\fitSharp\Fit\SampleInputFiles\SampleConfig.xml ,-i,document\fitSharp\Fit\SampleInputFiles\SampleSubFolder\SampleFailingTest.html</td></tr>
 </table>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
@@ -120,7 +120,7 @@ To process a selected file with the associated suite set up and tear down, use t
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>with</td><td>new</td><td>folder runner story</td></tr>
-<tr><td>run</td><td>-c,..\..\document\fitSharp\Fit\SampleInputFiles\SampleConfig.xml ,-s,SampleSubFolder\SampleFailingTest.html</td></tr>
+<tr><td>run</td><td>-c,document\fitSharp\Fit\SampleInputFiles\SampleConfig.xml ,-s,SampleSubFolder\SampleFailingTest.html</td></tr>
 </table>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
@@ -131,7 +131,7 @@ XML output can be created.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>with</td><td>new</td><td>folder runner story</td></tr>
-<tr><td>run</td><td>-c,..\..\document\fitSharp\Fit\SampleInputFiles\SampleConfigXmlOutput.xml</td></tr>
+<tr><td>run</td><td>-c,document\fitSharp\Fit\SampleInputFiles\SampleConfigXmlOutput.xml</td></tr>
 </table>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
@@ -143,7 +143,7 @@ Files and directories can be excluded.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>with</td><td>new</td><td>folder runner story</td></tr>
-<tr><td>run</td><td>-c,..\..\document\fitSharp\Fit\SampleInputFiles\SampleConfig.xml,-x,Sample</td></tr>
+<tr><td>run</td><td>-c,document\fitSharp\Fit\SampleInputFiles\SampleConfig.xml,-x,Sample</td></tr>
 </table>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
@@ -154,7 +154,7 @@ The output folder can be overridden on the command line.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>with</td><td>new</td><td>folder runner story</td></tr>
-<tr><td>run</td><td>-c,..\..\document\fitSharp\Fit\SampleInputFiles\SampleConfig.xml,-o,testoutput\overridden</td></tr>
+<tr><td>run</td><td>-c,document\fitSharp\Fit\SampleInputFiles\SampleConfig.xml,-o,testoutput\overridden</td></tr>
 </table>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">

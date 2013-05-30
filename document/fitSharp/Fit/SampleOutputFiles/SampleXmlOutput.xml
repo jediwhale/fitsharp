@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <testResults>
   <result>
-    <relativePageName>..\..\document\fitSharp\Fit\SampleInputFiles\SampleSimpleTest.html</relativePageName>
+    <relativePageName>document\fitSharp\Fit\SampleInputFiles\SampleSimpleTest.html</relativePageName>
     <content><![CDATA[<html>
 <head>
   <link href="fit.css" type="text/css" rel="stylesheet"></head>
@@ -21,7 +21,7 @@ This is a simple test.<br>
     </counts>
   </result>
   <result>
-    <relativePageName>..\..\document\fitSharp\Fit\SampleInputFiles\SampleSubDecorated\SampleSimpleTest.html</relativePageName>
+    <relativePageName>document\fitSharp\Fit\SampleInputFiles\SampleSubDecorated\SampleSimpleTest.html</relativePageName>
     <content><![CDATA[<html>
 <head>
   <link href="fit.css" type="text/css" rel="stylesheet"></head>
@@ -41,7 +41,7 @@ This is teardown</body>
     </counts>
   </result>
   <result>
-    <relativePageName>..\..\document\fitSharp\Fit\SampleInputFiles\SampleSubDecorated\SampleSub\SampleSimpleTest.html</relativePageName>
+    <relativePageName>document\fitSharp\Fit\SampleInputFiles\SampleSubDecorated\SampleSub\SampleSimpleTest.html</relativePageName>
     <content><![CDATA[<html>
 <head>
   <link href="fit.css" type="text/css" rel="stylesheet"></head>
@@ -63,7 +63,7 @@ This is teardown</body>
     </counts>
   </result>
   <result>
-    <relativePageName>..\..\document\fitSharp\Fit\SampleInputFiles\SampleSubFolder\SuiteSetUp.html</relativePageName>
+    <relativePageName>document\fitSharp\Fit\SampleInputFiles\SampleSubFolder\SuiteSetUp.html</relativePageName>
     <content><![CDATA[<html>
 <head>
   <link href="fit.css" type="text/css" rel="stylesheet"></head>
@@ -83,7 +83,7 @@ This is a suite setup test.<br>
     </counts>
   </result>
   <result>
-    <relativePageName>..\..\document\fitSharp\Fit\SampleInputFiles\SampleSubFolder\SampleFailingTest.html</relativePageName>
+    <relativePageName>document\fitSharp\Fit\SampleInputFiles\SampleSubFolder\SampleFailingTest.html</relativePageName>
     <content><![CDATA[<html>
 <head>
   <link href="fit.css" type="text/css" rel="stylesheet"></head>
@@ -103,7 +103,7 @@ This is a failing test.<br>
     </counts>
   </result>
   <result>
-    <relativePageName>..\..\document\fitSharp\Fit\SampleInputFiles\SampleSubFolder\SuiteTearDown.html</relativePageName>
+    <relativePageName>document\fitSharp\Fit\SampleInputFiles\SampleSubFolder\SuiteTearDown.html</relativePageName>
     <content><![CDATA[<html>
 <head>
   <link href="fit.css" type="text/css" rel="stylesheet"></head>
@@ -123,7 +123,7 @@ This is a suite teardown test.<br>
     </counts>
   </result>
   <result>
-    <relativePageName>..\..\document\fitSharp\Fit\SampleInputFiles\SampleSubWithStyle\SampleSimpleTest.html</relativePageName>
+    <relativePageName>document\fitSharp\Fit\SampleInputFiles\SampleSubWithStyle\SampleSimpleTest.html</relativePageName>
     <content><![CDATA[<html>
 <head>
   <link href="fit.css" type="text/css" rel="stylesheet"></head>

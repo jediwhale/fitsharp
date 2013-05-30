@@ -1,11 +1,8 @@
 <suiteConfig>
 
-    <!-- This configuration assumes the current working directory is in 
-         fitSharp's build output dir, e.g. build/debug. -->
-
     <Settings>
-        <inputFolder>..\..\document\fitSharp</inputFolder>
-        <outputFolder>..\..\site</outputFolder>
+        <inputFolder>document\fitSharp</inputFolder>
+        <outputFolder>site</outputFolder>
         <runner>fit.Runner.FolderRunner</runner>
     </Settings>
 
@@ -24,10 +21,9 @@
         <addNamespace>fitlibrary</addNamespace>
         <addNamespace>fit.Fixtures</addNamespace>
         <addNamespace>fitSharp.Test.Acceptance.Slim</addNamespace>
-
-        <addAssembly>fitsharptest.dll</addAssembly>
-        <addAssembly>fittest.dll</addAssembly>
-        <addAssembly>samples.dll</addAssembly>
+        <addAssembly>build\debug\fitsharptest.dll</addAssembly>
+        <addAssembly>build\debug\fittest.dll</addAssembly>
+        <addAssembly>build\debug\samples.dll</addAssembly>
     </ApplicationUnderTest>
     
     <Culture>
