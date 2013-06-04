@@ -5,7 +5,7 @@
     </Settings>
     
     <ApplicationUnderTest>
-        <addAssembly>build\debug\fittest.dll</addAssembly>
+        <addAssembly>build\sandbox\fittest.dll</addAssembly>
         <addNamespace>fit.Test.Double</addNamespace>
     </ApplicationUnderTest>
     
