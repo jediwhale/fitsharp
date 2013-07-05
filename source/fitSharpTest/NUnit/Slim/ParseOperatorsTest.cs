@@ -1,13 +1,11 @@
-﻿// Copyright © 2011 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2013 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Reflection;
-using System.Threading;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using fitSharp.Slim.Model;
@@ -19,13 +17,11 @@ using NUnit.Framework;
 namespace fitSharp.Test.NUnit.Slim {
 
     public interface IObject {}
-    public class ConcreteObject : IObject
-    {
+    public class ConcreteObject : IObject {
         public string Name { get; set; }
         public string Description { get; set; }
 
-        public static IObject NewInstance()
-        {
+        public static IObject NewInstance() {
             return new ConcreteObject {Name = "testname", Description = "testdescription"};
         }
     }
@@ -37,11 +33,8 @@ namespace fitSharp.Test.NUnit.Slim {
             processor = Builder.Service();
         }
 
-        #region Test changes to ParseSymbol#Parse
-
         [Test]
-        public void ParseSymbolReplacesWithValueAsImplementation()
-        {
+        public void ParseSymbolReplacesWithValueAsImplementation() {
             var testvalue = ConcreteObject.NewInstance();
             processor.Get<Symbols>().Save("symbol", testvalue);
             Assert.AreEqual(testvalue, Parse(new ParseSymbol { Processor = processor }, typeof(ConcreteObject), new SlimLeaf("$symbol")));
@@ -53,9 +46,6 @@ namespace fitSharp.Test.NUnit.Slim {
             processor.Get<Symbols>().Save("symbol", testvalue);
             Assert.AreEqual(testvalue, Parse(new ParseSymbol { Processor = processor }, typeof(IObject), new SlimLeaf("$symbol")));
         }
-
-        #endregion
-
 
         [Test] public void ParseSymbolReplacesWithValue() {
             processor.Get<Symbols>().Save("symbol", "testvalue");
@@ -134,11 +124,8 @@ namespace fitSharp.Test.NUnit.Slim {
             Assert.AreEqual("value", dictionary["key"]);
         }
 
-        [Test] public void ParsesWithInvariantCulture() {
-            CultureInfo current = CultureInfo.CurrentCulture;
-            Thread.CurrentThread.CurrentCulture = new CultureInfo("es-ES", false);
-            Assert.AreEqual(1.001, processor.Parse(typeof (double), TypedValue.Void, new SlimLeaf("1.001")).Value);
-            Thread.CurrentThread.CurrentCulture = current;
+        [Test] [SetCulture("es-ES")] public void ParsesWithCurrentCulture() {
+            Assert.AreEqual(1.001, processor.Parse(typeof (double), TypedValue.Void, new SlimLeaf("1,001")).Value);
         }
 
         static object Parse(ParseOperator<string> parseOperator, Type type, Tree<string> parameters) {

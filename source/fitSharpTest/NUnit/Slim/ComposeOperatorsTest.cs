@@ -1,12 +1,10 @@
-﻿// Copyright © 2010 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2013 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Threading;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
@@ -34,15 +32,12 @@ namespace fitSharp.Test.NUnit.Slim {
             CheckCompose(new ComposeDefault(), null, typeof (void), "/__VOID__/");
         }
         
-        [Test] public void DefaultComposeIsString() {
+        [Test] [SetCulture("en-US")] public void DefaultComposeIsString() {
             CheckCompose(new ComposeDefault(), 1.23, typeof (double), "1.23");
         }
         
-        [Test] public void ComposesWithInvariantCulture() {
-            CultureInfo current = CultureInfo.CurrentCulture;
-            Thread.CurrentThread.CurrentCulture = new CultureInfo("es-ES", false);
-            CheckCompose(new ComposeDefault(), 1.23, typeof (double), "1.23");
-            Thread.CurrentThread.CurrentCulture = current;
+        [Test] [SetCulture("es-ES")] public void ComposesWithCurrentCulture() {
+            CheckCompose(new ComposeDefault(), 1.23, typeof (double), "1,23");
         }
         
         [Test] public void BooleanTrueIsComposed() {
@@ -53,7 +48,7 @@ namespace fitSharp.Test.NUnit.Slim {
             CheckCompose(new ComposeBoolean(), false, typeof (bool), "false");
         }
 
-        [Test] public void ListIsComposedAsTree() {
+        [Test] [SetCulture("en-US")] public void ListIsComposedAsTree() {
             processor.AddOperator(new ComposeDefault());
             var result = Compose(new ComposeList(), new List<object> {"a", 1.23}, typeof (List<object>));
             Assert.IsNotNull(result);
@@ -62,7 +57,7 @@ namespace fitSharp.Test.NUnit.Slim {
             Assert.AreEqual("1.23", result.ValueAt(1)); 
         }
 
-        [Test] public void ArrayIsComposedAsTree() {
+        [Test] [SetCulture("en-US")] public void ArrayIsComposedAsTree() {
             processor.AddOperator(new ComposeDefault());
             var result = Compose(new ComposeList(), new object[] {"a", 1.23}, typeof (List<object>));
             Assert.IsNotNull(result);
