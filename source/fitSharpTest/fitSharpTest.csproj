@@ -53,6 +53,7 @@
     <Compile Include="Double\FullTestConfig.cs" />
     <Compile Include="Double\SampleClassTwo.cs" />
     <Compile Include="Double\Slim\Builder.cs" />
+    <Compile Include="NUnit\Fit\CompareDefaultTest.cs" />
     <Compile Include="NUnit\Fit\FindMemberPatternTest.cs" />
     <Compile Include="NUnit\Fit\IncludeTest.cs" />
     <Compile Include="NUnit\Fit\ParseMemberNameTest.cs" />
