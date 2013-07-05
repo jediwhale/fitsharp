@@ -120,7 +120,7 @@ namespace dbfit {
 			}
 			return allParams;
 		}
-		private static string[] StringTypes = new string[] { "VARCHAR", "VARCHAR2", "NVARCHAR2", "CHAR", "NCHAR", "ROWID", "CLOB", "NCLOB" };
+		private static string[] StringTypes = new string[] { "VARCHAR", "VARCHAR2", "NVARCHAR2", "CHAR", "NCHAR", "ROWID", "CLOB", "NCLOB", "RAW" };
 		private static string[] DecimalTypes = new string[] { "BINARY_INTEGER","NUMBER","FLOAT" };
 		private static string[] DateTypes = new string[] { "TIMESTAMP", "DATE" };
 		private static string[] RefCursorTypes = new string[] { "REF" };
