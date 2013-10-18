@@ -49,7 +49,7 @@ namespace fitSharp.Test.NUnit.Fit {
         }
 
         class TestTarget: TargetObjectProvider {
-            public string NewMember;
+            public string NewMember = null;
             public object GetTargetObject() { return this; }
         }
     }

@@ -90,6 +90,10 @@ namespace fit.Test.NUnit {
         }
     }
 
+// Disable the Obsolete warning, we want to run these
+// tests until we remove the Save/Recall methods entirely.
+#pragma warning disable 612, 618
+
     [TestFixture]
     public class SaveAndRecallTest
     {
@@ -140,4 +144,6 @@ namespace fit.Test.NUnit {
             Assert.AreSame(fixture, fixture.GetTargetObject());
         }
     }
+
+#pragma warning restore 612, 618
 }
