@@ -104,9 +104,9 @@ namespace fit.Test.NUnit {
         {
             const string key = "aVariable";
             const string value = "aValue";
-            Assert.IsNull(Fixture.Recall(key));
-            Fixture.Save(key, value);
-            Assert.AreEqual(value, Fixture.Recall(key));
+            Assert.IsNull(fixture.Symbols.GetValueOrDefault(key, null));
+            fixture.Symbols.Save(key, value);
+            Assert.AreEqual(value, fixture.Symbols.GetValueOrDefault(key, null));
         }
 
         [Test]
@@ -116,11 +116,11 @@ namespace fit.Test.NUnit {
             const string value = "aValue";
             const string otherKey = "anotherVariable";
             const string otherValue = "anotherValue";
-            Assert.IsNull(Fixture.Recall(key));
-            Fixture.Save(key, value);
-            Fixture.Save(otherKey, otherValue);
-            Assert.AreEqual(value, Fixture.Recall(key));
-            Assert.AreEqual(otherValue, Fixture.Recall(otherKey));
+            Assert.IsNull(fixture.Symbols.GetValueOrDefault(key, null));
+            fixture.Symbols.Save(key, value);
+            fixture.Symbols.Save(otherKey, otherValue);
+            Assert.AreEqual(value, fixture.Symbols.GetValueOrDefault(key, null));
+            Assert.AreEqual(otherValue, fixture.Symbols.GetValueOrDefault(otherKey, null));
         }
 
         [Test]
@@ -129,9 +129,9 @@ namespace fit.Test.NUnit {
             const string key = "aVariable";
             const string value = "aValue";
             const string otherValue = "anotherValue";
-            Fixture.Save(key, value);
-            Fixture.Save(key, otherValue);
-            Assert.AreEqual(otherValue, Fixture.Recall(key));
+            fixture.Symbols.Save(key, value);
+            fixture.Symbols.Save(key, otherValue);
+            Assert.AreEqual(otherValue, fixture.Symbols.GetValueOrDefault(key, null));
         }
 
         [Test]
