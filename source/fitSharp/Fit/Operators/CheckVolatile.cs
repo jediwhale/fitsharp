@@ -5,7 +5,6 @@
 
 using System.Threading;
 using fitSharp.Fit.Engine;
-using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
@@ -26,11 +25,11 @@ namespace fitSharp.Fit.Operators {
         }
 
         void CheckEventuallyMatches(CellOperationValue actualValue, Tree<Cell> expectedCell) {
-            var wait = Processor.Memory.GetItem<Settings>().WaitTime;
-            if (wait == 0) wait = defaultWaitTime;
+            var wait = Processor.Get<Symbols>().GetValueOrDefault<int>("WaitFor.Time", defaultWaitTime);
+            var maxCount = Processor.Get<Symbols>().GetValueOrDefault<int>("WaitFor.Count", defaultWaitCount);
             var sleep = 0;
             TypedValue actual = TypedValue.Void;
-            for (var count = 0; count < 100; count++) {
+            for (var count = 0; count < maxCount; count++) {
                 Processor.Get<Logging>().BeginCell(expectedCell.Value);
                 try {
                     actual = actualValue.GetTypedActual(Processor);
@@ -42,7 +41,7 @@ namespace fitSharp.Fit.Operators {
                     Processor.TestStatus.MarkRight(expectedCell.Value);
                     return;
                 }
-                var sleepThisTime = (wait*count)/100 - sleep;
+                var sleepThisTime = (wait*count)/maxCount - sleep;
                 if (sleepThisTime <= 0) continue;
                 Thread.Sleep(sleepThisTime);
                 sleep += sleepThisTime;
@@ -52,5 +51,6 @@ namespace fitSharp.Fit.Operators {
         }
 
         const int defaultWaitTime = 1000;
+        const int defaultWaitCount = 100;
     }
 }

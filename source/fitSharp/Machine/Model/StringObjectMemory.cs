@@ -12,6 +12,11 @@ namespace fitSharp.Machine.Model {
         public void SaveValue<T>(string id, T value) { Save(id, value); }
         public void Clear() { items.Clear(); }
         public bool HasValue(string id) { return items.ContainsKey(id.Trim()); }
+        public T GetValueAs<T>(string id) { return (T) GetValue(id); } 
+
+        public T GetValueOrDefault<T>(string id, T defaultValue) {
+            return HasValue(id) ? (T)items[id.Trim()] : defaultValue;
+        } 
 
         public object GetValue(string id) {
             if (HasValue(id)) return items[id.Trim()];

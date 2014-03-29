@@ -54,7 +54,8 @@ namespace fit.Test.NUnit {
         }
 
         [Test] public void WaitUntilRepeatsUpToLimit() {
-            fixture.Processor.Memory.GetItem<Settings>().WaitTime = 10;
+            fixture.Processor.Get<Symbols>().Save("WaitFor.Count", 10);
+            fixture.Processor.Get<Symbols>().Save("WaitFor.Time", 1);
             var table = Parse.ParseFrom("<table><tr><td>wait until</td><td>next count</td><td>101</td></tr></table>");
             keywords.WaitUntil(table.Parts.Parts);
             Assert.AreEqual(fitSharp.Fit.Model.TestStatus.Wrong, table.Parts.Parts.Last.GetAttribute(CellAttribute.Status));

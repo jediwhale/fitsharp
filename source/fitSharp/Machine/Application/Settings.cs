@@ -24,7 +24,6 @@ namespace fitSharp.Machine.Application {
         public string Behavior { get; set; }
         public bool DryRun { get; set; }
         public string TagList { get; set; }
-        public int WaitTime { get; set; }
 
         public int CodePageNumber {
             get {
@@ -54,7 +53,6 @@ namespace fitSharp.Machine.Application {
             XmlOutput = other.XmlOutput;
             DryRun = other.DryRun;
             TagList = other.TagList;
-            WaitTime = other.WaitTime;
         }
 
         public Copyable Copy() {

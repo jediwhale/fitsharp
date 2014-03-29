@@ -71,5 +71,9 @@ namespace fit.Test.Double {
         public void TearDown() {
             Log.Write("TearDown()");
         }
+
+        public string ReplaceWithIn(string oldValue, string newValue, string text) {
+            return text.Replace(oldValue, newValue);
+        }
     }
 }
