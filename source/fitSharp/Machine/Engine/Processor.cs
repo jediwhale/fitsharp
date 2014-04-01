@@ -16,6 +16,7 @@ namespace fitSharp.Machine.Engine {
         void AddNamespace(string namespaceName);
 
         void AddOperator(string operatorName);
+        void AddOperatorFirst(string operatorName);
         void RemoveOperator(string operatorName);
 
         bool Compare(TypedValue instance, Tree<T> parameters);
