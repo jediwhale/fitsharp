@@ -123,17 +123,20 @@ namespace fit
 			return text;
 		}
 
-		[Obsolete] public static object Recall(string key)
+		[Obsolete("Use instance property Symbols and its method GetValueOrDefault()")]
+		public static object Recall(string key)
 		{
 		    return symbolProcessor.Get<Symbols>().GetValueOrDefault(key, null);
 		}
 
-		[Obsolete] public static void Save(string key, object value)
+		[Obsolete("Use instance property Symbols and its method Save()")]
+		public static void Save(string key, object value)
 		{
 			symbolProcessor.Get<Symbols>().Save(key, value);
 		}
 
-		[Obsolete] public static void ClearSaved()
+		[Obsolete("Use instance property Symbols and its method Clear()")]
+		public static void ClearSaved()
 		{
 		    symbolProcessor.Get<Symbols>().Clear();
 		}
