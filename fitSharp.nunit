@@ -1,0 +1,13 @@
+﻿<NUnitProject>
+  <Settings activeconfig="Debug" />
+  <Config name="Debug" binpathtype="Auto">
+    <assembly path="source\dbfitTest\bin\Debug\dbfitTest.dll" />
+    <assembly path="source\fitSharpTest\bin\Debug\fitSharpTest.dll" />
+    <assembly path="source\fitTest\bin\Debug\fitTest.dll" />
+  </Config>
+  <Config name="Release" binpathtype="Auto">
+    <assembly path="source\dbfitTest\bin\Release\dbfitTest.dll" />
+    <assembly path="source\fitSharpTest\bin\Release\fitSharpTest.dll" />
+    <assembly path="source\fitTest\bin\Release\fitTest.dll" />
+  </Config>
+</NUnitProject>

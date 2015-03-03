@@ -38,6 +38,37 @@ namespace fit.Fixtures {
             DoCheckOperation(theCells, false);
         }
 
+        private bool Gherkin(Parse theCells)
+        {
+            var result = ExecuteEmbeddedMethod(theCells);
+            return result == null ? false : (bool)result;
+        }
+
+        public bool Given(Parse theCells)
+        {
+            return Gherkin(theCells);
+        }
+
+        public bool And(Parse theCells)
+        {
+            return Gherkin(theCells);
+        }
+
+        public bool When(Parse theCells)
+        {
+            return Gherkin(theCells);
+        }
+
+        public bool Then(Parse theCells)
+        {
+            return Gherkin(theCells);
+        }
+
+        public bool But(Parse theCells)
+        {
+            return Gherkin(theCells);
+        }
+
         void DoCheckOperation(Parse theCells, bool isVolatile) {
             try {
                 CellRange methodCells = CellRange.GetMethodCellRange(theCells, 1);
