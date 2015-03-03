@@ -93,6 +93,7 @@ namespace fitSharp.Test.NUnit.Fit {
             Assert.IsFalse(TryParse(typeof(DateTime), "today-"));
         }
 
+        [SetUICulture("en-US")]
         [Test] public void NonNumericModifierIsNotParsed() {
             Assert.IsFalse(TryParse(typeof(DateTime), "today+fun"));
             Assert.AreEqual("Input string was not in a correct format.", exceptionMessage);

@@ -30,6 +30,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dbfitMySql", "source\dbfitM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "fitIf", "source\fitIf\fitIf.csproj", "{C60E1405-C544-4EFC-B742-C7A714B94773}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{85771C91-3AA7-475B-8015-D79F9A254272}"
+	ProjectSection(SolutionItems) = preProject
+		fitSharp.nunit = fitSharp.nunit
+		fitSharp.nuspec = fitSharp.nuspec
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
