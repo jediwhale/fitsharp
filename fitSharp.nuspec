@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata>
+        <id>FitSharp</id>
+        <version>2.2.1</version>
+        <title>fitSharp</title>
+        <authors>Sebastian Mitterle, Mike Stockdale</authors>
+        <owners>mathume</owners>
+        <licenseUrl>https://github.com/mathume/fitsharp/blob/master/GPLicense.txt</licenseUrl>
+        <projectUrl>http://github.com/mathume/fitsharp</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>fitSharp is a set of open-source functional testing tools for .NET, inspired by the Framework for Integrated Test. This package contains extensions and bugfixes not contained in the original package.</description>
+        <tags>fit fitnesse testing</tags>
+    </metadata>
+    <files>
+        <file src="lib\net40\dbfit.dll" target="lib\net40\dbfit.dll" />
+        <file src="lib\net40\dbfit.mysql.dll" target="lib\net40\dbfit.mysql.dll" />
+        <file src="lib\net40\dbfit.oracle.dll" target="lib\net40\dbfit.oracle.dll" />
+        <file src="lib\net40\dbfit.sqlserver.dll" target="lib\net40\dbfit.sqlserver.dll" />
+        <file src="lib\net40\dbfit.sybase.dll" target="lib\net40\dbfit.sybase.dll" />
+        <file src="lib\net40\fit.dll" target="lib\net40\fit.dll" />
+        <file src="lib\net40\fitSharp.dll" target="lib\net40\fitSharp.dll" />
+        <file src="tools\Runner.exe" target="tools\Runner.exe" />
+        <file src="tools\RunnerW.exe" target="tools\RunnerW.exe" />
+    </files>
+</package>
