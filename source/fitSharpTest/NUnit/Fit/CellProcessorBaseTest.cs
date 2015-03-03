@@ -5,6 +5,7 @@
 
 using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
+using fitSharp.Fit.Operators;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using fitSharp.Samples.Fit;
@@ -28,6 +29,23 @@ namespace fitSharp.Test.NUnit.Fit {
             var processor = Builder.CellProcessor();
             var result = processor.Operate<WrapOperator>(new TypedValue("hi"));
             Assert.AreEqual("hi", result.ValueString);
+        }
+
+        [Test] public void UsesCreateOperator() {
+            var processor = Builder.CellProcessor();
+            processor.AddOperator(new TestCreateOperator());
+            var result = processor.Create("testname");
+            Assert.AreEqual("mytestname", result.GetValueAs<string>());
+        }
+
+        class TestCreateOperator: CellOperator, CreateOperator<Cell> {
+            public bool CanCreate(NameMatcher memberName, Tree<Cell> parameters) {
+                return memberName.Matches("testname");
+            }
+
+            public TypedValue Create(NameMatcher memberName, Tree<Cell> parameters) {
+                return new TypedValue("mytestname");
+            }
         }
     }
 }
