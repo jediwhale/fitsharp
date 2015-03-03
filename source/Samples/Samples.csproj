@@ -41,6 +41,7 @@
     <Compile Include="EchoFixture.cs" />
     <Compile Include="Fit\Builder.cs" />
     <Compile Include="FolderTestModel.cs" />
+    <Compile Include="GherkinDoFixture.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Person.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -52,6 +53,10 @@
     <ProjectReference Include="..\fitSharp\fitSharp.csproj">
       <Project>{204FF2CD-475F-4C6E-A6B5-6779364B33F8}</Project>
       <Name>fitSharp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\fit\fit.csproj">
+      <Project>{C83FBAF8-9569-406B-A75A-56BC7D993ABC}</Project>
+      <Name>fit</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

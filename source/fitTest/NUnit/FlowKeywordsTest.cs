@@ -21,6 +21,39 @@ namespace fit.Test.NUnit {
             keywords = new FlowKeywords(fixture, fixture.Processor);
         }
 
+        [Test]
+        public void GherkinKeywords(
+            [Values("Given", "When", "Then", "And", "But")] string keyword,
+            [Values(true, false)] bool expectedResult)
+        {
+            var html = string.Format("<table><tr><td>{0}</td><td>Always{1}</td></tr></table>", keyword, expectedResult);
+            var table = Parse.ParseFrom(html);
+            bool result = true;
+            switch (keyword)
+            {
+                case "Given":
+                    result = keywords.Given(table.Parts.Parts);
+                    break;
+                case "When":
+                    result = keywords.When(table.Parts.Parts);
+                    break;
+                case "Then":
+                    result = keywords.Then(table.Parts.Parts);
+                    break;
+                case "And":
+                    result = keywords.And(table.Parts.Parts);
+                    break;
+                case "But":
+                    result = keywords.But(table.Parts.Parts);
+                    break;
+                default:
+                    Assert.Fail("Unknown case: " + keyword);
+                    break;
+            }
+
+            Assert.AreEqual(expectedResult, result, "Expected methods to return " + expectedResult);
+        }
+
         [Test] public void NameKeywordAssignsASymbol() {
             var table = Parse.ParseFrom("<table><tr><td>name</td><td>symbol</td><td>stuff</td></tr></table>");
             keywords.Name(table.Parts.Parts);
@@ -58,11 +91,15 @@ namespace fit.Test.NUnit {
             fixture.Processor.Get<Symbols>().Save("WaitFor.Time", 1);
             var table = Parse.ParseFrom("<table><tr><td>wait until</td><td>next count</td><td>101</td></tr></table>");
             keywords.WaitUntil(table.Parts.Parts);
+            var argumentPosition = 1;
             Assert.AreEqual(fitSharp.Fit.Model.TestStatus.Wrong, table.Parts.Parts.Last.GetAttribute(CellAttribute.Status));
         }
 
         private class TestDoFixture: DoFixture {
-            public string Stuff = "some stuff";
+            private const string stuff = "some stuff";
+            public string Stuff = stuff;
+            public bool AlwaysTrue = true;
+            public bool AlwaysFalse = false;
             private int count;
             public int NextCount() {
                 return count++;
