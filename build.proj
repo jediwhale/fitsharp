@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
-        DefaultTargets="solution;unittests" > <!-- contained formerly ";storytests" -->
+        DefaultTargets="solution;unittests;storytests" >
 
 <Import Project="binary\tools\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
 
 <PropertyGroup>
-    <Config>Release</Config>
+    <Config>Debug</Config>
 </PropertyGroup>
 
-<Target Name="all" DependsOnTargets="solution;unittests;dbfittests" /> <!-- contained formerly storytests; -->
+<Target Name="all" DependsOnTargets="solution;unittests;storytests;dbfittests" />
 <Target Name="deploy" DependsOnTargets="releasesolution;zip" />
 
 <Target Name="solution">
@@ -36,6 +36,11 @@
 
 <Target Name="storytests" DependsOnTargets="sandbox">
     <Exec Command=".\build\sandbox\runner -c storytest.config.xml" />
+</Target>
+
+<Target Name="dbfittests">
+    <Exec Command="binary\tools\nunit\nunit-console -nologo .\build\sandbox\dbfitTest.dll" />
+    <Exec Command="java -jar \apps\fitnesse\fitnesse.jar -o -d .\document -r FitNesseRoot -c &quot;DbFitTests?suite&amp;format=text&quot;" />
 </Target>
 
 <Target Name="releasesolution">
