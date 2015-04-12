@@ -214,7 +214,7 @@ namespace dbfit
             if (Array.IndexOf(VariantTypes, dataType) >= 0) return typeof(string);
             if (Array.IndexOf(FloatTypes, dataType) >= 0) return typeof(double);
             if (Array.IndexOf(RealTypes, dataType) >= 0) return typeof(float);
-            if (Array.IndexOf(TimeTypes, dataType) >= 0) return typeof(DateTime);
+            if (Array.IndexOf(TimeTypes, dataType) >= 0) return typeof(TimeSpan);
 
 
             throw new NotSupportedException(".net Type " + dataType + " is not supported");
