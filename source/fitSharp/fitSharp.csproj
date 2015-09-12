@@ -76,6 +76,7 @@
     <Compile Include="Fit\Engine\ExecuteOperator.cs" />
     <Compile Include="Fit\Operators\FindMemberPattern.cs" />
     <Compile Include="Fit\Operators\FindMemberQueryable.cs" />
+    <Compile Include="Fit\Operators\InvokeLiteral.cs" />
     <Compile Include="Fit\Operators\MemberPatternAttribute.cs" />
     <Compile Include="Fit\Operators\RunTestDefault.cs" />
     <Compile Include="Fit\Engine\RunTestOperator.cs" />
