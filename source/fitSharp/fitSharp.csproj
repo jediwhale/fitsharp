@@ -43,9 +43,11 @@
     <Compile Include="Fit\Application\ConfigurationList.cs" />
     <Compile Include="Fit\Application\FileExclusions.cs" />
     <Compile Include="Fit\Engine\DefaultFlowInterpreter.cs" />
+    <Compile Include="Fit\Engine\FlowRow.cs" />
     <Compile Include="Fit\Engine\InvokeSpecialOperator.cs" />
     <Compile Include="Fit\Engine\ListMatcher.cs" />
     <Compile Include="Fit\Engine\ListMatchStrategy.cs" />
+    <Compile Include="Fit\Engine\ValuePhrase.cs" />
     <Compile Include="Fit\Exception\AbandonSuiteException.cs" />
     <Compile Include="Fit\Exception\FitFailureException.cs" />
     <Compile Include="Fit\Exception\InvalidMethodException.cs" />
@@ -59,6 +61,7 @@
     <Compile Include="Fit\Fixtures\Include.cs" />
     <Compile Include="Fit\Fixtures\IncludeAction.cs" />
     <Compile Include="Fit\Engine\MethodPhrase.cs" />
+    <Compile Include="Fit\Fixtures\MatchValue.cs" />
     <Compile Include="Fit\Fixtures\UseFixture.cs" />
     <Compile Include="Fit\Loggers\ElapsedTime.cs" />
     <Compile Include="Fit\Model\CallStack.cs" />

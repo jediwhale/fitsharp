@@ -55,6 +55,7 @@
     <Compile Include="Double\Slim\Builder.cs" />
     <Compile Include="NUnit\Fit\CompareDefaultTest.cs" />
     <Compile Include="NUnit\Fit\FindMemberPatternTest.cs" />
+    <Compile Include="NUnit\Fit\FlowRowTest.cs" />
     <Compile Include="NUnit\Fit\IncludeTest.cs" />
     <Compile Include="NUnit\Fit\InvokeLiteralTest.cs" />
     <Compile Include="NUnit\Fit\ParseMemberNameTest.cs" />
@@ -66,6 +67,7 @@
     <Compile Include="NUnit\Fit\TagFilterTest.cs" />
     <Compile Include="NUnit\Fit\TestStatusTest.cs" />
     <Compile Include="NUnit\Fit\ValueArrayTest.cs" />
+    <Compile Include="NUnit\Fit\ValuePhraseTest.cs" />
     <Compile Include="NUnit\Machine\ArgumentParserTest.cs" />
     <Compile Include="NUnit\Machine\OperatorsTest.cs" />
     <Compile Include="NUnit\Machine\StringDifferenceTest.cs" />
