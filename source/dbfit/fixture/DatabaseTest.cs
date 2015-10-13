@@ -3,15 +3,14 @@
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-using System;
-using System.Data;
-using System.Data.Common;
 using dbfit.fixture;
 using dbfit.util;
 using fit;
-
 using fitlibrary;
 using fitSharp.Machine.Engine;
+using System;
+using System.Data;
+using System.Data.Common;
 
 namespace dbfit
 {
@@ -19,11 +18,13 @@ namespace dbfit
     {
         protected IDbEnvironment environment;
 
-        public void SetUp() {
+        public void SetUp()
+        {
             util.Options.reset();
         }
 
-        public void TearDown() {
+        public void TearDown()
+        {
             environment.CloseConnection();
         }
 
@@ -51,6 +52,12 @@ namespace dbfit
         {
             environment.ConnectUsingFile(path);
         }
+
+        public void ConnectUsingConfig(String configName)
+        {
+            environment.ConnectUsingConfig(configName);
+        }
+
         public void Close()
         {
             environment.CloseConnection();
@@ -176,7 +183,7 @@ namespace dbfit
             return GetDataTable(symbols, query, environment, 1);
         }
 
-        public static DataTable GetDataTable(Symbols symbols, String query,IDbEnvironment environment, int rsNo)
+        public static DataTable GetDataTable(Symbols symbols, String query, IDbEnvironment environment, int rsNo)
         {
             DbCommand dc = environment.CreateCommand(query, CommandType.Text);
             if (Options.ShouldBindSymbols())
