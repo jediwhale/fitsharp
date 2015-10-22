@@ -1,4 +1,4 @@
-﻿// Copyright © 2012 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2015 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -27,12 +27,7 @@ namespace fitSharp.Fit.Engine {
         public static object ExecuteFlowRowMethod(this FlowInterpreter interpreter, CellProcessor processor, Tree<Cell> row) {
             try {
                 var cells = row.Skip(1);
-                return
-                    processor.ExecuteWithThrow(interpreter,
-                            interpreter.MethodRowSelector.SelectMethodCells(cells),
-                            interpreter.MethodRowSelector.SelectParameterCells(cells),
-                            row.ValueAt(1)).
-                        Value;
+                return cells.ExecuteMethod(processor, interpreter).ThrowExceptionIfNotValid().Value;
             }
             catch (ParseException<Cell> e) {
                 processor.TestStatus.MarkException(e.Subject, e.InnerException);

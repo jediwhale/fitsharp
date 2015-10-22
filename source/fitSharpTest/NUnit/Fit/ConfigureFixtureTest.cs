@@ -1,11 +1,10 @@
-﻿// Copyright © 2012 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2015 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using fitSharp.Fit.Engine;
 using fitSharp.Fit.Fixtures;
-using fitSharp.Fit.Model;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using fitSharp.Samples.Fit;
@@ -45,15 +44,15 @@ namespace fitSharp.Test.NUnit.Fit {
         }
 
         [Test] public void InvokesMethodOnProcessor() {
-            var table = MakeTable("processor", "tostring");
+            var table = MakeTable("processor", "teststatus");
             fixture.Interpret(processor, table);
-            Assert.AreEqual("fitSharp.Fit.Service.CellProcessorBase", table.ValueAt(0, 2).GetAttribute(CellAttribute.Folded));
+            Assert.AreEqual("fitSharp.Fit.Model.TestStatus", table.ValueAt(0, 2).GetAttribute(CellAttribute.Folded));
         }
 
         [Test] public void InvokesMethodInEachRow() {
-            var table = new CellTree(new CellTree("configure", "processor"), new CellTree("tostring"));
+            var table = new CellTree(new CellTree("configure", "processor"), new CellTree("teststatus"));
             fixture.Interpret(processor, table);
-            Assert.AreEqual("fitSharp.Fit.Service.CellProcessorBase", table.ValueAt(1, 0).GetAttribute(CellAttribute.Folded));
+            Assert.AreEqual("fitSharp.Fit.Model.TestStatus", table.ValueAt(1, 0).GetAttribute(CellAttribute.Folded));
         }
     }
 }

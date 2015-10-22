@@ -1,11 +1,10 @@
-﻿// Copyright © 2013 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2015 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
 using fitSharp.Fit.Engine;
-using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
 using fitSharp.Fit.Service;
 using fitSharp.Machine.Engine;
@@ -48,9 +47,7 @@ namespace fitSharp.Test.NUnit.Fit {
             }
 
             public TypedValue Parse(Type type, TypedValue instance, Tree<Cell> parameters) {
-                return parameters.ValueAt(0).Text == ParseInterpreter.DefaultFlowInterpreter
-                    ? new TypedValue(new SampleFlow())
-                    : new TypedValue(new SampleFixture());
+                return new TypedValue(new SampleFixture());
             }
         }
 
@@ -73,16 +70,6 @@ namespace fitSharp.Test.NUnit.Fit {
             public static int Count;
             public SampleFixture() { Count++; }
             public void Interpret(CellProcessor processor, Tree<Cell> table) {}
-        }
-
-        class SampleFlow: FlowInterpreter {
-            public void Interpret(CellProcessor processor, Tree<Cell> table) {}
-            public object SystemUnderTest { get { return null; } }
-            public void SetSystemUnderTest(object theSystemUnderTest) {}
-            public bool IsInFlow(int tableCount) { return true; }
-            public void DoSetUp(CellProcessor processor, Tree<Cell> table) {}
-            public void DoTearDown(Tree<Cell> table) {}
-            public MethodRowSelector MethodRowSelector { get { return new DoRowSelector(); } }
         }
 
         class SampleItem: Copyable, SetUpTearDown {

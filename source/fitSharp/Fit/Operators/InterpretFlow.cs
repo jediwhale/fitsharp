@@ -36,19 +36,12 @@ namespace fitSharp.Fit.Operators {
         void ProcessFlowRow(Tree<Cell> table, int rowNumber) {
             var currentRow = table.Branches[rowNumber];
             try {
-                var specialActionName = processor.ParseTree<Cell, MemberName>(currentRow.Branches[0]);
-                currentRow.ValueAt(0).SetAttribute(CellAttribute.Syntax, CellAttributeValue.SyntaxKeyword);
-
-                var result = processor.Operate<InvokeSpecialOperator>(new TypedValue(interpreter), specialActionName, currentRow.Branches[0]);
+                var result = currentRow.InvokeSpecialAction(processor, interpreter);
 
                 if (!result.IsValid) {
-                    currentRow.ValueAt(0).ClearAttribute(CellAttribute.Syntax);
-                    result = processor.Execute(interpreter,
-                         interpreter.MethodRowSelector.SelectMethodCells(currentRow),
-                         interpreter.MethodRowSelector.SelectParameterCells(currentRow),
-                         currentRow.ValueAt(0));
-
+                    result = currentRow.ExecuteMethod(processor, interpreter);
                 }
+
                 if (!result.IsValid) {
                     if (result.IsException<MemberMissingException>()) {
                         foreach (var cell in interpreter.MethodRowSelector.SelectMethodCells(currentRow).Branches) {

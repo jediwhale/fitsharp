@@ -27,15 +27,13 @@ namespace fitSharp.Test.NUnit.Fit {
             var row = new CellTree("akeyword");
             Evaluate(row, null);
             Assert.AreEqual("somevalue", TestInvokeSpecialAction.Field);
-            Assert.AreEqual(CellAttributeValue.SyntaxKeyword, row.ValueAt(0).Attributes[CellAttribute.Syntax].Value);
         }
 
-        static void Evaluate(Tree<Cell> rowTree, object systemUnderTest) {
-            var interpreter = new DefaultFlowInterpreter(systemUnderTest);
-            var row = new FlowRow(rowTree);
+        static void Evaluate(Tree<Cell> row, object systemUnderTest) {
             var processor = Builder.CellProcessor();
+            processor.CallStack.DomainAdapter = new TypedValue(new DefaultFlowInterpreter(systemUnderTest));
             processor.AddOperator(new TestInvokeSpecialAction(), 2);
-            row.Evaluate(processor, interpreter);
+            row.Evaluate(processor);
         }
 
         class TestInvokeSpecialAction: CellOperator, InvokeSpecialOperator  {
