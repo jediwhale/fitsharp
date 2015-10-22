@@ -1,14 +1,15 @@
 /// Copyright (C) Gojko Adzic 2006-2008 http://gojko.net
 /// Released under GNU GPL 2.0
 
-using System;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Data;
-using System.Text.RegularExpressions;
-using System.Text;
 using dbfit.util;
 using fitSharp.Machine.Engine;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.Common;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace dbfit
 {
@@ -40,6 +41,7 @@ namespace dbfit
                 _currentConnection = value;
             }
         }
+
         public DbTransaction CurrentTransaction
         {
             get
@@ -50,31 +52,45 @@ namespace dbfit
             {
                 _currentTransaction = value;
             }
-
         }
 
-        public  virtual void Connect(String dataSource, String username, String password, String database)
+        public virtual void Connect(String dataSource, String username, String password, String database)
         {
             Connect(GetConnectionString(dataSource, username, password, database));
         }
-        public  virtual void Connect(String dataSource, String username, String password)
+
+        public virtual void Connect(String dataSource, String username, String password)
         {
             Connect(GetConnectionString(dataSource, username, password));
         }
-        public  virtual void Connect(String connectionString)
+
+        public virtual void Connect(String connectionString)
         {
             CurrentConnection = DbProviderFactory.CreateConnection();
             CurrentConnection.ConnectionString = connectionString;
             CurrentConnection.Open();
             CurrentTransaction = CurrentConnection.BeginTransaction();
         }
-        public  virtual void ConnectUsingFile(String connectionPropertiesFile)
+
+        public virtual void ConnectUsingFile(String connectionPropertiesFile)
         {
             DbConnectionProperties dbp = DbConnectionProperties.CreateFromFile(connectionPropertiesFile);
             if (dbp.FullConnectionString != null) Connect(dbp.FullConnectionString);
             else if (dbp.DbName != null) Connect(dbp.Service, dbp.Username, dbp.Password, dbp.DbName);
             else Connect(dbp.Service, dbp.Username, dbp.Password);
         }
+
+        public virtual void ConnectUsingConfig(String connectionName)
+        {
+            string fullConnectionString = ConfigurationManager.ConnectionStrings[connectionName].ConnectionString;
+
+            if (fullConnectionString == null)
+            {
+                throw new Exception(string.Format("No Connection String found for {0}", connectionName));
+            }
+            Connect(fullConnectionString);
+        }
+
         public virtual void ConnectNoTransaction(String dataSource, String username, String password, String database)
         {
             string connectionString = GetConnectionString(dataSource, username, password, database);
@@ -82,6 +98,7 @@ namespace dbfit
             CurrentConnection.ConnectionString = connectionString;
             CurrentConnection.Open();
         }
+
         protected virtual void AddInput(DbCommand dbCommand, String name, Object value)
         {
             DbParameter dbParameter = dbCommand.CreateParameter();
@@ -90,7 +107,8 @@ namespace dbfit
             dbParameter.Value = (value == null ? DBNull.Value : value);
             dbCommand.Parameters.Add(dbParameter);
         }
-        public  virtual DbCommand CreateCommand(string statement, CommandType commandType)
+
+        public virtual DbCommand CreateCommand(string statement, CommandType commandType)
         {
             if (CurrentConnection == null) throw new ApplicationException("Not connected to database");
 
@@ -101,6 +119,7 @@ namespace dbfit
             dc.CommandTimeout = Options.CommandTimeOut;
             return dc;
         }
+
         public void BindFixtureSymbols(Symbols symbols, DbCommand dc)
         {
             foreach (String paramName in ExtractParamNames(dc.CommandText))
@@ -108,6 +127,7 @@ namespace dbfit
                 AddInput(dc, paramName, symbols.GetValueOrDefault(paramName, null));
             }
         }
+
         public void CloseConnection()
         {
             if (CurrentTransaction != null)
@@ -121,18 +141,20 @@ namespace dbfit
                 CurrentTransaction = null;
             }
         }
+
         public void Commit()
         {
             CurrentTransaction.Commit();
             CurrentTransaction = CurrentConnection.BeginTransaction();
         }
+
         public void Rollback()
         {
             CurrentTransaction.Rollback();
             CurrentTransaction = CurrentConnection.BeginTransaction();
         }
 
-        public  virtual String BuildUpdateCommand(String tableName, DbParameterAccessor[] updateAccessors, DbParameterAccessor[] selectAccessors)
+        public virtual String BuildUpdateCommand(String tableName, DbParameterAccessor[] updateAccessors, DbParameterAccessor[] selectAccessors)
         {
             if (updateAccessors.Length == 0)
             {
@@ -155,7 +177,7 @@ namespace dbfit
             return s.ToString();
         }
 
-        public  virtual string[] ExtractParamNames(string commandText)
+        public virtual string[] ExtractParamNames(string commandText)
         {
             //dotnet2 does not support sets, so a set is simmulated with a hashmap
             Dictionary<string, string> parameters = new Dictionary<string, string>();
@@ -200,21 +222,31 @@ namespace dbfit
             return sb.ToString();
         }
 
-        #endregion
+        #endregion default implementations for IDbEnvironment methods and properties
 
         #region inherited methods from IDbEnvironment that have no default implementation
 
         protected abstract String GetConnectionString(String dataSource, String username, String password);
+
         protected abstract String GetConnectionString(String dataSource, String username, String password, String database);
+
         protected abstract Regex ParamNameRegex { get; }
-        public abstract DbProviderFactory DbProviderFactory { get ; }
+
+        public abstract DbProviderFactory DbProviderFactory { get; }
+
         public abstract Dictionary<string, DbParameterAccessor> GetAllProcedureParameters(string procName);
+
         public abstract Dictionary<string, DbParameterAccessor> GetAllColumns(string tableOrViewName);
 
-        public abstract bool SupportsReturnOnInsert { get;}
-        public abstract String IdentitySelectStatement(String tableName);
-#endregion
+        public abstract bool SupportsReturnOnInsert { get; }
 
-        protected virtual string BuildColumnName(string sourceColumnName) { return sourceColumnName; }
+        public abstract String IdentitySelectStatement(String tableName);
+
+        #endregion inherited methods from IDbEnvironment that have no default implementation
+
+        protected virtual string BuildColumnName(string sourceColumnName)
+        {
+            return sourceColumnName;
+        }
     }
 }
