@@ -1,5 +1,8 @@
-/// Copyright (C) Gojko Adzic 2006-2008 http://gojko.net
-/// Released under GNU GPL 2.0
+// Copyright © 2015 Syterra Software Inc. Includes work Copyright (C) Gojko Adzic 2006-2008 http://gojko.net
+// This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
+// This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -113,6 +116,8 @@ namespace dbfit {
         /// </summary>
         /// <param name="connectionPropertiesFile"></param>
         void ConnectUsingFile(String connectionPropertiesFile);
+
+        void ConnectUsingConfig(string connectionName);
 
         /// <summary>
         /// Connects to the database using a specified database for the user witout a transaction

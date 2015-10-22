@@ -1,8 +1,11 @@
-/// Copyright (C) Gojko Adzic 2006-2008 http://gojko.net
-/// Released under GNU GPL 2.0
+// Copyright © 2015 Syterra Software Inc. Includes work Copyright (C) Gojko Adzic 2006-2008 http://gojko.net
+// This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
+// This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.Common;
 using System.Data;
 using System.Text.RegularExpressions;
@@ -75,6 +78,16 @@ namespace dbfit
             else if (dbp.DbName != null) Connect(dbp.Service, dbp.Username, dbp.Password, dbp.DbName);
             else Connect(dbp.Service, dbp.Username, dbp.Password);
         }
+
+        public virtual void ConnectUsingConfig(string connectionName) {
+            var fullConnectionString = ConfigurationManager.ConnectionStrings[connectionName].ConnectionString;
+
+            if (fullConnectionString == null) {
+                throw new Exception(string.Format("No Connection String found for {0}", connectionName));
+            }
+            Connect(fullConnectionString);
+        }
+
         public virtual void ConnectNoTransaction(String dataSource, String username, String password, String database)
         {
             string connectionString = GetConnectionString(dataSource, username, password, database);
