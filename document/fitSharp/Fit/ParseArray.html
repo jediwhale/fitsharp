@@ -23,8 +23,13 @@ set strings a,b,c<br>
 check strings a,b,c<br>
 check 'strings at' 2 c<br>
 <br>
+name symbol1 string: x<br>
+name symbol2 string: y<br>
+set strings &lt;&lt;symbol1,&lt;&lt;symbol2<br>
+check strings x,y<br>
+<br>
 set strings blank<br>
-check 'strings at' 0 exception[IndexOutOfRangeException]</td><td>then output is</td><td><div><table><tr><td><span class="fit_SUT">sample domain</span></td> </tr></table></div><br /><div><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">strings</span></td> <td>a,b,c</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">strings</span></td> <td class="pass">a,b,c</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">strings at</span></td> <td>2</td> <td class="pass">c</td> </tr></table></div><br /><div><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">strings</span></td> <td>blank</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">strings at</span></td> <td>0</td> <td class="pass">exception[IndexOutOfRangeException]</td> </tr></table></div></td></tr>
+check 'strings at' 0 exception[IndexOutOfRangeException]</td><td>then output is</td><td><div><table><tr><td><span class="fit_SUT">sample domain</span></td> </tr></table></div><br /><div><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">strings</span></td> <td>a,b,c</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">strings</span></td> <td class="pass">a,b,c</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">strings at</span></td> <td>2</td> <td class="pass">c</td> </tr></table></div><br /><div><table><tr><td><span class="fit_keyword">name</span></td> <td class="pass">symbol1</td> <td><span class="fit_member">string:</span></td> <td>x</td> </tr></table><table><tr><td><span class="fit_keyword">name</span></td> <td class="pass">symbol2</td> <td><span class="fit_member">string:</span></td> <td>y</td> </tr></table><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">strings</span></td> <td>&lt;&lt;symbol1,&lt;&lt;symbol2</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">strings</span></td> <td class="pass">x,y</td> </tr></table></div><br /><div><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">strings</span></td> <td>blank</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">strings at</span></td> <td>0</td> <td class="pass">exception[IndexOutOfRangeException]</td> </tr></table></div></td></tr>
 </table>
 </div>
 <div style="width:100%;text-align:right">
