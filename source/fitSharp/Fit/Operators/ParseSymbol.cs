@@ -27,7 +27,7 @@ namespace fitSharp.Fit.Operators {
         }
 
         TypedValue MakeTypedValue(object value, Type type) {
-            return value == null || type.IsInstanceOfType(value)
+            return value == null || type.IsInstanceOfType(value) || value.GetType() != typeof(string)
                 ? new TypedValue(value, type)
                 : Processor.ParseString(type, value.ToString());
         }
