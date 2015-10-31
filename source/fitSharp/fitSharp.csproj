@@ -255,6 +255,7 @@
     <Compile Include="Slim\Operators\SlimInstruction.cs" />
     <Compile Include="Slim\Operators\SlimOperator.cs" />
     <Compile Include="Slim\Operators\SlimProcessor.cs" />
+    <Compile Include="Slim\Service\AssemblyLoadFailureHandler.cs" />
     <Compile Include="Slim\Service\Document.cs" />
     <Compile Include="Slim\Service\Interpreter.cs" />
     <Compile Include="Slim\Service\Messenger.cs" />

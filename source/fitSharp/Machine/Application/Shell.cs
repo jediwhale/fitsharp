@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Threading;
 using fitSharp.IO;
 using fitSharp.Machine.Engine;
+using fitSharp.Slim.Service;
 
 namespace fitSharp.Machine.Application {
 
@@ -75,9 +76,22 @@ namespace fitSharp.Machine.Application {
             argumentParser.AddArgumentHandler("a", value => memory.GetItem<AppDomainSetup>().ConfigurationFile = value);
             argumentParser.AddArgumentHandler("c", value => new SuiteConfiguration(memory).LoadXml(folderModel.GetPageContent(value)));
             argumentParser.AddArgumentHandler("r", value => memory.GetItem<Settings>().Runner = value);
+            argumentParser.AddArgumentHandler("f", InitializeAndAddFolders);
             argumentParser.SetUnusedHandler(value => extraArguments.Add(value));
             argumentParser.Parse(commandLineArguments);
+        }
 
+        /// <summary>
+        /// Initializes the Assembly Loader and adds the given folder arguments.
+        /// </summary>
+        /// <param name="args"></param>
+        private void InitializeAndAddFolders(string args)
+        {
+            /* Add each folder into the Assembly Loader */
+            foreach (var a in args.Split(new char[] {','}, StringSplitOptions.RemoveEmptyEntries))
+            {
+                AssemblyLoadFailureHandler.AddFolder(a);
+            }
         }
 
         bool ValidateArguments() {
