@@ -17,6 +17,16 @@ namespace fitnesse.slim.test {
             Count++;
         }
 
+        public SampleClass(Dictionary<string, string> dictionary, string extra) {
+            this.dictionary = dictionary; 
+        }
+
+        public List<object> query() {
+            return dictionary.Keys.Select(key => new List<object> {
+                new List<object> {"key", key}, new List<object> {"value", dictionary[key]},
+            }).Cast<object>().ToList();
+        }
+
         public int[] IntegerArray { get; set; }
 
         public string SampleMethod() {
@@ -37,6 +47,8 @@ namespace fitnesse.slim.test {
         private class SampleDomain {
             public string DomainMethod() { return "domainstuff"; }
         }
+
+        readonly Dictionary<string, string> dictionary;
     }
 
     public class SampleStopTest: ApplicationException {}
