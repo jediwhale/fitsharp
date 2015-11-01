@@ -42,6 +42,14 @@ namespace fitSharp.Test.NUnit.Slim {
             Assert.IsTrue(processor.Get<SavedInstances>().GetValue("variable") is SampleClass);
         }
 
+        [Test] public void ExecuteMakeUsesSymbolAsFullClassName() {
+            processor.Get<Symbols>().Save("symbol", "fitSharp.Test.NUnit.Slim.SampleClass");
+            var executeMake = new ExecuteMake { Processor = processor };
+            var input = new SlimTree().AddBranchValue("step").AddBranchValue("make").AddBranchValue("variable").AddBranchValue("$symbol");
+            ExecuteOperation(executeMake, input, 2);
+            Assert.IsTrue(processor.Get<SavedInstances>().GetValue("variable") is SampleClass);
+        }
+
         [Test] public void ExecuteMakeUsesSymbolAsObject() {
             var newClass = new SampleClass();
             processor.Get<Symbols>().Save("symbol", newClass);

@@ -13,7 +13,7 @@ namespace fitSharp.Slim.Operators {
 
         protected override Tree<string> ExecuteOperation(Tree<string> parameters) {
             var singleSymbol = Processor.LoadSymbol(parameters.ValueAt(3));
-            var newInstance = singleSymbol.IsObject
+            var newInstance = singleSymbol.IsObject && singleSymbol.Type != typeof(string)
                 ? singleSymbol
                 : CreateInstance(parameters);
             var name = parameters.ValueAt(2); 
