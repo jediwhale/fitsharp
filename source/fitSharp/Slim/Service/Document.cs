@@ -1,8 +1,9 @@
-﻿// Copyright © 2010 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2015 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
+using System;
 using System.Text;
 using fitSharp.Machine.Model;
 using fitSharp.Slim.Model;
@@ -40,7 +41,7 @@ namespace fitSharp.Slim.Service {
         public static Document Parse(string input) { return new Document(Read(input)); }
 
         static Tree<string> Read(string input) {
-            if (IsList(input)) return ReadList(input.Substring(1, input.Length - 2));
+            if (IsList(input)) return ReadList(new DelimitedString(input.Substring(1, input.Length - 2)));
             return new SlimLeaf(input);
         }
 
@@ -53,17 +54,38 @@ namespace fitSharp.Slim.Service {
                 && int.TryParse(input.Substring(1, 6), out result);
         }
 
-        static SlimTree ReadList(string input) {
-            int length = int.Parse(input.Substring(0, 6));
+        static SlimTree ReadList(DelimitedString input) {
+            var count = int.Parse(input.ReadTo(":"));
             var result = new SlimTree();
-            int start = 7;
-            for (int i = 0; i < length; i++) {
-                int itemLength = int.Parse(input.Substring(start, 6));
-                start += 7;
-                result.AddBranch(Read(input.Substring(start, itemLength)));
-                start += itemLength + 1; 
+            for (var i = 0; i < count; i++) {
+                var itemLength = int.Parse(input.ReadTo(":"));
+                result.AddBranch(Read(input.Read(itemLength, 1)));
             }
             return result;
+        }
+
+        class DelimitedString {
+            public DelimitedString(string content) {
+                this.content = content;
+                position = 0;
+            }
+
+            public string ReadTo(string terminator) {
+                var end = content.IndexOf(terminator, position, StringComparison.Ordinal);
+                if (end < 0) throw new InvalidOperationException("no terminator");
+                var result = content.Substring(position, end - position);
+                position = end + terminator.Length;
+                return result;
+            }
+
+            public string Read(int length, int skip) {
+                var result = content.Substring(position, length);
+                position += length + skip;
+                return result;
+            }
+
+            readonly string content;
+            int position;
         }
     }
 }

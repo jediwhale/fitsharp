@@ -130,6 +130,18 @@ namespace fitSharp.Test.NUnit.Slim {
             Assert.AreEqual("sampleData", result.ValueAt(1));
         }
 
+        [Test]
+        public void ExecuteAssignSavesSymol() {
+            processor.Get<SavedInstances>().Save("variable", new SampleClass());
+            var executeAssign = new ExecuteAssign { Processor = processor };
+            var input =
+                new SlimTree().AddBranchValue("step").AddBranchValue("assign").AddBranchValue("symbol").AddBranchValue(
+                    "value");
+            ExecuteOperation(executeAssign, input, 2);
+            Assert.AreEqual("OK", result.ValueAt(1));
+            Assert.AreEqual("value", processor.Get<Symbols>().GetValue("symbol"));
+        }
+
         private void MakeSampleClass(string sampleData) {
             var executeMake = new ExecuteMake { Processor = processor };
             var input = new SlimTree().AddBranchValue("step").AddBranchValue("make").AddBranchValue("scriptTableActor").AddBranchValue("fitSharp.Test.NUnit.Slim.SampleClass").AddBranchValue(sampleData);

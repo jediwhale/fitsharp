@@ -240,6 +240,7 @@
     <Compile Include="Slim\Operators\ComposeDefault.cs" />
     <Compile Include="Slim\Operators\ComposeException.cs" />
     <Compile Include="Slim\Operators\ComposeList.cs" />
+    <Compile Include="Slim\Operators\ExecuteAssign.cs" />
     <Compile Include="Slim\Operators\InvokeInstructionBase.cs" />
     <Compile Include="Slim\Operators\ExecuteCall.cs" />
     <Compile Include="Slim\Operators\ExecuteCallAndAssign.cs" />

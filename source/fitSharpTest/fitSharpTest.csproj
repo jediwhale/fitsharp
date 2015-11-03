@@ -111,6 +111,7 @@
     <Compile Include="NUnit\Slim\ExecuteOperatorsTest.cs" />
     <Compile Include="NUnit\Slim\Instructions.cs" />
     <Compile Include="NUnit\Slim\InterpreterTest.cs" />
+    <Compile Include="NUnit\Slim\MessengerTest.cs" />
     <Compile Include="NUnit\Slim\ParseOperatorsTest.cs" />
     <Compile Include="NUnit\Slim\InvokeLibraryTest.cs" />
     <Compile Include="NUnit\Slim\SlimTreeTest.cs" />
