@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using fitSharp.Machine.Model;
 
 namespace fitnesse.slim.test {
@@ -42,6 +43,10 @@ namespace fitnesse.slim.test {
 
         public void AbortTest() {
             throw new SampleStopTest();
+        }
+
+        public string Culture() {
+            return Thread.CurrentThread.CurrentCulture.DisplayName;
         }
 
         private class SampleDomain {

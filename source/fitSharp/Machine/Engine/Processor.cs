@@ -92,6 +92,13 @@ namespace fitSharp.Machine.Engine {
         public static TypedValue FindMember<T>(this Processor<T> processor, TypedValue instance, MemberQuery query) {
             return processor.Operate<FindMemberOperator<T>>(instance, query);
         }
+
+        public static V RunTest<T, V>(this Processor<T> processor, Func<V> action) {
+            processor.Memory.Apply(i => i.As<SetUpTearDown>(s => s.SetUp()));
+            var result = action();
+            processor.Memory.Apply(i => i.As<SetUpTearDown>(s => s.TearDown()));
+            return result;
+        }
     }
 
     public abstract class ProcessorBase<T, P> : Processor<T> where P : class, Processor<T> {

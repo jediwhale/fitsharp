@@ -1,4 +1,4 @@
-// Copyright © 2012 Syterra Software Inc. All rights reserved.
+// Copyright © 2015 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -7,6 +7,7 @@ using System;
 using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
 using fitSharp.IO;
+using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Operators {
@@ -32,9 +33,7 @@ namespace fitSharp.Fit.Operators {
 			    processor.TestStatus.Summary["run elapsed time"] = new ElapsedTime();
                 var heading = tables.Branches[0].ValueAt(0, 0);
                 try {
-                    processor.Memory.Apply(i => i.As<SetUpTearDown>(s => s.SetUp()));
-                    InterpretTables(tables);
-                    processor.Memory.Apply(i => i.As<SetUpTearDown>(s => s.TearDown()));
+                    processor.RunTest(() => InterpretTables(tables));
                 }
                 catch (System.Exception e) {
                     processor.TestStatus.MarkException(heading, e);
@@ -42,7 +41,7 @@ namespace fitSharp.Fit.Operators {
 			    writer.WriteTest(tables, processor.TestStatus.Counts);
             }
 
-            void InterpretTables(Tree<Cell> theTables) {
+            TypedValue InterpretTables(Tree<Cell> theTables) {
 		        processor.TestStatus.TableCount = 1;
                 flowFixture = new DefaultFlowInterpreter(null);
                 foreach (var table in theTables.Branches) {
@@ -55,7 +54,7 @@ namespace fitSharp.Fit.Operators {
                         }
                     }
                     catch (System.Exception e) {
-                        if (!typeof(AbandonException).IsAssignableFrom(e.GetType())) throw;
+                        if (!(e is AbandonException)) throw;
                     }
 
                     writer.WriteTable(table);
@@ -63,7 +62,8 @@ namespace fitSharp.Fit.Operators {
 		            processor.TestStatus.TableCount++;
                 }
                 flowFixture.DoTearDown(theTables.Branches[0]);
-		    }
+                return TypedValue.Void;
+            }
 
             void InterpretTable(Tree<Cell> table) {
                 var heading = table.ValueAt(0, 0);

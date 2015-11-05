@@ -1,8 +1,9 @@
-﻿// Copyright © 2011 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2015 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
+using System.Linq;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using fitSharp.Slim.Model;
@@ -22,9 +23,9 @@ namespace fitSharp.Slim.Service {
 
         public void ProcessInstructions() {
             while (true) {
-                string instruction = messenger.Read();
+                var instruction = messenger.Read();
                 if (messenger.IsEnd) break;
-                string results = Execute(instruction);
+                var results = processor.RunTest(() => Execute(instruction));
                 messenger.Write(results);
             }
         }
@@ -40,15 +41,14 @@ namespace fitSharp.Slim.Service {
         }
 
         private string ExecuteInstruction(string instruction) {
-            Document document = Document.Parse(instruction);
-            Tree<string> results = ExecuteInstructions(document.Content);
+            var document = Document.Parse(instruction);
+            var results = ExecuteInstructions(document.Content);
             return new Document(results).ToString();
         }
 
         private void AddAssemblies() {
             if (string.IsNullOrEmpty(assemblyPaths)) return;
-            foreach (string path in assemblyPaths.Split(';')) {
-                if (path.Length == 0) continue;
+            foreach (var path in assemblyPaths.Split(';').Where(path => path.Length != 0)) {
                 processor.ApplicationUnderTest.AddAssembly(path);
             }
             assemblyPaths = null;
@@ -56,14 +56,14 @@ namespace fitSharp.Slim.Service {
 
         private static string FormatException(System.Exception e) {
             // this format is hardcoded in case there is an exception in the general formatting code
-            string exception = string.Format(ComposeException.ExceptionResult, e);
-            string step = string.Format("[000002:000005:error:{0:000000}:{1}:]", exception.Length, exception);
+            var exception = string.Format(ComposeException.ExceptionResult, e);
+            var step = string.Format("[000002:000005:error:{0:000000}:{1}:]", exception.Length, exception);
             return string.Format("[000001:{0:000000}:{1}:]", step.Length, step);
         }
 
         private Tree<string> ExecuteInstructions(Tree<string> instructions) {
             var results = new SlimTree();
-            foreach (Tree<string> statement in instructions.Branches) {
+            foreach (var statement in instructions.Branches) {
                 var result = processor.Invoke(new SlimInstruction(), new MemberName(string.Empty), statement).GetValue<Tree<string>>();
                 results.AddBranchValue(result);
                 if (ComposeException.WasAborted(result.ValueAt(1))) break;
