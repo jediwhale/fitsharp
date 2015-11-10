@@ -18,7 +18,7 @@ namespace fitnesse.slim.test {
             Count++;
         }
 
-        public SampleClass(Dictionary<string, string> dictionary, string extra) {
+        public SampleClass(Dictionary<string, string> dictionary, Dictionary<string, string> extra) {
             this.dictionary = dictionary; 
         }
 
