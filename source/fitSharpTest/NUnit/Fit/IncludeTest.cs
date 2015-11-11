@@ -1,4 +1,4 @@
-﻿// Copyright © 2012 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2015 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -32,6 +32,7 @@ namespace fitSharp.Test.NUnit.Fit {
             new Include().Interpret(processor, includeTable);
             Assert.IsTrue(includeTable.ValueAt(0, 0).HasAttribute(CellAttribute.Folded));
             Assert.AreEqual(result, includeTable.ValueAt(0, 0).GetAttribute(CellAttribute.Folded));
+            Assert.AreEqual(1, processor.TestStatus.Counts.GetCount(fitSharp.Fit.Model.TestStatus.Right));
         }
 
         [Test] public void IncludesPage() {
@@ -80,6 +81,7 @@ namespace fitSharp.Test.NUnit.Fit {
             public TypedValue RunTest(Tree<Cell> testTables, StoryTestWriter writer) {
                 Assert.AreSame(parsedInput, testTables);
                 writer.WriteTable(parsedInput);
+                Processor.TestStatus.MarkRight(testTables.Branches[0].Value);
                 return TypedValue.Void;
             }
         }
