@@ -112,7 +112,7 @@
     <Compile Include="Fit\Engine\WrapOperator.cs" />
     <Compile Include="Fit\Runner\StoryTestPageFilter.cs" />
     <Compile Include="Fit\Runner\TagFilter.cs" />
-    <Compile Include="Fit\Operators\InterpretFlow.cs" />
+    <Compile Include="Fit\Engine\InterpretFlow.cs" />
     <Compile Include="Fit\Fixtures\StoryTestStringWriter.cs" />
     <Compile Include="Fit\Engine\StoryTestWriter.cs" />
     <Compile Include="Machine\Application\ArgumentParser.cs" />
