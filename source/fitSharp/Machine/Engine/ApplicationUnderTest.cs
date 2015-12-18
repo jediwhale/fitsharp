@@ -1,4 +1,4 @@
-﻿// Copyright © 2012 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2015 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -157,31 +157,28 @@ namespace fitSharp.Machine.Engine {
         }
 
         class Namespaces {
-            readonly List<string> namespaces;
 
             public Namespaces() {
-                namespaces = new List<string>();
+                test = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             }
 
             public Namespaces(Namespaces other) {
-                namespaces = new List<string>(other.namespaces);
+                test = new HashSet<string>(other.test, StringComparer.OrdinalIgnoreCase);
             }
 
             public void Add(string namespaceName) {
-                if (!namespaces.Contains(namespaceName)) {
-                    namespaces.Add(namespaceName);
-                }
+                test.Add(namespaceName);
             }
 
             public void Remove(string namespaceName) {
-                if (namespaces.Contains(namespaceName)) {
-                    namespaces.Remove(namespaceName);
-                }
+                test.Remove(namespaceName);
             }
 
             public bool IsRegistered(string namespaceName) {
-                return namespaces.Any(name => string.Compare(name, namespaceName, StringComparison.OrdinalIgnoreCase) == 0);
+                return test.Contains(namespaceName);
             }
+
+            readonly HashSet<string> test;
         }
     }
 }
