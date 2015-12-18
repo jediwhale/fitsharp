@@ -17,7 +17,7 @@ namespace fitSharp.Machine.Engine {
         const int cacheSize = 100;
         readonly Assemblies assemblies;
         readonly Namespaces namespaces;
-        readonly List<Type> cache = new List<Type>();
+        static readonly List<Type> cache = new List<Type>();
 
         public ApplicationUnderTest(): this(new CurrentDomain()) {}
 
@@ -33,7 +33,10 @@ namespace fitSharp.Machine.Engine {
         }
 
         public void AddAssembly(string assemblyName) { assemblies.AddAssembly(assemblyName); }
-        public void AddAssemblies(IEnumerable<string> assemblyNames) { foreach (var assemblyName in assemblyNames)  AddAssembly(assemblyName);}
+
+        public void AddAssemblies(IEnumerable<string> assemblyNames) {
+            foreach (var assemblyName in assemblyNames)  AddAssembly(assemblyName);
+        }
 
         public void AddOptionalAssembly(string assemblyName) {
             try {
@@ -68,7 +71,7 @@ namespace fitSharp.Machine.Engine {
         }
 
         public RuntimeType FindType(NameMatcher typeName) {
-            Type type = Type.GetType(typeName.MatchName);
+            var type = Type.GetType(typeName.MatchName);
             if (type == null) {
                 type = SearchForType(typeName, cache);
                 if (type == null) {
@@ -84,7 +87,7 @@ namespace fitSharp.Machine.Engine {
         }
 
         Type SearchForType(NameMatcher typeName, IEnumerable<Type> types) {
-            foreach (Type type in types) {
+            foreach (var type in types) {
                 if (typeName.Matches(type.FullName)) return type;
                 if (type.Namespace == null || !namespaces.IsRegistered(type.Namespace)) continue;
                 if (typeName.Matches(type.Name)) return type;
@@ -92,7 +95,7 @@ namespace fitSharp.Machine.Engine {
             return null;
         }
 
-        void UpdateCache(Type type) {
+        static void UpdateCache(Type type) {
             if (cache.Contains(type)) cache.Remove(type);
             cache.Add(type);
             if (cache.Count > cacheSize) cache.RemoveAt(0);
