@@ -43,7 +43,7 @@ use subset with 'get people' Mike-Stockdale,Bob-Martin<br>
 Bob Martin</td><td>then output is</td><td><table class="fit_table"><tr><td><span class="fit_SUT">sample domain</span></td> </tr><tr><td><span class="fit_interpreter">use</span></td> <td><span class="fit_interpreter">subset</span></td> <td><span class="fit_keyword">with</span></td> <td><span class="fit_member">get people</span></td> <td>Mike-Stockdale,Bob-Martin</td> </tr><tr><td><span class="fit_member">first name</span></td> <td><span class="fit_member">last name</span></td> </tr><tr><td class="pass">Bob</td> <td class="pass">Martin</td> </tr></table></td></tr>
 </table>
 <br>
-A dictionary is wrapped in a <a href="../Fit/SetFixture.html">Set Fixture</a>.<br>
+A dictionary is wrapped in a <a href="../Fit/SetFixture.html">Set Fixture</a>. The dictionary values are checked.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>when input is</td><td>|'sample domain'<br>
@@ -51,6 +51,16 @@ A dictionary is wrapped in a <a href="../Fit/SetFixture.html">Set Fixture</a>.<b
 'first name' 'last name'<br>
 Mike Stockdale<br>
 Bob Martin</td><td>then output is</td><td><table class="fit_table"><tr><td><span class="fit_SUT">sample domain</span></td> </tr><tr><td><span class="fit_member">make dictionary</span></td> </tr><tr><td><span class="fit_member">first name</span></td> <td><span class="fit_member">last name</span></td> </tr><tr><td class="pass">Mike</td> <td class="pass">Stockdale</td> </tr><tr><td class="pass">Bob</td> <td class="pass">Martin</td> </tr></table></td></tr>
+</table>
+<br>
+To check dictionary keys and values, we need a method to extract the key value pairs.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>when input is</td><td>|'sample domain'<br>
+'make key values'<br>
+key value<br>
+key1 value1<br>
+key2 value2</td><td>then output is</td><td><table class="fit_table"><tr><td><span class="fit_SUT">sample domain</span></td> </tr><tr><td><span class="fit_member">make key values</span></td> </tr><tr><td><span class="fit_member">key</span></td> <td><span class="fit_member">value</span></td> </tr><tr><td class="pass">key1</td> <td class="pass">value1</td> </tr><tr><td class="pass">key2</td> <td class="pass">value2</td> </tr></table></td></tr>
 </table>
 <br>
 A data table is wrapped in an <a href="../Fit/ArrayFixture.html">Array Fixture</a>.<br>

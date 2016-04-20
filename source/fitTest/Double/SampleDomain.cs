@@ -97,6 +97,11 @@ namespace fit.Test.Double {
             return new Dictionary<string, Person> {{"key1", new Person("Bob", "Martin")}, {"key2", new Person("Mike", "Stockdale")}};
         }
 
+        public IEnumerable<KeyValuePair<string, string>> MakeKeyValues() {
+            var dictionary = new Dictionary<string, string> {{"key1", "value1"}, {"key2", "value2"}};
+            return dictionary.AsEnumerable().OrderBy(p => p.Key);
+        }
+
         public DataTable MakeDataTable() {
             var table = new DataTable();
             table.Columns.Add("column1", typeof (string));
