@@ -1,4 +1,4 @@
-﻿// Copyright © 2013 Syterra Software Inc.
+﻿// Copyright © 2016 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -40,7 +40,7 @@ namespace fit.Fixtures {
 
         void DoCheckOperation(Parse theCells, bool isVolatile) {
             try {
-                CellRange methodCells = CellRange.GetMethodCellRange(theCells, 1);
+                var methodCells = CellRange.GetMethodCellRange(theCells, 1);
                 try {
                     processor.Operate<CheckOperator>(
                         CellOperationValue.Make(
@@ -70,26 +70,12 @@ namespace fit.Fixtures {
             processor.CallStack.SetReturn(new TypedValue(result));
         }
 
-        public void Set(Parse theCells) {
-            ExecuteEmbeddedMethod(theCells);
-        }
-
         public CommentFixture Comment(Parse cells) {
             return new CommentFixture();
         }
 
         public Fixture Ignored(Parse cells) {
             return new Fixture();
-        }
-
-        public void Ensure(Parse theCells) {
-            try {
-                processor.TestStatus.ColorCell(theCells, (bool) ExecuteEmbeddedMethod(theCells));
-            }
-            catch (IgnoredException) {}
-            catch (Exception e) {
-                processor.TestStatus.MarkException(theCells, e);
-            }
         }
 
         public void Not(Parse theCells) {
@@ -103,11 +89,11 @@ namespace fit.Fixtures {
         }
 
         public void Name(Parse theCells) {
-            Parse restOfTheCells = theCells.More;
+            var restOfTheCells = theCells.More;
             if (restOfTheCells == null || restOfTheCells.More == null)
                 throw new TableStructureException("missing cells for name.");
 
-            object namedValue = ourWithIdentifier.Equals(restOfTheCells.More.Text)
+            var namedValue = ourWithIdentifier.Equals(restOfTheCells.More.Text)
                                     ? new MethodPhrase(new CellRange(restOfTheCells.More)).Evaluate(fixture, processor)
                                     : ExecuteEmbeddedMethod(restOfTheCells);
             processor.Get<Symbols>().Save(restOfTheCells.Text, namedValue);

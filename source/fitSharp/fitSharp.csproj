@@ -58,6 +58,7 @@
     <Compile Include="Fit\Fixtures\ConfigureFixture.cs" />
     <Compile Include="Fit\Fixtures\Debug.cs" />
     <Compile Include="Fit\Fixtures\FileSystem.cs" />
+    <Compile Include="Fit\Fixtures\FlowKeywords.cs" />
     <Compile Include="Fit\Fixtures\Include.cs" />
     <Compile Include="Fit\Fixtures\IncludeAction.cs" />
     <Compile Include="Fit\Engine\MethodPhrase.cs" />
