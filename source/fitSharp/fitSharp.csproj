@@ -58,7 +58,6 @@
     <Compile Include="Fit\Fixtures\ConfigureFixture.cs" />
     <Compile Include="Fit\Fixtures\Debug.cs" />
     <Compile Include="Fit\Fixtures\FileSystem.cs" />
-    <Compile Include="Fit\Fixtures\FlowKeywords.cs" />
     <Compile Include="Fit\Fixtures\Include.cs" />
     <Compile Include="Fit\Fixtures\IncludeAction.cs" />
     <Compile Include="Fit\Engine\MethodPhrase.cs" />
@@ -81,6 +80,9 @@
     <Compile Include="Fit\Engine\ExecuteOperator.cs" />
     <Compile Include="Fit\Operators\FindMemberPattern.cs" />
     <Compile Include="Fit\Operators\FindMemberQueryable.cs" />
+    <Compile Include="Fit\Operators\InvokeKeywordEnsure.cs" />
+    <Compile Include="Fit\Operators\InvokeKeywordNote.cs" />
+    <Compile Include="Fit\Operators\InvokeKeywordSet.cs" />
     <Compile Include="Fit\Operators\InvokeLiteral.cs" />
     <Compile Include="Fit\Operators\MemberPatternAttribute.cs" />
     <Compile Include="Fit\Operators\RunTestDefault.cs" />

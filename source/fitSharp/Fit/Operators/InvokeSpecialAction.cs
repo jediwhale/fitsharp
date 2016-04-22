@@ -19,37 +19,29 @@ namespace fitSharp.Fit.Operators {
 
         public TypedValue InvokeSpecial(TypedValue instance, MemberName memberName, Tree<Cell> parameters) {
             var cell = parameters.Branches[0];
-            Type type = null;
+            Type type;
             try {
                 type = Processor.ApplicationUnderTest.FindType("fit.Parse").Type;
             }
-            catch (TypeMissingException) {}
-
-            if (type != null) {
-                // lookup Fixture
-			    foreach (var member in FindMember(instance.Value, memberName, type).Value)
-			    {
-                    cell.Value.SetAttribute(CellAttribute.Syntax, CellAttributeValue.SyntaxKeyword);
-                    return member.Invoke(new object[] { cell.Value });
-                }
+            catch (TypeMissingException) {
+                return TypedValue.MakeInvalid(new MemberMissingException(instance.Type, memberName.Name, 1));
             }
 
-			// lookup FlowKeywords
-            var keywords = new FlowKeywords(instance.GetValue<FlowInterpreter>(), Processor);
-			foreach (var member in FindMember(keywords, memberName, typeof(Tree<Cell>)).Value) {
+            // lookup Fixture
+            foreach (var member in FindMember(instance.Value, memberName, type).Value)
+            {
                 cell.Value.SetAttribute(CellAttribute.Syntax, CellAttributeValue.SyntaxKeyword);
-				return member.Invoke(new object[] { parameters });
-			}
+                return member.Invoke(new object[] { cell.Value });
+            }
 
-            if (type != null) {
-                var runtimeType = Processor.ApplicationUnderTest.FindType("fit.Fixtures.FlowKeywords");
-                var runtimeMember = runtimeType.GetConstructor(2);
-                var flowKeywords = runtimeMember.Invoke(new[] {instance.Value, Processor});
+            // lookup FlowKeywords
+            var runtimeType = Processor.ApplicationUnderTest.FindType("fit.Fixtures.FlowKeywords");
+            var runtimeMember = runtimeType.GetConstructor(2);
+            var flowKeywords = runtimeMember.Invoke(new[] {instance.Value, Processor});
 
-                foreach (var member in FindMember(flowKeywords.Value, memberName, type).Value) {
-                    cell.Value.SetAttribute(CellAttribute.Syntax, CellAttributeValue.SyntaxKeyword);
-                    return member.Invoke(new object[] {cell.Value});
-                }
+            foreach (var member in FindMember(flowKeywords.Value, memberName, type).Value) {
+                cell.Value.SetAttribute(CellAttribute.Syntax, CellAttributeValue.SyntaxKeyword);
+                return member.Invoke(new object[] {cell.Value});
             }
 
             return TypedValue.MakeInvalid(new MemberMissingException(instance.Type, memberName.Name, 1));

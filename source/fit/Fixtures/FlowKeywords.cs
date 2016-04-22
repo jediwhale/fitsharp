@@ -100,8 +100,6 @@ namespace fit.Fixtures {
             processor.TestStatus.MarkRight(restOfTheCells);
         }
 
-        public void Note(Parse theCells) {}
-
         public void Reject(Parse theCells) {
             Not(theCells);
         }

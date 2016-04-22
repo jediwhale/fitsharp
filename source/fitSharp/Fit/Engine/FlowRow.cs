@@ -19,8 +19,17 @@ namespace fitSharp.Fit.Engine {
 
         public static TypedValue InvokeSpecialAction(this Tree<Cell> row, CellProcessor processor, FlowInterpreter interpreter) {
             var specialActionName = processor.ParseTree<Cell, MemberName>(row.Branches[0]);
-            var result = processor.Operate<InvokeSpecialOperator>(new TypedValue(interpreter), specialActionName, row);
-            return result;
+            try {
+                var result = processor.Operate<InvokeSpecialOperator>(new TypedValue(interpreter), specialActionName, row);
+                if (result.IsValid) {
+                    SetSyntaxKeyword(row);
+                }
+                return result;
+            }
+            catch (System.Exception) {
+                    SetSyntaxKeyword(row);
+                throw;
+            }
         }
 
         public static TypedValue ExecuteMethod(this Tree<Cell> row, CellProcessor processor, FlowInterpreter interpreter) {
@@ -33,6 +42,10 @@ namespace fitSharp.Fit.Engine {
                         selector.SelectMethodCells(row),
                         selector.SelectParameterCells(row),
                         row.ValueAt(0));
+        }
+
+        static void SetSyntaxKeyword(Tree<Cell> row) {
+            row.Branches[0].Value.SetAttribute(CellAttribute.Syntax, CellAttributeValue.SyntaxKeyword);
         }
     }
 }
