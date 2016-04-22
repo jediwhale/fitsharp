@@ -1,18 +1,19 @@
-﻿// Copyright © 2011 Syterra Software Inc.
-// This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
-// This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+﻿// Copyright © 2016 Syterra Software Inc. All rights reserved.
+// The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+// which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
+// to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
-using fit.Runner;
+using System;
+using fitSharp.Fit.Operators;
 using fitSharp.Fit.Runner;
+using fitSharp.Fit.Service;
 using fitSharp.IO;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
 using fitSharp.Samples;
 using NUnit.Framework;
-using System;
 
-namespace fit.Test.NUnit {
+namespace fitSharp.Test.NUnit.Fit {
     [TestFixture] public class SuiteRunnerTest {
 
         Memory memory;
@@ -32,8 +33,8 @@ namespace fit.Test.NUnit {
 
             RunSuite();
 
-            int tearDown = folders.GetPageContent(@"out\reportIndex.html").IndexOf("suiteteardown.html");
-            int otherFile = folders.GetPageContent(@"out\reportIndex.html").IndexOf("zzzz.html");
+            int tearDown = folders.GetPageContent(@"out\reportIndex.html").IndexOf("suiteteardown.html", StringComparison.Ordinal);
+            int otherFile = folders.GetPageContent(@"out\reportIndex.html").IndexOf("zzzz.html", StringComparison.Ordinal);
             Assert.IsTrue(otherFile < tearDown);
         }
 
@@ -132,7 +133,7 @@ namespace fit.Test.NUnit {
         }
 
         private void RunSuite(ProgressReporter reporter) {
-            var runner = new SuiteRunner(memory, reporter);
+            var runner = new SuiteRunner(memory, reporter, m => new CellProcessorBase(m, m.GetItem<CellOperators>()));
             runner.Run(new StoryTestFolder(memory, folders), string.Empty);
         }
 

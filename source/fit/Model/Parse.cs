@@ -1,4 +1,4 @@
-// Copyright © 2012 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+// Copyright © 2016 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -23,7 +23,7 @@ namespace fit
         }
 
 	    public static Parse ParseRootFrom(string input) {
-	        return CopyFrom(new HtmlTables().Parse(input));
+	        return (Parse)new HtmlTables(text => new Parse(new CellBase(text))).Parse(input);
 	    }
 
 	    public Parse More { get; set; }
@@ -79,7 +79,7 @@ namespace fit
 		    this.SetAttribute(CellAttribute.InformationSuffix, text);
 		}
 
-        Parse(CellBase source): base(source) {}
+	    public Parse(CellBase source) : base(source) {}
 
         Parse(Parse other)
             : base(other) {
@@ -217,9 +217,9 @@ namespace fit
             return new Parse(this);
         }
 
-        public static Parse CopyFrom(Tree<CellBase> source) {
-            var result = new Parse(source.Value);
-            foreach (Tree<CellBase> branch in source.Branches) {
+        public static Parse CopyFrom(Tree<Cell> source) {
+            var result = new Parse((CellBase)source.Value);
+            foreach (var branch in source.Branches) {
                 Parse newBranch = CopyFrom(branch);
                 if (result.Parts == null) {
                     result.Parts = newBranch; 

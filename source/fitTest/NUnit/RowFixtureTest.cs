@@ -1,4 +1,4 @@
-// Copyright © 2012 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+// Copyright © 2016 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -24,7 +24,6 @@ namespace fit.Test.NUnit {
         Parse storyTables;
         TestCounts resultCounts;
         Memory memory;
-        string testResult;
         Service.Service processor;
 
         public void TestExpectBlankOrNullAllCorrect()
@@ -94,7 +93,7 @@ namespace fit.Test.NUnit {
             fixture.Processor = processor;
             fixture.DoTable(parse.Parts);
             resultCounts = fixture.TestStatus.Counts;
-            testResult = new ParseStoryTestString().Parse(typeof(StoryTableString), new TypedValue(), parse.Parts).ValueString;
+            new ParseStoryTestString().Parse(typeof(StoryTableString), new TypedValue(), parse.Parts);
         }
 
         [Test]
@@ -117,9 +116,9 @@ namespace fit.Test.NUnit {
                                                };
 
             RunTest(new BusinessObjectRowFixture(), parse);
-            Assert.IsTrue(parse.ToString().IndexOf("number1") > 0);
-            Assert.IsTrue(parse.ToString().IndexOf("number2") > 0);
-            Assert.IsTrue(parse.ToString().IndexOf("number3") > 0);
+            Assert.IsTrue(parse.ToString().IndexOf("number1", StringComparison.Ordinal) > 0);
+            Assert.IsTrue(parse.ToString().IndexOf("number2", StringComparison.Ordinal) > 0);
+            Assert.IsTrue(parse.ToString().IndexOf("number3", StringComparison.Ordinal) > 0);
             TestUtils.CheckCounts(resultCounts, 1, 2, 0, 0);
         }
 
@@ -143,9 +142,9 @@ namespace fit.Test.NUnit {
                                                };
 
             RunTest(new BusinessObjectRowFixture(), parse);
-            Assert.IsTrue(parse.ToString().IndexOf("number1") > 0);
-            Assert.IsTrue(parse.ToString().IndexOf("number2") > 0);
-            Assert.IsTrue(parse.ToString().IndexOf("number3") > 0);
+            Assert.IsTrue(parse.ToString().IndexOf("number1", StringComparison.Ordinal) > 0);
+            Assert.IsTrue(parse.ToString().IndexOf("number2", StringComparison.Ordinal) > 0);
+            Assert.IsTrue(parse.ToString().IndexOf("number3", StringComparison.Ordinal) > 0);
             TestUtils.CheckCounts(resultCounts, 1, 2, 0, 0);
         }
 
@@ -163,8 +162,8 @@ namespace fit.Test.NUnit {
             PeopleLoaderFixture.people.Add(new Person("Nigel", "Tufnel"));
             var tables = builder.Parse;
             RunTest(new PeopleRowFixture(), tables);
-            Assert.IsTrue(tables.ToString().IndexOf("Tuf..") > -1);
-            Assert.IsFalse(tables.ToString().IndexOf("Tufnel") > -1);
+            Assert.IsTrue(tables.ToString().IndexOf("Tuf..", StringComparison.Ordinal) > -1);
+            Assert.IsFalse(tables.ToString().IndexOf("Tufnel", StringComparison.Ordinal) > -1);
             TestUtils.CheckCounts(resultCounts, 2, 0, 0, 0);
         }
 
@@ -411,7 +410,7 @@ namespace fit.Test.NUnit {
             Assert.AreEqual(
                 "<tr><td class=\"fail\">7 <span class=\"fit_label\">missing</span></td><td>nullest</td><td>Jonesey</td></tr>" +
                 "<tr><td class=\"pass\">2</td><td class=\"pass\">Phil</td><td class=\"pass\">blank</td></tr>" +
-                "\n<tr>\n<td class=\"fail\"><span class=\"fit_grey\">1</span> <span class=\"fit_label\">surplus</span></td>\n<td><span class=\"fit_grey\">null</span></td>\n<td><span class=\"fit_grey\">Jones</span></td></tr>",
+                "\n<tr><td class=\"fail\"><span class=\"fit_grey\">1</span> <span class=\"fit_label\">surplus</span></td><td><span class=\"fit_grey\">null</span></td><td><span class=\"fit_grey\">Jones</span></td></tr>",
                 testTable.Parts.Parts.More.More.ToString());
         }
 
@@ -476,12 +475,12 @@ namespace fit.Test.NUnit {
 
         static void AssertTextInBody(Parse cell, string text)
         {
-            Assert.IsTrue(cell.Body.IndexOf(text) > -1);
+            Assert.IsTrue(cell.Body.IndexOf(text, StringComparison.Ordinal) > -1);
         }
 
         static void AssertTextNotInBody(Parse cell, string text)
         {
-            Assert.IsFalse(cell.Body.IndexOf(text) > -1);
+            Assert.IsFalse(cell.Body.IndexOf(text, StringComparison.Ordinal) > -1);
         }
 
         static void AddColumn(Parse table, string name)

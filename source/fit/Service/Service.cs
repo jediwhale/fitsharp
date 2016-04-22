@@ -1,4 +1,4 @@
-﻿// Copyright © 2012 Syterra Software Inc.
+﻿// Copyright © 2016 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -16,7 +16,6 @@ namespace fit.Service {
 
         public Service(Memory memory): base(memory, memory.GetItem<Operators>()) {
             ApplicationUnderTest.AddNamespace("fit");
-            ApplicationUnderTest.AddNamespace("fitSharp.Fit.Fixtures");
             ApplicationUnderTest.AddAssembly(Assembly.GetExecutingAssembly().CodeBase);
             memory.GetItem<Operators>().AddNamespaces(ApplicationUnderTest);
         }
@@ -32,7 +31,9 @@ namespace fit.Service {
         }
 
         public override Tree<Cell> MakeCell(string text, string tag, IEnumerable<Tree<Cell>> branches) {
-            var result = new Parse(tag, text, null, null);
+            var result = new Parse(new CellBase(text));
+            if (!string.IsNullOrEmpty(tag)) result.Value.SetTag(tag);
+            if (!string.IsNullOrEmpty(text)) result.Value.SetAttribute(CellAttribute.Body, text);
             foreach (var branch in branches) {
                 result.Add(branch);
             }

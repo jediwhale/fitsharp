@@ -1,29 +1,31 @@
-// Copyright © 2012 Syterra Software Inc.
-// This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
-// This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+// Copyright © 2016 Syterra Software Inc. All rights reserved.
+// The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+// which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
+// to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
+using fitSharp.Fit.Engine;
 using fitSharp.Fit.Fixtures;
 using fitSharp.Fit.Model;
-using fitSharp.Fit.Runner;
 using fitSharp.Fit.Service;
 using fitSharp.IO;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
 
-namespace fit.Runner {
+namespace fitSharp.Fit.Runner {
 	public class SuiteRunner {
 	    
 	    public TestCounts TestCounts { get; private set; }
 	    private readonly ProgressReporter myReporter;
 	    private ResultWriter resultWriter;
 	    private readonly Memory memory;
+	    readonly Func<Memory, CellProcessor> newService;
 
-		public SuiteRunner(Memory memory, ProgressReporter theReporter) {
+	    public SuiteRunner(Memory memory, ProgressReporter theReporter, Func<Memory, CellProcessor> newService) {
 		    TestCounts = new TestCounts();
 		    myReporter = theReporter;
 		    this.memory = memory;
+		    this.newService = newService;
 		}
 
 	    public void Run(StoryTestSuite theSuite, string theSelectedFile) {
@@ -53,7 +55,7 @@ namespace fit.Runner {
                 try {
                     executor.Do(testPage);
                 }
-                catch (Exception e) {
+                catch (System.Exception e) {
 	                myReporter.Write(e.ToString());
 	            }
                 if (executor.SuiteIsAbandoned) break;
@@ -72,7 +74,7 @@ namespace fit.Runner {
 
 	    private StoryTestPageExecutor SelectExecutor(bool dryRun) {
 	        if (dryRun) return new ReportPage(myReporter);
-	        return new ExecutePage(memory, resultWriter, HandleTestStatus);
+	        return new ExecutePage(memory, resultWriter, HandleTestStatus, newService);
 	    }
 
 	    private void HandleTestStatus(TestCounts counts) {
@@ -81,10 +83,11 @@ namespace fit.Runner {
         }
 
         class ExecutePage: StoryTestPageExecutor {
-            public ExecutePage(Memory memory, ResultWriter resultWriter,  Action<TestCounts> handleCounts) {
+            public ExecutePage(Memory memory, ResultWriter resultWriter,  Action<TestCounts> handleCounts, Func<Memory, CellProcessor> newService) {
                 this.memory = memory;
                 this.resultWriter = resultWriter;
                 this.handleCounts = handleCounts;
+                this.newService = newService;
             }
 
             public void Do(StoryTestPage page) {
@@ -97,7 +100,7 @@ namespace fit.Runner {
 
                 StoreCurrentlyExecutingPagePath(page.Name.Name);
 
-	            var service = new Service.Service(memory);
+	            var service = newService(memory);
                 var writer = new StoryTestStringWriter(service);
                 var storyTest = new StoryTest(service, writer).WithInput(input);
 
@@ -113,7 +116,7 @@ namespace fit.Runner {
                     storyTest.Execute();
                 }
                 else {
-                    storyTest.Execute(new Service.Service(service));
+                    storyTest.Execute(newService(service.Memory.Copy()));
                 }
 
                 var pageResult = new PageResult(page.Name.Name, writer.Tables, writer.Counts, elapsedTime);
@@ -135,6 +138,7 @@ namespace fit.Runner {
             readonly ResultWriter resultWriter;
             readonly Memory memory;
             readonly Action<TestCounts> handleCounts;
+            readonly Func<Memory, CellProcessor> newService;
         }
 
         class ReportPage: StoryTestPageExecutor {

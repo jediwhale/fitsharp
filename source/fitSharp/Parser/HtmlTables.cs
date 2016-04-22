@@ -1,4 +1,4 @@
-﻿// Copyright © 2012 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2016 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -14,22 +14,28 @@ namespace fitSharp.Parser {
     // The lexical analyzer is unusual - it skips everything until it finds the next expected token.
     public class HtmlTables {
 
-        public Tree<CellBase> Parse(string input) {
+        public HtmlTables(Func<string, Tree<Cell>> makeTreeCell) {
+            this.makeTreeCell = makeTreeCell;
+        }
+
+        public Tree<Cell> Parse(string input) {
             var alternationParser = new AlternationParser();
-            var cells = new ListParser("td", alternationParser, false);
-            var rows = new ListParser("tr", cells, true);
-            var tables = new ListParser("table", rows, true);
-            var items = new ListParser("li", alternationParser, false);
-            var lists = new ListParser("ul", items, true);
+            var cells = new ListParser("td", alternationParser, false, makeTreeCell);
+            var rows = new ListParser("tr", cells, true, makeTreeCell);
+            var tables = new ListParser("table", rows, true, makeTreeCell);
+            var items = new ListParser("li", alternationParser, false, makeTreeCell);
+            var lists = new ListParser("ul", items, true, makeTreeCell);
             alternationParser.ChildParsers = new [] {tables, lists};
-            var root = new CellBase(string.Empty, "div");
-            var result = new TreeList<CellBase>(root);
-            foreach (Tree<CellBase> branch in tables.Parse(new LexicalAnalyzer(input))) result.AddBranch(branch);
+            var result = makeTreeCell(string.Empty);
+            result.Value.SetTag("div");
+            foreach (var branch in tables.Parse(new LexicalAnalyzer(input))) result.Add(branch);
             return result;
         }
 
+        readonly Func<string, Tree<Cell>> makeTreeCell;
+
         interface ElementParser {
-            List<Tree<CellBase>> Parse(LexicalAnalyzer theAnalyzer);
+            List<Tree<Cell>> Parse(LexicalAnalyzer theAnalyzer);
             string Keyword {get;}
         }
 
@@ -38,21 +44,23 @@ namespace fitSharp.Parser {
             readonly ElementParser myChildParser;
             readonly string myKeyword;
             readonly bool IRequireChildren;
-            
-            public ListParser(string theKeyword, ElementParser theChildParser, bool thisRequiresChildren) {
+            readonly Func<string, Tree<Cell>> makeTreeCell;
+
+            public ListParser(string theKeyword, ElementParser theChildParser, bool thisRequiresChildren, Func<string, Tree<Cell>> makeTreeCell) {
                 myChildParser = theChildParser;
                 myKeyword = theKeyword;
                 IRequireChildren = thisRequiresChildren;
+                this.makeTreeCell = makeTreeCell;
             }
 
             public string Keyword {get {return myKeyword;}}
 
-            public List<Tree<CellBase>> Parse(LexicalAnalyzer theAnalyzer) {
-                var list = new List<Tree<CellBase>>();
-                Tree<CellBase> first = ParseOne(theAnalyzer);
+            public List<Tree<Cell>> Parse(LexicalAnalyzer theAnalyzer) {
+                var list = new List<Tree<Cell>>();
+                Tree<Cell> first = ParseOne(theAnalyzer);
                 if (first != null) {
                     list.Add(first);
-                    List<Tree<CellBase>> rest = Parse(theAnalyzer);
+                    var rest = Parse(theAnalyzer);
                     list.AddRange(rest);
                     if (rest.Count == 0) {
                         var trailer = theAnalyzer.Trailer;
@@ -62,29 +70,29 @@ namespace fitSharp.Parser {
                 return list;
             }
 
-            public Tree<CellBase> ParseOne(LexicalAnalyzer theAnalyzer) {
+            public Tree<Cell> ParseOne(LexicalAnalyzer theAnalyzer) {
                 theAnalyzer.GoToNextToken(myKeyword);
                 if (theAnalyzer.Token.Length == 0) return null;
                 return ParseElement(theAnalyzer);
             }
 
-            Tree<CellBase> ParseElement(LexicalAnalyzer theAnalyzer) {
+            Tree<Cell> ParseElement(LexicalAnalyzer theAnalyzer) {
                 string tag = theAnalyzer.Token;
                 string leader = theAnalyzer.Leader;
                 theAnalyzer.PushEnd("/" + myKeyword);
-                List<Tree<CellBase>> children = myChildParser.Parse(theAnalyzer);
+                var children = myChildParser.Parse(theAnalyzer);
                 if (IRequireChildren && children.Count == 0) {
                     throw new ApplicationException(string.Format("Can't find tag: {0}", myChildParser.Keyword));
                 }
                 theAnalyzer.PopEnd();
                 theAnalyzer.GoToNextToken("/" + myKeyword);
                 if (theAnalyzer.Token.Length == 0) throw new ApplicationException("expected /" + myKeyword + " tag");
-                var result = new TreeList<CellBase>(new CellBase(HtmlToText(theAnalyzer.Leader)));
+                var result = makeTreeCell(HtmlToText(theAnalyzer.Leader));
                 result.Value.SetAttribute(CellAttribute.Body, theAnalyzer.Leader);
                 result.Value.SetAttribute(CellAttribute.EndTag, theAnalyzer.Token);
                 if (leader.Length > 0) result.Value.SetAttribute(CellAttribute.Leader, leader);
                 result.Value.SetAttribute(CellAttribute.StartTag, tag);
-                foreach (Tree<CellBase> child in children) result.AddBranch(child);
+                foreach (var child in children) result.Add(child);
                 return result;
             }
         }
@@ -94,8 +102,8 @@ namespace fitSharp.Parser {
         }
 
         class AlternationParser: ElementParser {
-            public List<Tree<CellBase>> Parse(LexicalAnalyzer theAnalyzer) {
-                var result = new List<Tree<CellBase>>();
+            public List<Tree<Cell>> Parse(LexicalAnalyzer theAnalyzer) {
+                var result = new List<Tree<Cell>>();
                 ListParser firstChildParser = null;
                 int firstPosition = int.MaxValue;
                 foreach (ListParser childParser in myChildParsers) {
@@ -160,10 +168,10 @@ namespace fitSharp.Parser {
                     return -1;
 
                 // Scan backwards to see find the last comment that begins before the value we're looking for
-                int commentIndex = input.LastIndexOf("<!--", valueIndex, valueIndex - position + 1);
+                int commentIndex = input.LastIndexOf("<!--", valueIndex, valueIndex - position + 1, StringComparison.Ordinal);
                 if (commentIndex != -1 && commentIndex < valueIndex) {
                     // From found comment, look for closing token
-                    int endCommentIndex = input.IndexOf("-->", commentIndex + 4);
+                    int endCommentIndex = input.IndexOf("-->", commentIndex + 4, StringComparison.Ordinal);
                     if (endCommentIndex == -1) {
                         // Unclosed comment
                         return -1;
@@ -189,7 +197,7 @@ namespace fitSharp.Parser {
                 }
             }
 
-            public string PeekEnd() {
+            string PeekEnd() {
                 string endToken = null;
                 try {
                     endToken = myEndTokens.Peek();

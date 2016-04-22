@@ -1,4 +1,4 @@
-// Copyright © 2012 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+// Copyright © 2016 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -122,7 +122,6 @@ namespace fit.Test.NUnit {
             catch (ApplicationException e) 
             {
                 Assert.AreEqual("Can't find tag: td", e.Message);
-                return;
             }
         }
 
@@ -149,31 +148,31 @@ namespace fit.Test.NUnit {
         }
 
         [Test] public void CopyFromLeaf() {
-            TreeList<CellBase> source = MakeRootNode();
+            var source = MakeRootNode();
             source.Value.SetAttribute(CellAttribute.Body, "body");
             AssertCopyFromResult(source, "leader<tag stuff>body</tag>trailer");
         }
 
-        static void AssertCopyFromResult(Tree<CellBase> source, string expected) {
+        static void AssertCopyFromResult(Tree<Cell> source, string expected) {
             Assert.AreEqual(expected, Parse.CopyFrom(source).ToString());
         }
 
-        static TreeList<CellBase> MakeRootNode() {
+        static TreeList<Cell> MakeRootNode() {
             var sourceNode = new CellBase("text");
             sourceNode.SetAttribute(CellAttribute.EndTag, "</tag>");
             sourceNode.SetAttribute(CellAttribute.Leader, "leader");
             sourceNode.SetAttribute(CellAttribute.StartTag, "<tag stuff>");
             sourceNode.SetAttribute(CellAttribute.Trailer, "trailer");
-            return new TreeList<CellBase>(sourceNode);
+            return new TreeList<Cell>(sourceNode);
         }
 
         [Test] public void CopyFromWithBranch() {
-            TreeList<CellBase> source = MakeRootNode();
+            var source = MakeRootNode();
             AddBranch(source, "leaf");
             AssertCopyFromResult(source, "leader<tag stuff><leaftag>leaf</leaftag></tag>trailer");
         }
 
-        static void AddBranch(TreeList<CellBase> source, string body) {
+        static void AddBranch(TreeList<Cell> source, string body) {
             var branchNode = new CellBase("text");
             branchNode.SetAttribute(CellAttribute.Body, body);
             branchNode.SetAttribute(CellAttribute.EndTag, "</leaftag>");
@@ -182,7 +181,7 @@ namespace fit.Test.NUnit {
         }
 
         [Test] public void CopyFromWithBranches() {
-            TreeList<CellBase> source = MakeRootNode();
+            var source = MakeRootNode();
             for (int i = 0; i < 2; i++) AddBranch(source, "leaf" + i);
             AssertCopyFromResult(source, "leader<tag stuff><leaftag>leaf0</leaftag><leaftag>leaf1</leaftag></tag>trailer");
         }

@@ -129,7 +129,6 @@
     <Compile Include="NUnit\ScientificDoubleTest.cs" />
     <Compile Include="NUnit\StartsWithHandlerTest.cs" />
     <Compile Include="NUnit\SubstringHandlerTest.cs" />
-    <Compile Include="NUnit\SuiteRunnerTest.cs" />
     <Compile Include="NUnit\SymbolHandlerTest.cs" />
     <Compile Include="NUnit\TableFixtureTest.cs" />
     <Compile Include="NUnit\TestBuilder.cs" />

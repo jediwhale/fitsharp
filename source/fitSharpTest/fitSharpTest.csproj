@@ -64,6 +64,7 @@
     <Compile Include="NUnit\Fit\ParseOperatorTest.cs" />
     <Compile Include="NUnit\Fit\ParseQuotedStringTest.cs" />
     <Compile Include="NUnit\Fit\StoryTestFileTest.cs" />
+    <Compile Include="NUnit\Fit\SuiteRunnerTest.cs" />
     <Compile Include="NUnit\Fit\TagFilterTest.cs" />
     <Compile Include="NUnit\Fit\TestStatusTest.cs" />
     <Compile Include="NUnit\Fit\ValueArrayTest.cs" />

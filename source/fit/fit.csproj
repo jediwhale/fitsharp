@@ -48,16 +48,12 @@
     <Compile Include="Fixtures\RowEntryFixture.cs" />
     <Compile Include="Operators\ArrayMatchStrategy.cs" />
     <Compile Include="Operators\CompareList.cs" />
-    <Compile Include="Operators\ComposeHtmlStoryTestString.cs" />
-    <Compile Include="Operators\ComposeStoryTestString.cs" />
-    <Compile Include="Operators\ComposeTextStoryTestString.cs" />
     <Compile Include="Operators\NamedMatchStrategy.cs" />
     <Compile Include="Operators\InvokeProcedure.cs" />
     <Compile Include="Runner\FitSocket.cs" />
     <Compile Include="Runner\FolderRunner.cs" />
     <Compile Include="Runner\HttpRunner.cs" />
     <Compile Include="Runner\SocketServer.cs" />
-    <Compile Include="Runner\SuiteRunner.cs" />
     <Compile Include="Service\Operators.cs" />
     <Compile Include="Service\Service.cs" />
     <Compile Include="Exception\RowWidthException.cs" />

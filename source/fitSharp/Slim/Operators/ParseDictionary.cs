@@ -1,4 +1,4 @@
-﻿// Copyright © 2010 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2016 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -18,7 +18,7 @@ namespace fitSharp.Slim.Operators {
         }
 
         public TypedValue Parse(Type type, TypedValue instance, Tree<string> parameters) {
-            var table = new HtmlTables().Parse(parameters.Value);
+            var table = new HtmlTables(MakeTreeCell).Parse(parameters.Value);
             return new TypedValue(table.Branches[0].Branches.Aggregate(
                                       (IDictionary) Activator.CreateInstance(type),
                                       (dictionary, row) => {
@@ -30,5 +30,9 @@ namespace fitSharp.Slim.Operators {
                                           return dictionary;
                                       }));
         }
+
+        static Tree<Cell> MakeTreeCell(string text) {
+            return new TreeList<Cell>(new CellBase(text));
+        } 
     }
 }

@@ -1,11 +1,9 @@
-﻿// Copyright © 2010 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2016 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace fitSharp.Machine.Model {
     public class CellTree: TreeList<Cell> {
@@ -23,29 +21,6 @@ namespace fitSharp.Machine.Model {
 
         public CellTree(IEnumerable<Tree<Cell>> trees) {
             foreach (var tree in trees) AddBranch(tree);
-        }
-    }
-
-    public class CellBaseTree: TreeList<CellBase> {
-        public CellBaseTree(): base(new CellBase(string.Empty)) {}
-
-        public CellBaseTree(CellBase value): base(value) {}
-
-        public CellBaseTree(params string[] cells): this() {
-            foreach (var cell in cells) AddBranch(new CellBaseTree(new CellBase(cell)));
-        }
-
-        public CellBaseTree(params Tree<CellBase>[] lists): this() {
-            foreach (var list in lists) AddBranch(list);
-        }
-
-        public CellBaseTree(IEnumerable<Tree<CellBase>> trees): this() {
-            foreach (var tree in trees) AddBranch(tree);
-        }
-
-        public override string ToString() {
-            var branches = Branches.Aggregate(new StringBuilder(), (t, u) => t.Append(u)).ToString();
-            return string.Format(Value == null || string.IsNullOrEmpty(Value.Text) ? "{0}" : Value.Text, branches);
         }
     }
 

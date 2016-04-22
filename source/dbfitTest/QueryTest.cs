@@ -1,4 +1,4 @@
-﻿// Copyright © 2010 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2016 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -7,7 +7,6 @@ using System.Data;
 using dbfit.fixture;
 using fit;
 using fit.Service;
-using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
 using TestStatus=fitSharp.Fit.Model.TestStatus;
@@ -40,10 +39,10 @@ namespace dbfitTest {
             dataTable.Rows.Add(newRow);
             var fixture = new Query(dataTable, false) {Processor = new Service()};
 
-            var testTable = new CellBaseTree(
-                new CellBaseTree("query"),
-                new CellBaseTree("somekey", headerCellName),
-                new CellBaseTree("key", "value")
+            var testTable = new CellTree(
+                new CellTree("query"),
+                new CellTree("somekey", headerCellName),
+                new CellTree("key", "value")
                 );
             Parse parseTable = Parse.CopyFrom(testTable);
             fixture.DoTable(parseTable);
