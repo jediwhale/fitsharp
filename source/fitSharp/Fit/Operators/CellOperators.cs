@@ -41,9 +41,7 @@ namespace fitSharp.Fit.Operators {
             Add(new CheckVolatile(), 2);
             Add(new FindMemberQueryable(), 2);
             Add(new InvokeSpecialAction(), 2);
-            Add(new InvokeKeywordEnsure(), 2);
-            Add(new InvokeKeywordNote(), 2);
-            Add(new InvokeKeywordSet(), 2);
+            Add(new InvokeFlowKeyword(), 2);
             Add(new InvokeLiteral(), 2);
             Add(new ParseArray(), 2);
             Add(new ParseByteArray(), 2);

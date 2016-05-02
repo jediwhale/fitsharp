@@ -57,6 +57,7 @@
     <Compile Include="NUnit\Fit\FindMemberPatternTest.cs" />
     <Compile Include="NUnit\Fit\FlowRowTest.cs" />
     <Compile Include="NUnit\Fit\IncludeTest.cs" />
+    <Compile Include="NUnit\Fit\InvokeFlowKeywordTest.cs" />
     <Compile Include="NUnit\Fit\InvokeLiteralTest.cs" />
     <Compile Include="NUnit\Fit\ParseMemberNameTest.cs" />
     <Compile Include="NUnit\Fit\ParseNullArrayTest.cs" />

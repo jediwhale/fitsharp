@@ -106,7 +106,6 @@
     <Compile Include="NUnit\ErrorKeywordHandlerTest.cs" />
     <Compile Include="NUnit\ExceptionKeywordHandlerTest.cs" />
     <Compile Include="NUnit\FailKeywordHandlerTest.cs" />
-    <Compile Include="NUnit\FlowKeywordsTest.cs" />
     <Compile Include="NUnit\FolderRunnerTest.cs" />
     <Compile Include="NUnit\HttpRunnerTest.cs" />
     <Compile Include="NUnit\NamedMatchStrategyTest.cs" />

@@ -80,9 +80,7 @@
     <Compile Include="Fit\Engine\ExecuteOperator.cs" />
     <Compile Include="Fit\Operators\FindMemberPattern.cs" />
     <Compile Include="Fit\Operators\FindMemberQueryable.cs" />
-    <Compile Include="Fit\Operators\InvokeKeywordEnsure.cs" />
-    <Compile Include="Fit\Operators\InvokeKeywordNote.cs" />
-    <Compile Include="Fit\Operators\InvokeKeywordSet.cs" />
+    <Compile Include="Fit\Operators\InvokeFlowKeyword.cs" />
     <Compile Include="Fit\Operators\InvokeLiteral.cs" />
     <Compile Include="Fit\Operators\MemberPatternAttribute.cs" />
     <Compile Include="Fit\Operators\RunTestDefault.cs" />
