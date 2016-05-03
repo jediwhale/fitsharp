@@ -1,4 +1,4 @@
-// Copyright © 2013 Syterra Software Inc. All rights reserved.
+// Copyright © 2016 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -78,8 +78,8 @@ namespace fitSharp.Fit.Runner {
         public void WriteTest(PageResult result) {
             MakeStylesheet();
 
-            string outputFile = Path.Combine(myFolder.OutputPath, myPath.OutputFileName);
-            myFolderModel.MakeFile(outputFile, AddStyleSheetLink(result.Content));
+            var outputFile = Path.Combine(myFolder.OutputPath, myPath.OutputFileName);
+            myFolderModel.MakeFile(outputFile, ResultComment(result.TestCounts) + AddStyleSheetLink( result.Content));
             myFolder.ListFile(outputFile, result.TestCounts, result.ElapsedTime);
         }
 
@@ -91,6 +91,16 @@ namespace fitSharp.Fit.Runner {
                 if (scanner.Body.Contains("fit.css")) return input;
             }
             return styleSheetLink + input;
+        }
+
+        static string ResultComment(TestCounts counts) {
+            return "<!--"
+                   + Clock.Instance.Now.ToString("yyyy-MM-dd HH:mm:ss,")
+                   + counts.GetCount(TestStatus.Right) + ","
+                   + counts.GetCount(TestStatus.Wrong) + ","
+                   + counts.GetCount(TestStatus.Ignore) + ","
+                   + counts.GetCount(TestStatus.Exception) + "-->"
+                   + Environment.NewLine;
         }
 
         private bool HasTestName {

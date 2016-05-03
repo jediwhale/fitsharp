@@ -1,8 +1,9 @@
-﻿// Copyright © 2013 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2016 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
+using System;
 using NUnit.Framework;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Runner;
@@ -32,12 +33,16 @@ namespace fitSharp.Test.NUnit.Fit {
         }
 
         static void CheckResult(string content, string expected) {
+            Clock.Instance = new TestClock {Now = new DateTime(2016, 1, 2, 13, 14, 15)};
             var folder = new FolderTestModel();
             var memory = new TypeDictionary();
             memory.GetItem<Settings>().OutputFolder = "output";
             var file = new StoryTestFile("myfile", new StoryTestFolder(memory, folder), folder);
             file.WriteTest(new PageResult("title", content, new TestCounts()));
-            Assert.AreEqual(expected, folder.GetPageContent(new FilePath("output\\myfile.html")));
+            Clock.Instance = new Clock();
+            Assert.AreEqual(comment + expected, folder.GetPageContent(new FilePath("output\\myfile.html")));
         }
+
+        static readonly string comment = "<!--2016-01-02 13:14:15,0,0,0,0-->" + Environment.NewLine;
     }
 }
