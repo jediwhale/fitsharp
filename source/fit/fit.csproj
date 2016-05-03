@@ -44,10 +44,10 @@
     <Compile Include="Fixtures\CombinationFixture.cs" />
     <Compile Include="Fixtures\ConfigurationSetupFixture.cs" />
     <Compile Include="Fixtures\ConstraintFixture.cs" />
-    <Compile Include="Fixtures\FlowKeywords.cs" />
     <Compile Include="Fixtures\RowEntryFixture.cs" />
     <Compile Include="Operators\ArrayMatchStrategy.cs" />
     <Compile Include="Operators\CompareList.cs" />
+    <Compile Include="Operators\InvokeFitKeyword.cs" />
     <Compile Include="Operators\NamedMatchStrategy.cs" />
     <Compile Include="Operators\InvokeProcedure.cs" />
     <Compile Include="Runner\FitSocket.cs" />

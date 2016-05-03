@@ -82,6 +82,7 @@
     <Compile Include="Fit\Operators\FindMemberQueryable.cs" />
     <Compile Include="Fit\Operators\InvokeFlowKeyword.cs" />
     <Compile Include="Fit\Operators\InvokeLiteral.cs" />
+    <Compile Include="Fit\Operators\InvokeSpecialDefault.cs" />
     <Compile Include="Fit\Operators\MemberPatternAttribute.cs" />
     <Compile Include="Fit\Operators\RunTestDefault.cs" />
     <Compile Include="Fit\Engine\RunTestOperator.cs" />
@@ -108,7 +109,6 @@
     <Compile Include="Fit\Engine\CheckOperator.cs" />
     <Compile Include="Fit\Operators\ComposeDefault.cs" />
     <Compile Include="Fit\Operators\ComposeShowAsOperator.cs" />
-    <Compile Include="Fit\Operators\InvokeSpecialAction.cs" />
     <Compile Include="Fit\Operators\InvokeSetUpTearDown.cs" />
     <Compile Include="Fit\Operators\ParseInterpreter.cs" />
     <Compile Include="Fit\Operators\ParseNullArray.cs" />

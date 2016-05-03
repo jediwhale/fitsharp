@@ -20,6 +20,7 @@ namespace fit.Service {
             Add(new CompareList(), 0);
             Add(new ParseTable(), 0);
             Add(new ParseTree(), 0);
+            Add(new InvokeFitKeyword(), 2);
         }
 
         public Operators(Operators<Cell, CellProcessor> other) {

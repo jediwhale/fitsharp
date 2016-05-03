@@ -15,9 +15,13 @@ namespace fitSharp.Fit.Operators {
             Add(new ComposeDefault(), 0);
             Add(new ComposeStoryTestString(), 0);
             Add(new ComposeShowAsOperator(), 0);
+
             Add(new ExecuteDefault(), 0);
+
+            Add(new InvokeSpecialDefault(), 0);
             Add(new InvokeDataRow<Cell, CellProcessor>(), 0);
             Add(new InvokeSetUpTearDown(), 0);
+
             Add(new ParseDefault(), 0);
             Add(new ParseStoryTestString(), 0);
             Add(new ParseMemberName(), 0);
@@ -40,7 +44,6 @@ namespace fitSharp.Fit.Operators {
 
             Add(new CheckVolatile(), 2);
             Add(new FindMemberQueryable(), 2);
-            Add(new InvokeSpecialAction(), 2);
             Add(new InvokeFlowKeyword(), 2);
             Add(new InvokeLiteral(), 2);
             Add(new ParseArray(), 2);

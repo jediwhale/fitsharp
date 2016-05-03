@@ -16,20 +16,20 @@ namespace fitSharp.Fit.Operators {
     public class InvokeFlowKeyword: CellOperator, InvokeSpecialOperator {
 
         public InvokeFlowKeyword() {
-            keywords.Add("check", CheckAction);
-            keywords.Add("checkfieldsfor", CheckFieldsForAction);
-            keywords.Add("ensure", EnsureAction);
-            keywords.Add("name", NameAction);
-            keywords.Add("not", NotAction);
-            keywords.Add("note", NoteAction);
-            keywords.Add("reject", NotAction);
-            keywords.Add("return", ReturnAction);
-            keywords.Add("set", SetAction);
-            keywords.Add("show", ShowAction);
-            keywords.Add("showas", ShowAsAction);
-            keywords.Add("start", StartAction);
-            keywords.Add("waituntil", WaitUntilAction);
-            keywords.Add("with", WithAction);
+            keywords.Add("check", Check);
+            keywords.Add("checkfieldsfor", CheckFieldsFor);
+            keywords.Add("ensure", Ensure);
+            keywords.Add("name", Name);
+            keywords.Add("not", Not);
+            keywords.Add("note", Note);
+            keywords.Add("reject", Not);
+            keywords.Add("return", Return);
+            keywords.Add("set", Set);
+            keywords.Add("show", Show);
+            keywords.Add("showas", ShowAs);
+            keywords.Add("start", Start);
+            keywords.Add("waituntil", WaitUntil);
+            keywords.Add("with", With);
         }
 
         public bool CanInvokeSpecial(TypedValue instance, MemberName memberName, Tree<Cell> parameters) {
@@ -40,16 +40,16 @@ namespace fitSharp.Fit.Operators {
             return keywords[memberName.Name](instance.GetValue<FlowInterpreter>(), parameters);
         }
 
-        TypedValue CheckAction(FlowInterpreter interpreter, Tree<Cell> row) {
+        TypedValue Check(FlowInterpreter interpreter, Tree<Cell> row) {
             DoCheckOperation(interpreter, row, false);
             return TypedValue.Void;
         }
 
-        TypedValue CheckFieldsForAction(FlowInterpreter interpreter, Tree<Cell> row) {
+        TypedValue CheckFieldsFor(FlowInterpreter interpreter, Tree<Cell> row) {
             return new TypedValue(new List<object> { interpreter.ExecuteFlowRowMethod(Processor, row) });
         }
 
-        TypedValue EnsureAction(FlowInterpreter interpreter, Tree<Cell> row) {
+        TypedValue Ensure(FlowInterpreter interpreter, Tree<Cell> row) {
             var firstCell = row.Branches[0].Value;
             try {
                 Processor.TestStatus.ColorCell(firstCell, (bool) interpreter.ExecuteFlowRowMethod(Processor, row));
@@ -61,7 +61,7 @@ namespace fitSharp.Fit.Operators {
             return TypedValue.Void;
         }
 
-        TypedValue NameAction(FlowInterpreter interpreter, Tree<Cell> row) {
+        TypedValue Name(FlowInterpreter interpreter, Tree<Cell> row) {
             if (row.Branches.Count < 3) {
                 throw new TableStructureException("missing cells for name.");
             }
@@ -74,7 +74,7 @@ namespace fitSharp.Fit.Operators {
             return TypedValue.Void;
         }
 
-        TypedValue NotAction(FlowInterpreter interpreter, Tree<Cell> row) {
+        TypedValue Not(FlowInterpreter interpreter, Tree<Cell> row) {
             var firstCell = row.Branches[0].Value;
             try {
                 Processor.TestStatus.ColorCell(firstCell, !(bool) interpreter.ExecuteFlowRowMethod(Processor, row));
@@ -86,20 +86,20 @@ namespace fitSharp.Fit.Operators {
             return TypedValue.Void;
         }
 
-        TypedValue NoteAction(FlowInterpreter interpreter, Tree<Cell> row) { return TypedValue.Void; }
+        TypedValue Note(FlowInterpreter interpreter, Tree<Cell> row) { return TypedValue.Void; }
 
-        TypedValue ReturnAction(FlowInterpreter interpreter, Tree<Cell> row) {
+        TypedValue Return(FlowInterpreter interpreter, Tree<Cell> row) {
             var result = new MethodPhrase(row).Evaluate(interpreter, Processor);
             Processor.CallStack.SetReturn(new TypedValue(result));
             return TypedValue.Void;
         }
 
-        TypedValue SetAction(FlowInterpreter interpreter, Tree<Cell> row) {
+        TypedValue Set(FlowInterpreter interpreter, Tree<Cell> row) {
             interpreter.ExecuteFlowRowMethod(Processor, row);
             return TypedValue.Void;
         }
 
-        TypedValue ShowAction(FlowInterpreter interpreter, Tree<Cell> row) {
+        TypedValue Show(FlowInterpreter interpreter, Tree<Cell> row) {
             try {
                 AddCell(row, interpreter.ExecuteFlowRowMethod(Processor, row));
             }
@@ -107,7 +107,7 @@ namespace fitSharp.Fit.Operators {
             return TypedValue.Void;
         }
 
-        TypedValue ShowAsAction(FlowInterpreter interpreter, Tree<Cell> row) {
+        TypedValue ShowAs(FlowInterpreter interpreter, Tree<Cell> row) {
             try {
                 var restOfRow = row.Skip(1);
                 var attributes = GetAttributes(Processor.Parse<Cell, string>(row.Branches[1].Value));
@@ -119,7 +119,7 @@ namespace fitSharp.Fit.Operators {
         }
 
 
-        TypedValue StartAction(FlowInterpreter interpreter, Tree<Cell> row) {
+        TypedValue Start(FlowInterpreter interpreter, Tree<Cell> row) {
             try {
                 interpreter.SetSystemUnderTest(new MethodPhrase(row).EvaluateNew(Processor));
             }
@@ -129,12 +129,12 @@ namespace fitSharp.Fit.Operators {
             return TypedValue.Void;
         }
 
-        TypedValue WaitUntilAction(FlowInterpreter interpreter, Tree<Cell> row) {
+        TypedValue WaitUntil(FlowInterpreter interpreter, Tree<Cell> row) {
             DoCheckOperation(interpreter, row, true);
             return TypedValue.Void;
         }
 
-        TypedValue WithAction(FlowInterpreter interpreter, Tree<Cell> row) {
+        TypedValue With(FlowInterpreter interpreter, Tree<Cell> row) {
             interpreter.SetSystemUnderTest(new MethodPhrase(row).Evaluate(interpreter, Processor));
             return TypedValue.Void;
         }
