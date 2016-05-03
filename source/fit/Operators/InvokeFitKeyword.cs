@@ -18,7 +18,6 @@ namespace fit.Operators {
         public InvokeFitKeyword() {
             keywords.Add("abandonstorytest", AbandonStoryTest);
             keywords.Add("calculate", Calculate);
-            keywords.Add("comment", Comment);
             keywords.Add("ignored", Ignored);
         }
 
@@ -47,10 +46,6 @@ namespace fit.Operators {
 
         TypedValue Calculate(FlowInterpreter fixture, Parse theCells) {
             return new TypedValue(new CalculateFixture(fixture.SystemUnderTest ?? fixture));
-        }
-
-        TypedValue Comment(FlowInterpreter fixture, Parse cells) {
-            return new TypedValue(new CommentFixture());
         }
 
         TypedValue Ignored(FlowInterpreter fixture, Parse cells) {

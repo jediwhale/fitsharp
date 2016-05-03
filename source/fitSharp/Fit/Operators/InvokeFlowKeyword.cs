@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using fitSharp.Fit.Engine;
 using fitSharp.Fit.Exception;
+using fitSharp.Fit.Fixtures;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
@@ -18,6 +19,7 @@ namespace fitSharp.Fit.Operators {
         public InvokeFlowKeyword() {
             keywords.Add("check", Check);
             keywords.Add("checkfieldsfor", CheckFieldsFor);
+            keywords.Add("comment", Comment);
             keywords.Add("ensure", Ensure);
             keywords.Add("name", Name);
             keywords.Add("not", Not);
@@ -47,6 +49,10 @@ namespace fitSharp.Fit.Operators {
 
         TypedValue CheckFieldsFor(FlowInterpreter interpreter, Tree<Cell> row) {
             return new TypedValue(new List<object> { interpreter.ExecuteFlowRowMethod(Processor, row) });
+        }
+
+        TypedValue Comment(FlowInterpreter interpreter, Tree<Cell> row) {
+            return new TypedValue(new CommentFixture());
         }
 
         TypedValue Ensure(FlowInterpreter interpreter, Tree<Cell> row) {
