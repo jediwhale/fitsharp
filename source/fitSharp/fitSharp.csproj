@@ -88,6 +88,7 @@
     <Compile Include="Fit\Engine\RunTestOperator.cs" />
     <Compile Include="Fit\Fixtures\StoryTest.cs" />
     <Compile Include="Fit\Runner\FolderRunner.cs" />
+    <Compile Include="Fit\Runner\GuiRunner.cs" />
     <Compile Include="Fit\Runner\SuiteRunnerShell.cs" />
     <Compile Include="Fit\Runner\SuiteRunner.cs" />
     <Compile Include="IO\HttpServer.cs" />
