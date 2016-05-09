@@ -1,4 +1,4 @@
-﻿// Copyright © 2012 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2016 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -14,6 +14,9 @@ namespace fitSharp.Fit.Model {
     public interface AbandonException {}
 
     public class TestStatus {
+        public delegate void TestCountChangedHandler(TestCounts count);
+        public event TestCountChangedHandler TestCountChanged;
+
         public const string Exception = "error";
         public const string Wrong = "fail";
         public const string Ignore = "ignore";
@@ -26,12 +29,18 @@ namespace fitSharp.Fit.Model {
         public Hashtable Summary { get; private set; }
         public TestCounts Counts { get; private set; }
 
-        
         public TestStatus() {
+            Reset();
+        }
+
+        public void Reset() {
+            TableCount = 0;
+            IsAbandoned = false;
+            SuiteIsAbandoned = false;
+            LastAction = string.Empty;
             Summary = new Hashtable();
             Counts = new TestCounts();
         }
-
 
         public void MarkRight(Cell cell) {
             cell.SetAttribute(CellAttribute.Status, Right);
@@ -56,7 +65,7 @@ namespace fitSharp.Fit.Model {
         public void MarkException(Cell cell, System.Exception exception) {
             if (exception is IgnoredException) return;
 
-            System.Exception abandonException = GetAbandonException(exception);
+            var abandonException = GetAbandonException(exception);
 
             if (abandonException != null && IsAbandoned) throw abandonException;
 
@@ -75,11 +84,12 @@ namespace fitSharp.Fit.Model {
 
         void AddCount(string cellStatus) {
             Counts.AddCount(cellStatus);
+            if (TestCountChanged != null) TestCountChanged(Counts);
         }
 
         static System.Exception GetAbandonException(System.Exception exception) {
-            for (System.Exception e = exception; e != null; e = e.InnerException) {
-                if (typeof(AbandonException).IsAssignableFrom(e.GetType())) return e;
+            for (var e = exception; e != null; e = e.InnerException) {
+                if (e is AbandonException) return e;
             }
             return null;
         }

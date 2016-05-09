@@ -14,33 +14,27 @@ using fitSharp.Machine.Engine;
 namespace fitSharp.Fit.Runner {
     public class SuiteRunnerShell {
 
-        public int Run(IList<string> commandLineArguments, Memory memory, ProgressReporter reporter, Func<Memory, CellProcessor> newService) {
-            var now = DateTime.Now;
-            myProgressReporter = reporter;
-            var result = Run(memory, commandLineArguments, newService);
-            //todo: to suiterunner?
-            if (!memory.GetItem<Settings>().DryRun)
-                reporter.Write(string.Format("\n{0}, time: {1}\n", Results, DateTime.Now - now));
+        public SuiteRunnerShell(Memory memory, ProgressReporter reporter, Func<Memory, CellProcessor> newService) {
+            SuiteRunner = new SuiteRunner(memory, reporter, newService);
+        }
+
+        public string Results {get { return SuiteRunner.TestCounts.Description; }}
+        public SuiteRunner SuiteRunner { get; private set; }
+
+        public int Run(IList<string> commandLineArguments, Memory memory) {
+            var result = Run(memory, commandLineArguments);
             return result;
         }
 
-        public string Results {get { return myRunner.TestCounts.Description; }}
-
-
-        ProgressReporter myProgressReporter;
-        SuiteRunner myRunner;
-        string selectedFile;
-
-        int Run(Memory memory, IList<string> arguments, Func<Memory, CellProcessor> newService) {
+        int Run(Memory memory, IList<string> arguments) {
             ParseArguments(memory, arguments);
             var fileSystem = new FileSystemModel(memory.GetItem<Settings>().CodePageNumber);
             memory.GetItem<Context>().PageSource = fileSystem;
             memory.GetItem<Context>().SuitePath = new DirectoryPath(memory.GetItem<Settings>().InputFolder);
-            myRunner = new SuiteRunner(memory, myProgressReporter, newService);
-            myRunner.Run(
+            SuiteRunner.Run(
                 CreateStoryTestFolder(memory, fileSystem),
                 selectedFile);
-            return myRunner.TestCounts.FailCount;
+            return SuiteRunner.TestCounts.FailCount;
         }
 
         void ParseArguments(Memory memory, IList<string> arguments) {
@@ -71,5 +65,7 @@ namespace fitSharp.Fit.Runner {
 
             return storyTestFolder;
         }
+
+        string selectedFile;
     }
 }

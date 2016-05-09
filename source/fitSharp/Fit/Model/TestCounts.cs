@@ -7,7 +7,6 @@ using System.Collections.Generic;
 
 namespace fitSharp.Fit.Model {
     public class TestCounts {
-        private readonly Dictionary<string, int> counts = new Dictionary<string, int>();
 
         public TestCounts() {}
 
@@ -17,7 +16,7 @@ namespace fitSharp.Fit.Model {
 
         public TestCounts Subtract(TestCounts other) {
             var result = new TestCounts(this);
-            foreach (string cellStatus in other.counts.Keys) result.counts[cellStatus] = result.GetCount(cellStatus) - other.GetCount(cellStatus);
+            foreach (var cellStatus in other.counts.Keys) result.counts[cellStatus] = result.GetCount(cellStatus) - other.GetCount(cellStatus);
             return result;
         }
 
@@ -35,11 +34,7 @@ namespace fitSharp.Fit.Model {
         }
 
         public void TallyCounts(TestCounts other) {
-            foreach (string cellStatus in other.counts.Keys) counts[cellStatus] = GetCount(cellStatus) + other.GetCount(cellStatus);
-        }
-
-        public void TallyPageCounts(TestCounts other) {
-            AddCount(other.Style);
+            foreach (var cellStatus in other.counts.Keys) counts[cellStatus] = GetCount(cellStatus) + other.GetCount(cellStatus);
         }
 
         public string Description {
@@ -71,5 +66,6 @@ namespace fitSharp.Fit.Model {
             }
         }
 
+        readonly Dictionary<string, int> counts = new Dictionary<string, int>();
     }
 }

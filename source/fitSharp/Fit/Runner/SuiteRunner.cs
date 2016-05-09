@@ -14,7 +14,12 @@ using fitSharp.Machine.Engine;
 
 namespace fitSharp.Fit.Runner {
 	public class SuiteRunner {
-	    
+        public delegate void StartTestHandler(string testName);
+        public event StartTestHandler StartTest;
+
+        public delegate void EndTestHandler(string testName);
+        public event EndTestHandler EndTest;
+
 	    public TestCounts TestCounts { get; private set; }
 	    private readonly ProgressReporter myReporter;
 	    private ResultWriter resultWriter;
@@ -29,6 +34,7 @@ namespace fitSharp.Fit.Runner {
 		}
 
 	    public void Run(StoryTestSuite theSuite, string theSelectedFile) {
+            var now = DateTime.Now;
             resultWriter = CreateResultWriter();
             if (!string.IsNullOrEmpty(theSelectedFile)) theSuite.Select(theSelectedFile);
 
@@ -36,6 +42,17 @@ namespace fitSharp.Fit.Runner {
 
             resultWriter.WriteFinalCount(TestCounts);
             resultWriter.Close();
+
+            if (!memory.GetItem<Settings>().DryRun)
+                myReporter.Write(string.Format("\n{0}, time: {1}\n", TestCounts.Description, DateTime.Now - now));
+	    }
+
+	    void TestStarted(string testName) {
+	        if (StartTest != null) StartTest(testName);
+	    }
+
+	    void TestEnded(string testName) {
+	        if (EndTest != null) EndTest(testName);
 	    }
 
 	    private ResultWriter CreateResultWriter() {
@@ -53,7 +70,9 @@ namespace fitSharp.Fit.Runner {
             if (suiteSetUp != null) executor.Do(suiteSetUp);
 	        foreach (StoryTestPage testPage in theSuite.Pages) {
                 try {
+                    TestStarted(testPage.Name.Name);
                     executor.Do(testPage);
+                    TestEnded(testPage.Name.Name);
                 }
                 catch (System.Exception e) {
 	                myReporter.Write(e.ToString());

@@ -11,16 +11,13 @@ using fitSharp.Machine.Engine;
 namespace fit.Runner {
     public class FolderRunner: Runnable {
 
-        public FolderRunner() {
-            runner = new fitSharp.Fit.Runner.SuiteRunnerShell();
-        }
-
         public int Run(IList<string> commandLineArguments, Memory memory, ProgressReporter reporter) {
-            return runner.Run(commandLineArguments, memory, reporter, m => new Service.Service(m));
+            runner = new fitSharp.Fit.Runner.SuiteRunnerShell(memory, reporter, m => new Service.Service(m));
+            return runner.Run(commandLineArguments, memory);
         }
 
         public string Results { get { return runner.Results; } }
 
-        readonly fitSharp.Fit.Runner.SuiteRunnerShell runner;
+        fitSharp.Fit.Runner.SuiteRunnerShell runner;
     }
 }

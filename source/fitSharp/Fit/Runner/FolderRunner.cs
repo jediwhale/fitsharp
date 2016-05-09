@@ -13,16 +13,8 @@ using fitSharp.Machine.Engine;
 namespace fitSharp.Fit.Runner {
     public class FolderRunner: Runnable {
 
-        public FolderRunner() {
-            runner = new SuiteRunnerShell();
-        }
-
         public int Run(IList<string> commandLineArguments, Memory memory, ProgressReporter reporter) {
-            return runner.Run(commandLineArguments, memory, reporter, m => new CellProcessorBase(m, m.GetItem<CellOperators>()));
+            return new SuiteRunnerShell(memory, reporter, m => new CellProcessorBase(m, m.GetItem<CellOperators>())).Run(commandLineArguments, memory);
         }
-
-        public string Results { get { return runner.Results; } }
-
-        readonly SuiteRunnerShell runner;
     }
 }

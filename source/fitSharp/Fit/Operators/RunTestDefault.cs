@@ -28,7 +28,7 @@ namespace fitSharp.Fit.Operators {
             }
 
             public void DoTables(Tree<Cell> tables) {
-                processor.TestStatus = new TestStatus();
+                processor.TestStatus.Reset();
  			    processor.TestStatus.Summary["run date"] = DateTime.Now;
 			    processor.TestStatus.Summary["run elapsed time"] = new ElapsedTime();
                 var heading = tables.Branches[0].ValueAt(0, 0);
