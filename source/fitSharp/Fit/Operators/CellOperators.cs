@@ -21,6 +21,7 @@ namespace fitSharp.Fit.Operators {
             Add(new InvokeSpecialDefault(), 0);
             Add(new InvokeDataRow<Cell, CellProcessor>(), 0);
             Add(new InvokeSetUpTearDown(), 0);
+            Add(new InvokeProcedure(), 0);
 
             Add(new ParseDefault(), 0);
             Add(new ParseStoryTestString(), 0);

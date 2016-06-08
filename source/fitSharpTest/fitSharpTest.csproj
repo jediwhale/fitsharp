@@ -53,12 +53,15 @@
     <Compile Include="Double\FullTestConfig.cs" />
     <Compile Include="Double\SampleClassTwo.cs" />
     <Compile Include="Double\Slim\Builder.cs" />
+    <Compile Include="NUnit\Fit\Builder.cs" />
     <Compile Include="NUnit\Fit\CompareDefaultTest.cs" />
+    <Compile Include="NUnit\Fit\DeepCopyTest.cs" />
     <Compile Include="NUnit\Fit\FindMemberPatternTest.cs" />
     <Compile Include="NUnit\Fit\FlowRowTest.cs" />
     <Compile Include="NUnit\Fit\IncludeTest.cs" />
     <Compile Include="NUnit\Fit\InvokeFlowKeywordTest.cs" />
     <Compile Include="NUnit\Fit\InvokeLiteralTest.cs" />
+    <Compile Include="NUnit\Fit\InvokeProcedureTest.cs" />
     <Compile Include="NUnit\Fit\ParseMemberNameTest.cs" />
     <Compile Include="NUnit\Fit\ParseNullArrayTest.cs" />
     <Compile Include="NUnit\Fit\ParseNullTest.cs" />

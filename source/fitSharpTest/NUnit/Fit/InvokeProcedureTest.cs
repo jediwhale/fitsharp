@@ -1,29 +1,27 @@
-﻿// Copyright © 2012 Syterra Software Inc.
+﻿// Copyright © 2016 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-using fit.Operators;
+using fit;
 using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
+using fitSharp.Fit.Operators;
+using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
 
-namespace fit.Test.NUnit {
+namespace fitSharp.Test.NUnit.Fit {
     [TestFixture] public class InvokeProcedureTest {
         const string noParameterProcedureHtml = "<br><table border=1><tr><td>define</td><td>procedure</td></tr><tr><td>settext</td></tr></table>";
         const string errorProcedureHtml = "<table><tr><td>define</td><td>procedure</td></tr><tr><td>garbage</td></tr></table>";
-        const string oneParameterProcedureHtml =
-            "<table><tr><td>define</td><td>procedure</td><td>parm</td></tr><tr><td>settext</td><td>parm</td></tr></table>";
-        const string twoParameterProcedureHtml =
-            "<table><tr><td>define</td><td>procedure</td><td>parm1</td><td></td><td>parm2</td></tr><tr><td>settext</td><td>parm1</td><td></td><td>parm2</td></tr></table>";
 
         InvokeProcedure invokeProcedure;
         CellProcessor cellProcessor;
 
         [SetUp] public void SetUp() {
             invokeProcedure = new InvokeProcedure();
-            cellProcessor = new Service.Service();
+            cellProcessor = Builder.CellProcessor();
             invokeProcedure.Processor = cellProcessor;
         }
 
@@ -37,39 +35,47 @@ namespace fit.Test.NUnit {
         }
 
         [Test] public void ProcedureIsExecuted() {
-            cellProcessor.Get<Procedures>().Save("procedure", Parse.ParseFrom(noParameterProcedureHtml));
+            cellProcessor.Get<Procedures>().Save("procedure", new CellTree(new CellTree("define", "procedure"), new CellTree("settext")));
+            var sample = new Sample();
+            invokeProcedure.Invoke(new TypedValue(sample), new MemberName("procedure"), new CellTree());
+            Assert.AreEqual("hi", sample.Text);
+        }
+
+        [Test] public void ProcedureInNestedTableIsExecuted() {
+            cellProcessor.Get<Procedures>().Save("procedure", new CellTree(new CellTree("define", "procedure"), new CellTree(new CellTree(new CellTree(new CellTree("settext"))))));
             var sample = new Sample();
             invokeProcedure.Invoke(new TypedValue(sample), new MemberName("procedure"), new CellTree());
             Assert.AreEqual("hi", sample.Text);
         }
 
         [Test] public void ProcedureExecutionIsLogged() {
-            cellProcessor.Get<Procedures>().Save("procedure", Parse.ParseFrom(noParameterProcedureHtml));
+            cellProcessor.Get<Procedures>().Save("procedure", Builder.ParseHtmlTable(noParameterProcedureHtml));
             var sample = new Sample();
             invokeProcedure.Invoke(new TypedValue(sample), new MemberName("procedure"), new CellTree());
             Assert.AreEqual("<table border=1><tr><td><span class=\"fit_member\">settext</span></td></tr></table>", cellProcessor.TestStatus.LastAction);
         }
 
         [Test] public void ProcedureIsExecutedOnACopyOfBody() {
-            cellProcessor.Get<Procedures>().Save("procedure", Parse.ParseFrom(errorProcedureHtml));
+            cellProcessor.Get<Procedures>().Save("procedure", Builder.ParseHtmlTable(errorProcedureHtml));
             var sample = new Sample();
             invokeProcedure.Invoke(new TypedValue(sample), new MemberName("procedure"), new CellTree());
-            Assert.AreEqual(errorProcedureHtml, cellProcessor.Get<Procedures>().GetValue("procedure").ToString());
+            Assert.AreEqual(errorProcedureHtml, cellProcessor.ParseTree(typeof(StoryTableString),
+                    (Tree<Cell>)cellProcessor.Get<Procedures>().GetValue("procedure")).ValueString);
         }
 
         [Test] public void ParameterValueIsSubstituted() {
-            cellProcessor.Get<Procedures>().Save("procedure", Parse.ParseFrom(oneParameterProcedureHtml));
+            cellProcessor.Get<Procedures>().Save("procedure", new CellTree(new CellTree("define", "procedure", "parm"), new CellTree("settext", "parm")));
             var sample = new Sample();
-            invokeProcedure.Invoke(new TypedValue(sample), new MemberName("procedure"), new Parse("tr", "", new Parse("td", "actual", null, null), null));
+            invokeProcedure.Invoke(new TypedValue(sample), new MemberName("procedure"), new CellTree("actual"));
             Assert.AreEqual("actual", sample.Text);
         }
 
         [Test] public void TwoParameterValuesAreSubstituted() {
-            cellProcessor.Get<Procedures>().Save("procedure", Parse.ParseFrom(twoParameterProcedureHtml));
+            cellProcessor.Get<Procedures>()
+                .Save("procedure",
+                    new CellTree(new CellTree("define", "procedure", "parm1", "", "parm2"), new CellTree("settext", "parm1", "", "parm2")));
             var sample = new Sample();
-            invokeProcedure.Invoke(new TypedValue(sample), new MemberName("procedure"), new Parse("tr", "",
-                new Parse("td", "actual1", null, new Parse("td", "actual2", null, null)),
-                null));
+            invokeProcedure.Invoke(new TypedValue(sample), new MemberName("procedure"), new CellTree("actual1", "actual2"));
             Assert.AreEqual("actual1actual2", sample.Text);
         }
 

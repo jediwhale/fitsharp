@@ -1,15 +1,15 @@
-﻿// Copyright © 2012 Syterra Software Inc.
+﻿// Copyright © 2016 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
+using System.Linq;
 using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
-using fitSharp.Fit.Operators;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
-namespace fit.Operators {
+namespace fitSharp.Fit.Operators {
     public class InvokeProcedure: CellOperator, InvokeOperator<Cell>
     {
         public bool CanInvoke(TypedValue instance, MemberName memberName, Tree<Cell> parameters) {
@@ -18,22 +18,22 @@ namespace fit.Operators {
 
         public TypedValue Invoke(TypedValue instance, MemberName memberName, Tree<Cell> parameters) {
             var procedure = Processor.Get<Procedures>().GetValue(memberName.Name);
-            return Invoke((Parse)procedure, instance, parameters);
+            return Invoke((Tree<Cell>)procedure, instance, parameters);
         }
 
-        private TypedValue Invoke(Parse procedure, TypedValue target, Tree<Cell> parameterValues) {
-            var fixture = new DefaultFlowInterpreter(target.Value);
-
-            var parameters = new Parameters(procedure.Parts, parameterValues);
-            var body = procedure.Parts.More.Parts.Parts != null
-                ? new CellTree(procedure.Parts.More.Parts.Parts.DeepCopy(parameters.Substitute, s => s.More, s => s.Parts).SiblingTrees)
-                : new CellTree((Tree<Cell>)procedure.DeepCopy(
-                    parameters.Substitute,
-                    s => s == procedure ? null : s.More,
-                    s => s == procedure ? s.Parts.More : s.Parts));
+        private TypedValue Invoke(Tree<Cell> procedure, TypedValue target, Tree<Cell> parameterValues) {
+            var copy = new DeepCopy(Processor);
+            var parameters = new Parameters(procedure.Branches[0], parameterValues, copy);
+            var body = procedure.Branches[1].Branches[0].IsLeaf
+                ? new CellTree(copy.Make(procedure,
+                    source => source.Branches.Skip(1),
+                    parameters.Substitute))
+                : new CellTree(
+                    procedure.Branches[1].Branches[0].Branches.Select(branch => copy.Make(branch, parameters.Substitute)));
             body.ValueAt(0).ClearAttribute(CellAttribute.Leader);
 
             Processor.CallStack.Push();
+            var fixture = new DefaultFlowInterpreter(target.Value);
             ExecuteProcedure(fixture, body);
             Processor.TestStatus.LastAction = Processor.ParseTree(typeof(StoryTestString), body).ValueString;
             return Processor.CallStack.PopReturn();
@@ -45,20 +45,22 @@ namespace fit.Operators {
             }
         }
 
-        private class Parameters {
+        class Parameters {
             private readonly Tree<Cell> names;
             private readonly Tree<Cell> values;
-           
-            public Parameters(Tree<Cell> names, Tree<Cell> values) {
+            private readonly DeepCopy copy;
+
+            public Parameters(Tree<Cell> names, Tree<Cell> values, DeepCopy copy) {
                 this.names = names;
                 this.values = values;
+                this.copy = copy;
             }
 
-            public Parse Substitute(Parse source) {
-                int i = 2;
-                foreach (Tree<Cell> parameterValue in values.Branches) {
-                    if (names.ValueAt(i).Text == source.Value.Text) {
-                        return ((Parse) parameterValue).DeepCopy(s => null, s=> s == parameterValue ? null : s.More, s => s.Parts);
+            public Tree<Cell> Substitute(Tree<Cell> source) {
+                var i = 2;
+                foreach (var parameterValue in values.Branches) {
+                    if (source.Value != null && names.ValueAt(i).Text == source.Value.Text) {
+                        return copy.Make(parameterValue);
                     }
                     i += 2;
                 }

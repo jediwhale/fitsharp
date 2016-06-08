@@ -14,7 +14,6 @@ namespace fit.Service {
 
         public Operators() {
 
-            Add(new InvokeProcedure(), 0);
             Add(new ComposeTable(), 0);
             Add(new ListOperator(), 0);
             Add(new CompareList(), 0);

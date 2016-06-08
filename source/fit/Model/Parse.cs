@@ -231,12 +231,6 @@ namespace fit
             return result;
         }
 
-        public IEnumerable<Parse> Siblings {
-            get {
-                for (var sibling = this; sibling != null; sibling = sibling.More) yield return sibling;
-            }
-        }
-
         public IEnumerable<Tree<Cell>> SiblingTrees {
             get {
                 for (var sibling = this; sibling != null; sibling = sibling.More) yield return sibling;

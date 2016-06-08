@@ -49,7 +49,6 @@
     <Compile Include="Operators\CompareList.cs" />
     <Compile Include="Operators\InvokeFitKeyword.cs" />
     <Compile Include="Operators\NamedMatchStrategy.cs" />
-    <Compile Include="Operators\InvokeProcedure.cs" />
     <Compile Include="Runner\FitSocket.cs" />
     <Compile Include="Runner\FolderRunner.cs" />
     <Compile Include="Runner\HttpRunner.cs" />

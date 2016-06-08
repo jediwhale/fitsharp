@@ -41,7 +41,7 @@ namespace fitSharp.Fit.Runner {
             ".fit_stacktrace {font-size: 0.7em;}" + Environment.NewLine +
             ".fit_label {font-style: italic; color: #C08080;}" + Environment.NewLine +
             ".fit_grey {color: #808080;}" + Environment.NewLine +
-            ".fit_extension {border: solid 1px grey;}" + Environment.NewLine +
+            ".fit_extension {border: solid 1px grey; background-color: white;}" + Environment.NewLine +
             ".fit_table {border: solid 1px grey; border-collapse: collapse; margin: 2px 0px;}" + Environment.NewLine +
             "table.fit_table tr td {border: solid 1px grey; padding: 2px 2px 2px 2px;}" + Environment.NewLine +
             ".fit_interpreter {font-style: italic; color: #808020;}" + Environment.NewLine +
