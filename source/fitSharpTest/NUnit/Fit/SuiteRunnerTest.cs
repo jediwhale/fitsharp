@@ -128,13 +128,38 @@ namespace fitSharp.Test.NUnit.Fit {
             Assert.IsTrue(folders.FileExists(@"out\fit.css"), "fit.css should exist in output directory");
         }
 
-        private void RunSuite() {
-            RunSuite(new NullReporter());
+        [Test]
+        public void TestInSubFolderIsRun() {
+            AddTestFile(@"in\sub\test.html");
+            RunSuite();
+            Assert.IsTrue(folders.FileExists(@"out\sub\test.html"), "test.html should exist in output directory");
         }
 
-        private void RunSuite(ProgressReporter reporter) {
+        [Test]
+        public void SelectedTestIsRun() {
+            AddTestFile(@"in\test1.html");
+            AddTestFile(@"in\test2.html");
+            RunSuite("test2.html");
+            Assert.IsFalse(folders.FileExists(@"out\test1.html"), "test1.html should not exist in output directory");
+            Assert.IsTrue(folders.FileExists(@"out\test2.html"), "test2.html should exist in output directory");
+        }
+
+        [Test]
+        public void SelectedTestInSubFolderIsRun() {
+            AddTestFile(@"in\test1.html");
+            AddTestFile(@"in\sub\test2.html");
+            RunSuite(@"sub\test2.html");
+            Assert.IsFalse(folders.FileExists(@"out\test1.html"), "test1.html should not exist in output directory");
+            Assert.IsTrue(folders.FileExists(@"out\sub\test2.html"), "test2.html should exist in output directory");
+        }
+
+        private void RunSuite(string selectedFile = "") {
+            RunSuite(new NullReporter(), selectedFile);
+        }
+
+        private void RunSuite(ProgressReporter reporter, string selectedFile = "") {
             var runner = new SuiteRunner(memory, reporter, m => new CellProcessorBase(m, m.GetItem<CellOperators>()));
-            runner.Run(new StoryTestFolder(memory, folders), string.Empty);
+            runner.Run(new StoryTestFolder(memory, folders), selectedFile);
         }
 
         private void AddTestFile(string path) {
