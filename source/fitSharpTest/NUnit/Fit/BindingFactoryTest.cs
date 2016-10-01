@@ -1,4 +1,4 @@
-﻿// Copyright © 2010 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2016 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -6,7 +6,6 @@
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Service;
 using fitSharp.Machine.Model;
-using fitSharp.Samples.Fit;
 using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Fit {
@@ -14,10 +13,6 @@ namespace fitSharp.Test.NUnit.Fit {
 
         [Test] public void BindsNoActionForEmptyString() {
             Assert.IsTrue(Bind(string.Empty) is NoBinding);
-        }
-
-        static BindingOperation Bind(string input) {
-            return new BindingFactory(Builder.CellProcessor(), null, new TestTarget()).Make(new CellTreeLeaf(input));
         }
 
         [Test] public void BindsCheckForQuestionSuffix() {
@@ -40,12 +35,20 @@ namespace fitSharp.Test.NUnit.Fit {
             Assert.IsTrue(Bind("new stuff") is CreateBinding);
         }
 
+        [Test] public void BindsInputForNewPrefixWithoutSpace() {
+            Assert.IsTrue(Bind("newstuff") is InputBinding);
+        }
+
         [Test] public void BindsCheckForNewPrefixAndQuestionSuffix() {
             Assert.IsTrue(Bind("new stuff?") is CheckBinding);
         }
 
         [Test] public void BindsInputForNewPrefixOnMemberName() {
             Assert.IsTrue(Bind("new member") is InputBinding);
+        }
+
+        static BindingOperation Bind(string input) {
+            return new BindingFactory(Builder.CellProcessor(), null, new TestTarget()).Make(new CellTreeLeaf(input));
         }
 
         class TestTarget: TargetObjectProvider {
