@@ -1,4 +1,4 @@
-﻿// Copyright © 2013 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2016 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -102,6 +102,14 @@ namespace fitSharp.Test.NUnit.Slim {
                                   "message:<<MALFORMED_INSTRUCTION stuff,nonsense>> ");
         }
 
+        [Test] public void StopTestExceptionIsComposed() {
+            CheckExceptionCompose(new ApplicationException("blah", new MyStopTestException()), "ABORT_SLIM_TEST: ");
+        }
+
+        [Test] public void StopSuiteExceptionIsComposed() {
+            CheckExceptionCompose(new ApplicationException("blah", new MyStopSuiteException()), "ABORT_SLIM_SUITE: ");
+        }
+
         Tree<string> Compose(ComposeOperator<string> composeOperator, object instance, Type type) {
             var compose = (SlimOperator)composeOperator;
             compose.Processor = processor;
@@ -120,5 +128,8 @@ namespace fitSharp.Test.NUnit.Slim {
             Tree<string> result = composeOperator.Compose(new TypedValue(instance, type));
             Assert.AreEqual(expected, result.Value);
         }
+
+        class MyStopTestException: Exception {}
+        class MyStopSuiteException: Exception {}
     }
 }

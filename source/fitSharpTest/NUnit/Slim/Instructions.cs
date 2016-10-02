@@ -1,4 +1,4 @@
-﻿// Copyright © 2011 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2016 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -6,11 +6,9 @@
 using System;
 using fitSharp.Slim.Model;
 
-namespace fitSharp.Test.NUnit.Slim
-{
-    class Instructions
-    {
-        private readonly SlimTree instructionTree = new SlimTree();
+namespace fitSharp.Test.NUnit.Slim {
+    class Instructions {
+        readonly SlimTree instructionTree = new SlimTree();
 
         public SlimTree Tree { get { return instructionTree; } }
 
@@ -39,6 +37,13 @@ namespace fitSharp.Test.NUnit.Slim
             instructionTree.AddBranch(
                 new SlimTree().AddBranchValue("step3").AddBranchValue("call").AddBranchValue("variable").
                     AddBranchValue("aborttest"));
+            return this;
+        }
+
+        public Instructions ExecuteAbortSuite() {
+            instructionTree.AddBranch(
+                new SlimTree().AddBranchValue("step4").AddBranchValue("call").AddBranchValue("variable").
+                    AddBranchValue("abortsuite"));
             return this;
         }
 
