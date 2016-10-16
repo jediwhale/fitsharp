@@ -10,9 +10,6 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Slim.Service {
     public class Messenger {
-        private readonly Session session;
-        private static readonly IdentifierName EndIdentifier = new IdentifierName("bye");
-
         public bool IsEnd { get; private set; }
 
         public static Messenger Make(int port) {
@@ -32,14 +29,14 @@ namespace fitSharp.Slim.Service {
         }
 
         public string Read() {
-            string lengthString = string.Empty;
+            var lengthString = string.Empty;
             while (true) {
                 var lengthCharacter = session.Read(1);
                 if (lengthCharacter == ":") break;
                 lengthString += lengthCharacter;
             }
-            int messageByteLength = int.Parse(lengthString);
-            string message = session.Read(messageByteLength);
+            var messageByteLength = int.Parse(lengthString);
+            var message = session.Read(messageByteLength);
             if (EndIdentifier.Matches(message)) {
                 IsEnd = true;
                 session.Close();
@@ -51,5 +48,9 @@ namespace fitSharp.Slim.Service {
         public void Write(string message) {
             session.Write(message, "{0:000000}:");
         }
+
+        static readonly IdentifierName EndIdentifier = new IdentifierName("bye");
+
+        readonly Session session;
     }
 }

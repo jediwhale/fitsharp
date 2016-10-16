@@ -7,30 +7,28 @@ using System.Text;
 
 namespace fitSharp.IO {
     public class SocketSession: Session {
-        private readonly SocketModel socket;
-
         public SocketSession(SocketModel socket) {
             this.socket = socket;
         }
 
         public string Read(int bytesToRead) {
             var bytes = new byte[bytesToRead];
-			int bytesReceived = 0;
+			var bytesReceived = 0;
             while (bytesReceived < bytesToRead) {
 			    bytesReceived += socket.Receive(bytes, bytesReceived, bytesToRead - bytesReceived);
             }
 			var characters = new char[bytesToRead];
-			int charCount = Encoding.UTF8.GetDecoder().GetChars(bytes, 0, bytesToRead, characters, 0);
+			var charCount = Encoding.UTF8.GetDecoder().GetChars(bytes, 0, bytesToRead, characters, 0);
 			return new StringBuilder(charCount).Append(characters, 0, charCount).ToString();
         }
 
         public void Write(string message) {
-			byte[] messageBytes = Encoding.UTF8.GetBytes(message);
+			var messageBytes = Encoding.UTF8.GetBytes(message);
 			socket.Send(messageBytes);
         }
 
         public void Write(string message, string prefixFormat) {
-			byte[] messageBytes = Encoding.UTF8.GetBytes(message);
+			var messageBytes = Encoding.UTF8.GetBytes(message);
             Write(string.Format(prefixFormat, messageBytes.Length));
 			socket.Send(messageBytes);
         }
@@ -38,5 +36,7 @@ namespace fitSharp.IO {
         public void Close() {
             socket.Close();
         }
+
+        readonly SocketModel socket;
     }
 }

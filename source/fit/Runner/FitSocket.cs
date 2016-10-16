@@ -9,28 +9,23 @@ using fitSharp.IO;
 
 namespace fit.Runner {
     public class FitSocket {
-        private readonly SocketModel socket;
-        private readonly SocketSession socketSession;
-        private readonly ProgressReporter reporter;
-
         public FitSocket(SocketModel socket, ProgressReporter reporter) {
             socketSession = new SocketSession(socket);
             this.reporter = reporter;
             this.socket = socket;
         }
 
-		public void EstablishConnection(string request)
-		{
+		public void EstablishConnection(string request) {
 		    reporter.WriteLine("\tHTTP request: " + request);
 		    Transmit(request);
 
 		    reporter.WriteLine("Validating connection...");
-		    int StatusSize = ReceiveInteger();
-			if (StatusSize == 0) {
+		    var statusSize = ReceiveInteger();
+			if (statusSize == 0) {
 			    reporter.WriteLine("\t...ok\n");
 			}
 			else {
-				String errorMessage = socketSession.Read(StatusSize);
+				var errorMessage = socketSession.Read(statusSize);
 			    reporter.WriteLine("\t...failed because: " + errorMessage);
 			    Console.WriteLine("An error occured while connecting to client.");
 				Console.WriteLine(errorMessage);
@@ -47,10 +42,8 @@ namespace fit.Runner {
 		}
 
 		public string ReceiveDocument() {
-			int documentLength = ReceiveInteger();
-			if (documentLength == 0)
-				return "";
-		    return socketSession.Read(documentLength);
+			var documentLength = ReceiveInteger();
+			return documentLength == 0 ? "" : socketSession.Read(documentLength);
 		}
 
         public void SendCounts(TestCounts counts) {
@@ -61,8 +54,12 @@ namespace fit.Runner {
             socket.Close();
         }
 
-		private int ReceiveInteger() {
+		int ReceiveInteger() {
 			return Convert.ToInt32(socketSession.Read(10));
 		}
+
+        readonly SocketModel socket;
+        readonly SocketSession socketSession;
+        readonly ProgressReporter reporter;
     }
 }
