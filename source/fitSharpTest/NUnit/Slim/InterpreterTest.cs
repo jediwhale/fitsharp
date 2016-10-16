@@ -3,17 +3,26 @@
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
+using fitSharp.Slim.Service;
+using fitSharp.Test.Double.Slim;
 using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Slim {
     [TestFixture] public class InterpreterTest {
+
+        [SetUp]
+        public void SetUp() {
+            session = new TestSession();
+            interpreter = new Interpreter(new Messenger(session), string.Empty, Builder.Service());
+        }
+
         [Test] public void MultipleStepsAreExecuted() {
             var instructions = new Instructions()
                 .MakeVariable("variable", typeof (SampleClass))
                 .ExecuteMethod("samplemethod")
                 .ExecuteMethod("samplemethod");
             SampleClass.MethodCount = 0;
-            instructions.Execute();
+            Execute(instructions.InstructionString);
             Assert.AreEqual(2, SampleClass.MethodCount);
         }
 
@@ -24,7 +33,7 @@ namespace fitSharp.Test.NUnit.Slim {
                 .ExecuteAbortTest()
                 .ExecuteMethod("samplemethod");
             SampleClass.MethodCount = 0;
-            instructions.Execute();
+            Execute(instructions.InstructionString);
             Assert.AreEqual(1, SampleClass.MethodCount);
         }
 
@@ -35,12 +44,12 @@ namespace fitSharp.Test.NUnit.Slim {
                 .ExecuteAbortSuite()
                 .ExecuteMethod("samplemethod");
             SampleClass.MethodCount = 0;
-            instructions.Execute();
+            Execute(instructions.InstructionString);
             Assert.AreEqual(1, SampleClass.MethodCount);
         }
 
         [Test] public void EmptyInstructionReturnEmptyList() {
-            Assert.AreEqual("Slim -- V0.4\n000009:[000000:]", TestInterpreter.ExecuteInstructions("[000000:]"));
+            Assert.AreEqual("Slim -- V0.5\n000009:[000000:]", Execute("[000000:]"));
         }
 
         [Test] public void ExecutesMethodOnLibraryInstance() {
@@ -49,9 +58,18 @@ namespace fitSharp.Test.NUnit.Slim {
                 .MakeVariable("variable", typeof (DummyClass))
                 .ExecuteMethod("samplemethod");
             SampleClass.MethodCount = 0;
-            instructions.Execute();
+            Execute(instructions.InstructionString);
             Assert.AreEqual(1, SampleClass.MethodCount);
         }
+
+        string Execute(string instructionString) {
+            session.Input = string.Format("{0:000000}:{1}", instructionString.Length, instructionString);
+            interpreter.ProcessInstructions();
+            return session.Output;
+        }
+
+        Interpreter interpreter;
+        TestSession session;
     }
 
     public class DummyClass {}

@@ -97,6 +97,7 @@
     <Compile Include="IO\PageSource.cs" />
     <Compile Include="IO\Path.cs" />
     <Compile Include="IO\RequestReplyServer.cs" />
+    <Compile Include="IO\Session.cs" />
     <Compile Include="Machine\Engine\FindMemberDefault.cs" />
     <Compile Include="Machine\Engine\BasicMemberMatcher.cs" />
     <Compile Include="Machine\Engine\IndexerMemberMatcher.cs" />
@@ -174,7 +175,7 @@
     <Compile Include="IO\FolderModel.cs" />
     <Compile Include="IO\ProgressReporter.cs" />
     <Compile Include="IO\SocketModel.cs" />
-    <Compile Include="IO\SocketStream.cs" />
+    <Compile Include="IO\SocketSession.cs" />
     <Compile Include="IO\TimeKeeper.cs" />
     <Compile Include="Machine\Application\Settings.cs" />
     <Compile Include="Machine\Model\Cell.cs" />
@@ -266,6 +267,7 @@
     <Compile Include="Slim\Operators\SlimOperator.cs" />
     <Compile Include="Slim\Operators\SlimProcessor.cs" />
     <Compile Include="Machine\Application\AssemblyLoadFailureHandler.cs" />
+    <Compile Include="Slim\Service\ConsoleSession.cs" />
     <Compile Include="Slim\Service\Document.cs" />
     <Compile Include="Slim\Service\Interpreter.cs" />
     <Compile Include="Slim\Service\Messenger.cs" />

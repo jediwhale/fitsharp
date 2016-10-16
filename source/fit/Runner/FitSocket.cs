@@ -1,21 +1,20 @@
-﻿// Copyright © 2009 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+﻿// Copyright © 2016 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System;
-using fitnesse.fitserver;
 using fitSharp.Fit.Model;
 using fitSharp.IO;
 
 namespace fit.Runner {
     public class FitSocket {
         private readonly SocketModel socket;
-        private readonly SocketStream socketStream;
+        private readonly SocketSession socketSession;
         private readonly ProgressReporter reporter;
 
         public FitSocket(SocketModel socket, ProgressReporter reporter) {
-            socketStream = new SocketStream(socket);
+            socketSession = new SocketSession(socket);
             this.reporter = reporter;
             this.socket = socket;
         }
@@ -31,7 +30,7 @@ namespace fit.Runner {
 			    reporter.WriteLine("\t...ok\n");
 			}
 			else {
-				String errorMessage = socketStream.ReadBytes(StatusSize);
+				String errorMessage = socketSession.Read(StatusSize);
 			    reporter.WriteLine("\t...failed because: " + errorMessage);
 			    Console.WriteLine("An error occured while connecting to client.");
 				Console.WriteLine(errorMessage);
@@ -40,22 +39,22 @@ namespace fit.Runner {
 		}
 
         public void SendDocument(string document) {
-            socketStream.Write(Protocol.FormatDocument(document));
+            socketSession.Write(Protocol.FormatDocument(document));
         }
 
         public void Transmit(string message) {
-            socketStream.Write(message);
+            socketSession.Write(message);
 		}
 
 		public string ReceiveDocument() {
 			int documentLength = ReceiveInteger();
 			if (documentLength == 0)
 				return "";
-		    return socketStream.ReadBytes(documentLength);
+		    return socketSession.Read(documentLength);
 		}
 
         public void SendCounts(TestCounts counts) {
-	        socketStream.Write(Protocol.FormatCounts(counts));
+	        socketSession.Write(Protocol.FormatCounts(counts));
         }
 
         public void Close() {
@@ -63,7 +62,7 @@ namespace fit.Runner {
         }
 
 		private int ReceiveInteger() {
-			return Convert.ToInt32(socketStream.ReadBytes(10));
+			return Convert.ToInt32(socketSession.Read(10));
 		}
     }
 }

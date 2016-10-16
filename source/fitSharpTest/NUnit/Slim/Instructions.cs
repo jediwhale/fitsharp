@@ -47,10 +47,10 @@ namespace fitSharp.Test.NUnit.Slim {
             return this;
         }
 
-        public void Execute() {
-            string instructionString = new fitSharp.Slim.Service.Document(instructionTree).ToString();
-            TestInterpreter.ExecuteInstructions(instructionString);
+        public string InstructionString {
+            get {
+                return new fitSharp.Slim.Service.Document(instructionTree).ToString();
+            }
         }
-
     }
 }
