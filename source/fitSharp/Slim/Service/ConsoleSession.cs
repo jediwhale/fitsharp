@@ -10,40 +10,48 @@ using fitSharp.IO;
 
 namespace fitSharp.Slim.Service {
     public class ConsoleSession: Session {
+        public ConsoleSession() {
+            saveOut = Console.Out;
+            saveError = Console.Error;
+            CaptureConsole();
+        }
+
         public void Write(string message, string prefixFormat) {
-            RestoreConsole();
+            WriteCaptured();
             WriteToConsole(string.Format(prefixFormat, message.Length));
         }
 
         public void Write(string message) {
-            RestoreConsole();
+            WriteCaptured();
             WriteToConsole(message);
         }
 
         public string Read(int length) {
-            CaptureConsole();
             return ReadFromConsole(length);
         }
 
         public void Close() {
-            RestoreConsole();
+            WriteCaptured();
+            Console.SetOut(saveOut);
+            Console.SetError(saveError);
         }
 
         void WriteCaptured() {
             WriteEncoded("SOUT :", captureOut);
             WriteEncoded("SERR :", captureError);
+            CaptureConsole();
         }
 
-        static void WriteEncoded(string prefix, StringWriter content) {
+        void WriteEncoded(string prefix, StringWriter content) {
             var encodedContent = prefix + content.ToString().Replace(Environment.NewLine, Environment.NewLine + prefix);
             if (encodedContent.EndsWith(prefix)) {
                 encodedContent = encodedContent.Substring(0, encodedContent.Length - prefix.Length);
             }
-            Console.Error.Write(encodedContent);
+            saveError.Write(encodedContent);
         }
 
-        static void WriteToConsole(string message) {
-            Console.Write(message);
+        void WriteToConsole(string message) {
+            saveOut.Write(message);
         }
 
         static string ReadFromConsole(int length) {
@@ -55,27 +63,14 @@ namespace fitSharp.Slim.Service {
         }
 
         void CaptureConsole() {
-            if (isCaptured) return;
-            saveOut = Console.Out;
-            saveError = Console.Error;
             captureOut = new StringWriter();
             captureError = new StringWriter();
             Console.SetOut(captureOut);
             Console.SetError(captureError);
-            isCaptured = true;
         }
 
-        void RestoreConsole() {
-            if (!isCaptured) return;
-            Console.SetOut(saveOut);
-            Console.SetError(saveError);
-            WriteCaptured();
-            isCaptured = false;
-        }
-
-        bool isCaptured;
-        TextWriter saveOut;
-        TextWriter saveError;
+        readonly TextWriter saveOut;
+        readonly TextWriter saveError;
         StringWriter captureOut;
         StringWriter captureError;
     }

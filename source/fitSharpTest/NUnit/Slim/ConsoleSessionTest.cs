@@ -48,8 +48,7 @@ namespace fitSharp.Test.NUnit.Slim {
         }
 
         [Test]
-        public void WritesEncodedOutputBetweenReadAndWrite() {
-            ReadInput();
+        public void WritesEncodedOutputBeforeWrite() {
             Console.WriteLine("between");
             Console.Error.WriteLine("you");
             WriteOutput();
@@ -58,7 +57,6 @@ namespace fitSharp.Test.NUnit.Slim {
 
         [Test]
         public void EncodesEachLineOfOutput() {
-            ReadInput();
             Console.WriteLine("this is");
             Console.WriteLine("between");
             Console.Error.WriteLine("you");
@@ -68,29 +66,12 @@ namespace fitSharp.Test.NUnit.Slim {
         }
 
         [Test]
-        public void OutputNotEncodedAfterWrite() {
-            ReadInput();
-            WriteOutput();
-            Console.WriteLine("between");
-            Console.Error.WriteLine("you");
-            Assert.AreEqual("somethingbetween\r\n", testOut.ToString());
-            Assert.AreEqual("you\r\n", testError.ToString());
-        }
-
-        [Test]
         public void OutputNotEncodedAfterClose() {
-            ReadInput();
             session.Close();
             Console.WriteLine("between");
             Console.Error.WriteLine("you");
             Assert.AreEqual("between\r\n", testOut.ToString());
             Assert.AreEqual("you\r\n", testError.ToString());
-        }
-
-        void ReadInput() {
-            var testIn = new StringReader("hey");
-            Console.SetIn(testIn);
-            session.Read(3);
         }
 
         void WriteOutput() {
