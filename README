@@ -1,0 +1,10 @@
+Functional testing tools for .NET
+---------------------------------
+
+For documentation, see http://fitsharp.github.io
+
+All work derived from the original Fit, FitLibrary and DBFit projects is covered by the GNU General Public License. See GPLicense.txt.
+This includes the fit.dll and dbfit*.dll executables.
+
+All original work on this software is covered by the Common Public License. See CPLicense.txt.
+This includes all other executables.
