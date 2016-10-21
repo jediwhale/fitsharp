@@ -3,8 +3,10 @@
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace fitSharp.Machine.Model {
     public interface TreeWriter<T> {
@@ -64,6 +66,14 @@ namespace fitSharp.Machine.Model {
 
         public static Tree<T> Last<T>(this Tree<T> tree) {
             return tree.Branches[tree.Branches.Count - 1];
+        }
+
+        public static string List<T>(this Tree<T> tree, Func<T,string> listItem) {
+            var result = new StringBuilder();
+            result.AppendFormat("{0}[ ", listItem(tree.Value));
+            foreach (var child in tree.Branches) result.AppendFormat("{0} ", List(child, listItem));
+            result.Append("]");
+            return result.ToString();
         }
     }
 }

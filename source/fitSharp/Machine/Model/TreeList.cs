@@ -16,6 +16,7 @@ namespace fitSharp.Machine.Model {
         public bool IsLeaf { get { return list.Count == 0; } }
         public ReadList<Tree<T>> Branches { get { return list; } }
         public void Add(Tree<T> branch) { list.Add(branch); }
+        public void Add(T branchValue) { Add(new TreeList<T>(branchValue)); }
 
         public TreeList<T> AddBranchValue(object value) {
             Add(value as Tree<T> ?? new TreeList<T>((T)value));
