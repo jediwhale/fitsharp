@@ -2,11 +2,13 @@
 using System.IO;
 
 namespace fitIf {
-    public interface Folder {
+    public interface TextDictionary {
         bool Contains(string key);
         TextReader Reader(string key);
-        IEnumerable<string> Pages { get; }
-        IEnumerable<Folder> Folders { get; }
+    }
+
+    public interface Folder {
+        IEnumerable<string> PageNames { get; }
         string Path { get; }
     }
 
@@ -16,8 +18,8 @@ namespace fitIf {
         }
     }
 
-    public interface BasicTree<T> {
+    public interface BasicTree<out T> {
         T Value { get; }
-        IEnumerable<T> Branches { get; }
+        IEnumerable<BasicTree<T>> Branches { get; }
     }
 }

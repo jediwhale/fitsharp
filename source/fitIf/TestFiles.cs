@@ -4,9 +4,9 @@ using fitSharp.Machine.Model;
 
 namespace fitIf {
     public class TestFiles {
-        public TestFiles(Folder testRootFolder, Folder resultRootFolder) {
+        public TestFiles(BasicTree<Folder> testRootFolder, TextDictionary resultTextDictionary) {
             this.testRootFolder = testRootFolder;
-            this.resultRootFolder = resultRootFolder;
+            this.resultTextDictionary = resultTextDictionary;
         }
 
         public Tree<TestFile> Tree {
@@ -17,23 +17,23 @@ namespace fitIf {
             }
         }
 
-        void AddFiles(TreeList<TestFile> tree, Folder folder) {
-            foreach (var file in folder.Pages.Where(file => Path.GetExtension(file) == ".html")) {
+        void AddFiles(TreeList<TestFile> tree, BasicTree<Folder> folder) {
+            foreach (var file in folder.Value.PageNames.Where(file => Path.GetExtension(file) == ".html")) {
                 var testFile = new TestFile {
                     FileName = Path.GetFileNameWithoutExtension(file), Path = tree.Value.FullName
                 };
-                var result = new TestResult(resultRootFolder, testFile);
+                var result = new TestResult(resultTextDictionary, testFile);
                 testFile.TestStatus = result.Status;
                 tree.Add(testFile);
             }
-            foreach (var subfolder in folder.Folders) {
-                var branch = new TreeList<TestFile>(new TestFile {FileName = subfolder.Name(), Path = tree.Value.FullName, IsFolder = true});
+            foreach (var subfolder in folder.Branches) {
+                var branch = new TreeList<TestFile>(new TestFile {FileName = subfolder.Value.Name(), Path = tree.Value.FullName, IsFolder = true});
                 tree.Add(branch);
                 AddFiles(branch, subfolder);
             }
         }
 
-        readonly Folder testRootFolder;
-        private readonly Folder resultRootFolder;
+        readonly BasicTree<Folder> testRootFolder;
+        readonly TextDictionary resultTextDictionary;
     }
 }

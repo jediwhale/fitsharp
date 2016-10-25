@@ -10,23 +10,39 @@ namespace fitIf {
 
         public string Path { get; private set; }
 
+        public IEnumerable<string> PageNames {
+            get { return Directory.EnumerateFiles(Path);}
+        }
+    }
+
+    public class FileSystemTree: BasicTree<Folder> {
+        public FileSystemTree(string path) {
+            this.path = path;
+        }
+
+        public Folder Value { get { return new FileFolder(path); } }
+
+        public IEnumerable<BasicTree<Folder>> Branches {
+            get { return Directory.EnumerateDirectories(path).Select(subPath => new FileSystemTree(subPath)); }
+        }
+
+        readonly string path;
+    }
+
+    public class FileSystem: TextDictionary {
+
+        public FileSystem(string root) {
+            this.root = root;
+        }
 
         public bool Contains(string key) {
-            return File.Exists(FilePath(key));
+            return File.Exists(Path.Combine(root, key));
         }
 
         public TextReader Reader(string key) {
-            return new StreamReader(FilePath(key));
+            return new StreamReader(Path.Combine(root, key));
         }
 
-        public IEnumerable<string> Pages {
-            get { return Directory.EnumerateFiles(Path);}
-        }
-
-        public IEnumerable<Folder> Folders {
-            get { return Directory.EnumerateDirectories(Path).Select(path => new FileFolder(path)); }
-        }
-
-        string FilePath(string key) { return System.IO.Path.Combine(Path, key); }
+        readonly string root;
     }
 }

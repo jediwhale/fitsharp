@@ -2,15 +2,14 @@
 
 namespace fitIf {
     public class TestResult {
-        public TestResult(Folder rootFolder, TestFile file) {
-            this.rootFolder = rootFolder;
+        public TestResult(TextDictionary textDictionary, TestFile file) {
             this.file = file;
             if (file.IsFolder) return;
 
-            path = file.FullName + ".html";
-            if (!this.rootFolder.Contains(path)) return;
+            var path = file.FullName + ".html";
+            if (!textDictionary.Contains(path)) return;
 
-            using (var input = this.rootFolder.Reader(path)) {
+            using (var input = textDictionary.Reader(path)) {
                 var line = input.ReadLine();
                 if (line.Length < 8) return;
                 var content = line.Substring(4, line.Length - 7).Split(',');
@@ -22,10 +21,6 @@ namespace fitIf {
                 counts.SetCount(TestStatus.Ignore, int.Parse(content[3]));
                 counts.SetCount(TestStatus.Exception, int.Parse(content[4]));
             }
-        }
-
-        public string Path {
-            get { return !file.IsFolder && rootFolder.Contains(path) ? System.IO.Path.Combine(rootFolder.Path, path) : string.Empty; }
         }
 
         public string Description {
@@ -40,9 +35,7 @@ namespace fitIf {
 
         public string Status { get { return counts != null ? counts.Style : TestStatus.Ignore; } }
 
-        readonly Folder rootFolder;
         readonly TestFile file;
-        readonly string path;
         readonly string runTime;
         readonly TestCounts counts;
     }

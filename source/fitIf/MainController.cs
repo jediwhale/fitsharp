@@ -13,8 +13,8 @@ namespace fitIf {
             var folderModel = new FileSystemModel();
             new SuiteConfiguration(memory).LoadXml(folderModel.GetPageContent(@"storytest.config.xml"));
             view.ShowTests(new TestFiles(
-                    new FileFolder(memory.GetItem<Settings>().InputFolder),
-                    new FileFolder(memory.GetItem<Settings>().OutputFolder)
+                    new FileSystemTree(memory.GetItem<Settings>().InputFolder),
+                    new FileSystem(memory.GetItem<Settings>().OutputFolder)
                 ).Tree);
         }
 
