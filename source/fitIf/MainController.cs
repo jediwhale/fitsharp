@@ -1,4 +1,8 @@
-﻿using fitSharp.IO;
+﻿using fitSharp.Fit.Engine;
+using fitSharp.Fit.Model;
+using fitSharp.Fit.Operators;
+using fitSharp.Fit.Service;
+using fitSharp.IO;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
 
@@ -12,10 +16,19 @@ namespace fitIf {
         public void Initialize() {
             var folderModel = new FileSystemModel();
             new SuiteConfiguration(memory).LoadXml(folderModel.GetPageContent(@"storytest.config.xml"));
+            var inputPath = memory.GetItem<Settings>().InputFolder;
+            var outputPath = memory.GetItem<Settings>().OutputFolder;
+            var processor = new CellProcessorBase(memory, memory.GetItem<CellOperators>());
             view.ShowTests(new TestFiles(
-                    new FileSystemTree(memory.GetItem<Settings>().InputFolder),
-                    new FileSystem(memory.GetItem<Settings>().OutputFolder)
+                    new FileFolder(inputPath),
+                    new FileFolder(outputPath),
+                    new StoryTestSuite(s => IsExecutable(processor, s))
                 ).Tree);
+        }
+
+        private bool IsExecutable(CellProcessor processor, string content) {
+            var parsedInput = processor.Compose(new StoryTestString(content));
+            return parsedInput != null && parsedInput.Branches.Count > 0;
         }
 
         readonly MainView view;

@@ -2,14 +2,14 @@
 
 namespace fitIf {
     public class TestResult {
-        public TestResult(TextDictionary textDictionary, TestFile file) {
+        public TestResult(Folder folder, TestFile file) {
             this.file = file;
             if (file.IsFolder) return;
 
-            var path = file.FullName + ".html";
-            if (!textDictionary.Contains(path)) return;
+            var path = file.FileName + ".html";
+            if (!folder.Pages.Contains(path)) return;
 
-            using (var input = textDictionary.Reader(path)) {
+            using (var input = folder.Pages[path].Reader) {
                 var line = input.ReadLine();
                 if (line.Length < 8) return;
                 var content = line.Substring(4, line.Length - 7).Split(',');
