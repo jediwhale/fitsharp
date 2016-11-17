@@ -18,7 +18,7 @@ namespace fitSharp.Slim.Service {
 
         public void Write(string message, string prefixFormat) {
             WriteCaptured();
-            WriteToConsole(string.Format(prefixFormat, message.Length));
+            WriteToConsole(string.Format(prefixFormat, message.Length) + message);
         }
 
         public void Write(string message) {

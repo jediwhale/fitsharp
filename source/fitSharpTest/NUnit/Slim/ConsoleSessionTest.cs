@@ -38,6 +38,12 @@ namespace fitSharp.Test.NUnit.Slim {
         }
 
         [Test]
+        public void WritesToConsoleWithPrefix() {
+            session.Write("hey", "{0:000000}:");
+            Assert.AreEqual("000003:hey", testOut.ToString());
+        }
+
+        [Test]
         public void ReadsFromConsole() {
             var testIn = new StringReader("in\r\n\u1234\u0000it");
             Console.SetIn(testIn);
