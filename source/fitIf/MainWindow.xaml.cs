@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -12,6 +13,17 @@ namespace fitIf {
             InitializeComponent();
             controller = new MainController(this);
             controller.Initialize();
+        }
+
+        public void ShowResult(string path) {
+            Browser.Dispatcher.BeginInvoke(new Action(() => {
+                if (string.IsNullOrEmpty(path)) {
+                    Browser.NavigateToString("<html />");
+                }
+                else {
+                    Browser.Navigate(new Uri("file:///" + path));
+                }
+            }));
         }
 
         public void ShowTests(Tree<TestFile> tests) {
@@ -46,6 +58,13 @@ namespace fitIf {
                     : status == TestStatus.Exception
                         ? new SolidColorBrush(Color.FromRgb(255, 255, 170))
                         : new SolidColorBrush(Color.FromRgb(204, 204, 204));
+        }
+
+        void TestTree_OnSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e) {
+            var item = TestTree.SelectedItem as TreeViewItem;
+            if (item != null) {
+                controller.SelectTest((TestFile)item.Tag);
+            }
         }
 
         readonly MainController controller;

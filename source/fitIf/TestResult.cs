@@ -33,7 +33,13 @@ namespace fitIf {
             }
         }
 
-        public string Status { get { return counts != null ? counts.Style : TestStatus.Ignore; } }
+        public string Status {
+            get {
+                if (counts == null) return TestStatus.Ignore;
+                var style = counts.Style;
+                return string.IsNullOrEmpty(style) ? TestStatus.Right : style;
+            }
+        }
 
         readonly TestFile file;
         readonly string runTime;

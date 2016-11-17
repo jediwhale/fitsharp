@@ -11,7 +11,8 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <TreeView Grid.Column="0" Name="TestTree" />
+        <TreeView Grid.Column="0" Name="TestTree" SelectedItemChanged="TestTree_OnSelectedItemChanged" />
         <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
+        <WebBrowser Grid.Column="2" Name="Browser" />
     </Grid>
 </Window>

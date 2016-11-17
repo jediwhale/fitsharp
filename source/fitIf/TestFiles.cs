@@ -27,7 +27,7 @@ namespace fitIf {
                 tree.Add(testFile);
             }
 
-            foreach (var subfolder in testFolder.Folders.Items) {
+            foreach (var subfolder in suite.SubFolders(testFolder)) {
                 var branch = new TreeList<TestFile>(new TestFile {FileName = subfolder.Name(), Path = tree.Value.FullName, IsFolder = true});
                 tree.Add(branch);
                 AddFiles(branch, subfolder, resultFolder.SubFolder(subfolder.Name()));

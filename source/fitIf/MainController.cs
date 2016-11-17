@@ -1,4 +1,6 @@
-﻿using fitSharp.Fit.Engine;
+﻿using System.IO;
+using fitSharp.Fit.Application;
+using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
 using fitSharp.Fit.Service;
@@ -22,11 +24,15 @@ namespace fitIf {
             view.ShowTests(new TestFiles(
                     new FileFolder(inputPath),
                     new FileFolder(outputPath),
-                    new StoryTestSuite(s => IsExecutable(processor, s))
+                    new StoryTestSuite(memory.GetItem<FileExclusions>(), s => IsExecutable(processor, s))
                 ).Tree);
         }
 
-        private bool IsExecutable(CellProcessor processor, string content) {
+        public void SelectTest(TestFile file) {
+            view.ShowResult(System.IO.Path.GetFullPath(System.IO.Path.Combine(memory.GetItem<Settings>().OutputFolder, file.FullName + ".html")));
+        }
+
+        static bool IsExecutable(CellProcessor processor, string content) {
             var parsedInput = processor.Compose(new StoryTestString(content));
             return parsedInput != null && parsedInput.Branches.Count > 0;
         }
