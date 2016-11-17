@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using fitIf;
+using fitSharp.Fit.Application;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
 
@@ -12,7 +13,7 @@ namespace fitSharp.Test.NUnit.FitIf {
         public void SetUp() {
             testFolder = new TestFolder { Path = "root\\Tests"};
             resultFolder = new TestFolder { Path = "other\\Results"};
-            testFiles = new TestFiles(testFolder, resultFolder, new StoryTestSuite(s => true));
+            testFiles = new TestFiles(testFolder, resultFolder, new StoryTestSuite(new FileExclusions(), s => true));
         }
 
         [Test]
