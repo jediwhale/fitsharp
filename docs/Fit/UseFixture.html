@@ -1,0 +1,91 @@
+<!--2016-11-17 20:49:51,4,0,0,0-->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- fitSharp
+Copyright © Syterra Software Inc. All rights reserved.
+The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
+to be bound by the terms of this license. You must not remove this notice, or any other, from this software. -->
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+ <link href="../fitsharp1.css" type="text/css" rel="stylesheet">
+  <link href="fit.css" type="text/css" rel="stylesheet">
+  <title>Use Fixture</title>
+</head>
+<body>
+<div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
+<div class="pagename">Use Fixture</div>
+<div class="content">The <a href="../Fit/UseFixture.html">Use Fixture</a> selects a fixture and <a href="../Fit/SystemUnderTest.html">System Under Test</a> to process the remainder of the current table. The fixture can be one saved with the <a href="../Fit/NameKeyword.html">Name Keyword</a> or a new fixture. The <a href="../Fit/SystemUnderTest.html">System Under Test</a> can be set using the <a href="../Fit/WithKeyword.html">With Keyword</a>.<br>
+<ul><li>use <span style="font-style:italic">&lt;symbol-name&gt;</span></li><li>use <span style="font-style:italic">&lt;fixture-name&gt;</span></li><li>use <span style="font-style:italic">&lt;name&gt;</span> <a href="../Fit/WithKeyword.html">with</a> <span style="font-style:italic">&lt;with-phrase&gt;</span></li></ul><br>
+The fixture to use can be one saved with the <a href="../Fit/NameKeyword.html">Name Keyword</a>.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td class="pass"><span class="fit_member">when input is</span><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension"><table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">story test fixture</span></td></tr>
+<tr><td><span class="fit_keyword">check</span></td><td><span class="fit_member">plain test</span></td><td>'sample do'<br>
+name 'my sample' 'make sample do' hello<br>
+<br>
+use 'my sample'<br>
+check text hello</td><td class="pass"><div><table><tr><td><span class="fit_interpreter">sample do</span></td> </tr></table><table><tr><td><span class="fit_keyword">name</span></td> <td class="pass">my sample</td> <td><span class="fit_member">make sample do</span></td> <td>hello</td> </tr></table></div><br /><div><table><tr><td><span class="fit_interpreter">use</span></td> <td>my sample</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">text</span></td> <td class="pass">hello</td> </tr></table></div></td></tr>
+</table></div></div></td><td>'sample do'<br>
+name 'my sample' 'make sample do' hello<br>
+<br>
+use 'my sample'<br>
+check text hello</td><td><span class="fit_member">then output is</span></td><td><div><table><tr><td><span class="fit_interpreter">sample do</span></td> </tr></table><table><tr><td><span class="fit_keyword">name</span></td> <td class="pass">my sample</td> <td><span class="fit_member">make sample do</span></td> <td>hello</td> </tr></table></div><br /><div><table><tr><td><span class="fit_interpreter">use</span></td> <td>my sample</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">text</span></td> <td class="pass">hello</td> </tr></table></div></td></tr>
+</table>
+<br>
+The fixture to use can be a new fixture.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td class="pass"><span class="fit_member">when input is</span><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension"><table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">story test fixture</span></td></tr>
+<tr><td><span class="fit_keyword">check</span></td><td><span class="fit_member">plain test</span></td><td>use 'sample do'<br>
+check one 1</td><td class="pass"><div><table><tr><td><span class="fit_interpreter">use</span></td> <td><span class="fit_interpreter">sample do</span></td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">one</span></td> <td class="pass">1</td> </tr></table></div></td></tr>
+</table></div></div></td><td>use 'sample do'<br>
+check one 1</td><td><span class="fit_member">then output is</span></td><td><div><table><tr><td><span class="fit_interpreter">use</span></td> <td><span class="fit_interpreter">sample do</span></td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">one</span></td> <td class="pass">1</td> </tr></table></div></td></tr>
+</table>
+<br>
+The <a href="../Fit/SystemUnderTest.html">System Under Test</a> can be set using the <a href="../Fit/WithKeyword.html">With Keyword</a>.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td class="pass"><span class="fit_member">when input is</span><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension"><table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">story test fixture</span></td></tr>
+<tr><td><span class="fit_keyword">check</span></td><td><span class="fit_member">plain test</span></td><td>'sample domain'<br>
+set name Bob<br>
+<br>
+use do with current<br>
+check name Bob</td><td class="pass"><div><table><tr><td><span class="fit_SUT">sample domain</span></td> </tr></table><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">name</span></td> <td>Bob</td> </tr></table></div><br /><div><table><tr><td><span class="fit_interpreter">use</span></td> <td><span class="fit_interpreter">do</span></td> <td><span class="fit_keyword">with</span></td> <td><span class="fit_keyword">current</span></td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">name</span></td> <td class="pass">Bob</td> </tr></table></div></td></tr>
+</table></div></div></td><td>'sample domain'<br>
+set name Bob<br>
+<br>
+use do with current<br>
+check name Bob</td><td><span class="fit_member">then output is</span></td><td><div><table><tr><td><span class="fit_SUT">sample domain</span></td> </tr></table><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">name</span></td> <td>Bob</td> </tr></table></div><br /><div><table><tr><td><span class="fit_interpreter">use</span></td> <td><span class="fit_interpreter">do</span></td> <td><span class="fit_keyword">with</span></td> <td><span class="fit_keyword">current</span></td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">name</span></td> <td class="pass">Bob</td> </tr></table></div></td></tr>
+</table>
+<br>
+An error is reported if the fixture is not found or the fixture name is missing.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td class="pass"><span class="fit_member">when input is</span><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension"><table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">story test fixture</span></td></tr>
+<tr><td><span class="fit_keyword">check</span></td><td><span class="fit_member">plain test</span></td><td>use garbage<br>
+<br>
+use<br>
+<br>
+with new 'sample domain' Joe<br>
+name joesname name<br>
+use joesname</td><td class="pass"><div><table><tr><td class="error"><span class="fit_interpreter">use</span><hr /><pre><div class="fit_stacktrace">Type 'garbage' not found in assemblies</div></pre></td> <td>garbage</td> </tr></table></div><br /><div><table><tr><td class="error"><span class="fit_interpreter">use</span><hr /><pre><div class="fit_stacktrace">This table is invalid for this fixture: Missing cells for use.</div></pre></td> </tr></table></div><br /><div><table><tr><td><span class="fit_keyword">with</span></td> <td><span class="fit_keyword">new</span></td> <td><span class="fit_SUT">sample domain</span></td> <td>Joe</td> </tr></table><table><tr><td><span class="fit_keyword">name</span></td> <td class="pass">joesname</td> <td><span class="fit_member">name</span></td> </tr></table><table><tr><td class="error"><span class="fit_interpreter">use</span><hr /><pre><div class="fit_stacktrace">Result is not a Fixture.</div></pre></td> <td>joesname</td> </tr></table></div></td></tr>
+</table></div></div></td><td>use garbage<br>
+<br>
+use<br>
+<br>
+with new 'sample domain' Joe<br>
+name joesname name<br>
+use joesname</td><td><span class="fit_member">then output is</span></td><td><div><table><tr><td class="error"><span class="fit_interpreter">use</span><hr /><pre><div class="fit_stacktrace">Type 'garbage' not found in assemblies</div></pre></td> <td>garbage</td> </tr></table></div><br /><div><table><tr><td class="error"><span class="fit_interpreter">use</span><hr /><pre><div class="fit_stacktrace">This table is invalid for this fixture: Missing cells for use.</div></pre></td> </tr></table></div><br /><div><table><tr><td><span class="fit_keyword">with</span></td> <td><span class="fit_keyword">new</span></td> <td><span class="fit_SUT">sample domain</span></td> <td>Joe</td> </tr></table><table><tr><td><span class="fit_keyword">name</span></td> <td class="pass">joesname</td> <td><span class="fit_member">name</span></td> </tr></table><table><tr><td class="error"><span class="fit_interpreter">use</span><hr /><pre><div class="fit_stacktrace">Result is not a Fixture.</div></pre></td> <td>joesname</td> </tr></table></div></td></tr>
+</table>
+</div>
+<div style="width:100%;text-align:right">
+<span class="footer">&copy; Copyright <a href="http://www.syterra.com">Syterra Software Inc.</a> All rights reserved.</span>
+</div>
+
+</body>
+</html>

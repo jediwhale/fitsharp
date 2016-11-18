@@ -1,0 +1,66 @@
+<!--2016-11-17 20:49:51,6,0,0,0-->
+<html>
+<head>
+<link href="fit.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+<div class="setup">
+	<div style="float: right;" class="meta"><a href="javascript:expandAll();">Expand All</a> | <a href="javascript:collapseAll();">Collapse All</a></div>
+	<a href="javascript:toggleCollapsable('-5848989533995079487');">
+		<img src="/files/images/collapsableOpen.gif" class="left" id="img-5848989533995079487"/>
+	</a>
+&nbsp;<span class="meta">Set Up: <a href="../../../FitNesseAcceptanceTests/SetUp.html">Fit Nesse Acceptance Tests. Set Up</a></span>
+	<div class="collapsable" id="-5848989533995079487"><table border="1" cellspacing="0">
+<tr><td><span class="fit_interpreter">Import</span></td>
+</tr>
+<tr><td>fitnesse.acceptanceTests</td>
+</tr>
+</table>
+</div>
+</div>
+<h3>You can assert that a numeric value is within a given range using the optional IntegralRangeHandler.</h3><hr><br>First, make sure to load the handler as it is not loaded by default.<br><br><table border="1" cellspacing="0">
+<tr><td colspan="2"><span class="fit_interpreter">cell handler loader</span></td>
+</tr>
+<tr><td>load</td>
+<td>IntegralRangeHandler</td>
+</tr>
+</table>
+<br>Type the low end of the range, ".." and the high end and the cell will turn green if the actual value is within that range.<br><br><table border="1" cellspacing="0">
+<tr><td colspan="6"><span class="fit_interpreter">int fixture</span></td>
+</tr>
+<tr><td><span class="fit_member">field</span></td>
+<td><span class="fit_member">field?</span></td>
+<td><span class="fit_member">property</span></td>
+<td><span class="fit_member">property?</span></td>
+<td><span class="fit_member">set</span></td>
+<td><span class="fit_member">get?</span></td>
+</tr>
+<tr><td>256</td>
+<td class="pass">0..256</td>
+<td>5</td>
+<td class="pass">4..7</td>
+<td>9</td>
+<td class="pass">3..9</td>
+</tr>
+<tr><td>0</td>
+<td class="pass">-12..37</td>
+<td>-19</td>
+<td class="pass">-256..0</td>
+<td>-1</td>
+<td class="pass">-12..12</td>
+</tr>
+</table>
+<br><div class="teardown">
+	<div style="float: right;" class="meta"><a href="javascript:expandAll();">Expand All</a> | <a href="javascript:collapseAll();">Collapse All</a></div>
+	<a href="javascript:toggleCollapsable('-4264483789480185844');">
+		<img src="/files/images/collapsableOpen.gif" class="left" id="img-4264483789480185844"/>
+	</a>
+&nbsp;<span class="meta">Tear Down: <a href="../../../FitNesseAcceptanceTests/TearDown.html">Fit Nesse Acceptance Tests. Tear Down</a></span>
+	<div class="collapsable" id="-4264483789480185844"><table border="1" cellspacing="0">
+<tr><td><span class="fit_interpreter">ResetNamespacesFixture</span></td>
+</tr>
+</table>
+</div>
+</div>
+<hr><br>[<a href="../../../FrontPage.html">Front Page</a>] [<a href="../../../RecentChanges.html">Recent Changes</a>]
+</body></html>

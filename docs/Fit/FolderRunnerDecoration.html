@@ -1,0 +1,81 @@
+<!--2016-11-17 20:49:51,6,0,0,0-->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- fitSharp
+Copyright © Syterra Software Inc. All rights reserved.
+The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
+to be bound by the terms of this license. You must not remove this notice, or any other, from this software. -->
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+ <link href="../fitsharp1.css" type="text/css" rel="stylesheet">
+  <link href="fit.css" type="text/css" rel="stylesheet">
+  <title>Folder Runner Decoration</title>
+</head>
+<body>
+<div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
+<div class="pagename">Folder Runner Decoration</div>
+<div class="content">This is a description of how test pages processed by <a href="../Fit/FolderRunner.html">Folder Runner</a> are decorated with set up and tear down information prior to the execution of their FIT tests.<br>
+<br>
+Set-up decoration is inserted at the beginning and tear-down decoration is inserted at the end of the test page.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_keyword">with</span></td><td><span class="fit_keyword">new</span></td><td><span class="fit_SUT">test page decoration</span></td><td>prefix-</td><td>-suffix</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_keyword">check</span></td><td><span class="fit_member">decorate</span></td><td>a test page</td><td class="pass">prefix-a test page-suffix</td></tr>
+</table>
+<br>
+If the test page contains a &lt;body> element, the decoration is inserted inside the body of the test page.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_keyword">check</span></td><td><span class="fit_member">decorate</span></td><td>a &lt;body>test&lt;/body> page</td><td class="pass">a &lt;body>prefix-test-suffix&lt;/body> page</td></tr>
+</table>
+<br>
+If the set-up or tear-down contains a &lt;body> element, the contents of the body is used as the decoration.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_keyword">with</span></td><td><span class="fit_keyword">new</span></td><td><span class="fit_SUT">test page decoration</span></td><td>a &lt;body>prefix-&lt;/body> more</td><td>a &lt;body>-suffix&lt;/body> more</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_keyword">check</span></td><td><span class="fit_member">decorate</span></td><td>a test page</td><td class="pass">prefix-a test page-suffix</td></tr>
+</table>
+<br>
+If the set-up or tear-down contains a &lt;head> element, the contents of the head is inserted at the beginning of the test page.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_keyword">with</span></td><td><span class="fit_keyword">new</span></td><td><span class="fit_SUT">test page decoration</span></td><td>a &lt;head>head-&lt;/head>prefix-</td><td>a &lt;head>-more&lt;/head> and &lt;body>-suffix&lt;/body> more</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_keyword">check</span></td><td><span class="fit_member">decorate</span></td><td>a &lt;body>test&lt;/body> page</td><td class="pass">head--morea &lt;body>prefix-test-suffix&lt;/body> page</td></tr>
+</table>
+<br>
+If the test page contains a &lt;head> element, the head decorations are inserted inside the head of the test page.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_keyword">check</span></td><td><span class="fit_member">decorate</span></td><td>a &lt;head>of&lt;/head>and&lt;body>test&lt;/body> page</td><td class="pass">a &lt;head>head-of-more&lt;/head>and&lt;body>prefix-test-suffix&lt;/body> page</td></tr>
+</table>
+<br>
+A child page decoration has its set-up decoration prefixed with its parent's and its tear-down decoration suffixed with its parent's.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_keyword">with</span></td><td><span class="fit_keyword">new</span></td><td><span class="fit_SUT">test page decoration</span></td><td>&lt;head>head1-&lt;/head>prefix1-</td><td>&lt;head>-more1&lt;/head>-suffix1</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_keyword">with</span></td><td><span class="fit_member">make child</span></td><td>&lt;head>head2-&lt;/head>prefix2-</td><td><span class="fit_member"></span></td><td>&lt;head>-more2&lt;/head>-suffix2</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_keyword">check</span></td><td><span class="fit_member">decorate</span></td><td>&lt;head>a head&lt;/head>&lt;body>test body&lt;/body></td><td class="pass">&lt;head>head1-head2-a head-more2-more1&lt;/head>&lt;body>prefix1-prefix2-test body-suffix2-suffix1&lt;/body></td></tr>
+</table>
+</div>
+<div style="width:100%;text-align:right">
+<span class="footer">&copy; Copyright <a href="http://www.syterra.com">Syterra Software Inc.</a> All rights reserved.</span>
+</div>
+
+</body>
+</html>

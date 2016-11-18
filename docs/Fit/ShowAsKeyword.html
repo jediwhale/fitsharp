@@ -1,0 +1,70 @@
+<!--2016-11-17 20:49:51,3,0,0,0-->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- fitSharp
+Copyright © Syterra Software Inc. All rights reserved.
+The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
+to be bound by the terms of this license. You must not remove this notice, or any other, from this software. -->
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+ <link href="../fitsharp1.css" type="text/css" rel="stylesheet">
+  <link href="fit.css" type="text/css" rel="stylesheet">
+  <title>Show As Keyword</title>
+</head>
+<body>
+<div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
+<div class="pagename">Show As Keyword</div>
+<div class="content">The Show As keyword is one of the <a href="../Fit/FlowFixtureKeywords.html">Flow Fixture Keywords</a>. It executes a method on the <a href="../Fit/SystemUnderTest.html">System Under Test</a> and adds a cell to the row to display the result using one or more cell attributes.<br>
+<br>
+The Raw attribute displays the result directly with no encoding.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td class="pass"><span class="fit_member">when input is</span><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension"><table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">story test fixture</span></td></tr>
+<tr><td><span class="fit_keyword">check</span></td><td><span class="fit_member">plain test</span></td><td>'sample do'<br>
+set text &lt;b>stuff&lt;/b><br>
+'show as' raw text</td><td class="pass"><div><table><tr><td><span class="fit_interpreter">sample do</span></td> </tr></table><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">text</span></td> <td>&lt;b&gt;stuff&lt;/b&gt;</td> </tr></table><table><tr><td><span class="fit_keyword">show as</span></td> <td>raw</td> <td><span class="fit_member">text</span></td> 
+<td><b>stuff</b></td></tr></table></div></td></tr>
+</table></div></div></td><td>'sample do'<br>
+set text &lt;b>stuff&lt;/b><br>
+'show as' raw text</td><td><span class="fit_member">then output is</span></td><td><div><table><tr><td><span class="fit_interpreter">sample do</span></td> </tr></table><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">text</span></td> <td>&lt;b&gt;stuff&lt;/b&gt;</td> </tr></table><table><tr><td><span class="fit_keyword">show as</span></td> <td>raw</td> <td><span class="fit_member">text</span></td> 
+<td><b>stuff</b></td></tr></table></div></td></tr>
+</table>
+<br>
+The Formatted attribute displays the result encoded with formatting preserved.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td class="pass"><span class="fit_member">when input is</span><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension"><table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">story test fixture</span></td></tr>
+<tr><td><span class="fit_keyword">check</span></td><td><span class="fit_member">plain test</span></td><td>'sample do'<br>
+set text '&lt;b>more&lt;/b> stuff'<br>
+'show as' formatted text</td><td class="pass"><div><table><tr><td><span class="fit_interpreter">sample do</span></td> </tr></table><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">text</span></td> <td>&lt;b&gt;more&lt;/b&gt; stuff</td> </tr></table><table><tr><td><span class="fit_keyword">show as</span></td> <td>formatted</td> <td><span class="fit_member">text</span></td> 
+<td><pre>&lt;b&gt;more&lt;/b&gt; stuff</pre></td></tr></table></div></td></tr>
+</table></div></div></td><td>'sample do'<br>
+set text '&lt;b>more&lt;/b> stuff'<br>
+'show as' formatted text</td><td><span class="fit_member">then output is</span></td><td><div><table><tr><td><span class="fit_interpreter">sample do</span></td> </tr></table><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">text</span></td> <td>&lt;b&gt;more&lt;/b&gt; stuff</td> </tr></table><table><tr><td><span class="fit_keyword">show as</span></td> <td>formatted</td> <td><span class="fit_member">text</span></td> 
+<td><pre>&lt;b&gt;more&lt;/b&gt; stuff</pre></td></tr></table></div></td></tr>
+</table>
+<br>
+The Folded attribute displays the result in a collapsible section.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td class="pass"><span class="fit_member">when input is</span><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension"><table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">story test fixture</span></td></tr>
+<tr><td><span class="fit_keyword">check</span></td><td><span class="fit_member">plain test</span></td><td>'sample do'<br>
+set text stuff<br>
+'show as' folded text</td><td class="pass"><div><table><tr><td><span class="fit_interpreter">sample do</span></td> </tr></table><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">text</span></td> <td>stuff</td> </tr></table><table><tr><td><span class="fit_keyword">show as</span></td> <td>folded</td> <td><span class="fit_member">text</span></td> 
+<td><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension"><span class="fit_grey">stuff</span></div></div></td></tr></table></div></td></tr>
+</table></div></div></td><td>'sample do'<br>
+set text stuff<br>
+'show as' folded text</td><td><span class="fit_member">then output is</span></td><td><div><table><tr><td><span class="fit_interpreter">sample do</span></td> </tr></table><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">text</span></td> <td>stuff</td> </tr></table><table><tr><td><span class="fit_keyword">show as</span></td> <td>folded</td> <td><span class="fit_member">text</span></td> 
+<td><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension"><span class="fit_grey">stuff</span></div></div></td></tr></table></div></td></tr>
+</table>
+</div>
+<div style="width:100%;text-align:right">
+<span class="footer">&copy; Copyright <a href="http://www.syterra.com">Syterra Software Inc.</a> All rights reserved.</span>
+</div>
+
+</body>
+</html>

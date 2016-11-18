@@ -1,0 +1,69 @@
+<!--2016-11-17 20:49:51,3,0,0,0-->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- fitSharp
+Copyright © Syterra Software Inc. All rights reserved.
+The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
+to be bound by the terms of this license. You must not remove this notice, or any other, from this software. -->
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+ <link href="../fitsharp1.css" type="text/css" rel="stylesheet">
+  <link href="fit.css" type="text/css" rel="stylesheet">
+  <title>Flow Mode</title>
+</head>
+<body>
+<div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
+<div class="pagename">Flow Mode</div>
+<div class="content">In <a href="../Fit/FlowMode.html">Flow Mode</a>, a fixture processes all the tables in the story test, without repeating the fixture name in the first row of each table.<br>
+<br>
+Each row is interpreted as one of the following.<ul><li>One of the standard <a href="../Fit/FlowFixtureKeywords.html">Flow Fixture Keywords</a>.</li><li>A custom flow fixture keyword defined in the current fixture.</li><li><a href="../Fit/MethodExecution.html">Method Execution</a> for a method defined in the current fixture or the current fixture's <a href="../Fit/SystemUnderTest.html">System Under Test</a>.</li><li>The name of a new fixture that will process the rest of the current table.</li></ul><br>
+If the method invoked for a row returns certain types, the return value will be set as the <a href="../Fit/SystemUnderTest.html">System Under Test</a> for a <a href="../Fit/FixtureWrapper.html">Fixture Wrapper</a> that will process the rest of the table.<br>
+<br>
+A row might ambiguously refer to: a fixture class name, a method in the fixture or <a href="../Fit/SystemUnderTest.html">System Under Test</a>, or a keyword. With method-keyword ambiguity, the keyword is executed. With fixture-method ambiguity, the method is executed.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td class="pass"><span class="fit_member">when input is</span><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension"><table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">story test fixture</span></td></tr>
+<tr><td><span class="fit_keyword">check</span></td><td><span class="fit_member">plain test</span></td><td>'sample do'<br>
+<br>
+check one 1<br>
+<br>
+summary</td><td class="pass"><div><table><tr><td><span class="fit_interpreter">sample do</span></td> </tr></table></div><br /><div><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">one</span></td> <td class="pass">1</td> </tr></table></div><br /><div><table><tr><td class="pass"><span class="fit_member">summary</span></td> </tr></table></div></td></tr>
+</table></div></div></td><td>'sample do'<br>
+<br>
+check one 1<br>
+<br>
+summary</td><td><span class="fit_member">then output is</span></td><td><div><table><tr><td><span class="fit_interpreter">sample do</span></td> </tr></table></div><br /><div><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">one</span></td> <td class="pass">1</td> </tr></table></div><br /><div><table><tr><td class="pass"><span class="fit_member">summary</span></td> </tr></table></div></td></tr>
+</table></div></td></tr>
+</table>
+<br>
+Errors are reported.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td class="pass"><span class="fit_member">when input is</span><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension"><table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">story test fixture</span></td></tr>
+<tr><td><span class="fit_keyword">check</span></td><td><span class="fit_member">plain test</span></td><td>'sample do'<br>
+garbage<br>
+<br>
+check more garbage</td><td class="pass"><div><table><tr><td><span class="fit_interpreter">sample do</span></td> </tr></table><table><tr><td class="error">garbage<hr /><pre><div class="fit_stacktrace">Type 'garbage' not found in assemblies:</div></pre></td> </tr></table></div><br /><div><table><tr><td><span class="fit_keyword">check</span></td> <td class="error"><span class="fit_member">more</span><hr /><pre><div class="fit_stacktrace">Member 'more' with 0 parameter(s) not found for type 'fit.Test.Double.SampleDoFixture'.</div></pre></td> <td>garbage</td> </tr></table></div></td></tr>
+</table></div></div></td><td>'sample do'<br>
+garbage<br>
+<br>
+check more garbage</td><td><span class="fit_member">then output is</span></td><td><div><table><tr><td><span class="fit_interpreter">sample do</span></td> </tr></table><table><tr><td class="error">garbage<hr /><pre><div class="fit_stacktrace">Type 'garbage' not found in assemblies:</div></pre></td> </tr></table></div><br /><div><table><tr><td><span class="fit_keyword">check</span></td> <td class="error"><span class="fit_member">more</span><hr /><pre><div class="fit_stacktrace">Member 'more' with 0 parameter(s) not found for type 'fit.Test.Double.SampleDoFixture'.</div></pre></td> <td>garbage</td> </tr></table></div></td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td class="pass"><span class="fit_member">when input is</span><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension"><table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">story test fixture</span></td></tr>
+<tr><td><span class="fit_keyword">check</span></td><td><span class="fit_member">plain test</span></td><td>garbage</td><td class="pass"><div><table><tr><td class="error">garbage<hr /><pre><div class="fit_stacktrace">Type 'garbage' not found in assemblies:</div></pre></td> </tr></table></div></td></tr>
+</table></div></div></td><td>garbage</td><td><span class="fit_member">then output is</span></td><td><div><table><tr><td class="error">garbage<hr /><pre><div class="fit_stacktrace">Type 'garbage' not found in assemblies:</div></pre></td> </tr></table></div></td></tr>
+</table>
+<br>
+</div>
+<div style="width:100%;text-align:right">
+<span class="footer">&copy; Copyright <a href="http://www.syterra.com">Syterra Software Inc.</a> All rights reserved.</span>
+</div>
+
+</body>
+</html>

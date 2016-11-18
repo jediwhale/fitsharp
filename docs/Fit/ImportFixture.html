@@ -1,0 +1,59 @@
+<!--2016-11-17 20:49:51,2,0,0,0-->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- fitSharp
+Copyright © Syterra Software Inc. All rights reserved.
+The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
+to be bound by the terms of this license. You must not remove this notice, or any other, from this software. -->
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+ <link href="../fitsharp1.css" type="text/css" rel="stylesheet">
+  <link href="fit.css" type="text/css" rel="stylesheet">
+  <title>Import Fixture</title>
+</head>
+<body>
+<div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
+<div class="pagename">Import Fixture</div>
+<div class="content"><i>Obsolete: </i>Use <a href="../FitSharp/SuiteConfigurationFile.html">Suite Configuration File</a> or <a href="../Fit/ConfigureFixture.html">Configure Fixture</a> - configure applicationUnderTest addNamespace xxx<br>
+<br>
+<a href="../Fit/ImportFixture.html">Import Fixture</a> adds to the list of namespaces that are searched for fixture classes.<br>
+<br>
+By default, the fully qualified name of the fixture class is required.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td class="pass"><span class="fit_member">when input is</span><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension"><table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">story test fixture</span></td></tr>
+<tr><td><span class="fit_keyword">check</span></td><td><span class="fit_member">plain test</span></td><td>|ArithmeticColumnFixture<br>
+x y plus?<br>
+1 2 3</td><td class="pass"><table class="fit_table"><tr><td class="error">ArithmeticColumnFixture<hr /><pre><div class="fit_stacktrace">Type 'ArithmeticColumnFixture' not found in assemblies</div></pre></td> </tr><tr><td>x</td> <td>y</td> <td>plus?</td> </tr><tr><td>1</td> <td>2</td> <td>3</td> </tr></table></td></tr>
+</table></div></div></td><td>|ArithmeticColumnFixture<br>
+x y plus?<br>
+1 2 3</td><td><span class="fit_member">then output is</span></td><td><table class="fit_table"><tr><td class="error">ArithmeticColumnFixture<hr /><pre><div class="fit_stacktrace">Type 'ArithmeticColumnFixture' not found in assemblies</div></pre></td> </tr><tr><td>x</td> <td>y</td> <td>plus?</td> </tr><tr><td>1</td> <td>2</td> <td>3</td> </tr></table></td></tr>
+</table>
+<br>
+By importing the namespace, only the fixture class name is required.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td class="pass"><span class="fit_member">when input is</span><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension"><table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">story test fixture</span></td></tr>
+<tr><td><span class="fit_keyword">check</span></td><td><span class="fit_member">plain test</span></td><td>import<br>
+eg<br>
+<br>
+|ArithmeticColumnFixture<br>
+x y plus?<br>
+1 2 3</td><td class="pass"><div><table><tr><td><span class="fit_interpreter">import</span></td> </tr></table><table><tr><td>eg</td> </tr></table></div><br /><table class="fit_table"><tr><td><span class="fit_interpreter">ArithmeticColumnFixture</span></td> </tr><tr><td><span class="fit_member">x</span></td> <td><span class="fit_member">y</span></td> <td><span class="fit_member">plus?</span></td> </tr><tr><td>1</td> <td>2</td> <td class="pass">3</td> </tr></table></td></tr>
+</table></div></div></td><td>import<br>
+eg<br>
+<br>
+|ArithmeticColumnFixture<br>
+x y plus?<br>
+1 2 3</td><td><span class="fit_member">then output is</span></td><td><div><table><tr><td><span class="fit_interpreter">import</span></td> </tr></table><table><tr><td>eg</td> </tr></table></div><br /><table class="fit_table"><tr><td><span class="fit_interpreter">ArithmeticColumnFixture</span></td> </tr><tr><td><span class="fit_member">x</span></td> <td><span class="fit_member">y</span></td> <td><span class="fit_member">plus?</span></td> </tr><tr><td>1</td> <td>2</td> <td class="pass">3</td> </tr></table></td></tr>
+</table>
+</div>
+<div style="width:100%;text-align:right">
+<span class="footer">&copy; Copyright <a href="http://www.syterra.com">Syterra Software Inc.</a> All rights reserved.</span>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!--2016-11-17 20:49:50,11,0,0,0-->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- fitSharp
+Copyright © Syterra Software Inc. All rights reserved.
+The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
+to be bound by the terms of this license. You must not remove this notice, or any other, from this software. -->
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+ <link href="../fitsharp1.css" type="text/css" rel="stylesheet">
+  <link href="fit.css" type="text/css" rel="stylesheet">
+  <title>Compare String</title>
+</head>
+<body>
+<div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
+<div class="pagename">Compare String</div>
+<div class="content">The Compare String operator compares strings with options to ignore white space and ignore case. Cell prefixes can be used to identify the cells that use the handler, or it can be used on all cells with string types.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">configure</span></td><td><span class="fit_SUT">processor</span></td><td><span class="fit_member">add operator</span></td><td>CompareString</td></tr>
+</table>
+<br>
+The default option is to ignore whitespace.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">string</span></td></tr>
+<tr><td><span class="fit_member">field</span></td><td><span class="fit_member">field?</span></td></tr>
+<tr><td>h e l l o </td><td class="pass">he llo</td></tr>
+<tr><td>null</td><td class="pass">fail[he llo]</td></tr>
+</table>
+<br>
+A cell prefix can be configured to identify the cells to be compared by the handler.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">configure</span></td><td><span class="fit_SUT">fitSharp.Fit.Operators.CompareString</span></td><td><span class="fit_member">add</span></td><td>w-</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">string</span></td></tr>
+<tr><td><span class="fit_member">field</span></td><td><span class="fit_member">field?</span></td></tr>
+<tr><td>h e l l o </td><td class="pass">w-he llo</td></tr>
+<tr><td>h e l l o </td><td class="pass">fail[he llo]</td></tr>
+</table>
+<br>
+Comparison options can be configured for a cell prefix.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">configure</span></td><td><span class="fit_SUT">fitSharp.Fit.Operators.CompareString</span></td></tr>
+<tr><td><span class="fit_member">add</span></td><td>i-,IgnoreCase</td></tr>
+<tr><td><span class="fit_member">add</span></td><td>w*,IgnoreWhitespace</td></tr>
+<tr><td><span class="fit_member">add</span></td><td>b!,IgnoreCase,IgnoreWhitespace</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">string</span></td></tr>
+<tr><td><span class="fit_member">field</span></td><td><span class="fit_member">field?</span></td></tr>
+<tr><td>hello</td><td class="pass">i-HeLlo</td></tr>
+<tr><td>hello</td><td class="pass">fail[i-he llo]</td></tr>
+<tr><td>hello</td><td class="pass">fail[HeLlo]</td></tr>
+<tr><td>h e l l o </td><td class="pass">w*he llo</td></tr>
+<tr><td>h e l l o </td><td class="pass">b!He Llo</td></tr>
+</table>
+<br>
+Comparison options can be configured for an empty prefix.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">configure</span></td><td><span class="fit_SUT">fitSharp.Fit.Operators.CompareString</span></td><td><span class="fit_member">add</span></td><td>,IgnoreCase</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">string</span></td></tr>
+<tr><td><span class="fit_member">field</span></td><td><span class="fit_member">field?</span></td></tr>
+<tr><td>hello</td><td class="pass">HeLlo</td></tr>
+<tr><td>h e l l o </td><td class="pass">fail[he llo]</td></tr>
+</table>
+<br>
+</div>
+<div style="width:100%;text-align:right">
+<span class="footer">&copy; Copyright <a href="http://www.syterra.com">Syterra Software Inc.</a> All rights reserved.</span>
+</div>
+
+</body>
+</html>

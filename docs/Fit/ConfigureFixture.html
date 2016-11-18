@@ -1,0 +1,53 @@
+<!--2016-11-17 20:49:50,1,0,0,0-->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- fitSharp
+Copyright © Syterra Software Inc. All rights reserved.
+The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
+to be bound by the terms of this license. You must not remove this notice, or any other, from this software. -->
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+ <link href="../fitsharp1.css" type="text/css" rel="stylesheet">
+  <link href="fit.css" type="text/css" rel="stylesheet">
+  <title>Configure Fixture</title>
+</head>
+<body>
+<div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
+<div class="pagename">Configure Fixture</div>
+<div class="content">The Configure Fixture lets us issue commands to control different facilities of the Fit framework. The format of a configure command is:<ul><li>configure <span style="font-style:italic">&lt;facility&gt;</span> <span style="font-style:italic">&lt;command&gt;</span></li></ul>We can issue multiple commands with 'configure <span style="font-style:italic">&lt;facility&gt;</span>' in the first row and a command in each of the subsequent rows.<br>
+<br>
+These are the facilties that we can configure.<br>
+<br>
+<span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">ApplicationUnderTest</span><br>
+<br>
+The commands are:<ul><li>addAssembly <span style="font-style:italic">&lt;assemblyName&gt;</span></li><li>addNamespace <span style="font-style:italic">&lt;namespaceName&gt;</span></li><li>removeNamespace <span style="font-style:italic">&lt;namespaceName&gt;</span></li></ul><span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">Logging</span><br>
+<br>
+The logging facility can capture an execution trace of the core <span style="font-family:verdana,sans-serif"><i>fit</i>Sharp</span> engine and display it. In its present form it is probably mostly useful to <span style="font-family:verdana,sans-serif"><i>fit</i>Sharp</span> framework developers only. We can issue these commands:<ul><li>start</li><li>stop</li><li>show</li></ul><span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">Processor</span><br>
+<br>
+The commands are:<ul><li>addOperator <span style="font-style:italic">&lt;operatorClassName&gt;</span></li><li>removeOperator <span style="font-style:italic">&lt;operatorClassName&gt;</span></li></ul><br>
+<span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">Symbols</span><br>
+<br>
+We can set, display and clear <a href="../Fit/SymbolValues.html">Symbol Values</a>.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td class="pass"><span class="fit_member">when input is</span><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension"><table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">story test fixture</span></td></tr>
+<tr><td><span class="fit_keyword">check</span></td><td><span class="fit_member">plain test</span></td><td>configure symbols<br>
+save mysymbol 'value of System.String' myvalue<br>
+'get value' mysymbol<br>
+clear<br>
+'has value' mysymbol</td><td class="pass"><div><table><tr><td><span class="fit_interpreter">configure</span></td> <td><span class="fit_SUT">symbols</span></td> </tr></table><table><tr><td><span class="fit_member">save</span></td> <td>mysymbol</td> <td><span class="fit_member">value of System.String</span></td> <td>myvalue</td> </tr></table><table><tr><td><span class="fit_member">get value</span><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension">myvalue</div></div></td> <td>mysymbol</td> </tr></table><table><tr><td><span class="fit_member">clear</span></td> </tr></table><table><tr><td><span class="fit_member">has value</span><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension">False</div></div></td> <td>mysymbol</td> </tr></table></div></td></tr>
+</table></div></div></td><td>configure symbols<br>
+save mysymbol 'value of System.String' myvalue<br>
+'get value' mysymbol<br>
+clear<br>
+'has value' mysymbol</td><td><span class="fit_member">then output is</span></td><td><div><table><tr><td><span class="fit_interpreter">configure</span></td> <td><span class="fit_SUT">symbols</span></td> </tr></table><table><tr><td><span class="fit_member">save</span></td> <td>mysymbol</td> <td><span class="fit_member">value of System.String</span></td> <td>myvalue</td> </tr></table><table><tr><td><span class="fit_member">get value</span><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension">myvalue</div></div></td> <td>mysymbol</td> </tr></table><table><tr><td><span class="fit_member">clear</span></td> </tr></table><table><tr><td><span class="fit_member">has value</span><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension">False</div></div></td> <td>mysymbol</td> </tr></table></div></td></tr>
+</table>
+</div>
+<div style="width:100%;text-align:right">
+<span class="footer">&copy; Copyright <a href="http://www.syterra.com">Syterra Software Inc.</a> All rights reserved.</span>
+</div>
+
+</body>
+</html>

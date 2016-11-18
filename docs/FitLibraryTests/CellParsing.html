@@ -1,0 +1,82 @@
+<!--2016-11-17 20:49:51,13,0,0,0-->
+<!-- Copyright © 2007 Syterra Software Inc. -->
+<html>
+<head>
+<link href="fit.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+<table border="1" cellspacing="0">
+<tr><td><span class="fit_interpreter">CellParsing</span></td>
+</tr>
+</table>
+<br>Strings are parsed as is.<br><br><table border="1" cellspacing="0">
+<tr><td class="pass"><span class="fit_keyword">check parse string</span></td>
+<td>&nbsp;</td>
+<td>''</td>
+</tr>
+<tr><td class="pass"><span class="fit_keyword">check parse string</span></td>
+<td>something</td>
+<td>'something'</td>
+</tr>
+</table>
+<br>Static Parse methods on elementary classes are used.<br><br><table border="1" cellspacing="0">
+<tr><td class="pass"><span class="fit_keyword">check parse integer</span></td>
+<td>123456789</td>
+<td>123,456,789</td>
+</tr>
+<tr><td class="pass"><span class="fit_keyword">check parse integer</span></td>
+<td>-123456789</td>
+<td>-123,456,789</td>
+</tr>
+<tr><td class="pass"><span class="fit_keyword">check parse integer</span></td>
+<td>0</td>
+<td>&nbsp;</td>
+</tr>
+</table>
+<p>Enumerated types are parsed.</p>
+<table border="1" cellspacing="0"><tr><td><span class="fit_keyword">check</span></td><td><span class="fit_member">parse as type code</span></td><td>Byte</td><td class="pass">'Byte'</td></tr></table>
+<p>Nullable types are parsed.</p>
+<table border="1" cellspacing="0">
+<tr><td><span class="fit_keyword">check</span></td><td><span class="fit_member">parse as nullable int</span></td><td>123</td><td class="pass">'123'</td></tr>
+<tr><td><span class="fit_keyword">check</span></td><td><span class="fit_member">parse as nullable int</span></td><td>null</td><td class="pass">''</td></tr>
+</table>
+<br />
+Static Parse methods on classes under test are used if they exist.<br><br><table border="1" cellspacing="0">
+<tr><td class="pass"><span class="fit_keyword">check parse test class</span></td>
+<td>special</td>
+<td>SPECIAL</td>
+</tr>
+</table>
+<br>Nested lists can be parsed as a fitlibrary.tree.Tree.<br><br><table border="1" cellspacing="0">
+<tr><td class="pass"><span class="fit_keyword">check parse tree</span></td>
+<td>root<ul><li>child1</li><li>child2</li></ul></td>
+<td>root[child1[] child2[] ]</td>
+</tr>
+</table>
+<br>Nested tables can be parsed as a fitlibrary.table.Table.<br><br><table border="1" cellspacing="0">
+<tr><td class="pass"><span class="fit_keyword">check parse table</span></td>
+<td><table>
+<tr><td>11</td><td>12</td></tr>
+<tr><td>21</td><td>22</td></tr>
+</table></td>
+<td>{[11 12 ][21 22 ]}</td>
+</tr>
+</table>
+<br>Nested tables can be parsed as a IList.  The table must have a <a href="../FitLibraryTests/SetUpFixture.html">Set Up Fixture</a> format.<br><br><table border="1" cellspacing="0">
+<tr><td class="pass"><span class="fit_keyword">check parse list</span></td>
+<td><table>
+<tr><td><span class="fit_member">a</span></td><td><span class="fit_member">b</span></td></tr>
+<tr><td>11</td><td>12</td></tr>
+<tr><td>21</td><td>22</td></tr>
+</table></td>
+<td><table>
+<tr><td><span class="fit_member">x</span></td><td><span class="fit_member">y</span></td></tr>
+<tr><td>11</td><td>12</td></tr>
+<tr><td>21</td><td>22</td></tr>
+</table></td>
+</tr>
+</table>
+<p>Custom cell parsers can be added. To do this, create a class that implements fit.ICellHandler and call Configuration.Instance.FitLibraryCellHandlers.Add("your.CustomParser")</p>
+<table cellspacing="0" cellpadding="1" border="1">
+<tr><td><span class="fit_keyword">check</span></td><td><span class="fit_member">parse with custom parser</span></td><td>one</td><td class="pass">'1'</td></tr></table>
+</body></html>

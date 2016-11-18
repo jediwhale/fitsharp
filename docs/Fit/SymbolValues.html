@@ -1,0 +1,96 @@
+<!--2016-11-17 20:49:51,3,0,0,0-->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- fitSharp
+Copyright © Syterra Software Inc. All rights reserved.
+The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
+to be bound by the terms of this license. You must not remove this notice, or any other, from this software. -->
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+ <link href="../fitsharp1.css" type="text/css" rel="stylesheet">
+  <link href="fit.css" type="text/css" rel="stylesheet">
+  <title>Symbol Values</title>
+</head>
+<body>
+<div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
+<div class="pagename">Symbol Values</div>
+<div class="content">The symbol save operator (>>) and the symbol recall operator (<<) can be used to collect a value at one place in a story test and then use it in other places.<br>
+<br>
+The symbol save operator can be used in any expected value cell. Instead of comparing the actual value to an expected value, the actual value is saved with the symbol name.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td class="pass"><span class="fit_member">when input is</span><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension"><table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">story test fixture</span></td></tr>
+<tr><td><span class="fit_keyword">check</span></td><td><span class="fit_member">plain test</span></td><td>'sample class'<br>
+set field something<br>
+check field >>mysymbol<br>
+set field null<br>
+check field >>nullsymbol</td><td class="pass"><div><table><tr><td><span class="fit_SUT">sample class</span></td> </tr></table><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">field</span></td> <td>something</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">field</span></td> <td>&gt;&gt;mysymbol<span class="fit_grey"> something</span></td> </tr></table><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">field</span></td> <td>null</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">field</span></td> <td>&gt;&gt;nullsymbol<span class="fit_grey"> null</span></td> </tr></table></div></td></tr>
+</table></div></div></td><td>'sample class'<br>
+set field something<br>
+check field >>mysymbol<br>
+set field null<br>
+check field >>nullsymbol</td><td><span class="fit_member">then output is</span></td><td><div><table><tr><td><span class="fit_SUT">sample class</span></td> </tr></table><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">field</span></td> <td>something</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">field</span></td> <td>&gt;&gt;mysymbol<span class="fit_grey"> something</span></td> </tr></table><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">field</span></td> <td>null</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">field</span></td> <td>&gt;&gt;nullsymbol<span class="fit_grey"> null</span></td> </tr></table></div></td></tr>
+</table>
+<br>
+The symbol recall operator can be used in any input or expected value cell. The value used will be the last value saved with the symbol name.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td class="pass"><span class="fit_member">when input is</span><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension"><table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">story test fixture</span></td></tr>
+<tr><td><span class="fit_keyword">check</span></td><td><span class="fit_member">plain test</span></td><td>'sample class'<br>
+set field something<br>
+check field &lt;&lt;mysymbol<br>
+set field null<br>
+check field &lt;&lt;nullsymbol<br>
+set field &lt;&lt;mysymbol<br>
+check field something<br>
+set field &lt;&lt;nullsymbol<br>
+check field null</td><td class="pass"><div><table><tr><td><span class="fit_SUT">sample class</span></td> </tr></table><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">field</span></td> <td>something</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">field</span></td> <td class="pass">&lt;&lt;mysymbol<span class="fit_grey"> something</span></td> </tr></table><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">field</span></td> <td>null</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">field</span></td> <td class="pass">&lt;&lt;nullsymbol<span class="fit_grey"> null</span></td> </tr></table><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">field</span></td> <td>&lt;&lt;mysymbol<span class="fit_grey"> something</span></td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">field</span></td> <td class="pass">something</td> </tr></table><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">field</span></td> <td>&lt;&lt;nullsymbol<span class="fit_grey"> null</span></td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">field</span></td> <td class="pass">null</td> </tr></table></div></td></tr>
+</table></div></div></td><td>'sample class'<br>
+set field something<br>
+check field &lt;&lt;mysymbol<br>
+set field null<br>
+check field &lt;&lt;nullsymbol<br>
+set field &lt;&lt;mysymbol<br>
+check field something<br>
+set field &lt;&lt;nullsymbol<br>
+check field null</td><td><span class="fit_member">then output is</span></td><td><div><table><tr><td><span class="fit_SUT">sample class</span></td> </tr></table><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">field</span></td> <td>something</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">field</span></td> <td class="pass">&lt;&lt;mysymbol<span class="fit_grey"> something</span></td> </tr></table><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">field</span></td> <td>null</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">field</span></td> <td class="pass">&lt;&lt;nullsymbol<span class="fit_grey"> null</span></td> </tr></table><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">field</span></td> <td>&lt;&lt;mysymbol<span class="fit_grey"> something</span></td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">field</span></td> <td class="pass">something</td> </tr></table><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">field</span></td> <td>&lt;&lt;nullsymbol<span class="fit_grey"> null</span></td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">field</span></td> <td class="pass">null</td> </tr></table></div></td></tr>
+</table>
+<br>
+We can save any value in a symbol, e.g. a byte array.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td class="pass"><span class="fit_member">when input is</span><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension"><table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">story test fixture</span></td></tr>
+<tr><td><span class="fit_keyword">check</span></td><td><span class="fit_member">plain test</span></td><td>'sample class'<br>
+set bytes 0x010203<br>
+check bytes >>bytesymbol<br>
+check bytes &lt;&lt;bytesymbol</td><td class="pass"><div><table><tr><td><span class="fit_SUT">sample class</span></td> </tr></table><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">bytes</span></td> <td>0x010203</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">bytes</span></td> <td>&gt;&gt;bytesymbol<span class="fit_grey"> System.Byte[]</span></td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">bytes</span></td> <td class="pass">&lt;&lt;bytesymbol<span class="fit_grey"> System.Byte[]</span></td> </tr></table></div></td></tr>
+</table></div></div></td><td>'sample class'<br>
+set bytes 0x010203<br>
+check bytes >>bytesymbol<br>
+check bytes &lt;&lt;bytesymbol</td><td><span class="fit_member">then output is</span></td><td><div><table><tr><td><span class="fit_SUT">sample class</span></td> </tr></table><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">bytes</span></td> <td>0x010203</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">bytes</span></td> <td>&gt;&gt;bytesymbol<span class="fit_grey"> System.Byte[]</span></td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">bytes</span></td> <td class="pass">&lt;&lt;bytesymbol<span class="fit_grey"> System.Byte[]</span></td> </tr></table></div></td></tr>
+</table>
+<br>
+Symbol values can also be assigned with the <a href="../Fit/NameKeyword.html">Name Keyword</a> and the <a href="../Fit/ConfigureFixture.html">Configure Fixture</a> and used with the <a href="../Fit/UseFixture.html">Use Fixture</a> and <a href="../Fit/WithKeyword.html">With Keyword</a>.<br>
+<br>
+Symbols can be erased with the <a href="../Fit/ClearSymbolsFixture.html">Clear Symbols Fixture</a>.<br>
+<br>
+We can also get and set symbol values in fixture code: <pre class="code">    if (Symbols.HasValue("stuff")) {
+        var mySymbol = Symbols.GetValue("stuff);
+    }
+
+    Symbols.Save("another") = "one";
+</pre> <span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">Notes:</span><br>
+<br>
+This is a separate feature from the FitNesse wiki symbol feature.<br>
+<br>
+</div>
+<div style="width:100%;text-align:right">
+<span class="footer">&copy; Copyright <a href="http://www.syterra.com">Syterra Software Inc.</a> All rights reserved.</span>
+</div>
+
+</body>
+</html>

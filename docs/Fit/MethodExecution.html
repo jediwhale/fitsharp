@@ -1,0 +1,81 @@
+<!--2016-11-17 20:49:51,4,0,0,0-->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- fitSharp
+Copyright © Syterra Software Inc. All rights reserved.
+The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
+to be bound by the terms of this license. You must not remove this notice, or any other, from this software. -->
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+ <link href="../fitsharp1.css" type="text/css" rel="stylesheet">
+  <link href="fit.css" type="text/css" rel="stylesheet">
+  <title>Method Execution</title>
+</head>
+<body>
+<div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
+<div class="pagename">Method Execution</div>
+<div class="content">We can execute methods on our <a href="../Fit/SystemUnderTest.html">System Under Test</a> using a row in <a href="../Fit/FlowMode.html">Flow Mode</a>.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td class="pass"><span class="fit_member">when input is</span><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension"><table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">story test fixture</span></td></tr>
+<tr><td><span class="fit_keyword">check</span></td><td><span class="fit_member">plain test</span></td><td>'sample class'<br>
+check count 0<br>
+'count method'<br>
+check count 1</td><td class="pass"><div><table><tr><td><span class="fit_SUT">sample class</span></td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">count</span></td> <td class="pass">0</td> </tr></table><table><tr><td><span class="fit_member">count method</span></td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">count</span></td> <td class="pass">1</td> </tr></table></div></td></tr>
+</table></div></div></td><td>'sample class'<br>
+check count 0<br>
+'count method'<br>
+check count 1</td><td><span class="fit_member">then output is</span></td><td><div><table><tr><td><span class="fit_SUT">sample class</span></td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">count</span></td> <td class="pass">0</td> </tr></table><table><tr><td><span class="fit_member">count method</span></td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">count</span></td> <td class="pass">1</td> </tr></table></div></td></tr>
+</table>
+<br>
+We can check return values and pass parameters.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td class="pass"><span class="fit_member">when input is</span><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension"><table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">story test fixture</span></td></tr>
+<tr><td><span class="fit_keyword">check</span></td><td><span class="fit_member">plain test</span></td><td>'sample class'<br>
+check 'method no parms' samplereturn<br>
+check 'method with parms' 'my value' 'samplemy value'</td><td class="pass"><div><table><tr><td><span class="fit_SUT">sample class</span></td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">method no parms</span></td> <td class="pass">samplereturn</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">method with parms</span></td> <td>my value</td> <td class="pass">samplemy value</td> </tr></table></div></td></tr>
+</table></div></div></td><td>'sample class'<br>
+check 'method no parms' samplereturn<br>
+check 'method with parms' 'my value' 'samplemy value'</td><td><span class="fit_member">then output is</span></td><td><div><table><tr><td><span class="fit_SUT">sample class</span></td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">method no parms</span></td> <td class="pass">samplereturn</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">method with parms</span></td> <td>my value</td> <td class="pass">samplemy value</td> </tr></table></div></td></tr>
+</table>
+<br>
+We can execute generic methods.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td class="pass"><span class="fit_member">when input is</span><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension"><table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">story test fixture</span></td></tr>
+<tr><td><span class="fit_keyword">check</span></td><td><span class="fit_member">plain test</span></td><td>'sample class'<br>
+check 'generic method of System.Int32' 123 sample123</td><td class="pass"><div><table><tr><td><span class="fit_SUT">sample class</span></td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">generic method of System.Int32</span></td> <td>123</td> <td class="pass">sample123</td> </tr></table></div></td></tr>
+</table></div></div></td><td>'sample class'<br>
+check 'generic method of System.Int32' 123 sample123</td><td><span class="fit_member">then output is</span></td><td><div><table><tr><td><span class="fit_SUT">sample class</span></td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">generic method of System.Int32</span></td> <td>123</td> <td class="pass">sample123</td> </tr></table></div></td></tr>
+</table>
+<br>
+We can access properties, fields and indexers.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td class="pass"><span class="fit_member">when input is</span><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension"><table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">story test fixture</span></td></tr>
+<tr><td><span class="fit_keyword">check</span></td><td><span class="fit_member">plain test</span></td><td>'sample class'<br>
+set property something<br>
+check property something<br>
+set field else<br>
+check field else<br>
+check anything indexanything</td><td class="pass"><div><table><tr><td><span class="fit_SUT">sample class</span></td> </tr></table><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">property</span></td> <td>something</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">property</span></td> <td class="pass">something</td> </tr></table><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">field</span></td> <td>else</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">field</span></td> <td class="pass">else</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">anything</span></td> <td class="pass">indexanything</td> </tr></table></div></td></tr>
+</table></div></div></td><td>'sample class'<br>
+set property something<br>
+check property something<br>
+set field else<br>
+check field else<br>
+check anything indexanything</td><td><span class="fit_member">then output is</span></td><td><div><table><tr><td><span class="fit_SUT">sample class</span></td> </tr></table><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">property</span></td> <td>something</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">property</span></td> <td class="pass">something</td> </tr></table><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">field</span></td> <td>else</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">field</span></td> <td class="pass">else</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">anything</span></td> <td class="pass">indexanything</td> </tr></table></div></td></tr>
+</table>
+</div>
+<div style="width:100%;text-align:right">
+<span class="footer">&copy; Copyright <a href="http://www.syterra.com">Syterra Software Inc.</a> All rights reserved.</span>
+</div>
+
+</body>
+</html>

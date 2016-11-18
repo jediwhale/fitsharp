@@ -1,0 +1,177 @@
+<!--2016-11-17 20:49:50,9,0,0,0-->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- fitSharp
+Copyright © Syterra Software Inc. All rights reserved.
+The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
+to be bound by the terms of this license. You must not remove this notice, or any other, from this software. -->
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+ <link href="../fitsharp1.css" type="text/css" rel="stylesheet">
+  <link href="fit.css" type="text/css" rel="stylesheet">
+  <title>Fixture Wrapper</title>
+</head>
+<body>
+<div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
+<div class="pagename">Fixture Wrapper</div>
+<div class="content">A Fixture Wrapper is a fixture that is created automatically to process a return value from <a href="../Fit/MethodExecution.html">Method Execution</a> in <a href="../Fit/FlowMode.html">Flow Mode</a>. The new fixture processes the rest of the table with the wrapped value as its <a href="../Fit/SystemUnderTest.html">System Under Test</a>.<br>
+<br>
+Any enumerable return type is processed by an <a href="../Fit/ArrayFixture.html">Array Fixture</a>.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td class="pass"><span class="fit_member">when input is</span><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension"><table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">story test fixture</span></td></tr>
+<tr><td><span class="fit_keyword">check</span></td><td><span class="fit_member">plain test</span></td><td>|'sample domain'<br>
+'get people' Bob-Martin,Mike-Stockdale<br>
+'first name' 'last name'<br>
+Bob Martin<br>
+Mike Stockdale</td><td class="pass"><table class="fit_table"><tr><td><span class="fit_SUT">sample domain</span></td> </tr><tr><td><span class="fit_member">get people</span></td> <td>Bob-Martin,Mike-Stockdale</td> </tr><tr><td><span class="fit_member">first name</span></td> <td><span class="fit_member">last name</span></td> </tr><tr><td class="pass">Bob</td> <td class="pass">Martin</td> </tr><tr><td class="pass">Mike</td> <td class="pass">Stockdale</td> </tr></table></td></tr>
+</table></div></div></td><td>|'sample domain'<br>
+'get people' Bob-Martin,Mike-Stockdale<br>
+'first name' 'last name'<br>
+Bob Martin<br>
+Mike Stockdale</td><td><span class="fit_member">then output is</span></td><td><table class="fit_table"><tr><td><span class="fit_SUT">sample domain</span></td> </tr><tr><td><span class="fit_member">get people</span></td> <td>Bob-Martin,Mike-Stockdale</td> </tr><tr><td><span class="fit_member">first name</span></td> <td><span class="fit_member">last name</span></td> </tr><tr><td class="pass">Bob</td> <td class="pass">Martin</td> </tr><tr><td class="pass">Mike</td> <td class="pass">Stockdale</td> </tr></table></td></tr>
+</table>
+<br>
+To use a different fixture for an enumerable return type, use the <a href="../Fit/UseFixture.html">Use Fixture</a>.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td class="pass"><span class="fit_member">when input is</span><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension"><table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">story test fixture</span></td></tr>
+<tr><td><span class="fit_keyword">check</span></td><td><span class="fit_member">plain test</span></td><td>|'sample domain'<br>
+use set with 'get people' Mike-Stockdale,Bob-Martin<br>
+'first name' 'last name'<br>
+Bob Martin<br>
+Mike Stockdale</td><td class="pass"><table class="fit_table"><tr><td><span class="fit_SUT">sample domain</span></td> </tr><tr><td><span class="fit_interpreter">use</span></td> <td><span class="fit_interpreter">set</span></td> <td><span class="fit_keyword">with</span></td> <td><span class="fit_member">get people</span></td> <td>Mike-Stockdale,Bob-Martin</td> </tr><tr><td><span class="fit_member">first name</span></td> <td><span class="fit_member">last name</span></td> </tr><tr><td class="pass">Bob</td> <td class="pass">Martin</td> </tr><tr><td class="pass">Mike</td> <td class="pass">Stockdale</td> </tr></table></td></tr>
+</table></div></div></td><td>|'sample domain'<br>
+use set with 'get people' Mike-Stockdale,Bob-Martin<br>
+'first name' 'last name'<br>
+Bob Martin<br>
+Mike Stockdale</td><td><span class="fit_member">then output is</span></td><td><table class="fit_table"><tr><td><span class="fit_SUT">sample domain</span></td> </tr><tr><td><span class="fit_interpreter">use</span></td> <td><span class="fit_interpreter">set</span></td> <td><span class="fit_keyword">with</span></td> <td><span class="fit_member">get people</span></td> <td>Mike-Stockdale,Bob-Martin</td> </tr><tr><td><span class="fit_member">first name</span></td> <td><span class="fit_member">last name</span></td> </tr><tr><td class="pass">Bob</td> <td class="pass">Martin</td> </tr><tr><td class="pass">Mike</td> <td class="pass">Stockdale</td> </tr></table></td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td class="pass"><span class="fit_member">when input is</span><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension"><table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">story test fixture</span></td></tr>
+<tr><td><span class="fit_keyword">check</span></td><td><span class="fit_member">plain test</span></td><td>|'sample domain'<br>
+use subset with 'get people' Mike-Stockdale,Bob-Martin<br>
+'first name' 'last name'<br>
+Bob Martin</td><td class="pass"><table class="fit_table"><tr><td><span class="fit_SUT">sample domain</span></td> </tr><tr><td><span class="fit_interpreter">use</span></td> <td><span class="fit_interpreter">subset</span></td> <td><span class="fit_keyword">with</span></td> <td><span class="fit_member">get people</span></td> <td>Mike-Stockdale,Bob-Martin</td> </tr><tr><td><span class="fit_member">first name</span></td> <td><span class="fit_member">last name</span></td> </tr><tr><td class="pass">Bob</td> <td class="pass">Martin</td> </tr></table></td></tr>
+</table></div></div></td><td>|'sample domain'<br>
+use subset with 'get people' Mike-Stockdale,Bob-Martin<br>
+'first name' 'last name'<br>
+Bob Martin</td><td><span class="fit_member">then output is</span></td><td><table class="fit_table"><tr><td><span class="fit_SUT">sample domain</span></td> </tr><tr><td><span class="fit_interpreter">use</span></td> <td><span class="fit_interpreter">subset</span></td> <td><span class="fit_keyword">with</span></td> <td><span class="fit_member">get people</span></td> <td>Mike-Stockdale,Bob-Martin</td> </tr><tr><td><span class="fit_member">first name</span></td> <td><span class="fit_member">last name</span></td> </tr><tr><td class="pass">Bob</td> <td class="pass">Martin</td> </tr></table></td></tr>
+</table>
+<br>
+A dictionary is wrapped in a <a href="../Fit/SetFixture.html">Set Fixture</a>. The dictionary values are checked.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td class="pass"><span class="fit_member">when input is</span><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension"><table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">story test fixture</span></td></tr>
+<tr><td><span class="fit_keyword">check</span></td><td><span class="fit_member">plain test</span></td><td>|'sample domain'<br>
+'make dictionary'<br>
+'first name' 'last name'<br>
+Mike Stockdale<br>
+Bob Martin</td><td class="pass"><table class="fit_table"><tr><td><span class="fit_SUT">sample domain</span></td> </tr><tr><td><span class="fit_member">make dictionary</span></td> </tr><tr><td><span class="fit_member">first name</span></td> <td><span class="fit_member">last name</span></td> </tr><tr><td class="pass">Mike</td> <td class="pass">Stockdale</td> </tr><tr><td class="pass">Bob</td> <td class="pass">Martin</td> </tr></table></td></tr>
+</table></div></div></td><td>|'sample domain'<br>
+'make dictionary'<br>
+'first name' 'last name'<br>
+Mike Stockdale<br>
+Bob Martin</td><td><span class="fit_member">then output is</span></td><td><table class="fit_table"><tr><td><span class="fit_SUT">sample domain</span></td> </tr><tr><td><span class="fit_member">make dictionary</span></td> </tr><tr><td><span class="fit_member">first name</span></td> <td><span class="fit_member">last name</span></td> </tr><tr><td class="pass">Mike</td> <td class="pass">Stockdale</td> </tr><tr><td class="pass">Bob</td> <td class="pass">Martin</td> </tr></table></td></tr>
+</table>
+<br>
+To check dictionary keys and values, we need a method to extract the key value pairs.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td class="pass"><span class="fit_member">when input is</span><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension"><table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">story test fixture</span></td></tr>
+<tr><td><span class="fit_keyword">check</span></td><td><span class="fit_member">plain test</span></td><td>|'sample domain'<br>
+'make key values'<br>
+key value<br>
+key1 value1<br>
+key2 value2</td><td class="pass"><table class="fit_table"><tr><td><span class="fit_SUT">sample domain</span></td> </tr><tr><td><span class="fit_member">make key values</span></td> </tr><tr><td><span class="fit_member">key</span></td> <td><span class="fit_member">value</span></td> </tr><tr><td class="pass">key1</td> <td class="pass">value1</td> </tr><tr><td class="pass">key2</td> <td class="pass">value2</td> </tr></table></td></tr>
+</table></div></div></td><td>|'sample domain'<br>
+'make key values'<br>
+key value<br>
+key1 value1<br>
+key2 value2</td><td><span class="fit_member">then output is</span></td><td><table class="fit_table"><tr><td><span class="fit_SUT">sample domain</span></td> </tr><tr><td><span class="fit_member">make key values</span></td> </tr><tr><td><span class="fit_member">key</span></td> <td><span class="fit_member">value</span></td> </tr><tr><td class="pass">key1</td> <td class="pass">value1</td> </tr><tr><td class="pass">key2</td> <td class="pass">value2</td> </tr></table></td></tr>
+</table>
+<br>
+A data table is wrapped in an <a href="../Fit/ArrayFixture.html">Array Fixture</a>.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td class="pass"><span class="fit_member">when input is</span><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension"><table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">story test fixture</span></td></tr>
+<tr><td><span class="fit_keyword">check</span></td><td><span class="fit_member">plain test</span></td><td>|'sample domain'<br>
+'make data table'<br>
+column1 column2<br>
+value1 value2</td><td class="pass"><table class="fit_table"><tr><td><span class="fit_SUT">sample domain</span></td> </tr><tr><td><span class="fit_member">make data table</span></td> </tr><tr><td><span class="fit_member">column1</span></td> <td><span class="fit_member">column2</span></td> </tr><tr><td class="pass">value1</td> <td class="pass">value2</td> </tr></table></td></tr>
+</table></div></div></td><td>|'sample domain'<br>
+'make data table'<br>
+column1 column2<br>
+value1 value2</td><td><span class="fit_member">then output is</span></td><td><table class="fit_table"><tr><td><span class="fit_SUT">sample domain</span></td> </tr><tr><td><span class="fit_member">make data table</span></td> </tr><tr><td><span class="fit_member">column1</span></td> <td><span class="fit_member">column2</span></td> </tr><tr><td class="pass">value1</td> <td class="pass">value2</td> </tr></table></td></tr>
+</table>
+<br>
+An XML document is wrapped in an <a href="../Fit/XmlFixture.html">Xml Fixture</a>.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td class="pass"><span class="fit_member">when input is</span><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension"><table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">story test fixture</span></td></tr>
+<tr><td><span class="fit_keyword">check</span></td><td><span class="fit_member">plain test</span></td><td>|'sample domain'<br>
+'make xml'<br>
+root<br>
+'' child text</td><td class="pass"><table class="fit_table"><tr><td><span class="fit_SUT">sample domain</span></td> </tr><tr><td><span class="fit_member">make xml</span></td> </tr><tr><td class="pass">root</td> </tr><tr><td></td> <td class="pass">child</td> <td class="pass">text</td> </tr></table></td></tr>
+</table></div></div></td><td>|'sample domain'<br>
+'make xml'<br>
+root<br>
+'' child text</td><td><span class="fit_member">then output is</span></td><td><table class="fit_table"><tr><td><span class="fit_SUT">sample domain</span></td> </tr><tr><td><span class="fit_member">make xml</span></td> </tr><tr><td class="pass">root</td> </tr><tr><td></td> <td class="pass">child</td> <td class="pass">text</td> </tr></table></td></tr>
+</table>
+<br>
+If the return value is not a fixture, enumerable or a primitive type, it is wrapped in a <a href="../Fit/DoFixture.html">Do Fixture</a>.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td class="pass"><span class="fit_member">when input is</span><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension"><table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">story test fixture</span></td></tr>
+<tr><td><span class="fit_keyword">check</span></td><td><span class="fit_member">plain test</span></td><td>'sample do'<br>
+set name Mike<br>
+<br>
+'make person with first' Bob 'and last' Martin<br>
+check 'first name' Bob<br>
+check 'last name' Martin<br>
+<br>
+check name Mike</td><td class="pass"><div><table><tr><td><span class="fit_interpreter">sample do</span></td> </tr></table><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">name</span></td> <td>Mike</td> </tr></table></div><br /><div><table><tr><td><span class="fit_member">make person with first</span></td> <td>Bob</td> <td><span class="fit_member">and last</span></td> <td>Martin</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">first name</span></td> <td class="pass">Bob</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">last name</span></td> <td class="pass">Martin</td> </tr></table></div><br /><div><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">name</span></td> <td class="pass">Mike</td> </tr></table></div></td></tr>
+</table></div></div></td><td>'sample do'<br>
+set name Mike<br>
+<br>
+'make person with first' Bob 'and last' Martin<br>
+check 'first name' Bob<br>
+check 'last name' Martin<br>
+<br>
+check name Mike</td><td><span class="fit_member">then output is</span></td><td><div><table><tr><td><span class="fit_interpreter">sample do</span></td> </tr></table><table><tr><td><span class="fit_keyword">set</span></td> <td><span class="fit_member">name</span></td> <td>Mike</td> </tr></table></div><br /><div><table><tr><td><span class="fit_member">make person with first</span></td> <td>Bob</td> <td><span class="fit_member">and last</span></td> <td>Martin</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">first name</span></td> <td class="pass">Bob</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">last name</span></td> <td class="pass">Martin</td> </tr></table></div><br /><div><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">name</span></td> <td class="pass">Mike</td> </tr></table></div></td></tr>
+</table>
+<br>
+This wrapping can occur from within the wrapping fixture.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td class="pass"><span class="fit_member">when input is</span><span><a href="javascript:void(0)" onclick="this.parentNode.nextSibling.style.display=this.parentNode.nextSibling.style.display=='none'?'':'none'">&#8659;</a></span><div style="display:none"><div class="fit_extension"><table border="1" cellpadding="2" cellspacing="0">
+<tr><td><span class="fit_interpreter">story test fixture</span></td></tr>
+<tr><td><span class="fit_keyword">check</span></td><td><span class="fit_member">plain test</span></td><td>'sample do'<br>
+'make person with first' Bob 'and last' Martin<br>
+'full name'<br>
+check first Bob<br>
+check last Martin</td><td class="pass"><div><table><tr><td><span class="fit_interpreter">sample do</span></td> </tr></table><table><tr><td><span class="fit_member">make person with first</span></td> <td>Bob</td> <td><span class="fit_member">and last</span></td> <td>Martin</td> </tr></table><table><tr><td><span class="fit_member">full name</span></td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">first</span></td> <td class="pass">Bob</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">last</span></td> <td class="pass">Martin</td> </tr></table></div></td></tr>
+</table></div></div></td><td>'sample do'<br>
+'make person with first' Bob 'and last' Martin<br>
+'full name'<br>
+check first Bob<br>
+check last Martin</td><td><span class="fit_member">then output is</span></td><td><div><table><tr><td><span class="fit_interpreter">sample do</span></td> </tr></table><table><tr><td><span class="fit_member">make person with first</span></td> <td>Bob</td> <td><span class="fit_member">and last</span></td> <td>Martin</td> </tr></table><table><tr><td><span class="fit_member">full name</span></td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">first</span></td> <td class="pass">Bob</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">last</span></td> <td class="pass">Martin</td> </tr></table></div></td></tr>
+</table>
+<br>
+</div>
+<div style="width:100%;text-align:right">
+<span class="footer">&copy; Copyright <a href="http://www.syterra.com">Syterra Software Inc.</a> All rights reserved.</span>
+</div>
+
+</body>
+</html>
