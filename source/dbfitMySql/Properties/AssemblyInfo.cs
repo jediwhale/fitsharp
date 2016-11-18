@@ -4,8 +4,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("DbFit MySql for fitSharp")]
 [assembly: AssemblyDescription("DbFit. This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.")]
 [assembly: AssemblyProduct("fitSharp")]
-[assembly: AssemblyCopyright("Copyright © 2015 Syterra Software Inc. All rights reserved.")]
+[assembly: AssemblyCopyright("Copyright © 2016 Syterra Software Inc. All rights reserved.")]
 
 [assembly: ComVisible(false)]
 
-[assembly: AssemblyVersion("2.4.*")]
+[assembly: AssemblyVersion("2.5.*")]
