@@ -7,10 +7,13 @@ using System;
 using System.IO;
 using System.Text;
 using fitSharp.IO;
+using fitSharp.Machine.Engine;
 
 namespace fitSharp.Slim.Service {
     public class ConsoleSession: Session {
-        public ConsoleSession() {
+
+        public ConsoleSession(Memory memory) {
+            this.memory = memory;
             saveOut = Console.Out;
             saveError = Console.Error;
             CaptureConsole();
@@ -43,23 +46,29 @@ namespace fitSharp.Slim.Service {
         }
 
         void WriteEncoded(string prefix, StringWriter content) {
-            var encodedContent = prefix + content.ToString().Replace(Environment.NewLine, Environment.NewLine + prefix);
+            var contentString = content.ToString();
+            if (string.IsNullOrEmpty(contentString)) return;
+            var encodedContent = prefix + contentString.Replace(Environment.NewLine, Environment.NewLine + prefix);
             if (encodedContent.EndsWith(prefix)) {
                 encodedContent = encodedContent.Substring(0, encodedContent.Length - prefix.Length);
             }
+            memory.GetItem<Trace>().Write("ConsoleErr", encodedContent);
             saveError.Write(encodedContent);
         }
 
         void WriteToConsole(string message) {
+            memory.GetItem<Trace>().Write("ConsoleOut", message);
             saveOut.Write(message);
         }
 
-        static string ReadFromConsole(int length) {
+        string ReadFromConsole(int length) {
             var result = new StringBuilder(length);
             for (var i = 0; i < length; i++) {
                 result.Append((char) Console.Read());
             }
-            return result.ToString();
+            var message = result.ToString();
+            memory.GetItem<Trace>().Write("ConsoleIn", message);
+            return message;
         }
 
         void CaptureConsole() {
@@ -69,6 +78,7 @@ namespace fitSharp.Slim.Service {
             Console.SetError(captureError);
         }
 
+        readonly Memory memory;
         readonly TextWriter saveOut;
         readonly TextWriter saveError;
         StringWriter captureOut;

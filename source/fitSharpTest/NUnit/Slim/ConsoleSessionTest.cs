@@ -5,6 +5,7 @@
 
 using System;
 using System.IO;
+using fitSharp.Machine.Engine;
 using fitSharp.Slim.Service;
 using NUnit.Framework;
 
@@ -21,7 +22,7 @@ namespace fitSharp.Test.NUnit.Slim {
             Console.SetOut(testOut);
             testError = new StringWriter();
             Console.SetError(testError);
-            session = new ConsoleSession();
+            session = new ConsoleSession(new TypeDictionary());
         }
 
         [TearDown]

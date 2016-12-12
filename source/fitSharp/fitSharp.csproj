@@ -106,6 +106,7 @@
     <Compile Include="Machine\Engine\MemberQuery.cs" />
     <Compile Include="Machine\Engine\MemberSpecification.cs" />
     <Compile Include="Machine\Engine\RuntimeMemberFactory.cs" />
+    <Compile Include="Machine\Engine\Trace.cs" />
     <Compile Include="Machine\Exception\IgnoredException.cs" />
     <Compile Include="Fit\Fixtures\Define.cs" />
     <Compile Include="Fit\Operators\CheckDefault.cs" />

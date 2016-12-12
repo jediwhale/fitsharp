@@ -268,5 +268,20 @@ namespace fitnesse.slim.test {
         public Dictionary<string, string> SomeDictionary() {
             return new Dictionary<string, string>{{"name", "bob"}, {"address", "here"}};
         }
+
+        public string StringOf(int count) {
+            //var thread = new Thread(WriteStuff);
+            //thread.Start();
+            var result =  new string('*', count);
+            Console.WriteLine(result);
+            return result;
+        }
+
+        static void WriteStuff() {
+            for (var i = 0; i < 1000; i++) {
+                Thread.Sleep(1);
+                Console.WriteLine("hey");
+            }
+        }
     }
 }

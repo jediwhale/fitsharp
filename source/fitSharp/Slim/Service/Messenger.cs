@@ -6,15 +6,16 @@
 using System.Net;
 using System.Net.Sockets;
 using fitSharp.IO;
+using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Slim.Service {
     public class Messenger {
         public bool IsEnd { get; private set; }
 
-        public static Messenger Make(int port) {
+        public static Messenger Make(int port, Memory memory) {
             if (port == 1) {
-                return new Messenger(new ConsoleSession());
+                return new Messenger(new ConsoleSession(memory));
             }
             var listener = new TcpListener(IPAddress.Any, port);
             listener.Start();
