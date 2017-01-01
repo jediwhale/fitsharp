@@ -60,6 +60,7 @@
     <Compile Include="NUnit\Fit\DeepCopyTest.cs" />
     <Compile Include="NUnit\Fit\FindMemberPatternTest.cs" />
     <Compile Include="NUnit\Fit\FlowRowTest.cs" />
+    <Compile Include="NUnit\Fit\HtmlDecoratorTest.cs" />
     <Compile Include="NUnit\Fit\IncludeTest.cs" />
     <Compile Include="NUnit\Fit\InvokeFlowKeywordTest.cs" />
     <Compile Include="NUnit\Fit\InvokeLiteralTest.cs" />
@@ -102,6 +103,7 @@
     <Compile Include="NUnit\Machine\CultureTest.cs" />
     <Compile Include="NUnit\Machine\LoggingTest.cs" />
     <Compile Include="NUnit\Parser\HtmlTablesTest.cs" />
+    <Compile Include="NUnit\Parser\ScannerTest.cs" />
     <Compile Include="NUnit\Parser\TextTableScannerTest.cs" />
     <Compile Include="NUnit\Parser\TextTablesTest.cs" />
     <Compile Include="NUnit\Slim\ConsoleSessionTest.cs" />

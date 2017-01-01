@@ -3,6 +3,8 @@
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
+using System;
+
 namespace fitSharp.Parser {
     public delegate bool TokenBodyFilter(Substring theTokenBody);
 
@@ -46,7 +48,7 @@ namespace fitSharp.Parser {
 
         static int Find(string theInput, string theSearch, int theStart, int theEnd) {
             if (theStart >= theEnd) return theEnd;
-            int result = theInput.IndexOf(theSearch, theStart, theEnd - theStart);
+            int result = theInput.IndexOf(theSearch, theStart, theEnd - theStart, StringComparison.OrdinalIgnoreCase);
             return result < 0 ? theEnd : result;
         }
 

@@ -5,7 +5,7 @@
 .fit_stacktrace {font-size: 0.7em;}
 .fit_label {font-style: italic; color: #C08080;}
 .fit_grey {color: #808080;}
-.fit_extension {border: solid 1px grey;}
+.fit_extension {border: solid 1px grey; background-color: white;}
 .fit_table {border: solid 1px grey; border-collapse: collapse; margin: 2px 0px;}
 table.fit_table tr td {border: solid 1px grey; padding: 2px 2px 2px 2px;}
 .fit_interpreter {font-style: italic; color: #808020;}
