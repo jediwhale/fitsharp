@@ -1,4 +1,4 @@
-﻿// Copyright © 2016 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2017 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -15,11 +15,11 @@ using fitSharp.Samples;
 namespace fitSharp.Test.NUnit.Fit {
     [TestFixture] public class StoryTestFileTest {
         [Test] public void DecoratesResultWithNoStyleSheetLink() {
-            CheckResult("content", "<link href=\"fit.css\" type=\"text/css\" rel=\"stylesheet\">content");
+            CheckResult("content", "<link href=\"fit.css\" type=\"text/css\" rel=\"stylesheet\">\r\ncontent");
         }
 
         [Test] public void DecoratesResultWithOtherStyleSheetLink() {
-            CheckResult("<link other stuff>content", "<link href=\"fit.css\" type=\"text/css\" rel=\"stylesheet\"><link other stuff>content");
+            CheckResult("<link other stuff>content", "<link href=\"fit.css\" type=\"text/css\" rel=\"stylesheet\">\r\n<link other stuff>content");
         }
 
         [Test] public void DoesNotDecorateWithFitLink() {
@@ -43,6 +43,6 @@ namespace fitSharp.Test.NUnit.Fit {
             Assert.AreEqual(comment + expected, folder.GetPageContent(new FilePath("output\\myfile.html")));
         }
 
-        static readonly string comment = "<!--2016-01-02 13:14:15,0,0,0,0-->" + Environment.NewLine;
+        static readonly string comment = "<!--2016-01-02 13:14:15,0,0,0,0--><!-- saved from url=(0014)about:internet -->" + Environment.NewLine;
     }
 }

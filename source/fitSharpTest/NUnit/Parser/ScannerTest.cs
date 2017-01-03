@@ -1,4 +1,9 @@
-﻿using fitSharp.Parser;
+﻿// Copyright © 2017 Syterra Software Inc. All rights reserved.
+// The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+// which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
+// to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
+
+using fitSharp.Parser;
 using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Parser {
@@ -10,6 +15,7 @@ namespace fitSharp.Test.NUnit.Parser {
             Scan("basic [text] to be scanned");
             AssertLeader("basic ");
             AssertBody("text");
+            Assert.AreEqual("[text]", scanner.Element.ToString());
         }
 
         [Test]
@@ -63,7 +69,7 @@ namespace fitSharp.Test.NUnit.Parser {
         [Test]
         public void BodyCanBeFiltered() {
             scanner = new Scanner("[not me] but [me]");
-            scanner.FindTokenPair("[", "]", s => s.ToString() != "not me");
+            scanner.FindTokenPair("[", "]", s => !s.Equals("not me"));
             AssertLeader("[not me] but ");
             AssertBody("me");
         }
