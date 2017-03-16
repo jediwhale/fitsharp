@@ -270,18 +270,17 @@ namespace fitnesse.slim.test {
         }
 
         public string StringOf(int count) {
-            //var thread = new Thread(WriteStuff);
-            //thread.Start();
             var result =  new string('*', count);
-            Console.WriteLine(result);
+            //Console.WriteLine(result);
+            //Thread.Sleep(6000);
             return result;
         }
 
-        static void WriteStuff() {
-            for (var i = 0; i < 1000; i++) {
-                Thread.Sleep(1);
-                Console.WriteLine("hey");
-            }
-        }
+        public string versionInfo(string input) { return "SomeScript 1.2.3.4"; }
+        public bool setBrowser(string input) { return true; }
+        public void setTimeoutSeconds(int input) {}
+        public bool open(string input) { return true; }
+        public bool waitForPageToLoad() { Thread.Sleep(5000); return true; }
+        public string title { get { return "something"; }}
     }
 }

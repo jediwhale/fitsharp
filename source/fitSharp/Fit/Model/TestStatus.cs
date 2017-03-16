@@ -70,7 +70,7 @@ namespace fitSharp.Fit.Model {
             if (abandonException != null && IsAbandoned) throw abandonException;
 
             if (cell.GetAttribute(CellAttribute.Status) != Exception) {
-                cell.SetAttribute(CellAttribute.Exception, exception.ToString());
+                cell.SetAttribute(CellAttribute.Exception, (abandonException ?? exception).ToString());
                 cell.SetAttribute(CellAttribute.Status, Exception);
                 AddCount(Exception);
             }

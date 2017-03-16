@@ -30,7 +30,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dbfitMySql", "source\dbfitM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "fitIf0", "source\fitIf0\fitIf0.csproj", "{C60E1405-C544-4EFC-B742-C7A714B94773}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "fitIf", "source\fitIf\fitIf.csproj", "{E28CD081-F502-4082-99FA-12A8D9CF31C3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "fitIf1", "source\fitIf1\fitIf1.csproj", "{E28CD081-F502-4082-99FA-12A8D9CF31C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

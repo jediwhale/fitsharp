@@ -55,6 +55,7 @@
     <Compile Include="Double\Slim\Builder.cs" />
     <Compile Include="NUnit\FitIf\TestFilesTest.cs" />
     <Compile Include="NUnit\FitIf\TestFolder.cs" />
+    <Compile Include="NUnit\FitIf\TestResultTest.cs" />
     <Compile Include="NUnit\Fit\Builder.cs" />
     <Compile Include="NUnit\Fit\CompareDefaultTest.cs" />
     <Compile Include="NUnit\Fit\DeepCopyTest.cs" />
@@ -132,7 +133,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\fitIf\fitIf.csproj">
+    <ProjectReference Include="..\fitIf1\fitIf1.csproj">
       <Project>{e28cd081-f502-4082-99fa-12a8d9cf31c3}</Project>
       <Name>fitIf</Name>
     </ProjectReference>

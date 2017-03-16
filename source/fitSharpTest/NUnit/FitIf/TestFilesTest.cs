@@ -23,7 +23,7 @@ namespace fitSharp.Test.NUnit.FitIf {
                 new TestPage {Name = "leaf2.html", Contents = "stuff"}
             };
             resultFolder.PageList.Pages = new List<Page> {
-                new TestPage {Name = "leaf1.html", Contents = "<!--2016-01-02 13:14:15,1,0,0,0-->" + Environment.NewLine + "more stuff"},
+                new TestPage {Name = "leaf1.html", Contents = "<!doctype html>\r\n<!--2016-01-02 13:14:15,1,0,0,0-->" + Environment.NewLine + "more stuff"},
                 new TestPage {Name = "leaf2.html", Contents = "<!--2016-01-02 13:14:15,0,1,0,0-->" + Environment.NewLine + "more stuff"}
             };
             var tree = testFiles.Tree;
