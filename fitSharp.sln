@@ -32,6 +32,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "fitIf0", "source\fitIf0\fit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "fitIf1", "source\fitIf1\fitIf1.csproj", "{E28CD081-F502-4082-99FA-12A8D9CF31C3}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "fitIf", "source\fitIf\fitIf.fsproj", "{61558FF7-BD51-43FD-9647-76A76F5629D2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -101,6 +103,10 @@ Global
 		{E28CD081-F502-4082-99FA-12A8D9CF31C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E28CD081-F502-4082-99FA-12A8D9CF31C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E28CD081-F502-4082-99FA-12A8D9CF31C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61558FF7-BD51-43FD-9647-76A76F5629D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61558FF7-BD51-43FD-9647-76A76F5629D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61558FF7-BD51-43FD-9647-76A76F5629D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61558FF7-BD51-43FD-9647-76A76F5629D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
