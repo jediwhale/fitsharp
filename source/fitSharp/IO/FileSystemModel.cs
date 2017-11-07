@@ -1,4 +1,4 @@
-// Copyright © 2011 Syterra Software Inc. All rights reserved.
+// Copyright © 2017 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -8,9 +8,8 @@ using System.IO;
 using System.Text;
 
 namespace fitSharp.IO {
+    [Serializable]
     public class FileSystemModel: FolderModel {
-        
-        private readonly Encoding encoding;
 
         public FileSystemModel() {
             encoding = Encoding.UTF8;
@@ -33,10 +32,10 @@ namespace fitSharp.IO {
             return new StreamWriter(thePath);
         }
 
-        public string GetPageContent(Path thePath)
+        public string FileContent(string thePath)
         {
             try {
-                using (var file = new FileStream(thePath.ToString(), FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
+                using (var file = new FileStream(thePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
                     using (var reader = new StreamReader(file, encoding)) {
                         return reader.ReadToEnd();
                     }
@@ -76,8 +75,6 @@ namespace fitSharp.IO {
             File.Copy(theInputPath, theOutputPath);
         }
         
-        public void WriteToConsole(string theMessage) {
-            Console.Write(theMessage);
-        }
+        readonly Encoding encoding;
     }
 }

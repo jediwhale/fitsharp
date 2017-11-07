@@ -79,6 +79,7 @@
     <Compile Include="NUnit\Fit\ValuePhraseTest.cs" />
     <Compile Include="NUnit\Machine\ArgumentParserTest.cs" />
     <Compile Include="NUnit\Machine\OperatorsTest.cs" />
+    <Compile Include="NUnit\Machine\ShellArgumentsTest.cs" />
     <Compile Include="NUnit\Machine\StringDifferenceTest.cs" />
     <Compile Include="NUnit\Machine\SuiteConfigurationTest.cs" />
     <Compile Include="NUnit\Fit\BindingFactoryTest.cs" />

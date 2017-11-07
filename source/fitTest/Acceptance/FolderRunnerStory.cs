@@ -1,4 +1,4 @@
-// Copyright © 2012 Syterra Software Inc.
+// Copyright © 2017 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -7,30 +7,26 @@ using System;
 using fit.Runner;
 using fitSharp.IO;
 using fitSharp.Machine.Application;
-using fitSharp.Machine.Model;
 using fitSharp.Samples;
 
 namespace fit.Test.Acceptance {
-    public class FolderRunnerStory: DomainAdapter {
-        private readonly Shell shell;
-        private readonly CollectingReporter reporter;
-
-        public object SystemUnderTest { get { return shell; } }
+    public class FolderRunnerStory {
 
         public FolderRunnerStory() {
             reporter = new CollectingReporter();
-            shell = new Shell(reporter, new FileSystemModel());
         }
 
         public void Run(string[] theArguments) {
             TestClock.Instance.Now = new DateTime(2006, 12, 6, 13, 14, 15);
             TestClock.Instance.UtcNow = new DateTime(2006, 12, 6, 13, 14, 15);
             Clock.Instance = TestClock.Instance;
-            shell.Run(theArguments);
+            var shell = new Shell(reporter, new FileSystemModel(), theArguments);
+            shell.Run();
+            Results = ((FolderRunner) shell.Runner).Results;
             Clock.Instance = new Clock();
         }
 
-        public string Results { get { return ((FolderRunner) shell.Runner).Results; }}
+        public string Results { get; private set; }
 
         public string[] ConsoleOutput {
             get {
@@ -39,5 +35,7 @@ namespace fit.Test.Acceptance {
         }
 
         public string Output { get { return reporter.Output; } }
+
+        readonly CollectingReporter reporter;
     }
 }
