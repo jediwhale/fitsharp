@@ -20,7 +20,7 @@ namespace fit.Test.Acceptance {
             TestClock.Instance.Now = new DateTime(2006, 12, 6, 13, 14, 15);
             TestClock.Instance.UtcNow = new DateTime(2006, 12, 6, 13, 14, 15);
             Clock.Instance = TestClock.Instance;
-            var shell = new Shell(reporter, new FileSystemModel(), theArguments);
+            var shell = new Shell(reporter, new ShellArguments(new FileSystemModel(), theArguments));
             shell.Run();
             Results = ((FolderRunner) shell.Runner).Results;
             Clock.Instance = new Clock();

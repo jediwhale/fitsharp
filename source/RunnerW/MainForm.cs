@@ -45,7 +45,7 @@ namespace fitSharp.RunnerW {
                 Close();
             }
             else {
-                var result = new Shell(textReporter, new FileSystemModel(), arguments).Run();
+                var result = new Shell(textReporter, new ShellArguments(new FileSystemModel(), arguments)).Run();
                 textReporter.Write(string.Format("{0}Result: {1}", Environment.NewLine, result));
                 hasRun = true;
             }

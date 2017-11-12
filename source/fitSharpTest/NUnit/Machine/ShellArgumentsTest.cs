@@ -4,7 +4,6 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
-using System.Collections.Generic;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
 using fitSharp.Samples;
@@ -40,30 +39,30 @@ namespace fitSharp.Test.NUnit.Machine {
             Parse(AssertNoAction, AssertSuiteConfigReported, "-c", "missing.xml");
         }
 
-        void Parse(Func<Memory, IList<string>, int> process, Action<string> report, params string[] commandLineArguments) {
-            var arguments = new ShellArguments(folderModel, report);
-            arguments.Parse(commandLineArguments, process);
+        void Parse(Func<Memory, int> process, Action<string> report, params string[] commandLineArguments) {
+            var arguments = new ShellArguments(folderModel, commandLineArguments);
+            arguments.Parse(process, report);
         }
 
-        static int AssertRunnerSpecified(Memory memory, IList<string> extraArguments) {
+        static int AssertRunnerSpecified(Memory memory) {
             Assert.AreEqual("myRunner", memory.GetItem<Settings>().Runner);
             return 0;
         }
 
-        static int AssertAppConfigSpecified(Memory memory, IList<string> extraArguments) {
+        static int AssertAppConfigSpecified(Memory memory) {
             memory.GetItem<AppDomainSetup>().ApplicationBase = ".";
             Assert.IsTrue(memory.GetItem<AppDomainSetup>().ConfigurationFile.EndsWith("myConfig.xml"));
             return 0;
         }
 
-        static int AssertNoAction(Memory memory, IList<string> extraArguments) {
+        static int AssertNoAction(Memory memory) {
             Assert.Fail();
             return 0;
         }
 
         static void AssertNothingReported(string message) { Assert.Fail(message); }
         static void AssertRunnerReported(string message) { AssertReportContains(message, "runner"); }
-        static void AssertSuiteConfigReported(string message) { AssertReportContains(message, "suite configuration file"); }
+        static void AssertSuiteConfigReported(string message) { AssertReportContains(message, "Suite configuration file"); }
 
         static void AssertReportContains(string message, string expected) {
             Assert.IsTrue(message.Contains(expected) || message.Contains("Usage:"), message);

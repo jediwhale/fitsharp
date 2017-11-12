@@ -1,4 +1,4 @@
-﻿// Copyright © 2016 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2017 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -113,10 +113,10 @@ namespace fitSharp.Test.NUnit.Fit {
 
             RunSuite();
 
-            Assert.IsTrue(folders.FileExists(@"out\test.html"), "test.html should exist in output directory");
+            Assert.IsTrue(folders.Exists(@"out\test.html"), "test.html should exist in output directory");
 
-            Assert.IsFalse(folders.FileExists(@"out\setup.html"), "setup.html should not exist in output directory");
-            Assert.IsFalse(folders.FileExists(@"out\teardown.html"), "teardown.html should not exist in output directory");
+            Assert.IsFalse(folders.Exists(@"out\setup.html"), "setup.html should not exist in output directory");
+            Assert.IsFalse(folders.Exists(@"out\teardown.html"), "teardown.html should not exist in output directory");
         }
 
         [Test]
@@ -125,14 +125,14 @@ namespace fitSharp.Test.NUnit.Fit {
 
             RunSuite();
 
-            Assert.IsTrue(folders.FileExists(@"out\fit.css"), "fit.css should exist in output directory");
+            Assert.IsTrue(folders.Exists(@"out\fit.css"), "fit.css should exist in output directory");
         }
 
         [Test]
         public void TestInSubFolderIsRun() {
             AddTestFile(@"in\sub\test.html");
             RunSuite();
-            Assert.IsTrue(folders.FileExists(@"out\sub\test.html"), "test.html should exist in output directory");
+            Assert.IsTrue(folders.Exists(@"out\sub\test.html"), "test.html should exist in output directory");
         }
 
         [Test]
@@ -140,8 +140,8 @@ namespace fitSharp.Test.NUnit.Fit {
             AddTestFile(@"in\test1.html");
             AddTestFile(@"in\test2.html");
             RunSuite("test2.html");
-            Assert.IsFalse(folders.FileExists(@"out\test1.html"), "test1.html should not exist in output directory");
-            Assert.IsTrue(folders.FileExists(@"out\test2.html"), "test2.html should exist in output directory");
+            Assert.IsFalse(folders.Exists(@"out\test1.html"), "test1.html should not exist in output directory");
+            Assert.IsTrue(folders.Exists(@"out\test2.html"), "test2.html should exist in output directory");
         }
 
         [Test]
@@ -149,8 +149,8 @@ namespace fitSharp.Test.NUnit.Fit {
             AddTestFile(@"in\test1.html");
             AddTestFile(@"in\sub\test2.html");
             RunSuite(@"sub\test2.html");
-            Assert.IsFalse(folders.FileExists(@"out\test1.html"), "test1.html should not exist in output directory");
-            Assert.IsTrue(folders.FileExists(@"out\sub\test2.html"), "test2.html should exist in output directory");
+            Assert.IsFalse(folders.Exists(@"out\test1.html"), "test1.html should not exist in output directory");
+            Assert.IsTrue(folders.Exists(@"out\sub\test2.html"), "test2.html should exist in output directory");
         }
 
         private void RunSuite(string selectedFile = "") {

@@ -9,7 +9,7 @@ using fitSharp.Machine.Application;
 namespace fitSharp.Runner {
     internal class Program {
         static int Main(string[] arguments) {
-            return new Shell(new ConsoleReporter(), new FileSystemModel(), arguments).Run();
+            return new Shell(new ConsoleReporter(), new ShellArguments(new FileSystemModel(), arguments)).Run();
         }
     }
 }

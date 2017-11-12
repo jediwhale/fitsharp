@@ -4,7 +4,8 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 namespace fitSharp.IO {
-    public interface FileSource {
-        string FileContent(string path);
+    public interface TextSource {
+        bool Exists(string key);
+        string Content(string key);
     }
 }

@@ -5,51 +5,63 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using fitSharp.IO;
 using fitSharp.Machine.Engine;
 
 namespace fitSharp.Machine.Application {
+    [Serializable]
     public class ShellArguments {
 
-        public ShellArguments(FileSource fileSource, Action<string> report) {
-            this.fileSource = fileSource;
-            this.report = report;
+        public ShellArguments(TextSource textSource, IList<string> commandLineArguments) {
+            this.textSource = textSource;
+            this.commandLineArguments = commandLineArguments;
         }
 
-        public int Parse(IList<string> commandLineArguments, Func<Memory, IList<string>, int> process) {
-            memory = new TypeDictionary();
-            extraArguments = new List<string>();
+        public IEnumerable<string> Extras { get { return ArgumentParser.Extras(commandLineArguments, switches); } }
+
+        public string Usage {
+            get {
+            return string.Format("Usage:\n\t{0} [ -r runnerClass ][ -a appConfigFile ][ -c suiteConfigFile ] ...",
+                Process.GetCurrentProcess().ProcessName);
+            }
+        }
+
+        public int Parse(Func<Memory, int> process, Action<string> report) {
+            var memory = new TypeDictionary();
             isValidToRun = true;
 
             var argumentParser = new ArgumentParser();
             argumentParser.AddArgumentHandler("a", value => memory.GetItem<AppDomainSetup>().ConfigurationFile = value);
-            argumentParser.AddArgumentHandler("c", LoadSuiteConfiguration);
+            argumentParser.AddArgumentHandler("c", value => {
+                if (!textSource.Exists(value)) {
+                    report(string.Format("Suite configuration file '{0}' does not exist.", value));
+                    isValidToRun = false;
+                }
+                else {
+                    new SuiteConfiguration(memory).LoadXml(textSource.Content(value));
+                }
+            });
             argumentParser.AddArgumentHandler("r", value => memory.GetItem<Settings>().Runner = value);
             argumentParser.AddArgumentHandler("f", InitializeAndAddFolders);
-            argumentParser.SetUnusedHandler(value => extraArguments.Add(value));
             argumentParser.Parse(commandLineArguments);
+
+            var runner = memory.GetItem<Settings>().Runner;
+            if (!string.IsNullOrEmpty(runner)) {
+                var tokens = runner.Split(',');
+                if (tokens.Length > 1) {
+                    memory.GetItem<ApplicationUnderTest>().AddAssembly(tokens[1]);
+                    memory.GetItem<Settings>().Runner = tokens[0];
+                }
+            }
 
             if (isValidToRun && string.IsNullOrEmpty(memory.GetItem<Settings>().Runner)) {
                 report("Missing runner class");
                 isValidToRun = false;
             }
 
-            if (isValidToRun) return process(memory, extraArguments);
-
-            report("\nUsage:\n\tRunner [ -r runnerClass ][ -a appConfigFile ][ -c suiteConfigFile ] ...");
-            return 1;
+            return isValidToRun ? process(memory) : 1;
         }
-
-        void LoadSuiteConfiguration(string value) {
-            var content = fileSource.FileContent(value);
-            if (content == null) {
-                report(string.Format("Unable to load suite configuration file '{0}'", value));
-                isValidToRun = false;
-                return;
-            }
-            new SuiteConfiguration(memory).LoadXml(content);
-        }
-
 
         // Initializes the Assembly Loader and adds the given folder arguments.
         static void InitializeAndAddFolders(string args) {
@@ -59,11 +71,11 @@ namespace fitSharp.Machine.Application {
             }
         }
 
-        readonly FileSource fileSource;
-        readonly Action<string> report;
+        readonly TextSource textSource;
+        readonly IList<string> commandLineArguments;
 
         bool isValidToRun;
-        Memory memory;
-        List<string> extraArguments;
+
+        static readonly string[] switches = {"a", "c", "f", "r"};
     }
 }

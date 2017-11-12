@@ -4,17 +4,17 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 namespace fitSharp.IO {
-    public interface PageSource: FileSource {
+    public interface PageSource: TextSource {
         Path MakePath(string pageName);
     }
 
     public static class PageSourceExtension {
         public static string GetPageContent(this PageSource pageSource, Path pageName) {
-            return pageSource.FileContent(pageName.ToString());
+            return pageSource.Content(pageName.ToString());
         }
 
         public static string GetPageContent(this PageSource pageSource, string pageName) {
-            return pageSource.FileContent(pageName);
+            return pageSource.Content(pageName);
         }
     }
 }

@@ -68,7 +68,7 @@ namespace fitSharp.Test.NUnit.Machine {
         }
 
         static int RunShell(IList<string> arguments, FolderModel model) {
-            return new Shell(new ConsoleReporter(), model, arguments).Run();
+            return new Shell(new NullReporter(), new ShellArguments(model, arguments)).Run();
         }
 
         class PushCurrentDirectory : IDisposable {

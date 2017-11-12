@@ -94,7 +94,7 @@
     <Compile Include="Fit\Runner\HtmlDecorator.cs" />
     <Compile Include="Fit\Runner\SuiteRunnerShell.cs" />
     <Compile Include="Fit\Runner\SuiteRunner.cs" />
-    <Compile Include="IO\FileSource.cs" />
+    <Compile Include="IO\TextSource.cs" />
     <Compile Include="IO\HttpServer.cs" />
     <Compile Include="IO\PageSource.cs" />
     <Compile Include="IO\Path.cs" />

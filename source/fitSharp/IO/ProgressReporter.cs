@@ -25,6 +25,7 @@ namespace fitSharp.IO {
         }
     }
 
+    [Serializable]
     public class NullReporter: ProgressReporter {
         public void Write(string theMessage) {}
     }

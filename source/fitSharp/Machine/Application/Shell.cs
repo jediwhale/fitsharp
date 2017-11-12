@@ -4,7 +4,7 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 using fitSharp.IO;
@@ -14,28 +14,28 @@ namespace fitSharp.Machine.Application {
 
     public class Shell: MarshalByRefObject {
 
-        public Shell(ProgressReporter progressReporter, FileSource fileSource, IList<string> commandLineArguments) {
+        public Shell(ProgressReporter progressReporter, ShellArguments arguments) {
             this.progressReporter = progressReporter;
-            this.fileSource = fileSource;
-            this.commandLineArguments = commandLineArguments;
+            this.arguments = arguments;
         }
 
         public Runnable Runner { get; private set; }
 
         public int Run() {
             try {
-                var arguments = new ShellArguments(fileSource, progressReporter.WriteLine);
-                return arguments.Parse(commandLineArguments, RunInDomain);
+                var returnCode = arguments.Parse(RunInDomain, progressReporter.WriteLine);
+                if (returnCode != 0) progressReporter.WriteLine(arguments.Usage);
+                return returnCode;
             }
             catch (System.Exception e) {
-                progressReporter.Write(string.Format("{0}\n", e));
+                progressReporter.WriteLine(e.ToString());
                 return 1;
             }
         }
 
-        int RunInDomain(Memory memory, IList<string> extraArguments) {
+        int RunInDomain(Memory memory) {
             return !memory.HasItem<AppDomainSetup>()
-                ? RunInCurrentDomain(memory, extraArguments)
+                ? RunInCurrentDomain(memory)
                 : RunInNewDomain(memory.GetItem<AppDomainSetup>());
         }
 
@@ -51,7 +51,7 @@ namespace fitSharp.Machine.Application {
                                               false,
                                               BindingFlags.CreateInstance | BindingFlags.Instance | BindingFlags.Public,
                                               null,
-                                              new object[] { progressReporter, fileSource, commandLineArguments },
+                                              new object[] { progressReporter, arguments },
                                               null, null);
                 return remoteShell.RunInCurrentDomain();
             }
@@ -62,42 +62,36 @@ namespace fitSharp.Machine.Application {
         }
 
         int RunInCurrentDomain() {
-            var arguments = new ShellArguments(fileSource, progressReporter.WriteLine);
-            return arguments.Parse(commandLineArguments, RunInCurrentDomain);
+            return arguments.Parse(RunInCurrentDomain, progressReporter.WriteLine);
         }
 
-        int RunInCurrentDomain(Memory memory, IList<string> extraArguments) {
-            var tokens = memory.GetItem<Settings>().Runner.Split(',');
-            if (tokens.Length > 1) {
-                memory.GetItem<ApplicationUnderTest>().AddAssembly(tokens[1]);
-            }
-            Runner = new BasicProcessor().Create(tokens[0]).GetValue<Runnable>();
-            ExecuteInApartment(memory, extraArguments);
+        int RunInCurrentDomain(Memory memory) {
+            Runner = new BasicProcessor().Create(memory.GetItem<Settings>().Runner).GetValue<Runnable>();
+            ExecuteInApartment(memory);
             return result;
         }
 
-        void ExecuteInApartment(Memory memory, IList<string> extraArguments) {
+        void ExecuteInApartment(Memory memory) {
             var apartmentConfiguration = memory.GetItem<Settings>().ApartmentState;
             if (apartmentConfiguration != null) {
                 var desiredState = (ApartmentState)Enum.Parse(typeof(ApartmentState), apartmentConfiguration);
                 if (Thread.CurrentThread.GetApartmentState() != desiredState) {
-                    var thread = new Thread(() => Run(memory, extraArguments));
+                    var thread = new Thread(() => Run(memory));
                     thread.SetApartmentState(desiredState);
                     thread.Start();
                     thread.Join();
                     return;
                 }
             }
-            Run(memory, extraArguments);
+            Run(memory);
         }
 
-        void Run(Memory memory, IList<string> extraArguments) {
-            result = Runner.Run(extraArguments, memory, progressReporter);
+        void Run(Memory memory) {
+            result = Runner.Run(arguments.Extras.ToList(), memory, progressReporter);
         }
 
         readonly ProgressReporter progressReporter;
-        readonly FileSource fileSource;
-        readonly IList<string> commandLineArguments;
+        readonly ShellArguments arguments;
 
         int result;
     }

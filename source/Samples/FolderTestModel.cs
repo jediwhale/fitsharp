@@ -24,15 +24,15 @@ namespace fitSharp.Samples
             return writer;
         }
 
-        public string FileContent(string thePath) {
-            return (myFiles.ContainsKey(thePath.ToString()) ? myFiles[thePath].ToString() : null);
+        public string Content(string thePath) {
+            return myFiles[thePath].ToString();
         }
 
         public Path MakePath(string pageName) {
             return new FilePath(pageName);
         }
 
-        public bool FileExists(string thePath) {
+        public bool Exists(string thePath) {
             return myFiles.ContainsKey(thePath);
         }
 
@@ -60,7 +60,7 @@ namespace fitSharp.Samples
         }
 
         public void CopyFile(string theInputPath, string theOutputPath) {
-            MakeFile(theOutputPath, FileContent(theInputPath));
+            MakeFile(theOutputPath, Content(theInputPath));
         }
 
         readonly Dictionary<string, object> myFiles = new Dictionary<string, object>();

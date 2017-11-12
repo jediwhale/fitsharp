@@ -131,7 +131,7 @@ namespace fitSharp.Fit.Runner {
 
         private void MakeStylesheet() {
             string filePath = Path.Combine(myFolder.OutputPath, StyleName);
-            if (myFolderModel.GetPageContent(filePath) == null) {
+            if (!myFolderModel.Exists(filePath)) {
                 myFolderModel.MakeFile(filePath, StyleContent);
             }
         }

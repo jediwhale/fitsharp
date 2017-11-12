@@ -32,23 +32,17 @@ namespace fitSharp.IO {
             return new StreamWriter(thePath);
         }
 
-        public string FileContent(string thePath)
+        public bool Exists(string path) {
+            return File.Exists(path);
+        }
+
+        public string Content(string thePath)
         {
-            try {
-                using (var file = new FileStream(thePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
-                    using (var reader = new StreamReader(file, encoding)) {
-                        return reader.ReadToEnd();
-                    }
+            using (var file = new FileStream(thePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
+                using (var reader = new StreamReader(file, encoding)) {
+                    return reader.ReadToEnd();
                 }
             }
-            catch (FileNotFoundException) {
-                // File does not exist, return null
-            }
-            catch (DirectoryNotFoundException) {
-                // File's parent directory does not exist, return null
-            }
-
-            return null;
         }
 
         public Path MakePath(string pageName) {
