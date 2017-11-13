@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using fitSharp.IO;
 using fitSharp.Machine.Engine;
+using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Application {
     [Serializable]
@@ -22,21 +23,20 @@ namespace fitSharp.Machine.Application {
 
         public string Usage {
             get {
-            return string.Format("Usage:\n\t{0} [ -r runnerClass ][ -a appConfigFile ][ -c suiteConfigFile ] ...",
-                Process.GetCurrentProcess().ProcessName);
+                return string.Format("Usage:\n\t{0} [ -r runnerClass ][ -a appConfigFile ][ -c suiteConfigFile ] ...",
+                    Process.GetCurrentProcess().ProcessName);
             }
         }
 
-        public int Parse(Func<Memory, int> process, Action<string> report) {
+        public Either<Memory, string> LoadMemory() {
             var memory = new TypeDictionary();
-            isValidToRun = true;
+            var errorText = string.Empty;
 
             var argumentParser = new ArgumentParser();
             argumentParser.AddArgumentHandler("a", value => memory.GetItem<AppDomainSetup>().ConfigurationFile = value);
             argumentParser.AddArgumentHandler("c", value => {
                 if (!textSource.Exists(value)) {
-                    report(string.Format("Suite configuration file '{0}' does not exist.", value));
-                    isValidToRun = false;
+                    errorText = string.Format("Suite configuration file '{0}' does not exist.", value);
                 }
                 else {
                     new SuiteConfiguration(memory).LoadXml(textSource.Content(value));
@@ -46,21 +46,24 @@ namespace fitSharp.Machine.Application {
             argumentParser.AddArgumentHandler("f", InitializeAndAddFolders);
             argumentParser.Parse(commandLineArguments);
 
+            ParseRunner(memory);
+
+            if (errorText.Length == 0 && string.IsNullOrEmpty(memory.GetItem<Settings>().Runner)) {
+                errorText = "Missing runner class";
+            }
+
+            return new Either<Memory, string>(errorText.Length == 0, memory, errorText);
+        }
+
+        static void ParseRunner(Memory memory) {
             var runner = memory.GetItem<Settings>().Runner;
-            if (!string.IsNullOrEmpty(runner)) {
-                var tokens = runner.Split(',');
-                if (tokens.Length > 1) {
-                    memory.GetItem<ApplicationUnderTest>().AddAssembly(tokens[1]);
-                    memory.GetItem<Settings>().Runner = tokens[0];
-                }
-            }
+            if (string.IsNullOrEmpty(runner)) return;
 
-            if (isValidToRun && string.IsNullOrEmpty(memory.GetItem<Settings>().Runner)) {
-                report("Missing runner class");
-                isValidToRun = false;
-            }
+            var tokens = runner.Split(',');
+            if (tokens.Length <= 1) return;
 
-            return isValidToRun ? process(memory) : 1;
+            memory.GetItem<ApplicationUnderTest>().AddAssembly(tokens[1]);
+            memory.GetItem<Settings>().Runner = tokens[0];
         }
 
         // Initializes the Assembly Loader and adds the given folder arguments.
@@ -73,8 +76,6 @@ namespace fitSharp.Machine.Application {
 
         readonly TextSource textSource;
         readonly IList<string> commandLineArguments;
-
-        bool isValidToRun;
 
         static readonly string[] switches = {"a", "c", "f", "r"};
     }

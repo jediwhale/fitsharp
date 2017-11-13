@@ -41,7 +41,10 @@ namespace fitSharp.Test.NUnit.Machine {
 
         void Parse(Func<Memory, int> process, Action<string> report, params string[] commandLineArguments) {
             var arguments = new ShellArguments(folderModel, commandLineArguments);
-            arguments.Parse(process, report);
+            arguments.LoadMemory().OneOf(process, s => {
+                report(s);
+                return 1;
+            });
         }
 
         static int AssertRunnerSpecified(Memory memory) {

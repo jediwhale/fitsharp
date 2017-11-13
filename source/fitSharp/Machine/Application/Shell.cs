@@ -23,9 +23,7 @@ namespace fitSharp.Machine.Application {
 
         public int Run() {
             try {
-                var returnCode = arguments.Parse(RunInDomain, progressReporter.WriteLine);
-                if (returnCode != 0) progressReporter.WriteLine(arguments.Usage);
-                return returnCode;
+                return arguments.LoadMemory().OneOf(RunInDomain, ReportError);
             }
             catch (System.Exception e) {
                 progressReporter.WriteLine(e.ToString());
@@ -33,12 +31,18 @@ namespace fitSharp.Machine.Application {
             }
         }
 
+        int ReportError(string errorText) {
+            progressReporter.WriteLine(errorText);
+            progressReporter.WriteLine(arguments.Usage);
+            return 1;
+        }
+
         int RunInDomain(Memory memory) {
             return !memory.HasItem<AppDomainSetup>()
                 ? RunInCurrentDomain(memory)
                 : RunInNewDomain(memory.GetItem<AppDomainSetup>());
         }
-
+        
         int RunInNewDomain(AppDomainSetup appDomainSetup) {
             if (string.IsNullOrEmpty(appDomainSetup.ApplicationBase)) {
                 appDomainSetup.ApplicationBase = AppDomain.CurrentDomain.BaseDirectory;
@@ -53,7 +57,7 @@ namespace fitSharp.Machine.Application {
                                               null,
                                               new object[] { progressReporter, arguments },
                                               null, null);
-                return remoteShell.RunInCurrentDomain();
+                return remoteShell.RunInNewDomain();
             }
             finally {
                 // avoid deadlock on Unload
@@ -61,8 +65,8 @@ namespace fitSharp.Machine.Application {
             }
         }
 
-        int RunInCurrentDomain() {
-            return arguments.Parse(RunInCurrentDomain, progressReporter.WriteLine);
+        int RunInNewDomain() {
+            return arguments.LoadMemory().OneOf(RunInCurrentDomain, ReportError);
         }
 
         int RunInCurrentDomain(Memory memory) {
