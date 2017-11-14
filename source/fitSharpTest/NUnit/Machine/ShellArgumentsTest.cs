@@ -6,6 +6,7 @@
 using System;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
+using fitSharp.Machine.Model;
 using fitSharp.Samples;
 using NUnit.Framework;
 
@@ -45,11 +46,11 @@ namespace fitSharp.Test.NUnit.Machine {
             Parse(AssertNoAction, AssertSuiteConfigReported, "-c", "missing.xml");
         }
 
-        void Parse(Func<Memory, int> process, Action<string> report, params string[] commandLineArguments) {
+        void Parse(Func<Memory, int> process, Action<Error> report, params string[] commandLineArguments) {
             var arguments = new ShellArguments(folderModel, commandLineArguments);
             arguments.LoadMemory().Select(
-                s => {
-                    report(s);
+                e => {
+                    report(e);
                     return 1;
                 },
                 process);
@@ -71,13 +72,13 @@ namespace fitSharp.Test.NUnit.Machine {
             return 0;
         }
 
-        static void AssertNothingReported(string message) { Assert.Fail(message); }
-        static void AssertRunnerReported(string message) { AssertReportContains(message, "runner"); }
-        static void AssertAppConfigReported(string message) { AssertReportContains(message, "Application configuration file"); }
-        static void AssertSuiteConfigReported(string message) { AssertReportContains(message, "Suite configuration file"); }
+        static void AssertNothingReported(Error error) { Assert.Fail(error.Message); }
+        static void AssertRunnerReported(Error error) { AssertReportContains(error, "runner"); }
+        static void AssertAppConfigReported(Error error) { AssertReportContains(error, "Application configuration file"); }
+        static void AssertSuiteConfigReported(Error error) { AssertReportContains(error, "Suite configuration file"); }
 
-        static void AssertReportContains(string message, string expected) {
-            Assert.IsTrue(message.Contains(expected) || message.Contains("Usage:"), message);
+        static void AssertReportContains(Error error, string expected) {
+            Assert.IsTrue(error.Message.Contains(expected), error.Message);
         }
 
         [SetUp]

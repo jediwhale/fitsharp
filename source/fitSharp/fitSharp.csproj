@@ -186,6 +186,7 @@
     <Compile Include="Fit\Operators\CompareFloatingPoint.cs" />
     <Compile Include="Fit\Operators\ParseMemberName.cs" />
     <Compile Include="Machine\Model\Either.cs" />
+    <Compile Include="Machine\Model\Error.cs" />
     <Compile Include="Machine\Model\GracefulName.cs" />
     <Compile Include="Machine\Model\GracefulNameMatcher.cs" />
     <Compile Include="Machine\Model\Maybe.cs" />

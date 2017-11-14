@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Threading;
 using fitSharp.IO;
 using fitSharp.Machine.Engine;
+using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Application {
 
@@ -31,8 +32,8 @@ namespace fitSharp.Machine.Application {
             }
         }
 
-        int ReportError(string errorText) {
-            progressReporter.WriteLine(errorText);
+        int ReportError(Error error) {
+            progressReporter.Write(error.Message);
             progressReporter.WriteLine(arguments.Usage);
             return 1;
         }
