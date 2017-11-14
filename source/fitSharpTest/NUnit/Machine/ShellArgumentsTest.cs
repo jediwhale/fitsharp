@@ -20,6 +20,7 @@ namespace fitSharp.Test.NUnit.Machine {
 
         [Test]
         public void SpecifiesAppConfigFile() {
+            folderModel.MakeFile(Environment.CurrentDirectory + "\\myConfig.xml", "stuff");
             Parse(AssertAppConfigSpecified, AssertNothingReported, "-a", "myConfig.xml", "-r", "myRunner");
         }
 
@@ -32,6 +33,11 @@ namespace fitSharp.Test.NUnit.Machine {
         [Test]
         public void ChecksForMissingRunner() {
             Parse(AssertNoAction, AssertRunnerReported);
+        }
+
+        [Test]
+        public void ChecksForMissingAppConfigFile() {
+            Parse(AssertNoAction, AssertAppConfigReported, "-a", "missing.xml");
         }
 
         [Test]
@@ -67,6 +73,7 @@ namespace fitSharp.Test.NUnit.Machine {
 
         static void AssertNothingReported(string message) { Assert.Fail(message); }
         static void AssertRunnerReported(string message) { AssertReportContains(message, "runner"); }
+        static void AssertAppConfigReported(string message) { AssertReportContains(message, "Application configuration file"); }
         static void AssertSuiteConfigReported(string message) { AssertReportContains(message, "Suite configuration file"); }
 
         static void AssertReportContains(string message, string expected) {

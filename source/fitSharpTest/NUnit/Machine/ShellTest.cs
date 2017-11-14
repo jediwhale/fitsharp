@@ -42,6 +42,7 @@ namespace fitSharp.Test.NUnit.Machine {
         [Test] public void CustomAppConfigFromSuiteConfigIsUsed() {
             var folders = new FolderTestModel();
             folders.MakeFile("suite.config.xml", "<config><Settings><AppConfigFile>fitSharpTest.dll.alt.config</AppConfigFile></Settings></config>");
+            folders.MakeFile(Environment.CurrentDirectory + "\\fitSharpTest.dll.alt.config", "stuff");
             var result = RunShell(new[] {"-c", "suite.config.xml",
                 "-r", typeof (SampleRunner).FullName + "," + typeof (SampleRunner).Assembly.CodeBase}, folders );
             Assert.AreEqual(606, result);
@@ -64,7 +65,7 @@ namespace fitSharp.Test.NUnit.Machine {
         }
 
         static int RunShell(IList<string> arguments) {
-            return RunShell(arguments, new FolderTestModel());
+            return RunShell(arguments, new FileSystemModel());
         }
 
         static int RunShell(IList<string> arguments, FolderModel model) {

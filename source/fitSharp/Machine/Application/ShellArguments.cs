@@ -47,7 +47,10 @@ namespace fitSharp.Machine.Application {
             argumentParser.Parse(commandLineArguments);
 
             memory.Item<Settings>().Apply(settings => ParseRunner(memory, settings));
-            memory.Item<AppDomainSetup>().Apply(SetApplicationBase);
+
+            if (errorText.Length == 0) {
+                errorText = memory.Item<AppDomainSetup>().Select(ValidateApplicationBase).OrDefault(string.Empty);
+            }
 
             if (errorText.Length == 0 && string.IsNullOrEmpty(memory.GetItem<Settings>().Runner)) {
                 errorText = "Missing runner class";
@@ -56,11 +59,14 @@ namespace fitSharp.Machine.Application {
             return new Either<string, Memory>(errorText.Length != 0, errorText, memory);
         }
 
-        static void SetApplicationBase(AppDomainSetup appDomainSetup) {
+         string ValidateApplicationBase(AppDomainSetup appDomainSetup) {
             if (string.IsNullOrEmpty(appDomainSetup.ApplicationBase)) {
                 appDomainSetup.ApplicationBase = AppDomain.CurrentDomain.BaseDirectory;
             }
-        }
+             return textSource.Exists(appDomainSetup.ConfigurationFile)
+                 ? string.Empty
+                 : string.Format("Application configuration file '{0}' does not exist.", appDomainSetup.ConfigurationFile);
+         }
 
         static void ParseRunner(Memory memory, Settings settings) {
             var runner = settings.Runner;
