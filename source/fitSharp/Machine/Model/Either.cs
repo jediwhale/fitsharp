@@ -8,32 +8,32 @@ using System;
 namespace fitSharp.Machine.Model {
     public class Either<T, U> {
 
-        public Either(T first) {
-            this.first = first;
-            isFirst = true;
+        public Either(T left) {
+            this.left = left;
+            isLeft = true;
         }
 
-        public Either(U second) {
-            this.second = second;
-            isFirst = false;
+        public Either(U right) {
+            this.right = right;
+            isLeft = false;
         }
 
-        public Either(bool isFirst, T first, U second) {
-            this.isFirst = isFirst;
-            if (isFirst) {
-                this.first = first;
+        public Either(bool isLeft, T left, U right) {
+            this.isLeft = isLeft;
+            if (isLeft) {
+                this.left = left;
             }
             else {
-                this.second = second;
+                this.right = right;
             }
         }
 
-        public R OneOf<R>(Func<T, R> withFirst, Func<U, R> withSecond) {
-            return isFirst ? withFirst(first) : withSecond(second);
+        public R Select<R>(Func<T, R> withLeft, Func<U, R> withRight) {
+            return isLeft ? withLeft(left) : withRight(right);
         }
 
-        readonly bool isFirst;
-        readonly T first;
-        readonly U second;
+        readonly bool isLeft;
+        readonly T left;
+        readonly U right;
     }
 }

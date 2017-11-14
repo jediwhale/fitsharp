@@ -23,7 +23,7 @@ namespace fitSharp.Machine.Application {
 
         public int Run() {
             try {
-                return arguments.LoadMemory().OneOf(RunInDomain, ReportError);
+                return arguments.LoadMemory().Select(ReportError, RunInDomain);
             }
             catch (System.Exception e) {
                 progressReporter.WriteLine(e.ToString());
@@ -44,9 +44,6 @@ namespace fitSharp.Machine.Application {
         }
         
         int RunInNewDomain(AppDomainSetup appDomainSetup) {
-            if (string.IsNullOrEmpty(appDomainSetup.ApplicationBase)) {
-                appDomainSetup.ApplicationBase = AppDomain.CurrentDomain.BaseDirectory;
-            }
             var newDomain = AppDomain.CreateDomain("fitSharp.Machine", null, appDomainSetup);
             try {
                 var remoteShell = (Shell) newDomain.CreateInstanceAndUnwrap(
@@ -66,7 +63,7 @@ namespace fitSharp.Machine.Application {
         }
 
         int RunInNewDomain() {
-            return arguments.LoadMemory().OneOf(RunInCurrentDomain, ReportError);
+            return arguments.LoadMemory().Select(ReportError, RunInCurrentDomain);
         }
 
         int RunInCurrentDomain(Memory memory) {

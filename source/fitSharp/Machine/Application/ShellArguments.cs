@@ -28,7 +28,7 @@ namespace fitSharp.Machine.Application {
             }
         }
 
-        public Either<Memory, string> LoadMemory() {
+        public Either<string, Memory> LoadMemory() {
             var memory = new TypeDictionary();
             var errorText = string.Empty;
 
@@ -46,17 +46,24 @@ namespace fitSharp.Machine.Application {
             argumentParser.AddArgumentHandler("f", InitializeAndAddFolders);
             argumentParser.Parse(commandLineArguments);
 
-            ParseRunner(memory);
+            memory.Item<Settings>().Apply(settings => ParseRunner(memory, settings));
+            memory.Item<AppDomainSetup>().Apply(SetApplicationBase);
 
             if (errorText.Length == 0 && string.IsNullOrEmpty(memory.GetItem<Settings>().Runner)) {
                 errorText = "Missing runner class";
             }
 
-            return new Either<Memory, string>(errorText.Length == 0, memory, errorText);
+            return new Either<string, Memory>(errorText.Length != 0, errorText, memory);
         }
 
-        static void ParseRunner(Memory memory) {
-            var runner = memory.GetItem<Settings>().Runner;
+        static void SetApplicationBase(AppDomainSetup appDomainSetup) {
+            if (string.IsNullOrEmpty(appDomainSetup.ApplicationBase)) {
+                appDomainSetup.ApplicationBase = AppDomain.CurrentDomain.BaseDirectory;
+            }
+        }
+
+        static void ParseRunner(Memory memory, Settings settings) {
+            var runner = settings.Runner;
             if (string.IsNullOrEmpty(runner)) return;
 
             var tokens = runner.Split(',');

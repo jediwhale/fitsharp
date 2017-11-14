@@ -1,4 +1,4 @@
-// Copyright © 2016 Syterra Software Inc. All rights reserved.
+// Copyright © 2017 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -21,7 +21,7 @@ namespace fitSharp.Machine.Model {
 
         public bool HasValue { get { return hasValue; } }
 
-        public void ForValue(Action<T> action) {
+        public void Apply(Action<T> action) {
             if (hasValue) action(aValue);
         }
 
@@ -35,8 +35,12 @@ namespace fitSharp.Machine.Model {
             return hasValue ? this : otherValue();
         }
 
-        public U ForValue<U>(Func<T, U> withValue, Func<U> withoutValue) {
-            return hasValue ? withValue(aValue) : withoutValue();
+        public Maybe<U> Select<U>(Func<T, U> withValue) {
+            return hasValue ? new Maybe<U>(withValue(aValue)) : Maybe<U>.Nothing;
+        }
+
+        public T OrDefault(T defaultValue) {
+            return hasValue ? aValue : defaultValue;
         }
 
         public TypedValue TypedValue {
