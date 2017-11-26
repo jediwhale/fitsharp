@@ -1,16 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{8C5E0127-E52C-46B7-B253-BD88F5F29034}</ProjectGuid>
+    <ProjectGuid>{7091F316-CD5F-4C49-98F7-091A16781AE2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>fitSharp.Test</RootNamespace>
     <AssemblyName>fitSharpTest</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -31,129 +30,134 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Moq, Version=3.1.416.3, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\binary\tools\moq\Moq.dll</HintPath>
+    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Castle.Core.4.2.1\lib\net45\Castle.Core.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="nunit.framework, Version=2.5.7.10213, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\binary\tools\nunit\framework\nunit.framework.dll</HintPath>
+    <Reference Include="Moq, Version=4.7.145.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Moq.4.7.145\lib\net45\Moq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="nunit.framework, Version=3.9.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NUnit.3.9.0\lib\net45\nunit.framework.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Acceptance\FitNesseStory.cs" />
     <Compile Include="Acceptance\Slim\SlimDomain.cs" />
-    <Compile Include="Double\Fit\Parse.cs" />
     <Compile Include="Double\FullTestConfig.cs" />
+    <Compile Include="Double\SampleClass.cs" />
     <Compile Include="Double\SampleClassTwo.cs" />
     <Compile Include="Double\Slim\Builder.cs" />
-    <Compile Include="NUnit\FitIf\TestFilesTest.cs" />
-    <Compile Include="NUnit\FitIf\TestFolder.cs" />
-    <Compile Include="NUnit\FitIf\TestResultTest.cs" />
+    <Compile Include="NUnit\Fit\BindingFactoryTest.cs" />
     <Compile Include="NUnit\Fit\Builder.cs" />
+    <Compile Include="NUnit\Fit\CellOperationDefaultTest.cs" />
+    <Compile Include="NUnit\Fit\CellOperatorsTest.cs" />
+    <Compile Include="NUnit\Fit\CellProcessorBaseTest.cs" />
     <Compile Include="NUnit\Fit\CompareDefaultTest.cs" />
+    <Compile Include="NUnit\Fit\ComposeShowAsOperatorTest.cs" />
+    <Compile Include="NUnit\Fit\ConfigureFixtureTest.cs" />
     <Compile Include="NUnit\Fit\DeepCopyTest.cs" />
+    <Compile Include="NUnit\Fit\DefineTest.cs" />
     <Compile Include="NUnit\Fit\FindMemberPatternTest.cs" />
     <Compile Include="NUnit\Fit\FlowRowTest.cs" />
+    <Compile Include="NUnit\Fit\GracefulNameTest.cs" />
     <Compile Include="NUnit\Fit\HtmlDecoratorTest.cs" />
     <Compile Include="NUnit\Fit\IncludeTest.cs" />
     <Compile Include="NUnit\Fit\InvokeFlowKeywordTest.cs" />
     <Compile Include="NUnit\Fit\InvokeLiteralTest.cs" />
     <Compile Include="NUnit\Fit\InvokeProcedureTest.cs" />
+    <Compile Include="NUnit\Fit\ParseByteArrayTest.cs" />
+    <Compile Include="NUnit\Fit\ParseDateTest.cs" />
     <Compile Include="NUnit\Fit\ParseMemberNameTest.cs" />
     <Compile Include="NUnit\Fit\ParseNullArrayTest.cs" />
     <Compile Include="NUnit\Fit\ParseNullTest.cs" />
     <Compile Include="NUnit\Fit\ParseOperatorTest.cs" />
     <Compile Include="NUnit\Fit\ParseQuotedStringTest.cs" />
+    <Compile Include="NUnit\Fit\ParseStoryTestStringTest.cs" />
+    <Compile Include="NUnit\Fit\ParseSymbolTest.cs" />
+    <Compile Include="NUnit\Fit\RunTestDefaultTest.cs" />
     <Compile Include="NUnit\Fit\StoryTestFileTest.cs" />
     <Compile Include="NUnit\Fit\SuiteRunnerTest.cs" />
     <Compile Include="NUnit\Fit\TagFilterTest.cs" />
     <Compile Include="NUnit\Fit\TestStatusTest.cs" />
     <Compile Include="NUnit\Fit\ValueArrayTest.cs" />
     <Compile Include="NUnit\Fit\ValuePhraseTest.cs" />
-    <Compile Include="NUnit\Machine\ArgumentParserTest.cs" />
-    <Compile Include="NUnit\Machine\OperatorsTest.cs" />
-    <Compile Include="NUnit\Machine\ShellArgumentsTest.cs" />
-    <Compile Include="NUnit\Machine\StringDifferenceTest.cs" />
-    <Compile Include="NUnit\Machine\SuiteConfigurationTest.cs" />
-    <Compile Include="NUnit\Fit\BindingFactoryTest.cs" />
-    <Compile Include="NUnit\Fit\CellOperatorsTest.cs" />
-    <Compile Include="NUnit\Fit\CellProcessorBaseTest.cs" />
-    <Compile Include="NUnit\Fit\ComposeShowAsOperatorTest.cs" />
-    <Compile Include="NUnit\Fit\DefineTest.cs" />
-    <Compile Include="NUnit\Fit\CellOperationDefaultTest.cs" />
-    <Compile Include="NUnit\Fit\RunTestDefaultTest.cs" />
-    <Compile Include="NUnit\Fit\GracefulNameTest.cs" />
-    <Compile Include="NUnit\Fit\ConfigureFixtureTest.cs" />
-    <Compile Include="NUnit\Fit\ParseByteArrayTest.cs" />
-    <Compile Include="NUnit\Fit\ParseDateTest.cs" />
-    <Compile Include="NUnit\Fit\ParseStoryTestStringTest.cs" />
-    <Compile Include="NUnit\Fit\ParseSymbolTest.cs" />
     <Compile Include="NUnit\Fit\XmlResultWriterTest.cs" />
     <Compile Include="NUnit\IO\ElapsedTimeTest.cs" />
     <Compile Include="NUnit\IO\SocketSessionTest.cs" />
     <Compile Include="NUnit\Machine\ApplicationUnderTestTest.cs" />
-    <Compile Include="NUnit\Machine\TraverseTest.cs" />
-    <Compile Include="NUnit\Machine\TypeDictionaryTest.cs" />
+    <Compile Include="NUnit\Machine\ArgumentParserTest.cs" />
     <Compile Include="NUnit\Machine\CreateDefaultTest.cs" />
     <Compile Include="NUnit\Machine\CultureTest.cs" />
+    <Compile Include="NUnit\Machine\DefaultParseTest.cs" />
+    <Compile Include="NUnit\Machine\IdentifierNameTest.cs" />
+    <Compile Include="NUnit\Machine\InvokeDefaultTest.cs" />
     <Compile Include="NUnit\Machine\LoggingTest.cs" />
+    <Compile Include="NUnit\Machine\MemberQueryTest.cs" />
+    <Compile Include="NUnit\Machine\OperatorsTest.cs" />
+    <Compile Include="NUnit\Machine\ProcessorTest.cs" />
+    <Compile Include="NUnit\Machine\ShellArgumentsTest.cs" />
+    <Compile Include="NUnit\Machine\ShellTest.cs" />
+    <Compile Include="NUnit\Machine\StringDifferenceTest.cs" />
+    <Compile Include="NUnit\Machine\SuiteConfigurationTest.cs" />
+    <Compile Include="NUnit\Machine\TraverseTest.cs" />
+    <Compile Include="NUnit\Machine\TreeTest.cs" />
+    <Compile Include="NUnit\Machine\TypeDictionaryTest.cs" />
     <Compile Include="NUnit\Parser\HtmlTablesTest.cs" />
     <Compile Include="NUnit\Parser\ScannerTest.cs" />
     <Compile Include="NUnit\Parser\TextTableScannerTest.cs" />
     <Compile Include="NUnit\Parser\TextTablesTest.cs" />
+    <Compile Include="NUnit\Slim\ComposeOperatorsTest.cs" />
     <Compile Include="NUnit\Slim\ConsoleSessionTest.cs" />
     <Compile Include="NUnit\Slim\ConverterTest.cs" />
-    <Compile Include="NUnit\Machine\DefaultParseTest.cs" />
-    <Compile Include="NUnit\Machine\InvokeDefaultTest.cs" />
-    <Compile Include="NUnit\Machine\IdentifierNameTest.cs" />
-    <Compile Include="NUnit\Machine\ProcessorTest.cs" />
-    <Compile Include="NUnit\Machine\MemberQueryTest.cs" />
-    <Compile Include="Double\SampleClass.cs" />
-    <Compile Include="NUnit\Machine\ShellTest.cs" />
-    <Compile Include="NUnit\Machine\TreeTest.cs" />
-    <Compile Include="NUnit\Slim\ComposeOperatorsTest.cs" />
     <Compile Include="NUnit\Slim\DocumentTest.cs" />
     <Compile Include="NUnit\Slim\ExecuteOperatorsTest.cs" />
     <Compile Include="NUnit\Slim\Instructions.cs" />
     <Compile Include="NUnit\Slim\InterpreterTest.cs" />
+    <Compile Include="NUnit\Slim\InvokeLibraryTest.cs" />
     <Compile Include="NUnit\Slim\MessengerTest.cs" />
     <Compile Include="NUnit\Slim\ParseOperatorsTest.cs" />
-    <Compile Include="NUnit\Slim\InvokeLibraryTest.cs" />
-    <Compile Include="NUnit\Slim\SlimTreeTest.cs" />
     <Compile Include="NUnit\Slim\SampleClass.cs" />
     <Compile Include="NUnit\Slim\ServiceTest.cs" />
+    <Compile Include="NUnit\Slim\SlimTreeTest.cs" />
     <Compile Include="NUnit\Slim\TestSession.cs" />
-    <Compile Include="NUnit\Swim\ResultPageTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\fitIf1\fitIf1.csproj">
-      <Project>{e28cd081-f502-4082-99fa-12a8d9cf31c3}</Project>
-      <Name>fitIf</Name>
-    </ProjectReference>
     <ProjectReference Include="..\fitSharp\fitSharp.csproj">
-      <Project>{204FF2CD-475F-4C6E-A6B5-6779364B33F8}</Project>
+      <Project>{2b85b203-efb8-4f8d-8900-bc0a617d4adf}</Project>
       <Name>fitSharp</Name>
     </ProjectReference>
     <ProjectReference Include="..\Samples\Samples.csproj">
-      <Project>{A2546656-E446-4EF3-90DF-B958045F217C}</Project>
+      <Project>{52d82363-c201-4c78-8b94-018b79585763}</Project>
       <Name>Samples</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TestTarget\TestTarget.csproj">
+      <Project>{1a020ff5-df59-41cb-a38a-9963843156c6}</Project>
+      <Name>TestTarget</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="fitSharpTest.dll.alt.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy "$(TargetPath)*" "$(SolutionDir)build\$(ConfigurationName)\" /I /Y &amp;
+ copy "$(TargetDir)nunit.framework.dll" "$(SolutionDir)build\$(ConfigurationName)\"&amp;
+ copy "$(TargetDir)moq.dll" "$(SolutionDir)build\$(ConfigurationName)\" &amp; copy "$(TargetDir)castle.core.dll" "$(SolutionDir)build\$(ConfigurationName)\"
+</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
@@ -161,9 +165,4 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <PropertyGroup>
-    <PostBuildEvent>xcopy "$(TargetPath)*" "$(SolutionDir)build\$(ConfigurationName)\" /I /Y &amp;
- copy "$(TargetDir)nunit.framework.dll" "$(SolutionDir)build\$(ConfigurationName)\"&amp;
- copy "$(TargetDir)moq.dll" "$(SolutionDir)build\$(ConfigurationName)\"</PostBuildEvent>
-  </PropertyGroup>
 </Project>

@@ -1,16 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{E60C59D8-84BC-4C69-802F-26C62A0CF0F4}</ProjectGuid>
+    <ProjectGuid>{F38C6772-3B92-4E10-9ED4-D37BE35D2303}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>dbfit.Oracle</RootNamespace>
     <AssemblyName>dbfit.Oracle</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -33,8 +32,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Data.OracleClient" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -44,19 +43,22 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\dbfit\dbfit.csproj">
-      <Project>{87CB489E-7C38-4E50-BBE7-23229CF7D58C}</Project>
+      <Project>{6f72a0b4-eab2-410a-945d-4c4d04b18893}</Project>
       <Name>dbfit</Name>
     </ProjectReference>
     <ProjectReference Include="..\fitSharp\fitSharp.csproj">
-      <Project>{204FF2CD-475F-4C6E-A6B5-6779364B33F8}</Project>
+      <Project>{2b85b203-efb8-4f8d-8900-bc0a617d4adf}</Project>
       <Name>fitSharp</Name>
     </ProjectReference>
     <ProjectReference Include="..\fit\fit.csproj">
-      <Project>{C83FBAF8-9569-406B-A75A-56BC7D993ABC}</Project>
+      <Project>{11b32830-36bc-473b-9638-fb3c7fdaa422}</Project>
       <Name>fit</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy "$(TargetPath)*" "$(SolutionDir)build\$(ConfigurationName)\" /I /Y</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
@@ -64,7 +66,4 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <PropertyGroup>
-    <PostBuildEvent>xcopy "$(TargetPath)*" "$(SolutionDir)build\$(ConfigurationName)\" /I /Y</PostBuildEvent>
-  </PropertyGroup>
 </Project>

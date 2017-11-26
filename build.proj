@@ -2,7 +2,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
         DefaultTargets="solution;unittests;storytests" >
 
-<Import Project="binary\tools\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
+<!--Import Project="binary\tools\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/ -->
 
 <PropertyGroup>
     <Config>Debug</Config>
@@ -30,8 +30,8 @@
 </Target>
 
 <Target Name="unittests" DependsOnTargets="sandbox">
-    <Exec Command="binary\tools\nunit\nunit-console -nologo -framework:net-4.0 .\build\sandbox\fitSharpTest.dll" />
-    <Exec Command="binary\tools\nunit\nunit-console -nologo -framework:net-4.0 .\build\sandbox\fitTest.dll" />
+    <Exec Command=".\packages\Nunit.ConsoleRunner.3.7.0\tools\nunit3-console -framework:net-4.5 .\build\sandbox\fitSharpTest.dll" />
+    <Exec Command=".\packages\Nunit.ConsoleRunner.3.7.0\tools\nunit3-console -framework:net-4.5 .\build\sandbox\fitTest.dll" />
 </Target>
 
 <Target Name="storytests" DependsOnTargets="sandbox">

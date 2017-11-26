@@ -1,8 +1,9 @@
-﻿// Copyright © 2012 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+﻿// Copyright © 2017 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
+using System;
 using System.Reflection;
 using fit.Runner;
 using fitSharp.Fit.Engine;
@@ -22,7 +23,7 @@ namespace fit.Test.NUnit {
         [Test] public void StoryTestIsExecuted() {
             var service = new Service.Service();
             service.AddNamespace("fitlibrary");
-            service.ApplicationUnderTest.AddAssembly("fit.dll");
+            service.ApplicationUnderTest.AddAssembly(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "fit.dll"));
             RunTest(service, "<table><tr><td>do</td></tr></table><table><tr><td>do</td></tr></table>");
             Assert.AreEqual("<table><tr><td><span class=\"fit_interpreter\">do</span></td></tr></table><table><tr><td><span class=\"fit_interpreter\">do</span></td></tr></table>", resultTables);
         }

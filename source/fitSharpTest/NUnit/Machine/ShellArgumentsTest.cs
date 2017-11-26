@@ -4,6 +4,7 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
+using System.IO;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
@@ -21,7 +22,7 @@ namespace fitSharp.Test.NUnit.Machine {
 
         [Test]
         public void SpecifiesAppConfigFile() {
-            folderModel.MakeFile(Environment.CurrentDirectory + "\\myConfig.xml", "stuff");
+            folderModel.MakeFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "myConfig.xml"), "stuff");
             Parse(AssertAppConfigSpecified, AssertNothingReported, "-a", "myConfig.xml", "-r", "myRunner");
         }
 

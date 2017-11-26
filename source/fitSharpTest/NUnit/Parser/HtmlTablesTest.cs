@@ -1,4 +1,4 @@
-// Copyright © 2016 Syterra Software Inc. All rights reserved.
+// Copyright © 2017 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -28,12 +28,12 @@ namespace fitSharp.Test.NUnit.Parser {
             Assert.IsTrue(result.Branches.Count == 0);
         }
     
-        [Test, ExpectedException(typeof(ApplicationException))] public void ParseEmptyTable() {
-            Parse("leader<table x=\"y\"></table>trailer");
+        [Test] public void ParseEmptyTable() {
+            Assert.Throws<ApplicationException>(() => Parse("leader<table x=\"y\"></table>trailer"));
         }
     
-        [Test, ExpectedException(typeof(ApplicationException))] public void ParseTableWithBody() {
-            Parse("leader<Table foo=2>body</table>trailer");
+        [Test] public void ParseTableWithBody() {
+            Assert.Throws<ApplicationException>(() =>Parse("leader<Table foo=2>body</table>trailer"));
         }
     
         [Test] public void ParseTwoTables() {
@@ -41,8 +41,8 @@ namespace fitSharp.Test.NUnit.Parser {
             Assert.AreEqual(" <table> <tr> <td> x</td></tr></table> leader <table> <tr> <td> x</td></tr></table> trailer", result);
         }
 
-        [Test, ExpectedException(typeof(ApplicationException))] public void ParseRow() {
-            Parse(" <table>leader<tr></tr></table>");
+        [Test] public void ParseRow() {
+            Assert.Throws<ApplicationException>(() =>Parse(" <table>leader<tr></tr></table>"));
         }
     
         [Test] public void ParseCell() {
