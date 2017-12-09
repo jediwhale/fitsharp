@@ -49,12 +49,20 @@
 </Target>
 
 <ItemGroup>
-  <ZipFiles Include="build\release\fit.dll;build\release\fitSharp.dll;build\release\dbfit.dll;build\release\dbfit.oracle.dll;build\release\dbfit.sqlserver.dll;build\release\dbfit.mysql.dll;build\release\dbfit.sybase.dll;build\release\Runner*.exe;*License.txt" />
+  <ZipFiles Include="build\release\fit.dll" />
+  <ZipFiles Include="build\release\fitSharp.dll" />
+  <ZipFiles Include="build\release\dbfit.dll" />
+  <ZipFiles Include="build\release\dbfit.oracle.dll" />
+  <ZipFiles Include="build\release\dbfit.sqlserver.dll" />
+  <ZipFiles Include="build\release\dbfit.mysql.dll" />
+  <ZipFiles Include="build\release\dbfit.sybase.dll" />
+  <ZipFiles Include="build\release\Runner.exe" />
+  <ZipFiles Include="build\release\RunnerW.exe" />
+  <ZipFiles Include="license.txt" />
 </ItemGroup>
 
 <Target Name="zip">
-  <Zip Files="@(ZipFiles)" Flatten="Yes"
-   ZipFileName="binary\mylatest.zip" />
+  <Exec Command="PowerShell -command Compress-Archive @(ZipFiles, ',') binary\mylatest.zip -Force" />
 </Target>
 
 </Project>
