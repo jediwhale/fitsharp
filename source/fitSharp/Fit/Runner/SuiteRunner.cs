@@ -20,14 +20,6 @@ namespace fitSharp.Fit.Runner {
         public delegate void EndTestHandler(string testName);
         public event EndTestHandler EndTest;
 
-	    public TestCounts TestCounts { get; private set; }
-	    private readonly ProgressReporter myReporter;
-	    private ResultWriter resultWriter;
-	    private readonly Memory memory;
-	    readonly Func<Memory, CellProcessor> newService;
-	    readonly FolderModel folderModel;
-	    readonly Report myReport;
-
 	    public SuiteRunner(Memory memory, ProgressReporter theReporter, Func<Memory, CellProcessor> newService, FolderModel folderModel) {
 		    TestCounts = new TestCounts();
 		    myReporter = theReporter;
@@ -36,6 +28,8 @@ namespace fitSharp.Fit.Runner {
 	        this.folderModel = folderModel;
 	        myReport = new Report(memory.GetItem<Settings>().OutputFolder);
 		}
+
+	    public TestCounts TestCounts { get; }
 
 	    public void Run(StoryTestSuite theSuite, string theSelectedFile) {
             var now = DateTime.Now;
@@ -47,18 +41,18 @@ namespace fitSharp.Fit.Runner {
             resultWriter.Close();
 
             if (!memory.GetItem<Settings>().DryRun)
-                myReporter.Write(string.Format("\n{0}, time: {1}\n", TestCounts.Description, DateTime.Now - now));
+                myReporter.Write($"\n{TestCounts.Description}, time: {DateTime.Now - now}\n");
 	    }
 
 	    void TestStarted(string testName) {
-	        if (StartTest != null) StartTest(testName);
+	        StartTest?.Invoke(testName);
 	    }
 
 	    void TestEnded(string testName) {
-	        if (EndTest != null) EndTest(testName);
+	        EndTest?.Invoke(testName);
 	    }
 
-	    private ResultWriter CreateResultWriter() {
+	    ResultWriter CreateResultWriter() {
 	        if (memory.GetItem<Settings>().XmlOutput != null) {
 	            return new XmlResultWriter(memory.GetItem<Settings>().XmlOutput,
 	                                       new FileSystemModel(memory.GetItem<Settings>().CodePageNumber));
@@ -66,7 +60,7 @@ namespace fitSharp.Fit.Runner {
 	        return new NullResultWriter();
 	    }
 
-        private void RunFolder(StoryTestSuite theSuite, bool dryRun) {
+        void RunFolder(StoryTestSuite theSuite, bool dryRun) {
 	        var executor = SelectExecutor(dryRun);
             foreach (var testPage in theSuite.AllPages) {
                 if (!executor.SuiteIsAbandoned) {
@@ -85,15 +79,23 @@ namespace fitSharp.Fit.Runner {
             }
 	    }
 
-	    private StoryTestPageExecutor SelectExecutor(bool dryRun) {
+	    StoryTestPageExecutor SelectExecutor(bool dryRun) {
 	        if (dryRun) return new ReportPage(myReporter);
 	        return new ExecutePage(memory, resultWriter, HandleTestStatus, newService, myReport);
 	    }
 
-	    private void HandleTestStatus(TestCounts counts) {
+	    void HandleTestStatus(TestCounts counts) {
 	        myReporter.Write(counts.Letter);
 	        TestCounts.TallyCounts(counts);
         }
+
+	    readonly ProgressReporter myReporter;
+	    readonly Memory memory;
+	    readonly Func<Memory, CellProcessor> newService;
+	    readonly FolderModel folderModel;
+	    readonly Report myReport;
+
+	    ResultWriter resultWriter;
 
         class ExecutePage: StoryTestPageExecutor {
             public ExecutePage(Memory memory, ResultWriter resultWriter,  Action<TestCounts> handleCounts, Func<Memory, CellProcessor> newService, Report report) {
@@ -103,6 +105,8 @@ namespace fitSharp.Fit.Runner {
                 this.newService = newService;
                 this.report = report;
             }
+
+            public bool SuiteIsAbandoned { get; private set; }
 
             public void Do(StoryTestPage page) {
                 var elapsedTime = new ElapsedTime();
@@ -144,11 +148,10 @@ namespace fitSharp.Fit.Runner {
                 handleCounts(new TestCounts());
             }
 
-            private void StoreCurrentlyExecutingPagePath(string path) {
+            void StoreCurrentlyExecutingPagePath(string path) {
                 memory.GetItem<Context>().TestPagePath = new FilePath(path);
             }
 
-            public bool SuiteIsAbandoned { get; private set; }
 
             readonly ResultWriter resultWriter;
             readonly Memory memory;
@@ -162,14 +165,14 @@ namespace fitSharp.Fit.Runner {
                 this.reporter = reporter;
             }
 
+            public bool SuiteIsAbandoned => false;
+
             public void Do(StoryTestPage page) {
                 if (string.IsNullOrEmpty(page.TestContent)) return;
 	            reporter.WriteLine(page.Name.Name);
             }
 
             public void DoNoTest() {}
-
-            public bool SuiteIsAbandoned { get { return false; } }
 
             readonly ProgressReporter reporter;
         }

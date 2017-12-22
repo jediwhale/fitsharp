@@ -28,29 +28,6 @@ namespace fitSharp.Fit.Runner {
     }
 
     public class StoryTestFile: StoryTestPage {
-        private readonly StoryFileName myPath;
-        private readonly StoryTestFolder myFolder;
-        private readonly FolderModel myFolderModel;
-        private string myContent;
-
-        private const string StyleName = "fit.css";
-        private static readonly string StyleContent =
-            ".pass {background-color: #AAFFAA;}" + Environment.NewLine +
-            ".fail {background-color: #FFAAAA;}" + Environment.NewLine +
-            ".error {background-color: #FFFFAA;}" + Environment.NewLine +
-            ".ignore {background-color: #CCCCCC;}" + Environment.NewLine +
-            ".fit_stacktrace {font-size: 0.7em;}" + Environment.NewLine +
-            ".fit_label {font-style: italic; color: #C08080;}" + Environment.NewLine +
-            ".fit_grey {color: #808080;}" + Environment.NewLine +
-            ".fit_extension {border: solid 1px grey; background-color: white;}" + Environment.NewLine +
-            ".fit_table {border: solid 1px grey; border-collapse: collapse; margin: 2px 0px;}" + Environment.NewLine +
-            "table.fit_table tr td {border: solid 1px grey; padding: 2px 2px 2px 2px;}" + Environment.NewLine +
-            ".fit_interpreter {font-style: italic; color: #808020;}" + Environment.NewLine +
-            ".fit_keyword {color: #1010A0;}" + Environment.NewLine +
-            ".fit_member {color: #208080;}" + Environment.NewLine +
-            ".fit_SUT {color: #808020;}" + Environment.NewLine;
-
-        private const string styleSheetLink = "<link href=\"fit.css\" type=\"text/css\" rel=\"stylesheet\">";
 
         public StoryTestFile(string thePath, StoryTestFolder theFolder, FolderModel theFolderModel) {
             myPath = new StoryFileName(thePath);
@@ -58,9 +35,15 @@ namespace fitSharp.Fit.Runner {
             myFolderModel = theFolderModel;
         }
 
-        public StoryPageName Name { get { return myPath; } }
-
+        public StoryPageName Name => myPath;
         public string OutputFile => Path.Combine(myFolder.OutputPath, myPath.OutputFileName);
+
+        public string Content {
+            get {
+                if (myContent == null) myContent = myFolderModel.GetPageContent(myPath.Name);
+                return myContent;
+            }
+        }
 
         public string TestContent {
             get {
@@ -80,7 +63,6 @@ namespace fitSharp.Fit.Runner {
 
         public void WriteTest(PageResult result) {
             MakeStylesheet();
-
             myFolderModel.MakeFile(OutputFile, HtmlDecorator.AddToStart(ResultComment(result.TestCounts), AddStyleSheetLink(result.Content)));
         }
 
@@ -103,38 +85,43 @@ namespace fitSharp.Fit.Runner {
                    + counts.GetCount(TestStatus.Exception) + "--><!-- saved from url=(0014)about:internet -->";
         }
 
-        private bool HasTestName {
-            get {
-                return !(myPath.IsSetUp || myPath.IsTearDown || myPath.IsSuiteSetUp || myPath.IsSuiteTearDown);
-            }
-        }
+        bool HasTestName => !(myPath.IsSetUp || myPath.IsTearDown || myPath.IsSuiteSetUp || myPath.IsSuiteTearDown);
 
-        public string Content {
-            get {
-                if (myContent == null) myContent = myFolderModel.GetPageContent(myPath.Name);
-                return myContent;
-            }
-        }
+        StoryTestString DecoratedContent =>
+            new StoryTestString(myFolder.Decoration.IsEmpty
+                ? Content
+                : myFolder.Decoration.Decorate(Content));
 
-        private StoryTestString DecoratedContent {
-            get {
-                return new StoryTestString(myFolder.Decoration.IsEmpty
-                                               ? Content
-                                               : myFolder.Decoration.Decorate(Content));
-            }
-        }
+        StoryTestString PlainContent => new StoryTestString(Content);
 
-        private StoryTestString PlainContent {
-            get {
-                return new StoryTestString(Content);
-            }
-        }
-
-        private void MakeStylesheet() {
-            string filePath = Path.Combine(myFolder.OutputPath, StyleName);
+        void MakeStylesheet() {
+            var filePath = Path.Combine(myFolder.OutputPath, styleName);
             if (!myFolderModel.Exists(filePath)) {
-                myFolderModel.MakeFile(filePath, StyleContent);
+                myFolderModel.MakeFile(filePath, styleContent);
             }
         }
+
+        const string styleName = "fit.css";
+        const string styleSheetLink = "<link href=\"fit.css\" type=\"text/css\" rel=\"stylesheet\">";
+        static readonly string styleContent =
+            ".pass {background-color: #AAFFAA;}" + Environment.NewLine +
+            ".fail {background-color: #FFAAAA;}" + Environment.NewLine +
+            ".error {background-color: #FFFFAA;}" + Environment.NewLine +
+            ".ignore {background-color: #CCCCCC;}" + Environment.NewLine +
+            ".fit_stacktrace {font-size: 0.7em;}" + Environment.NewLine +
+            ".fit_label {font-style: italic; color: #C08080;}" + Environment.NewLine +
+            ".fit_grey {color: #808080;}" + Environment.NewLine +
+            ".fit_extension {border: solid 1px grey; background-color: white;}" + Environment.NewLine +
+            ".fit_table {border: solid 1px grey; border-collapse: collapse; margin: 2px 0px;}" + Environment.NewLine +
+            "table.fit_table tr td {border: solid 1px grey; padding: 2px 2px 2px 2px;}" + Environment.NewLine +
+            ".fit_interpreter {font-style: italic; color: #808020;}" + Environment.NewLine +
+            ".fit_keyword {color: #1010A0;}" + Environment.NewLine +
+            ".fit_member {color: #208080;}" + Environment.NewLine +
+            ".fit_SUT {color: #808020;}" + Environment.NewLine;
+
+        readonly StoryFileName myPath;
+        readonly StoryTestFolder myFolder;
+        readonly FolderModel myFolderModel;
+        string myContent;
     }
 }

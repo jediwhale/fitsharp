@@ -3,6 +3,7 @@
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using fitSharp.IO;
@@ -31,7 +32,8 @@ namespace fitSharp.Fit.Runner {
             this.filters = filters;
         }
 
-        public string FullName { get; private set; }
+        public string FullName { get; }
+        public string OutputPath { get; }
 
         public IEnumerable<StoryTestPage> AllPages {
             get {
@@ -41,6 +43,17 @@ namespace fitSharp.Fit.Runner {
                 foreach (var page in Suites.SelectMany(s => s.AllPages)) yield return page;
                 var suiteTearDown = SuiteTearDown;
                 if (suiteTearDown != null) yield return suiteTearDown;
+            }
+        }
+
+        public TestPageDecoration Decoration {
+            get {
+                if (myDecoration == null) {
+                    myDecoration = myParent == null
+                                       ? new TestPageDecoration(GetSetUp(), GetTearDown())
+                                       : myParent.Decoration.MakeChild(GetSetUp(), GetTearDown());
+                }
+                return myDecoration;
             }
         }
 
@@ -74,48 +87,34 @@ namespace fitSharp.Fit.Runner {
             }
         }
 
-        private StoryTestSuite CreateChildSuite(string inputFolder) {
-            string relativeFolder = inputFolder.Substring(FullName.Length + 1);
+        StoryTestSuite CreateChildSuite(string inputFolder) {
+            var relativeFolder = inputFolder.Substring(FullName.Length + 1);
             return new StoryTestFolder(inputFolder, Path.Combine(OutputPath, relativeFolder), myFolderModel, this, filters);
         }
 
-        public TestPageDecoration Decoration {
-            get {
-                if (myDecoration == null) {
-                    myDecoration = myParent == null
-                                       ? new TestPageDecoration(GetSetUp(), GetTearDown())
-                                       : myParent.Decoration.MakeChild(GetSetUp(), GetTearDown());
-                }
-                return myDecoration;
-            }
-        }
-
-        public string OutputPath { get; }
-
-        private delegate bool FileFilter(StoryFileName name);
-
-        private StoryTestFile FindFile(FileFilter filter) {
-            foreach (string filePath in myFolderModel.GetFiles(FullName)) {
+        StoryTestFile FindFile(Func<StoryFileName, bool> filter) {
+            foreach (var filePath in myFolderModel.GetFiles(FullName)) {
                 if (filter(new StoryFileName(filePath))) {
-                    return new StoryTestFile(/*configuration,*/ filePath, this, myFolderModel);
+                    return new StoryTestFile(filePath, this, myFolderModel);
                 }
             }
             return null;
         }
 
-        private string GetSetUp() {
-            StoryTestFile file = FindFile(name => name.IsSetUp);
-            return file == null ? string.Empty : file.Content;
-        }
-	    
-        private string GetTearDown() {
-            StoryTestFile file = FindFile(name => name.IsTearDown);
+        string GetSetUp() {
+            var file = FindFile(name => name.IsSetUp);
             return file == null ? string.Empty : file.Content;
         }
 
-        private readonly StoryTestFolder myParent;
+        string GetTearDown() {
+            var file = FindFile(name => name.IsTearDown);
+            return file == null ? string.Empty : file.Content;
+        }
+
+        readonly StoryTestFolder myParent;
         readonly Filters filters;
-        private readonly FolderModel myFolderModel;
-        private TestPageDecoration myDecoration;
+        readonly FolderModel myFolderModel;
+
+        TestPageDecoration myDecoration;
     }
 }

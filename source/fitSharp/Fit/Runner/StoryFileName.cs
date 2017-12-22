@@ -15,50 +15,40 @@ namespace fitSharp.Fit.Runner {
     }
 
     public class StoryFileName: StoryPageName {
-        private const string outputExtension = ".html";
 
         public StoryFileName(string theName) {
-            myName = theName;
+            Name = theName;
         }
 
-        public string Name { get { return myName; } }
-        public string OutputFileName { get { return Path.GetFileNameWithoutExtension(myName) + outputExtension; } }
-        public string CopyFileName { get { return Path.GetFileName(myName); } }
+        public string Name { get; }
 
-        public bool IsSuitePage { get { return IsSuiteSetUp || IsSuiteTearDown; } }
+        public string OutputFileName => Path.GetFileNameWithoutExtension(Name) + outputExtension;
+        public string CopyFileName => Path.GetFileName(Name);
+        public bool IsSuitePage => IsSuiteSetUp || IsSuiteTearDown;
+        public bool IsSuiteSetUp => ourSuiteSetupIdentifier.Equals(OutputFileName);
+        public bool IsSuiteTearDown => ourSuiteTearDownIdentifier.Equals(OutputFileName);
 
         public bool IsSetUp {
             get {
-                string name = Path.GetFileName(myName);
+                var name = Path.GetFileName(Name);
                 return ourSetupIdentifier1.Equals(name) || ourSetupIdentifier2.Equals(name);
-            }
-        }
-
-        public bool IsSuiteSetUp {
-            get {
-                return ourSuiteSetupIdentifier.Equals(OutputFileName);
-            }
-        }
-
-        public bool IsSuiteTearDown {
-            get {
-                return ourSuiteTearDownIdentifier.Equals(OutputFileName);
             }
         }
 
         public bool IsTearDown {
             get {
-                string name = Path.GetFileName(myName);
+                var name = Path.GetFileName(Name);
                 return ourTeardownIdentifier1.Equals(name) || ourTeardownIdentifier2.Equals(name);
             }
         }
 
-        private static readonly IdentifierName ourSetupIdentifier1 = new IdentifierName("setup.html");
-        private static readonly IdentifierName ourSetupIdentifier2 = new IdentifierName("setup.htm");
-        private static readonly IdentifierName ourTeardownIdentifier1 = new IdentifierName("teardown.html");
-        private static readonly IdentifierName ourTeardownIdentifier2 = new IdentifierName("teardown.htm");
-        private static readonly IdentifierName ourSuiteSetupIdentifier = new IdentifierName("suitesetup.html");
-        private static readonly IdentifierName ourSuiteTearDownIdentifier = new IdentifierName("suiteteardown.html");
-        private readonly string myName;
+        const string outputExtension = ".html";
+
+        static readonly IdentifierName ourSetupIdentifier1 = new IdentifierName("setup.html");
+        static readonly IdentifierName ourSetupIdentifier2 = new IdentifierName("setup.htm");
+        static readonly IdentifierName ourTeardownIdentifier1 = new IdentifierName("teardown.html");
+        static readonly IdentifierName ourTeardownIdentifier2 = new IdentifierName("teardown.htm");
+        static readonly IdentifierName ourSuiteSetupIdentifier = new IdentifierName("suitesetup.html");
+        static readonly IdentifierName ourSuiteTearDownIdentifier = new IdentifierName("suiteteardown.html");
     }
 }
