@@ -4,6 +4,7 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
+using fitSharp.Fit.Application;
 using fitSharp.Fit.Operators;
 using fitSharp.Fit.Runner;
 using fitSharp.Fit.Service;
@@ -158,8 +159,8 @@ namespace fitSharp.Test.NUnit.Fit {
         }
 
         private void RunSuite(ProgressReporter reporter, string selectedFile = "") {
-            var runner = new SuiteRunner(memory, reporter, m => new CellProcessorBase(m, m.GetItem<CellOperators>()));
-            runner.Run(new StoryTestFolder(memory, folders), selectedFile);
+            var runner = new SuiteRunner(memory, reporter, m => new CellProcessorBase(m, m.GetItem<CellOperators>()), folders);
+            runner.Run(new StoryTestFolder(memory, folders, new Filters(string.Empty, new FileExclusions(), selectedFile)), selectedFile);
         }
 
         private void AddTestFile(string path) {

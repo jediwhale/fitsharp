@@ -135,13 +135,14 @@
     <Compile Include="Fit\Operators\ParseSymbol.cs" />
     <Compile Include="Fit\Operators\RunTestDefault.cs" />
     <Compile Include="Fit\Operators\WrapDefault.cs" />
+    <Compile Include="Fit\Runner\Filters.cs" />
     <Compile Include="Fit\Runner\FolderRunner.cs" />
     <Compile Include="Fit\Runner\GuiRunner.cs" />
     <Compile Include="Fit\Runner\HtmlDecorator.cs" />
+    <Compile Include="Fit\Runner\Report.cs" />
     <Compile Include="Fit\Runner\StoryFileName.cs" />
     <Compile Include="Fit\Runner\StoryTestFile.cs" />
     <Compile Include="Fit\Runner\StoryTestFolder.cs" />
-    <Compile Include="Fit\Runner\StoryTestPageFilter.cs" />
     <Compile Include="Fit\Runner\SuiteRunner.cs" />
     <Compile Include="Fit\Runner\SuiteRunnerShell.cs" />
     <Compile Include="Fit\Runner\TagFilter.cs" />

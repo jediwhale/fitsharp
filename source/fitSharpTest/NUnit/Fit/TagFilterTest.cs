@@ -173,6 +173,7 @@ namespace fitSharp.Test.NUnit.Fit {
             public void WriteTest(PageResult result) {}
             public void WriteNonTest() {}
             public string TestContent { get { return content; } }
+            public string OutputFile { get { return string.Empty;} }
         }
     }
 }

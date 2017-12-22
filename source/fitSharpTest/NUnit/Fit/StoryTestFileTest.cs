@@ -4,6 +4,7 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
+using fitSharp.Fit.Application;
 using NUnit.Framework;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Runner;
@@ -37,7 +38,7 @@ namespace fitSharp.Test.NUnit.Fit {
             var folder = new FolderTestModel();
             var memory = new TypeDictionary();
             memory.GetItem<Settings>().OutputFolder = "output";
-            var file = new StoryTestFile("myfile", new StoryTestFolder(memory, folder), folder);
+            var file = new StoryTestFile("myfile", new StoryTestFolder(memory, folder, new Filters(string.Empty, new FileExclusions(), string.Empty)), folder);
             file.WriteTest(new PageResult("title", content, new TestCounts()));
             Clock.Instance = new Clock();
             Assert.AreEqual(comment + expected, folder.GetPageContent(new FilePath("output\\myfile.html")));

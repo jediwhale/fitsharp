@@ -14,6 +14,7 @@ namespace fitSharp.Fit.Runner {
     public interface StoryTestPage {
         StoryPageName Name { get; }
         string Content { get; }
+        string OutputFile { get; }
 
         void WriteTest(PageResult result);
         void WriteNonTest();
@@ -59,6 +60,8 @@ namespace fitSharp.Fit.Runner {
 
         public StoryPageName Name { get { return myPath; } }
 
+        public string OutputFile => Path.Combine(myFolder.OutputPath, myPath.OutputFileName);
+
         public string TestContent {
             get {
                 if (HasTestName) return DecoratedContent.ToString();
@@ -78,9 +81,7 @@ namespace fitSharp.Fit.Runner {
         public void WriteTest(PageResult result) {
             MakeStylesheet();
 
-            var outputFile = Path.Combine(myFolder.OutputPath, myPath.OutputFileName);
-            myFolderModel.MakeFile(outputFile, HtmlDecorator.AddToStart(ResultComment(result.TestCounts), AddStyleSheetLink(result.Content)));
-            myFolder.ListFile(outputFile, result.TestCounts, result.ElapsedTime);
+            myFolderModel.MakeFile(OutputFile, HtmlDecorator.AddToStart(ResultComment(result.TestCounts), AddStyleSheetLink(result.Content)));
         }
 
         static string AddStyleSheetLink(string input) {

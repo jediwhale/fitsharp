@@ -1,4 +1,4 @@
-// Copyright © 2016 Syterra Software Inc. All rights reserved.
+// Copyright © 2017 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -25,18 +25,21 @@ namespace fitSharp.Fit.Runner {
 	    private ResultWriter resultWriter;
 	    private readonly Memory memory;
 	    readonly Func<Memory, CellProcessor> newService;
+	    readonly FolderModel folderModel;
+	    readonly Report myReport;
 
-	    public SuiteRunner(Memory memory, ProgressReporter theReporter, Func<Memory, CellProcessor> newService) {
+	    public SuiteRunner(Memory memory, ProgressReporter theReporter, Func<Memory, CellProcessor> newService, FolderModel folderModel) {
 		    TestCounts = new TestCounts();
 		    myReporter = theReporter;
 		    this.memory = memory;
 		    this.newService = newService;
+	        this.folderModel = folderModel;
+	        myReport = new Report(memory.GetItem<Settings>().OutputFolder);
 		}
 
 	    public void Run(StoryTestSuite theSuite, string theSelectedFile) {
             var now = DateTime.Now;
             resultWriter = CreateResultWriter();
-            if (!string.IsNullOrEmpty(theSelectedFile)) theSuite.Select(theSelectedFile);
 
 	        RunFolder(theSuite, memory.GetItem<Settings>().DryRun);
 
@@ -63,37 +66,28 @@ namespace fitSharp.Fit.Runner {
 	        return new NullResultWriter();
 	    }
 
-	    private void RunFolder(StoryTestSuite theSuite, bool dryRun) {
+        private void RunFolder(StoryTestSuite theSuite, bool dryRun) {
 	        var executor = SelectExecutor(dryRun);
-
-	        StoryTestPage suiteSetUp = theSuite.SuiteSetUp;
-            if (suiteSetUp != null) executor.Do(suiteSetUp);
-	        foreach (StoryTestPage testPage in theSuite.Pages) {
-                try {
-                    TestStarted(testPage.Name.Name);
-                    executor.Do(testPage);
-                    TestEnded(testPage.Name.Name);
+            foreach (var testPage in theSuite.AllPages) {
+                if (!executor.SuiteIsAbandoned) {
+                    try {
+                        TestStarted(testPage.Name.Name);
+                        executor.Do(testPage);
+                        TestEnded(testPage.Name.Name);
+                    }
+                    catch (System.Exception e) {
+	                    myReporter.Write(e.ToString());
+	                }
                 }
-                catch (System.Exception e) {
-	                myReporter.Write(e.ToString());
-	            }
-                if (executor.SuiteIsAbandoned) break;
             }
-
-            if (!executor.SuiteIsAbandoned) {
-                foreach (StoryTestSuite childSuite in theSuite.Suites) {
-                    RunFolder(childSuite, dryRun);
-                }
-                StoryTestPage suiteTearDown = theSuite.SuiteTearDown;
-                if (suiteTearDown != null) executor.Do(suiteTearDown);
+            if (!dryRun) {
+                myReport.Finish(folderModel);
             }
-
-	        if (!dryRun) theSuite.Finish();
 	    }
 
 	    private StoryTestPageExecutor SelectExecutor(bool dryRun) {
 	        if (dryRun) return new ReportPage(myReporter);
-	        return new ExecutePage(memory, resultWriter, HandleTestStatus, newService);
+	        return new ExecutePage(memory, resultWriter, HandleTestStatus, newService, myReport);
 	    }
 
 	    private void HandleTestStatus(TestCounts counts) {
@@ -102,11 +96,12 @@ namespace fitSharp.Fit.Runner {
         }
 
         class ExecutePage: StoryTestPageExecutor {
-            public ExecutePage(Memory memory, ResultWriter resultWriter,  Action<TestCounts> handleCounts, Func<Memory, CellProcessor> newService) {
+            public ExecutePage(Memory memory, ResultWriter resultWriter,  Action<TestCounts> handleCounts, Func<Memory, CellProcessor> newService, Report report) {
                 this.memory = memory;
                 this.resultWriter = resultWriter;
                 this.handleCounts = handleCounts;
                 this.newService = newService;
+                this.report = report;
             }
 
             public void Do(StoryTestPage page) {
@@ -140,6 +135,7 @@ namespace fitSharp.Fit.Runner {
 
                 var pageResult = new PageResult(page.Name.Name, writer.Tables, writer.Counts, elapsedTime);
                 page.WriteTest(pageResult);
+                report.ListFile(page.OutputFile, writer.Counts, elapsedTime);
                 handleCounts(writer.Counts);
                 resultWriter.WritePageResult(pageResult);
             }
@@ -158,6 +154,7 @@ namespace fitSharp.Fit.Runner {
             readonly Memory memory;
             readonly Action<TestCounts> handleCounts;
             readonly Func<Memory, CellProcessor> newService;
+            readonly Report report;
         }
 
         class ReportPage: StoryTestPageExecutor {
