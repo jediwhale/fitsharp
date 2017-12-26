@@ -51,7 +51,7 @@ namespace fitSharp.Samples
             var result = new ArrayList();
             foreach (var file in myFiles.Keys) {
                 if (!file.StartsWith(thePath + "\\")) continue;
-                var length = file.LastIndexOf("\\");
+                var length = file.IndexOf("\\", thePath.Length + 1);
                 if (length <= thePath.Length) continue;
                 var folder = file.Substring(0, length);
                 if (!result.Contains(folder)) result.Add(folder);

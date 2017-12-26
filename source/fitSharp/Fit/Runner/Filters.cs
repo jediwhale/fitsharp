@@ -24,10 +24,6 @@ namespace fitSharp.Fit.Runner {
         }
 
         public bool Matches(StoryTestSuite suite) {
-            if (!string.IsNullOrEmpty(selection)) {
-                var selectionPath = Path.GetDirectoryName(selection);
-                if (!string.IsNullOrEmpty(selectionPath) && !suite.FullName.EndsWith(selectionPath)) return false;
-            }
             return !fileExclusions.IsExcluded(Path.GetFileName(suite.FullName));
         }
 

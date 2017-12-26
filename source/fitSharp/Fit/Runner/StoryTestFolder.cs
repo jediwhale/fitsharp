@@ -37,12 +37,19 @@ namespace fitSharp.Fit.Runner {
 
         public IEnumerable<StoryTestPage> AllPages {
             get {
-                var suiteSetUp = SuiteSetUp;
-                if (suiteSetUp != null) yield return suiteSetUp;
-                foreach (var page in Pages) yield return page;
-                foreach (var page in Suites.SelectMany(s => s.AllPages)) yield return page;
-                var suiteTearDown = SuiteTearDown;
-                if (suiteTearDown != null) yield return suiteTearDown;
+                var count = 0;
+                foreach (var page in Pages.Concat(Suites.SelectMany(s => s.AllPages))) {
+                    if (count == 0) {
+                        var suiteSetUp = SuiteSetUp;
+                        if (suiteSetUp != null) yield return suiteSetUp;
+                    }
+                    yield return page;
+                    count++;
+                }
+                if (count > 0) {
+                    var suiteTearDown = SuiteTearDown;
+                    if (suiteTearDown != null) yield return suiteTearDown;
+                }
             }
         }
 

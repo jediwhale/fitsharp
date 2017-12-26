@@ -148,10 +148,12 @@ namespace fitSharp.Test.NUnit.Fit {
         [Test]
         public void SelectedTestInSubFolderIsRun() {
             AddTestFile(@"in\test1.html");
-            AddTestFile(@"in\sub\test2.html");
+            AddTestFile(@"in\test2.html");
+            AddTestFile(@"in\some\sub\test2.html");
             RunSuite(@"sub\test2.html");
-            Assert.IsFalse(folders.Exists(@"out\test1.html"), "test1.html should not exist in output directory");
-            Assert.IsTrue(folders.Exists(@"out\sub\test2.html"), "test2.html should exist in output directory");
+            Assert.IsFalse(folders.Exists(@"out\test1.html"), "test1.html should not exist in out directory");
+            Assert.IsFalse(folders.Exists(@"out\test2.html"), "test2.html should not exist in out directory");
+            Assert.IsTrue(folders.Exists(@"out\some\sub\test2.html"), "test2.html should exist in out\\some\\sub directory");
         }
 
         private void RunSuite(string selectedFile = "") {
