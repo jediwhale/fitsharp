@@ -36,6 +36,7 @@
     <Reference Include="System.Web" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Fit\Application\Configurable.cs" />
@@ -241,6 +242,8 @@
     <Compile Include="Machine\Model\TypedValue.cs" />
     <Compile Include="Parser\Characters.cs" />
     <Compile Include="Parser\CharacterType.cs" />
+    <Compile Include="Parser\ExcelCell.cs" />
+    <Compile Include="Parser\ExcelSheet.cs" />
     <Compile Include="Parser\HtmlString.cs" />
     <Compile Include="Parser\HtmlTables.cs" />
     <Compile Include="Parser\Scanner.cs" />

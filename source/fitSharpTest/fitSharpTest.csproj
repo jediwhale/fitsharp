@@ -110,6 +110,9 @@
     <Compile Include="NUnit\Machine\TraverseTest.cs" />
     <Compile Include="NUnit\Machine\TreeTest.cs" />
     <Compile Include="NUnit\Machine\TypeDictionaryTest.cs" />
+    <Compile Include="NUnit\Parser\TreeCellExtension.cs" />
+    <Compile Include="NUnit\Parser\ExcelCellTest.cs" />
+    <Compile Include="NUnit\Parser\ExcelSheetTest.cs" />
     <Compile Include="NUnit\Parser\HtmlTablesTest.cs" />
     <Compile Include="NUnit\Parser\ScannerTest.cs" />
     <Compile Include="NUnit\Parser\TextTableScannerTest.cs" />

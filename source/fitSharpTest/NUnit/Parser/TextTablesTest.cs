@@ -1,4 +1,4 @@
-﻿// Copyright © 2016 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2018 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -73,27 +73,30 @@ namespace fitSharp.Test.NUnit.Parser {
         }
 
         [Test] public void IncludesLeaderInFirstTable() {
-            Assert.AreEqual(
-                " more test@ <div> <table><tr> <td> stuff</td> </tr></table></div>",
-                Format(ParseRaw("more test@stuff")));
+            AssertParseRaw("more test@stuff",
+                " more test@ <div> <table><tr> <td> stuff</td> </tr></table></div>");
         }
 
         [Test] public void IncludesTrailerInLastTable() {
-            Assert.AreEqual(
-                " test@ <div> <table><tr> <td> stuff</td> </tr></table></div> @test",
-                Format(ParseRaw("test@stuff@test")));
+            AssertParseRaw("test@stuff@test",
+                " test@ <div> <table><tr> <td> stuff</td> </tr></table></div> @test");
         }
 
         [Test] public void IncludesLeaderInSecondTable() {
-            Assert.AreEqual(
-                " test@ <div> <table><tr> <td> stuff</td> </tr></table></div> @test and test@ <div> <table><tr> <td> more</td> </tr></table></div>",
-                Format(ParseRaw("test@stuff@test and test@more")));
+            AssertParseRaw("test@stuff@test and test@more",
+                " test@ <div> <table><tr> <td> stuff</td> </tr></table></div> @test and test@ <div> <table><tr> <td> more</td> </tr></table></div>");
         }
 
         static void AssertParse(string input, string expected) {
             Assert.AreEqual(
                 " test@" + expected,
-                Format(Parse(input)));
+                Parse(input).Format());
+        }
+
+        static void AssertParseRaw(string input, string expected) {
+            Assert.AreEqual(
+                expected,
+                ParseRaw(input).Format());
         }
 
         static Tree<Cell> Parse(string input) {
@@ -105,21 +108,6 @@ namespace fitSharp.Test.NUnit.Parser {
                     new TextTableScanner(input, c => c == CharacterType.Letter),
                     text => new TreeList<Cell>(new CellBase(text)))
                 .Parse();
-        }
-
-        static string Format(Tree<Cell> tree, string separator = " ") {
-            var result = new StringBuilder();
-            if (!string.IsNullOrEmpty(tree.Value.GetAttribute(CellAttribute.Leader)))
-                result.AppendFormat("{0}{1}", tree.Value.GetAttribute(CellAttribute.Leader), separator);
-            result.Append(tree.Value.GetAttribute(CellAttribute.StartTag));
-            foreach (var branch in tree.Branches)
-                result.AppendFormat("{0}{1}", separator, Format(branch, separator));
-            if (!string.IsNullOrEmpty(tree.Value.GetAttribute(CellAttribute.Body)))
-                result.AppendFormat("{0}{1}", separator, tree.Value.GetAttribute(CellAttribute.Body));
-            result.Append(tree.Value.GetAttribute(CellAttribute.EndTag));
-            if (!string.IsNullOrEmpty(tree.Value.GetAttribute(CellAttribute.Trailer)))
-                result.AppendFormat("{0}{1}", separator, tree.Value.GetAttribute(CellAttribute.Trailer));
-            return result.ToString();
         }
     }
 }
