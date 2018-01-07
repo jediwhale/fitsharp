@@ -31,6 +31,6 @@ namespace fitSharp.Machine.Model {
     public class CellTreeLeaf: CellTree {
         public CellTreeLeaf(string text): base(new CellBase(text)) {}
 
-        public string Text { get { return Value.Text; } }
+        public string Text => Value.Text;
     }
 }

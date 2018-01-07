@@ -32,13 +32,9 @@ namespace fitSharp.Fit.Fixtures {
             return this;
         }
 
-        public bool IsExecutable {
-            get { return ParsedInput != null && ParsedInput.Branches.Count > 0; }
-        }
+        public bool IsExecutable => ParsedInput != null && ParsedInput.Branches.Count > 0;
 
-        public string Leader {
-            get { return ParsedInput.ValueAt(0).GetAttribute(CellAttribute.Leader); }
-        }
+        public string Leader => ParsedInput.ValueAt(0).GetAttribute(CellAttribute.Leader);
 
         public void Execute() {
             Execute(processor);

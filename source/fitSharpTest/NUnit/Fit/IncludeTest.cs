@@ -59,7 +59,7 @@ namespace fitSharp.Test.NUnit.Fit {
             processor.Get<Context>().PageSource = pageSource;
         }
 
-        Context Context { get { return processor.Get<Context>(); } }
+        Context Context => processor.Get<Context>();
         CellProcessorBase processor;
         IncludeAction includeAction;
 

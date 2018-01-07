@@ -13,17 +13,17 @@ namespace fit.Test.NUnit {
 
         [Test] public void HtmlStringIsParsed() {
             var service = new Service.Service();
-            Tree<Cell> result = service.Compose(StoryTestSource.FromString("<table><tr><td>hello</td></tr></table>"));
+            var result = service.Compose(StoryTestSource.FromString("<table><tr><td>hello</td></tr></table>"));
             var table = ((Parse)result).Parts;
             Assert.AreEqual("<table>", table.Tag);
-            Parse cell = table.Parts.Parts;
+            var cell = table.Parts.Parts;
             Assert.AreEqual("<td>", cell.Tag);
             Assert.AreEqual("hello", cell.Body);
         }
 
         [Test] public void NoTablesReturnsEmptyTree() {
             var service = new Service.Service();
-            Tree<Cell> result = service.Compose(StoryTestSource.FromString("<b>stuff</b>"));
+            var result = service.Compose(StoryTestSource.FromString("<b>stuff</b>"));
             Assert.AreEqual(0, result.Branches.Count);
         }
 
@@ -39,7 +39,7 @@ namespace fit.Test.NUnit {
             CheckRoundTrip("some stuff <table border=\"1\"><tr> umm <td>hello</td></tr></table> and more <table><tr><td>more</td></tr></table>");
         }
 
-        private static void CheckRoundTrip(string input) {
+        static void CheckRoundTrip(string input) {
             var service = new Service.Service();
             var source = service.Compose(StoryTestSource.FromString(input));
             var result = source.WriteBranches();

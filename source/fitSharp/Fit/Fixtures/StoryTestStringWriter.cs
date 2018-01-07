@@ -12,16 +12,16 @@ using fitSharp.Machine.Model;
 namespace fitSharp.Fit.Fixtures {
     public class StoryTestStringWriter: StoryTestWriter {
 
-        public string Tables { get { return tables.ToString(); } }
+        public string Tables => tables.ToString();
         public TestCounts Counts { get; private set; }
 
-        public StoryTestStringWriter ForTables(Action<string> handleTables) {
-            this.handleTables = handleTables;
+        public StoryTestStringWriter ForTables(Action<string> handleTablesAction) {
+            handleTables = handleTablesAction;
             return this;
         }
 
-        public StoryTestStringWriter ForCounts(Action<TestCounts> handleCounts) {
-            this.handleCounts = handleCounts;
+        public StoryTestStringWriter ForCounts(Action<TestCounts> handleCountsAction) {
+            handleCounts = handleCountsAction;
             return this;
         }
 
