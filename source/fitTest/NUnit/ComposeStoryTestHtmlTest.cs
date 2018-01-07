@@ -1,20 +1,19 @@
-﻿// Copyright © 2010 Syterra Software Inc.
+﻿// Copyright © 2018 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-using System.Linq;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
 
 namespace fit.Test.NUnit {
-    [TestFixture] public class StoryTestStringOperatorsTest {
+    [TestFixture] public class ComposeStoryTestHtmlTest {
 
         [Test] public void HtmlStringIsParsed() {
             var service = new Service.Service();
-            Tree<Cell> result = service.Compose(new StoryTestString("<table><tr><td>hello</td></tr></table>"));
+            Tree<Cell> result = service.Compose(StoryTestSource.FromString("<table><tr><td>hello</td></tr></table>"));
             var table = ((Parse)result).Parts;
             Assert.AreEqual("<table>", table.Tag);
             Parse cell = table.Parts.Parts;
@@ -24,7 +23,7 @@ namespace fit.Test.NUnit {
 
         [Test] public void NoTablesReturnsEmptyTree() {
             var service = new Service.Service();
-            Tree<Cell> result = service.Compose(new StoryTestString("<b>stuff</b>"));
+            Tree<Cell> result = service.Compose(StoryTestSource.FromString("<b>stuff</b>"));
             Assert.AreEqual(0, result.Branches.Count);
         }
 
@@ -42,8 +41,8 @@ namespace fit.Test.NUnit {
 
         private static void CheckRoundTrip(string input) {
             var service = new Service.Service();
-            var source = service.Compose(new StoryTestString(input));
-            var result = source.Branches.Aggregate(string.Empty, (current, table) => current + service.Parse(typeof (StoryTableString), TypedValue.Void, table));
+            var source = service.Compose(StoryTestSource.FromString(input));
+            var result = source.WriteBranches();
             Assert.AreEqual(input, result);
         }
     }

@@ -1,4 +1,4 @@
-﻿// Copyright © 2011 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2018 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -7,14 +7,10 @@ using System;
 using System.Text;
 using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
-using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Fixtures {
     public class StoryTestStringWriter: StoryTestWriter {
-        public StoryTestStringWriter(CellProcessor processor) {
-            this.processor = processor;
-        }
 
         public string Tables { get { return tables.ToString(); } }
         public TestCounts Counts { get; private set; }
@@ -30,7 +26,7 @@ namespace fitSharp.Fit.Fixtures {
         }
 
         public void WriteTable(Tree<Cell> table) {
-            var tableResult = processor.ParseTree<Cell, StoryTableString>(table).ToString();
+            var tableResult = table.WriteTree();
             if (string.IsNullOrEmpty(tableResult)) return;
 
             HandleTableResult(tableResult);
@@ -39,7 +35,7 @@ namespace fitSharp.Fit.Fixtures {
 
         public void WriteTest(Tree<Cell> test, TestCounts counts) {
             if (!writesTables) {
-                var testResult = processor.ParseTree<Cell, StoryTestString>(test).ToString();
+                var testResult = test.WriteBranches();
                 if (!string.IsNullOrEmpty(testResult)) HandleTableResult(testResult);
             }
             handleCounts(counts);
@@ -51,7 +47,6 @@ namespace fitSharp.Fit.Fixtures {
             tables.Append(tableResult);
         }
 
-        readonly CellProcessor processor;
         readonly StringBuilder tables = new StringBuilder();
 
         Action<string> handleTables = s => {};

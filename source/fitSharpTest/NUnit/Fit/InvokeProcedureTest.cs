@@ -1,13 +1,11 @@
-﻿// Copyright © 2016 Syterra Software Inc.
+﻿// Copyright © 2018 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-using fit;
 using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
-using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
 
@@ -59,8 +57,7 @@ namespace fitSharp.Test.NUnit.Fit {
             cellProcessor.Get<Procedures>().Save("procedure", Builder.ParseHtmlTable(errorProcedureHtml));
             var sample = new Sample();
             invokeProcedure.Invoke(new TypedValue(sample), new MemberName("procedure"), new CellTree());
-            Assert.AreEqual(errorProcedureHtml, cellProcessor.ParseTree(typeof(StoryTableString),
-                    (Tree<Cell>)cellProcessor.Get<Procedures>().GetValue("procedure")).ValueString);
+            Assert.AreEqual(errorProcedureHtml, ((Tree<Cell>)cellProcessor.Get<Procedures>().GetValue("procedure")).WriteTree());
         }
 
         [Test] public void ParameterValueIsSubstituted() {

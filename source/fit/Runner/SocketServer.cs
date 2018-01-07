@@ -1,4 +1,4 @@
-﻿// Copyright © 2012 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+﻿// Copyright © 2018 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -46,7 +46,7 @@ namespace fit.Runner {
         private void ProcessTestDocument(string document, StoryTestWriter writer) {
 			try {
 			    var storyTest = new StoryTest(service, writer)
-                    .WithInput(document)
+                    .WithInput(StoryTestSource.FromString(document))
                     .OnAbandonSuite(() => { suiteIsAbandoned = true; });
 			    reporter.WriteLine(storyTest.Leader);
 			    if (suiteSetupIdentifier.IsStartOf(storyTest.Leader) || IMaybeProcessingSuiteSetup)

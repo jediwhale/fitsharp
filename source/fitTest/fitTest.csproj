@@ -129,7 +129,7 @@
     <Compile Include="NUnit\SetUpFixtureTest.cs" />
     <Compile Include="NUnit\SocketServerTest.cs" />
     <Compile Include="NUnit\StartsWithHandlerTest.cs" />
-    <Compile Include="NUnit\StoryTestStringOperatorsTest.cs" />
+    <Compile Include="NUnit\ComposeStoryTestHtmlTest.cs" />
     <Compile Include="NUnit\SubstringHandlerTest.cs" />
     <Compile Include="NUnit\SymbolHandlerTest.cs" />
     <Compile Include="NUnit\TableFixtureTest.cs" />

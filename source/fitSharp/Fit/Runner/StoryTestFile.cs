@@ -1,4 +1,4 @@
-// Copyright © 2017 Syterra Software Inc. All rights reserved.
+// Copyright © 2018 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -18,7 +18,7 @@ namespace fitSharp.Fit.Runner {
 
         void WriteTest(PageResult result);
         void WriteNonTest();
-        string TestContent { get; }
+        StoryTestSource TestContent { get; }
     }
 
     public interface StoryTestPageExecutor {
@@ -45,11 +45,11 @@ namespace fitSharp.Fit.Runner {
             }
         }
 
-        public string TestContent {
+        public StoryTestSource TestContent {
             get {
-                if (HasTestName) return DecoratedContent.ToString();
-                if (myPath.IsSuiteSetUp || myPath.IsSuiteTearDown) return PlainContent.ToString();
-                return string.Empty;
+                if (HasTestName) return DecoratedContent;
+                if (myPath.IsSuiteSetUp || myPath.IsSuiteTearDown) return PlainContent;
+                return StoryTestSource.FromString(string.Empty);
             }
         }
 
@@ -87,12 +87,12 @@ namespace fitSharp.Fit.Runner {
 
         bool HasTestName => !(myPath.IsSetUp || myPath.IsTearDown || myPath.IsSuiteSetUp || myPath.IsSuiteTearDown);
 
-        StoryTestString DecoratedContent =>
-            new StoryTestString(myFolder.Decoration.IsEmpty
+        StoryTestSource DecoratedContent =>
+            StoryTestSource.FromString(myFolder.Decoration.IsEmpty
                 ? Content
                 : myFolder.Decoration.Decorate(Content));
 
-        StoryTestString PlainContent => new StoryTestString(Content);
+        StoryTestSource PlainContent => StoryTestSource.FromString(Content);
 
         void MakeStylesheet() {
             var filePath = Path.Combine(myFolder.OutputPath, styleName);

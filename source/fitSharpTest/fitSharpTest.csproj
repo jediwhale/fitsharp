@@ -80,7 +80,7 @@
     <Compile Include="NUnit\Fit\ParseNullTest.cs" />
     <Compile Include="NUnit\Fit\ParseOperatorTest.cs" />
     <Compile Include="NUnit\Fit\ParseQuotedStringTest.cs" />
-    <Compile Include="NUnit\Fit\ParseStoryTestStringTest.cs" />
+    <Compile Include="NUnit\Fit\TreeCellWriterTest.cs" />
     <Compile Include="NUnit\Fit\ParseSymbolTest.cs" />
     <Compile Include="NUnit\Fit\RunTestDefaultTest.cs" />
     <Compile Include="NUnit\Fit\StoryTestFileTest.cs" />

@@ -1,4 +1,4 @@
-// Copyright © 2017 Syterra Software Inc. All rights reserved.
+// Copyright © 2018 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -111,7 +111,7 @@ namespace fitSharp.Fit.Runner {
             public void Do(StoryTestPage page) {
                 var elapsedTime = new ElapsedTime();
                 var input = page.TestContent;
-                if (string.IsNullOrEmpty(input)) {
+                if (input.IsEmpty) {
                     page.WriteNonTest();
                     DoNoTest();
                 }
@@ -119,7 +119,7 @@ namespace fitSharp.Fit.Runner {
                 StoreCurrentlyExecutingPagePath(page.Name.Name);
 
 	            var service = newService(memory);
-                var writer = new StoryTestStringWriter(service);
+                var writer = new StoryTestStringWriter();
                 var storyTest = new StoryTest(service, writer).WithInput(input);
 
                 if (!storyTest.IsExecutable) {
@@ -168,7 +168,7 @@ namespace fitSharp.Fit.Runner {
             public bool SuiteIsAbandoned => false;
 
             public void Do(StoryTestPage page) {
-                if (string.IsNullOrEmpty(page.TestContent)) return;
+                if (page.TestContent.IsEmpty) return;
 	            reporter.WriteLine(page.Name.Name);
             }
 

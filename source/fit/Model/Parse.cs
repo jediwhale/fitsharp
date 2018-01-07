@@ -1,4 +1,4 @@
-// Copyright © 2016 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+// Copyright © 2018 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -8,7 +8,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using fitSharp.Fit.Operators;
+using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
 using fitSharp.Parser;
 
@@ -65,7 +65,7 @@ namespace fit
         }
 
 	    public string Body { get {
-	        return ParseStoryTestString.Body(this);
+	        return TreeCellWriter.Body(this);
             }
         }
 

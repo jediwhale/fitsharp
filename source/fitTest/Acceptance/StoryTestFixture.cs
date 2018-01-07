@@ -1,4 +1,4 @@
-﻿// Copyright © 2012 Syterra Software Inc.
+﻿// Copyright © 2018 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -20,12 +20,12 @@ namespace fit.Test.Acceptance {
         }
 
         public Parse PlainTest(string plainTest) {
-            var writer = new StoryTestStringWriter(Processor);
+            var writer = new StoryTestStringWriter();
             var storyTest = new StoryTest(Processor, writer)
-                .WithInput("test@\n" + plainTest);
+                .WithInput(StoryTestSource.FromString("test@\n" + plainTest));
             storyTest.Execute(new Service.Service(Processor));
             var resultString = writer.Tables.Substring(11);
-            var parseResult = Processor.Compose(new StoryTestString(resultString));
+            var parseResult = Processor.Compose(StoryTestSource.FromString(resultString));
             return (Parse)parseResult.Branches[0];
         }
         
