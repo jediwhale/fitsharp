@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <testResults>
   <result>
+    <relativePageName>document\fitSharp\Fit\SampleInputFiles\SampleExcelTest.xlsx</relativePageName>
+    <content><![CDATA[<table class="fit_table"><tr><td><span class="fit_interpreter">SampleDo</span></td></tr><tr><td><span class="fit_keyword">check</span></td><td><span class="fit_member">one</span></td><td class="pass">1</td></tr></table>]]></content>
+    <counts>
+      <right>1</right>
+      <wrong>0</wrong>
+      <ignores>0</ignores>
+      <exceptions>0</exceptions>
+    </counts>
+  </result>
+  <result>
     <relativePageName>document\fitSharp\Fit\SampleInputFiles\SampleSimpleTest.html</relativePageName>
     <content><![CDATA[<div id="fit_tags" style="color:gray; font-weight:bold; margin-bottom:1em;">Tags: SampleTag</div><br>
 This is a simple test.<br>
@@ -139,7 +149,7 @@ This is a simple test.<br>
     </counts>
   </result>
   <finalCounts>
-    <right>6</right>
+    <right>7</right>
     <wrong>1</wrong>
     <ignores>0</ignores>
     <exceptions>0</exceptions>

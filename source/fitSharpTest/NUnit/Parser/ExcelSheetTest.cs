@@ -6,8 +6,8 @@
 using fitSharp.Machine.Model;
 using fitSharp.Parser;
 using NUnit.Framework;
-using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
 
 namespace fitSharp.Test.NUnit.Parser {
     [TestFixture]
@@ -34,15 +34,28 @@ namespace fitSharp.Test.NUnit.Parser {
         [Test]
         public void ParsesMultipleRows() {
             AssertParses(Worksheet("A1", "A2"),
-                " <table class=\"fit_table\"> <tr> <td> A1value</td></tr> <tr> <td> A2value</td></tr></table>");        }
+                " <table class=\"fit_table\"> <tr> <td> A1value</td></tr> <tr> <td> A2value</td></tr></table>");
+        }
 
         [Test]
         public void ParsesMultipleTables() {
             AssertParses(Worksheet("A1", "A3"),
-                " <table class=\"fit_table\"> <tr> <td> A1value</td></tr></table> <br /> <table class=\"fit_table\"> <tr> <td> A3value</td></tr></table>");        }
+                " <table class=\"fit_table\"> <tr> <td> A1value</td></tr></table> <br /> <table class=\"fit_table\"> <tr> <td> A3value</td></tr></table>");
+        }
 
-        static void AssertParses(string worksheet, string expected) {
-            Assert.AreEqual(expected, new ExcelSheet(worksheet, text => new TreeList<Cell>(new CellBase(text))).Parse().Format());
+        [Test]
+        public void SubstitutesStrings() {
+            AssertParses(
+                "<worksheet xmlns=\"myNamespace\"><sheetData><row><c r=\"A1\" t=\"s\"><v>1</v></c><c r=\"B1\" t=\"s\"><v>0</v></c></row></sheetData></worksheet>",
+                " <table class=\"fit_table\"> <tr> <td> def</td> <td> abc</td></tr></table>",
+                "<sst xmlns=\"myNamespace\"><si><t>abc</t></si><si><t>def</t></si></sst>");
+        }
+
+        static void AssertParses(string worksheet, string expected, string strings = "<sst/>") {
+            var sheet = new ExcelSheet(text => new TreeList<Cell>(new CellBase(text)));
+            sheet.LoadStrings(XDocument.Parse(strings));
+            var sheetDocument = XDocument.Parse(worksheet);
+            Assert.AreEqual(expected, sheet.Parse(sheetDocument).Format());
         }
 
         static string Worksheet(params string[] addresses) {

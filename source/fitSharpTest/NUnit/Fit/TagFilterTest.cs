@@ -174,6 +174,8 @@ namespace fitSharp.Test.NUnit.Fit {
             public void WriteNonTest() {}
             public StoryTestSource TestContent { get { return StoryTestSource.FromString(content); } }
             public string OutputFile { get { return string.Empty;} }
+            public bool HasTestContent { get { return true; } }
+
         }
     }
 }

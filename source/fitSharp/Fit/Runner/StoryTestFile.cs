@@ -18,6 +18,7 @@ namespace fitSharp.Fit.Runner {
 
         void WriteTest(PageResult result);
         void WriteNonTest();
+        bool HasTestContent { get; }
         StoryTestSource TestContent { get; }
     }
 
@@ -45,13 +46,9 @@ namespace fitSharp.Fit.Runner {
             }
         }
 
-        public StoryTestSource TestContent {
-            get {
-                if (HasTestName) return DecoratedContent;
-                if (myPath.IsSuiteSetUp || myPath.IsSuiteTearDown) return PlainContent;
-                return StoryTestSource.FromString(string.Empty);
-            }
-        }
+        public bool HasTestContent => HasTestName || HasSuiteName;
+
+        public StoryTestSource TestContent => HasTestName && !myPath.IsExcelSpreadsheet ? DecoratedContent : PlainContent;
 
         public void WriteNonTest() {
             // Setup/teardown contents are already inlined into every executed page
@@ -85,14 +82,15 @@ namespace fitSharp.Fit.Runner {
                    + counts.GetCount(TestStatus.Exception) + "--><!-- saved from url=(0014)about:internet -->";
         }
 
-        bool HasTestName => !(myPath.IsSetUp || myPath.IsTearDown || myPath.IsSuiteSetUp || myPath.IsSuiteTearDown);
+        bool HasTestName => !(myPath.IsSetUp || myPath.IsTearDown || HasSuiteName);
+        bool HasSuiteName => myPath.IsSuiteSetUp || myPath.IsSuiteTearDown;
 
         StoryTestSource DecoratedContent =>
             StoryTestSource.FromString(myFolder.Decoration.IsEmpty
                 ? Content
                 : myFolder.Decoration.Decorate(Content));
 
-        StoryTestSource PlainContent => StoryTestSource.FromString(Content);
+        StoryTestSource PlainContent => StoryTestSource.FromFile(myPath, Content);
 
         void MakeStylesheet() {
             var filePath = Path.Combine(myFolder.OutputPath, styleName);

@@ -1,18 +1,14 @@
-﻿// Copyright © 2017 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2018 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
+using System;
 using System.IO;
+using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Runner {
-    public interface StoryPageName {
-        string Name { get; }
-        bool IsSuitePage { get; }
-        bool IsSuiteSetUp { get; }
-        bool IsSuiteTearDown { get; }
-    }
 
     public class StoryFileName: StoryPageName {
 
@@ -27,6 +23,9 @@ namespace fitSharp.Fit.Runner {
         public bool IsSuitePage => IsSuiteSetUp || IsSuiteTearDown;
         public bool IsSuiteSetUp => ourSuiteSetupIdentifier.Equals(OutputFileName);
         public bool IsSuiteTearDown => ourSuiteTearDownIdentifier.Equals(OutputFileName);
+
+        public bool IsExcelSpreadsheet
+            => string.Compare(Path.GetExtension(Name), spreadsheetExtension, StringComparison.OrdinalIgnoreCase) == 0;
 
         public bool IsSetUp {
             get {
@@ -43,6 +42,7 @@ namespace fitSharp.Fit.Runner {
         }
 
         const string outputExtension = ".html";
+        const string spreadsheetExtension = ".xlsx";
 
         static readonly IdentifierName ourSetupIdentifier1 = new IdentifierName("setup.html");
         static readonly IdentifierName ourSetupIdentifier2 = new IdentifierName("setup.htm");

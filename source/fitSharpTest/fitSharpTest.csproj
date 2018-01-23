@@ -47,6 +47,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Acceptance\FitNesseStory.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="NUnit\Fit\ParseNullTest.cs" />
     <Compile Include="NUnit\Fit\ParseOperatorTest.cs" />
     <Compile Include="NUnit\Fit\ParseQuotedStringTest.cs" />
+    <Compile Include="NUnit\Fit\StoryFileNameTest.cs" />
     <Compile Include="NUnit\Fit\TreeCellWriterTest.cs" />
     <Compile Include="NUnit\Fit\ParseSymbolTest.cs" />
     <Compile Include="NUnit\Fit\RunTestDefaultTest.cs" />

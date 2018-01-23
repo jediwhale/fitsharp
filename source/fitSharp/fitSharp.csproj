@@ -33,6 +33,8 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Web" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -79,6 +81,10 @@
     <Compile Include="Fit\Fixtures\UseFixture.cs" />
     <Compile Include="Fit\Loggers\ElapsedTime.cs" />
     <Compile Include="Fit\Model\CallStack.cs" />
+    <Compile Include="Fit\Model\ExcelStoryTestSource.cs" />
+    <Compile Include="Fit\Model\HtmlStoryTestSource.cs" />
+    <Compile Include="Fit\Model\StoryPageName.cs" />
+    <Compile Include="Fit\Model\TextStoryTestSource.cs" />
     <Compile Include="Fit\Model\TreeCellWriter.cs" />
     <Compile Include="Fit\Model\CellSubstring.cs" />
     <Compile Include="Fit\Model\DeepCopy.cs" />
@@ -111,8 +117,7 @@
     <Compile Include="Fit\Operators\CompareSubstring.cs" />
     <Compile Include="Fit\Operators\ComposeDefault.cs" />
     <Compile Include="Fit\Operators\ComposeShowAsOperator.cs" />
-    <Compile Include="Fit\Operators\ComposeStoryTestHtml.cs" />
-    <Compile Include="Fit\Operators\ComposeStoryTestText.cs" />
+    <Compile Include="Fit\Operators\ComposeStoryTest.cs" />
     <Compile Include="Fit\Operators\ExecuteDefault.cs" />
     <Compile Include="Fit\Operators\FindMemberPattern.cs" />
     <Compile Include="Fit\Operators\FindMemberQueryable.cs" />

@@ -110,17 +110,17 @@ namespace fitSharp.Fit.Runner {
 
             public void Do(StoryTestPage page) {
                 var elapsedTime = new ElapsedTime();
-                var input = page.TestContent;
-                if (input.IsEmpty) {
+                if (!page.HasTestContent) {
                     page.WriteNonTest();
                     DoNoTest();
+                    return;
                 }
 
                 StoreCurrentlyExecutingPagePath(page.Name.Name);
 
 	            var service = newService(memory);
                 var writer = new StoryTestStringWriter();
-                var storyTest = new StoryTest(service, writer).WithInput(input);
+                var storyTest = new StoryTest(service, writer).WithInput(page.TestContent);
 
                 if (!storyTest.IsExecutable) {
                     page.WriteNonTest();
@@ -168,7 +168,7 @@ namespace fitSharp.Fit.Runner {
             public bool SuiteIsAbandoned => false;
 
             public void Do(StoryTestPage page) {
-                if (page.TestContent.IsEmpty) return;
+                if (!page.HasTestContent) return;
 	            reporter.WriteLine(page.Name.Name);
             }
 

@@ -1,5 +1,5 @@
 ﻿// Copyright © 2018 Syterra Software Inc. All rights reserved.
-// The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+// The use and distribution terms for this software are covered by the Common Public License 1.0 (https://opensource.org/licenses/cpl1.0.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
@@ -8,31 +8,25 @@ using fitSharp.Machine.Model;
 using fitSharp.Parser;
 
 namespace fitSharp.Fit.Model {
-    public enum StoryTestType {
-        Html,
-        Text
-    }
-
-    public class StoryTestSource {
+    public abstract class StoryTestSource {
         public static StoryTestSource FromString(string content) {
-            return new StoryTestSource(
-                content.Contains(Characters.TextStoryTestBegin) ? StoryTestType.Text : StoryTestType.Html,
-                content);
+            if (content.Contains(Characters.TextStoryTestBegin)) {
+                return new TextStoryTestSource(content);
+            }
+            return new HtmlStoryTestSource(content);
+        }
+
+        public static StoryTestSource FromFile(StoryPageName name, string content) {
+            if (name.IsExcelSpreadsheet) {
+                return new ExcelStoryTestSource(name.Name);
+            }
+            return FromString(content);
         }
 
         public static Tree<Cell> MakeTreeCell(CellProcessor processor, string text) {
             return processor.MakeCell(text, string.Empty, new TreeList<Cell>[] {});
-        } 
-
-        public StoryTestSource(StoryTestType type, string content) {
-            Type = type;
-            this.content = content;
         }
 
-        public StoryTestType Type { get; }
-        public bool IsEmpty => string.IsNullOrEmpty(content);
-        public override string ToString() { return content; }
-
-        readonly string content;
+        public abstract Tree<Cell> Parse(CellProcessor processor);
     }
 }
