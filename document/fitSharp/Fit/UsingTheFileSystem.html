@@ -9,14 +9,19 @@ to be bound by the terms of this license. You must not remove this notice, or an
   <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
  <link href="../fitsharp1.css" type="text/css" rel="stylesheet">
   <link href="fit.css" type="text/css" rel="stylesheet">
-  <title>App Config File</title>
+  <title>Using The File System</title>
 </head>
 <body>
 <div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
-<div class="pagename">App Config File</div>
-<div class="content">If our application uses an application configuration file, e.g. myapp.exe.config, it won't be loaded by default when the <span style="font-family:verdana,sans-serif"><i>fit</i>Sharp</span> Runner executes. To specify the application configuration file, we use the -a switch.<br>
-<pre class="code">!define COMMAND_PATTERN {%m -a c:\mypath\myapp.exe.config ... %p}</pre> or <pre class="code">c:\apps\fitsharp\runner -a c:\mypath\myapp.exe.config ...</pre> or specify it in a <a href="../FitSharp/SuiteConfigurationFile.html">Suite Configuration File</a>.<br>
-</div>
+<div class="pagename">Using The File System</div>
+<div class="content">We can store our tests as files in the file system.<br>
+<br>
+There is a choice of three formats for writing tests:<ul><li><a href="../Fit/HtmlTableFormat.html">Html Table Format</a></li><li><a href="../Fit/PlainTextFormat.html">Plain Text Format</a></li><li><a href="../Fit/SpreadsheetFormat.html">Spreadsheet Format</a></li></ul>We can mix tests in different formats within a test suite, but an individual test page must be in one format.<br>
+<br>
+We can use any editor that we like for each format.<br>
+<br>
+To run tests from the file system, we use <a href="../Fit/FolderRunner.html">Folder Runner</a>.<br>
+<pre class="code">c:\apps\fitsharp\runner -r fit.Runner.FolderRunner -c c:\myfolder\mysuite.config.xml</pre></div>
 <div style="width:100%;text-align:right">
 <span class="footer">Copyright &copy; 2018 Syterra Software Inc. All rights reserved.</span>
 </div>

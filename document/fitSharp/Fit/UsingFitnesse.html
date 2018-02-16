@@ -14,7 +14,11 @@ to be bound by the terms of this license. You must not remove this notice, or an
 <body>
 <div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
 <div class="pagename">Using Fitnesse</div>
-<div class="content">To run tests from the <a class="externallink" href="http://www.fitnesse.org">FitNesse</a> wiki, we add the following to the root page of our Fit tests. This could be the root of our FitNesse wiki (e.g., localhost:8080/root) or on the Fit test page or suite page.<br>
+<div class="content">We can store, edit, and run tests using the <a class="externallink" href="http://www.fitnesse.org">FitNesse</a> framework.<br>
+<br>
+There is a choice of two formats for writing tests:<ul><li><a href="../Fit/HtmlTableFormat.html">Html Table Format</a></li><li><a href="../Fit/PlainTextFormat.html">Plain Text Format</a></li></ul>We can mix tests in either format within a test suite, but an individual test page must be in one format.<br>
+<br>
+To run tests from the <a class="externallink" href="http://www.fitnesse.org">FitNesse</a> wiki, we add the following to the root page of our Fit tests. This could be the root of our FitNesse wiki (e.g., localhost:8080/root) or on the Fit test page or suite page.<br>
 <pre class="code">[!path assemblies]
 !define COMMAND_PATTERN {%m -r fitnesse.fitserver.FitServer [-c suiteconfig] [-a appconfig] %p}
 !define TEST_RUNNER {c:\apps\fitsharp\Runner.exe}</pre> where:<ul><li>assemblies is a list of assemblies to load, seperated by ';' </li><li>appconfig is the name of an <a href="../FitSharp/AppConfigFile.html">App Config File</a></li><li>suiteconfig is the name of a <a href="../FitSharp/SuiteConfigurationFile.html">Suite Configuration File</a></li></ul>There are two ways to load the assemblies that contain our fixtures and our system under test:<ul><li>With the !path definition.</li><li>In a <a href="../FitSharp/SuiteConfigurationFile.html">Suite Configuration File</a></li></ul>Example:<br>
@@ -23,7 +27,7 @@ to be bound by the terms of this license. You must not remove this notice, or an
 !define TEST_RUNNER {c:\apps\fitsharp\Runner.exe}</pre> To run FitNesse tests from the command line, we can use the FitNesse <a class="externallink" href="http://fitnesse.org/FitNesse.UserGuide.CommandLineRestCommands">Command Line REST Commands</a>.<br>
 </div>
 <div style="width:100%;text-align:right">
-<span class="footer">Copyright &copy; 2017 Syterra Software Inc. All rights reserved.</span>
+<span class="footer">Copyright &copy; 2018 Syterra Software Inc. All rights reserved.</span>
 </div>
 
 </body>

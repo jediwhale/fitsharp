@@ -9,17 +9,18 @@ to be bound by the terms of this license. You must not remove this notice, or an
   <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
  <link href="../fitsharp1.css" type="text/css" rel="stylesheet">
   <link href="fit.css" type="text/css" rel="stylesheet">
-  <title>App Config File</title>
+  <title>Spreadsheet Format</title>
 </head>
 <body>
 <div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
-<div class="pagename">App Config File</div>
-<div class="content">If our application uses an application configuration file, e.g. myapp.exe.config, it won't be loaded by default when the <span style="font-family:verdana,sans-serif"><i>fit</i>Sharp</span> Runner executes. To specify the application configuration file, we use the -a switch.<br>
-<pre class="code">!define COMMAND_PATTERN {%m -a c:\mypath\myapp.exe.config ... %p}</pre> or <pre class="code">c:\apps\fitsharp\runner -a c:\mypath\myapp.exe.config ...</pre> or specify it in a <a href="../FitSharp/SuiteConfigurationFile.html">Suite Configuration File</a>.<br>
-</div>
+<div class="pagename">Spreadsheet Format</div>
+<div class="content"><span style="background-color:#E0E0FF">This is an early release feature and will be enhanced in future releases.</span><br>
+<br>
+<span style="font-family:verdana,sans-serif"><i>fit</i>Sharp</span> can run tests from spreadsheet files. Files with the extension <code>.xlsx</code> are assumed to be spreadsheets. Only the first sheet in a file is processed. Test tables are separated with one or more blank rows. Only cell values are used. Any cell formatting is ignored.</div>
 <div style="width:100%;text-align:right">
 <span class="footer">Copyright &copy; 2018 Syterra Software Inc. All rights reserved.</span>
 </div>
 
 </body>
 </html>
+<br>
