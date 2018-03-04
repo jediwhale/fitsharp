@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" 
+  xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -42,9 +43,11 @@
     <Compile Include="environment\DbEnvironmentFactory.cs" />
     <Compile Include="fixture\Clean.cs" />
     <Compile Include="fixture\CompareStoredQueries.cs" />
+    <Compile Include="fixture\CompareStoredQueriesHideMatchingRows.cs" />
     <Compile Include="fixture\DatabaseEnvironment.cs" />
     <Compile Include="fixture\DatabaseTest.cs" />
     <Compile Include="fixture\Execute.cs" />
+    <Compile Include="fixture\ExecuteDDL.cs" />
     <Compile Include="fixture\ExecuteProcedure.cs" />
     <Compile Include="fixture\Insert.cs" />
     <Compile Include="fixture\Inspect.cs" />
@@ -79,9 +82,6 @@
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
+  <Target Name="BeforeBuild"></Target><Target Name="AfterBuild"></Target>
   -->
 </Project>

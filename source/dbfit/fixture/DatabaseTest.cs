@@ -1,4 +1,4 @@
-// Copyright © 2015 Syterra Software Inc. Includes work Copyright (C) Gojko Adzic 2006-2008 http://gojko.net
+// Copyright ï¿½ 2015 Syterra Software Inc. Includes work Copyright (C) Gojko Adzic 2006-2008 http://gojko.net
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -101,6 +101,11 @@ namespace dbfit
             return new Execute(environment, statement);
         }
 
+        public Fixture ExecuteDDL(String statement)
+        {
+            return new ExecuteDDL(environment, statement);
+        }
+
         public Fixture Insert(String table)
         {
             return new Insert(environment, table);
@@ -169,6 +174,11 @@ namespace dbfit
         public Fixture CompareStoredQueries(String symbol1, String symbol2)
         {
             return new CompareStoredQueries(environment, symbol1, symbol2);
+        }
+
+        public Fixture CompareStoredQueriesHideMatchingRows(String symbol1, String symbol2)
+        {
+            return new CompareStoredQueriesHideMatchingRows(environment, symbol1, symbol2);
         }
 
         public void SetOption(String option, String value)
