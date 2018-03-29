@@ -29,10 +29,10 @@ namespace dbfit
 
         #region default implementations for IDbEnvironment methods and properties
 
-        private DbConnection _currentConnection;
-        private DbTransaction _currentTransaction;
+        private IDbConnection _currentConnection;
+        private IDbTransaction _currentTransaction;
 
-        public DbConnection CurrentConnection
+        public IDbConnection CurrentConnection
         {
             get
             {
@@ -43,7 +43,7 @@ namespace dbfit
                 _currentConnection = value;
             }
         }
-        public DbTransaction CurrentTransaction
+        public IDbTransaction CurrentTransaction
         {
             get
             {
@@ -53,7 +53,6 @@ namespace dbfit
             {
                 _currentTransaction = value;
             }
-
         }
 
         public  virtual void Connect(String dataSource, String username, String password, String database)
@@ -95,26 +94,29 @@ namespace dbfit
             CurrentConnection.ConnectionString = connectionString;
             CurrentConnection.Open();
         }
-        protected virtual void AddInput(DbCommand dbCommand, String name, Object value)
+        protected virtual void AddInput(IDbCommand dbCommand, String name, Object value)
         {
-            DbParameter dbParameter = dbCommand.CreateParameter();
+            var cmd = (DbCommand)dbCommand;
+            DbParameter dbParameter = cmd.CreateParameter();
             dbParameter.Direction = ParameterDirection.Input;
             dbParameter.ParameterName = name;
             dbParameter.Value = (value == null ? DBNull.Value : value);
             dbCommand.Parameters.Add(dbParameter);
         }
-        public  virtual DbCommand CreateCommand(string statement, CommandType commandType)
+
+        public virtual IDbCommand CreateCommand(string statement, CommandType commandType)
         {
             if (CurrentConnection == null) throw new ApplicationException("Not connected to database");
 
-            DbCommand dc = CurrentConnection.CreateCommand();
+            var cnx = (DbConnection)CurrentConnection;
+            DbCommand dc = cnx.CreateCommand();
             dc.CommandText = statement.Replace("\r", " ").Replace("\n", " ");
             dc.CommandType = commandType;
-            dc.Transaction = CurrentTransaction;
+            dc.Transaction = (DbTransaction)CurrentTransaction;
             dc.CommandTimeout = Options.CommandTimeOut;
-            return dc;
+            return (IDbCommand)dc;
         }
-        public void BindFixtureSymbols(Symbols symbols, DbCommand dc)
+        public virtual void BindFixtureSymbols(Symbols symbols, IDbCommand dc)
         {
             foreach (String paramName in ExtractParamNames(dc.CommandText))
             {

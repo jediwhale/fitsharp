@@ -64,7 +64,7 @@ namespace dbfit {
         /// <param name="statement">Command text to execute</param>
         /// <param name="commandType">Statement type</param>
         /// <returns>initialised DbCommand object</returns>
-        DbCommand CreateCommand(string statement, CommandType commandType);
+        IDbCommand CreateCommand(string statement, CommandType commandType);
         /// <summary>
         /// Closes the current connection and rolls back any active transactions. The transactions
         /// are automatically rolled back to make tests repeatable.
@@ -131,7 +131,7 @@ namespace dbfit {
         /// symbols that have no matching parameters are ignored.
         /// </summary>
         /// <param name="dc"></param>
-        void BindFixtureSymbols(Symbols symbols, DbCommand dc);
+        void BindFixtureSymbols(Symbols symbols, IDbCommand dc);
 
         /// <summary>
         /// Commit current transaction
@@ -160,11 +160,11 @@ namespace dbfit {
         /// <summary>
         /// Accessor for the current database connection, used by DBFit Fixtures
         /// </summary>
-        DbConnection CurrentConnection { get; }
+        IDbConnection CurrentConnection { get; }
         /// <summary>
         /// Accessor for the current database transaction, used by DBFit Fixtures
         /// </summary>
-        DbTransaction CurrentTransaction { get; }
+        IDbTransaction CurrentTransaction { get; }
 
     }
 }

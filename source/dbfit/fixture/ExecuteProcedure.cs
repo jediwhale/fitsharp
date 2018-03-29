@@ -104,7 +104,7 @@ namespace dbfit.fixture
         }
         private void InitCommand()
         {
-            command = dbEnvironment.CreateCommand(procedureName, CommandType.StoredProcedure);
+            command = (DbCommand)dbEnvironment.CreateCommand(procedureName, CommandType.StoredProcedure);
             DbParameterAccessor[] sortedAccessors = SortAccessors(accessors);
 
             foreach (DbParameterAccessor accessor in sortedAccessors)

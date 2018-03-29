@@ -26,7 +26,7 @@ namespace dbfit.util
             if (environment.SupportsReturnOnInsert)
                 throw new ApplicationException(environment.GetType() + 
                     " supports return on insert, IdRetrievalAccessor should not be used");
-            DbCommand cmd = environment.CreateCommand(environment.IdentitySelectStatement(tableName), CommandType.Text);
+            DbCommand cmd = (DbCommand)environment.CreateCommand(environment.IdentitySelectStatement(tableName), CommandType.Text);
          //   Console.WriteLine(environment.IdentitySelectExpression);
             object value = cmd.ExecuteScalar();
             value=Convert.ChangeType(value, expectedType);

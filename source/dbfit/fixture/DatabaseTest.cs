@@ -66,6 +66,11 @@ namespace dbfit
             fixture.SetParameter.SetParameterValue(Symbols, name, value);
         }
 
+        public Fixture SetTableParameter(String name, String type)
+        {
+            return new SetTableParameter(environment, Symbols, name, type);
+        }
+
         public void ClearParameters()
         {
             Symbols.Clear();
@@ -193,12 +198,12 @@ namespace dbfit
 
         public static DataTable GetDataTable(Symbols symbols, String query,IDbEnvironment environment, int rsNo)
         {
-            DbCommand dc = environment.CreateCommand(query, CommandType.Text);
+            var dc = environment.CreateCommand(query, CommandType.Text);
             if (Options.ShouldBindSymbols())
                 environment.BindFixtureSymbols(symbols, dc);
 
             DbDataAdapter oap = environment.DbProviderFactory.CreateDataAdapter();
-            oap.SelectCommand = dc;
+            oap.SelectCommand = (DbCommand)dc;
             var ds = new DataSet();
             oap.Fill(ds);
             dc.Dispose();

@@ -23,7 +23,7 @@ namespace dbfit.fixture
         {
             if (String.IsNullOrEmpty(statement))
                 statement = Args[0];
-            using (DbCommand dc = environment.CreateCommand(statement, CommandType.Text))
+            using (DbCommand dc = (DbCommand)environment.CreateCommand(statement, CommandType.Text))
             {
                 if (dbfit.util.Options.ShouldBindSymbols()) 
                     environment.BindFixtureSymbols(Symbols, dc);
