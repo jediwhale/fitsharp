@@ -1,4 +1,4 @@
-// Copyright © 2011 Syterra Software Inc. Includes work Copyright (C) Gojko Adzic 2006-2008 http://gojko.net
+// Copyright Â© 2011 Syterra Software Inc. Includes work Copyright (C) Gojko Adzic 2006-2008 http://gojko.net
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -65,7 +65,7 @@ namespace dbfit
             @"SELECT c.[name], TYPE_NAME(c.system_type_id) as [Type], c.max_length, 
             0 As is_output, 0 As is_cursor_ref, c.precision, c.scale
             FROM " + dbName + @"sys.columns c 
-            WHERE c.object_id = COALESCE(OBJECT_ID(@objname), (SELECT type_table_object_id FROM Foo.sys.table_types WHERE user_type_id = TYPE_ID(@objname)))
+            WHERE c.object_id = COALESCE(OBJECT_ID(@objname), (SELECT type_table_object_id FROM "+ dbName + @"sys.table_types WHERE user_type_id = TYPE_ID(@objname)))
             ORDER BY column_id" );
         }
 
