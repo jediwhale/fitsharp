@@ -42,14 +42,17 @@
     <Compile Include="environment\DbEnvironmentFactory.cs" />
     <Compile Include="fixture\Clean.cs" />
     <Compile Include="fixture\CompareStoredQueries.cs" />
+    <Compile Include="fixture\CompareStoredQueriesHideMatchingRows.cs" />
     <Compile Include="fixture\DatabaseEnvironment.cs" />
     <Compile Include="fixture\DatabaseTest.cs" />
     <Compile Include="fixture\Execute.cs" />
+    <Compile Include="fixture\ExecuteDDL.cs" />
     <Compile Include="fixture\ExecuteProcedure.cs" />
     <Compile Include="fixture\Insert.cs" />
     <Compile Include="fixture\Inspect.cs" />
     <Compile Include="fixture\Query.cs" />
     <Compile Include="fixture\QueryStats.cs" />
+    <Compile Include="fixture\SetTableParameter.cs" />
     <Compile Include="fixture\SetParameter.cs" />
     <Compile Include="fixture\StoreQuery.cs" />
     <Compile Include="fixture\Update.cs" />
@@ -62,6 +65,7 @@
     <Compile Include="util\IdRetrievalAccessor.cs" />
     <Compile Include="util\NameNormaliser.cs" />
     <Compile Include="util\Options.cs" />
+    <Compile Include="util\TableTypeParameter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\fitSharp\fitSharp.csproj">
@@ -79,9 +83,6 @@
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
+  <Target Name="BeforeBuild"></Target><Target Name="AfterBuild"></Target>
   -->
 </Project>

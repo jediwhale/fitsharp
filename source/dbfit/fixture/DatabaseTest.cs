@@ -1,4 +1,4 @@
-// Copyright © 2015 Syterra Software Inc. Includes work Copyright (C) Gojko Adzic 2006-2008 http://gojko.net
+// Copyright ï¿½ 2015 Syterra Software Inc. Includes work Copyright (C) Gojko Adzic 2006-2008 http://gojko.net
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -66,6 +66,11 @@ namespace dbfit
             fixture.SetParameter.SetParameterValue(Symbols, name, value);
         }
 
+        public Fixture SetTableParameter(String name, String type)
+        {
+            return new SetTableParameter(environment, Symbols, name, type);
+        }
+
         public void ClearParameters()
         {
             Symbols.Clear();
@@ -99,6 +104,11 @@ namespace dbfit
         public Fixture Execute(String statement)
         {
             return new Execute(environment, statement);
+        }
+
+        public Fixture ExecuteDDL(String statement)
+        {
+            return new ExecuteDDL(environment, statement);
         }
 
         public Fixture Insert(String table)
@@ -171,6 +181,11 @@ namespace dbfit
             return new CompareStoredQueries(environment, symbol1, symbol2);
         }
 
+        public Fixture CompareStoredQueriesHideMatchingRows(String symbol1, String symbol2)
+        {
+            return new CompareStoredQueriesHideMatchingRows(environment, symbol1, symbol2);
+        }
+
         public void SetOption(String option, String value)
         {
             util.Options.SetOption(Processor, option, value);
@@ -183,12 +198,12 @@ namespace dbfit
 
         public static DataTable GetDataTable(Symbols symbols, String query,IDbEnvironment environment, int rsNo)
         {
-            DbCommand dc = environment.CreateCommand(query, CommandType.Text);
+            var dc = environment.CreateCommand(query, CommandType.Text);
             if (Options.ShouldBindSymbols())
                 environment.BindFixtureSymbols(symbols, dc);
 
             DbDataAdapter oap = environment.DbProviderFactory.CreateDataAdapter();
-            oap.SelectCommand = dc;
+            oap.SelectCommand = (DbCommand)dc;
             var ds = new DataSet();
             oap.Fill(ds);
             dc.Dispose();

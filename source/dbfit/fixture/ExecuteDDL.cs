@@ -6,15 +6,15 @@ using System.Data;
 using System.Data.Common;
 namespace dbfit.fixture
 {
-    public class Execute:fit.Fixture
+    public class ExecuteDDL:fit.Fixture
     {
         private IDbEnvironment environment;
         private String statement;
-        public Execute()
+        public ExecuteDDL()
         {
             environment = DbEnvironmentFactory.DefaultEnvironment;
         }
-        public Execute(IDbEnvironment environment, String statement)
+        public ExecuteDDL(IDbEnvironment environment, String statement)
         {
             this.environment = environment;
             this.statement = statement;
@@ -25,8 +25,6 @@ namespace dbfit.fixture
                 statement = Args[0];
             using (DbCommand dc = (DbCommand)environment.CreateCommand(statement, CommandType.Text))
             {
-                if (dbfit.util.Options.ShouldBindSymbols()) 
-                    environment.BindFixtureSymbols(Symbols, dc);
                 dc.ExecuteNonQuery();
             }
         }

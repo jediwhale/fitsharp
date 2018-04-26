@@ -54,7 +54,7 @@ namespace dbfit.fixture {
 
 		private void InitCommand() {
 			String ctext=dbEnvironment.BuildUpdateCommand(tableName,updateAccessors,selectAccessors);
-			command = dbEnvironment.CreateCommand(ctext,CommandType.Text);
+			command = (DbCommand)dbEnvironment.CreateCommand(ctext,CommandType.Text);
          foreach (DbParameterAccessor accessor in updateAccessors) {
                 command.Parameters.Add(accessor.DbParameter);
          }

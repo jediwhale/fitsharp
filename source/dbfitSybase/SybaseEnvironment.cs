@@ -42,9 +42,10 @@ namespace dbfit
             get { return paramNames; }
         }
         
-        protected override void AddInput(DbCommand dbCommand, String name, Object value)
+        protected override void AddInput(IDbCommand dbCommand, String name, Object value)
         {
-            DbParameter dbParameter = dbCommand.CreateParameter();
+            var cmd = (DbCommand)dbCommand;
+            DbParameter dbParameter = cmd.CreateParameter();
             dbParameter.Direction = ParameterDirection.Input;
             if (!name.StartsWith(ParameterPrefix))
                 dbParameter.ParameterName = ParameterPrefix + name;
@@ -132,8 +133,9 @@ namespace dbfit
             {
                 objname =  NameNormaliser.NormaliseName(objname) ;
             }
-            DbCommand dc = CurrentConnection.CreateCommand();
-            dc.Transaction = CurrentTransaction;
+            var cnx = (DbConnection)CurrentConnection;
+            DbCommand dc = cnx.CreateCommand();
+            dc.Transaction = (DbTransaction)CurrentTransaction;
             dc.CommandText = query;
             dc.CommandType = CommandType.Text;
             AddInput(dc, "@objname", objname);

@@ -1,4 +1,4 @@
-// Copyright © 2011 Syterra Software Inc. Includes work Copyright (C) Gojko Adzic 2006-2008 http://gojko.net
+// Copyright Â© 2011 Syterra Software Inc. Includes work Copyright (C) Gojko Adzic 2006-2008 http://gojko.net
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -10,6 +10,7 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.Text.RegularExpressions;
 using dbfit.util;
+using fitSharp.Machine.Engine;
 
 namespace dbfit
 {
@@ -57,13 +58,15 @@ namespace dbfit
             }
             return "";
         }
-        public override Dictionary<String, DbParameterAccessor> GetAllColumns(String tableOrViewName)
+        public override Dictionary<String, DbParameterAccessor> GetAllColumns(String tableOrViewOrTypeName)
         {
-            string dbName = GetDbName(tableOrViewName);
-            return ReadIntoParams(tableOrViewName,
-            @"select c.[name], TYPE_NAME(c.system_type_id) as [Type], c.max_length, 
+            string dbName = GetDbName(tableOrViewOrTypeName);
+            return ReadIntoParams(tableOrViewOrTypeName,
+            @"SELECT c.[name], TYPE_NAME(c.system_type_id) as [Type], c.max_length, 
             0 As is_output, 0 As is_cursor_ref, c.precision, c.scale
-            from " + dbName + " sys.columns c where c.object_id = OBJECT_ID(@objname) order by column_id" );
+            FROM " + dbName + @"sys.columns c 
+            WHERE c.object_id = COALESCE(OBJECT_ID(@objname), (SELECT type_table_object_id FROM "+ dbName + @"sys.table_types WHERE user_type_id = TYPE_ID(@objname)))
+            ORDER BY column_id" );
         }
 
         private  Dictionary<string, DbParameterAccessor> ReadIntoParams(String objname, String query)
@@ -76,17 +79,18 @@ namespace dbfit
             {
                 objname = "[" + NameNormaliser.NormaliseName(objname) + "]";
             }
-            DbCommand dc = CurrentConnection.CreateCommand();
-            dc.Transaction = CurrentTransaction;
+            var cnx = (SqlConnection)CurrentConnection;
+            SqlCommand dc = cnx.CreateCommand();
+            dc.Transaction = (SqlTransaction)CurrentTransaction;
             dc.CommandText = query;
             dc.CommandType = CommandType.Text;
-            AddInput(dc, "@objname", objname);
+            dc.Parameters.Clear();
+            AddInput(dc, "objname", objname);
             DbDataReader reader = dc.ExecuteReader();
             var allParams = new Dictionary<string, DbParameterAccessor>();
             int position=0;
             while (reader.Read())
             {
-
                 String paramName = (reader.IsDBNull(0)) ? null : reader.GetString(0);
                 String dataType = reader.GetString(1);
                 int length = (reader.IsDBNull(2)) ? 0 : Convert.ToInt32(reader[2]);
@@ -126,6 +130,7 @@ namespace dbfit
                     new DbParameterAccessor(dp, GetDotNetType(dataType), position++, dataType);
             }
             reader.Close();
+            dc.Parameters.Clear();
             if (allParams.Count == 0)
                 throw new ApplicationException("Cannot read columns/parameters for object " + objname + " - check spelling or access privileges ");
             return allParams;
@@ -152,6 +157,8 @@ namespace dbfit
         private static readonly string[] VariantTypes = new[] { "SQL_VARIANT" };
         private static readonly string[] FloatTypes = new[] { "FLOAT" };
         private static readonly string[] RealTypes = new[] { "REAL" };
+        private static readonly string[] Structured = new[] { "TABLE TYPE" };
+
         private static string NormaliseTypeName(string dataType)
         {
             dataType = dataType.ToUpper().Trim();
@@ -159,8 +166,7 @@ namespace dbfit
             if (idx >= 0) dataType = dataType.Substring(0, idx);
             idx = dataType.IndexOf("(");
             if (idx >= 0) dataType = dataType.Substring(0, idx);
-            return dataType;
-            
+            return dataType;            
         }
         protected static SqlDbType GetDBType(String dataType)
         { 
@@ -187,8 +193,8 @@ namespace dbfit
             if (Array.IndexOf(VariantTypes, dataType) >= 0) return SqlDbType.Variant;
             if (Array.IndexOf(FloatTypes, dataType) >= 0) return SqlDbType.Float;
             if (Array.IndexOf(RealTypes, dataType) >= 0) return SqlDbType.Real;
-
-
+            if (Array.IndexOf(Structured, dataType) >= 0) return SqlDbType.Structured;
+            
             throw new NotSupportedException("Type " + dataType + " is not supported");
         }
         protected static Type GetDotNetType(String dataType)
@@ -215,8 +221,8 @@ namespace dbfit
             if (Array.IndexOf(FloatTypes, dataType) >= 0) return typeof(double);
             if (Array.IndexOf(RealTypes, dataType) >= 0) return typeof(float);
             if (Array.IndexOf(TimeTypes, dataType) >= 0) return typeof(TimeSpan);
-
-
+            if (Array.IndexOf(Structured, dataType) >= 0) return typeof(DataTable);
+            
             throw new NotSupportedException(".net Type " + dataType + " is not supported");
         }
         private static ParameterDirection GetParameterDirection(int isOutput) {
@@ -245,6 +251,45 @@ namespace dbfit
         protected override string BuildColumnName(string sourceColumnName)
         {
             return "[" + sourceColumnName + "]";
+        }
+
+        protected override void AddInput(IDbCommand dbCommand, String name, Object value)
+        {
+            SqlParameter dbParameter;
+            var cmd = (SqlCommand)dbCommand;
+
+            if (value is TableTypeParameter parameter)
+            {
+                dbParameter = cmd.Parameters.AddWithValue(name, parameter.Datatable );
+                dbParameter.Direction = ParameterDirection.Input;
+                dbParameter.SqlDbType = SqlDbType.Structured ;
+                dbParameter.TypeName = parameter.Tabletype;
+            }
+            else
+            {
+                dbParameter = cmd.Parameters.AddWithValue(name, (value ?? DBNull.Value));
+                dbParameter.Direction = ParameterDirection.Input;
+            }                
+        }
+        public override void BindFixtureSymbols(Symbols symbols, IDbCommand dc)
+        {
+            foreach (String paramName in ExtractParamNames(dc.CommandText))
+            {
+                AddInput(dc, paramName, symbols.GetValueOrDefault(paramName, null));
+            }
+        }
+
+        public override IDbCommand CreateCommand(string statement, CommandType commandType)
+        {
+            if (CurrentConnection == null) throw new ApplicationException("Not connected to database");
+
+            var cnx = (SqlConnection)CurrentConnection;
+            SqlCommand dc = cnx.CreateCommand();
+            dc.CommandText = statement.Replace("\r", " ").Replace("\n", " ");
+            dc.CommandType = commandType;
+            dc.Transaction = (SqlTransaction)CurrentTransaction;
+            dc.CommandTimeout = Options.CommandTimeOut;
+            return dc;
         }
     }
 }

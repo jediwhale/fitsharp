@@ -179,8 +179,9 @@ namespace dbfit
 
         private DbDataReader ExecuteParameterQuery(String[] queryParameters, String query)
         {
-            DbCommand dc = CurrentConnection.CreateCommand();
-            dc.Transaction = CurrentTransaction;
+            var cnx = (DbConnection)CurrentConnection;
+            DbCommand dc = cnx.CreateCommand();
+            dc.Transaction = (DbTransaction)CurrentTransaction;
             dc.CommandText = query;
             dc.CommandType = CommandType.Text;
             if (queryParameters.Length == 2)

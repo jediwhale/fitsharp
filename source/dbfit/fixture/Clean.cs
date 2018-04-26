@@ -58,14 +58,14 @@ namespace dbfit.fixture {
 
         private bool hadRowOperation=false;		
 		public bool clean() {
-            DbCommand command = environment.CreateCommand(
+            DbCommand command = (DbCommand)environment.CreateCommand(
                 "Delete from " + table +(where!=null?" where "+where:""), CommandType.Text);
             command.ExecuteNonQuery();
 			return true;
 		}
         public bool DeleteRowsForIDs()
         {
-            DbCommand command = environment.CreateCommand(
+            DbCommand command = (DbCommand)environment.CreateCommand(
                 "Delete from " + table + " where "+columnName +" in ("
                 + getIDCSV()+") "+(where != null ? " and " + where : ""), CommandType.Text);
             command.ExecuteNonQuery();
@@ -74,7 +74,7 @@ namespace dbfit.fixture {
         }
         public bool DeleteRowsForKeys()
         {
-            DbCommand command = environment.CreateCommand(
+            DbCommand command = (DbCommand)environment.CreateCommand(
                 "Delete from " + table + " where " + columnName + " in ("
                 + getKeyCSV() + ") " + (where != null ? " and " + where : ""), CommandType.Text);
             command.ExecuteNonQuery();
