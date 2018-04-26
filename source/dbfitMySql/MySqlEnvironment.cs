@@ -78,7 +78,7 @@ namespace dbfit
 
         private Dictionary<string, DbParameterAccessor> ProcedureReadIntoParams(String[] queryParameters, String query) //done
         {
-            DbDataReader reader = ExecuteParameterQuery(queryParameters, query);
+            var reader = ExecuteParameterQuery(queryParameters, query);
             Dictionary<String, DbParameterAccessor>
                 allParams = new Dictionary<string, DbParameterAccessor>();
             reader.Read();
@@ -158,7 +158,7 @@ namespace dbfit
 
         private Dictionary<string, DbParameterAccessor> ReadIntoParams(String[] queryParameters, String query) //done
         {
-            DbDataReader reader = ExecuteParameterQuery(queryParameters, query);
+            var reader = ExecuteParameterQuery(queryParameters, query);
             Dictionary<String, DbParameterAccessor>
                 allParams = new Dictionary<string, DbParameterAccessor>();
             int position = 0;
@@ -177,10 +177,10 @@ namespace dbfit
             return allParams;
         }
 
-        private DbDataReader ExecuteParameterQuery(String[] queryParameters, String query)
+        private IDataReader ExecuteParameterQuery(String[] queryParameters, String query)
         {
-            var cnx = (DbConnection)CurrentConnection;
-            DbCommand dc = cnx.CreateCommand();
+            var cnx = CurrentConnection;
+            var dc = cnx.CreateCommand();
             dc.Transaction = (DbTransaction)CurrentTransaction;
             dc.CommandText = query;
             dc.CommandType = CommandType.Text;
@@ -193,7 +193,7 @@ namespace dbfit
             {
                 AddInput(dc, "@objname", queryParameters[0]);
             }
-            DbDataReader reader = dc.ExecuteReader();
+            var reader = dc.ExecuteReader();
             return reader;
         }
         //datatypes done

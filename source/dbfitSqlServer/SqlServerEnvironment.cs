@@ -258,7 +258,8 @@ namespace dbfit
             SqlParameter dbParameter;
             var cmd = (SqlCommand)dbCommand;
 
-            if (value is TableTypeParameter parameter)
+            var parameter = value as TableTypeParameter;
+            if (parameter != null)
             {
                 dbParameter = cmd.Parameters.AddWithValue(name, parameter.Datatable );
                 dbParameter.Direction = ParameterDirection.Input;
@@ -283,11 +284,11 @@ namespace dbfit
         {
             if (CurrentConnection == null) throw new ApplicationException("Not connected to database");
 
-            var cnx = (SqlConnection)CurrentConnection;
-            SqlCommand dc = cnx.CreateCommand();
+            var cnx = CurrentConnection;
+            var dc = cnx.CreateCommand();
             dc.CommandText = statement.Replace("\r", " ").Replace("\n", " ");
             dc.CommandType = commandType;
-            dc.Transaction = (SqlTransaction)CurrentTransaction;
+            dc.Transaction = CurrentTransaction;
             dc.CommandTimeout = Options.CommandTimeOut;
             return dc;
         }

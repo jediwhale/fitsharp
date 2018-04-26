@@ -21,7 +21,7 @@ namespace dbfit.fixture
         private readonly IDbEnvironment dbEnvironment;
         private readonly bool expectException;
         private readonly List<DbParameterAccessor> accessors = new List<DbParameterAccessor>();
-        private DbCommand command;
+        private IDbCommand command;
         private String procedureName;
         private int? errorCode;
         private Parse currentRow;
@@ -104,7 +104,7 @@ namespace dbfit.fixture
         }
         private void InitCommand()
         {
-            command = (DbCommand)dbEnvironment.CreateCommand(procedureName, CommandType.StoredProcedure);
+            command = dbEnvironment.CreateCommand(procedureName, CommandType.StoredProcedure);
             DbParameterAccessor[] sortedAccessors = SortAccessors(accessors);
 
             foreach (DbParameterAccessor accessor in sortedAccessors)

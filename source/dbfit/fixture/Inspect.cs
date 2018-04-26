@@ -58,11 +58,11 @@ namespace dbfit.fixture
 		    addRowWithParamNames(table,allParams);
 	    }
 	    private void InspectQuery(Parse table) {
-            DbCommand dc = (DbCommand)environment.CreateCommand(objectName, CommandType.Text);
+            var dc = environment.CreateCommand(objectName, CommandType.Text);
             environment.BindFixtureSymbols(Symbols, dc);
 
             DbDataAdapter oap = environment.DbProviderFactory.CreateDataAdapter();
-            oap.SelectCommand = dc;
+            oap.SelectCommand = (DbCommand)dc;
             DataSet ds = new DataSet();
             oap.Fill(ds);
             dc.Dispose();

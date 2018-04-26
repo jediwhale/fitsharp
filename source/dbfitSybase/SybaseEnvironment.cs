@@ -44,8 +44,8 @@ namespace dbfit
         
         protected override void AddInput(IDbCommand dbCommand, String name, Object value)
         {
-            var cmd = (DbCommand)dbCommand;
-            DbParameter dbParameter = cmd.CreateParameter();
+            var cmd = dbCommand;
+            var dbParameter = cmd.CreateParameter();
             dbParameter.Direction = ParameterDirection.Input;
             if (!name.StartsWith(ParameterPrefix))
                 dbParameter.ParameterName = ParameterPrefix + name;
@@ -133,13 +133,13 @@ namespace dbfit
             {
                 objname =  NameNormaliser.NormaliseName(objname) ;
             }
-            var cnx = (DbConnection)CurrentConnection;
-            DbCommand dc = cnx.CreateCommand();
+            var cnx = CurrentConnection;
+            var dc = cnx.CreateCommand();
             dc.Transaction = (DbTransaction)CurrentTransaction;
             dc.CommandText = query;
             dc.CommandType = CommandType.Text;
             AddInput(dc, "@objname", objname);
-            DbDataReader reader = dc.ExecuteReader();
+            var reader = dc.ExecuteReader();
             Dictionary<String, DbParameterAccessor> allParams = new Dictionary<string, DbParameterAccessor>();
             int position = 0;
             while (reader.Read())

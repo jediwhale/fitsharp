@@ -202,7 +202,7 @@ namespace dbfit
             if (Options.ShouldBindSymbols())
                 environment.BindFixtureSymbols(symbols, dc);
 
-            DbDataAdapter oap = environment.DbProviderFactory.CreateDataAdapter();
+            var oap = environment.DbProviderFactory.CreateDataAdapter();
             oap.SelectCommand = (DbCommand)dc;
             var ds = new DataSet();
             oap.Fill(ds);

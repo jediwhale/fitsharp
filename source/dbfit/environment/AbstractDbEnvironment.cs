@@ -96,8 +96,7 @@ namespace dbfit
         }
         protected virtual void AddInput(IDbCommand dbCommand, String name, Object value)
         {
-            var cmd = (DbCommand)dbCommand;
-            DbParameter dbParameter = cmd.CreateParameter();
+            var dbParameter = dbCommand.CreateParameter();
             dbParameter.Direction = ParameterDirection.Input;
             dbParameter.ParameterName = name;
             dbParameter.Value = (value == null ? DBNull.Value : value);
@@ -108,13 +107,12 @@ namespace dbfit
         {
             if (CurrentConnection == null) throw new ApplicationException("Not connected to database");
 
-            var cnx = (DbConnection)CurrentConnection;
-            DbCommand dc = cnx.CreateCommand();
+            var dc = CurrentConnection.CreateCommand();
             dc.CommandText = statement.Replace("\r", " ").Replace("\n", " ");
             dc.CommandType = commandType;
-            dc.Transaction = (DbTransaction)CurrentTransaction;
+            dc.Transaction = CurrentTransaction;
             dc.CommandTimeout = Options.CommandTimeOut;
-            return (IDbCommand)dc;
+            return dc;
         }
         public virtual void BindFixtureSymbols(Symbols symbols, IDbCommand dc)
         {

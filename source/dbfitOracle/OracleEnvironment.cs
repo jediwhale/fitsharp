@@ -81,15 +81,15 @@ namespace dbfit {
 		}
 
 		private Dictionary<string, DbParameterAccessor> ReadIntoParams(String[] queryParameters, String query) {
-            var cnx = (DbConnection)CurrentConnection;
-            DbCommand dc = cnx.CreateCommand();
+            var cnx = CurrentConnection;
+            var dc = cnx.CreateCommand();
 			dc.Transaction = (DbTransaction)CurrentTransaction;
 			dc.CommandText = query;
 			dc.CommandType = CommandType.Text;
 			for (int i = 0; i < queryParameters.Length; i++) {
 				AddInput(dc, ":" + i, queryParameters[i].ToUpper());
 			}
-			DbDataReader reader = dc.ExecuteReader();
+			var reader = dc.ExecuteReader();
 			Dictionary<String, DbParameterAccessor>
 				allParams = new Dictionary<string, DbParameterAccessor>();
             int position = 0;

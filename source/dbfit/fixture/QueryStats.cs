@@ -36,18 +36,18 @@ namespace dbfit.fixture
             if (Query == null)
             {
                 Query = "select count(*) from " + TableName + (Where != null ? " where " + Where : "");
-                DbCommand dc = (DbCommand)environment.CreateCommand(Query, CommandType.Text);
+                var dc = environment.CreateCommand(Query, CommandType.Text);
                 object o=dc.ExecuteScalar();
                 dc.Dispose();
                 if (o != null) _rows = Convert.ToInt32(o);
             }
             else
             {
-                DbCommand dc = (DbCommand)environment.CreateCommand(Query, CommandType.Text);
+                var dc = environment.CreateCommand(Query, CommandType.Text);
                 environment.BindFixtureSymbols(Symbols, dc);
 
                 DbDataAdapter oap = environment.DbProviderFactory.CreateDataAdapter();
-                oap.SelectCommand = dc;
+                oap.SelectCommand = (DbCommand)dc;
                 DataSet ds = new DataSet();
                 oap.Fill(ds);
                 dc.Dispose();

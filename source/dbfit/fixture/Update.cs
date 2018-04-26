@@ -15,7 +15,7 @@ using fitSharp.Machine.Engine;
 namespace dbfit.fixture {
 	public class Update: ColumnFixture, MemberQueryable {
 	    private readonly IDbEnvironment dbEnvironment;
-		private DbCommand command;
+		private IDbCommand command;
 		private String tableName;
 		private DbParameterAccessor[] updateAccessors;
 		private DbParameterAccessor[] selectAccessors;
@@ -54,7 +54,7 @@ namespace dbfit.fixture {
 
 		private void InitCommand() {
 			String ctext=dbEnvironment.BuildUpdateCommand(tableName,updateAccessors,selectAccessors);
-			command = (DbCommand)dbEnvironment.CreateCommand(ctext,CommandType.Text);
+			command = dbEnvironment.CreateCommand(ctext,CommandType.Text);
          foreach (DbParameterAccessor accessor in updateAccessors) {
                 command.Parameters.Add(accessor.DbParameter);
          }

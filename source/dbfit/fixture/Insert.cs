@@ -18,7 +18,7 @@ namespace dbfit.fixture {
 	public class Insert: ColumnFixture, MemberQueryable {
 
 		private readonly IDbEnvironment dbEnvironment;
-		private DbCommand command;
+		private IDbCommand command;
 		private String tableName;
 
         // array of parameter accessors for the input command
@@ -56,7 +56,7 @@ namespace dbfit.fixture {
 		}
 		private void InitCommand() {
             String insert = dbEnvironment.BuildInsertCommand(tableName, accessors);
-            command = (DbCommand)dbEnvironment.CreateCommand(insert,
+            command = dbEnvironment.CreateCommand(insert,
                     CommandType.Text);
             foreach (DbParameterAccessor accessor in accessors) {
                   command.Parameters.Add(accessor.DbParameter);
