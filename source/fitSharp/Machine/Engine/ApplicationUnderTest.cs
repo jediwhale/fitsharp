@@ -1,4 +1,4 @@
-﻿// Copyright © 2015 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2018 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -67,22 +67,21 @@ namespace fitSharp.Machine.Engine {
                 return MatchName == candidateName;
             }
 
-            public string MatchName {get; private set; }
+            public string MatchName {get; }
         }
 
         public RuntimeType FindType(NameMatcher typeName) {
             var type = Type.GetType(typeName.MatchName);
+            if (type != null) return new RuntimeType(type);
+            type = SearchForType(typeName, cache);
             if (type == null) {
-                type = SearchForType(typeName, cache);
-                if (type == null) {
-                    assemblies.LoadWellKnownAssemblies(typeName.MatchName);
-                    type = SearchForType(typeName, assemblies.Types);
-                }
-                if (type == null) {
-                    throw new TypeMissingException(typeName.MatchName, assemblies.Report);
-                }
-                UpdateCache(type);
+                assemblies.LoadWellKnownAssemblies(typeName.MatchName);
+                type = SearchForType(typeName, assemblies.Types);
             }
+            if (type == null) {
+                throw new TypeMissingException(typeName.MatchName, assemblies.Report);
+            }
+            UpdateCache(type);
             return new RuntimeType(type);
         }
 
@@ -127,7 +126,8 @@ namespace fitSharp.Machine.Engine {
                 catch (FileNotFoundException) {} // if it's not there, we tried our best
             }
 
-            public void AddAssembly(string assemblyName) {
+            public void AddAssembly(string name) {
+                var assemblyName = name.StartsWith("file:///") ? name.Substring(8) : name;
                 if (IsIgnored(assemblyName)) return;
                 if (assemblies.Exists(a => a.Name == assemblyName)) return;
                 var assembly = appDomain.LoadAssembly(assemblyName);

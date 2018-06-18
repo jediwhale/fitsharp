@@ -1,4 +1,4 @@
-﻿// Copyright © 2017 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2018 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -15,15 +15,30 @@ namespace fitSharp.Test.NUnit.Machine {
     [TestFixture]
     public class ShellArgumentsTest {
 
-        [Test]
-        public void SpecifiesRunner() {
-            Parse(AssertRunnerSpecified, AssertNothingReported, "-r", "myRunner");
-        }
-
+#if !NETCOREAPP2_0
         [Test]
         public void SpecifiesAppConfigFile() {
             folderModel.MakeFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "myConfig.xml"), "stuff");
             Parse(AssertAppConfigSpecified, AssertNothingReported, "-a", "myConfig.xml", "-r", "myRunner");
+        }
+
+        [Test]
+        public void ChecksForMissingAppConfigFile() {
+            Parse(AssertNoAction, AssertAppConfigReported, "-a", "missing.xml");
+        }
+
+        static void AssertAppConfigReported(Error error) { AssertReportContains(error, "Application configuration file"); }
+
+        static int AssertAppConfigSpecified(Memory memory) {
+            memory.GetItem<AppDomainSetup>().ApplicationBase = ".";
+            Assert.IsTrue(memory.GetItem<AppDomainSetup>().ConfigurationFile.EndsWith("myConfig.xml"));
+            return 0;
+        }
+#endif
+
+        [Test]
+        public void SpecifiesRunner() {
+            Parse(AssertRunnerSpecified, AssertNothingReported, "-r", "myRunner");
         }
 
         [Test]
@@ -35,11 +50,6 @@ namespace fitSharp.Test.NUnit.Machine {
         [Test]
         public void ChecksForMissingRunner() {
             Parse(AssertNoAction, AssertRunnerReported);
-        }
-
-        [Test]
-        public void ChecksForMissingAppConfigFile() {
-            Parse(AssertNoAction, AssertAppConfigReported, "-a", "missing.xml");
         }
 
         [Test]
@@ -62,12 +72,6 @@ namespace fitSharp.Test.NUnit.Machine {
             return 0;
         }
 
-        static int AssertAppConfigSpecified(Memory memory) {
-            memory.GetItem<AppDomainSetup>().ApplicationBase = ".";
-            Assert.IsTrue(memory.GetItem<AppDomainSetup>().ConfigurationFile.EndsWith("myConfig.xml"));
-            return 0;
-        }
-
         static int AssertNoAction(Memory memory) {
             Assert.Fail();
             return 0;
@@ -75,7 +79,6 @@ namespace fitSharp.Test.NUnit.Machine {
 
         static void AssertNothingReported(Error error) { Assert.Fail(error.Message); }
         static void AssertRunnerReported(Error error) { AssertReportContains(error, "runner"); }
-        static void AssertAppConfigReported(Error error) { AssertReportContains(error, "Application configuration file"); }
         static void AssertSuiteConfigReported(Error error) { AssertReportContains(error, "Suite configuration file"); }
 
         static void AssertReportContains(Error error, string expected) {

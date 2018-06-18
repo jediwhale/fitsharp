@@ -1,9 +1,10 @@
-// Copyright © 2017 Syterra Software Inc. All rights reserved.
+// Copyright © 2018 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -34,10 +35,19 @@ namespace fitSharp.Machine.Application {
 
         int ReportError(Error error) {
             progressReporter.Write(error.Message);
-            progressReporter.WriteLine(arguments.Usage);
+            progressReporter.WriteLine(Usage);
             return 1;
         }
+        
+        static string Usage =>
+            $"Usage:\n\t{Process.GetCurrentProcess().ProcessName} [ -r runnerClass ][ -a appConfigFile ][ -c suiteConfigFile ] ...";
 
+
+#if NETCOREAPP2_0
+        int RunInDomain(Memory memory) {
+            return RunInCurrentDomain(memory);
+        }
+#else
         int RunInDomain(Memory memory) {
             return !memory.HasItem<AppDomainSetup>()
                 ? RunInCurrentDomain(memory)
@@ -66,6 +76,7 @@ namespace fitSharp.Machine.Application {
         int RunInNewDomain() {
             return arguments.LoadMemory().Select(ReportError, RunInCurrentDomain);
         }
+#endif
 
         int RunInCurrentDomain(Memory memory) {
             Runner = new BasicProcessor().Create(memory.GetItem<Settings>().Runner).GetValue<Runnable>();

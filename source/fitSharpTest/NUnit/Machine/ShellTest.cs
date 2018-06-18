@@ -1,4 +1,4 @@
-﻿// Copyright © 2017 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2018 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -15,18 +15,8 @@ using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Machine {
     [TestFixture] public class ShellTest {
-        [Test] public void RunnerIsCalled() {
-            var result = RunShell(new [] {"-r", typeof(SampleRunner).FullName});
-            Assert.AreEqual(SampleRunner.Result, result);
-        }
 
-        [Test] public void AdditionalArgumentsArePassed() {
-            RunShell(new [] {"more", "-r", typeof(SampleRunner).FullName, "stuff"});
-            Assert.AreEqual(2, SampleRunner.LastArguments.Count);
-            Assert.AreEqual("more", SampleRunner.LastArguments[0]);
-            Assert.AreEqual("stuff", SampleRunner.LastArguments[1]);
-        }
-
+#if !NETCOREAPP2_0
         [Test] public void CustomAppConfigIsUsed() {
             var result = RunShell(new[] {"-a", "fitSharpTest.dll.alt.config",
                 "-r", typeof (SampleRunner).FullName + "," + typeof (SampleRunner).Assembly.CodeBase} );
@@ -46,6 +36,19 @@ namespace fitSharp.Test.NUnit.Machine {
             var result = RunShell(new[] {"-c", "suite.config.xml",
                 "-r", typeof (SampleRunner).FullName + "," + typeof (SampleRunner).Assembly.CodeBase}, folders );
             Assert.AreEqual(606, result);
+        }
+#endif
+
+        [Test] public void RunnerIsCalled() {
+            var result = RunShell(new [] {"-r", typeof(SampleRunner).FullName});
+            Assert.AreEqual(SampleRunner.Result, result);
+        }
+
+        [Test] public void AdditionalArgumentsArePassed() {
+            RunShell(new [] {"more", "-r", typeof(SampleRunner).FullName, "stuff"});
+            Assert.AreEqual(2, SampleRunner.LastArguments.Count);
+            Assert.AreEqual("more", SampleRunner.LastArguments[0]);
+            Assert.AreEqual("stuff", SampleRunner.LastArguments[1]);
         }
 
         [Test] public void RunnerFromSuiteConfigIsUsed() {
@@ -99,12 +102,16 @@ namespace fitSharp.Test.NUnit.Machine {
         public int Run(IList<string> arguments, Memory memory, ProgressReporter reporter) {
             LastArguments = arguments;
             ApartmentState = Thread.CurrentThread.GetApartmentState();
+#if NETCOREAPP2_0
+            return Result;
+#else
             try {
                 return int.Parse(ConfigurationManager.AppSettings.Get("returnCode"));
             }
             catch (Exception) {
                 return Result;
             }
+#endif
         }
     }
 }
