@@ -58,9 +58,9 @@ The file format is XML. Here is a sample showing the configurable items:<br>
 <span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">Apartment State</span><br>
 The default COM apartment state is MTA. It can be set to STA when testing with software that requires this.<br>
 <br>
+<div style="border:1px solid #e0e0ff"><span style="background-color:#e0e0ff;font-size:smaller;">.NET Framework only</span><br>
 <span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">System.AppDomainSetup</span><br>
-This section describes the App Domain in which story tests are executed. Two frequently-used properties are:<ul><li>ApplicationBase: the directory where application executable files are found</li><li>ConfigurationFile: the application configuration file used by the application under test.</li></ul>See the MSDN documentation for a complete list of properties for App Domain Setup.<br>
-<br>
+This section describes the App Domain in which story tests are executed. Two frequently-used properties are:<ul><li>ApplicationBase: the directory where application executable files are found</li><li>ConfigurationFile: the application configuration file used by the application under test.</li></ul>See the MSDN documentation for a complete list of properties for App Domain Setup.</div><br>
 <span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">ApplicationUnderTest</span><br>
 Assemblies and namespaces can be specified to be used when looking for fixture and domain classes.<ul><li>AddAssembly: loads the assembly</li><li>AddOptionalAssembly: loads the assembly, but is ignores if the assembly is not found. This may be useful when the suite configuration file is used in different situations where different assemblies may be present.</li><li>AddNamespace: adds the namespace to a list that is used to look for classes when class names appear without a namespace. </li></ul><br>
 <span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">Behavior</span><br>
@@ -70,7 +70,7 @@ These are the behavior keywords:<ul><li><i>std</i> - removes leading and trailin
     &lt;add key="fitVersion" value="std,fitlibrary1" />
 &lt;/appSettings></pre><br>
 <span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">CodePage</span><br>
-The default code page for file I/O is 1252 (Windows encoding). It can be set to other values to process Unicode, UTF-8 and other encodings. See the MSDN documentation for code page values.<br>
+The default code page for file I/O is 1252 (Windows encoding) for <span style="background-color:#e0e0ff;font-size:smaller;">.NET Framework</span> and UTF-8 for <span style="background-color:#e0e0ff;font-size:smaller;">.NET Core</span>. It can be set to other values to process Unicode, UTF-8 and other encodings. See the MSDN documentation for code page values.<br>
 <br>
 <span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">Culture</span><br>
 The name of the culture to use for test execution. The name "Invariant" can be used for the invariant culture.<br>

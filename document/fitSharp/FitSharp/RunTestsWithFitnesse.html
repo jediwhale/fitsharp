@@ -1,0 +1,50 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- fitSharp
+Copyright © Syterra Software Inc. All rights reserved.
+The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
+to be bound by the terms of this license. You must not remove this notice, or any other, from this software. -->
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+ <link href="../fitsharp1.css" type="text/css" rel="stylesheet">
+  <link href="fit.css" type="text/css" rel="stylesheet">
+  <title>Run Tests With Fitnesse</title>
+</head>
+<body>
+<div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
+<div class="pagename">Run Tests With Fitnesse</div>
+<div class="content">To run tests from the <a class="externallink" href="http://www.fitnesse.org">FitNesse</a> wiki, we need to install FitNesse first. Check the FitNesse download <a class="externallink" href="http://fitnesse.org/FitNesseDownload">instructions</a> for the latest on how to do that. To customize FitNesse for <span style="font-family:verdana,sans-serif"><i>fit</i>Sharp</span>, we add the following definitions to the root page of our tests. This could be the root of our FitNesse wiki (e.g., localhost:8080/root) or on the test page or on a suite page that includes the test pages.<br>
+<br>
+<div style="border:1px solid #e0e0ff"><span style="background-color:#e0e0ff;font-size:smaller;">.NET Framework</span><pre class="code">!define COMMAND_PATTERN {%m -c suiteconfig %p}
+!define TEST_RUNNER {pathToFitsharp\Runner.exe}</pre></div><div style="border:1px solid #e0e0ff"><span style="background-color:#e0e0ff;font-size:smaller;">.NET Core</span> <pre class="code">!define COMMAND_PATTERN {%m pathToFitSharp\Runner.dll -c suiteconfig %p}
+!define TEST_RUNNER {dotnet}</pre></div><br>
+where:<ul><li><code>suiteconfig</code> is the name of a <a href="../FitSharp/SuiteConfigurationFile.html">Suite Configuration File</a></li></ul>The <a href="../FitSharp/SuiteConfigurationFile.html">Suite Configuration File</a> contains information required to run our tests:<ul><li>The <code>Runner</code> tag indicates the class that runs the tests: <code>fitnesse.fitserver.FitServer</code> for Fit tests or <code>fitSharp.Slim.Service.Runner</code> for Slim tests.</li><li>The <code>AddAssembly</code> tag loads assemblies that contain our fixtures and system under test.</li><li>The <code>AddNamespace</code> tag specifies the namespaces used by our fixtures and system under test.</li><li><span style="background-color:#e0e0ff;font-size:smaller;">.NET Framework only:</span> The <code>ConfigurationFile</code> tag contains the name of the <a href="../FitSharp/AppConfigFile.html">App Config File</a> used by our system under test.</li></ul>Here's an example of a basic <a href="../FitSharp/SuiteConfigurationFile.html">Suite Configuration File</a>:<br>
+<pre class="code">&lt;suiteConfig>
+    &lt;System.AppDomainSetup>
+        &lt;ConfigurationFile>myapp.config&lt;/ConfigurationFile>
+    &lt;/System.AppDomainSetup>
+    &lt;ApplicationUnderTest>
+        &lt;AddAssembly>myTests.dll&lt;/AddAssembly>
+        &lt;AddNamespace>MyTests&lt;/AddNamespace>
+    &lt;/ApplicationUnderTest>
+    &lt;Settings>
+       &lt;Runner>fitSharp.Slim.Service.Runner&lt;/Runner>
+    &lt;/Settings>
+&lt;/suiteConfig></pre> We need to make sure the FitNesse root (e.g., localhost:8080/root) doesn't contain Java paths. If we find the following, we remove them.<br>
+<pre class="code">!path classes
+!path fitnesse.jar
+!path fitlibrary.jar</pre> We can now run tests from the FitNesse wiki, or we can run FitNesse tests from the command line with the <a class="externallink" href="http://fitnesse.org/FitNesse.UserGuide.AdministeringFitNesse.CommandLineArguments">-c command line argument</a>.<br>
+<br>
+ <span style="background-color:#f0f080">The following is deprecated and may be removed in a future release.</span><br>
+<br>
+We can specify some of the items in the <a href="../FitSharp/SuiteConfigurationFile.html">Suite Configuration File</a> in an alternate way:<ul><li>The <code>!path assemblies</code> definition specifies a list of assemblies to load, seperated by ';'.</li><li>The <code>-r runnerClass</code> command switch indicates the class that runs the tests.</li><li><span style="background-color:#e0e0ff;font-size:smaller;">.NET Framework only:</span> The <code>-a appConfigFile</code> command switch contains the name of the <a href="../FitSharp/AppConfigFile.html">App Config File</a> used by our system under test.</li></ul>Example:<br>
+<pre class="code">!path c:\mypath\myCode.dll
+!define COMMAND_PATTERN {%m -r fitnesse.fitserver.FitServer -a myapp.config -c mysuite.xml %p}
+!define TEST_RUNNER {c:\apps\fitsharp\Runner.exe}</pre></div>
+<div style="width:100%;text-align:right">
+<span class="footer">Copyright &copy; 2018 Syterra Software Inc. All rights reserved.</span>
+</div>
+
+</body>
+</html>
