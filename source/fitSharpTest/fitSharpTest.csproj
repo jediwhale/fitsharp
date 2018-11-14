@@ -108,6 +108,7 @@
     <Compile Include="NUnit\Machine\ShellArgumentsTest.cs" />
     <Compile Include="NUnit\Machine\ShellTest.cs" />
     <Compile Include="NUnit\Machine\StringDifferenceTest.cs" />
+    <Compile Include="NUnit\Machine\StringTest.cs" />
     <Compile Include="NUnit\Machine\SuiteConfigurationTest.cs" />
     <Compile Include="NUnit\Machine\TraverseTest.cs" />
     <Compile Include="NUnit\Machine\TreeTest.cs" />
@@ -143,10 +144,6 @@
     <ProjectReference Include="..\Samples\Samples.csproj">
       <Project>{52d82363-c201-4c78-8b94-018b79585763}</Project>
       <Name>Samples</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TestTarget\TestTarget.csproj">
-      <Project>{1a020ff5-df59-41cb-a38a-9963843156c6}</Project>
-      <Name>TestTarget</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
