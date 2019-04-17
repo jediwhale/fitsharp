@@ -3,6 +3,8 @@
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
+using fitSharp.IO;
+using fitSharp.Samples;
 using fitSharp.Slim.Service;
 using fitSharp.Test.Double.Slim;
 using NUnit.Framework;
@@ -12,8 +14,8 @@ namespace fitSharp.Test.NUnit.Slim {
 
         [SetUp]
         public void SetUp() {
-            session = new TestSession();
-            interpreter = new Interpreter(new Messenger(session), string.Empty, Builder.Service());
+            port = new TestPort();
+            interpreter = new Interpreter(new Messenger(new MessageChannel(port)), string.Empty, Builder.Service());
         }
 
         [Test] public void MultipleStepsAreExecuted() {
@@ -63,13 +65,13 @@ namespace fitSharp.Test.NUnit.Slim {
         }
 
         string Execute(string instructionString) {
-            session.Input = string.Format("{0:000000}:{1}", instructionString.Length, instructionString);
+            port.Input = string.Format("{0:000000}:{1}", instructionString.Length, instructionString) + "000003:bye";
             interpreter.ProcessInstructions();
-            return session.Output;
+            return port.Output;
         }
 
         Interpreter interpreter;
-        TestSession session;
+        TestPort port;
     }
 
     public class DummyClass {}

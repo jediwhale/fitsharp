@@ -3,6 +3,8 @@
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
+using fitSharp.IO;
+using fitSharp.Samples;
 using fitSharp.Slim.Service;
 using NUnit.Framework;
 
@@ -13,28 +15,28 @@ namespace fitSharp.Test.NUnit.Slim {
 
         [Test]
         public void WritesVersion() {
-            Assert.AreEqual("Slim -- V0.5\n", session.Output);
+            Assert.AreEqual("Slim -- V0.5\n", port.Output);
         }
 
         [Test]
         public void WritesMessageWithLengthPrefix() {
-            session.Output = string.Empty;
+            port.Clear();
             messenger.Write("hello");
-            Assert.AreEqual("000005:hello", session.Output);
+            Assert.AreEqual("000005:hello", port.Output);
         }
 
         [Test]
         public void ReadsMessageWithLengthPrefix() {
-            session.Input = "000005:hello";
+            port.Input = "000005:hello";
             Assert.AreEqual("hello", messenger.Read());
         }
 
         [Test]
         public void AtEndWhenByeRead() {
-            session.Input = "000003:bye";
+            port.Input = "000003:bye";
             messenger.Read();
             Assert.IsTrue(messenger.IsEnd);
-            Assert.IsTrue(session.IsClosed);
+            Assert.IsFalse(port.IsOpen);
         }
 
         /* slow tests
@@ -53,11 +55,11 @@ namespace fitSharp.Test.NUnit.Slim {
 
         [SetUp]
         public void SetUp() {
-            session = new TestSession();
-            messenger = new Messenger(session);
+            port = new TestPort();
+            messenger = new Messenger(new MessageChannel(port));
         }
 
-        TestSession session;
+        TestPort port;
         Messenger messenger;
     }
 }

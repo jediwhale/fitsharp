@@ -159,6 +159,8 @@
     <Compile Include="Fit\Service\NullResultWriter.cs" />
     <Compile Include="Fit\Service\ResultWriter.cs" />
     <Compile Include="Fit\Service\XmlResultWriter.cs" />
+    <Compile Include="IO\Port.cs" />
+    <Compile Include="IO\ConsolePort.cs" />
     <Compile Include="IO\ElapsedTime.cs" />
     <Compile Include="IO\FileSystemModel.cs" />
     <Compile Include="IO\FolderModel.cs" />
@@ -167,9 +169,8 @@
     <Compile Include="IO\Path.cs" />
     <Compile Include="IO\ProgressReporter.cs" />
     <Compile Include="IO\RequestReplyServer.cs" />
-    <Compile Include="IO\Session.cs" />
-    <Compile Include="IO\SocketModel.cs" />
-    <Compile Include="IO\SocketSession.cs" />
+    <Compile Include="IO\SocketPort.cs" />
+    <Compile Include="IO\MessageChannel.cs" />
     <Compile Include="IO\TextSource.cs" />
     <Compile Include="IO\TimeKeeper.cs" />
     <Compile Include="Machine\Application\ArgumentParser.cs" />
@@ -282,7 +283,6 @@
     <Compile Include="Slim\Operators\SlimInstruction.cs" />
     <Compile Include="Slim\Operators\SlimOperator.cs" />
     <Compile Include="Slim\Operators\SlimProcessor.cs" />
-    <Compile Include="Slim\Service\ConsoleSession.cs" />
     <Compile Include="Slim\Service\Document.cs" />
     <Compile Include="Slim\Service\Interpreter.cs" />
     <Compile Include="Slim\Service\Messenger.cs" />

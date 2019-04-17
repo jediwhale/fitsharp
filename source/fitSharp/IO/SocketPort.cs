@@ -1,4 +1,4 @@
-﻿// Copyright © 2009 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2019 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -6,21 +6,15 @@
 using System.Net.Sockets;
 
 namespace fitSharp.IO {
-    public interface SocketModel {
-        int Receive(byte[] buffer, int offset, int bytesToRead);
-        void Send(byte[] buffer);
-        void Close();
-    }
 
-    public class SocketModelImpl: SocketModel {
-        private readonly Socket socket;
+    public class SocketPort: Port {
 
-        public SocketModelImpl(string hostName, int port) {
+        public SocketPort(string hostName, int port) {
 			socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 		    socket.Connect(hostName, port);
         }
 
-        public SocketModelImpl(Socket socket) {
+        public SocketPort(Socket socket) {
             this.socket = socket;
         }
 
@@ -33,5 +27,7 @@ namespace fitSharp.IO {
         }
 
         public void Close() { socket.Close(); }
+        
+        readonly Socket socket;
     }
 }

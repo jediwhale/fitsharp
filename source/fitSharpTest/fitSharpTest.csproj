@@ -93,7 +93,7 @@
     <Compile Include="NUnit\Fit\ValuePhraseTest.cs" />
     <Compile Include="NUnit\Fit\XmlResultWriterTest.cs" />
     <Compile Include="NUnit\IO\ElapsedTimeTest.cs" />
-    <Compile Include="NUnit\IO\SocketSessionTest.cs" />
+    <Compile Include="NUnit\IO\MessageChannelTest.cs" />
     <Compile Include="NUnit\Machine\ApplicationUnderTestTest.cs" />
     <Compile Include="NUnit\Machine\ArgumentParserTest.cs" />
     <Compile Include="NUnit\Machine\CreateDefaultTest.cs" />
@@ -121,7 +121,6 @@
     <Compile Include="NUnit\Parser\TextTableScannerTest.cs" />
     <Compile Include="NUnit\Parser\TextTablesTest.cs" />
     <Compile Include="NUnit\Slim\ComposeOperatorsTest.cs" />
-    <Compile Include="NUnit\Slim\ConsoleSessionTest.cs" />
     <Compile Include="NUnit\Slim\ConverterTest.cs" />
     <Compile Include="NUnit\Slim\DocumentTest.cs" />
     <Compile Include="NUnit\Slim\ExecuteOperatorsTest.cs" />
@@ -133,7 +132,6 @@
     <Compile Include="NUnit\Slim\SampleClass.cs" />
     <Compile Include="NUnit\Slim\ServiceTest.cs" />
     <Compile Include="NUnit\Slim\SlimTreeTest.cs" />
-    <Compile Include="NUnit\Slim\TestSession.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

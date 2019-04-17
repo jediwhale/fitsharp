@@ -1,50 +1,54 @@
-﻿// Copyright © 2016 Syterra Software Inc. All rights reserved.
+// Copyright © 2019 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
 using System.IO;
-using System.Text;
-using fitSharp.IO;
 using fitSharp.Machine.Engine;
 
-namespace fitSharp.Slim.Service {
-    public class ConsoleSession: Session {
+namespace fitSharp.IO {
+    public class ConsolePort: Port {
 
-        public ConsoleSession(Memory memory) {
+        public ConsolePort(Memory memory) {
             this.memory = memory;
             saveOut = Console.Out;
             saveError = Console.Error;
+            inputStream = Console.OpenStandardInput();
+            outputStream = Console.OpenStandardOutput();
             CaptureConsole();
         }
-
-        public void Write(string message, string prefixFormat) {
-            WriteCaptured();
-            WriteToConsole(string.Format(prefixFormat, message.Length) + message);
+        
+        public int Receive(byte[] buffer, int offset, int bytesToRead) {
+            inputStream.Read(buffer, offset, bytesToRead);
+            return bytesToRead;
         }
 
-        public void Write(string message) {
-            WriteCaptured();
-            WriteToConsole(message);
-        }
-
-        public string Read(int length) {
-            return ReadFromConsole(length);
+        public void Send(byte[] buffer) {
+            outputStream.Write(buffer, 0, buffer.Length);
         }
 
         public void Close() {
             WriteCaptured();
+            inputStream.Close();
+            outputStream.Close();
             Console.SetOut(saveOut);
             Console.SetError(saveError);
         }
-
+        
         void WriteCaptured() {
             WriteEncoded("SOUT :", captureOut);
             WriteEncoded("SERR :", captureError);
             CaptureConsole();
         }
-
+        
+        void CaptureConsole() {
+            captureOut = new StringWriter();
+            captureError = new StringWriter();
+            Console.SetOut(captureOut);
+            Console.SetError(captureError);
+        }
+        
         void WriteEncoded(string prefix, StringWriter content) {
             var contentString = content.ToString();
             if (string.IsNullOrEmpty(contentString)) return;
@@ -55,32 +59,12 @@ namespace fitSharp.Slim.Service {
             memory.GetItem<Trace>().Write("ConsoleErr", encodedContent);
             saveError.Write(encodedContent);
         }
-
-        void WriteToConsole(string message) {
-            memory.GetItem<Trace>().Write("ConsoleOut", message);
-            saveOut.Write(message);
-        }
-
-        string ReadFromConsole(int length) {
-            var result = new StringBuilder(length);
-            for (var i = 0; i < length; i++) {
-                result.Append((char) Console.Read());
-            }
-            var message = result.ToString();
-            memory.GetItem<Trace>().Write("ConsoleIn", message);
-            return message;
-        }
-
-        void CaptureConsole() {
-            captureOut = new StringWriter();
-            captureError = new StringWriter();
-            Console.SetOut(captureOut);
-            Console.SetError(captureError);
-        }
-
+        
         readonly Memory memory;
         readonly TextWriter saveOut;
         readonly TextWriter saveError;
+        readonly Stream inputStream;
+        readonly Stream outputStream;
         StringWriter captureOut;
         StringWriter captureError;
     }
