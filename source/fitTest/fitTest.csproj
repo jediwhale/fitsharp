@@ -110,7 +110,6 @@
     <Compile Include="NUnit\FixtureNUnitTest.cs" />
     <Compile Include="NUnit\FixtureTableTest.cs" />
     <Compile Include="NUnit\FolderRunnerTest.cs" />
-    <Compile Include="NUnit\HttpRunnerTest.cs" />
     <Compile Include="NUnit\IntegralRangeHandlerTest.cs" />
     <Compile Include="NUnit\NamedMatchStrategyTest.cs" />
     <Compile Include="NUnit\NullKeywordHandlerTest.cs" />

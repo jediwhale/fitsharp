@@ -90,7 +90,6 @@
     <Compile Include="Runner\FitServer.cs" />
     <Compile Include="Runner\FitSocket.cs" />
     <Compile Include="Runner\FolderRunner.cs" />
-    <Compile Include="Runner\HttpRunner.cs" />
     <Compile Include="Runner\PathParser.cs" />
     <Compile Include="Runner\Protocol.cs" />
     <Compile Include="Runner\SocketServer.cs" />
