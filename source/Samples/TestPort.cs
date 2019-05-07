@@ -50,7 +50,9 @@ namespace fitSharp.Samples {
 
         public string Output => MessageChannel.Decode(GetBytes());
 
-        public string Input { set => PutBytes(MessageChannel.Encode(value)); }
+        public string Input {
+            set { PutBytes(MessageChannel.Encode(value)); }
+        }
 
         readonly List<byte> inBuffer = new List<byte>();
         readonly List<byte> outBuffer = new List<byte>();
