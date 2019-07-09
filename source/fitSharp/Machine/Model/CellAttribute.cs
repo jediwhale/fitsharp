@@ -1,4 +1,4 @@
-// Copyright © 2016 Syterra Software Inc. All rights reserved.
+// Copyright © 2019 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -38,24 +38,24 @@ namespace fitSharp.Machine.Model {
 
         public static CellAttributeValue Make(CellAttribute attribute) {
             return factories.ContainsKey(attribute)
-                ? factories[attribute](attribute)
+                ? factories[attribute]()
                 : new CellAttributeValue();
         }
 
-        static readonly Dictionary<CellAttribute, Func<CellAttribute, CellAttributeValue>> factories
-            = new Dictionary<CellAttribute, Func<CellAttribute, CellAttributeValue>> {
-                {CellAttribute.Add, key => new AddValue()},
-                {CellAttribute.Actual, key => new ActualValue()},
-                {CellAttribute.Difference, key => new DifferenceValue()},
-                {CellAttribute.Exception, key => new ExceptionValue()},
-                {CellAttribute.Folded, key => new FoldedValue()},
-                {CellAttribute.Formatted, key => new FormattedValue()},
-                {CellAttribute.InformationPrefix, key => new InformationPrefixValue()},
-                {CellAttribute.InformationSuffix, key => new InformationSuffixValue()},
-                {CellAttribute.Label, key => new LabelValue()},
-                {CellAttribute.Status, key => new StatusValue()},
-                {CellAttribute.Syntax, key => new SyntaxValue()},
-                {CellAttribute.Title, key => new TitleValue()}
+        static readonly Dictionary<CellAttribute, Func<CellAttributeValue>> factories
+            = new Dictionary<CellAttribute, Func<CellAttributeValue>> {
+                {CellAttribute.Add, () => new AddValue()},
+                {CellAttribute.Actual, () => new ActualValue()},
+                {CellAttribute.Difference, () => new DifferenceValue()},
+                {CellAttribute.Exception, () => new ExceptionValue()},
+                {CellAttribute.Folded, () => new FoldedValue()},
+                {CellAttribute.Formatted, () => new FormattedValue()},
+                {CellAttribute.InformationPrefix, () => new InformationPrefixValue()},
+                {CellAttribute.InformationSuffix, () => new InformationSuffixValue()},
+                {CellAttribute.Label, () => new LabelValue()},
+                {CellAttribute.Status, () => new StatusValue()},
+                {CellAttribute.Syntax, () => new SyntaxValue()},
+                {CellAttribute.Title, () => new TitleValue()}
         };
 
         public string Value { get; protected set; }
