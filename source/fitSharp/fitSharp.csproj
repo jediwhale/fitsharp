@@ -224,6 +224,7 @@
     <Compile Include="Machine\Model\Cell.cs" />
     <Compile Include="Machine\Model\CellAttribute.cs" />
     <Compile Include="Machine\Model\CellBase.cs" />
+    <Compile Include="Machine\Model\CellFactory.cs" />
     <Compile Include="Machine\Model\CellTree.cs" />
     <Compile Include="Machine\Model\Copyable.cs" />
     <Compile Include="Machine\Model\DomainAdapter.cs" />
