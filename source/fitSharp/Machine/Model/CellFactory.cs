@@ -9,4 +9,11 @@ namespace fitSharp.Machine.Model {
     public interface CellFactory {
         Tree<Cell> MakeCell(string text, string tag, IEnumerable<Tree<Cell>> branches);
     }
+
+    public static class CellFactoryExtension {
+        public static Tree<Cell> MakeEmptyCell(this CellFactory factory, string text) {
+            return factory.MakeCell(text, string.Empty, new TreeList<Cell>[] {});
+        }
+
+    }
 }

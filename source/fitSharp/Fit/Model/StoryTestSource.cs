@@ -4,6 +4,7 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using fitSharp.Fit.Engine;
+using fitSharp.Machine.Application;
 using fitSharp.Machine.Model;
 using fitSharp.Parser;
 
@@ -23,10 +24,6 @@ namespace fitSharp.Fit.Model {
             return FromString(content);
         }
 
-        public static Tree<Cell> MakeTreeCell(CellProcessor processor, string text) {
-            return processor.MakeCell(text, string.Empty, new TreeList<Cell>[] {});
-        }
-
-        public abstract Tree<Cell> Parse(CellProcessor processor);
+        public abstract Tree<Cell> Parse(CellFactory factory, Settings settings);
     }
 }
