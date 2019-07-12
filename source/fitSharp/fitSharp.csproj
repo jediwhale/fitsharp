@@ -51,6 +51,7 @@
     <Compile Include="Fit\Engine\CheckOperator.cs" />
     <Compile Include="Fit\Engine\DefaultFlowInterpreter.cs" />
     <Compile Include="Fit\Engine\ExecuteOperator.cs" />
+    <Compile Include="Fit\Engine\FitSettings.cs" />
     <Compile Include="Fit\Engine\FlowRow.cs" />
     <Compile Include="Fit\Engine\Interpreter.cs" />
     <Compile Include="Fit\Engine\InterpretFlow.cs" />
