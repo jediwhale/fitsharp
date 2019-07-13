@@ -32,7 +32,7 @@ namespace fitSharp.Fit.Service {
             Memory.GetItem<Symbols>();
             Memory.GetItem<Procedures>();
 
-            Memory.GetItem<FitSettings>().RunTestOperator = new RunTestDefault {Processor = this};
+            Memory.GetItem<FitSettings>().RunTest = new RunTestDefault();
 
             ApplicationUnderTest.AddNamespace("fitSharp.Fit.Fixtures");
         }

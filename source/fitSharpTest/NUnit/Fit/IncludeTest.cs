@@ -24,7 +24,7 @@ namespace fitSharp.Test.NUnit.Fit {
         }
 
         [Test] public void ParsesAndExecutesIncludedText() {
-            processor.Get<FitSettings>().RunTestOperator = new MockRunTestOperator {Processor = processor};
+            processor.Get<FitSettings>().RunTest = new MockRunTest();
             processor.AddOperator(new MockComposeStoryTestString());
             var includeTable = new CellTree(new CellTree("include", "string", input));
             new Include().Interpret(processor, includeTable);
@@ -71,17 +71,12 @@ namespace fitSharp.Test.NUnit.Fit {
         const string result = "more stuff";
         static Tree<Cell> parsedInput;
 
-        class MockRunTestOperator: CellOperator, RunTestOperator {
-            public bool CanRunTest(Tree<Cell> testTables, StoryTestWriter writer) {
-                return true;
-            }
-
-            public TypedValue RunTest(Tree<Cell> testTables, StoryTestWriter writer) {
+        class MockRunTest: RunTest {
+            public void Run(CellProcessor processor, Tree<Cell> testTables, StoryTestWriter writer) {
                 Assert.AreSame(parsedInput, testTables);
                 parsedInput.Value.SetAttribute(CellAttribute.Body, result);
                 writer.WriteTable(parsedInput);
-                Processor.TestStatus.MarkRight(testTables.Branches[0].Value);
-                return TypedValue.Void;
+                processor.TestStatus.MarkRight(testTables.Branches[0].Value);
             }
         }
 

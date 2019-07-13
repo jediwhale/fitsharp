@@ -7,9 +7,9 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Engine {
     public class FitSettings: Copyable {
-        public RunTestOperator RunTestOperator;
+        public RunTest RunTest;
         public Copyable Copy() {
-            return new FitSettings {RunTestOperator = RunTestOperator};
+            return new FitSettings {RunTest = RunTest};
         }
     }
 }

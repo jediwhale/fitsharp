@@ -59,7 +59,7 @@
     <Compile Include="Fit\Engine\ListMatcher.cs" />
     <Compile Include="Fit\Engine\ListMatchStrategy.cs" />
     <Compile Include="Fit\Engine\MethodPhrase.cs" />
-    <Compile Include="Fit\Engine\RunTestOperator.cs" />
+    <Compile Include="Fit\Engine\RunTest.cs" />
     <Compile Include="Fit\Engine\StoryTestWriter.cs" />
     <Compile Include="Fit\Engine\ValuePhrase.cs" />
     <Compile Include="Fit\Engine\WrapOperator.cs" />
