@@ -6,10 +6,18 @@
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Engine {
-    public class FitSettings: Copyable {
-        public RunTest RunTest;
-        public Copyable Copy() {
-            return new FitSettings {RunTest = RunTest};
+    public class FitEnvironment: Copyable {
+        public FitEnvironment(CellProcessor processor) {
+            this.processor = processor;
         }
+
+        public RunTest RunTest;
+        public DecorateElement DecorateElement;
+
+        public Copyable Copy() {
+            return new FitEnvironment(processor) {RunTest = RunTest};
+        }
+
+        readonly CellProcessor processor;
     }
 }

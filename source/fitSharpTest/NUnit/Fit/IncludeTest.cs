@@ -24,7 +24,7 @@ namespace fitSharp.Test.NUnit.Fit {
         }
 
         [Test] public void ParsesAndExecutesIncludedText() {
-            processor.Get<FitSettings>().RunTest = new MockRunTest();
+            processor.ItemOf<FitEnvironment>().RunTest = new MockRunTest();
             processor.AddOperator(new MockComposeStoryTestString());
             var includeTable = new CellTree(new CellTree("include", "string", input));
             new Include().Interpret(processor, includeTable);

@@ -41,7 +41,7 @@ namespace fitSharp.Fit.Fixtures {
         }
 
         public void Execute(CellProcessor cellProcessor) {
-            cellProcessor.Get<FitSettings>().RunTest.Run(cellProcessor, ParsedInput, writer);
+            cellProcessor.ItemOf<FitEnvironment>().RunTest.Run(cellProcessor, ParsedInput, writer);
             if (cellProcessor.TestStatus.SuiteIsAbandoned) abandonSuite();
         }
 
