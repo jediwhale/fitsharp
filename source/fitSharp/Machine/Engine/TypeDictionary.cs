@@ -20,7 +20,7 @@ namespace fitSharp.Machine.Engine {
 
         public Memory Copy() {
             var copy = new TypeDictionary();
-            foreach (Type key in items.Keys) {
+            foreach (var key in items.Keys) {
                 var item = items[key];
                 var copyableItem = item as Copyable;
                 copy.SetItem(key, copyableItem != null ? copyableItem.Copy() : item);
@@ -48,7 +48,7 @@ namespace fitSharp.Machine.Engine {
         }
 
         public object GetItem(string typeName) {
-            RuntimeType type = new ApplicationUnderTest().FindType(new IdentifierName(typeName));
+            var type = new ApplicationUnderTest().FindType(new IdentifierName(typeName));
             return GetItem(type.Type);
         }
 
