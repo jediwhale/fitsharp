@@ -4,12 +4,20 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
+using fitSharp.IO;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Engine {
-    public class DecorateElementDefault: DecorateElement {
-        public TypedValue Decorate(CellProcessor processor, Tree<Cell> element, Func<TypedValue> action) {
-            return action();
+    public class DecorateElapsed: DecorateElement {
+        public TypedValue Decorate(CellProcessor processor, Tree<Cell> table, Func<TypedValue> action) {
+            var elapsed = new ElapsedTime();
+            var result = action();
+            var time = elapsed.ToString();
+            if (!table.Branches.Last().Branches.Last().Value.Text.StartsWith("elapsed: ")) {
+                table.Branches.Last()
+                    .Add(processor.Compose(new TypedValue($"elapsed: {time}")));
+            }
+            return result;
         }
     }
 }

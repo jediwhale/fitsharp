@@ -1,4 +1,4 @@
-﻿// Copyright © 2016 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2019 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -25,8 +25,8 @@ namespace fitSharp.Machine.Model {
             return valueAs != null ? action(valueAs) : notAction();
         }
 
-        public void As<T>(Action<T> action, Action notAction) where T: class {
-            As<T, bool>(
+        public bool As<T>(Action<T> action, Action notAction) where T: class {
+            return As<T, bool>(
                 t => { action(t); return true; },
                 () => { notAction(); return false; });
         }

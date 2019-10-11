@@ -55,6 +55,8 @@
     <Compile Include="Double\FullTestConfig.cs" />
     <Compile Include="Double\SampleClass.cs" />
     <Compile Include="Double\SampleClassTwo.cs" />
+    <Compile Include="Double\SampleFixture.cs" />
+    <Compile Include="Double\SimpleSample.cs" />
     <Compile Include="Double\Slim\Builder.cs" />
     <Compile Include="NUnit\Fit\BindingFactoryTest.cs" />
     <Compile Include="NUnit\Fit\Builder.cs" />

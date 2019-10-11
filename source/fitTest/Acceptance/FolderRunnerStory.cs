@@ -1,4 +1,4 @@
-// Copyright © 2017 Syterra Software Inc.
+// Copyright Â© 2019 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -18,7 +18,7 @@ namespace fit.Test.Acceptance {
 
         public void Run(string[] theArguments) {
             TestClock.Instance.Now = new DateTime(2006, 12, 6, 13, 14, 15);
-            TestClock.Instance.UtcNow = new DateTime(2006, 12, 6, 13, 14, 15);
+            TestClock.Instance.Elapsed = new TimeSpan();
             Clock.Instance = TestClock.Instance;
             var shell = new Shell(reporter, new ShellArguments(new FileSystemModel(), theArguments));
             shell.Run();

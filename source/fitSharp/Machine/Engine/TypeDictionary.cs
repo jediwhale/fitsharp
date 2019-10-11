@@ -52,14 +52,14 @@ namespace fitSharp.Machine.Engine {
             return GetItem(type.Type);
         }
 
-        void SetItem(Type type, object value) { items[type] = value; }
-
-        object GetItem(Type type) {
+        public object GetItem(Type type) {
             if (!items.ContainsKey(type)) {
                 items[type] = new BasicProcessor().Create(type.AssemblyQualifiedName).GetValue<object>();
             }
             return items[type];
         }
+
+        void SetItem(Type type, object value) { items[type] = value; }
 
         readonly Dictionary<Type, object> items = new Dictionary<Type, object>();
     }

@@ -8,6 +8,6 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Engine {
     public interface DecorateElement {
-        TypedValue Decorate(Tree<Cell> element, Func<TypedValue> action);
+        TypedValue Decorate(CellProcessor processor, Tree<Cell> element, Func<TypedValue> action);
     }
 }

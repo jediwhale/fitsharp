@@ -1,12 +1,15 @@
-﻿// Copyright © 2018 Syterra Software Inc.
+﻿// Copyright © 2019 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
+using System;
 using fitlibrary;
 using fitSharp.Fit.Fixtures;
 using fitSharp.Fit.Model;
+using fitSharp.IO;
 using fitSharp.Machine.Engine;
+using fitSharp.Samples;
 
 namespace fit.Test.Acceptance {
     public class StoryTestFixture: DoFixture {
@@ -23,7 +26,10 @@ namespace fit.Test.Acceptance {
             var writer = new StoryTestStringWriter();
             var storyTest = new StoryTest(Processor, writer)
                 .WithInput(StoryTestSource.FromString("test@\n" + plainTest));
+            TestClock.Instance.Elapsed = new TimeSpan();
+            Clock.Instance = TestClock.Instance;
             storyTest.Execute(new Service.Service(Processor));
+            Clock.Instance = new Clock();
             var resultString = writer.Tables.Substring(11);
             var parseResult = Processor.Compose(StoryTestSource.FromString(resultString));
             return (Parse)parseResult.Branches[0];

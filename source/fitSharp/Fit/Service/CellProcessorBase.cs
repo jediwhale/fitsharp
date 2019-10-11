@@ -5,6 +5,7 @@
 
 using System.Collections.Generic;
 using fitSharp.Fit.Engine;
+using fitSharp.Fit.Fixtures;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Operators;
 using fitSharp.Machine.Engine;
@@ -32,8 +33,10 @@ namespace fitSharp.Fit.Service {
             Memory.GetItem<Symbols>();
             Memory.GetItem<Procedures>();
 
-            Memory.Add(new FitEnvironment(this));
-            Memory.ItemOf<FitEnvironment>().RunTest = new RunTestDefault();
+            Memory.Add(new FitEnvironment(this) {
+                RunTest = new RunTestDefault(),
+                DecorateElement = new DecorateElementDefault()
+            });
 
             ApplicationUnderTest.AddNamespace("fitSharp.Fit.Fixtures");
         }

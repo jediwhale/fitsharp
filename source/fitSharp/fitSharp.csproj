@@ -49,9 +49,10 @@
     <Compile Include="Fit\Engine\CellProcessor.cs" />
     <Compile Include="Fit\Engine\CellProcessorExtension.cs" />
     <Compile Include="Fit\Engine\CheckOperator.cs" />
+    <Compile Include="Fit\Engine\DecorateElapsed.cs" />
     <Compile Include="Fit\Engine\DefaultFlowInterpreter.cs" />
     <Compile Include="Fit\Engine\ExecuteOperator.cs" />
-    <Compile Include="Fit\Engine\FitEnvironment.cs" />
+    <Compile Include="Fit\Fixtures\FitEnvironment.cs" />
     <Compile Include="Fit\Engine\FlowRow.cs" />
     <Compile Include="Fit\Engine\Interpreter.cs" />
     <Compile Include="Fit\Engine\InterpretFlow.cs" />

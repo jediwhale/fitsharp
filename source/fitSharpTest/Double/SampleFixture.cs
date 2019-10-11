@@ -3,21 +3,16 @@
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
-using System;
+using System.Linq;
+using fitSharp.Fit.Engine;
 using fitSharp.Machine.Model;
 
-namespace fitSharp.Machine.Engine {
-    public interface Memory {
-        T ItemOf<T>();
-        void Add(object item);
-        Memory Copy();
-        void Apply(Action<object> action);
-        bool HasItem<T>();
-        T GetItem<T>() where T: new();
-        Maybe<T> Item<T>();
-        object GetItem(string typeName);
-        object GetItem(Type type);
+namespace fitSharp.Test.Double {
+    public class SampleFixture: Interpreter {
+        public void Interpret(CellProcessor processor, Tree<Cell> table) {
+            new Traverse<Cell>()
+                .All(row => row.Branches.Select(branch => branch.Value).Where(cell => cell.Text == "good").ForEach(cell => processor.TestStatus.MarkRight(cell)))
+                .VisitTable(table);
+        }
     }
-
-    public interface Configuration: Memory {}
 }
