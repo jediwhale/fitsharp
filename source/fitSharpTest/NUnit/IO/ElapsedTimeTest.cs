@@ -14,7 +14,7 @@ namespace fitSharp.Test.NUnit.IO {
             Clock.Instance = TestClock.Instance;
             var elapsed = new ElapsedTime();
             TestClock.Instance.Elapsed = new TimeSpan(0);
-            Assert.AreEqual("00:00:00.001", elapsed.ToString());
+            Assert.AreEqual("0.001", elapsed.ToString());
         }
 
         [Test] public void LongTimeIsShown() {

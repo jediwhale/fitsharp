@@ -8,7 +8,9 @@ namespace fitSharp.IO {
 
         public override string ToString() {
             var elapsed = Clock.Instance.Stop(watch);
-            return $"{elapsed.TotalHours:####00}:{elapsed.Minutes:00}:{elapsed.Seconds:00}.{elapsed.Milliseconds:000}";
+            return elapsed.TotalMinutes < 1.0
+                ? $"{elapsed.Seconds:#0}.{elapsed.Milliseconds:000}"
+                : $"{elapsed.TotalHours:####00}:{elapsed.Minutes:00}:{elapsed.Seconds:00}.{elapsed.Milliseconds:000}";
         }
 
         readonly int watch = Clock.Instance.Start();
