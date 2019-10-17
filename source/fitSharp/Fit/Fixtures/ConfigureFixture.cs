@@ -6,6 +6,7 @@
 using System;
 using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
+using fitSharp.Machine.Application;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Fixtures {
@@ -28,18 +29,15 @@ namespace fitSharp.Fit.Fixtures {
         static void Execute(CellProcessor processor, string facilityName, Tree<Cell> currentRow) {
             var facility = processorIdentifier.Matches(facilityName)
                 ? processor
-                : processor.Memory.GetItem(FindType(processor, facilityName));
+                : processor.Memory.GetItem(FindType(processor, facilityName, currentRow.ValueAt(0).Text));
 
             var result = currentRow.ExecuteMethod(processor, new DoRowSelector(), facility).ThrowExceptionIfNotValid();
             if (result.IsVoid) return;
             currentRow.ValueAt(0).SetAttribute(CellAttribute.Folded, result.ValueString);
         }
 
-        static Type FindType(CellProcessor processor, string typeName) {
-            if (string.Equals(typeName, "settings", StringComparison.OrdinalIgnoreCase)) {
-                return typeof(FitEnvironment);
-            }
-            return processor.ApplicationUnderTest.FindType(new GracefulNameMatcher(typeName)).Type;
+        static Type FindType(CellProcessor processor, string facilityName, string action) {
+            return processor.ApplicationUnderTest.FindType(new GracefulNameMatcher(ConfigurationNames.TypeName(facilityName, action))).Type;
         }
 
         static readonly IdentifierName processorIdentifier = new IdentifierName("processor");

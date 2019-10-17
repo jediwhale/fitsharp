@@ -33,7 +33,7 @@ namespace fitSharp.Fit.Service {
             Memory.GetItem<Symbols>();
             Memory.GetItem<Procedures>();
 
-            Memory.Add(new FitEnvironment(this) {
+            Memory.Add(new FitEnvironment() {
                 RunTest = new RunTestDefault(),
                 DecorateElement = new DecorateElementDefault()
             });

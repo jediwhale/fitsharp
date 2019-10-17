@@ -3,14 +3,10 @@
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
-using fitSharp.Fit.Engine;
 using fitSharp.Machine.Model;
 
-namespace fitSharp.Fit.Fixtures {
+namespace fitSharp.Fit.Engine {
     public class FitEnvironment: Copyable {
-        public FitEnvironment(CellProcessor processor) {
-            this.processor = processor;
-        }
 
         public RunTest RunTest;
         public DecorateElement DecorateElement;
@@ -20,12 +16,11 @@ namespace fitSharp.Fit.Fixtures {
         }
 
         public Copyable Copy() {
-            return new FitEnvironment(processor) {
+            return new FitEnvironment() {
                 RunTest = RunTest,
                 DecorateElement = DecorateElement
             };
         }
 
-        readonly CellProcessor processor;
     }
 }

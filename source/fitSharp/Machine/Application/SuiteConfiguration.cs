@@ -1,9 +1,8 @@
-﻿// Copyright © 2011 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2019 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
-using System.Collections.Generic;
 using System.Xml;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
@@ -33,12 +32,7 @@ namespace fitSharp.Machine.Application {
         }
 
         TypedValue AliasType(string originalType, string originalMethod) {
-            var originalTypeLower = originalType.ToLowerInvariant();
-            var newType = aliasTypes.ContainsKey(originalTypeLower) ? aliasTypes[originalTypeLower] : originalType;
-            if (newType == "fitSharp.Machine.Application.Settings" && originalMethod.ToLowerInvariant() == "appconfigfile") {
-                newType = "System.AppDomainSetup";
-            }
-            return new TypedValue(memory.GetItem(newType));
+            return new TypedValue(memory.GetItem(ConfigurationNames.TypeName(originalType, originalMethod)));
         }
 
         static string AliasMethod(string originalType, string originalMethod) {
@@ -75,22 +69,6 @@ namespace fitSharp.Machine.Application {
             }
             return result;
         }
-
-        static readonly Dictionary<string, string> aliasTypes = new Dictionary<string, string> {
-           {"fit.assemblies", "fitSharp.Machine.Engine.ApplicationUnderTest"},
-           {"fit.fileexclusions", "fitSharp.Fit.Application.FileExclusions"},
-           {"fit.namespaces", "fitSharp.Machine.Engine.ApplicationUnderTest"},
-           {"fit.settings", "fitSharp.Machine.Application.Settings"},
-           {"settings", "fitSharp.Machine.Application.Settings"},
-           {"fileexclusions", "fitSharp.Fit.Application.FileExclusions"},
-           {"slim.service", "fitSharp.Slim.Service.SlimOperators"},
-           {"slim.operators", "fitSharp.Slim.Service.SlimOperators"},
-           {"fitsharp.slim.service.service", "fitSharp.Slim.Service.SlimOperators"},
-           {"fit.service", "fit.Service.Operators"},
-           {"fit.operators", "fit.Service.Operators"},
-           {"fit.cellhandlers", "fit.Service.Operators"},
-           {"fitlibrary.cellhandlers", "fit.Service.Operators"}
-        };
 
         readonly Memory memory;
     }

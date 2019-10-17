@@ -52,7 +52,7 @@
     <Compile Include="Fit\Engine\DecorateElapsed.cs" />
     <Compile Include="Fit\Engine\DefaultFlowInterpreter.cs" />
     <Compile Include="Fit\Engine\ExecuteOperator.cs" />
-    <Compile Include="Fit\Fixtures\FitEnvironment.cs" />
+    <Compile Include="Fit\Engine\FitEnvironment.cs" />
     <Compile Include="Fit\Engine\FlowRow.cs" />
     <Compile Include="Fit\Engine\Interpreter.cs" />
     <Compile Include="Fit\Engine\InterpretFlow.cs" />
@@ -179,6 +179,7 @@
     <Compile Include="IO\TimeKeeper.cs" />
     <Compile Include="Machine\Application\ArgumentParser.cs" />
     <Compile Include="Machine\Application\AssemblyLoadFailureHandler.cs" />
+    <Compile Include="Machine\Application\ConfigurationNames.cs" />
     <Compile Include="Machine\Application\Context.cs" />
     <Compile Include="Machine\Application\Runnable.cs" />
     <Compile Include="Machine\Application\Settings.cs" />
