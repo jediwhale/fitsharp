@@ -51,7 +51,9 @@
 
 <Target Name="releasesolution">
     <MSBuild Projects="source\netcore\fitsharp.sln" 
-        Properties="Configuration=Release; OutputPath=../../../build/netcore "/>
+        Properties="Configuration=Release;TargetFramework=netcoreapp3.0; OutputPath=../../../build/netcore "/>
+    <MSBuild Projects="source\netcore\fitsharp.sln" 
+        Properties="Configuration=Release; TargetFramework=net472; OutputPath=../../../build/net472 "/>
 </Target>
 
 <ItemGroup>
