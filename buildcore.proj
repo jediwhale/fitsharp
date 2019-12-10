@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
-        DefaultTargets="copy;restore;solution;unittests;storytests" >
+        DefaultTargets="copy;restore;solution;deploy" >
 
 <PropertyGroup>
     <Config>Debug</Config>
@@ -51,19 +51,13 @@
 
 <Target Name="releasesolution">
     <MSBuild Projects="source\netcore\fitsharp.sln" 
-        Properties="Configuration=Release" />
+        Properties="Configuration=Release; OutputPath=../../../build/netcore "/>
 </Target>
 
 <ItemGroup>
-  <ZipFiles Include="build\release\fit.dll" />
-  <ZipFiles Include="build\release\fitSharp.dll" />
-  <ZipFiles Include="build\release\dbfit.dll" />
-  <ZipFiles Include="build\release\dbfit.oracle.dll" />
-  <ZipFiles Include="build\release\dbfit.sqlserver.dll" />
-  <ZipFiles Include="build\release\dbfit.mysql.dll" />
-  <ZipFiles Include="build\release\dbfit.sybase.dll" />
-  <ZipFiles Include="build\release\Runner.exe" />
-  <ZipFiles Include="build\release\RunnerW.exe" />
+  <ZipFiles Include="build\netcore\fit.dll" />
+  <ZipFiles Include="build\netcore\fitSharp.dll" />
+  <ZipFiles Include="build\netcore\Runner.exe" />
   <ZipFiles Include="license.txt" />
 </ItemGroup>
 
