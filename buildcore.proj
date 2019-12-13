@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
-        DefaultTargets="copy;restore;solution;deploy" >
+        DefaultTargets="copy;solution;storytests" >
 
 <PropertyGroup>
     <Config>Debug</Config>
 </PropertyGroup>
 
 <Target Name="all" DependsOnTargets="solution;unittests;storytests" />
-<Target Name="deploy" DependsOnTargets="releasesolution;zip" />
+<Target Name="deploy" DependsOnTargets="releasesolution;zipnet472;zipcore;" />
 
 <Target Name="copy">
   <Exec Command="xcopy source\fit\*.cs source\netcore\fit /R /S /Y" />
@@ -19,25 +19,34 @@
   <Exec Command="xcopy source\TestTarget\*.cs source\netcore\TestTarget /R /S /Y" />
 </Target>
 
-<Target Name="restore" DependsOnTargets="copy">
-    <Exec Command="dotnet restore source\netcore\fitsharp.sln" />
-</Target>
-
-<Target Name="solution" DependsOnTargets="restore">
+<Target Name="solution">
     <MSBuild Projects="source\netcore\fitsharp.sln" Properties="Configuration=$(Config)" />
 </Target>
 
 <!-- Set up a sandbox with a fixed name that story test pages
      and configurations can refer to. -->
 <Target Name="sandbox" DependsOnTargets="solution">
-    <ItemGroup>
-        <Assemblies Include="source\netcore\fitSharp\bin\$(Config)\netcoreapp2.0\fitsharp.dll; source\netcore\fit\bin\$(Config)\netcoreapp2.0\fit.dll; source\netcore\fitSharpTest\bin\$(Config)\netcoreapp2.0\fitSharpTest.dll; source\netcore\fitTest\bin\$(Config)\netcoreapp2.0\fitTest.dll; source\netcore\Samples\bin\$(Config)\netcoreapp2.0\Samples.dll; source\netcore\Runner\bin\$(Config)\netcoreapp2.0\Runner.dll; source\netcore\Runner\bin\$(Config)\netcoreapp2.0\Runner.runtimeconfig.json"/>
+    <MSBuild Projects="source\netcore\Runner\Runner.csproj" 
+        Properties="Configuration=Release; TargetFramework=netcoreapp3.0; OutputPath=../../../build/sandbox "/>
+    <MSBuild Projects="source\netcore\fitSharpTest\fitSharpTest.csproj" 
+        Properties="Configuration=Release; TargetFramework=netcoreapp3.0; OutputPath=../../../build/sandbox "/>
+    <MSBuild Projects="source\netcore\fitTest\fitTest.csproj" 
+        Properties="Configuration=Release; TargetFramework=netcoreapp3.0; OutputPath=../../../build/sandbox "/>
+    <!-- <ItemGroup>
+        <Assemblies Include="
+        source\netcore\fitSharp\bin\$(Config)\netcoreapp3.0\fitsharp.dll;
+        source\netcore\fit\bin\$(Config)\netcoreapp3.0\fit.dll;
+        source\netcore\fitSharpTest\bin\$(Config)\netcoreapp3.0\fitSharpTest.dll;
+        source\netcore\fitTest\bin\$(Config)\netcoreapp3.0\fitTest.dll;
+        source\netcore\Samples\bin\$(Config)\netcoreapp3.0\Samples.dll;
+        source\netcore\Runner\bin\$(Config)\netcoreapp3.0\Runner.dll;
+        source\netcore\Runner\bin\$(Config)\netcoreapp3.0\Runner.runtimeconfig.json"/>
     </ItemGroup>
 
     <Copy
         SourceFiles="@(Assemblies)"
         DestinationFolder="build\sandbox"
-    />
+    /> -->
 </Target>
 
 <Target Name="unittests" DependsOnTargets="solution">
@@ -46,25 +55,42 @@
 </Target>
 
 <Target Name="storytests" DependsOnTargets="sandbox">
-    <Exec Command="dotnet build\sandbox\runner.dll -c storytest.config.xml" />
+    <Exec Command="build\sandbox\Runner.exe -c storytest.config.xml" />
 </Target>
 
 <Target Name="releasesolution">
     <MSBuild Projects="source\netcore\fitsharp.sln" 
-        Properties="Configuration=Release;TargetFramework=netcoreapp3.0; OutputPath=../../../build/netcore "/>
+        Properties="Configuration=Release; TargetFramework=netcoreapp3.0; OutputPath=../../../build/netcore "/>
     <MSBuild Projects="source\netcore\fitsharp.sln" 
         Properties="Configuration=Release; TargetFramework=net472; OutputPath=../../../build/net472 "/>
 </Target>
 
 <ItemGroup>
-  <ZipFiles Include="build\netcore\fit.dll" />
-  <ZipFiles Include="build\netcore\fitSharp.dll" />
-  <ZipFiles Include="build\netcore\Runner.exe" />
+  <ZipFilesCore Include="build\netcore\fit.dll" />
+  <ZipFilesCore Include="build\netcore\fitSharp.dll" />
+  <ZipFilesCore Include="build\netcore\Runner.exe" />
+  <ZipFilesCore Include="license.txt" />
+</ItemGroup>
+
+<Target Name="zipcore">
+  <Exec Command="PowerShell -command Compress-Archive @(ZipFilesCore, ',') binary\mylatest_core.zip -Force" />
+</Target>
+
+<ItemGroup>
+  <ZipFiles Include="build\net472\fit.dll" />
+  <ZipFiles Include="build\net472\fitSharp.dll" />
+  <ZipFiles Include="build\net472\dbfit.dll" />
+  <ZipFiles Include="build\net472\dbfit.oracle.dll" />
+  <ZipFiles Include="build\net472\dbfit.sqlserver.dll" />
+  <ZipFiles Include="build\net472\dbfit.mysql.dll" />
+  <ZipFiles Include="build\net472\dbfit.sybase.dll" />
+  <ZipFiles Include="build\net472\Runner.exe" />
+  <ZipFiles Include="build\net472\RunnerW.exe" />
   <ZipFiles Include="license.txt" />
 </ItemGroup>
 
-<Target Name="zip">
-  <Exec Command="PowerShell -command Compress-Archive @(ZipFiles, ',') binary\mylatest.zip -Force" />
+<Target Name="zipnet472">
+  <Exec Command="PowerShell -command Compress-Archive @(ZipFilesCore, ',') binary\mylatest_core.zip -Force" />
 </Target>
 
 </Project>
