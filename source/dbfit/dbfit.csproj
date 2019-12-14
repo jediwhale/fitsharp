@@ -9,4 +9,7 @@
     <ProjectReference Include="..\fit\fit.csproj" />
     <ProjectReference Include="..\fitSharp\fitSharp.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.7.0" />
+  </ItemGroup>
 </Project>

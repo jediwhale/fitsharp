@@ -10,4 +10,7 @@
     <ProjectReference Include="..\fit\fit.csproj" />
     <ProjectReference Include="..\fitSharp\fitSharp.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Data.OracleClient" Version="1.0.8" />
+  </ItemGroup>
 </Project>

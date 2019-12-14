@@ -10,4 +10,7 @@
     <ProjectReference Include="..\fit\fit.csproj" />
     <ProjectReference Include="..\fitSharp\fitSharp.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MySql.Data" Version="8.0.18" />
+  </ItemGroup>
 </Project>

@@ -1,13 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <TargetFrameworks>netcoreapp3.0;net472</TargetFrameworks>
     <RootNamespace>dbfit.Sybase</RootNamespace>
     <Deterministic>false</Deterministic>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\dbfit\dbfit.csproj" />
     <ProjectReference Include="..\fit\fit.csproj" />
     <ProjectReference Include="..\fitSharp\fitSharp.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Sybase.AdoNet2.AseClient">
+      <HintPath>..\..\binary\tools\sybase\Sybase.AdoNet2.AseClient.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
