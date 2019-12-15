@@ -10,7 +10,11 @@
 <Target Name="all" DependsOnTargets="solution;unittests;storytests" />
 <Target Name="deploy" DependsOnTargets="releasesolution;zipnet472;zipcore;" />
 
-<Target Name="solution">
+<Target Name="restore">
+    <Exec Command="dotnet restore fitSharp.sln"/>
+</Target>
+
+<Target Name="solution" DependsOnTargets="restore">
     <MSBuild Projects="fitsharp.sln" Properties="Configuration=$(Config); TargetFramework=$(TargetFramework)" />
 </Target>
 
@@ -57,7 +61,7 @@
     <Exec Command="build\sandbox\Runner.exe -c storytest.config.xml" />
 </Target>
 
-<Target Name="releasesolution">
+<Target Name="releasesolution" DependsOnTargets="restore">
     <MSBuild Projects="fitsharp.sln" 
         Properties="Configuration=Release; TargetFramework=net472; OutputPath=..\..\build\net472"/>
     <MSBuild Projects="fitsharp.sln" 
