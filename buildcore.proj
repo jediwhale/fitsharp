@@ -66,13 +66,16 @@
 
 <Target Name="releasesolution">
     <MSBuild Projects="fitsharp.sln" 
-        Properties="Configuration=Release; OutputPath=../../../build "/>
+        Properties="Configuration=Release; TargetFramework=net472; OutputPath=..\..\build\net472"/>
+    <MSBuild Projects="fitsharp.sln" 
+        Properties="Configuration=Release; TargetFramework=netcoreapp3.0; OutputPath=..\..\build\netcoreapp3.0"/>
 </Target>
 
 <ItemGroup>
-  <ZipFilesCore Include="build\fit.dll" />
-  <ZipFilesCore Include="build\fitSharp.dll" />
-  <ZipFilesCore Include="build\Runner.exe" />
+  <ZipFilesCore Include="build\netcoreapp3.0\fit.dll" />
+  <ZipFilesCore Include="build\netcoreapp3.0\fitSharp.dll" />
+  <ZipFilesCore Include="build\netcoreapp3.0\Runner.exe" />
+  <ZipFilesCore Include="build\netcoreapp3.0\Runner.runtimeconfig.json"/>
   <ZipFilesCore Include="license.txt" />
 </ItemGroup>
 
@@ -94,7 +97,7 @@
 </ItemGroup>
 
 <Target Name="zipnet472">
-  <Exec Command="PowerShell -command Compress-Archive @(ZipFilesCore, ',') binary\mylatest_core.zip -Force" />
+  <Exec Command="PowerShell -command Compress-Archive @(ZipFiles, ',') binary\mylatest_net472.zip -Force" />
 </Target>
 
 </Project>
