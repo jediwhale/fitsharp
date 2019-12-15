@@ -67,6 +67,7 @@
 <ItemGroup>
   <ZipFilesCore Include="build\netcoreapp3.0\fit.dll" />
   <ZipFilesCore Include="build\netcoreapp3.0\fitSharp.dll" />
+  <ZipFilesCore Include="build\netcoreapp3.0\Runner.dll" />
   <ZipFilesCore Include="build\netcoreapp3.0\Runner.exe" />
   <ZipFilesCore Include="build\netcoreapp3.0\Runner.runtimeconfig.json"/>
   <ZipFilesCore Include="license.txt" />
