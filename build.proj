@@ -38,9 +38,8 @@
         source\fitSharpTest\bin\\$(Config)\$(TargetFramework)\fitSharpTest.dll;
         source\fitTest\bin\\$(Config)\$(TargetFramework)\fitTest.dll;
         source\Samples\bin\\$(Config)\$(TargetFramework)\Samples.dll;
-        source\Runner\bin\\$(Config)\$(TargetFramework)\Runner.dll;
         source\Runner\bin\\$(Config)\$(TargetFramework)\Runner.exe;"/>
-        <CoreSpecificAssemblies Include="source\Runner\bin\$(Config)\$(TargetFramework)\Runner.runtimeconfig.json"/>
+        <CoreSpecificAssemblies Include="source\Runner\bin\$(Config)\$(TargetFramework)\Runner.runtimeconfig.json;source\Runner\bin\\$(Config)\$(TargetFramework)\Runner.dll"/>
     </ItemGroup>
 
     <Copy Condition="'$(TargetFramework)'=='netcoreapp3.0'"
