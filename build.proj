@@ -32,24 +32,18 @@
 
 <Target Name="sandbox" DependsOnTargets="solution">
     <ItemGroup>
-
         <Assemblies Include="
         source\fitSharp\bin\\$(Config)\$(TargetFramework)\fitsharp.dll;
-        source\netcore\fit\bin\\$(Config)\$(TargetFramework)\fit.dll;
-        source\netcore\fitSharpTest\bin\\$(Config)\$(TargetFramework)\fitSharpTest.dll;
-        source\netcore\fitTest\bin\\$(Config)\$(TargetFramework)\fitTest.dll;
-        source\netcore\Samples\bin\\$(Config)\$(TargetFramework)\Samples.dll;
-        source\netcore\Runner\bin\\$(Config)\$(TargetFramework)\Runner.exe;
-        "/>
-
-        <CoreSpecificAssemblies Include="
-        source\netcore\Runner\bin\\$(Config)\$(TargetFramework)\Runner.runtimeconfig.json
-        "/>
-
+        source\fit\bin\\$(Config)\$(TargetFramework)\fit.dll;
+        source\fitSharpTest\bin\\$(Config)\$(TargetFramework)\fitSharpTest.dll;
+        source\fitTest\bin\\$(Config)\$(TargetFramework)\fitTest.dll;
+        source\Samples\bin\\$(Config)\$(TargetFramework)\Samples.dll;
+        source\Runner\bin\\$(Config)\$(TargetFramework)\Runner.dll;
+        source\Runner\bin\\$(Config)\$(TargetFramework)\Runner.exe;"/>
+        <CoreSpecificAssemblies Include="source\Runner\bin\$(Config)\$(TargetFramework)\Runner.runtimeconfig.json"/>
     </ItemGroup>
 
     <Copy Condition="'$(TargetFramework)'=='netcoreapp3.0'"
-
         SourceFiles="@(CoreSpecificAssemblies)"
         DestinationFolder="build\sandbox"
     />
