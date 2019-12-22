@@ -28,6 +28,7 @@ namespace fitSharp.RunnerW {
             textReporter.Write(Environment.NewLine);
         }
 
+        [Serializable]
         class TextReporter: ProgressReporter {
 
             public TextReporter(TextBox text) { this.text = text; }
