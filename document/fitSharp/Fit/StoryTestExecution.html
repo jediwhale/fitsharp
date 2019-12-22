@@ -49,7 +49,54 @@ to be bound by the terms of this license. You must not remove this notice, or an
 |start|myDomainClass|
 |xxx|xxx|</pre> If the first cell isn't a class name at all, a Do Fixture is still created. In this case, the first cell will have to be one of the <a href="../Fit/FlowFixtureKeywords.html">Flow Fixture Keywords</a> or a procedure from a <a href="../Fit/DefineFixture.html">Define Fixture</a> in a Suite Set Up page. <pre class="test">|with|new|myDomainClass|xxx|xxx|
 |xxx|xxx|</pre> or <pre class="test">|myProcedure|xxx|xxx|
-|xxx|xxx|</pre> <br>
+|xxx|xxx|</pre><br>
+<br>
+first cell in first table is class name, creates class instance, following rows in first table and all rows in rest of tables can execute methods on the instance and check results<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>when input is</td><td>'simple sample'<br>
+check count 0<br>
+<br>
+increment<br>
+check count 1</td><td>then output is</td><td><div><table><tr><td><span class="fit_SUT">simple sample</span></td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">count</span></td> <td class="pass">0</td> </tr></table></div><br /><div><table><tr><td><span class="fit_member">increment</span></td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">count</span></td> <td class="pass">1</td> </tr></table></div></td></tr>
+</table>
+<br>
+if the constructor has parameters<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>when input is</td><td>with new 'simple sample' 42<br>
+increment<br>
+<br>
+check count 43</td><td>then output is</td><td><div><table><tr><td><span class="fit_keyword">with</span></td> <td><span class="fit_keyword">new</span></td> <td><span class="fit_SUT">simple sample</span></td> <td>42</td> </tr></table><table><tr><td><span class="fit_member">increment</span></td> </tr></table></div><br /><div><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">count</span></td> <td class="pass">43</td> </tr></table></div></td></tr>
+</table>
+<br>
+fixture name first in any row,, processes rest of table<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>when input is</td><td>'simple sample'<br>
+check count 0<br>
+'sample fixture'<br>
+some good stuff<br>
+<br>
+'increment'<br>
+<br>
+'sample fixture'<br>
+other good stuff<br>
+<br>
+check count 1</td><td>then output is</td><td><div><table><tr><td><span class="fit_SUT">simple sample</span></td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">count</span></td> <td class="pass">0</td> </tr></table><table><tr><td><span class="fit_interpreter">sample fixture</span></td> </tr></table><table><tr><td>some</td> <td class="pass">good</td> <td>stuff</td> </tr></table></div><br /><div><table><tr><td><span class="fit_member">increment</span></td> </tr></table></div><br /><div><table><tr><td><span class="fit_interpreter">sample fixture</span></td> </tr></table><table><tr><td>other</td> <td class="pass">good</td> <td>stuff</td> </tr></table></div><br /><div><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">count</span></td> <td class="pass">1</td> </tr></table></div></td></tr>
+</table>
+<br>
+class but not a fixture, processes rest of table (this is a bit odd?)<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>when input is</td><td>'simple sample'<br>
+increment<br>
+'sample class'<br>
+check count 0<br>
+<br>
+check count 1</td><td>then output is</td><td><div><table><tr><td><span class="fit_SUT">simple sample</span></td> </tr></table><table><tr><td><span class="fit_member">increment</span></td> </tr></table><table><tr><td><span class="fit_SUT">sample class</span></td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">count</span></td> <td class="pass">0</td> </tr></table></div><br /><div><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">count</span></td> <td class="pass">1</td> </tr></table></div></td></tr>
+</table>
+<br>
 </div>
 <div style="width:100%;text-align:right">
 <span class="footer">Copyright &copy; 2019 Syterra Software Inc. All rights reserved.</span>

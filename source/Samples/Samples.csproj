@@ -37,6 +37,7 @@
     <Compile Include="EchoFixture.cs" />
     <Compile Include="Fit\Builder.cs" />
     <Compile Include="FolderTestModel.cs" />
+    <Compile Include="KeywordTranslator.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Person.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
