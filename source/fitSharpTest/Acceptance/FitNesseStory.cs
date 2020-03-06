@@ -9,7 +9,7 @@ namespace fitSharp.Test.Acceptance {
     public class FitNesseStory {
         public void Run(string suite) {
             var startInfo = new ProcessStartInfo("java",
-#if NETCOREAPP2_0
+#if NETCOREAPP
                 "\"-DTEST_RUNNER=dotnet build\\sandbox\\Runner.dll\""
 #else
                 "\"-DTEST_RUNNER=build\\sandbox\\Runner.exe\""

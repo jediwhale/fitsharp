@@ -16,7 +16,7 @@ using NUnit.Framework;
 namespace fitSharp.Test.NUnit.Machine {
     [TestFixture] public class ShellTest {
 
-#if !NETCOREAPP2_0
+#if !NETCOREAPP
         [Test] public void CustomAppConfigIsUsed() {
             var result = RunShell(new[] {"-a", "fitSharpTest.dll.alt.config",
                 "-r", typeof (SampleRunner).FullName + "," + typeof (SampleRunner).Assembly.CodeBase} );
@@ -102,7 +102,7 @@ namespace fitSharp.Test.NUnit.Machine {
         public int Run(IList<string> arguments, Memory memory, ProgressReporter reporter) {
             LastArguments = arguments;
             ApartmentState = Thread.CurrentThread.GetApartmentState();
-#if NETCOREAPP2_0
+#if NETCOREAPP
             return Result;
 #else
             try {
