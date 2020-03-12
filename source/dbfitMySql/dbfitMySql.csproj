@@ -1,71 +1,17 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0E54698B-0BF7-4413-9E4C-C807E346CD11}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <TargetFrameworks>netcoreapp3.0;net472</TargetFrameworks>
     <RootNamespace>dbfit.MySql</RootNamespace>
     <AssemblyName>dbfit.MySql</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <Deterministic>false</Deterministic>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MySql.Data">
-      <HintPath>..\..\binary\tools\MySql\MySql.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
+    <ProjectReference Include="..\dbfit\dbfit.csproj" />
+    <ProjectReference Include="..\fit\fit.csproj" />
+    <ProjectReference Include="..\fitSharp\fitSharp.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MySqlEnvironment.cs" />
-    <Compile Include="MySqlTest.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <PackageReference Include="MySql.Data" Version="8.0.18" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\dbfit\dbfit.csproj">
-      <Project>{6f72a0b4-eab2-410a-945d-4c4d04b18893}</Project>
-      <Name>dbfit</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\fitSharp\fitSharp.csproj">
-      <Project>{2b85b203-efb8-4f8d-8900-bc0a617d4adf}</Project>
-      <Name>fitSharp</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\fit\fit.csproj">
-      <Project>{11b32830-36bc-473b-9638-fb3c7fdaa422}</Project>
-      <Name>fit</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>xcopy "$(TargetPath)*" "$(SolutionDir)build\$(ConfigurationName)\" /I /Y &amp;
- copy "$(TargetDir)mysql.data.dll" "$(SolutionDir)build\$(ConfigurationName)\"</PostBuildEvent>
-  </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

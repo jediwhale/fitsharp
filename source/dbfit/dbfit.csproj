@@ -1,88 +1,15 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{6F72A0B4-EAB2-410A-945D-4C4D04B18893}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <TargetFrameworks>netcoreapp3.0;net472</TargetFrameworks>
     <RootNamespace>dbfit</RootNamespace>
-    <AssemblyName>dbfit</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <Deterministic>false</Deterministic>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <ProjectReference Include="..\fit\fit.csproj" />
+    <ProjectReference Include="..\fitSharp\fitSharp.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="environment\AbstractDbEnvironment.cs" />
-    <Compile Include="environment\DbEnvironment.cs" />
-    <Compile Include="environment\DbEnvironmentFactory.cs" />
-    <Compile Include="fixture\Clean.cs" />
-    <Compile Include="fixture\CompareStoredQueries.cs" />
-    <Compile Include="fixture\CompareStoredQueriesHideMatchingRows.cs" />
-    <Compile Include="fixture\DatabaseEnvironment.cs" />
-    <Compile Include="fixture\DatabaseTest.cs" />
-    <Compile Include="fixture\Execute.cs" />
-    <Compile Include="fixture\ExecuteDDL.cs" />
-    <Compile Include="fixture\ExecuteProcedure.cs" />
-    <Compile Include="fixture\Insert.cs" />
-    <Compile Include="fixture\Inspect.cs" />
-    <Compile Include="fixture\Query.cs" />
-    <Compile Include="fixture\QueryStats.cs" />
-    <Compile Include="fixture\SetTableParameter.cs" />
-    <Compile Include="fixture\SetParameter.cs" />
-    <Compile Include="fixture\StoreQuery.cs" />
-    <Compile Include="fixture\Update.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="util\Accessor.cs" />
-    <Compile Include="util\ColumnAccessors.cs" />
-    <Compile Include="util\ColumnMissingException.cs" />
-    <Compile Include="util\DbConnectionProperties.cs" />
-    <Compile Include="util\DbParameterAccessor.cs" />
-    <Compile Include="util\IdRetrievalAccessor.cs" />
-    <Compile Include="util\NameNormaliser.cs" />
-    <Compile Include="util\Options.cs" />
-    <Compile Include="util\TableTypeParameter.cs" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.7.0" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\fitSharp\fitSharp.csproj">
-      <Project>{2b85b203-efb8-4f8d-8900-bc0a617d4adf}</Project>
-      <Name>fitSharp</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\fit\fit.csproj">
-      <Project>{11b32830-36bc-473b-9638-fb3c7fdaa422}</Project>
-      <Name>fit</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>xcopy "$(TargetPath)*" "$(SolutionDir)build\$(ConfigurationName)\" /I /Y</PostBuildEvent>
-  </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild"></Target><Target Name="AfterBuild"></Target>
-  -->
 </Project>

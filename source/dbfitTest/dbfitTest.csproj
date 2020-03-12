@@ -1,97 +1,22 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{383E3568-AEEE-4F95-8D87-355D891DB36F}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>dbfitTest</RootNamespace>
-    <AssemblyName>dbfitTest</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <TargetFrameworks>netcoreapp3.0;net472</TargetFrameworks>
+    <RootNamespace>fitSharp.Test</RootNamespace>
+    <Deterministic>false</Deterministic>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Castle.Core.4.2.1\lib\net45\Castle.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Moq, Version=4.7.145.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Moq.4.7.145\lib\net45\Moq.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="nunit.framework, Version=3.9.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\NUnit.3.9.0\lib\net45\nunit.framework.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <PackageReference Include="Moq" Version="4.8.3" />
+    <PackageReference Include="nunit" Version="3.12.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.15.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0"/>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DbConnectionPropertiesTest.cs" />
-    <Compile Include="ExecuteProcedureTest.cs" />
-    <Compile Include="NameNormaliserTest.cs" />
-    <Compile Include="OracleEnvironmentTest.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QueryTest.cs" />
-    <Compile Include="SqlServerEnvironmentTest.cs" />
+    <ProjectReference Include="..\dbfitOracle\dbfitOracle.csproj" />
+    <ProjectReference Include="..\dbfitSqlServer\dbfitSqlServer.csproj" />
+    <ProjectReference Include="..\fitSharp\fitSharp.csproj" />
+    <ProjectReference Include="..\Samples\Samples.csproj" />
+    <ProjectReference Include="..\TestTarget\TestTarget.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\dbfitOracle\dbfitOracle.csproj">
-      <Project>{f38c6772-3b92-4e10-9ed4-d37be35d2303}</Project>
-      <Name>dbfitOracle</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\dbfitSqlServer\dbfitSqlServer.csproj">
-      <Project>{cf0cad84-0102-4c7c-ba8c-572111ff6899}</Project>
-      <Name>dbfitSqlServer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\dbfit\dbfit.csproj">
-      <Project>{6f72a0b4-eab2-410a-945d-4c4d04b18893}</Project>
-      <Name>dbfit</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\fitSharp\fitSharp.csproj">
-      <Project>{2b85b203-efb8-4f8d-8900-bc0a617d4adf}</Project>
-      <Name>fitSharp</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\fit\fit.csproj">
-      <Project>{11b32830-36bc-473b-9638-fb3c7fdaa422}</Project>
-      <Name>fit</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>xcopy "$(TargetPath)*" "$(SolutionDir)build\$(ConfigurationName)\" /I /Y &amp;
- copy "$(TargetDir)nunit.framework.dll" "$(SolutionDir)build\$(ConfigurationName)\"</PostBuildEvent>
-  </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

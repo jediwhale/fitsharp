@@ -25,6 +25,7 @@ namespace fitSharp.Machine.Application {
             var error = new Error();
 
             var argumentParser = new ArgumentParser();
+
 #if !NETCOREAPP
             argumentParser.AddArgumentHandler("a", value => memory.GetItem<AppDomainSetup>().ConfigurationFile = value);
 #endif
@@ -41,6 +42,7 @@ namespace fitSharp.Machine.Application {
             argumentParser.Parse(commandLineArguments);
 
             memory.Item<Settings>().Apply(settings => ParseRunner(memory, settings));
+
 
 #if !NETCOREAPP
             if (error.IsNone) {

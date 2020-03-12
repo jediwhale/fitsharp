@@ -1,166 +1,38 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{BD51905F-01FA-4ACE-B5AB-457875AB1A2C}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <TargetFrameworks>netcoreapp3.0;net472</TargetFrameworks>
     <RootNamespace>fit.Test</RootNamespace>
-    <AssemblyName>fitTest</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <Deterministic>false</Deterministic>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Castle.Core.4.2.1\lib\net45\Castle.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Moq, Version=4.7.145.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Moq.4.7.145\lib\net45\Moq.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="nunit.framework, Version=3.9.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\NUnit.3.9.0\lib\net45\nunit.framework.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
+    <ProjectReference Include="..\fitSharp\fitSharp.csproj" />
+    <ProjectReference Include="..\fit\fit.csproj" />
+    <ProjectReference Include="..\Samples\Samples.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.0'">
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.2" />
+    <PackageReference Include="Moq" Version="4.8.3" />
+    <PackageReference Include="NUnit" Version="3.10.1" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net472' ">
+
+    <PackageReference Include="Castle.Core" Version="4.2.1" />
+    <PackageReference Include="Moq" Version="4.7.145.0" />
+    <PackageReference Include="nunit" Version="3.9.0.0" />
+
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Acceptance\AbstractNestedLists.cs" />
-    <Compile Include="Acceptance\ArithmeticColumnFixture.cs" />
-    <Compile Include="Acceptance\BowlingGame.cs" />
-    <Compile Include="Acceptance\BowlingGameFixture.cs" />
-    <Compile Include="Acceptance\CellHandlerStory.cs" />
-    <Compile Include="Acceptance\CellMatching.cs" />
-    <Compile Include="Acceptance\CellParsing.cs" />
-    <Compile Include="Acceptance\ColorInspectorFixture.cs" />
-    <Compile Include="Acceptance\CountFixture.cs" />
-    <Compile Include="Acceptance\ExecuteExampleFixture.cs" />
-    <Compile Include="Acceptance\FolderRunnerStory.cs" />
-    <Compile Include="Acceptance\InfoFixture.cs" />
-    <Compile Include="Acceptance\NestedLists.cs" />
-    <Compile Include="Acceptance\PathParserFixture.cs" />
-    <Compile Include="Acceptance\PersonFixture.cs" />
-    <Compile Include="Acceptance\Rectangle.cs" />
-    <Compile Include="Acceptance\ResetNamespacesFixture.cs" />
-    <Compile Include="Acceptance\SampleTable.cs" />
-    <Compile Include="Acceptance\StoryTestCopyWriter.cs" />
-    <Compile Include="Acceptance\StoryTestFixture.cs" />
-    <Compile Include="Acceptance\SystemUnderTest.cs" />
-    <Compile Include="Acceptance\TypeName.cs" />
-    <Compile Include="Acceptance\XmlFixtureUnderTest.cs" />
-    <Compile Include="Double\SampleArrayFixture.cs" />
-    <Compile Include="Double\SampleCalculateDomain.cs" />
-    <Compile Include="Double\SampleCalculateFixture.cs" />
-    <Compile Include="Double\SampleColumnFixture.cs" />
-    <Compile Include="Double\SampleCombinationFixture.cs" />
-    <Compile Include="Double\SampleConstraints.cs" />
-    <Compile Include="Double\SampleDoFixture.cs" />
-    <Compile Include="Double\SampleDomain.cs" />
-    <Compile Include="Double\SampleDomainAdapter.cs" />
-    <Compile Include="Double\SampleGridFixture.cs" />
-    <Compile Include="Double\SampleRowDomain.cs" />
-    <Compile Include="Double\SampleRowFixture.cs" />
-    <Compile Include="Double\SampleSetFixture.cs" />
-    <Compile Include="Double\SampleSetUpDomainFixture.cs" />
-    <Compile Include="Double\SampleSetupFixture.cs" />
-    <Compile Include="Double\SampleSubsetFixture.cs" />
-    <Compile Include="Double\SampleTree.cs" />
-    <Compile Include="Double\SummarySample.cs" />
-    <Compile Include="NUnit\ActionFixtureTest.cs" />
-    <Compile Include="NUnit\BindingTest.cs" />
-    <Compile Include="NUnit\CellHandlerLoaderTest.cs" />
-    <Compile Include="NUnit\CellMaking.cs" />
-    <Compile Include="NUnit\CellMatching.cs" />
-    <Compile Include="NUnit\CellOperatorTest.cs" />
-    <Compile Include="NUnit\ColumnFixtureTests.cs" />
-    <Compile Include="NUnit\ConstraintFixtureTest.cs" />
-    <Compile Include="NUnit\DefaultCellHandlerTest.cs" />
-    <Compile Include="NUnit\EmptyCellHandlerTest.cs" />
-    <Compile Include="NUnit\EndsWithHandlerTest.cs" />
-    <Compile Include="NUnit\ErrorKeywordHandlerTest.cs" />
-    <Compile Include="NUnit\ExceptionKeywordHandlerTest.cs" />
-    <Compile Include="NUnit\FailKeywordHandlerTest.cs" />
-    <Compile Include="NUnit\FixtureNUnitTest.cs" />
-    <Compile Include="NUnit\FixtureTableTest.cs" />
-    <Compile Include="NUnit\FolderRunnerTest.cs" />
-    <Compile Include="NUnit\IntegralRangeHandlerTest.cs" />
-    <Compile Include="NUnit\NamedMatchStrategyTest.cs" />
-    <Compile Include="NUnit\NullKeywordHandlerTest.cs" />
-    <Compile Include="NUnit\ParseBlankTest.cs" />
-    <Compile Include="NUnit\ParseBooleanTest.cs" />
-    <Compile Include="NUnit\ParseInterpreterTest.cs" />
-    <Compile Include="NUnit\ParseTest.cs" />
-    <Compile Include="NUnit\ParseTreeTest.cs" />
-    <Compile Include="NUnit\PathParserTest.cs" />
-    <Compile Include="NUnit\ProtocolTest.cs" />
-    <Compile Include="NUnit\RowFixtureTest.cs" />
-    <Compile Include="NUnit\ScientificDoubleTest.cs" />
-    <Compile Include="NUnit\SetUpFixtureTest.cs" />
-    <Compile Include="NUnit\SocketServerTest.cs" />
-    <Compile Include="NUnit\StartsWithHandlerTest.cs" />
-    <Compile Include="NUnit\ComposeStoryTestHtmlTest.cs" />
-    <Compile Include="NUnit\SubstringHandlerTest.cs" />
-    <Compile Include="NUnit\SymbolHandlerTest.cs" />
-    <Compile Include="NUnit\TableFixtureTest.cs" />
-    <Compile Include="NUnit\TestBuilder.cs" />
-    <Compile Include="NUnit\TestUtils.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\fitSharp\fitSharp.csproj">
-      <Project>{2b85b203-efb8-4f8d-8900-bc0a617d4adf}</Project>
-      <Name>fitSharp</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\fit\fit.csproj">
-      <Project>{11b32830-36bc-473b-9638-fb3c7fdaa422}</Project>
-      <Name>fit</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Samples\Samples.csproj">
-      <Project>{52d82363-c201-4c78-8b94-018b79585763}</Project>
-      <Name>Samples</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>xcopy "$(TargetPath)*" "$(SolutionDir)build\$(ConfigurationName)\" /I /Y &amp;
- copy "$(TargetDir)nunit.framework.dll" "$(SolutionDir)build\$(ConfigurationName)\" &amp;
- copy "$(TargetDir)moq.dll" "$(SolutionDir)build\$(ConfigurationName)\"</PostBuildEvent>
-  </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>
