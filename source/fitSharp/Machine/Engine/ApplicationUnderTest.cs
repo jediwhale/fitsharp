@@ -127,7 +127,11 @@ namespace fitSharp.Machine.Engine {
             }
 
             public void AddAssembly(string name) {
-                var assemblyName = name.StartsWith("file:///") ? name.Substring(8) : name;
+                var assemblyName = name.StartsWith("file:///")
+                    ? name.Substring(8).Contains(":")
+                        ? name.Substring(8)
+                        : name.Substring(7)
+                    :name;
                 if (IsIgnored(assemblyName)) return;
                 if (assemblies.Exists(a => a.Name == assemblyName)) return;
                 var assembly = appDomain.LoadAssembly(assemblyName);

@@ -43,7 +43,7 @@ namespace fitSharp.Machine.Application {
             $"Usage:\n\t{Process.GetCurrentProcess().ProcessName} [ -r runnerClass ][ -a appConfigFile ][ -c suiteConfigFile ] ...";
 
 
-#if NETCOREAPP3_0
+#if NETCOREAPP
         int RunInDomain(Memory memory) {
             return RunInCurrentDomain(memory);
         }

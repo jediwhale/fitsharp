@@ -25,7 +25,8 @@ namespace fitSharp.Machine.Application {
             var error = new Error();
 
             var argumentParser = new ArgumentParser();
-#if !NETCOREAPP3_0
+
+#if !NETCOREAPP
             argumentParser.AddArgumentHandler("a", value => memory.GetItem<AppDomainSetup>().ConfigurationFile = value);
 #endif
             argumentParser.AddArgumentHandler("c", value => {
@@ -42,7 +43,8 @@ namespace fitSharp.Machine.Application {
 
             memory.Item<Settings>().Apply(settings => ParseRunner(memory, settings));
 
-#if !NETCOREAPP3_0
+
+#if !NETCOREAPP
             if (error.IsNone) {
                 memory.Item<AppDomainSetup>().Apply(setup => ValidateApplicationBase(setup, error));
             }
@@ -54,7 +56,7 @@ namespace fitSharp.Machine.Application {
             return new Either<Error, Memory>(!error.IsNone, error, memory);
         }
 
-#if !NETCOREAPP3_0
+#if !NETCOREAPP
         void ValidateApplicationBase(AppDomainSetup appDomainSetup, Error error) {
             if (string.IsNullOrEmpty(appDomainSetup.ApplicationBase)) {
                 appDomainSetup.ApplicationBase = AppDomain.CurrentDomain.BaseDirectory;

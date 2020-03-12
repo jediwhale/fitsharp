@@ -15,7 +15,7 @@ namespace fitSharp.Test.NUnit.Machine {
     [TestFixture]
     public class ShellArgumentsTest {
 
-#if !NETCOREAPP3_0
+#if !NETCOREAPP
         [Test]
         public void SpecifiesAppConfigFile() {
             folderModel.MakeFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "myConfig.xml"), "stuff");

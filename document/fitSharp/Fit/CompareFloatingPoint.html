@@ -16,6 +16,17 @@ to be bound by the terms of this license. You must not remove this notice, or an
 <div class="pagename">Compare Floating Point</div>
 <div class="content">The Compare Floating Point operator compares floating point numbers using "visual" precision, i.e., numbers that display as the same string are considered equal. This is one way of dealing with floating point rounding issues that can cause apparently correct results to be marked as incorrect.<br>
 <br>
+This operator is not needed for .NET Core versions 3 and higher, because of different floating point behavior. In this case, we abandon the test.<br>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>system information</td></tr>
+</table>
+<br>
+<table border="1" cellpadding="2" cellspacing="0">
+<tr><td>match value</td><td>major version</td></tr>
+<tr><td>3</td><td>abandonstorytest</td></tr>
+</table>
+<br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>when input is</td><td>'sample do'<br>
 check 'divide float' 1 '' 3 0.3333333<br>

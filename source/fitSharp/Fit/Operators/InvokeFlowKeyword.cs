@@ -52,7 +52,7 @@ namespace fitSharp.Fit.Operators {
         }
 
         TypedValue Comment(FlowInterpreter interpreter, Tree<Cell> row) {
-            return new TypedValue(new CommentFixture());
+            return new TypedValue(new CommentFixture()); //todo: commentfixture messes with tablecount - not what we want here
         }
 
         TypedValue Ensure(FlowInterpreter interpreter, Tree<Cell> row) {
