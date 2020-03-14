@@ -1,6 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
     <TargetFrameworks>net462;netcoreapp3.1</TargetFrameworks>
     <RootNamespace>fitSharp.Test</RootNamespace>
     <Deterministic>false</Deterministic>

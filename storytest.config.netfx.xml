@@ -21,8 +21,8 @@
         <addNamespace>fitlibrary</addNamespace>
         <addNamespace>fit.Fixtures</addNamespace>
         <addNamespace>fitSharp.Test.Acceptance.Slim</addNamespace>
-        <addAssembly>build\sandbox\fitsharptest.exe</addAssembly>
-        <addAssembly>build\sandbox\fittest.exe</addAssembly>
+        <addAssembly>build\sandbox\fitsharptest.dll</addAssembly>
+        <addAssembly>build\sandbox\fittest.dll</addAssembly>
         <addAssembly>build\sandbox\samples.dll</addAssembly>
     </ApplicationUnderTest>
     

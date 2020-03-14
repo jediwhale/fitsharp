@@ -5,11 +5,7 @@ using NUnit.Framework;
 
 namespace fitSharp.StoryTest {
     [TestFixture]
-    public class Program {
-        #if NETCOREAPP
-        #else
-            static void Main(string[] args) {}
-        #endif
+    public class StoryTest {
 
         [Test]
         public void Run() {

@@ -2,7 +2,7 @@
 
     <Settings>
         <inputFolder>document\fitSharp</inputFolder>
-        <outputFolder>site\netfx</outputFolder>
+        <outputFolder>site\netcore</outputFolder>
         <runner>fit.Runner.FolderRunner</runner>
     </Settings>
 
