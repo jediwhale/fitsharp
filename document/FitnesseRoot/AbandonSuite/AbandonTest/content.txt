@@ -1,2 +1,2 @@
-|sample domain adapter|
+|sample SUT|
 |throw abandon suite|

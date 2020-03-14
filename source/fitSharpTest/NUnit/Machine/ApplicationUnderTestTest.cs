@@ -88,7 +88,7 @@ namespace fitSharp.Test.NUnit.Machine {
 
         [Test]
         public void LoadsFromAlternateFolder() {
-            AssemblyLoadFailureHandler.AddFolder(Path.Combine(TargetPath(), "build/sample/1".AsPath()));
+            AssemblyLoadFailureHandler.AddFolder(Path.Combine(TargetPath(), "build/sample/" + framework + "1".AsPath()));
             LoadTarget("2/TestTarget2");
             var runtimeType = applicationUnderTest.FindType("fitSharp.TestTarget2.SampleWithDependency");
             Assert.AreEqual("my sample says hi sample", runtimeType.CreateInstance().ValueString);
@@ -160,13 +160,20 @@ namespace fitSharp.Test.NUnit.Machine {
         void LoadTarget(string name) {
             applicationUnderTest.AddAssembly(Path.Combine(
                 TargetPath(),
-                ("build/sample/" + name + ".dll").AsPath()));
+                ("build/sample/" + framework + name + ".dll").AsPath()));
         }
 
         string TargetPath() {
             return AppDomain.CurrentDomain.BaseDirectory.Before(new[] {"/build/".AsPath(), "/source/".AsPath()});
         }
 
+        const string framework =
+            #if NETCOREAPP
+                    "netcore"
+            #else
+                    "netfx"
+            #endif
+            ;
     }
 }
 

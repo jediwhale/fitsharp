@@ -1,8 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.0;net472</TargetFrameworks>
+    <TargetFrameworks>net462;netcoreapp3.1</TargetFrameworks>
     <RootNamespace>fitSharp.TestTarget</RootNamespace>
     <Deterministic>false</Deterministic>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent Condition="'$(TargetFramework)' == 'net462'">xcopy "$(TargetPath)*" "$(SolutionDir)build\sample\netfx1\" /I /Y
+    </PostBuildEvent>
+    <PostBuildEvent Condition="'$(TargetFramework)' == 'netcoreapp3.1'">xcopy "$(TargetPath)*" "$(SolutionDir)build\sample\netcore1\" /I /Y
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>

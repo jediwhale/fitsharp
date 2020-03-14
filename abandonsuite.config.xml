@@ -5,8 +5,8 @@
     </Settings>
     
     <ApplicationUnderTest>
-        <addAssembly>build\sandbox\fittest.dll</addAssembly>
-        <addNamespace>fit.Test.Double</addNamespace>
+        <addAssembly>build\sandbox\samples.dll</addAssembly>
+        <addNamespace>fitSharp.Samples</addNamespace>
     </ApplicationUnderTest>
     
 </suiteConfig>
