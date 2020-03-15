@@ -1,101 +1,64 @@
 <?xml version="1.0"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
-        DefaultTargets="solution;storytests" >
-
+        DefaultTargets="unittests;storytests" >
+        
 <PropertyGroup>
     <Config>Debug</Config>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
 </PropertyGroup>
 
-<Target Name="all" DependsOnTargets="solution;unittests;storytests" />
-<Target Name="deploy" DependsOnTargets="releasesolution;zipnet472;zipcore;" />
+<Target Name="deploy" DependsOnTargets="releasesolution;package;" />
 
 <Target Name="restore">
     <Exec Command="dotnet restore fitSharp.sln"/>
 </Target>
 
 <Target Name="solution" DependsOnTargets="restore">
-    <MSBuild Projects="fitsharp.sln" Properties="Configuration=$(Config); TargetFramework=$(TargetFramework)" />
-</Target>
-
-<!-- Set up a sandbox with a fixed name that story test pages
-     and configurations can refer to. -->
-<Target Name="sandbox" DependsOnTargets="solution">
-    <MSBuild Projects="source\Runner\Runner.csproj" 
-        Properties="Configuration=Release; TargetFramework=$(TargetFramework); OutputPath=../../../build/sandbox "/>
-    <MSBuild Projects="source\fitSharpTest\fitSharpTest.csproj" 
-        Properties="Configuration=Release; TargetFramework=$(TargetFramework); OutputPath=../../../build/sandbox "/>
-    <MSBuild Projects="source\fitTest\fitTest.csproj" 
-        Properties="Configuration=Release; TargetFramework=$(TargetFramework); OutputPath=../../../build/sandbox "/>
-</Target>
-
-<Target Name="unittests" DependsOnTargets="solution">
-    <Exec Command="dotnet test -f $(TargetFramework) source\fitSharpTest\fitSharpTest.csproj" />
-    <Exec Command="dotnet test -f $(TargetFramework) source\fitTest\fitTest.csproj" />
-</Target>
-
-<Target Name="sandbox" DependsOnTargets="solution">
-    <ItemGroup>
-        <Assemblies Include="
-        source\fitSharp\bin\\$(Config)\$(TargetFramework)\fitsharp.dll;
-        source\fit\bin\\$(Config)\$(TargetFramework)\fit.dll;
-        source\fitSharpTest\bin\\$(Config)\$(TargetFramework)\fitSharpTest.dll;
-        source\fitTest\bin\\$(Config)\$(TargetFramework)\fitTest.dll;
-        source\Samples\bin\\$(Config)\$(TargetFramework)\Samples.dll;
-        source\Runner\bin\\$(Config)\$(TargetFramework)\Runner.exe;"/>
-        <CoreSpecificAssemblies Include="source\Runner\bin\$(Config)\$(TargetFramework)\Runner.runtimeconfig.json;source\Runner\bin\\$(Config)\$(TargetFramework)\Runner.dll"/>
-    </ItemGroup>
-
-    <Copy Condition="'$(TargetFramework)'=='netcoreapp3.0'"
-        SourceFiles="@(CoreSpecificAssemblies)"
-        DestinationFolder="build\sandbox"
-    />
-
-    <Copy
-        SourceFiles="@(Assemblies)"
-        DestinationFolder="build\sandbox"
-    />
-</Target>
-
-<Target Name="storytests" DependsOnTargets="sandbox">
-    <Exec Command="build\sandbox\Runner.exe -c storytest.config.xml" />
+    <MSBuild Projects="fitsharp.sln" Properties="Configuration=$(Config)" />
 </Target>
 
 <Target Name="releasesolution" DependsOnTargets="restore">
-    <MSBuild Projects="fitsharp.sln" 
-        Properties="Configuration=Release; TargetFramework=net472; OutputPath=..\..\build\net472"/>
-    <MSBuild Projects="fitsharp.sln" 
-        Properties="Configuration=Release; TargetFramework=netcoreapp3.0; OutputPath=..\..\build\netcoreapp3.0"/>
+    <MSBuild Projects="fitsharp.sln" Properties="Configuration=Release" />
 </Target>
 
-<ItemGroup>
-  <ZipFilesCore Include="build\netcoreapp3.0\fit.dll" />
-  <ZipFilesCore Include="build\netcoreapp3.0\fitSharp.dll" />
-  <ZipFilesCore Include="build\netcoreapp3.0\Runner.dll" />
-  <ZipFilesCore Include="build\netcoreapp3.0\Runner.exe" />
-  <ZipFilesCore Include="build\netcoreapp3.0\Runner.runtimeconfig.json"/>
-  <ZipFilesCore Include="license.txt" />
-</ItemGroup>
-
-<Target Name="zipcore">
-  <Exec Command="PowerShell -command Compress-Archive @(ZipFilesCore, ',') binary\mylatest_core.zip -Force" />
+<Target Name="unittests" DependsOnTargets="solution">
+    <Exec Command="dotnet test source\fitSharpTest\fitSharpTest.csproj" />
+    <Exec Command="dotnet test source\fitTest\fitTest.csproj" />
 </Target>
 
-<ItemGroup>
-  <ZipFiles Include="build\net472\fit.dll" />
-  <ZipFiles Include="build\net472\fitSharp.dll" />
-  <ZipFiles Include="build\net472\dbfit.dll" />
-  <ZipFiles Include="build\net472\dbfit.oracle.dll" />
-  <ZipFiles Include="build\net472\dbfit.sqlserver.dll" />
-  <ZipFiles Include="build\net472\dbfit.mysql.dll" />
-  <ZipFiles Include="build\net472\dbfit.sybase.dll" />
-  <ZipFiles Include="build\net472\Runner.exe" />
-  <ZipFiles Include="build\net472\RunnerW.exe" />
-  <ZipFiles Include="license.txt" />
-</ItemGroup>
+<Target Name="storytests" DependsOnTargets="solution">
+    <Exec Command="dotnet test source\StoryTest\StoryTest.csproj" />
+</Target>
 
-<Target Name="zipnet472">
-  <Exec Command="PowerShell -command Compress-Archive @(ZipFiles, ',') binary\mylatest_net472.zip -Force" />
+<Target Name="package">
+  <ItemGroup>
+    <NetfxFiles Include="
+      source\fitSharp\bin\release\net462\fitSharp.dll;
+      source\fit\bin\release\net462\fit.dll;
+      source\Runner\bin\release\net462\Runner.exe;
+      source\RunnerW\bin\release\net462\RunnerW.exe;
+      source\dbfit\bin\release\net462\dbfit.dll;
+      source\dbfitMySql\bin\release\net462\dbfit.mysql.dll;
+      source\dbfitOracle\bin\release\net462\dbfit.oracle.dll;
+      source\dbfitSqlServer\bin\release\net462\dbfit.sqlserver.dll;
+      source\dbfitSybase\bin\release\net462\dbfit.sybase.dll;"/>
+    <NetcoreFiles Include="
+      source\fitSharp\bin\release\netcoreapp3.1\fitSharp.dll;
+      source\fit\bin\release\netcoreapp3.1\fit.dll;
+      source\Runner\bin\release\netcoreapp3.1\Runner.dll;
+      source\Runner\bin\release\netcoreapp3.1\Runner.runtimeconfig.json;
+      source\RunnerW\bin\release\netcoreapp3.1\RunnerW.dll;
+      source\RunnerW\bin\release\netcoreapp3.1\RunnerW.runtimeconfig.json;
+      source\dbfit\bin\release\netcoreapp3.1\dbfit.dll;
+      source\dbfitMySql\bin\release\netcoreapp3.1\dbfit.mysql.dll;
+      source\dbfitOracle\bin\release\netcoreapp3.1\dbfit.oracle.dll;
+      source\dbfitSqlServer\bin\release\netcoreapp3.1\dbfit.sqlserver.dll;
+      source\dbfitSybase\bin\release\netcoreapp3.1\dbfit.sybase.dll;"/>
+    <Packages Include="nuget\*.nupkg" />
+  </ItemGroup>
+  <Copy SourceFiles="@(NetfxFiles)" DestinationFolder="nuget\lib\net462" />
+  <Copy SourceFiles="@(NetcoreFiles)" DestinationFolder="nuget\lib\netcoreapp3.1" />
+  <Exec Command="..\binary\tools\nuget\nuget pack FitSharp.nuspec" WorkingDirectory="nuget"/>
+  <Move SourceFiles="@(Packages)" DestinationFolder="binary" />
 </Target>
 
 </Project>
