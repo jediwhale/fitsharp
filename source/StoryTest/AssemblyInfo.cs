@@ -1,8 +1,8 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("Tests for fitSharp")]
-[assembly: AssemblyDescription("fitSharp. The use and distribution terms for this software are covered by the Common Public License 1.0.")]
+[assembly: AssemblyDescription("fitSharp story tests. The use and distribution terms for this software are covered by the Common Public License 1.0.")]
 [assembly: AssemblyProduct("fitSharp")]
 [assembly: AssemblyCopyright("Copyright © 2020 Syterra Software Inc. All rights reserved.")]
 

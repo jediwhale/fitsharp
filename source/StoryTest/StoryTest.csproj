@@ -3,6 +3,8 @@
     <PropertyGroup>
         <RootNamespace>fitSharp.StoryTest</RootNamespace>
         <TargetFrameworks>net462;netcoreapp3.1</TargetFrameworks>
+        <Deterministic>false</Deterministic>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     </PropertyGroup>
 
     <ItemGroup>
