@@ -6,6 +6,7 @@
 using System;
 using System.IO;
 using System.Reflection;
+using fitSharp.Machine.Application;
 using NUnit.Framework;
 
 namespace fitSharp.StoryTest {
@@ -26,14 +27,14 @@ namespace fitSharp.StoryTest {
             Copy("Runner", sourcePath, destinationPath);
             Copy("Samples", sourcePath, destinationPath);
             Environment.CurrentDirectory = root;
-            const string config = "storyTest.Config." +
+            const string config = "storyTest.config." +
                 #if NETCOREAPP
                     "netcore"
                 #else
                     "netfx"
                 #endif
                 + ".xml";
-            Assert.AreEqual(0,  Runner.Program.Main(new [] {"-c", config}));
+            Assert.AreEqual(0,  Shell.Run(new [] {"-c", config}));
         }
 
         static void Copy(string project, string sourcePath, string destinationPath) {

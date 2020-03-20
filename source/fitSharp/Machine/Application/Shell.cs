@@ -15,7 +15,11 @@ using fitSharp.Machine.Model;
 namespace fitSharp.Machine.Application {
 
     public class Shell: MarshalByRefObject {
-
+        
+        public static int Run(string[] arguments) {
+            return new Shell(new ConsoleReporter(), new ShellArguments(new FileSystemModel(), arguments)).Run();
+        }
+        
         public Shell(ProgressReporter progressReporter, ShellArguments arguments) {
             this.progressReporter = progressReporter;
             this.arguments = arguments;
