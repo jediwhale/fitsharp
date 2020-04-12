@@ -6,7 +6,9 @@
 using System;
 using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using fitSharp.Machine.Application;
+using fitSharp.Machine.Model;
 using NUnit.Framework;
 
 namespace fitSharp.StoryTest {
@@ -19,21 +21,23 @@ namespace fitSharp.StoryTest {
             var root = current.Substring(0, current.IndexOf("source", StringComparison.Ordinal));
             var build = new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath;
             var sourcePath = Path.GetDirectoryName(build);
-            var destinationPath = Path.Combine(root, "build\\sandbox");
+            var destinationPath = Path.Combine(root, "build", "sandbox");
+            Directory.CreateDirectory(destinationPath);
             Copy("fit", sourcePath, destinationPath);
             Copy("fitSharp", sourcePath, destinationPath);
             Copy("fitTest", sourcePath, destinationPath);
             Copy("fitSharpTest", sourcePath, destinationPath);
-            Copy("Runner", sourcePath, destinationPath);
             Copy("Samples", sourcePath, destinationPath);
             Environment.CurrentDirectory = root;
-            const string config = "storyTest.config." +
-                #if NETCOREAPP
-                    "netcore"
-                #else
-                    "netfx"
-                #endif
-                + ".xml";
+            var config = Path.Combine(
+                AppDomain.CurrentDomain.BaseDirectory.Before(new[] {"/build/".AsPath(), "/source/".AsPath()}),
+                "storytest.config." +
+                    #if NETCOREAPP
+                        (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "netcore" : "linux")
+                    #else
+                        "netfx"
+                    #endif
+                + ".xml");
             Assert.AreEqual(0,  Shell.Run(new [] {"-c", config}));
         }
 

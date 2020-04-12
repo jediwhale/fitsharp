@@ -1,4 +1,4 @@
-﻿// Copyright © 2018 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2020 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -21,11 +21,11 @@ namespace fitSharp.Test.NUnit.Fit {
         }
 
         [Test] public void DecoratesResultWithNoStyleSheetLink() {
-            CheckResult("content", "<link href=\"fit.css\" type=\"text/css\" rel=\"stylesheet\">\r\ncontent");
+            CheckResult("content", "<link href=\"fit.css\" type=\"text/css\" rel=\"stylesheet\">" + Environment.NewLine + "content");
         }
 
         [Test] public void DecoratesResultWithOtherStyleSheetLink() {
-            CheckResult("<link other stuff>content", "<link href=\"fit.css\" type=\"text/css\" rel=\"stylesheet\">\r\n<link other stuff>content");
+            CheckResult("<link other stuff>content", "<link href=\"fit.css\" type=\"text/css\" rel=\"stylesheet\">" + Environment.NewLine + "<link other stuff>content");
         }
 
         [Test] public void DoesNotDecorateWithFitLink() {
@@ -51,7 +51,7 @@ namespace fitSharp.Test.NUnit.Fit {
             var file = MakeStoryTestFile("myfile");
             file.WriteTest(new PageResult("title", content, new TestCounts()));
             Clock.Instance = new Clock();
-            Assert.AreEqual(comment + expected, folder.GetPageContent(new FilePath("output\\myfile.html")));
+            Assert.AreEqual(comment + expected, folder.GetPageContent(new FilePath(System.IO.Path.Combine("output", "myfile.html"))));
         }
 
         StoryTestFile MakeStoryTestFile(string fileName) {

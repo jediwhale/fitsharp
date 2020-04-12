@@ -1,4 +1,4 @@
-// Copyright © 2017 Syterra Software Inc. All rights reserved.
+// Copyright Â© 2020 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -40,7 +40,8 @@ namespace fitSharp.Samples
             if (thePath.Contains(".")) return new [] {thePath};
             var result = new ArrayList();
             foreach (var file in myFiles.Keys) {
-                if (file.StartsWith(thePath + "\\") && file.Substring(thePath.Length + 1).IndexOf("\\") < 0) result.Add(file);
+                if (file.StartsWith(thePath + System.IO.Path.DirectorySeparatorChar)
+                    && file.Substring(thePath.Length + 1).IndexOf(System.IO.Path.DirectorySeparatorChar) < 0) result.Add(file);
             }
             var files = (string[])result.ToArray(typeof(string));
             Array.Sort(files);
@@ -50,8 +51,8 @@ namespace fitSharp.Samples
         public string[] GetFolders(string thePath) {
             var result = new ArrayList();
             foreach (var file in myFiles.Keys) {
-                if (!file.StartsWith(thePath + "\\")) continue;
-                var length = file.IndexOf("\\", thePath.Length + 1);
+                if (!file.StartsWith(thePath + System.IO.Path.DirectorySeparatorChar)) continue;
+                var length = file.IndexOf(System.IO.Path.DirectorySeparatorChar, thePath.Length + 1);
                 if (length <= thePath.Length) continue;
                 var folder = file.Substring(0, length);
                 if (!result.Contains(folder)) result.Add(folder);

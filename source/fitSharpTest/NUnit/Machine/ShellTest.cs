@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Runtime.InteropServices;
 using System.Threading;
 using fitSharp.IO;
 using fitSharp.Machine.Application;
@@ -61,6 +62,7 @@ namespace fitSharp.Test.NUnit.Machine {
         }
 
         [Test] public void ApartmentStateFromSuiteConfigIsUsed() {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) return; //apartment state only supported on windows
             var folders = new FolderTestModel();
             folders.MakeFile("suite.config.xml", "<config><Settings><ApartmentState>STA</ApartmentState></Settings></config>");
             RunShell(new[] {"-r", typeof(SampleRunner).FullName, "-c", "suite.config.xml"}, folders );

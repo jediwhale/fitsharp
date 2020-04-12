@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <RootNamespace>fitSharp.StoryTest</RootNamespace>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <Deterministic>false</Deterministic>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <AssemblyName>StoryTest</AssemblyName>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
+      <PackageReference Include="NUnit" Version="3.12.0" />
+      <PackageReference Include="NUnit3TestAdapter" Version="3.16.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\fitSharpTest\fitSharpTestL.csproj" />
+      <ProjectReference Include="..\fitSharp\fitSharpL.csproj" />
+      <ProjectReference Include="..\fitTest\fitTestL.csproj" />
+      <ProjectReference Include="..\fit\fitL.csproj" />
+      <ProjectReference Include="..\Samples\SamplesL.csproj" />
+    </ItemGroup>
+
+</Project>

@@ -1,8 +1,9 @@
-// Copyright © 2017 Syterra Software Inc. All rights reserved.
+// Copyright Â© 2020 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
+using System;
 using System.Text;
 using fitSharp.Fit.Model;
 using fitSharp.Fit.Service;
@@ -31,7 +32,7 @@ namespace fitSharp.Test.NUnit.Fit {
             _strategy = new XmlResultWriter(TEST_RESULT_FILE_NAME, _folderModel);
             _strategy.Close();
             Assert.IsTrue(_folderModel.Exists(TEST_RESULT_FILE_NAME));
-            Assert.AreEqual("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<testResults />", _folderModel.GetPageContent(TEST_RESULT_FILE_NAME));
+            Assert.AreEqual("<?xml version=\"1.0\" encoding=\"utf-16\"?>" + Environment.NewLine + "<testResults />", _folderModel.GetPageContent(TEST_RESULT_FILE_NAME));
         }
 
         [Test]
@@ -46,12 +47,17 @@ namespace fitSharp.Test.NUnit.Fit {
         public void TestWriteResults()
         {
             const string pageName = "Test Page";
-            var pageResult = new PageResult(pageName, "<table border=\"1\" cellspacing=\"0\">\r\n<tr><td>Text</td>\r\n</tr>\r\n</table>", MakeTestCounts());
+            var pageResult = new PageResult(pageName, "<table border=\"1\" cellspacing=\"0\">" + Environment.NewLine
+                       + "<tr><td>Text</td>" + Environment.NewLine 
+                       + "</tr>" + Environment.NewLine + "</table>", MakeTestCounts());
             _strategy = new XmlResultWriter(TEST_RESULT_FILE_NAME, _folderModel);
             _strategy.WritePageResult(pageResult);
             _strategy.Close();
             Assert.AreEqual(
-                BuildPageResultString(pageName, "<![CDATA[<table border=\"1\" cellspacing=\"0\">\r\n<tr><td>Text</td>\r\n</tr>\r\n</table>]]>", 1, 2, 3, 4),
+                BuildPageResultString(pageName, "<![CDATA[<table border=\"1\" cellspacing=\"0\">" + Environment.NewLine
+                          + "<tr><td>Text</td>" + Environment.NewLine 
+                          + "</tr>" + Environment.NewLine
+                          + "</table>]]>", 1, 2, 3, 4),
                 _folderModel.GetPageContent(TEST_RESULT_FILE_NAME));
         }
 
@@ -84,13 +90,13 @@ namespace fitSharp.Test.NUnit.Fit {
             builder.AppendLine("<?xml version=\"1.0\" encoding=\"utf-16\"?>");
             builder.AppendLine("<testResults>");
             builder.AppendLine("  <result>");
-            builder.AppendFormat("    <relativePageName>{0}</relativePageName>\r\n", pageName);
-            builder.AppendFormat("    <content>{0}</content>\r\n", content);
+            builder.AppendFormat("    <relativePageName>{0}</relativePageName>" + Environment.NewLine, pageName);
+            builder.AppendFormat("    <content>{0}</content>" + Environment.NewLine, content);
             builder.AppendLine("    <counts>");
-            builder.AppendFormat("      <right>{0}</right>\r\n", right);
-            builder.AppendFormat("      <wrong>{0}</wrong>\r\n", wrong);
-            builder.AppendFormat("      <ignores>{0}</ignores>\r\n", ignores);
-            builder.AppendFormat("      <exceptions>{0}</exceptions>\r\n", exceptions);
+            builder.AppendFormat("      <right>{0}</right>" + Environment.NewLine, right);
+            builder.AppendFormat("      <wrong>{0}</wrong>" + Environment.NewLine, wrong);
+            builder.AppendFormat("      <ignores>{0}</ignores>" + Environment.NewLine, ignores);
+            builder.AppendFormat("      <exceptions>{0}</exceptions>" + Environment.NewLine, exceptions);
             builder.AppendLine("    </counts>");
             builder.AppendLine("  </result>");
             builder.Append("</testResults>");
@@ -103,10 +109,10 @@ namespace fitSharp.Test.NUnit.Fit {
             builder.AppendLine("<?xml version=\"1.0\" encoding=\"utf-16\"?>");
             builder.AppendLine("<testResults>");
             builder.AppendLine("  <finalCounts>");
-            builder.AppendFormat("    <right>{0}</right>\r\n", right);
-            builder.AppendFormat("    <wrong>{0}</wrong>\r\n", wrong);
-            builder.AppendFormat("    <ignores>{0}</ignores>\r\n", ignores);
-            builder.AppendFormat("    <exceptions>{0}</exceptions>\r\n", exceptions);
+            builder.AppendFormat("    <right>{0}</right>" + Environment.NewLine, right);
+            builder.AppendFormat("    <wrong>{0}</wrong>" + Environment.NewLine, wrong);
+            builder.AppendFormat("    <ignores>{0}</ignores>" + Environment.NewLine, ignores);
+            builder.AppendFormat("    <exceptions>{0}</exceptions>" + Environment.NewLine, exceptions);
             builder.AppendLine("  </finalCounts>");
             builder.Append("</testResults>");
             return builder.ToString();

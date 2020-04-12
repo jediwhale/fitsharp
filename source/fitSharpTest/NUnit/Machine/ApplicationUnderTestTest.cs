@@ -1,11 +1,11 @@
-﻿// Copyright © 2018 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2020 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (https://opensource.org/licenses/cpl1.0.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
 using System.IO;
-using System.Linq;
+using System.Reflection;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
@@ -17,6 +17,19 @@ namespace fitSharp.Test.NUnit.Machine {
     [TestFixture] public class ApplicationUnderTestTest {
         ApplicationUnderTest applicationUnderTest;
         Mock<ApplicationDomain> domain;
+
+        [OneTimeSetUp]
+        public void OneTimeSetUp() {
+            CopySample("TestTarget");
+            CopySample("TestTarget2");
+        }
+
+        void CopySample(string sampleName) {
+            var target = Path.Combine(TargetPath(), "build", "sample", sampleName);
+            Directory.CreateDirectory(target);
+            var source = Assembly.GetExecutingAssembly().Location.Replace("fitSharpTest", sampleName);
+            File.Copy(source, Path.Combine(target, sampleName + ".dll"), true);
+        }
 
         [SetUp] public void SetUp() {
             applicationUnderTest = new ApplicationUnderTest();
@@ -88,8 +101,8 @@ namespace fitSharp.Test.NUnit.Machine {
 
         [Test]
         public void LoadsFromAlternateFolder() {
-            AssemblyLoadFailureHandler.AddFolder(Path.Combine(TargetPath(), "build/sample/" + framework + "1".AsPath()));
-            LoadTarget("2/TestTarget2");
+            AssemblyLoadFailureHandler.AddFolder(Path.Combine(TargetPath(), "build/sample/TestTarget".AsPath()));
+            LoadTarget("TestTarget2");
             var runtimeType = applicationUnderTest.FindType("fitSharp.TestTarget2.SampleWithDependency");
             Assert.AreEqual("my sample says hi sample", runtimeType.CreateInstance().ValueString);
         }
@@ -154,26 +167,18 @@ namespace fitSharp.Test.NUnit.Machine {
         }
 
         void LoadTestTarget() {
-            LoadTarget("1/TestTarget");
+            LoadTarget("TestTarget");
         }
 
         void LoadTarget(string name) {
             applicationUnderTest.AddAssembly(Path.Combine(
                 TargetPath(),
-                ("build/sample/" + framework + name + ".dll").AsPath()));
+                ("build/sample/" + name + "/" + name + ".dll").AsPath()));
         }
 
         string TargetPath() {
             return AppDomain.CurrentDomain.BaseDirectory.Before(new[] {"/build/".AsPath(), "/source/".AsPath()});
         }
-
-        const string framework =
-            #if NETCOREAPP
-                    "netcore"
-            #else
-                    "netfx"
-            #endif
-            ;
     }
 }
 
