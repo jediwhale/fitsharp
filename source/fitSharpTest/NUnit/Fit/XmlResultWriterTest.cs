@@ -16,31 +16,31 @@ namespace fitSharp.Test.NUnit.Fit {
     [TestFixture]
     public class XmlResultWriterTest
     {
-        const string TEST_RESULT_FILE_NAME = "Test.xml";
-        XmlResultWriter _strategy;
-        FolderTestModel _folderModel;
+        const string testResultFileName = "Test.xml";
+        XmlResultWriter strategy;
+        FolderTestModel folderModel;
 
         [SetUp]
         public void SetUp()
         {
-            _folderModel = new FolderTestModel();
+            folderModel = new FolderTestModel();
         }
 
         [Test]
         public void TestCloseWithFileName()
         {
-            _strategy = new XmlResultWriter(TEST_RESULT_FILE_NAME, _folderModel);
-            _strategy.Close();
-            Assert.IsTrue(_folderModel.Exists(TEST_RESULT_FILE_NAME));
-            Assert.AreEqual("<?xml version=\"1.0\" encoding=\"utf-16\"?>" + Environment.NewLine + "<testResults />", _folderModel.GetPageContent(TEST_RESULT_FILE_NAME));
+            strategy = new XmlResultWriter(testResultFileName, folderModel);
+            strategy.Close();
+            Assert.IsTrue(folderModel.Exists(testResultFileName));
+            Assert.AreEqual("<?xml version=\"1.0\" encoding=\"utf-16\"?>" + Environment.NewLine + "<testResults />", folderModel.GetPageContent(testResultFileName));
         }
 
         [Test]
         public void TestCloseWithStandardOut()
         {
-            _strategy = new XmlResultWriter("stdout", _folderModel);
-            _strategy.Close();
-            Assert.IsFalse(_folderModel.Exists(TEST_RESULT_FILE_NAME));
+            strategy = new XmlResultWriter("stdout", folderModel);
+            strategy.Close();
+            Assert.IsFalse(folderModel.Exists(testResultFileName));
         }
 
         [Test]
@@ -50,15 +50,15 @@ namespace fitSharp.Test.NUnit.Fit {
             var pageResult = new PageResult(pageName, "<table border=\"1\" cellspacing=\"0\">" + Environment.NewLine
                        + "<tr><td>Text</td>" + Environment.NewLine 
                        + "</tr>" + Environment.NewLine + "</table>", MakeTestCounts());
-            _strategy = new XmlResultWriter(TEST_RESULT_FILE_NAME, _folderModel);
-            _strategy.WritePageResult(pageResult);
-            _strategy.Close();
+            strategy = new XmlResultWriter(testResultFileName, folderModel);
+            strategy.WritePageResult(pageResult);
+            strategy.Close();
             Assert.AreEqual(
                 BuildPageResultString(pageName, "<![CDATA[<table border=\"1\" cellspacing=\"0\">" + Environment.NewLine
                           + "<tr><td>Text</td>" + Environment.NewLine 
                           + "</tr>" + Environment.NewLine
                           + "</table>]]>", 1, 2, 3, 4),
-                _folderModel.GetPageContent(TEST_RESULT_FILE_NAME));
+                folderModel.GetPageContent(testResultFileName));
         }
 
         [Test]
@@ -66,22 +66,22 @@ namespace fitSharp.Test.NUnit.Fit {
         {
             const string pageName = "Test Page";
             var pageResult = new PageResult(pageName, "<table><tr><td>Text</td></tr>\x02</table>", MakeTestCounts());
-            _strategy = new XmlResultWriter(TEST_RESULT_FILE_NAME, _folderModel);
-            _strategy.WritePageResult(pageResult);
-            _strategy.Close();
+            strategy = new XmlResultWriter(testResultFileName, folderModel);
+            strategy.WritePageResult(pageResult);
+            strategy.Close();
             Assert.AreEqual(
                 BuildPageResultString(pageName, "<![CDATA[<table><tr><td>Text</td></tr>&#2;</table>]]>", 1, 2, 3, 4),
-                _folderModel.GetPageContent(TEST_RESULT_FILE_NAME));
+                folderModel.GetPageContent(testResultFileName));
         }
 
         [Test]
         public void TestWriteFinalCounts()
         {
-            _strategy = new XmlResultWriter(TEST_RESULT_FILE_NAME, _folderModel);
-            _strategy.WriteFinalCount(MakeTestCounts());
-            _strategy.Close();
+            strategy = new XmlResultWriter(testResultFileName, folderModel);
+            strategy.WriteFinalCount(MakeTestCounts());
+            strategy.Close();
             Assert.AreEqual(BuildFinalCountsString(1, 2, 3, 4),
-                            _folderModel.GetPageContent(TEST_RESULT_FILE_NAME));
+                            folderModel.GetPageContent(testResultFileName));
         }
 
         static string BuildPageResultString(string pageName, string content, int right, int wrong, int ignores, int exceptions)

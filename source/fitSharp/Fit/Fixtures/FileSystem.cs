@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using fitSharp.IO;
 
 namespace fitSharp.Fit.Fixtures {
@@ -53,14 +54,15 @@ namespace fitSharp.Fit.Fixtures {
             myAliases[theAlias] = theFolder.Path;
         }
 
-        private string FullName(string theFileName) {
-            foreach (string alias in myAliases.Keys) {
-                if (theFileName.StartsWith(alias)) return myAliases[alias] + theFileName.Substring(alias.Length);
+        string FullName(string theFileName) {
+            foreach (var alias in myAliases.Keys.Where(theFileName.StartsWith)) {
+                return myAliases[alias] + theFileName.Substring(alias.Length);
             }
+
             return theFileName;
         }
 
-        private readonly Dictionary<string, string> myAliases = new Dictionary<string, string>();
+        readonly Dictionary<string, string> myAliases = new Dictionary<string, string>();
 
     }
 

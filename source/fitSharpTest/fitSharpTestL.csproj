@@ -5,6 +5,7 @@
     <Deterministic>false</Deterministic>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AssemblyName>fitSharpTest</AssemblyName>
+    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Moq" Version="4.13.1" />

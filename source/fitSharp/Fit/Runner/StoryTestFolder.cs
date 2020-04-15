@@ -24,7 +24,7 @@ namespace fitSharp.Fit.Runner {
                    memory.GetItem<Settings>().OutputFolder, theFolderModel, null, filters) {
         }
 
-        public StoryTestFolder(string theInputPath, string theOutputPath, FolderModel theFolderModel, StoryTestFolder theParentFolder, Filters filters) {
+        StoryTestFolder(string theInputPath, string theOutputPath, FolderModel theFolderModel, StoryTestFolder theParentFolder, Filters filters) {
             FullName = theInputPath;
             OutputPath = theOutputPath;
             myFolderModel = theFolderModel;
@@ -64,37 +64,23 @@ namespace fitSharp.Fit.Runner {
             }
         }
 
-        IEnumerable<StoryTestPage> Pages {
-            get {
-                return myFolderModel
-                    .GetFiles(FullName)
-                    .Select(filePath => new StoryTestFile(filePath, this, myFolderModel))
-                    .Where(file => filters.Matches(file))
-                    .OrderBy(file => file.Name.Name);
-            }
-        }
+        IEnumerable<StoryTestPage> Pages =>
+            myFolderModel
+                .GetFiles(FullName)
+                .Select(filePath => new StoryTestFile(filePath, this, myFolderModel))
+                .Where(file => filters.Matches(file))
+                .OrderBy(file => file.Name.Name);
 
-        StoryTestPage SuiteSetUp {
-            get {
-                return FindFile(name => name.IsSuiteSetUp);
-            }
-        }
+        StoryTestPage SuiteSetUp => FindFile(name => name.IsSuiteSetUp);
 
-        StoryTestPage SuiteTearDown {
-            get {
-                return FindFile(name => name.IsSuiteTearDown);
-            }
-        }
+        StoryTestPage SuiteTearDown => FindFile(name => name.IsSuiteTearDown);
 
-        IEnumerable<StoryTestSuite> Suites {
-            get {
-                return myFolderModel
-                    .GetFolders(FullName)
-                    .Select(CreateChildSuite)
-                    .Where(suite => filters.Matches(suite))
-                    .OrderBy(suite => suite.FullName);
-            }
-        }
+        IEnumerable<StoryTestSuite> Suites =>
+            myFolderModel
+                .GetFolders(FullName)
+                .Select(CreateChildSuite)
+                .Where(suite => filters.Matches(suite))
+                .OrderBy(suite => suite.FullName);
 
         StoryTestSuite CreateChildSuite(string inputFolder) {
             var relativeFolder = inputFolder.Substring(FullName.Length + 1);
@@ -102,12 +88,10 @@ namespace fitSharp.Fit.Runner {
         }
 
         StoryTestFile FindFile(Func<StoryFileName, bool> filter) {
-            foreach (var filePath in myFolderModel.GetFiles(FullName)) {
-                if (filter(new StoryFileName(filePath))) {
-                    return new StoryTestFile(filePath, this, myFolderModel);
-                }
-            }
-            return null;
+            return myFolderModel.GetFiles(FullName)
+                .Where(filePath => filter(new StoryFileName(filePath)))
+                .Select(filePath => new StoryTestFile(filePath, this, myFolderModel))
+                .FirstOrDefault();
         }
 
         string GetSetUp() {
