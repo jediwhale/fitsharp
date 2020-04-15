@@ -4,18 +4,20 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System.Diagnostics;
+using fitSharp.IO;
 
 namespace fitSharp.Test.Acceptance {
     public class FitNesseStory {
         public void Run(string suite) {
             var startInfo = new ProcessStartInfo("java",
-#if NETCOREAPP
-                "\"-DTEST_RUNNER=dotnet build\\sandbox\\Runner.dll\""
-#else
-                "\"-DTEST_RUNNER=build\\sandbox\\Runner.exe\""
-#endif
-                + " -jar .\\binary\\tools\\fitnesse\\fitnesse.jar -o -d .\\document -r FitnesseRoot -c \"" + suite +
-                "?suite&format=text\"") {
+                PathId.AsOS(
+                    #if NETCOREAPP
+                        "\"-DTEST_RUNNER=dotnet build\\sandbox\\Runner.dll\""
+                    #else
+                        "\"-DTEST_RUNNER=build\\sandbox\\Runner.exe\""
+                    #endif
+                    + " \"-DCOMMAND_PATTERN=%m -c abandonsuite.config.$OS$.xml %p\" -jar .\\binary\\tools\\fitnesse\\fitnesse.jar -o -d .\\document -r FitnesseRoot -c \""
+                    + suite + "?suite&format=text\"")) {
                 UseShellExecute = false,
                 RedirectStandardOutput = true
             };

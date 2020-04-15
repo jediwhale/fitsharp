@@ -1,10 +1,11 @@
-// Copyright © 2017 Syterra Software Inc. All rights reserved.
+// Copyright ï¿½ 2017 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using fitSharp.IO;
 using fitSharp.Machine.Application;
@@ -69,7 +70,8 @@ namespace fitSharp.Fit.Runner {
                 return myFolderModel
                     .GetFiles(FullName)
                     .Select(filePath => new StoryTestFile(filePath, this, myFolderModel))
-                    .Where(file => filters.Matches(file));
+                    .Where(file => filters.Matches(file))
+                    .OrderBy(file => file.Name.Name);
             }
         }
 
@@ -90,7 +92,8 @@ namespace fitSharp.Fit.Runner {
                 return myFolderModel
                     .GetFolders(FullName)
                     .Select(CreateChildSuite)
-                    .Where(suite => filters.Matches(suite));
+                    .Where(suite => filters.Matches(suite))
+                    .OrderBy(suite => suite.FullName);
             }
         }
 

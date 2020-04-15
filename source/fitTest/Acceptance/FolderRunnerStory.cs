@@ -1,9 +1,10 @@
-// Copyright © 2019 Syterra Software Inc.
+// Copyright © 2020 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using System;
+using System.Linq;
 using fit.Runner;
 using fitSharp.IO;
 using fitSharp.Machine.Application;
@@ -20,9 +21,12 @@ namespace fit.Test.Acceptance {
             TestClock.Instance.Now = new DateTime(2006, 12, 6, 13, 14, 15);
             TestClock.Instance.Elapsed = new TimeSpan();
             Clock.Instance = TestClock.Instance;
-            var shell = new Shell(reporter, new ShellArguments(new FileSystemModel(), theArguments));
+            var shell = new Shell(reporter, new ShellArguments(
+                new FileSystemModel(),
+                theArguments.Select(PathId.AsOS).ToList()));
             shell.Run();
-            Results = ((FolderRunner) shell.Runner).Results;
+            var runner = (FolderRunner) shell.Runner;
+            Results = runner != null ? runner.Results ?? Output : Output;
             Clock.Instance = new Clock();
         }
 
@@ -30,7 +34,7 @@ namespace fit.Test.Acceptance {
 
         public string[] ConsoleOutput {
             get {
-                return Output.Split(new[] {'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries);
+                return PathId.AsWindows(Output).Split(new[] {'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries);
             }
         }
 

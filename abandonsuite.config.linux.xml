@@ -1,0 +1,12 @@
+<suiteConfig>
+
+    <Settings>
+        <runner>fitnesse.fitserver.FitServer</runner>
+    </Settings>
+    
+    <ApplicationUnderTest>
+        <addAssembly>build/sandbox/Samples.dll</addAssembly>
+        <addNamespace>fitSharp.Samples</addNamespace>
+    </ApplicationUnderTest>
+    
+</suiteConfig>

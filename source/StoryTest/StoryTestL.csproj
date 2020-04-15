@@ -15,11 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\fitSharpTest\fitSharpTestL.csproj" />
       <ProjectReference Include="..\fitSharp\fitSharpL.csproj" />
-      <ProjectReference Include="..\fitTest\fitTestL.csproj" />
-      <ProjectReference Include="..\fit\fitL.csproj" />
-      <ProjectReference Include="..\Samples\SamplesL.csproj" />
     </ItemGroup>
 
 </Project>

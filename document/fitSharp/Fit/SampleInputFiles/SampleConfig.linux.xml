@@ -1,0 +1,19 @@
+<suiteConfig>
+
+    <ApplicationUnderTest>
+        <addNamespace>fit.Test.Acceptance</addNamespace>
+        <addNamespace>fit.Test.Double</addNamespace>
+    </ApplicationUnderTest>
+
+    <fitSharp.Machine.Application.Settings>
+        <inputFolder>document/fitSharp/Fit/SampleInputFiles</inputFolder>
+        <outputFolder>test/output</outputFolder>
+        <runner>fit.Runner.FolderRunner</runner>
+    </fitSharp.Machine.Application.Settings>
+
+    <fitSharp.Fit.Application.FileExclusions>
+       <remove>^Sample</remove>
+       <add>xml$</add>
+    </fitSharp.Fit.Application.FileExclusions>
+
+</suiteConfig>

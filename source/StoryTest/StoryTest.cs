@@ -27,6 +27,7 @@ namespace fitSharp.StoryTest {
             Copy("fitSharp", sourcePath, destinationPath);
             Copy("fitTest", sourcePath, destinationPath);
             Copy("fitSharpTest", sourcePath, destinationPath);
+            Copy("Runner", sourcePath, destinationPath);
             Copy("Samples", sourcePath, destinationPath);
             Environment.CurrentDirectory = root;
             var config = Path.Combine(
@@ -44,7 +45,6 @@ namespace fitSharp.StoryTest {
         static void Copy(string project, string sourcePath, string destinationPath) {
             foreach (var file in Directory.GetFiles(sourcePath.Replace("StoryTest", project))) {
                 if (Path.GetFileName(file).StartsWith(project)) {
-                    Console.WriteLine(file);
                     File.Copy(file, Path.Combine(destinationPath, Path.GetFileName(file)), true);
                 }
             }
