@@ -13,6 +13,7 @@
 
     <fitSharp.Fit.Application.FileExclusions>
        <remove>^Sample</remove>
+       <add>xml$</add>
     </fitSharp.Fit.Application.FileExclusions>
 
 </suiteConfig>

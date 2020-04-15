@@ -24,7 +24,14 @@ namespace fitSharp.IO {
 
         public string Path => AsOS(id);
 
-        static readonly string osName = (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "windows" : "linux");
+        
+        static readonly string osName = 
+            #if NETCOREAPP
+                (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "windows" : "linux")
+            #else
+                "windows"
+            #endif
+            ;
         readonly string id;
     }
 }
