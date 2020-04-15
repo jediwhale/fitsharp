@@ -76,8 +76,9 @@ namespace fitSharp.Fit.Fixtures {
         }
 
         public void WriteLineWithPath(string line) {
-            using var writer = File.AppendText(name);
-            writer.WriteLine(PathId.AsOS(line));
+            using (var writer = File.AppendText(name)) {
+                writer.WriteLine(PathId.AsOS(line));
+            }
         }
 
         readonly string name;
