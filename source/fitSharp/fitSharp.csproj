@@ -6,6 +6,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System.IO.Compression" Condition="'$(TargetFramework)' == 'net462'" />
+    <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>C:\Program Files\dotnet\sdk\3.1.102\Microsoft\Microsoft.NET.Build.Extensions\net462\lib\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web" Condition="'$(TargetFramework)' == 'net462'" />
   </ItemGroup>
 </Project>
