@@ -55,7 +55,12 @@ namespace fitSharp.Test.NUnit.Machine {
         [Test] public void RunnerFromSuiteConfigIsUsed() {
             var folders = new FolderTestModel();
             folders.MakeFile("suite.config.xml", "<config><Settings><Runner>"
-                + typeof (SampleRunner).FullName + "," + typeof (SampleRunner).Assembly.CodeBase
+                + typeof (SampleRunner).FullName + ","
+                #if NET5_0
+                    + typeof (SampleRunner).Assembly.Location
+                #else
+                    + typeof (SampleRunner).Assembly.CodeBase
+                #endif
                 + "</Runner></Settings></config>");
             var result = RunShell(new[] {"-c", "suite.config.xml"}, folders );
             Assert.AreEqual(SampleRunner.Result, result);

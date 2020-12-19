@@ -11,10 +11,14 @@ namespace fitSharp.Test.Acceptance {
         public void Run(string suite) {
             var startInfo = new ProcessStartInfo("java",
                 PathId.AsOS(
-                    #if NETCOREAPP
+                    #if NET5_0
                         "\"-DTEST_RUNNER=dotnet build\\sandbox\\Runner.dll\""
                     #else
-                        "\"-DTEST_RUNNER=build\\sandbox\\Runner.exe\""
+                        #if NETCOREAPP
+                            "\"-DTEST_RUNNER=dotnet build\\sandbox\\Runner.dll\""
+                        #else
+                            "\"-DTEST_RUNNER=build\\sandbox\\Runner.exe\""
+                        #endif
                     #endif
                     + " \"-DCOMMAND_PATTERN=%m -c abandonsuite.config.$OS$.xml %p\" -jar .\\binary\\tools\\fitnesse\\fitnesse.jar -o -d .\\document -r FitnesseRoot -c \""
                     + suite + "?suite&format=text\"")) {

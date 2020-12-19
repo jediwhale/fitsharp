@@ -6,7 +6,6 @@
 using System;
 using System.IO;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
@@ -19,7 +18,11 @@ namespace fitSharp.StoryTest {
         public void Run() {
             var current = Environment.CurrentDirectory;
             var root = current.Substring(0, current.IndexOf("source", StringComparison.Ordinal));
-            var build = new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath;
+            #if NET5_0
+                var build = new Uri(Assembly.GetExecutingAssembly().Location).LocalPath;
+            #else
+                var build = new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath;
+            #endif
             var sourcePath = Path.GetDirectoryName(build);
             var destinationPath = Path.Combine(root, "build", "sandbox");
             Directory.CreateDirectory(destinationPath);
@@ -33,11 +36,15 @@ namespace fitSharp.StoryTest {
             var config = Path.Combine(
                 AppDomain.CurrentDomain.BaseDirectory.Before(new[] {"/build/".AsPath(), "/source/".AsPath()}),
                 "storytest.config." +
+                #if NET5_0
+                        (OperatingSystem.IsWindows() ? "net5" : "linux")
+                #else
                     #if NETCOREAPP
-                        (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "netcore" : "linux")
+                        "netcore"
                     #else
                         "netfx"
                     #endif
+                #endif
                 + ".xml");
             Assert.AreEqual(0,  Shell.Run(new [] {"-c", config}));
         }

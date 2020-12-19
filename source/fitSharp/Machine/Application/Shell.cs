@@ -89,6 +89,9 @@ namespace fitSharp.Machine.Application {
         }
 
         void ExecuteInApartment(Memory memory) {
+            #if NET5_0
+                if (OperatingSystem.IsWindows()) {
+            #endif
             var apartmentConfiguration = memory.GetItem<Settings>().ApartmentState;
             if (apartmentConfiguration != null) {
                 var desiredState = (ApartmentState)Enum.Parse(typeof(ApartmentState), apartmentConfiguration);
@@ -100,6 +103,9 @@ namespace fitSharp.Machine.Application {
                     return;
                 }
             }
+            #if NET5_0
+                }
+            #endif
             Run(memory);
         }
 

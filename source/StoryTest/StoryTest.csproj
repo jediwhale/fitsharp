@@ -2,13 +2,13 @@
 
     <PropertyGroup>
         <RootNamespace>fitSharp.StoryTest</RootNamespace>
-        <TargetFrameworks>net462;netcoreapp3.1</TargetFrameworks>
+        <TargetFrameworks>net462;net5.0;netcoreapp3.1</TargetFrameworks>
         <Deterministic>false</Deterministic>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
+      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.0" />
       <PackageReference Include="NUnit" Version="3.12.0" />
       <PackageReference Include="NUnit3TestAdapter" Version="3.16.1" />
     </ItemGroup>
