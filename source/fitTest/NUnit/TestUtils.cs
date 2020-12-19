@@ -1,4 +1,4 @@
-// Copyright © 2011 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+// Copyright ï¿½ 2011 Syterra Software Inc. Includes work by Object Mentor, Inc., ï¿½ 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -20,7 +20,11 @@ namespace fit.Test.NUnit {
         public static Memory InitAssembliesAndNamespaces()
         {
             var memory = new TypeDictionary();
-            memory.GetItem<ApplicationUnderTest>().AddAssembly(Assembly.GetAssembly(typeof (TestUtils)).CodeBase);
+            #if NET5_0
+                memory.GetItem<ApplicationUnderTest>().AddAssembly(Assembly.GetAssembly(typeof (TestUtils)).Location);
+            #else
+                memory.GetItem<ApplicationUnderTest>().AddAssembly(Assembly.GetAssembly(typeof (TestUtils)).CodeBase);
+            #endif
             memory.GetItem<ApplicationUnderTest>().AddNamespace("fit.Test.NUnit");
             memory.GetItem<ApplicationUnderTest>().AddNamespace("fit.Test.Acceptance");
             return memory;

@@ -35,7 +35,11 @@ namespace fitSharp.Machine.Engine {
         class AssemblyTypes: Types {
             readonly Assembly assembly;
             public AssemblyTypes(Assembly assembly) { this.assembly = assembly; }
-            public string Name { get { return assembly.CodeBase; } }
+            #if NET5_0
+                public string Name => assembly.Location;
+            #else
+                public string Name => assembly.CodeBase;
+            #endif
             public IEnumerable<Type> Types { get { return assembly.GetExportedTypes(); } }
         }
     }

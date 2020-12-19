@@ -16,7 +16,11 @@ namespace fit.Service {
 
         public Service(Memory memory): base(memory, memory.GetItem<Operators>()) {
             ApplicationUnderTest.AddNamespace("fit");
-            ApplicationUnderTest.AddAssembly(Assembly.GetExecutingAssembly().CodeBase);
+            #if NET5_0
+                ApplicationUnderTest.AddAssembly(Assembly.GetExecutingAssembly().Location);
+            #else
+                ApplicationUnderTest.AddAssembly(Assembly.GetExecutingAssembly().CodeBase);
+            #endif
             memory.GetItem<Operators>().AddNamespaces(ApplicationUnderTest);
         }
 

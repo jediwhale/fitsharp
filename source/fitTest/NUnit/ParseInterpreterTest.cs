@@ -36,7 +36,11 @@ namespace fit.Test.NUnit {
 
         TypedValue Parse(string inputTables, TypedValue target) {
             processor = new Service.Service();
-            processor.ApplicationUnderTest.AddAssembly(Assembly.GetExecutingAssembly().CodeBase);
+            #if NET5_0
+                processor.ApplicationUnderTest.AddAssembly(Assembly.GetExecutingAssembly().Location);
+            #else
+                processor.ApplicationUnderTest.AddAssembly(Assembly.GetExecutingAssembly().CodeBase);
+            #endif
             processor.ApplicationUnderTest.AddNamespace(typeof(SampleDomain).Namespace);
             var parser = new ParseInterpreter { Processor = processor };
             var table = fit.Parse.ParseFrom(inputTables);

@@ -35,7 +35,11 @@ namespace fit.Test.NUnit {
         }
 
         private void RunMemoryTest(Service.Service service, string leader) {
-            service.ApplicationUnderTest.AddAssembly(Assembly.GetExecutingAssembly().CodeBase);
+            #if NET5_0
+                service.ApplicationUnderTest.AddAssembly(Assembly.GetExecutingAssembly().Location);
+            #else
+                service.ApplicationUnderTest.AddAssembly(Assembly.GetExecutingAssembly().CodeBase);
+            #endif
             string tables = leader + "<table><tr><td>configure</td><td>fit.Test.NUnit.TestItem</td><td>Method</td></tr></table>";
             RunTest(service, tables);
         }
