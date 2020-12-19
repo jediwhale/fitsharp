@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <RootNamespace>fitSharp.StoryTest</RootNamespace>
-        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <TargetFramework>net5.0</TargetFramework>
         <Deterministic>false</Deterministic>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <AssemblyName>StoryTest</AssemblyName>
