@@ -1,4 +1,4 @@
-﻿// Copyright © 2019 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+﻿// Copyright © 2020 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -9,12 +9,13 @@ using fit.Runner;
 using fitSharp.Fit.Engine;
 using fitSharp.Fit.Fixtures;
 using fitSharp.IO;
+using fitSharp.Machine.Model;
 using fitSharp.Samples;
 using NUnit.Framework;
 
 namespace fit.Test.NUnit {
     [TestFixture] public class SocketServerTest {
-        private string resultTables;
+        string resultTables;
 
         [SetUp] public void SetUp() {
             resultTables = string.Empty;
@@ -34,13 +35,9 @@ namespace fit.Test.NUnit {
             Assert.IsFalse(service.Memory.HasItem<TestItem>());
         }
 
-        private void RunMemoryTest(Service.Service service, string leader) {
-            #if NET5_0
-                service.ApplicationUnderTest.AddAssembly(Assembly.GetExecutingAssembly().Location);
-            #else
-                service.ApplicationUnderTest.AddAssembly(Assembly.GetExecutingAssembly().CodeBase);
-            #endif
-            string tables = leader + "<table><tr><td>configure</td><td>fit.Test.NUnit.TestItem</td><td>Method</td></tr></table>";
+        void RunMemoryTest(Service.Service service, string leader) {
+            service.ApplicationUnderTest.AddAssembly(TargetFramework.Location(Assembly.GetExecutingAssembly()));
+            var tables = leader + "<table><tr><td>configure</td><td>fit.Test.NUnit.TestItem</td><td>Method</td></tr></table>";
             RunTest(service, tables);
         }
 
@@ -60,9 +57,9 @@ namespace fit.Test.NUnit {
 
         private void RunTest(CellProcessor service, string tables) {
             var port = new TestPort();
-            port.Input = Protocol.FormatInteger(tables.Length);
-            port.Input = tables;
-            port.Input = Protocol.FormatInteger(0);
+            port.AddInput(Protocol.FormatInteger(tables.Length));
+            port.AddInput(tables);
+            port.AddInput(Protocol.FormatInteger(0));
             var server = new SocketServer(new FitSocket(new MessageChannel(port), new NullReporter()), service, new NullReporter(), false);
             server.ProcessTestDocuments(new StoryTestStringWriter().ForTables(s => resultTables += s));
             Assert.IsFalse(port.IsOpen);

@@ -18,11 +18,7 @@ namespace fitSharp.StoryTest {
         public void Run() {
             var current = Environment.CurrentDirectory;
             var root = current.Substring(0, current.IndexOf("source", StringComparison.Ordinal));
-            #if NET5_0
-                var build = new Uri(Assembly.GetExecutingAssembly().Location).LocalPath;
-            #else
-                var build = new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath;
-            #endif
+            var build = new Uri(TargetFramework.Location(Assembly.GetExecutingAssembly())).LocalPath;
             var sourcePath = Path.GetDirectoryName(build);
             var destinationPath = Path.Combine(root, "build", "sandbox");
             Directory.CreateDirectory(destinationPath);
@@ -35,17 +31,7 @@ namespace fitSharp.StoryTest {
             Environment.CurrentDirectory = root;
             var config = Path.Combine(
                 AppDomain.CurrentDomain.BaseDirectory.Before(new[] {"/build/".AsPath(), "/source/".AsPath()}),
-                "storytest.config." +
-                #if NET5_0
-                        (OperatingSystem.IsWindows() ? "net5" : "linux")
-                #else
-                    #if NETCOREAPP
-                        "netcore"
-                    #else
-                        "netfx"
-                    #endif
-                #endif
-                + ".xml");
+                "storytest.config." + TargetFramework.FileExtension + ".xml");
             Assert.AreEqual(0,  Shell.Run(new [] {"-c", config}));
         }
 

@@ -27,7 +27,7 @@ namespace fitSharp.Machine.Engine {
             AddNamespace(GetType().Namespace);
         }
 
-        public ApplicationUnderTest(ApplicationUnderTest other) {
+        ApplicationUnderTest(ApplicationUnderTest other) {
             assemblies = new Assemblies(other.assemblies);
             namespaces = new Namespaces(other.namespaces);
         }
@@ -67,7 +67,7 @@ namespace fitSharp.Machine.Engine {
                 return MatchName == candidateName;
             }
 
-            public string MatchName {get; }
+            public string MatchName { get; }
         }
 
         public RuntimeType FindType(NameMatcher typeName) {
@@ -121,11 +121,7 @@ namespace fitSharp.Machine.Engine {
                 if (!typeName.StartsWith("fit.") && !typeName.StartsWith("fitnesse.")) return;
                 if (assemblies.Exists(a => a.Name.EndsWith("/fit.dll", StringComparison.OrdinalIgnoreCase))) return;
                 try {
-                    #if NET5_0
-                        AddAssembly(Assembly.GetExecutingAssembly().Location.Replace("/fitSharp.", "/fit."));
-                    #else
-                        AddAssembly(Assembly.GetExecutingAssembly().CodeBase.Replace("/fitSharp.", "/fit."));
-                    #endif
+                    AddAssembly(TargetFramework.Location(Assembly.GetExecutingAssembly()).Replace("/fitSharp.", "/fit."));
                 }
                 catch (FileNotFoundException) {} // if it's not there, we tried our best
             }

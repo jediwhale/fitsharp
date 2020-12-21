@@ -1,9 +1,8 @@
-// Copyright � 2011 Syterra Software Inc. Includes work by Object Mentor, Inc., � 2002 Cunningham & Cunningham, Inc.
+// Copyright © 2020 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-using System;
 using System.Reflection;
 using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
@@ -20,11 +19,7 @@ namespace fit.Test.NUnit {
         public static Memory InitAssembliesAndNamespaces()
         {
             var memory = new TypeDictionary();
-            #if NET5_0
-                memory.GetItem<ApplicationUnderTest>().AddAssembly(Assembly.GetAssembly(typeof (TestUtils)).Location);
-            #else
-                memory.GetItem<ApplicationUnderTest>().AddAssembly(Assembly.GetAssembly(typeof (TestUtils)).CodeBase);
-            #endif
+            memory.GetItem<ApplicationUnderTest>().AddAssembly(TargetFramework.Location(Assembly.GetAssembly(typeof (TestUtils))));
             memory.GetItem<ApplicationUnderTest>().AddNamespace("fit.Test.NUnit");
             memory.GetItem<ApplicationUnderTest>().AddNamespace("fit.Test.Acceptance");
             return memory;
@@ -32,7 +27,7 @@ namespace fit.Test.NUnit {
 
         public static Parse CreateCell(string value)
         {
-            return new Parse("td", value, null, null);
+            return new("td", value, null, null);
         }
 
         public static Tree<Cell> CreateCellRange(string value)
@@ -40,31 +35,12 @@ namespace fit.Test.NUnit {
             return new CellTree(value);
 		}
 
-        public static bool IsMatch(CompareOperator<Cell> compareOperator, object instance, Type type, string value) {
-            return compareOperator.CanCompare(new TypedValue(instance, type), CreateCell(value));
-        }
-
         public static void DoInput(Fixture fixture, Tree<Cell> range, Parse cell) {
             new InputBinding(fixture.Processor, fixture, range).Do(cell);
         }
 
         public static void DoCheck(Fixture fixture, Tree<Cell> range, Parse cell) {
             fixture.Processor.Check(fixture.GetTargetObject(), range, cell);
-        }
-
-        public static TestCounts MakeTestCounts() {
-            var counts = new TestCounts();
-            counts.AddCount(TestStatus.Right);
-            counts.AddCount(TestStatus.Wrong);
-            counts.AddCount(TestStatus.Wrong);
-            counts.AddCount(TestStatus.Ignore);
-            counts.AddCount(TestStatus.Ignore);
-            counts.AddCount(TestStatus.Ignore);
-            counts.AddCount(TestStatus.Exception);
-            counts.AddCount(TestStatus.Exception);
-            counts.AddCount(TestStatus.Exception);
-            counts.AddCount(TestStatus.Exception);
-            return counts;
         }
 
         public static void CheckCounts(TestCounts counts, int right, int wrong, int ignore, int exception) {

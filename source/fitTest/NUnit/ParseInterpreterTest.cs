@@ -1,4 +1,4 @@
-﻿// Copyright © 2015 Syterra Software Inc.
+﻿// Copyright © 2020 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -36,11 +36,7 @@ namespace fit.Test.NUnit {
 
         TypedValue Parse(string inputTables, TypedValue target) {
             processor = new Service.Service();
-            #if NET5_0
-                processor.ApplicationUnderTest.AddAssembly(Assembly.GetExecutingAssembly().Location);
-            #else
-                processor.ApplicationUnderTest.AddAssembly(Assembly.GetExecutingAssembly().CodeBase);
-            #endif
+            processor.ApplicationUnderTest.AddAssembly(TargetFramework.Location(Assembly.GetExecutingAssembly()));
             processor.ApplicationUnderTest.AddNamespace(typeof(SampleDomain).Namespace);
             var parser = new ParseInterpreter { Processor = processor };
             var table = fit.Parse.ParseFrom(inputTables);

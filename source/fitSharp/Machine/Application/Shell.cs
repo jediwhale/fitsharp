@@ -6,7 +6,6 @@
 using System;
 using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
 using System.Threading;
 using fitSharp.IO;
 using fitSharp.Machine.Engine;
@@ -89,23 +88,19 @@ namespace fitSharp.Machine.Application {
         }
 
         void ExecuteInApartment(Memory memory) {
-            #if NET5_0
-                if (OperatingSystem.IsWindows()) {
-            #endif
-            var apartmentConfiguration = memory.GetItem<Settings>().ApartmentState;
-            if (apartmentConfiguration != null) {
-                var desiredState = (ApartmentState)Enum.Parse(typeof(ApartmentState), apartmentConfiguration);
-                if (Thread.CurrentThread.GetApartmentState() != desiredState) {
-                    var thread = new Thread(() => Run(memory));
-                    thread.SetApartmentState(desiredState);
-                    thread.Start();
-                    thread.Join();
-                    return;
+            if (OperatingSystem.IsWindows()) {
+                var apartmentConfiguration = memory.GetItem<Settings>().ApartmentState;
+                if (apartmentConfiguration != null) {
+                    var desiredState = (ApartmentState)Enum.Parse(typeof(ApartmentState), apartmentConfiguration);
+                    if (Thread.CurrentThread.GetApartmentState() != desiredState) {
+                        var thread = new Thread(() => Run(memory));
+                        thread.SetApartmentState(desiredState);
+                        thread.Start();
+                        thread.Join();
+                        return;
+                    }
                 }
             }
-            #if NET5_0
-                }
-            #endif
             Run(memory);
         }
 

@@ -3,14 +3,17 @@
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
+#if !NETCOREAPP
 using System;
-using System.Collections.Generic;
 using System.Configuration;
+#endif
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading;
 using fitSharp.IO;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
+using fitSharp.Machine.Model;
 using fitSharp.Samples;
 using NUnit.Framework;
 
@@ -38,6 +41,19 @@ namespace fitSharp.Test.NUnit.Machine {
                 "-r", typeof (SampleRunner).FullName + "," + typeof (SampleRunner).Assembly.CodeBase}, folders );
             Assert.AreEqual(606, result);
         }
+
+        class PushCurrentDirectory : IDisposable {
+            public PushCurrentDirectory(string directory) {
+                original = Environment.CurrentDirectory;
+                Environment.CurrentDirectory = directory;
+            }
+
+            public void Dispose() {
+                Environment.CurrentDirectory = original;
+            }
+
+            readonly string original;
+        }
 #endif
 
         [Test] public void RunnerIsCalled() {
@@ -56,11 +72,7 @@ namespace fitSharp.Test.NUnit.Machine {
             var folders = new FolderTestModel();
             folders.MakeFile("suite.config.xml", "<config><Settings><Runner>"
                 + typeof (SampleRunner).FullName + ","
-                #if NET5_0
-                    + typeof (SampleRunner).Assembly.Location
-                #else
-                    + typeof (SampleRunner).Assembly.CodeBase
-                #endif
+                + TargetFramework.Location(typeof (SampleRunner).Assembly)
                 + "</Runner></Settings></config>");
             var result = RunShell(new[] {"-c", "suite.config.xml"}, folders );
             Assert.AreEqual(SampleRunner.Result, result);
@@ -80,19 +92,6 @@ namespace fitSharp.Test.NUnit.Machine {
 
         static int RunShell(IList<string> arguments, FolderModel model) {
             return new Shell(new NullReporter(), new ShellArguments(model, arguments)).Run();
-        }
-
-        class PushCurrentDirectory : IDisposable {
-            public PushCurrentDirectory(string directory) {
-                original = Environment.CurrentDirectory;
-                Environment.CurrentDirectory = directory;
-            }
-
-            public void Dispose() {
-                Environment.CurrentDirectory = original;
-            }
-
-            readonly string original;
         }
     }
 

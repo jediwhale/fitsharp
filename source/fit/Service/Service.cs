@@ -1,4 +1,4 @@
-﻿// Copyright © 2016 Syterra Software Inc.
+﻿// Copyright © 2020 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -16,11 +16,7 @@ namespace fit.Service {
 
         public Service(Memory memory): base(memory, memory.GetItem<Operators>()) {
             ApplicationUnderTest.AddNamespace("fit");
-            #if NET5_0
-                ApplicationUnderTest.AddAssembly(Assembly.GetExecutingAssembly().Location);
-            #else
-                ApplicationUnderTest.AddAssembly(Assembly.GetExecutingAssembly().CodeBase);
-            #endif
+            ApplicationUnderTest.AddAssembly(TargetFramework.Location(Assembly.GetExecutingAssembly()));
             memory.GetItem<Operators>().AddNamespaces(ApplicationUnderTest);
         }
 
