@@ -36,12 +36,14 @@ FitServer throws an exception when the suite is abandoned to make FitNesse stop 
 The following runs a suite with two tests. The first one throws AbandonTestSuiteException so the second is not run.<pre class="test">test@<br>
 configure processor 'add operator' compareregex
 
-fitSharp.Test.Acceptance.FitNesseStory
-run AbandonSuite
-check 'standard output' '/.*1 Tests,	1 Failures.*/'<br>
+'fitnesse server'
+'add page' 'test@,fit.Test.Double.SampleDomainAdapter,throwabandonsuite'
+'add page' 'test@,garbage'
+run
+check results '/.*SampleDomainAdapter.* \\(Test completed\\) \\(Suite abandoned\\)/'<br>
 @test</pre></div>
 <div style="width:100%;text-align:right">
-<span class="footer">Copyright &copy; 2019 Syterra Software Inc. All rights reserved.</span>
+<span class="footer">Copyright &copy; 2020 Syterra Software Inc. All rights reserved.</span>
 </div>
 
 </body>
