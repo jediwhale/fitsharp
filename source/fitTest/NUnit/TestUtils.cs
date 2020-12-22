@@ -27,7 +27,7 @@ namespace fit.Test.NUnit {
 
         public static Parse CreateCell(string value)
         {
-            return new("td", value, null, null);
+            return new Parse("td", value, null, null);
         }
 
         public static Tree<Cell> CreateCellRange(string value)

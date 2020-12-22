@@ -5,13 +5,14 @@
 
 using System;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace fitSharp.Machine.Model {
     public static class TargetFramework {
         public static string Location(Assembly assembly) {
             return
                 #if NET5_0
-                    assembly.Location
+                    OperatingSystem.IsWindows() ? assembly.Location.Replace("\\", "/") : assembly.Location
                 #else
                     assembly.CodeBase
                 #endif
@@ -26,6 +27,18 @@ namespace fitSharp.Machine.Model {
                     "netcore"
                 #else
                     "netfx"
+                #endif
+            #endif
+            ;
+        
+        public static bool IsWindows =>
+            #if NET5_0
+                OperatingSystem.IsWindows()
+            #else
+                #if NETCOREAPP
+                    RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+                #else
+                    true
                 #endif
             #endif
             ;

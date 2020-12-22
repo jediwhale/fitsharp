@@ -6,6 +6,7 @@
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using fitSharp.IO;
 using fitSharp.Machine.Engine;
@@ -88,7 +89,7 @@ namespace fitSharp.Machine.Application {
         }
 
         void ExecuteInApartment(Memory memory) {
-            if (OperatingSystem.IsWindows()) {
+            if (TargetFramework.IsWindows) {
                 var apartmentConfiguration = memory.GetItem<Settings>().ApartmentState;
                 if (apartmentConfiguration != null) {
                     var desiredState = (ApartmentState)Enum.Parse(typeof(ApartmentState), apartmentConfiguration);

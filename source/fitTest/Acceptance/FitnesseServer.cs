@@ -35,6 +35,6 @@ namespace fit.Test.Acceptance {
         }
         
         public string Results;
-        readonly TestPort port = new();
+        readonly TestPort port = new TestPort();
     }
 }
