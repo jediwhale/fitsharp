@@ -53,10 +53,23 @@
       source\dbfitOracle\bin\release\netcoreapp3.1\dbfit.oracle.dll;
       source\dbfitSqlServer\bin\release\netcoreapp3.1\dbfit.sqlserver.dll;
       source\dbfitSybase\bin\release\netcoreapp3.1\dbfit.sybase.dll;"/>
+    <Net5Files Include="
+      source\fitSharp\bin\release\net5.0\fitSharp.dll;
+      source\fit\bin\release\net5.0\fit.dll;
+      source\Runner\bin\release\net5.0\Runner.dll;
+      source\Runner\bin\release\net5.0\Runner.runtimeconfig.json;
+      source\RunnerW\bin\release\net5.0-windows\RunnerW.dll;
+      source\RunnerW\bin\release\net5.0-windows\RunnerW.runtimeconfig.json;
+      source\dbfit\bin\release\net5.0\dbfit.dll;
+      source\dbfitMySql\bin\release\net5.0\dbfit.mysql.dll;
+      source\dbfitOracle\bin\release\net5.0\dbfit.oracle.dll;
+      source\dbfitSqlServer\bin\release\net5.0\dbfit.sqlserver.dll;
+      source\dbfitSybase\bin\release\net5.0\dbfit.sybase.dll;"/>
     <Packages Include="nuget\*.nupkg" />
   </ItemGroup>
   <Copy SourceFiles="@(NetfxFiles)" DestinationFolder="nuget\lib\net462" />
   <Copy SourceFiles="@(NetcoreFiles)" DestinationFolder="nuget\lib\netcoreapp3.1" />
+  <Copy SourceFiles="@(Net5Files)" DestinationFolder="nuget\lib\net5.0" />
   <Exec Command="..\binary\tools\nuget\nuget pack FitSharp.nuspec" WorkingDirectory="nuget"/>
   <Move SourceFiles="@(Packages)" DestinationFolder="binary" />
 </Target>
