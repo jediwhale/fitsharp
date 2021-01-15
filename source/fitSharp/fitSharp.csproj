@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Deterministic>false</Deterministic>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <TargetFrameworks>net462;net5.0;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>net462;net5.0;net5.0-windows;netcoreapp3.1</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System.IO.Compression" Condition="'$(TargetFramework)' == 'net462'" />
