@@ -9,6 +9,11 @@
     <RootNamespace>fitSharp.RunnerW</RootNamespace>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(TargetFramework)'=='net5.0-windows'">
+    <UseWpf>true</UseWpf>
+    <UseWindowsForms>true</UseWindowsForms>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\fitSharp\fitSharp.csproj" />
   </ItemGroup>
