@@ -1,20 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>net462;net5.0;net5.0-windows;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>net462;net48;net5.0;net5.0-windows;netcoreapp3.1</TargetFrameworks>
     <RootNamespace>fitSharp.Runner</RootNamespace>
     <Deterministic>false</Deterministic>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(TargetFramework)'=='net5.0-windows'">
     <UseWpf>true</UseWpf>
     <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\fitSharp\fitSharp.csproj" />
   </ItemGroup>
-
 </Project>

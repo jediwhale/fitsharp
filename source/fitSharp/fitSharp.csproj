@@ -2,13 +2,16 @@
   <PropertyGroup>
     <Deterministic>false</Deterministic>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <TargetFrameworks>net462;net5.0;net5.0-windows;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>net462;net48;net5.0;net5.0-windows;netcoreapp3.1</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System.IO.Compression" Condition="'$(TargetFramework)' == 'net462'" />
     <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <HintPath>C:\Program Files\dotnet\sdk\3.1.102\Microsoft\Microsoft.NET.Build.Extensions\net462\lib\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
     </Reference>
-    <Reference Include="System.Web" Condition="'$(TargetFramework)' == 'net462'" />
   </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
+    <Reference Include="System.IO.Compression"/>
+    <Reference Include="System.Web"/>
+  </ItemGroup>
+
 </Project>

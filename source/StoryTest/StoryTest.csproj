@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <RootNamespace>fitSharp.StoryTest</RootNamespace>
-        <TargetFrameworks>net462;net5.0;net5.0-windows;netcoreapp3.1</TargetFrameworks>
+        <TargetFrameworks>net462;net48;net5.0;net5.0-windows;netcoreapp3.1</TargetFrameworks>
         <Deterministic>false</Deterministic>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     </PropertyGroup>
