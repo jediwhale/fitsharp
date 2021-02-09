@@ -2,13 +2,16 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFrameworks>net462;net5.0-windows;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>net462;net48;net5.0-windows;netcoreapp3.1</TargetFrameworks>
     <UseWindowsForms>true</UseWindowsForms>
     <Deterministic>false</Deterministic>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <RootNamespace>fitSharp.RunnerW</RootNamespace>
   </PropertyGroup>
-
+  <PropertyGroup Condition="'$(TargetFramework)'=='net5.0-windows'">
+    <UseWpf>true</UseWpf>
+    <UseWindowsForms>true</UseWindowsForms>
+  </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\fitSharp\fitSharp.csproj" />
   </ItemGroup>
