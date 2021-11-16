@@ -7,6 +7,12 @@ using System.Runtime.InteropServices;
 
 namespace fitSharp.IO {
     public class PathId {
+        static PathId()
+        {
+            osName = GetOsName();
+        }
+
+
         public static PathId Parse(string input) { return new PathId(input); }
 
         public static string AsOS(string input) {
@@ -19,13 +25,24 @@ namespace fitSharp.IO {
             return input
                 .Replace(System.IO.Path.DirectorySeparatorChar, '\\');
         }
-        
+
         PathId(string id) { this.id = id; }
 
         public string Path => AsOS(id);
 
-        
-        static readonly string osName = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "windows" : "linux";
+        static readonly string osName;
+
         readonly string id;
+        private static string GetOsName()
+        {
+#if NETFRAMEWORK
+            return "windows";
+#endif
+#if NETCOREAPP
+                return RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+                           ? "windows"
+                           : "linux";
+#endif
+        }
     }
 }
