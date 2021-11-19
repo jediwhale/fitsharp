@@ -1,4 +1,4 @@
-// Copyright © 2012 Syterra Software Inc. All rights reserved.
+// Copyright © 2021 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -28,32 +28,27 @@ namespace fitSharp.Machine.Engine {
             this.memberName = memberName;
         }
 
-        public MemberSpecification WithParameterTypes(IList<Type> parameterTypes) {
-            this.parameterTypes = parameterTypes;
-            parameterCount = parameterTypes.Count;
+        public MemberSpecification WithParameterTypes(IList<Type> types) {
+            parameterTypes = types;
+            parameterCount = types.Count;
             return this;
         }
 
         public MemberSpecification WithParameterNames(IEnumerable<string> parameterNames) {
-            parameterCount = parameterNames.Count();
             parameterIdNames = new List<IdentifierName>();
             foreach (var name in parameterNames) {
                 parameterIdNames.Add(new IdentifierName(name));
             }
+            parameterCount = parameterIdNames.Count;
             return this;
         }
 
-        public bool IsGetter { get { return parameterCount == 0; } }
-        public bool IsSetter { get { return parameterCount == 1; } }
-        public string MemberName { get { return memberName.Name; } }
+        public bool IsGetter => parameterCount == 0;
+        public string MemberName => memberName.Name;
         public override string ToString() { return memberName.ToString(); }
 
         public bool MatchesIdentifierName(string name) {
             return new IdentifierName(memberName.Name).Matches(name);
-        }
-
-        public bool MatchesBaseName(string name) {
-            return new IdentifierName(memberName.BaseName).Matches(name);
         }
 
         public Match MatchRegexName(string pattern) {
@@ -61,10 +56,7 @@ namespace fitSharp.Machine.Engine {
         }
 
         public bool MatchesGetSetName(string name) {
-            var identifier = new IdentifierName(memberName.Name);
-            if (identifier.Matches(name)) return true;
-            if (!identifier.MatchName.StartsWith("set") && !identifier.MatchName.StartsWith("get")) return false;
-            return new IdentifierName(identifier.MatchName.Substring(3)).Matches(name);
+            return memberName.MatchesGetSetName(name);
         }
 
         public bool MatchesParameterCount(RuntimeMember runtimeMember) {
@@ -85,15 +77,17 @@ namespace fitSharp.Machine.Engine {
                 parameterIdNames.All(name => HasMatchingParameter(runtimeMember, name));
         }
 
+        public bool Matches(MethodInfo info) { return memberName.Matches(info); }
+
+        public RuntimeMember MakeMember(MethodInfo info, object instance) {
+            return memberName.MakeMember(info, instance);
+        }
+
         bool HasMatchingParameter(RuntimeMember runtimeMember, NameMatcher name) {
             for (var i = 0; i < parameterCount; i++) {
                 if (name.Matches(runtimeMember.GetParameterName(i))) return true;
             }
             return false;
-        }
-
-        public MethodInfo MakeGenericMethod(MethodInfo baseMethod) {
-            return baseMethod.MakeGenericMethod(memberName.GenericTypes.ToArray());
         }
 
         public MemberMissingException MemberMissingException(Type type) {

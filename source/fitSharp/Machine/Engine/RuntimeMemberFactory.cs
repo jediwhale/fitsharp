@@ -1,4 +1,4 @@
-// Copyright © 2012 Syterra Software Inc. All rights reserved.
+// Copyright © 2021 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -33,7 +33,7 @@ namespace fitSharp.Machine.Engine {
             this.info = info;
         }
 
-        protected MemberInfo info;
+        protected readonly MemberInfo info;
     }
 
     public class MethodMemberFactory: RuntimeMemberFactory {
@@ -42,18 +42,14 @@ namespace fitSharp.Machine.Engine {
         }
 
         public override bool Matches(MemberSpecification specification) {
-            return Info.IsGenericMethod
-                ? specification.MatchesBaseName(info.Name)
-                : base.Matches(specification);
+            return specification.Matches(Info);
         }
 
         public override RuntimeMember MakeMember(object instance) {
-            return Info.IsGenericMethod
-                       ? new MethodMember(specification.MakeGenericMethod(Info), instance)
-                       : new MethodMember(info, instance);
+            return specification.MakeMember(Info, instance);
         }
 
-        MethodInfo Info { get { return (MethodInfo) info; } }
+        MethodInfo Info => (MethodInfo) info;
 
         readonly MemberSpecification specification;
     }
