@@ -10,6 +10,8 @@ using System.Reflection;
 using fitSharp.Machine.Engine;
 
 namespace fitSharp.Machine.Model {
+    //MemberName is a bit misleading, it carries other stuff too
+    //everything we need along with instance and parameters to do invoke
     public class MemberName {
         public static readonly MemberName Constructor = new MemberName("\".ctor\"");
         public static readonly MemberName ParseMethod = new MemberName("Parse");
@@ -20,19 +22,26 @@ namespace fitSharp.Machine.Model {
 
         public MemberName(string name, string baseName, IEnumerable<Type> genericTypes) {
             OriginalName = name;
-            Name = new GracefulName(name).IdentifierName.ToString();
-            this.baseName = new GracefulName(baseName).IdentifierName.ToString();
+            Name = new GracefulName(name).IdentifierName.ToString(); 
+            this.baseName = new GracefulName(baseName).IdentifierName.ToString(); 
             this.genericTypes = genericTypes;
         }
 
-        public MemberName WithNamedParameters() {
+        public MemberName(string originalName, string baseName, Type extensionType) {
+            OriginalName = originalName;
+            this.baseName = new GracefulName(baseName).IdentifierName.ToString();
+            Name = this.baseName;
+            this.extensionType = extensionType;
+        }
+        
+        public MemberName WithNamedParameters() { 
             HasNamedParameters = true;
             return this;
         }
 
         public bool Matches(MethodInfo info) {
-            return info.IsGenericMethod
-                ? MatchesBaseName(info.Name)
+            return (info.IsGenericMethod && genericTypes != null && genericTypes.Any()) || extensionType != null
+                ? MatchesBaseName(info.Name) 
                 : MatchesGetSetName(info.Name);
         }
         
@@ -57,12 +66,19 @@ namespace fitSharp.Machine.Model {
             return info.MakeGenericMethod(genericTypes.ToArray());
         }
 
-        public string Name { get; private set; }
-        public string OriginalName { get; private set; }
+        public Maybe<RuntimeMember> FindMatchingMember(MemberQuery query, object instance) {
+            return extensionType == null
+                ? query.FindInstanceMember(instance)
+                : query.FindExtensionMember(extensionType, instance);
+        }
+
+        public string Name { get; }
+        public string OriginalName { get; }
         public bool HasNamedParameters { get; private set; }
-        public override string ToString() { return Name; }
+        public override string ToString() { return baseName; }
         
         readonly IEnumerable<Type> genericTypes;
+        readonly Type extensionType;
         readonly string baseName;
     }
 }

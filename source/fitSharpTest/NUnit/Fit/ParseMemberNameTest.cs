@@ -14,9 +14,9 @@ namespace fitSharp.Test.NUnit.Fit {
         }
 
         [Test] public void ParsesGenericType() {
-            var member = Parse("stuff of System.String");
-            Assert.AreEqual("stuffofsystemstring", member.Name);
-            Assert.True(member.Matches(typeof(ParseMemberSample).GetMethod("Stuff")));
+            var member = Parse("generic of System.String");
+            Assert.AreEqual("genericofsystemstring", member.Name);
+            Assert.True(member.Matches(typeof(ParseMemberSample).GetMethod("Generic")));
         }
 
         [Test]
@@ -25,14 +25,26 @@ namespace fitSharp.Test.NUnit.Fit {
             Assert.AreEqual("string:", member.OriginalName);
         }
 
+        [Test]
+        public void ParsesExtensionMethod() {
+            var member = Parse("extension(fitSharp.Test.NUnit.Fit.ParseMemberExtension)");
+            Assert.True(member.Matches(typeof(ParseMemberExtension).GetMethod("Extension")));
+        }
+
         static MemberName Parse(string input) {
-            var parser = new ParseMemberName {Processor = Builder.CellProcessor()};
+            var processor = Builder.CellProcessor();
+            processor.ApplicationUnderTest.AddAssembly(typeof(ParseMemberNameTest).Assembly.Location);
+            var parser = new ParseMemberName {Processor = processor};
             return
                 parser.Parse(typeof (ParseMemberName), TypedValue.Void, new CellTree(input)).GetValue<MemberName>();
         }
     }
 
     public class ParseMemberSample {
-        public bool Stuff<T>() { return true; }
+        public bool Generic<T>() { return true; }
+    }
+
+    public static class ParseMemberExtension {
+        public static void Extension(this ParseMemberSample sample) {}
     }
 }

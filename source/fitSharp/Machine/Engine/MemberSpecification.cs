@@ -77,10 +77,23 @@ namespace fitSharp.Machine.Engine {
                 parameterIdNames.All(name => HasMatchingParameter(runtimeMember, name));
         }
 
-        public bool Matches(MethodInfo info) { return memberName.Matches(info); }
+        public bool MatchesExtension(MethodInfo info, object instance) {
+            return
+                Matches(info) &&
+                parameterCount == info.GetParameters().Length - 1 &&
+                info.GetParameters()[0].ParameterType.IsInstanceOfType(instance);
+        }
+
+        public bool Matches(MethodInfo info) {
+            return memberName.Matches(info);
+        }
 
         public RuntimeMember MakeMember(MethodInfo info, object instance) {
             return memberName.MakeMember(info, instance);
+        }
+
+        public Maybe<RuntimeMember> FindMatchingMember(MemberQuery query, object instance) {
+            return memberName.FindMatchingMember(query, instance);
         }
 
         bool HasMatchingParameter(RuntimeMember runtimeMember, NameMatcher name) {

@@ -1,4 +1,4 @@
-﻿// Copyright © 2012 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2021 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -34,11 +34,11 @@ namespace fitSharp.Fit.Operators {
             return new TypedValue(MakeMemberName(name));
         }
 
-        private static StringBuilder Append(StringBuilder nameParts, string name) {
+        static StringBuilder Append(StringBuilder nameParts, string name) {
             return nameParts.Append(name);
         }
 
-        private static StringBuilder AppendWithConversion(StringBuilder nameParts, IEnumerable<char> name) {
+        static StringBuilder AppendWithConversion(StringBuilder nameParts, IEnumerable<char> name) {
             return nameParts.Append(
                              name.Aggregate(new StringBuilder(), 
                                  (t, character) => !specialCharacterConversion.ContainsKey(character)
@@ -53,6 +53,12 @@ namespace fitSharp.Fit.Operators {
                 var genericType = name.Substring(ofPosition + 4);
                 var baseName = name.Substring(0, ofPosition);
                 return new MemberName(name, baseName, MakeGenericTypes(new[] {genericType}));
+            }
+            var atPosition = name.IndexOf("(", StringComparison.OrdinalIgnoreCase);
+            if (name.EndsWith(")") && atPosition > 0 && atPosition < name.Length - 2) {
+                var baseName = name.Substring(0, atPosition);
+                var type = Processor.ParseString<Cell, Type>(name.Substring(atPosition + 1, name.Length - atPosition - 2));
+                return new MemberName(name, baseName, type);
             }
             return new MemberName(name);
         }

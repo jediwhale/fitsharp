@@ -1,4 +1,4 @@
-﻿// Copyright © 2011 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2021 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -19,7 +19,7 @@ namespace fitSharp.Machine.Engine {
     }
 
     public abstract class ReflectionMember: RuntimeMember {
-        protected object instance;
+        protected readonly object instance;
         protected readonly MemberInfo info;
 
         protected ReflectionMember(MemberInfo info, object instance) {
@@ -27,7 +27,7 @@ namespace fitSharp.Machine.Engine {
             this.info = info;
         } 
 
-        public string Name { get { return info.Name; }}
+        public string Name => info.Name;
         public virtual string GetParameterName(int index) { return info.Name; }
 
         public TypedValue Invoke(object[] parameters) {
@@ -39,7 +39,7 @@ namespace fitSharp.Machine.Engine {
             }
         }
 
-        public abstract TypedValue TryInvoke(object[] parameters);
+        protected abstract TypedValue TryInvoke(object[] parameters);
         public abstract bool MatchesParameterCount(int count);
         public abstract Type GetParameterType(int index);
         public abstract Type ReturnType { get; }
@@ -48,7 +48,7 @@ namespace fitSharp.Machine.Engine {
     class MethodMember: ReflectionMember {
         public MethodMember(MemberInfo memberInfo, object instance): base(memberInfo, instance) {}
 
-        private MethodInfo Info { get { return (MethodInfo) info; } }
+        protected MethodInfo Info => (MethodInfo) info;
 
         public override bool MatchesParameterCount(int count) { return Info.GetParameters().Length == count; }
 
@@ -60,7 +60,7 @@ namespace fitSharp.Machine.Engine {
             return Info.GetParameters()[index].Name;
         }
 
-        public override TypedValue TryInvoke(object[] parameters) {
+        protected override TypedValue TryInvoke(object[] parameters) {
             object result;
             if (Info.IsGenericMethod) {
                 result = Info.Invoke(instance, parameters);
@@ -77,17 +77,33 @@ namespace fitSharp.Machine.Engine {
             return new TypedValue(result, Info.ReturnType != typeof(void) && result != null ? result.GetType() : Info.ReturnType); //todo: push this into TypedValue
         }
 
-        public override Type ReturnType { get { return Info.ReturnType; } }
+        public override Type ReturnType => Info.ReturnType;
+    }
+
+    class ExtensionMember : MethodMember {
+        public ExtensionMember(MemberInfo memberInfo, object instance): base(memberInfo, instance) {}
+
+        protected override TypedValue TryInvoke(object[] parameters) {
+            var extensionParms = new object[parameters.Length + 1];
+            extensionParms[0] = instance;
+            for (var i = 1; i < extensionParms.Length; i++) extensionParms[i] = parameters[i - 1];
+            var result = Info.Invoke(null, extensionParms);
+            return new TypedValue(result, Info.ReturnType != typeof(void) && result != null ? result.GetType() : Info.ReturnType); //todo: push this into TypedValue
+        }
+        
+        public override Type GetParameterType(int index) {
+            return Info.GetParameters()[index + 1].ParameterType;
+        }
     }
 
     class IndexerMember: MethodMember {
-        private readonly string key;
+        readonly string key;
 
         public IndexerMember(MemberInfo memberInfo, object instance, string key): base(memberInfo, instance) {
             this.key = key;
         }
 
-        public override TypedValue TryInvoke(object[] parameters) {
+        protected override TypedValue TryInvoke(object[] parameters) {
             return base.TryInvoke(new object[] {key});
         }
     }
@@ -95,7 +111,7 @@ namespace fitSharp.Machine.Engine {
     class FieldMember: ReflectionMember {
         public FieldMember(MemberInfo memberInfo, object instance): base(memberInfo, instance) {}
 
-        private FieldInfo Info { get { return (FieldInfo) info; } }
+        FieldInfo Info => (FieldInfo) info;
 
         public override Type GetParameterType(int index) {
             return Info.FieldType;
@@ -103,9 +119,9 @@ namespace fitSharp.Machine.Engine {
 
         public override bool MatchesParameterCount(int count) { return count == 0 || count == 1; }
 
-        public override TypedValue TryInvoke(object[] parameters) {
-            Type type = info.DeclaringType;
-            object result = type.InvokeMember(info.Name,
+        protected override TypedValue TryInvoke(object[] parameters) {
+            var type = info.DeclaringType;
+            var result = type.InvokeMember(info.Name,
                                               BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
                                               | (parameters.Length == 0 ? BindingFlags.GetField : BindingFlags.SetField)
                                               | BindingFlags.Static,
@@ -114,13 +130,13 @@ namespace fitSharp.Machine.Engine {
             return new TypedValue(result, parameters.Length == 0 ? Info.FieldType : typeof(void));
         }
 
-        public override Type ReturnType { get { return Info.FieldType; } }
+        public override Type ReturnType => Info.FieldType;
     }
 
     class PropertyMember: ReflectionMember {
         public PropertyMember(MemberInfo memberInfo, object instance): base(memberInfo, instance) {}
 
-        private PropertyInfo Info { get { return (PropertyInfo) info; } }
+        PropertyInfo Info => (PropertyInfo) info;
 
         public override Type GetParameterType(int index) {
             return Info.PropertyType;
@@ -128,9 +144,9 @@ namespace fitSharp.Machine.Engine {
 
         public override bool MatchesParameterCount(int count) { return count == 0 && Info.CanRead || count == 1 && Info.CanWrite; }
 
-        public override TypedValue TryInvoke(object[] parameters) {
-            Type type = info.DeclaringType;
-            object result = type.InvokeMember(info.Name,
+        protected override TypedValue TryInvoke(object[] parameters) {
+            var type = info.DeclaringType;
+            var result = type.InvokeMember(info.Name,
                                               BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
                                               | (parameters.Length == 0 ? BindingFlags.GetProperty : BindingFlags.SetProperty)
                                               | BindingFlags.Static,
@@ -139,13 +155,13 @@ namespace fitSharp.Machine.Engine {
             return new TypedValue(result, parameters.Length == 0 ? Info.PropertyType : typeof(void));
         }
 
-        public override Type ReturnType { get { return Info.PropertyType; } }
+        public override Type ReturnType => Info.PropertyType;
     }
 
     class ConstructorMember: ReflectionMember {
         public ConstructorMember(MemberInfo memberInfo, object instance): base(memberInfo, instance) {}
 
-        private ConstructorInfo Info { get { return (ConstructorInfo) info; } }
+        ConstructorInfo Info => (ConstructorInfo) info;
 
         public override Type GetParameterType(int index) {
             return Info.GetParameters()[index].ParameterType;
@@ -157,12 +173,12 @@ namespace fitSharp.Machine.Engine {
 
         public override bool MatchesParameterCount(int count) { return Info.GetParameters().Length == count; }
 
-        public override TypedValue TryInvoke(object[] parameters) {
-            Type type = info.DeclaringType;
+        protected override TypedValue TryInvoke(object[] parameters) {
+            var type = info.DeclaringType;
             var result = Info.Invoke(parameters);
             return new TypedValue(result, type);
         }
 
-        public override Type ReturnType { get { return info.DeclaringType; } }
+        public override Type ReturnType => info.DeclaringType;
     }
 }
