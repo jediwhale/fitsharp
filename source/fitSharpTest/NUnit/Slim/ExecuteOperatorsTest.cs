@@ -1,4 +1,4 @@
-﻿// Copyright © 2015 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2021 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -13,11 +13,10 @@ using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Slim {
     [TestFixture] public class ExecuteOperatorsTest {
-        private Service processor;
-        private Tree<string> result;
-
         [SetUp] public void SetUp() {
             processor = Builder.Service();
+            processor.ApplicationUnderTest.AddAssembly(typeof(SampleClass).Assembly.Location);
+            processor.ApplicationUnderTest.AddNamespace(typeof(SampleClass).Namespace);
         }
 
         [Test] public void ExecuteDefaultReturnsException() {
@@ -63,7 +62,7 @@ namespace fitSharp.Test.NUnit.Slim {
             var executeMake = new ExecuteMake { Processor = processor };
             var input = new SlimTree().AddBranchValue("step").AddBranchValue("make").AddBranchValue("librarystuff").AddBranchValue("fitSharp.Test.NUnit.Slim.SampleClass");
             ExecuteOperation(executeMake, input, 2);
-            foreach (TypedValue libraryInstance in processor.LibraryInstances) {
+            foreach (var libraryInstance in processor.LibraryInstances) {
                 Assert.IsTrue(libraryInstance.Value is SampleClass);
                 return;
             }
@@ -76,6 +75,14 @@ namespace fitSharp.Test.NUnit.Slim {
             var input = new SlimTree().AddBranchValue("step").AddBranchValue("call").AddBranchValue("variable").AddBranchValue("garbage");
             ExecuteOperation(executeCall, input, 2);
             CheckForException("message:<<NO_METHOD_IN_CLASS garbage fitSharp.Test.NUnit.Slim.SampleClass>>");
+        }
+
+        [Test] public void ExecuteCallUsesExtensionMethod() {
+            processor.Get<SavedInstances>().Save("variable", new SampleClass());
+            var executeCall = new ExecuteCall { Processor = processor };
+            var input = new SlimTree().AddBranchValue("step").AddBranchValue("call").AddBranchValue("variable").AddBranchValue("increase_in_sampleextension").AddBranchValue("2");
+            ExecuteOperation(executeCall, input, 2);
+            Assert.AreEqual("3", result.ValueAt(1));
         }
 
         [Test] public void ExecuteImportAddsNamespace() {
@@ -142,20 +149,20 @@ namespace fitSharp.Test.NUnit.Slim {
             Assert.AreEqual("value", processor.Get<Symbols>().GetValue("symbol"));
         }
 
-        private void MakeSampleClass(string sampleData) {
+        void MakeSampleClass(string sampleData) {
             var executeMake = new ExecuteMake { Processor = processor };
             var input = new SlimTree().AddBranchValue("step").AddBranchValue("make").AddBranchValue("scriptTableActor").AddBranchValue("fitSharp.Test.NUnit.Slim.SampleClass").AddBranchValue(sampleData);
             ExecuteOperation(executeMake, input, 2);
         }
 
-        private void CallActorMethod(string methodName) {
+        void CallActorMethod(string methodName) {
             var executeCall = new ExecuteCall { Processor = processor };
             var input = new SlimTree().AddBranchValue("step").AddBranchValue("call").AddBranchValue("scriptTableActor").AddBranchValue(methodName);
             ExecuteOperation(executeCall, input, 2);
         }
 
-        private void ExecuteOperation(InvokeOperator<string> executeOperator, Tree<string> input, int branchCount) {
-            TypedValue executeResult = TypedValue.Void;
+        void ExecuteOperation(InvokeOperator<string> executeOperator, Tree<string> input, int branchCount) {
+            var executeResult = TypedValue.Void;
             if (executeOperator.CanInvoke(new TypedValue(new SlimInstruction()), new MemberName(string.Empty), input)) {
                 executeResult = executeOperator.Invoke(new TypedValue(new SlimInstruction()), new MemberName(string.Empty), input);
             }
@@ -165,8 +172,11 @@ namespace fitSharp.Test.NUnit.Slim {
             Assert.AreEqual("step", result.ValueAt(0));
         }
 
-        private void CheckForException(string exceptionText) {
+        void CheckForException(string exceptionText) {
             Assert.IsTrue(result.ValueAt(1).StartsWith("__EXCEPTION__:" + exceptionText));
         }
+        
+        Service processor;
+        Tree<string> result;
     }
 }

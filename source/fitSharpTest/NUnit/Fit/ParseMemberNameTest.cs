@@ -13,38 +13,16 @@ namespace fitSharp.Test.NUnit.Fit {
             Assert.AreEqual("ninestuff", Parse("9stuff").Name);
         }
 
-        [Test] public void ParsesGenericType() {
-            var member = Parse("generic of System.String");
-            Assert.AreEqual("genericofsystemstring", member.Name);
-            Assert.True(member.Matches(typeof(ParseMemberSample).GetMethod("Generic")));
-        }
-
         [Test]
         public void PreservesOriginalName() {
             var member = Parse("string:");
             Assert.AreEqual("string:", member.OriginalName);
         }
 
-        [Test]
-        public void ParsesExtensionMethod() {
-            var member = Parse("extension(fitSharp.Test.NUnit.Fit.ParseMemberExtension)");
-            Assert.True(member.Matches(typeof(ParseMemberExtension).GetMethod("Extension")));
-        }
-
         static MemberName Parse(string input) {
-            var processor = Builder.CellProcessor();
-            processor.ApplicationUnderTest.AddAssembly(typeof(ParseMemberNameTest).Assembly.Location);
-            var parser = new ParseMemberName {Processor = processor};
+            var parser = new ParseMemberName {Processor = Builder.CellProcessor()};
             return
                 parser.Parse(typeof (ParseMemberName), TypedValue.Void, new CellTree(input)).GetValue<MemberName>();
         }
-    }
-
-    public class ParseMemberSample {
-        public bool Generic<T>() { return true; }
-    }
-
-    public static class ParseMemberExtension {
-        public static void Extension(this ParseMemberSample sample) {}
     }
 }

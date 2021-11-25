@@ -47,24 +47,7 @@ namespace fitSharp.Fit.Operators {
         }
 
         MemberName MakeMemberName(string name) {
-            if (name.EndsWith("?")) name = name.Substring(0, name.Length - 1);
-            var ofPosition = name.IndexOf(" of ", StringComparison.OrdinalIgnoreCase);
-            if (ofPosition > 0 && ofPosition < name.Length - 4) {
-                var genericType = name.Substring(ofPosition + 4);
-                var baseName = name.Substring(0, ofPosition);
-                return new MemberName(name, baseName, MakeGenericTypes(new[] {genericType}));
-            }
-            var atPosition = name.IndexOf("(", StringComparison.OrdinalIgnoreCase);
-            if (name.EndsWith(")") && atPosition > 0 && atPosition < name.Length - 2) {
-                var baseName = name.Substring(0, atPosition);
-                var type = Processor.ParseString<Cell, Type>(name.Substring(atPosition + 1, name.Length - atPosition - 2));
-                return new MemberName(name, baseName, type);
-            }
-            return new MemberName(name);
-        }
-
-        IEnumerable<Type> MakeGenericTypes(IEnumerable<string> typeNames) {
-            return typeNames.Select(name => Processor.ParseString<Cell, Type>(name));
+            return new MemberNameBuilder(Processor.ApplicationUnderTest).MakeMemberName(name);
         }
 
         static readonly Dictionary<char, string> digitConversion = new Dictionary<char, string> {

@@ -38,12 +38,12 @@ We can execute generic methods by adding the keyword 'of' followed by the generi
 check 'generic method of System.Int32' 123 sample123</td><td>then output is</td><td><div><table><tr><td><span class="fit_SUT">sample class</span></td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">generic method of System.Int32</span></td> <td>123</td> <td class="pass">sample123</td> </tr></table></div></td></tr>
 </table>
 <br>
-We can execute extension methods by adding the name of the extension class enclosed in parentheses, after the method name.<br>
+We can execute extension methods by adding the keyword 'in' followed by the name of the extension class, after the method name.<br>
 <br>
 <table border="1" cellpadding="2" cellspacing="0">
 <tr><td>when input is</td><td>'sample class'<br>
 check 'count by' 2 2<br>
-check 'increase(sample extension)' 2 4</td><td>then output is</td><td><div><table><tr><td><span class="fit_SUT">sample class</span></td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">count by</span></td> <td>2</td> <td class="pass">2</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">increase(sample extension)</span></td> <td>2</td> <td class="pass">4</td> </tr></table></div></td></tr>
+check 'increase in sample extension' 2 4</td><td>then output is</td><td><div><table><tr><td><span class="fit_SUT">sample class</span></td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">count by</span></td> <td>2</td> <td class="pass">2</td> </tr></table><table><tr><td><span class="fit_keyword">check</span></td> <td><span class="fit_member">increase in sample extension</span></td> <td>2</td> <td class="pass">4</td> </tr></table></div></td></tr>
 </table>
 <br>
 We can access properties, fields and indexers.<br>

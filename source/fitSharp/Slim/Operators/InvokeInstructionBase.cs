@@ -1,4 +1,4 @@
-﻿// Copyright © 2011 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2021 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -9,9 +9,6 @@ using fitSharp.Slim.Model;
 
 namespace fitSharp.Slim.Operators {
     public abstract class InvokeInstructionBase: SlimOperator, InvokeOperator<string> {
-        private const string defaultResult = "OK";
-        private readonly IdentifierName identifier;
-
         public bool CanInvoke(TypedValue instance, MemberName memberName, Tree<string> parameters) {
             return instance.Type == typeof(SlimInstruction) && (
                 identifier.IsEmpty ||
@@ -51,7 +48,7 @@ namespace fitSharp.Slim.Operators {
 
         protected static Tree<string> ParameterTree(Tree<string> input, int startingIndex) {
             var result = new SlimTree();
-            for (int i = startingIndex; i < input.Branches.Count; i++) {
+            for (var i = startingIndex; i < input.Branches.Count; i++) {
                 result.AddBranch(input.Branches[i]);
             }
             return result;
@@ -60,12 +57,18 @@ namespace fitSharp.Slim.Operators {
         protected TypedValue InvokeMember(Tree<string> parameters, int memberIndex) {
             var savedInstances = Processor.Get<SavedInstances>();
             var instance = parameters.ValueAt(memberIndex);
-            object target = savedInstances.HasValue(instance) ? savedInstances.GetValue(instance) : new NullInstance();
-            TypedValue result = Processor.Invoke(target, new MemberName(parameters.ValueAt(memberIndex + 1)), ParameterTree(parameters, memberIndex + 2));
+            var target = savedInstances.HasValue(instance) ? savedInstances.GetValue(instance) : new NullInstance();
+            var result = Processor.Invoke(
+                target,
+                new MemberNameBuilder(Processor.ApplicationUnderTest).MakeMemberName(parameters.ValueAt(memberIndex + 1)),
+                ParameterTree(parameters, memberIndex + 2));
             result.ThrowExceptionIfNotValid();
             return result;
         }
+        
+        const string defaultResult = "OK";
+        readonly IdentifierName identifier;
 
-        private class NullInstance {}
+        class NullInstance {}
     }
 }
