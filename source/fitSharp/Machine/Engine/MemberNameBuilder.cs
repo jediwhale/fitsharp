@@ -38,7 +38,7 @@ namespace fitSharp.Machine.Engine {
         }
 
         Type MakeType(string name) {
-            return application.FindType(new GracefulNameMatcher(name)).Type;
+            return application.FindType(new GracefulNameMatcher(name));
         }
 
         readonly ApplicationUnderTest application;

@@ -1,7 +1,7 @@
-﻿// Copyright © 2011 Syterra Software Inc.
-// This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
-// This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+﻿// Copyright © 2021 Syterra Software Inc. All rights reserved.
+// The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+// which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
+// to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
@@ -13,7 +13,7 @@ namespace fitSharp.Machine.Engine {
         }
 
         public TypedValue Create(NameMatcher memberName, Tree<T> parameters) {
-            var runtimeType = Processor.ApplicationUnderTest.FindType(memberName);
+            var runtimeType = new RuntimeType(Processor.ApplicationUnderTest.FindType(memberName));
             return parameters.Branches.Count == 0
                          ? CreateWithoutParameters(runtimeType)
                          : CreateWithParameters(parameters, runtimeType);

@@ -54,7 +54,7 @@ namespace fitSharp.Machine.Engine {
             namespaces.Remove(namespaceName.Trim());
         }
 
-        public RuntimeType FindType(string exactTypename) {
+        public Type FindType(string exactTypename) {
             return FindType(new ExactNameMatcher(exactTypename));
         }
 
@@ -70,9 +70,9 @@ namespace fitSharp.Machine.Engine {
             public string MatchName { get; }
         }
 
-        public RuntimeType FindType(NameMatcher typeName) {
+        public Type FindType(NameMatcher typeName) {
             var type = Type.GetType(typeName.MatchName);
-            if (type != null) return new RuntimeType(type);
+            if (type != null) return type;
             type = SearchForType(typeName, cache);
             if (type == null) {
                 assemblies.LoadWellKnownAssemblies(typeName.MatchName);
@@ -82,7 +82,7 @@ namespace fitSharp.Machine.Engine {
                 throw new TypeMissingException(typeName.MatchName, assemblies.Report + namespaces.Report);
             }
             UpdateCache(type);
-            return new RuntimeType(type);
+            return type;
         }
 
         Type SearchForType(NameMatcher typeName, IEnumerable<Type> types) {

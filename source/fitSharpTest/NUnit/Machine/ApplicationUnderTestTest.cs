@@ -1,4 +1,4 @@
-﻿// Copyright © 2020 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2021 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (https://opensource.org/licenses/cpl1.0.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -69,8 +69,8 @@ namespace fitSharp.Test.NUnit.Machine {
 
         [Test] public void TypeIsFoundInLoadedAssembly() {
             LoadTestTarget();
-            RuntimeType sample = GetType("fitSharp.TestTarget.SampleDomain");
-            Assert.AreEqual("fitSharp.TestTarget.SampleDomain", sample.Type.FullName);
+            var sample = GetType("fitSharp.TestTarget.SampleDomain");
+            Assert.AreEqual("fitSharp.TestTarget.SampleDomain", sample.FullName);
         }
 
         [Test] public void TypeIsFoundInDefaultNamespace() {
@@ -88,8 +88,8 @@ namespace fitSharp.Test.NUnit.Machine {
         [Test] public void ReloadingAssemblyIsIgnored() {
             LoadTestTarget();
             LoadTestTarget();
-            RuntimeType sample = GetType("fitSharp.TestTarget.SampleDomain");
-            Assert.AreEqual("fitSharp.TestTarget.SampleDomain", sample.Type.FullName);
+            var sample = GetType("fitSharp.TestTarget.SampleDomain");
+            Assert.AreEqual("fitSharp.TestTarget.SampleDomain", sample.FullName);
         }
 
         [Test] public void JarFilesAreIgnored() {
@@ -103,8 +103,8 @@ namespace fitSharp.Test.NUnit.Machine {
         public void LoadsFromAlternateFolder() {
             AssemblyLoadFailureHandler.AddFolder(Path.Combine(TargetPath(), "build/sample/TestTarget".AsPath()));
             LoadTarget("TestTarget2");
-            var runtimeType = applicationUnderTest.FindType("fitSharp.TestTarget2.SampleWithDependency");
-            Assert.AreEqual("my sample says hi sample", runtimeType.CreateInstance().ValueString);
+            var type = applicationUnderTest.FindType("fitSharp.TestTarget2.SampleWithDependency");
+            Assert.AreEqual("my sample says hi sample", new RuntimeType(type).CreateInstance().ValueString);
         }
 
         void SetUpMockDomain() {
@@ -147,12 +147,12 @@ namespace fitSharp.Test.NUnit.Machine {
         }
 
         void CheckTypeFound<T>(string typeName) {
-            RuntimeType sample = GetType(typeName);
-            Assert.AreEqual(typeof(T), sample.Type);
+            var sample = GetType(typeName);
+            Assert.AreEqual(typeof(T), sample);
         }
 
         void CheckTypeNotFound(string typeName) {
-            string message = string.Empty;
+            var message = string.Empty;
             try {
                 GetType(typeName);
             }
@@ -162,7 +162,7 @@ namespace fitSharp.Test.NUnit.Machine {
             Assert.IsTrue(message.StartsWith("Type 'SampleClass' not found in assemblies"));
         }
 
-        RuntimeType GetType(string name) {
+        Type GetType(string name) {
             return applicationUnderTest.FindType(new IdentifierName(name));
         }
 
@@ -176,7 +176,7 @@ namespace fitSharp.Test.NUnit.Machine {
                 ("build/sample/" + name + "/" + name + ".dll").AsPath()));
         }
 
-        string TargetPath() {
+        static string TargetPath() {
             return AppDomain.CurrentDomain.BaseDirectory.Before(new[] {"/build/".AsPath(), "/source/".AsPath()});
         }
     }
