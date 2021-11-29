@@ -80,7 +80,7 @@ namespace fitSharp.Test.NUnit.Slim {
         [Test] public void ExecuteCallUsesExtensionMethod() {
             processor.Get<SavedInstances>().Save("variable", new SampleClass());
             var executeCall = new ExecuteCall { Processor = processor };
-            var input = new SlimTree().AddBranchValue("step").AddBranchValue("call").AddBranchValue("variable").AddBranchValue("increase_in_sampleextension").AddBranchValue("2");
+            var input = new SlimTree().AddBranchValue("step").AddBranchValue("call").AddBranchValue("variable").AddBranchValue("increase.in.sampleextension").AddBranchValue("2");
             ExecuteOperation(executeCall, input, 2);
             Assert.AreEqual("3", result.ValueAt(1));
         }

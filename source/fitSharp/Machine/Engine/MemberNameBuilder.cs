@@ -5,7 +5,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
@@ -14,33 +13,45 @@ namespace fitSharp.Machine.Engine {
             this.application = application;
         }
         
-        public MemberName MakeMemberName(string name) {
-            if (name.EndsWith("?")) name = name.Substring(0, name.Length - 1);
-            var ofPosition = name.IndexOf(" of ", StringComparison.OrdinalIgnoreCase);
-            if (ofPosition < 0) ofPosition = name.IndexOf("_of_", StringComparison.OrdinalIgnoreCase);
-            if (ofPosition > 0 && ofPosition < name.Length - 4) {
-                var genericType = name.Substring(ofPosition + 4);
-                var baseName = name.Substring(0, ofPosition);
-                return new MemberName(name, baseName, MakeGenericTypes(new[] {genericType}));
-            }
-            var inPosition = name.IndexOf(" in ", StringComparison.OrdinalIgnoreCase);
-            if (inPosition < 0) inPosition = name.IndexOf("_in_", StringComparison.OrdinalIgnoreCase);
+        public MemberName MakeMemberName(string memberName) {
+            var length = memberName.Length;
+            if (memberName.EndsWith("?")) length--;
+            var originalName = memberName.Substring(0, length);
+            var name = originalName;
+            var extensionType = Maybe<Type>.Nothing;
+            var genericTypes = new List<Type>();
+            
+            var inPosition = name.LastIndexOf(extensionKeyword, StringComparison.OrdinalIgnoreCase);
             if (inPosition > 0 && inPosition < name.Length - 4) {
-                var baseName = name.Substring(0, inPosition);
-                var type = MakeType(name.Substring(inPosition + 4));
-                return new MemberName(name, baseName, type);
+                extensionType = new Maybe<Type>(application.FindType(new GracefulNameMatcher(name.Substring(inPosition + 4))));
+                name = name.Substring(0, inPosition);
             }
-            return new MemberName(name);
+            
+            var ofPosition = name.LastIndexOf(genericKeyword, StringComparison.OrdinalIgnoreCase);
+            if (ofPosition > 0 && ofPosition < name.Length - 4) {
+                genericTypes.Insert(0, application.FindType(new GracefulNameMatcher(name.Substring(ofPosition + 4))));
+                name = name.Substring(0, ofPosition);
+            }
+
+            ofPosition = name.LastIndexOf(originalGenericKeyword, StringComparison.OrdinalIgnoreCase);
+            if (ofPosition > 0 && ofPosition < name.Length - 4) {
+                var type = MakeType(name.Substring(ofPosition + 4));
+                var baseName = name.Substring(0, ofPosition);
+                return type
+                    .Select(t => new MemberName(name, baseName, new[] {t}))
+                    .OrDefault(() => new MemberName(name));
+            }
+            return new MemberName(originalName, name, extensionType, genericTypes);
         }
 
-        IEnumerable<Type> MakeGenericTypes(IEnumerable<string> typeNames) {
-            return typeNames.Select(MakeType);
-        }
-
-        Type MakeType(string name) {
-            return application.FindType(new GracefulNameMatcher(name));
+        Maybe<Type> MakeType(string name) {
+            return application.SearchTypes(new GracefulNameMatcher(name));
         }
 
         readonly ApplicationUnderTest application;
+        
+        static readonly string extensionKeyword = ".in.";
+        static readonly string genericKeyword = ".of.";
+        static readonly string originalGenericKeyword = " of ";
     }
 }

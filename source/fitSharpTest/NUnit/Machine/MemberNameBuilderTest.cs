@@ -11,42 +11,52 @@ namespace fitSharp.Test.NUnit.Machine {
     [TestFixture]
     public class MemberNameBuilderTest {
 
-        [Test] public void ParsesGenericType() {
-            var member = Parse("generic of System.String");
-            Assert.AreEqual("genericofsystemstring", member.Name);
-            Assert.True(member.Matches(typeof(MemberNameBuilder).GetMethod("Generic")));
+        [Test] public void ParsesGenericTypeWithBlanks() {
+            var member = Parse("generic of some class");
+            Assert.AreEqual("genericofsomeclass", member.Name);
+            Assert.True(member.Matches(typeof(BuilderSample).GetMethod("Generic")));
         }
         
-        [Test] public void ParsesGenericTypeWithUnderscores() {
-            var member = Parse("generic_of_System.String");
-            Assert.True(member.Matches(typeof(MemberNameBuilder).GetMethod("Generic")));
+        [Test] public void ParsesGenericType() {
+            var member = Parse("generic.of.some class");
+            Assert.True(member.Matches(typeof(BuilderSample).GetMethod("Generic")));
         }
         
         [Test]
         public void ParsesExtensionMethod() {
-            var member = Parse("extension in member name builder extension");
-            Assert.True(member.Matches(typeof(MemberNameBuilderExtension).GetMethod("Extension")));
+            var member = Parse("extension.in.some extensions");
+            Assert.True(member.Matches(typeof(SomeExtensions).GetMethod("Extension")));
         }
 
         [Test]
-        public void ParsesExtensionMethodWithUnderscores() {
-            var member = Parse("extension_in_MemberNameBuilderExtension");
-            Assert.True(member.Matches(typeof(MemberNameBuilderExtension).GetMethod("Extension")));
+        public void ParsesMethodWithEmbeddedOf() {
+            var member = Parse("not of generic");
+            Assert.True(member.Matches(typeof(BuilderSample).GetMethod("NotOfGeneric")));
+        }
+
+        [Test]
+        public void ParsesGenericExtensionMethod() {
+            Assert.True(Parse("generic.of.some class.in.some extensions")
+                .Matches(typeof(SomeExtensions).GetMethod("Generic")));
         }
 
         static MemberName Parse(string name) {
             var application = new ApplicationUnderTest();
             application.AddAssembly(typeof(MemberNameBuilderTest).Assembly.Location);
-            application.AddNamespace("fitSharp.Test.NUnit.Machine");
-            return new fitSharp.Machine.Engine.MemberNameBuilder(application).MakeMemberName(name);
+            application.AddNamespace(typeof(MemberNameBuilderTest).Namespace);
+            return new MemberNameBuilder(application).MakeMemberName(name);
         }
     }
     
-    public class MemberNameBuilder {
+    public class BuilderSample {
         public bool Generic<T>() { return true; }
+        public int NotOfGeneric() { return 0; }
     }
+    
+    public class SomeClass {}
 
-    public static class MemberNameBuilderExtension {
-        public static void Extension(this MemberNameBuilder nameBuilder) {}
+    public static class SomeExtensions {
+        public static void Extension(this BuilderSample nameBuilder) {}
+        public static void Generic<T>(this BuilderSample nameBuilder) {}
     }
 }

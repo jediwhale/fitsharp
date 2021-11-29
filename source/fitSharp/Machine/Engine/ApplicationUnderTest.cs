@@ -71,27 +71,29 @@ namespace fitSharp.Machine.Engine {
         }
 
         public Type FindType(NameMatcher typeName) {
-            var type = Type.GetType(typeName.MatchName);
-            if (type != null) return type;
-            type = SearchForType(typeName, cache);
-            if (type == null) {
-                assemblies.LoadWellKnownAssemblies(typeName.MatchName);
-                type = SearchForType(typeName, assemblies.Types);
-            }
-            if (type == null) {
-                throw new TypeMissingException(typeName.MatchName, assemblies.Report + namespaces.Report);
-            }
-            UpdateCache(type);
-            return type;
+            return SearchTypes(typeName)
+                .OrDefault(() => throw new TypeMissingException(typeName.MatchName, assemblies.Report + namespaces.Report));
         }
 
-        Type SearchForType(NameMatcher typeName, IEnumerable<Type> types) {
+        public Maybe<Type> SearchTypes(NameMatcher typeName) {
+            var type = Type.GetType(typeName.MatchName);
+            if (type != null) return new Maybe<Type>(type);
+            var result = SearchForType(typeName, cache)
+                .OrMaybe(() => {
+                    assemblies.LoadWellKnownAssemblies(typeName.MatchName);
+                    return SearchForType(typeName, assemblies.Types);
+            });
+            result.Apply(UpdateCache);
+            return result;
+        }
+
+        Maybe<Type> SearchForType(NameMatcher typeName, IEnumerable<Type> types) {
             foreach (var type in types) {
-                if (typeName.Matches(type.FullName)) return type;
+                if (typeName.Matches(type.FullName)) return new Maybe<Type>(type);
                 if (type.Namespace == null || !namespaces.IsRegistered(type.Namespace)) continue;
-                if (typeName.Matches(type.Name)) return type;
+                if (typeName.Matches(type.Name)) return new Maybe<Type>(type);
             }
-            return null;
+            return Maybe<Type>.Nothing;
         }
 
         static void UpdateCache(Type type) {

@@ -25,22 +25,31 @@ namespace fitSharp.Machine.Model {
             Name = new GracefulName(name).IdentifierName.ToString(); 
             this.baseName = new GracefulName(baseName).IdentifierName.ToString(); 
             this.genericTypes = genericTypes;
+            extensionType = Maybe<Type>.Nothing;
         }
 
         public MemberName(string originalName, string baseName, Type extensionType) {
             OriginalName = originalName;
             this.baseName = new GracefulName(baseName).IdentifierName.ToString();
             Name = this.baseName;
-            this.extensionType = extensionType;
+            this.extensionType = new Maybe<Type>(extensionType);
         }
-        
+
+        public MemberName(string originalName, string baseName, Maybe<Type> extensionType, IEnumerable<Type> genericTypes) {
+            OriginalName = originalName;
+            this.baseName = new GracefulName(baseName).IdentifierName.ToString();
+            Name = this.baseName;
+            this.extensionType = extensionType;
+            this.genericTypes = genericTypes;
+        }
+
         public MemberName WithNamedParameters() { 
             HasNamedParameters = true;
             return this;
         }
 
         public bool Matches(MethodInfo info) {
-            return (info.IsGenericMethod && genericTypes != null && genericTypes.Any()) || extensionType != null
+            return (info.IsGenericMethod && genericTypes != null && genericTypes.Any()) || extensionType.HasValue
                 ? MatchesBaseName(info.Name) 
                 : MatchesGetSetName(info.Name);
         }
@@ -67,9 +76,9 @@ namespace fitSharp.Machine.Model {
         }
 
         public Maybe<RuntimeMember> FindMatchingMember(MemberQuery query, object instance) {
-            return extensionType == null
-                ? query.FindInstanceMember(instance)
-                : query.FindExtensionMember(extensionType, instance);
+            return extensionType
+                .Select(e => query.FindExtensionMember(e, instance))
+                .OrDefault(() => query.FindInstanceMember(instance));
         }
 
         public string Name { get; }
@@ -78,7 +87,7 @@ namespace fitSharp.Machine.Model {
         public override string ToString() { return baseName; }
         
         readonly IEnumerable<Type> genericTypes;
-        readonly Type extensionType;
+        readonly Maybe<Type> extensionType;
         readonly string baseName;
     }
 }
