@@ -1,4 +1,4 @@
-﻿// Copyright © 2016 Syterra Software Inc.
+﻿// Copyright © 2021 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using fit.exception;
 using fitlibrary;
 using fitSharp.Fit.Engine;
-using fitSharp.Fit.Fixtures;
 using fitSharp.Fit.Operators;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
@@ -22,7 +21,7 @@ namespace fit.Operators {
         }
 
         public bool CanInvokeSpecial(TypedValue instance, MemberName memberName, Tree<Cell> parameters) {
-            return keywords.ContainsKey(memberName.Name) || FindMember(instance.Value, memberName, typeof(Parse)).HasValue;
+            return keywords.ContainsKey(memberName.Name) || FindMember(instance.Value, memberName, typeof(Parse)).IsPresent;
         }
 
         public TypedValue InvokeSpecial(TypedValue instance, MemberName memberName, Tree<Cell> parameters) {
@@ -44,11 +43,11 @@ namespace fit.Operators {
             throw new AbandonStoryTestException();
         }
 
-        TypedValue Calculate(FlowInterpreter fixture, Parse theCells) {
+        static TypedValue Calculate(FlowInterpreter fixture, Parse theCells) {
             return new TypedValue(new CalculateFixture(fixture.SystemUnderTest ?? fixture));
         }
 
-        TypedValue Ignored(FlowInterpreter fixture, Parse cells) {
+        static TypedValue Ignored(FlowInterpreter fixture, Parse cells) {
             return new TypedValue(new Fixture());
         }
 

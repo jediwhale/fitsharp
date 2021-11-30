@@ -149,7 +149,7 @@ namespace fitSharp.Test.NUnit.Machine {
 
         [Test]
         public void ExtensionMethodIsInvoked() {
-            var name = new MemberName("increase(sampleextension)", "increase", typeof(SampleExtension));
+            var name = new MemberName("increase(sampleextension)", "increase", Maybe<Type>.Of(typeof(SampleExtension)), Array.Empty<Type>());
             var method = MemberQuery.FindInstance(MemberQuery.FindMember, instance, new MemberSpecification(name, 1));
             var result = method.Invoke(new object[] {2});
             Assert.AreEqual(2, result.Value);

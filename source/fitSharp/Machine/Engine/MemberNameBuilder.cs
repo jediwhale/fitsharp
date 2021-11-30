@@ -20,7 +20,7 @@ namespace fitSharp.Machine.Engine {
             var genericTypes = new List<Type>();
 
             ProcessKeyword(extensionKeyword,
-                matcher => { extensionType = new Maybe<Type>(application.FindType(matcher)); });
+                matcher => { extensionType = Maybe<Type>.Of(application.FindType(matcher)); });
 
             while (ProcessKeyword(genericKeyword,
                 matcher => { genericTypes.Insert(0, application.FindType(matcher)); })) {
@@ -33,7 +33,7 @@ namespace fitSharp.Machine.Engine {
                 var baseName = name.Substring(0, ofPosition);
                 return type
                     .Select(t => new MemberName(name, baseName, new[] {t}))
-                    .OrDefault(() => new MemberName(name));
+                    .OrElseGet(() => new MemberName(name));
             }
             
             return new MemberName(originalName, name, extensionType, genericTypes);

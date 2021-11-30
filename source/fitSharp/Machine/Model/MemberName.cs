@@ -28,13 +28,6 @@ namespace fitSharp.Machine.Model {
             extensionType = Maybe<Type>.Nothing;
         }
 
-        public MemberName(string originalName, string baseName, Type extensionType) {
-            OriginalName = originalName;
-            this.baseName = new GracefulName(baseName).IdentifierName.ToString();
-            Name = this.baseName;
-            this.extensionType = new Maybe<Type>(extensionType);
-        }
-
         public MemberName(string originalName, string baseName, Maybe<Type> extensionType, IEnumerable<Type> genericTypes) {
             OriginalName = originalName;
             this.baseName = new GracefulName(baseName).IdentifierName.ToString();
@@ -49,7 +42,7 @@ namespace fitSharp.Machine.Model {
         }
 
         public bool Matches(MethodInfo info) {
-            return (info.IsGenericMethod && genericTypes != null && genericTypes.Any()) || extensionType.HasValue
+            return (info.IsGenericMethod && genericTypes != null && genericTypes.Any()) || extensionType.IsPresent
                 ? MatchesBaseName(info.Name) 
                 : MatchesGetSetName(info.Name);
         }
@@ -78,7 +71,7 @@ namespace fitSharp.Machine.Model {
         public Maybe<RuntimeMember> FindMatchingMember(MemberQuery query, object instance) {
             return extensionType
                 .Select(e => query.FindExtensionMember(e, instance))
-                .OrDefault(() => query.FindInstanceMember(instance));
+                .OrElseGet(() => query.FindInstanceMember(instance));
         }
 
         public string Name { get; }

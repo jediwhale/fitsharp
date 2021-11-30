@@ -9,46 +9,52 @@ using System.Collections.Generic;
 namespace fitSharp.Machine.Model {
     public class Maybe<T> {
         public static Maybe<T> Nothing => new Maybe<T>();
+        public static Maybe<T> Of(T aValue) => new Maybe<T>(aValue);
 
         public Maybe(T aValue) {
             this.aValue = aValue;
-            HasValue = true;
+            IsPresent = true;
         }
 
         Maybe() {
-            HasValue = false;
+            IsPresent = false;
         }
 
-        public bool HasValue { get; }
+        public bool IsPresent { get; }
 
-        public void Apply(Action<T> action) {
-            if (HasValue) action(aValue);
+        public void IfPresent(Action<T> action) {
+            if (IsPresent) action(aValue);
         }
 
         public IEnumerable<T> Value {
             get {
-                if (HasValue) yield return aValue;
+                if (IsPresent) yield return aValue;
             }
         }
 
         public Maybe<T> OrMaybe(Func<Maybe<T>> otherValue) {
-            return HasValue ? this : otherValue();
+            return IsPresent ? this : otherValue();
         }
 
         public Maybe<U> Select<U>(Func<T, U> withValue) {
-            return HasValue ? new Maybe<U>(withValue(aValue)) : Maybe<U>.Nothing;
+            return IsPresent ? Maybe<U>.Of(withValue(aValue)) : Maybe<U>.Nothing;
         }
 
-        public T OrDefault(T defaultValue) {
-            return HasValue ? aValue : defaultValue;
+        public T OrElse(T defaultValue) {
+            return IsPresent ? aValue : defaultValue;
         }
 
-        public T OrDefault(Func<T> defaultAction) {
-            return HasValue ? aValue : defaultAction();
+        public T OrElseThrow(Func<System.Exception> exception) {
+            if (!IsPresent) throw exception();
+            return aValue;
+        }
+
+        public T OrElseGet(Func<T> defaultAction) {
+            return IsPresent ? aValue : defaultAction();
         }
 
         public TypedValue TypedValue =>
-            HasValue
+            IsPresent
                 ? new TypedValue(aValue, typeof(T))
                 : new TypedValue(null, typeof(T));
 

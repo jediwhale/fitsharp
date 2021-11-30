@@ -18,7 +18,7 @@ namespace fitSharp.Machine.Engine {
                 var methodInfo = member as MethodInfo;
                 if (methodInfo == null) continue;
                 if (!specification.MatchesExtension(methodInfo, instance)) continue;
-                return new Maybe<RuntimeMember>(new ExtensionMember(methodInfo, instance));
+                return Maybe<RuntimeMember>.Of(new ExtensionMember(methodInfo, instance));
             }
             return Maybe<RuntimeMember>.Nothing;
         }

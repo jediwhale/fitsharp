@@ -72,26 +72,26 @@ namespace fitSharp.Machine.Engine {
 
         public Type FindType(NameMatcher typeName) {
             return SearchTypes(typeName)
-                .OrDefault(() => throw new TypeMissingException(typeName.MatchName, assemblies.Report + namespaces.Report));
+                .OrElseThrow(() => new TypeMissingException(typeName.MatchName, assemblies.Report + namespaces.Report));
         }
 
         public Maybe<Type> SearchTypes(NameMatcher typeName) {
             var type = Type.GetType(typeName.MatchName);
-            if (type != null) return new Maybe<Type>(type);
+            if (type != null) return Maybe<Type>.Of(type);
             var result = SearchForType(typeName, cache)
                 .OrMaybe(() => {
                     assemblies.LoadWellKnownAssemblies(typeName.MatchName);
                     return SearchForType(typeName, assemblies.Types);
             });
-            result.Apply(UpdateCache);
+            result.IfPresent(UpdateCache);
             return result;
         }
 
         Maybe<Type> SearchForType(NameMatcher typeName, IEnumerable<Type> types) {
             foreach (var type in types) {
-                if (typeName.Matches(type.FullName)) return new Maybe<Type>(type);
+                if (typeName.Matches(type.FullName)) return Maybe<Type>.Of(type);
                 if (type.Namespace == null || !namespaces.IsRegistered(type.Namespace)) continue;
-                if (typeName.Matches(type.Name)) return new Maybe<Type>(type);
+                if (typeName.Matches(type.Name)) return Maybe<Type>.Of(type);
             }
             return Maybe<Type>.Nothing;
         }
