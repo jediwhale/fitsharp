@@ -14,26 +14,20 @@ namespace fitSharp.Machine.Engine {
         }
         
         public MemberName MakeMemberName(string memberName) {
-            var length = memberName.Length;
-            if (memberName.EndsWith("?")) length--;
-            var originalName = memberName.Substring(0, length);
-            var name = originalName;
+            var originalName = memberName.EndsWith("?") ? memberName.Substring(0, memberName.Length - 1) : memberName;
+            name = originalName;
             var extensionType = Maybe<Type>.Nothing;
             var genericTypes = new List<Type>();
-            
-            var inPosition = name.LastIndexOf(extensionKeyword, StringComparison.OrdinalIgnoreCase);
-            if (inPosition > 0 && inPosition < name.Length - 4) {
-                extensionType = new Maybe<Type>(application.FindType(new GracefulNameMatcher(name.Substring(inPosition + 4))));
-                name = name.Substring(0, inPosition);
-            }
-            
-            var ofPosition = name.LastIndexOf(genericKeyword, StringComparison.OrdinalIgnoreCase);
-            if (ofPosition > 0 && ofPosition < name.Length - 4) {
-                genericTypes.Insert(0, application.FindType(new GracefulNameMatcher(name.Substring(ofPosition + 4))));
-                name = name.Substring(0, ofPosition);
+
+            ProcessKeyword(extensionKeyword,
+                matcher => { extensionType = new Maybe<Type>(application.FindType(matcher)); });
+
+            while (ProcessKeyword(genericKeyword,
+                matcher => { genericTypes.Insert(0, application.FindType(matcher)); })) {
             }
 
-            ofPosition = name.LastIndexOf(originalGenericKeyword, StringComparison.OrdinalIgnoreCase);
+            // old behaviour, preserve for compatibility
+            var ofPosition = name.LastIndexOf(originalGenericKeyword, StringComparison.OrdinalIgnoreCase);
             if (ofPosition > 0 && ofPosition < name.Length - 4) {
                 var type = MakeType(name.Substring(ofPosition + 4));
                 var baseName = name.Substring(0, ofPosition);
@@ -41,17 +35,27 @@ namespace fitSharp.Machine.Engine {
                     .Select(t => new MemberName(name, baseName, new[] {t}))
                     .OrDefault(() => new MemberName(name));
             }
+            
             return new MemberName(originalName, name, extensionType, genericTypes);
         }
 
-        Maybe<Type> MakeType(string name) {
-            return application.SearchTypes(new GracefulNameMatcher(name));
+        Maybe<Type> MakeType(string typeName) {
+            return application.SearchTypes(new GracefulNameMatcher(typeName));
+        }
+
+        bool ProcessKeyword(string keyword, Action<NameMatcher> action) {
+            var position = name.LastIndexOf(keyword, StringComparison.OrdinalIgnoreCase);
+            if (position <= 0 || position >= name.Length - keyword.Length) return false;
+            action(new GracefulNameMatcher(name.Substring(position + keyword.Length)));
+            name = name.Substring(0, position);
+            return true;
         }
 
         readonly ApplicationUnderTest application;
-        
-        static readonly string extensionKeyword = ".in.";
-        static readonly string genericKeyword = ".of.";
-        static readonly string originalGenericKeyword = " of ";
+        string name;
+
+        const string extensionKeyword = ".in.";
+        const string genericKeyword = ".of.";
+        const string originalGenericKeyword = " of ";
     }
 }

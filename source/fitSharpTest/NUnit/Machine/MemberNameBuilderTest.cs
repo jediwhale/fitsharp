@@ -12,6 +12,7 @@ namespace fitSharp.Test.NUnit.Machine {
     public class MemberNameBuilderTest {
 
         [Test] public void ParsesGenericTypeWithBlanks() {
+            // old behaviour, preserve for compatibility
             var member = Parse("generic of some class");
             Assert.AreEqual("genericofsomeclass", member.Name);
             Assert.True(member.Matches(typeof(BuilderSample).GetMethod("Generic")));
@@ -19,7 +20,18 @@ namespace fitSharp.Test.NUnit.Machine {
         
         [Test] public void ParsesGenericType() {
             var member = Parse("generic.of.some class");
-            Assert.True(member.Matches(typeof(BuilderSample).GetMethod("Generic")));
+            var methodInfo = typeof(BuilderSample).GetMethod("Generic");
+            Assert.True(member.Matches(methodInfo));
+            var genericMember = member.MakeMember(methodInfo, new BuilderSample());
+            Assert.AreEqual("SomeClass", genericMember.Invoke(new object [] {}).Value);
+        }
+
+        [Test] public void ParsesMultipleGenericTypes() {
+            var member = Parse("multi generic.of.some class.of.some other class");
+            var methodInfo = typeof(BuilderSample).GetMethod("MultiGeneric");
+            Assert.True(member.Matches(methodInfo));
+            var genericMember = member.MakeMember(methodInfo, new BuilderSample());
+            Assert.AreEqual("SomeClassSomeOtherClass", genericMember.Invoke(new object [] {}).Value);
         }
         
         [Test]
@@ -49,11 +61,13 @@ namespace fitSharp.Test.NUnit.Machine {
     }
     
     public class BuilderSample {
-        public bool Generic<T>() { return true; }
+        public string Generic<T>() { return typeof(T).Name; }
+        public string MultiGeneric<T,U>() { return typeof(T).Name + typeof(U).Name; }
         public int NotOfGeneric() { return 0; }
     }
     
     public class SomeClass {}
+    public class SomeOtherClass {}
 
     public static class SomeExtensions {
         public static void Extension(this BuilderSample nameBuilder) {}
