@@ -44,6 +44,7 @@ namespace fitSharp.Machine.Engine {
         }
 
         public bool IsGetter => parameterCount == 0;
+        public bool IsSetter => parameterCount == 1;
         public string MemberName => memberName.Name;
         public override string ToString() { return memberName.ToString(); }
 

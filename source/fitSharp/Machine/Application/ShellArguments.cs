@@ -46,7 +46,7 @@ namespace fitSharp.Machine.Application {
 
 #if !NETCOREAPP
             if (error.IsNone) {
-                memory.Item<AppDomainSetup>().Apply(setup => ValidateApplicationBase(setup, error));
+                memory.Item<AppDomainSetup>().IfPresent(setup => ValidateApplicationBase(setup, error));
             }
 #endif
             if (error.IsNone && string.IsNullOrEmpty(memory.GetItem<Settings>().Runner)) {
