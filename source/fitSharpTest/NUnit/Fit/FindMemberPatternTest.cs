@@ -38,7 +38,7 @@ namespace fitSharp.Test.NUnit.Fit {
                 Assert.Fail();
             }
             catch (InvalidMethodException e) {
-                Assert.AreEqual("Member pattern for MisMatchedParameters has 2 parameters.", e.Message);
+                Assert.AreEqual("Member pattern for fitSharp.Test.NUnit.Fit.FindMemberPatternTest+TestClass:MisMatchedParameters has 2 parameters.", e.Message);
             }
         }
  

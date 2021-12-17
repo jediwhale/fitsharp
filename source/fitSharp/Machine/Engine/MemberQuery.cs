@@ -9,7 +9,7 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
     public class MemberQuery {
-        public static RuntimeMember FindInstance(Func<TypedValue, MemberQuery, TypedValue> finder, object instance, MemberSpecification specification) {
+        public static Maybe<RuntimeMember> FindInstance(Func<TypedValue, MemberQuery, TypedValue> finder, object instance, MemberSpecification specification) {
             return new MemberQuery(specification, finder).Find(instance);
         }
 
@@ -62,11 +62,11 @@ namespace fitSharp.Machine.Engine {
             this.finder = finder;
         }
         
-        RuntimeMember Find(object instance) {
+        Maybe<RuntimeMember> Find(object instance) {
             object target = instance;
             while (target != null) {
                 var member = finder(new TypedValue(target), this);
-                if (member.HasValue) return member.GetValue<RuntimeMember>();
+                if (member.HasValue) return Maybe<RuntimeMember>.Of(member.GetValue<RuntimeMember>());
 
 
                 var adapter = target as DomainAdapter;
@@ -75,7 +75,7 @@ namespace fitSharp.Machine.Engine {
                 target = adapter.SystemUnderTest;
                 if (target == adapter) break;
             }
-            return null;
+            return Maybe<RuntimeMember>.Nothing;
         }
         
         Maybe<RuntimeMember> FindBasicMember(object instance, Type targetType) {

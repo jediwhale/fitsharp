@@ -27,7 +27,7 @@ namespace fitSharp.Machine.Engine {
             this.info = info;
         } 
 
-        public string Name => info.Name;
+        public string Name => (info.DeclaringType == null ? "" : info.DeclaringType.FullName + ":") + info.Name;
         public virtual string GetParameterName(int index) { return info.Name; }
 
         public TypedValue Invoke(object[] parameters) {

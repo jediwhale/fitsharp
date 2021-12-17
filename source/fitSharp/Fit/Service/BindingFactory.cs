@@ -1,4 +1,4 @@
-﻿// Copyright © 2016 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2021 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -11,8 +11,7 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Service {
     public class BindingFactory {
-
-		public static bool CheckIsImpliedBy(string name) {
+	    static bool CheckIsImpliedBy(string name) {
 		    return name.EndsWith("?") || name.EndsWith("!") || name.EndsWith("()");
 		}
 
@@ -35,7 +34,7 @@ namespace fitSharp.Fit.Service {
             var member = MemberQuery.FindInstance(processor.FindMember, targetProvider, 
                     new MemberSpecification(memberName, 1));
 
-		    if (member == null && name.StartsWith(newIdentifier, StringComparison.OrdinalIgnoreCase)) {
+		    if (!member.IsPresent && name.StartsWith(newIdentifier, StringComparison.OrdinalIgnoreCase)) {
 		        return new CreateBinding(processor, adapter, name.Substring(4));
 		    }
 
