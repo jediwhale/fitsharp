@@ -11,7 +11,7 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Fit.Service {
     public class BindingFactory {
-	    static bool CheckIsImpliedBy(string name) {
+	    public static bool CheckIsImpliedBy(string name) {
 		    return name.EndsWith("?") || name.EndsWith("!") || name.EndsWith("()");
 		}
 
