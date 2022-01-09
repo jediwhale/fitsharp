@@ -71,7 +71,11 @@ namespace fitSharp.Machine.Engine {
             foreach (var list in operators) {
                 for (var i = 0; i < list.Count; i++) {
                     var name = list[i].GetType().Name;
+                    #if NETCOREAPP
                     if (name.Contains("`", StringComparison.Ordinal)) {
+                    #else
+                    if (name.Contains("`")) {
+                    #endif
                         if (name.Substring(0, name.IndexOf("`", StringComparison.Ordinal)) != original) continue;
                     }
                     else if (name != original) continue;
