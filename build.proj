@@ -82,8 +82,6 @@
       source\fit\bin\release\net6.0\fit.dll;
       source\Runner\bin\release\net6.0\Runner.dll;
       source\Runner\bin\release\net6.0\Runner.runtimeconfig.json;
-      source\RunnerW\bin\release\net6.0-windows\RunnerW.dll;
-      source\RunnerW\bin\release\net6.0-windows\RunnerW.runtimeconfig.json;
       source\dbfit\bin\release\net6.0\dbfit.dll;
       source\dbfitMySql\bin\release\net6.0\dbfit.mysql.dll;
       source\dbfitOracle\bin\release\net6.0\dbfit.oracle.dll;
