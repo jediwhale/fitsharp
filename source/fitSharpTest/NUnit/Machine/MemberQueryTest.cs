@@ -1,4 +1,4 @@
-﻿// Copyright © 2021 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2022 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -27,7 +27,7 @@ namespace fitSharp.Test.NUnit.Machine {
         }
 
         Maybe<RuntimeMember> GetMethod(string memberName, int count) {
-            return MemberQuery.FindInstance(MemberQuery.FindMember, instance,
+            return MemberQuery.FindInstance(MemberQuery.FindMember, TypedValue.Of(instance),
                     new MemberSpecification(new MemberName(memberName), count));
         }
 
@@ -49,7 +49,7 @@ namespace fitSharp.Test.NUnit.Machine {
 
         static Maybe<RuntimeMember> GetMethodFromProcessor(object targetInstance, string memberName, int parameterCount) {
             var processor = Builder.CellProcessor();
-            return MemberQuery.FindInstance(processor.FindMember, targetInstance,
+            return MemberQuery.FindInstance(processor.FindMember, TypedValue.Of(targetInstance),
                     new MemberSpecification(new MemberName(memberName), parameterCount));
         }
 
@@ -71,7 +71,7 @@ namespace fitSharp.Test.NUnit.Machine {
 
         [Test] public void GenericMethodWithParmsIsInvoked() {
             var member = new MemberName("genericmethodofsystemint32", "genericmethod", new[] { typeof(int)});
-            var method = MemberQuery.FindInstance(MemberQuery.FindMember, instance,
+            var method = MemberQuery.FindInstance(MemberQuery.FindMember, TypedValue.Of(instance),
                     new MemberSpecification(member, 1));
             var result = Invoke(method, new object[] {123});
             Assert.AreEqual("sample123", result.Value.ToString());
@@ -136,7 +136,7 @@ namespace fitSharp.Test.NUnit.Machine {
         [Test]
         public void ExtensionMethodIsInvoked() {
             var name = new MemberName("increase(sampleextension)", "increase", Maybe<Type>.Of(typeof(SampleExtension)), Array.Empty<Type>());
-            var method = MemberQuery.FindInstance(MemberQuery.FindMember, instance, new MemberSpecification(name, 1));
+            var method = MemberQuery.FindInstance(MemberQuery.FindMember, TypedValue.Of(instance), new MemberSpecification(name, 1));
             var result = Invoke(method, new object[] {2});
             Assert.AreEqual(2, result.Value);
         }
@@ -175,12 +175,12 @@ namespace fitSharp.Test.NUnit.Machine {
         }
 
         [Test] public void MethodwithMisMatchedParameterNamesIsNotFound() {
-            Assert.False(MemberQuery.FindInstance(MemberQuery.FindMember, instance,
+            Assert.False(MemberQuery.FindInstance(MemberQuery.FindMember, TypedValue.Of(instance),
                 new MemberSpecification("methodwithparms", 1).WithParameterNames(new [] {"garbage"})).IsPresent);
         }
 
         [Test] public void MethodwithMatchedParameterNamesIsFound() {
-            Assert.True(MemberQuery.FindInstance(MemberQuery.FindMember, instance,
+            Assert.True(MemberQuery.FindInstance(MemberQuery.FindMember, TypedValue.Of(instance),
                 new MemberSpecification("methodwithparms", 1).WithParameterNames(new [] {"input"})).IsPresent);
         }
     }

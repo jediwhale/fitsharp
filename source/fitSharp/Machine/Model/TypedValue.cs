@@ -1,4 +1,4 @@
-﻿// Copyright © 2019 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2022 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -10,12 +10,13 @@ using System.Text;
 using fitSharp.Machine.Exception;
 
 namespace fitSharp.Machine.Model {
-    public struct TypedValue {
+    public readonly struct TypedValue {
         public static readonly TypedValue Void = new TypedValue(null, typeof(void));
-
+        
+        public static TypedValue Of(object instance) { return new TypedValue(instance); }
         public static TypedValue MakeInvalid(System.Exception exception) { return new TypedValue(exception, typeof(void)); }
 
-        public object Value { get; private set; }
+        public object Value { get; }
         public T GetValue<T>() { return (T)Value;} 
         public T GetValueAs<T>() where T: class { return Value as T;}
 
@@ -39,7 +40,7 @@ namespace fitSharp.Machine.Model {
             As<T>(t => {}, notAction);
         }
 
-        public Type Type { get; private set; }
+        public Type Type { get; }
 
         public TypedValue(object value, Type type) : this() {
             Value = value;
@@ -48,14 +49,14 @@ namespace fitSharp.Machine.Model {
 
         public TypedValue(object value): this(value, value != null ? value.GetType() : typeof(object)) {}
 
-        public bool IsVoid { get { return Type == typeof (void) && Value == null; } }
-        public bool IsInvalid { get { return Type == typeof (void) && Value != null; } }
-        public bool IsValid { get { return !IsInvalid; } }
-        public bool IsObject { get { return IsValid && ! IsVoid; } }
-        public bool HasValue { get { return IsObject && !IsNull; } }
+        public bool IsVoid => Type == typeof (void) && Value == null;
+        public bool IsInvalid => Type == typeof (void) && Value != null;
+        public bool IsValid => !IsInvalid;
+        public bool IsObject => IsValid && ! IsVoid;
+        public bool HasValue => IsObject && !IsNull;
         public bool HasValueAs<T>() { return HasValue && Value is T; }
-        public bool IsNull { get { return IsObject && (Value == null || Type == typeof(DBNull)); } }
-        public bool IsNullOrEmpty { get { return IsObject && (IsNull || Value.ToString().Length == 0); } }
+        public bool IsNull => IsObject && (Value == null || Type == typeof(DBNull));
+        public bool IsNullOrEmpty => IsObject && (IsNull || Value.ToString().Length == 0);
 
         public string ValueString {
             get {

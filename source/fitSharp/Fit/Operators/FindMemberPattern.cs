@@ -1,3 +1,8 @@
+// Copyright © 2022 Syterra Software Inc. All rights reserved.
+// The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+// which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
+// to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
+
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -14,7 +19,7 @@ namespace fitSharp.Fit.Operators {
 
         public TypedValue FindMember(TypedValue instance, MemberQuery query) {
             var member = query.FindMatchingMember(instance.Type, new PatternMemberMatcher(Processor, instance.Value, query.Specification)) 
-                    .OrMaybe(() => query.FindMember(instance.Value));
+                    .OrMaybe(() => query.FindMember(instance));
             return member.TypedValue;
         }
 
@@ -55,7 +60,8 @@ namespace fitSharp.Fit.Operators {
 
             public TypedValue Invoke(object[] invokeParameters) {
                 if (!baseMember.MatchesParameterCount(patternParameters.Length)) {
-                    throw new InvalidMethodException(string.Format("Member pattern for {0} has {1} parameters.", baseMember.Name, patternParameters.Length));
+                    throw new InvalidMethodException(
+                        $"Member pattern for {baseMember.Name} has {patternParameters.Length} parameters.");
                 }
                 var parameters = new object[patternParameters.Length];
                 foreach (var i in patternParameters.Length.Count()) {
@@ -76,13 +82,8 @@ namespace fitSharp.Fit.Operators {
                 return baseMember.GetParameterName(index);
             }
 
-            public Type ReturnType {
-                get { return baseMember.ReturnType; }
-            }
-
-            public string Name {
-                get { return baseMember.Name; }
-            }
+            public Type ReturnType => baseMember.ReturnType;
+            public string Name => baseMember.Name;
 
             readonly RuntimeMember baseMember;
             readonly string[] patternParameters;

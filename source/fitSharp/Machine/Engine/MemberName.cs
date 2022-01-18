@@ -68,7 +68,7 @@ namespace fitSharp.Machine.Engine {
             return info.MakeGenericMethod(genericTypes.ToArray());
         }
 
-        public Maybe<RuntimeMember> FindMatchingMember(MemberQuery query, object instance) {
+        public Maybe<RuntimeMember> FindMatchingMember(MemberQuery query, TypedValue instance) {
             return extensionType
                 .Select(e => query.FindExtensionMember(e, instance))
                 .OrElseGet(() => query.FindInstanceMember(instance));

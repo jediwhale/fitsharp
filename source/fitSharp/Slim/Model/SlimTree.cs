@@ -1,4 +1,4 @@
-﻿// Copyright © 2012 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2022 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -13,13 +13,18 @@ namespace fitSharp.Slim.Model {
             return MakeTree(input);
         }
 
-        public string Value { get { return tree.Value; } }
-        public bool IsLeaf { get { return false; } }
-        public ReadList<Tree<string>> Branches { get { return tree.Branches; } }
+        public string Value => tree.Value;
+        public bool IsLeaf => false;
+        public ReadList<Tree<string>> Branches => tree.Branches;
         public void Add(Tree<string> branch) { tree.Add(branch); }
 
         public SlimTree AddBranchValue(object branch) {
             tree.AddBranch(branch as Tree<string> ?? new SlimLeaf(branch.ToString()));
+            return this;
+        }
+
+        public SlimTree AddBranches(params object[] branches) {
+            foreach (var branch in branches) AddBranchValue(branch);
             return this;
         }
 
@@ -38,7 +43,7 @@ namespace fitSharp.Slim.Model {
                     start = endList + 3;
                 }
                 else {
-                    var end = input.IndexOf(", ", start);
+                    var end = input.IndexOf(", ", start, StringComparison.Ordinal);
                     if (end < start) end = input.Length - 1;
                     if (end >= start) result.AddBranch(MakeBranch(input.Substring(start, end - start)));
                     start = end + 2;
@@ -48,7 +53,7 @@ namespace fitSharp.Slim.Model {
         }
 
         static int FindEndOfNestedList(string input, int start) {
-            var endList = input.IndexOf("], ", start);
+            var endList = input.IndexOf("], ", start, StringComparison.Ordinal);
             if (endList < 0 && input[input.Length - 2] == ']') endList = input.Length - 2;
             return endList;
         }
@@ -66,13 +71,13 @@ namespace fitSharp.Slim.Model {
     }
 
     public class SlimLeaf: Tree<string> {
-        public string Value { get; private set; }
+        public string Value { get; }
 
         public SlimLeaf(string value) { Value = value; }
 
-        public bool IsLeaf { get { return true; } }
+        public bool IsLeaf => true;
 
-        public ReadList<Tree<string>> Branches { get { throw new InvalidOperationException("Leaf node has no branches."); } }
+        public ReadList<Tree<string>> Branches => throw new InvalidOperationException("Leaf node has no branches.");
         public void Add(Tree<string> branch) { throw new InvalidOperationException("Leaf node has no branches."); }
     }
 }

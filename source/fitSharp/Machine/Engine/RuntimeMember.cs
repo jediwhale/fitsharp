@@ -1,4 +1,4 @@
-﻿// Copyright © 2021 Syterra Software Inc. All rights reserved.
+﻿// Copyright © 2022 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -27,7 +27,7 @@ namespace fitSharp.Machine.Engine {
             this.info = info;
         } 
 
-        public string Name => (info.DeclaringType == null ? "" : info.DeclaringType.FullName + ":") + info.Name;
+        public virtual string Name => (info.DeclaringType == null ? "" : info.DeclaringType.FullName + ":") + info.Name;
         public virtual string GetParameterName(int index) { return info.Name; }
 
         public TypedValue Invoke(object[] parameters) {
@@ -49,6 +49,8 @@ namespace fitSharp.Machine.Engine {
         public MethodMember(MemberInfo memberInfo, object instance): base(memberInfo, instance) {}
 
         protected MethodInfo Info => (MethodInfo) info;
+
+        public override string Name => base.Name + "(" + Info.GetParameters().Length + ")";
 
         public override bool MatchesParameterCount(int count) { return Info.GetParameters().Length == count; }
 
@@ -170,7 +172,9 @@ namespace fitSharp.Machine.Engine {
         public override string GetParameterName(int index) {
             return Info.GetParameters()[index].Name;
         }
-
+        
+        public override string Name => base.Name + "(" + Info.GetParameters().Length + ")";
+        
         public override bool MatchesParameterCount(int count) { return Info.GetParameters().Length == count; }
 
         protected override TypedValue TryInvoke(object[] parameters) {

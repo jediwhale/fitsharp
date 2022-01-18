@@ -1,4 +1,4 @@
-// Copyright © 2021 Syterra Software Inc. All rights reserved.
+// Copyright © 2022 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -9,12 +9,12 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
     public class MemberQuery {
-        public static Maybe<RuntimeMember> FindInstance(Func<TypedValue, MemberQuery, TypedValue> finder, object instance, MemberSpecification specification) {
+        public static Maybe<RuntimeMember> FindInstance(Func<TypedValue, MemberQuery, TypedValue> finder, TypedValue instance, MemberSpecification specification) {
             return new MemberQuery(specification, finder).Find(instance);
         }
 
         public static Maybe<RuntimeMember> FindDirectInstance(object instance, MemberSpecification specification) {
-            return new MemberQuery(specification).FindMember(instance);
+            return new MemberQuery(specification).FindMember(TypedValue.Of(instance));
         }
 
         public static RuntimeMember GetDirectInstance(object instance, MemberSpecification specification) {
@@ -25,7 +25,7 @@ namespace fitSharp.Machine.Engine {
         }
 
         public static TypedValue FindMember(TypedValue instance, MemberQuery query) {
-            return query.FindMember(instance.Value).TypedValue;
+            return query.FindMember(instance).TypedValue;
         }
 
         public MemberQuery(MemberSpecification specification): this(specification, FindMember) {}
@@ -37,18 +37,18 @@ namespace fitSharp.Machine.Engine {
 
         public MemberSpecification Specification { get; }
 
-        public Maybe<RuntimeMember> FindMember(object instance) {
+        public Maybe<RuntimeMember> FindMember(TypedValue instance) {
             return Specification.FindMatchingMember(this, instance);
         }
 
-        public Maybe<RuntimeMember> FindInstanceMember(object instance) {
-            var targetType = instance as Type ?? instance.GetType(); 
-            return FindBasicMember(instance, targetType)
-                    .OrMaybe(() => FindIndexerMember(instance, targetType));
+        public Maybe<RuntimeMember> FindInstanceMember(TypedValue instance) {
+            var targetType = instance.Type.IsAssignableTo(typeof(Type)) ? (Type)instance.Value : instance.Type;
+            return FindBasicMember(instance.Value, targetType)
+                    .OrMaybe(() => FindIndexerMember(instance.Value, targetType));
         }
 
-        public Maybe<RuntimeMember> FindExtensionMember(Type extensionType, object instance) {
-            return FindMatchingMember(extensionType, new ExtensionMemberMatcher(Specification, instance));
+        public Maybe<RuntimeMember> FindExtensionMember(Type extensionType, TypedValue instance) {
+            return FindMatchingMember(extensionType, new ExtensionMemberMatcher(Specification, instance.Value));
         }
 
         public Maybe<RuntimeMember> FindMatchingMember(Type targetType, MemberMatcher matcher) {
@@ -62,18 +62,18 @@ namespace fitSharp.Machine.Engine {
             this.finder = finder;
         }
         
-        Maybe<RuntimeMember> Find(object instance) {
-            object target = instance;
-            while (target != null) {
-                var member = finder(new TypedValue(target), this);
+        Maybe<RuntimeMember> Find(TypedValue instance) {
+            var target = instance;
+            while (true) {
+                var member = finder(target, this);
                 if (member.HasValue) return Maybe<RuntimeMember>.Of(member.GetValue<RuntimeMember>());
 
-
-                var adapter = target as DomainAdapter;
-                if (adapter == null) break;
-
-                target = adapter.SystemUnderTest;
-                if (target == adapter) break;
+                if (!typeof(DomainAdapter).IsAssignableFrom(target.Type)) break;
+                
+                var adapter = target.Value as DomainAdapter;
+                var sut = adapter?.SystemUnderTest;
+                if (sut == null || sut == adapter) break;
+                target = new TypedValue(sut);
             }
             return Maybe<RuntimeMember>.Nothing;
         }
