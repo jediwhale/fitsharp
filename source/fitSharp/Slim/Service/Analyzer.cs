@@ -26,21 +26,26 @@ namespace fitSharp.Slim.Service {
         public IEnumerable<string> Calls => calls;
 
         void ProcessCall(SlimTree instruction) {
-            var memberName = new MemberNameBuilder(applicationUnderTest).MakeMemberName(instruction.ValueAt(3));
-            var parameterCount = instruction.Branches.Count - 4;
-            var instance = new TypedValue(null, instances[instruction.ValueAt(2)]);
-            var member = MemberQuery.FindInstance(FindMember, instance,
-                new MemberSpecification(memberName, parameterCount));
-            calls.Add(member.Select(m => m.Name).OrElse("*not found*"));
+            AnalyzeCall(instruction, 0);
         }
 
         void ProcessCallAndAssign(SlimTree instruction) {
-            var memberName = new MemberNameBuilder(applicationUnderTest).MakeMemberName(instruction.ValueAt(4));
-            var parameterCount = instruction.Branches.Count - 5;
-            var instance = new TypedValue(null, instances[instruction.ValueAt(3)]);
+            AnalyzeCall(instruction, 1);
+        }
+        
+        void AnalyzeCall(SlimTree instruction, int offset) {
+            var instanceText = instruction.ValueAt(offset + 2);
+            var memberText = instruction.ValueAt(offset + 3);
+            var memberName = new MemberNameBuilder(applicationUnderTest).MakeMemberName(memberText);
+            if (!instances.ContainsKey(instanceText)) {
+                calls.Add($"* Unknown type for method '{memberText}' *");
+                return;
+            }
+            var parameterCount = instruction.Branches.Count - 4 - offset;
+            var instance = new TypedValue(null, instances[instanceText]);
             var member = MemberQuery.FindInstance(FindMember, instance,
                 new MemberSpecification(memberName, parameterCount));
-            calls.Add(member.Select(m => m.Name).OrElse("*not found*"));
+            calls.Add(member.Select(m => m.Name).OrElse($"* Method '{memberText}' not found *"));
         }
 
         static TypedValue FindMember(TypedValue instance, MemberQuery query) {
@@ -48,9 +53,12 @@ namespace fitSharp.Slim.Service {
         }
         
         void ProcessMake(SlimTree instruction) {
-            var type = applicationUnderTest.FindType(new GracefulNameMatcher(instruction.ValueAt(3)));
-            instances[instruction.ValueAt(2)] = type;
-            calls.Add(type.FullName + ":" +type.Name + "(" + (instruction.Branches.Count - 4) +")");
+            var typeText = instruction.ValueAt(3);
+            var type = applicationUnderTest.SearchTypes(new GracefulNameMatcher(typeText));
+            type.IfPresent(t => {instances[instruction.ValueAt(2)] = t;});
+            calls.Add(
+                type.Select(t => $"{t.FullName}:{t.Name}({instruction.Branches.Count - 4})")
+                    .OrElse($"* Type '{typeText}' not found *"));
         }
 
         void ProcessImport(SlimTree instruction) {
