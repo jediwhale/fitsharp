@@ -1,0 +1,18 @@
+<suiteConfig>
+
+    <Settings>
+        <runner>fitSharp.Slim.Analysis.Report</runner>
+    </Settings>
+    
+    <fitSharp.Slim.Analysis.Settings>
+        <Input>/home/mikes/code/myFitNesse/instruction.txt</Input>
+        <Output>/home/mikes/code/fitsharp/analysis.txt</Output>
+    </fitSharp.Slim.Analysis.Settings>
+        
+
+   <ApplicationUnderTest>
+        <addNamespace>fitSharp.Test.NUnit.Slim</addNamespace>
+        <addAssembly>build/sandbox/fitSharpTest.dll</addAssembly>
+   </ApplicationUnderTest>
+ 
+</suiteConfig>

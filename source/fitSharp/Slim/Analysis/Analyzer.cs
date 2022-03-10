@@ -9,9 +9,12 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using fitSharp.Slim.Model;
 
-namespace fitSharp.Slim.Service {
+namespace fitSharp.Slim.Analysis {
     public class Analyzer {
-        public Analyzer() {
+        public Analyzer() : this(new ApplicationUnderTest()) {}
+
+        public Analyzer(ApplicationUnderTest applicationUnderTest) {
+            this.applicationUnderTest = applicationUnderTest;
             actions.Add("make", ProcessMake);
             actions.Add("import", ProcessImport);
             actions.Add("call", ProcessCall);
@@ -42,9 +45,14 @@ namespace fitSharp.Slim.Service {
                 return;
             }
             var parameterCount = instruction.Branches.Count - 4 - offset;
-            var instance = new TypedValue(null, instances[instanceText]);
-            var member = MemberQuery.FindInstance(FindMember, instance,
-                new MemberSpecification(memberName, parameterCount));
+            var specification = new MemberSpecification(memberName, parameterCount);
+            var member = MemberQuery.FindInstance(FindMember, new TypedValue(null, instances[instanceText]), specification);
+            if (!member.IsPresent) {
+                foreach (var type in library) {
+                    member = MemberQuery.FindInstance(FindMember, new TypedValue(null, type), specification);
+                    if (member.IsPresent) break;
+                }
+            }
             calls.Add(member.Select(m => m.Name).OrElse($"* Method '{memberText}' not found *"));
         }
 
@@ -55,7 +63,15 @@ namespace fitSharp.Slim.Service {
         void ProcessMake(SlimTree instruction) {
             var typeText = instruction.ValueAt(3);
             var type = applicationUnderTest.SearchTypes(new GracefulNameMatcher(typeText));
-            type.IfPresent(t => {instances[instruction.ValueAt(2)] = t;});
+            var instanceText = instruction.ValueAt(2);
+            type.IfPresent(t => {
+                if (instanceText.StartsWith("library")) {
+                    library.Push(t);
+                }
+                else {
+                    instances[instanceText] = t;
+                }
+            });
             calls.Add(
                 type.Select(t => $"{t.FullName}:{t.Name}({instruction.Branches.Count - 4})")
                     .OrElse($"* Type '{typeText}' not found *"));
@@ -66,8 +82,9 @@ namespace fitSharp.Slim.Service {
         }
 
         readonly Dictionary<string, Action<SlimTree>> actions = new Dictionary<string, Action<SlimTree>>();
-        readonly ApplicationUnderTest applicationUnderTest = new ApplicationUnderTest();
+        readonly ApplicationUnderTest applicationUnderTest;
         readonly Dictionary<string, Type> instances = new Dictionary<string, Type>();
+        readonly Stack<Type> library = new Stack<Type>();
         readonly List<string> calls = new List<string>();
     }
 }

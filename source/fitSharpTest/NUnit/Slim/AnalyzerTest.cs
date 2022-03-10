@@ -4,8 +4,8 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System.Collections.Generic;
+using fitSharp.Slim.Analysis;
 using fitSharp.Slim.Model;
-using fitSharp.Slim.Service;
 using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Slim {
@@ -38,6 +38,16 @@ namespace fitSharp.Test.NUnit.Slim {
                         + "fitSharp.Test.NUnit.Slim.SampleClass:SampleMethod(0)");
         }
 
+        [Test]
+        public void ProcessCallFindsLibraryMethod([ValueSource(nameof(callCommands))] string[] command) {
+            Process("make", "libraryInstance", "fitSharp.Test.NUnit.Slim.SampleClass");
+            Process("make", "instance0", "fitSharp.Test.NUnit.Slim.OtherSampleClass");
+            ProcessCall(command, "instance0", "SampleMethod");
+            AssertCalls("fitSharp.Test.NUnit.Slim.SampleClass:SampleClass(0),"
+                        + "fitSharp.Test.NUnit.Slim.OtherSampleClass:OtherSampleClass(0),"
+                        + "fitSharp.Test.NUnit.Slim.SampleClass:SampleMethod(0)");
+        }
+        
         [Test]
         public void ProcessCallReportsMissingMethod([ValueSource(nameof(callCommands))] string[] command) {
             Process("make", "instance0", "fitSharp.Test.NUnit.Slim.SampleClass");
