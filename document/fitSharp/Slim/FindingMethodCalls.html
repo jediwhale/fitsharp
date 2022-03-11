@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- fitSharp
+Copyright © Syterra Software Inc. All rights reserved.
+The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
+to be bound by the terms of this license. You must not remove this notice, or any other, from this software. -->
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+ <link href="../fitsharp1.css" type="text/css" rel="stylesheet">
+  <link href="fit.css" type="text/css" rel="stylesheet">
+  <title>Finding Method Calls</title>
+</head>
+<body>
+<div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
+<div class="pagename">Finding Method Calls</div>
+<div class="content">To find all the methods used in our <a href="../Slim.html">Slim</a> tests, there are two options.<br>
+<br>
+<span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">Logging method calls</span><br>
+<br>
+We can log all the method calls with the following entry in our <a href="../FitSharp/SuiteConfigurationFile.html">Suite Configuration File</a>:<br>
+<pre class="code">&lt;suiteConfig>
+    ...
+    &lt;Slim.Operators>
+        &lt;Replace with="fitSharp.Slim.Operators.InvokeLogged">InvokeLibrary&lt;/Replace>
+    &lt;/Slim.Operators>
+&lt;/suiteConfig></pre>The log is written to a file named <code>invoke.log</code>.<br>
+<br>
+<span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">Analyzing Test Pages</span><br>
+<br>
+We can also run an analysis of the <a href="../Slim.html">Slim</a> tests, to list all the method calls, without running the tests. This is a two-step process:<ul><li>extract the <a href="../Slim.html">Slim</a> instructions with a <a class="externallink" href="http://www.fitnesse.org">FitNesse</a> command: <code>java -jar pathToFitNesse/fitnesse.jar -c "MySuite?instruction" -b instruction.txt</code></li><li>analyze the <a href="../Slim.html">Slim</a> instructions: <code>pathTofitSharp/Runner -c analysis.config.xml</code></li></ul>where <code>analysis.config.xml</code> looks like this:<br>
+<pre class="code">&lt;suiteConfig>
+    &lt;Settings>
+        &lt;runner>fitSharp.Slim.Analysis.Report&lt;/runner>
+    &lt;/Settings>
+    &lt;fitSharp.Slim.Analysis.Settings>
+        &lt;Input>instruction.txt&lt;/Input>
+        &lt;Output>analysis.txt&lt;/Output>
+    &lt;/fitSharp.Slim.Analysis.Settings>
+    &lt;ApplicationUnderTest>
+        &lt;addNamespace>My.Application.NameSpace&lt;/addNamespace>
+        &lt;addAssembly>pathTo/MyApplication.dll&lt;/addAssembly>
+    &lt;/ApplicationUnderTest>
+&lt;/suiteConfig></pre>The output lists the page names and method calls found:<br>
+<pre class="code">MySuite.MyPageOne|My.SampleClass:SampleClass(0)
+MySuite.MyPageOne|My.SampleClass:SampleMethod(0)
+MySuite.MyPageTwo|My.SampleClass:SampleClass(1)
+MySuite.MyPageTwo|My.SampleClass:SampleMethodWithParm(1)</pre> The numbers in parentheses indicate the number of parameters. Some method calls may not be recognized if the method name is dynamically generated when the test is run.<br>
+</div>
+<div style="width:100%;text-align:right">
+<span class="footer">Copyright &copy; 2022 Syterra Software Inc. All rights reserved.</span>
+</div>
+
+</body>
+</html>
