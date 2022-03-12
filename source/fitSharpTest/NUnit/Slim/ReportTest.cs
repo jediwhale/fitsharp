@@ -3,6 +3,7 @@
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
+using System;
 using System.IO;
 using System.Text;
 using fitSharp.Machine.Engine;
@@ -35,10 +36,13 @@ namespace fitSharp.Test.NUnit.Slim {
             Assert.AreEqual(expected, output.ToString());
         }
 
-        const string pageInstructions1 = "MyPageOne|[000002:000087:[000004:000015:scriptTable_0_0:000004:make:000016:scriptTableActor:000011:SampleClass:]:000088:[000004:000015:scriptTable_0_1:000004:call:000016:scriptTableActor:000012:sampleMethod:]:]\n";
-        const string pageInstructions2 = "MyPageTwo|[000002:000096:[000005:000015:scriptTable_0_0:000004:make:000016:scriptTableActor:000011:SampleClass:000001:a:]:000107:[000005:000015:scriptTable_0_1:000004:call:000016:scriptTableActor:000020:sampleMethodWithParm:000003:now:]:]\n";
+        static readonly string pageInstructions1 = "MyPageOne|[000002:000087:[000004:000015:scriptTable_0_0:000004:make:000016:scriptTableActor:000011:SampleClass:]:000088:[000004:000015:scriptTable_0_1:000004:call:000016:scriptTableActor:000012:sampleMethod:]:]" + Environment.NewLine;
+        static readonly string pageInstructions2 = "MyPageTwo|[000002:000096:[000005:000015:scriptTable_0_0:000004:make:000016:scriptTableActor:000011:SampleClass:000001:a:]:000107:[000005:000015:scriptTable_0_1:000004:call:000016:scriptTableActor:000020:sampleMethodWithParm:000003:now:]:]" + Environment.NewLine;
 
-        const string pageReport1 = "MyPageOne|fitSharp.Test.NUnit.Slim.SampleClass:SampleClass(0)\nMyPageOne|fitSharp.Test.NUnit.Slim.SampleClass:SampleMethod(0)\n";
-        const string pageReport2 = "MyPageTwo|fitSharp.Test.NUnit.Slim.SampleClass:SampleClass(1)\nMyPageTwo|fitSharp.Test.NUnit.Slim.SampleClass:SampleMethodWithParm(1)\n";
+        static readonly string pageReport1 = "MyPageOne|fitSharp.Test.NUnit.Slim.SampleClass:SampleClass(0)" + Environment.NewLine +
+                                             "MyPageOne|fitSharp.Test.NUnit.Slim.SampleClass:SampleMethod(0)" + Environment.NewLine;
+
+        static readonly string pageReport2 = "MyPageTwo|fitSharp.Test.NUnit.Slim.SampleClass:SampleClass(1)"  + Environment.NewLine + 
+                                             "MyPageTwo|fitSharp.Test.NUnit.Slim.SampleClass:SampleMethodWithParm(1)" + Environment.NewLine;
     }
 }
