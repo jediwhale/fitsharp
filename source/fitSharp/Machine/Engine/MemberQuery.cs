@@ -42,7 +42,7 @@ namespace fitSharp.Machine.Engine {
         }
 
         public Maybe<RuntimeMember> FindInstanceMember(TypedValue instance) {
-            var targetType = instance.Type.IsAssignableTo(typeof(Type)) ? (Type)instance.Value : instance.Type;
+            var targetType = typeof(Type).IsAssignableFrom(instance.Type) ? (Type)instance.Value : instance.Type;
             return FindBasicMember(instance.Value, targetType)
                     .OrMaybe(() => FindIndexerMember(instance.Value, targetType));
         }
