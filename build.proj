@@ -87,6 +87,18 @@
       source\dbfitOracle\bin\release\net6.0\dbfit.oracle.dll;
       source\dbfitSqlServer\bin\release\net6.0\dbfit.sqlserver.dll;
       source\dbfitSybase\bin\release\net6.0\dbfit.sybase.dll;"/>
+     <Net6WinFiles Include="
+      source\fitSharp\bin\release\net6.0-windows\fitSharp.dll;
+      source\fit\bin\release\net6.0-windows\fit.dll;
+      source\Runner\bin\release\net6.0-windows\Runner.dll;
+      source\Runner\bin\release\net6.0-windows\Runner.runtimeconfig.json;
+      source\RunnerW\bin\release\net6.0-windows\RunnerW.dll;
+      source\RunnerW\bin\release\net6.0-windows\RunnerW.runtimeconfig.json;
+      source\dbfit\bin\release\net6.0-windows\dbfit.dll;
+      source\dbfitMySql\bin\release\net6.0-windows\dbfit.mysql.dll;
+      source\dbfitOracle\bin\release\net6.0-windows\dbfit.oracle.dll;
+      source\dbfitSqlServer\bin\release\net6.0-windows\dbfit.sqlserver.dll;
+      source\dbfitSybase\bin\release\net6.0-windows\dbfit.sybase.dll;"/>
    <Packages Include="nuget\*.nupkg" />
   </ItemGroup>
   <Copy SourceFiles="@(Netfx48Files)" DestinationFolder="nuget\lib\net48" />
@@ -94,6 +106,7 @@
   <Copy SourceFiles="@(Net5Files)" DestinationFolder="nuget\lib\net5.0" />
   <Copy SourceFiles="@(Net5WinFiles)" DestinationFolder="nuget\lib\net5.0-windows" />
   <Copy SourceFiles="@(Net6Files)" DestinationFolder="nuget\lib\net6.0" />
+  <Copy SourceFiles="@(Net6WinFiles)" DestinationFolder="nuget\lib\net6.0-windows" />
   <Exec Command="..\binary\tools\nuget\nuget pack FitSharp.nuspec" WorkingDirectory="nuget"/>
   <Move SourceFiles="@(Packages)" DestinationFolder="binary" />
 </Target>

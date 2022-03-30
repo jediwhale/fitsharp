@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net48;net5.0;net5.0-windows;netcoreapp3.1;net6.0</TargetFrameworks>
+    <TargetFrameworks>net48;net5.0;net5.0-windows;netcoreapp3.1;net6.0;net6.0-windows</TargetFrameworks>
     <RootNamespace>fitSharp.TestTarget2</RootNamespace>
     <Deterministic>false</Deterministic>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
