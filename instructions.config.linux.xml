@@ -11,7 +11,7 @@
         
 
    <ApplicationUnderTest>
-        <addNamespace>fitSharp.Test.NUnit.Slim</addNamespace>
+        <addNamespace>fitSharp.Test.Double</addNamespace>
         <addAssembly>build/sandbox/fitSharpTest.dll</addAssembly>
    </ApplicationUnderTest>
  

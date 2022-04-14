@@ -24,8 +24,13 @@ namespace fitSharp.Test.NUnit.Slim {
         }
 
         [Test]
-        public void TwoPagesAreReportedReported() {
+        public void TwoPagesAreReported() {
             AssertReport(pageInstructions1 + pageInstructions2, pageReport1 + pageReport2);
+        }
+
+        [Test]
+        public void MultilinePageIsReported() {
+            AssertReport(multilineInstructions, pageReport2);
         }
 
         static void AssertReport(string input, string expected) {
@@ -38,6 +43,7 @@ namespace fitSharp.Test.NUnit.Slim {
 
         static readonly string pageInstructions1 = "MyPageOne|[000002:000087:[000004:000015:scriptTable_0_0:000004:make:000016:scriptTableActor:000011:SampleClass:]:000088:[000004:000015:scriptTable_0_1:000004:call:000016:scriptTableActor:000012:sampleMethod:]:]" + Environment.NewLine;
         static readonly string pageInstructions2 = "MyPageTwo|[000002:000096:[000005:000015:scriptTable_0_0:000004:make:000016:scriptTableActor:000011:SampleClass:000001:a:]:000107:[000005:000015:scriptTable_0_1:000004:call:000016:scriptTableActor:000020:sampleMethodWithParm:000003:now:]:]" + Environment.NewLine;
+        static readonly string multilineInstructions = "MyPageTwo|[000002:000096:[000005:000015:scriptTable_0_0:000004:make:000016:scriptTableActor:000011:SampleClass:000001:a:]:000112:[000005:000015:scriptTable_0_1:000004:call:000016:scriptTableActor:000020:sampleMethodWithParm:000008:new%0Dline:]:]" + Environment.NewLine;
 
         static readonly string pageReport1 = "MyPageOne|fitSharp.Test.NUnit.Slim.SampleClass:SampleClass(0)" + Environment.NewLine +
                                              "MyPageOne|fitSharp.Test.NUnit.Slim.SampleClass:SampleMethod(0)" + Environment.NewLine;

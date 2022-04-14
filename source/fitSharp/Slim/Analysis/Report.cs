@@ -60,8 +60,15 @@ namespace fitSharp.Slim.Analysis {
                     var splitPoint = line.IndexOf("|", StringComparison.Ordinal);
                     var pageName = line.Substring(0, splitPoint);
                     var commands = line.Substring(splitPoint + 1);
-                    yield return new Tuple<string, string>(pageName, commands);
+                    yield return new Tuple<string, string>(pageName, Decode(commands));
                 }
+            }
+
+            static string Decode(string input) {
+                return input
+                    .Replace("%0D", "\n")
+                    .Replace("%0A", "\r")
+                    .Replace("%23", "%");
             }
 
             readonly ApplicationUnderTest applicationUnderTest;
