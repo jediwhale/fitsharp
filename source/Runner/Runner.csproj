@@ -6,7 +6,7 @@
     <Deterministic>false</Deterministic>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(TargetFramework)'=='net5.0-windows'">
+  <PropertyGroup Condition="'$(TargetFramework.Contains(-windows))'">
     <UseWpf>true</UseWpf>
     <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>

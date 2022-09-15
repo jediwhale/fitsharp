@@ -1,14 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <TargetFrameworks>net48;net5.0-windows;netcoreapp3.1;net6.0-windows;net7.0-windows</TargetFrameworks>
     <UseWindowsForms>true</UseWindowsForms>
     <Deterministic>false</Deterministic>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <RootNamespace>fitSharp.RunnerW</RootNamespace>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(TargetFramework)'=='net5.0-windows'">
+  <PropertyGroup Condition="'$(TargetFramework.Contains(-windows))'">
     <UseWpf>true</UseWpf>
     <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
