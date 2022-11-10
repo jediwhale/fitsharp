@@ -4,6 +4,8 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using fitSharp.Machine.Model;
+using fitSharp.Slim.Model;
+using fitSharp.Slim.Service;
 using NUnit.Framework;
 
 namespace fitSharp.Test.NUnit.Slim {
@@ -37,6 +39,18 @@ namespace fitSharp.Test.NUnit.Slim {
 
         [Test] public void ParsesBracketsWithShortCountAsString() {
             ParsesAsString("[12345:A]");
+        }
+
+        [Test] public void ComposesList() {
+            Assert.AreEqual(new Document(new SlimTree().AddBranches("hello", "world")).ToString(),
+                "[000002:000005:hello:000005:world:]");
+        }
+        
+        [Test] public void ComposesNestedList() {
+            Assert.AreEqual(new Document(new SlimTree().AddBranch(new SlimTree().AddBranches("hello", "world"))).ToString(),
+                "[000001:000035:[000002:000005:hello:000005:world:]:]");
+            Assert.AreEqual(new Document(new SlimTree().AddBranch(new SlimLeaf("[000002:000005:hello:000005:world:]"))).ToString(),
+                "[000001:000035:[000002:000005:hello:000005:world:]:]");
         }
     }
 }
