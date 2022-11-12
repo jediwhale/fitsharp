@@ -40,7 +40,7 @@ configure processor 'add operator' compareregex
 'add page' 'test@,fit.Test.Double.SampleDomainAdapter,throwabandonsuite'
 'add page' 'test@,garbage'
 run
-check results '/.*SampleDomainAdapter.* \\(Test completed\\) \\(Suite abandoned\\)/'<br>
+check results '/(?s).*SampleDomainAdapter.* \\(Test completed\\) \\(Suite abandoned\\)/'<br>
 @test</pre></div>
 <div style="width:100%;text-align:right">
 <span class="footer">Copyright &copy; 2022 Syterra Software Inc. All rights reserved.</span>

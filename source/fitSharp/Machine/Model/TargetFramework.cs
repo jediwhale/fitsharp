@@ -11,7 +11,7 @@ namespace fitSharp.Machine.Model {
     public static class TargetFramework {
         public static string Location(Assembly assembly) {
             return
-                #if NET5_0 || NET6_0
+                #if NET5_0 || NET6_0 || NET7_0
                     OperatingSystem.IsWindows() ? assembly.Location.Replace("\\", "/") : assembly.Location
                 #else
                     assembly.CodeBase
@@ -20,7 +20,7 @@ namespace fitSharp.Machine.Model {
         }
 
         public static string FileExtension =>
-            #if NET5_0 || NET6_0
+            #if NET5_0 || NET6_0 || NET7_0
                 OperatingSystem.IsWindows() ? "net5" : "linux"
             #else
                 #if NETCOREAPP
@@ -32,7 +32,7 @@ namespace fitSharp.Machine.Model {
             ;
         
         public static bool IsWindows =>
-            #if NET5_0 || NET6_0
+            #if NET5_0 || NET6_0 || NET7_0
                 OperatingSystem.IsWindows()
             #else
                 #if NETCOREAPP

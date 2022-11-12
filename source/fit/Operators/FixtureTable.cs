@@ -1,8 +1,10 @@
-// Copyright © 2010 Syterra Software Inc.
+// Copyright © 2022 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
+using System;
+using System.Linq;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
 
@@ -84,7 +86,8 @@ namespace fit.Operators {
         }
 
         static bool ContainsText(string actual, string expected) {
-            return actual.Replace("\r\n", "\n").IndexOf(expected.Replace("\r\n", "\n")) >= 0;
+            return expected.Split(new [] {".."}, StringSplitOptions.None)
+                .All(e => actual.Replace("\r\n", "\n").IndexOf(e.Replace("\r\n", "\n"), StringComparison.OrdinalIgnoreCase) >= 0);
         }
 
         static string[] SplitBody(string theSource) {
