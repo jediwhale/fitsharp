@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Deterministic>false</Deterministic>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <TargetFrameworks>net48;net5.0;net5.0-windows;netcoreapp3.1;net6.0;net6.0-windows;net7.0;net7.0-windows</TargetFrameworks>
+    <TargetFrameworks>net48;netcoreapp3.1;net6.0;net6.0-windows;net7.0;net7.0-windows</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
