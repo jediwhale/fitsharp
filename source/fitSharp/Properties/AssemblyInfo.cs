@@ -7,4 +7,4 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 [assembly: AssemblyCopyright("Copyright © 2022 Syterra Software Inc. All rights reserved.")]
-[assembly: AssemblyVersion("2022.3.11.0")]
+[assembly: AssemblyVersion("2022.11.13.0")]
