@@ -16,7 +16,6 @@ jobs:
             3.1.X
             6.0.X
             7.0.X
-            8.0.X
       - name: Install dependencies
         run: dotnet msbuild -target:restore .\build.proj
       - name: Build
