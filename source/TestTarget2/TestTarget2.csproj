@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net48;netcoreapp3.1;net6.0;net6.0-windows;net7.0;net7.0-windows</TargetFrameworks>
+    <TargetFrameworks>net48;net6.0;net6.0-windows;net7.0;net7.0-windows;net8.0;net8.0-windows</TargetFrameworks>
     <RootNamespace>fitSharp.TestTarget2</RootNamespace>
     <Deterministic>false</Deterministic>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -10,6 +10,6 @@
   </ItemGroup>
   <PropertyGroup>
     <PostBuildEvent Condition="'$(TargetFramework)' == 'net462'">xcopy "$(TargetPath)*" "$(SolutionDir)build\sample\netfx2\" /I /Y</PostBuildEvent>
-    <PostBuildEvent Condition="'$(TargetFramework)' == 'netcoreapp3.1'">xcopy "$(TargetPath)*" "$(SolutionDir)build\sample\netcore2\" /I /Y</PostBuildEvent>
+    <PostBuildEvent Condition="'$(TargetFramework)' == 'net8'">xreapp3py "$(TargetPath)*" "$(SolutionDir)build\sample\netcore2\" /I /Y</PostBuildEvent>
   </PropertyGroup>
 </Project>
