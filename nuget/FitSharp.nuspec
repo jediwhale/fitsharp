@@ -2,9 +2,9 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>FitSharp</id>
-    <version>2022.11.13</version>
+    <version>2024.02.27</version>
     <title>fitSharp</title>
-    <authors>Mike Stockdale</authors>
+    <authors>MikeStockdale,sqeezy</authors>
     <owners>mikestockdale</owners>
     <projectUrl>http://fitsharp.github.io/</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
