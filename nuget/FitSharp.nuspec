@@ -12,7 +12,7 @@
     <copyright>Copyright © 2022 Syterra Software Inc. All rights reserved.</copyright>
     <releaseNotes>See https://fitsharp.github.io/FitSharp/ReleaseInformation.html</releaseNotes>
     <license type="file">license\license.txt</license>
-    <tags>fit fitnesse testing</tags>
+    <tags>fit fitnesse testing dotnet</tags>
     <references>
       <reference file="fitsharp.dll" />
       <reference file="fit.dll" />
