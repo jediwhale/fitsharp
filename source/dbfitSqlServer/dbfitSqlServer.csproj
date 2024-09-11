@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net48;net6.0;net6.0-windows;net7.0;net7.0-windows;net8.0;net8.0-windows</TargetFrameworks>
+    <TargetFrameworks>net48;net8.0;net8.0-windows;net9.0;net9.0-windows</TargetFrameworks>
     <RootNamespace>dbfit.SqlServer</RootNamespace>
     <AssemblyName>dbfit.SqlServer</AssemblyName>
     <Deterministic>false</Deterministic>
