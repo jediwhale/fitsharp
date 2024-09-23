@@ -28,8 +28,10 @@ namespace fitSharp.Machine.Application {
         public Runnable Runner { get; private set; }
 
         public int Run() {
-            try {
-                return arguments.LoadMemory().Select(ReportError, RunInDomain);
+            try
+            {
+                int r = arguments.LoadMemory().Select(ReportError, RunInDomain);
+                return r;
             }
             catch (System.Exception e) {
                 progressReporter.WriteLine(e.ToString());

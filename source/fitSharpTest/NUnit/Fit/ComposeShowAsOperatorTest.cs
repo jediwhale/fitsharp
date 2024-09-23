@@ -9,6 +9,7 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using fitSharp.Samples.Fit;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Fit
 {
@@ -16,7 +17,7 @@ namespace fitSharp.Test.NUnit.Fit
     {
         [Test] public void ComposesObjectsThatItWraps() {
             var showAs = new ComposeShowAsOperator();
-            Assert.IsTrue(showAs.CanCompose(new TypedValue(showAs)));
+            ClassicAssert.IsTrue(showAs.CanCompose(new TypedValue(showAs)));
         }
 
         [Test] public void ComposesAsRaw() {
@@ -25,7 +26,7 @@ namespace fitSharp.Test.NUnit.Fit
             var showAs = new ComposeShowAsOperator {Processor = processor};
             var subject = new ComposeShowAsOperator(new [] {CellAttribute.Raw}, "stuff");
             var result = showAs.Compose(new TypedValue(subject));
-            Assert.IsTrue(result.Value.HasAttribute(CellAttribute.Raw));
+            ClassicAssert.IsTrue(result.Value.HasAttribute(CellAttribute.Raw));
         }
 
         class TestCompose: CellOperator, ComposeOperator<Cell> {

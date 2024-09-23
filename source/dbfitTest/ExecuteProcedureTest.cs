@@ -10,6 +10,7 @@ using fit;
 using fit.Service;
 using Moq;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using TestStatus=fitSharp.Fit.Model.TestStatus;
 
 namespace dbfitTest {
@@ -36,26 +37,26 @@ namespace dbfitTest {
             DbParameterAccessor[] resultingAccessors = ExecuteProcedure.SortAccessors(accessorsToOrder);
 
             //Verify
-            Assert.AreEqual(1, resultingAccessors[0].Position);
-            Assert.AreEqual(3, resultingAccessors[1].Position);
-            Assert.AreEqual(5, resultingAccessors[2].Position);
-            Assert.AreEqual(7, resultingAccessors[3].Position);
+            ClassicAssert.AreEqual(1, resultingAccessors[0].Position);
+            ClassicAssert.AreEqual(3, resultingAccessors[1].Position);
+            ClassicAssert.AreEqual(5, resultingAccessors[2].Position);
+            ClassicAssert.AreEqual(7, resultingAccessors[3].Position);
         }
         [Test] public void ExecutesProcedureWithNoParameters() {
             var command = new TestCommand();
             RunTest(command, null, string.Empty);
-            Assert.AreEqual(1, command.ExecuteNonQueryCalls);
+            ClassicAssert.AreEqual(1, command.ExecuteNonQueryCalls);
         }
 
         [Test] public void ExecutesProcedureWithInputParameter() {
             var command = new TestCommand {
-                NonQueryAction = (c => Assert.AreEqual("invalue", c.Parameters[0].Value))
+                NonQueryAction = (c => ClassicAssert.AreEqual("invalue", c.Parameters[0].Value))
             };
 
             RunTest(command, MakeParameters("inparm", ParameterDirection.Input),
                     "<tr><td>inparm</td></tr><tr><td>invalue</td></tr>");
 
-            Assert.AreEqual(1, command.ExecuteNonQueryCalls);
+            ClassicAssert.AreEqual(1, command.ExecuteNonQueryCalls);
         }
 
         [Test] public void ExecutesProcedureWithOutputParameter() {
@@ -66,14 +67,14 @@ namespace dbfitTest {
             RunTest(command, MakeParameters("outparm", ParameterDirection.Output),
                     "<tr><td>outparm?</td></tr><tr><td>outvalue</td></tr>");
 
-            Assert.AreEqual(1, command.ExecuteNonQueryCalls);
-            Assert.AreEqual(1, fixture.TestStatus.Counts.GetCount(TestStatus.Right));
+            ClassicAssert.AreEqual(1, command.ExecuteNonQueryCalls);
+            ClassicAssert.AreEqual(1, fixture.TestStatus.Counts.GetCount(TestStatus.Right));
         }
 
         [Test] public void ExecutesProcedureWithInOutParameter() {
             var command = new TestCommand {
                 NonQueryAction = (c => {
-                    Assert.AreEqual("invalue", c.Parameters[0].Value);
+                    ClassicAssert.AreEqual("invalue", c.Parameters[0].Value);
                     c.Parameters[0].Value = "outvalue";
                 })
             };
@@ -81,8 +82,8 @@ namespace dbfitTest {
             RunTest(command, MakeParameters("ioparm", ParameterDirection.InputOutput),
                     "<tr><td>ioparm</td><td>ioparm?</td></tr><tr><td>invalue</td><td>outvalue</td></tr>");
 
-            Assert.AreEqual(1, command.ExecuteNonQueryCalls);
-            Assert.AreEqual(1, fixture.TestStatus.Counts.GetCount(TestStatus.Right));
+            ClassicAssert.AreEqual(1, command.ExecuteNonQueryCalls);
+            ClassicAssert.AreEqual(1, fixture.TestStatus.Counts.GetCount(TestStatus.Right));
         }
 
         [Test] public void MarksWrongIfNoExpectedException() {
@@ -92,8 +93,8 @@ namespace dbfitTest {
             RunTest(command, MakeParameters("inparm", ParameterDirection.Input),
                     "<tr><td>inparm</td></tr><tr><td>invalue</td></tr>");
 
-            Assert.AreEqual(1, command.ExecuteNonQueryCalls);
-            Assert.AreEqual(1, fixture.TestStatus.Counts.GetCount(TestStatus.Wrong));
+            ClassicAssert.AreEqual(1, command.ExecuteNonQueryCalls);
+            ClassicAssert.AreEqual(1, fixture.TestStatus.Counts.GetCount(TestStatus.Wrong));
         }
 
         [Test] public void MarksRightIfExpectedException() {
@@ -105,8 +106,8 @@ namespace dbfitTest {
             RunTest(command, MakeParameters("inparm", ParameterDirection.Input),
                     "<tr><td>inparm</td></tr><tr><td>invalue</td></tr>");
 
-            Assert.AreEqual(1, command.ExecuteNonQueryCalls);
-            Assert.AreEqual(1, fixture.TestStatus.Counts.GetCount(TestStatus.Right));
+            ClassicAssert.AreEqual(1, command.ExecuteNonQueryCalls);
+            ClassicAssert.AreEqual(1, fixture.TestStatus.Counts.GetCount(TestStatus.Right));
         }
 
         private static Dictionary<string, DbParameterAccessor> MakeParameters(string parameterName, ParameterDirection direction) {

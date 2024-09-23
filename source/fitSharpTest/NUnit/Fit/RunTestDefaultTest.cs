@@ -12,6 +12,7 @@ using fitSharp.Machine.Exception;
 using fitSharp.Machine.Model;
 using fitSharp.Samples.Fit;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Fit {
     [TestFixture] public class RunTestDefaultTest {
@@ -26,19 +27,19 @@ namespace fitSharp.Test.NUnit.Fit {
         [Test] public void CreatesFixtureOnce() {
             SampleFixture.Count = 0;
             RunTest();
-            Assert.AreEqual(1, SampleFixture.Count);
+            ClassicAssert.AreEqual(1, SampleFixture.Count);
         }
 
         [Test] public void SetsUpConfiguration() {
             processor.Configuration.GetItem<SampleItem>();
             RunTest();
-            Assert.IsTrue(processor.Configuration.GetItem<SampleItem>().IsSetUp);
+            ClassicAssert.IsTrue(processor.Configuration.GetItem<SampleItem>().IsSetUp);
         }
 
         [Test] public void TearsDownConfiguration() {
             processor.Configuration.GetItem<SampleItem>();
             RunTest();
-            Assert.IsTrue(processor.Configuration.GetItem<SampleItem>().IsTearDown);
+            ClassicAssert.IsTrue(processor.Configuration.GetItem<SampleItem>().IsTearDown);
         }
 
         void RunTest() {

@@ -6,6 +6,7 @@
 using fit.Test.Double;
 using fitlibrary.tree;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fit.Test.NUnit {
     [TestFixture] public class ParseTreeTest {
@@ -13,12 +14,12 @@ namespace fit.Test.NUnit {
         [Test] public void MatchesTreeObject() {
             Parse table = Parse.ParseFrom("<table><tr><td><ul><li>a</li><li>b</li></ul></td></tr></table>");
             var tree = new ParseTree(table.Parts.Parts.Parts);
-            Assert.IsTrue(tree.Equals(new SampleTree(string.Empty, "a", "b")));
+            ClassicAssert.IsTrue(tree.Equals(new SampleTree(string.Empty, "a", "b")));
         }
 
         [Test] public void MatchesEmptyTreeObject() {
             var tree = new ParseTree(new Parse("ul", string.Empty, null, null));
-            Assert.IsTrue(tree.Equals(new SampleTree(string.Empty)));
+            ClassicAssert.IsTrue(tree.Equals(new SampleTree(string.Empty)));
         }
 
     }

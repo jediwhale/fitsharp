@@ -9,6 +9,7 @@ using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
 using fitSharp.Samples.Fit;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Fit {
     [TestFixture] public class DefineTest {
@@ -25,7 +26,7 @@ namespace fitSharp.Test.NUnit.Fit {
             var define = new Define();
             var input = new CellTree(defineRow, new CellTree("stuff"));
             define.Interpret(processor, input);
-            Assert.AreEqual(input, processor.Get<Procedures>().GetValue("myprocedure"));
+            ClassicAssert.AreEqual(input, processor.Get<Procedures>().GetValue("myprocedure"));
         }
 
     }

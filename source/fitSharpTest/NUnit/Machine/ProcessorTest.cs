@@ -8,6 +8,7 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using fitSharp.Test.Double;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Machine {
     [TestFixture] public class ProcessorTest {
@@ -25,7 +26,7 @@ namespace fitSharp.Test.NUnit.Machine {
         [Test] public void DefaultOperatorIsFound() {
             processor.AddOperator(defaultTest);
             object result = Execute();
-            Assert.AreEqual("defaultexecute", result.ToString());
+            ClassicAssert.AreEqual("defaultexecute", result.ToString());
         }
 
         private object Execute() {
@@ -37,7 +38,7 @@ namespace fitSharp.Test.NUnit.Machine {
             processor.AddOperator(specificTestA);
             processor.AddOperator(specificTestB);
             object result = Execute("A");
-            Assert.AreEqual("executeA", result.ToString());
+            ClassicAssert.AreEqual("executeA", result.ToString());
         }
 
         private object Execute(string parameter) {
@@ -46,26 +47,26 @@ namespace fitSharp.Test.NUnit.Machine {
 
         [Test] public void TypeIsCreated() {
             TypedValue result = processor.Create(typeof(SampleClass).FullName, new TreeList<string>());
-            Assert.IsTrue(result.Value is SampleClass);
+            ClassicAssert.IsTrue(result.Value is SampleClass);
         }
 
         [Test] public void MethodIsInvoked() {
             var instance = new TypedValue(new SampleClass());
             TypedValue result = processor.Invoke(instance, new MemberName("methodnoparms"), new TreeList<string>());
-            Assert.AreEqual("samplereturn", result.Value);
+            ClassicAssert.AreEqual("samplereturn", result.Value);
         }
 
         [Test] public void MethodWithParameterIsInvoked() {
             var instance = new TypedValue(new SampleClass());
             TypedValue result = processor.Invoke(instance, new MemberName("MethodWithParms"), new TreeList<string>().AddBranchValue("stringparm0"));
-            Assert.AreEqual("samplestringparm0", result.Value);
+            ClassicAssert.AreEqual("samplestringparm0", result.Value);
         }
 
         [Test] public void ExceptionReturnedAsValue() {
             var instance = new TypedValue(new SampleClass());
             TypedValue result = processor.Invoke(instance, new MemberName("throw"), new TreeList<string>().AddBranchValue("oh no"));
-            Assert.IsTrue(!result.IsValid);
-            Assert.IsTrue(result.Value is ApplicationException);
+            ClassicAssert.IsTrue(!result.IsValid);
+            ClassicAssert.IsTrue(result.Value is ApplicationException);
         }
 
         [Test] public void ExceptionIsThrown() {
@@ -75,31 +76,31 @@ namespace fitSharp.Test.NUnit.Machine {
             }
             catch (Exception e) {
                 var exceptionString = e.ToString();
-                Assert.IsTrue(exceptionString.Contains("System.ApplicationException"));
-                Assert.IsTrue(exceptionString.Contains(typeof(SampleClass).FullName ?? string.Empty));
+                ClassicAssert.IsTrue(exceptionString.Contains("System.ApplicationException"));
+                ClassicAssert.IsTrue(exceptionString.Contains(typeof(SampleClass).FullName ?? string.Empty));
                 return;
             }
-            Assert.Fail("no exception");
+            ClassicAssert.Fail("no exception");
         }
 
         [Test] public void OperatorIsRemoved() {
             processor.AddOperator(defaultTest);
             processor.AddOperator(specificTestA);
             object result = Execute("A");
-            Assert.AreEqual("executeA", result.ToString());
+            ClassicAssert.AreEqual("executeA", result.ToString());
             processor.RemoveOperator(specificTestA.GetType().FullName);
             result = Execute("A");
-            Assert.AreEqual("defaultexecute", result.ToString());
+            ClassicAssert.AreEqual("defaultexecute", result.ToString());
         }
 
         [Test] public void EmptyMemoryContainsNothing() {
-            Assert.IsFalse(processor.Configuration.GetItem<StringObjectMemory>().HasValue("anything"));
+            ClassicAssert.IsFalse(processor.Configuration.GetItem<StringObjectMemory>().HasValue("anything"));
         }
 
         [Test] public void StoredDataIsLoaded() {
             processor.Configuration.GetItem<StringObjectMemory>().Save("something", "stuff");
-            Assert.IsTrue(processor.Configuration.GetItem<StringObjectMemory>().HasValue("something"));
-            Assert.AreEqual("stuff", processor.Configuration.GetItem<StringObjectMemory>().GetValue("something"));
+            ClassicAssert.IsTrue(processor.Configuration.GetItem<StringObjectMemory>().HasValue("something"));
+            ClassicAssert.AreEqual("stuff", processor.Configuration.GetItem<StringObjectMemory>().GetValue("something"));
         }
 
         private class DefaultTest: Operator<string, BasicProcessor>, InvokeOperator<string> {

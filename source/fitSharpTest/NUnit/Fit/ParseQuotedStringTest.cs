@@ -5,22 +5,23 @@
 
 using NUnit.Framework;
 using fitSharp.Fit.Operators;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Fit
 {
     [TestFixture] public class ParseQuotedStringTest : ParseOperatorTest<ParseQuotedString> {
         [Test] public void CanParse() {
-            Assert.IsTrue(CanParse<string>("'quoted'"), "'quoted'");
-            Assert.IsTrue(CanParse<string>("\r\n'quoted with whitespace'  "), "\r\n'quoted with whitespace'  ");
-            Assert.IsFalse(CanParse<string>("'half-quoted"), "'half-quoted");
-            Assert.IsFalse(CanParse<string>("half-quoted'"), "half-quoted'");
-            Assert.IsFalse(CanParse<string>("unquoted"), "unquoted");
-            Assert.IsFalse(CanParse<int>("'1'"), "non-string");
+            ClassicAssert.IsTrue(CanParse<string>("'quoted'"), "'quoted'");
+            ClassicAssert.IsTrue(CanParse<string>("\r\n'quoted with whitespace'  "), "\r\n'quoted with whitespace'  ");
+            ClassicAssert.IsFalse(CanParse<string>("'half-quoted"), "'half-quoted");
+            ClassicAssert.IsFalse(CanParse<string>("half-quoted'"), "half-quoted'");
+            ClassicAssert.IsFalse(CanParse<string>("unquoted"), "unquoted");
+            ClassicAssert.IsFalse(CanParse<int>("'1'"), "non-string");
         }
 
         [Test] public void ParseStripsQuotes() {
-            Assert.AreEqual("content", Parse<string>("'content'"));
-            Assert.AreEqual("content", Parse<string>("\r\n\t 'content'\r\n\t "));
+            ClassicAssert.AreEqual("content", Parse<string>("'content'"));
+            ClassicAssert.AreEqual("content", Parse<string>("\r\n\t 'content'\r\n\t "));
         }
     }
 }

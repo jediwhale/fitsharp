@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using fitSharp.Slim.Analysis;
 using fitSharp.Slim.Model;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Slim {
     [TestFixture]
@@ -83,7 +84,7 @@ namespace fitSharp.Test.NUnit.Slim {
         }
 
         void AssertCalls(string expected) {
-            Assert.AreEqual(expected, string.Join(",", analyzer.Calls));
+            ClassicAssert.AreEqual(expected, string.Join(",", analyzer.Calls));
         }
 
         void Process(params object[] items) {

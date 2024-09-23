@@ -11,6 +11,7 @@ using fitSharp.Slim.Operators;
 using fitSharp.Slim.Service;
 using fitSharp.Test.Double.Slim;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Slim {
     [TestFixture] public class ServiceTest {
@@ -24,7 +25,7 @@ namespace fitSharp.Test.NUnit.Slim {
             SampleClass.Count = 0;
             var statement = new Instructions().MakeVariable("variable", typeof (SampleClass));
             DoInstruction(statement);
-            Assert.AreEqual(1, SampleClass.Count);
+            ClassicAssert.AreEqual(1, SampleClass.Count);
         }
 
         private TypedValue DoInstruction(Instructions statement) {
@@ -37,14 +38,14 @@ namespace fitSharp.Test.NUnit.Slim {
             var statement = new Instructions().MakeCommand("sampleCommand");
             service = new Service(configuration);
             var result = DoInstruction(statement).GetValue<Tree<string>>();
-            Assert.AreEqual("sampleResult", result.ValueAt(1));
+            ClassicAssert.AreEqual("sampleResult", result.ValueAt(1));
         }
 
         [Test] public void ParseSymbolIsDoneFirst() {
             service.Get<Symbols>().Save("symbol", "input");
             service.AddOperator(new SampleConverter());
             var value = (SampleClass)service.Parse(typeof(SampleClass), TypedValue.Void, new SlimLeaf("$symbol")).Value;
-            Assert.AreEqual("custominput", value.Info);
+            ClassicAssert.AreEqual("custominput", value.Info);
         }
 
         [Test] public void CustomComposeIsCalled() {
@@ -53,7 +54,7 @@ namespace fitSharp.Test.NUnit.Slim {
             DoInstruction(statement);
             statement = new Instructions().ExecuteMethod("makesample");
             var result = DoInstruction(statement).GetValue<SlimTree>();
-            Assert.AreEqual("mysample", result.ValueAt(1));
+            ClassicAssert.AreEqual("mysample", result.ValueAt(1));
         }
 
         class SampleConverter: Converter<SampleClass> {

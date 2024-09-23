@@ -13,6 +13,7 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using fitSharp.Samples.Fit;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using TestStatus=fitSharp.Fit.Model.TestStatus;
 
 namespace fit.Test.NUnit {
@@ -63,17 +64,17 @@ namespace fit.Test.NUnit {
 
         public static void AssertCellPasses(Parse cell)
         {
-            Assert.AreEqual(TestStatus.Right, cell.GetAttribute(CellAttribute.Status));
+            ClassicAssert.AreEqual(TestStatus.Right, cell.GetAttribute(CellAttribute.Status));
         }
 
         public static void AssertCellFails(Parse cell)
         {
-            Assert.AreEqual(TestStatus.Wrong, cell.GetAttribute(CellAttribute.Status));
+            ClassicAssert.AreEqual(TestStatus.Wrong, cell.GetAttribute(CellAttribute.Status));
         }
 
         public static void AssertValueInBody(Parse cell, string value)
         {
-            Assert.IsTrue(cell.Body.IndexOf(value) > -1);
+            ClassicAssert.IsTrue(cell.Body.IndexOf(value) > -1);
         }
 
         public static void AssertValuesInBody(Parse cell, string[] values)

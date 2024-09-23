@@ -7,6 +7,7 @@ using fitSharp.IO;
 using fitSharp.Samples;
 using fitSharp.Slim.Service;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Slim {
 
@@ -15,28 +16,28 @@ namespace fitSharp.Test.NUnit.Slim {
 
         [Test]
         public void WritesVersion() {
-            Assert.AreEqual("Slim -- V0.5\n", port.Output);
+            ClassicAssert.AreEqual("Slim -- V0.5\n", port.Output);
         }
 
         [Test]
         public void WritesMessageWithLengthPrefix() {
             port.Clear();
             messenger.Write("hello");
-            Assert.AreEqual("000005:hello", port.Output);
+            ClassicAssert.AreEqual("000005:hello", port.Output);
         }
 
         [Test]
         public void ReadsMessageWithLengthPrefix() {
             port.AddInput("000005:hello");
-            Assert.AreEqual("hello", messenger.Read());
+            ClassicAssert.AreEqual("hello", messenger.Read());
         }
 
         [Test]
         public void AtEndWhenByeRead() {
             port.AddInput("000003:bye");
             messenger.Read();
-            Assert.IsTrue(messenger.IsEnd);
-            Assert.IsFalse(port.IsOpen);
+            ClassicAssert.IsTrue(messenger.IsEnd);
+            ClassicAssert.IsFalse(port.IsOpen);
         }
 
         /* slow tests
@@ -44,13 +45,13 @@ namespace fitSharp.Test.NUnit.Slim {
         public void WritesLongMessageWithLengthPrefix() {
             session.Output = string.Empty;
             messenger.Write(new string('a', 1000000));
-            Assert.IsTrue(session.Output.StartsWith("1000000:a"));
+            ClassicAssert.IsTrue(session.Output.StartsWith("1000000:a"));
         }
 
         [Test]
         public void ReadsLongMessageWithLengthPrefix() {
             session.Input = "1000000:" + new string('a', 1000000);
-            Assert.AreEqual(1000000, messenger.Read().Length);
+            ClassicAssert.AreEqual(1000000, messenger.Read().Length);
         }*/
 
         [SetUp]

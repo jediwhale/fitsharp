@@ -1,4 +1,4 @@
-// Copyright © 2011 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+// Copyright ï¿½ 2011 Syterra Software Inc. Includes work by Object Mentor, Inc., ï¿½ 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -8,6 +8,7 @@ using fitSharp.Fit.Engine;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using TestStatus=fitSharp.Fit.Model.TestStatus;
 
 namespace fit.Test.NUnit {
@@ -21,7 +22,7 @@ namespace fit.Test.NUnit {
             Parse cell = TestUtils.CreateCell("xyz");
             MakeStringFixture();
             TestUtils.DoInput(stringFixture, TestUtils.CreateCellRange("Field"), cell);
-            Assert.AreEqual("xyz", stringFixture.Field);
+            ClassicAssert.AreEqual("xyz", stringFixture.Field);
             TestUtils.VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
 
@@ -43,8 +44,8 @@ namespace fit.Test.NUnit {
             stringFixture.Field = "abc";
             TestUtils.DoCheck(stringFixture, TestUtils.CreateCellRange("Field"), cell);
             AssertCellFails(cell);
-            Assert.IsTrue(cell.Body.IndexOf("abc") > -1);
-            Assert.IsTrue(cell.Body.IndexOf("xyz") > -1);
+            ClassicAssert.IsTrue(cell.Body.IndexOf("abc") > -1);
+            ClassicAssert.IsTrue(cell.Body.IndexOf("xyz") > -1);
             TestUtils.VerifyCounts(stringFixture, 0, 1, 0, 0);
         }
 
@@ -55,8 +56,8 @@ namespace fit.Test.NUnit {
             stringFixture.Field = null;
             TestUtils.DoCheck(stringFixture, TestUtils.CreateCellRange("Field"), cell);
             AssertCellFails(cell);
-            Assert.IsTrue(cell.Body.IndexOf("null") > -1);
-            Assert.IsTrue(cell.Body.IndexOf("xyz") > -1);
+            ClassicAssert.IsTrue(cell.Body.IndexOf("null") > -1);
+            ClassicAssert.IsTrue(cell.Body.IndexOf("xyz") > -1);
             TestUtils.VerifyCounts(stringFixture, 0, 1, 0, 0);
         }
 
@@ -69,7 +70,7 @@ namespace fit.Test.NUnit {
             service = new Service.Service();
             var fixture = new FixtureWithExecutableMethod {Processor = service};
             fixture.Processor.Execute(fixture, new CellRange(cell, 1), new CellTree());
-            Assert.AreEqual(1, FixtureWithExecutableMethod.Calls);
+            ClassicAssert.AreEqual(1, FixtureWithExecutableMethod.Calls);
         }
 
         [Test]
@@ -77,10 +78,10 @@ namespace fit.Test.NUnit {
             Parse cell = TestUtils.CreateCell("xyz");
             MakeStringFixture();
             stringFixture.Field = "abc";
-            Assert.IsFalse(service.Compare(new TypedValue("abc"), cell));
-            Assert.AreNotEqual(TestStatus.Wrong, cell.GetAttribute(CellAttribute.Status));
-            Assert.IsFalse(cell.Body.IndexOf("abc") > -1);
-            Assert.IsTrue(cell.Body.IndexOf("xyz") > -1);
+            ClassicAssert.IsFalse(service.Compare(new TypedValue("abc"), cell));
+            ClassicAssert.AreNotEqual(TestStatus.Wrong, cell.GetAttribute(CellAttribute.Status));
+            ClassicAssert.IsFalse(cell.Body.IndexOf("abc") > -1);
+            ClassicAssert.IsTrue(cell.Body.IndexOf("xyz") > -1);
             TestUtils.VerifyCounts(stringFixture, 0, 0, 0, 0);
 			
         }
@@ -90,8 +91,8 @@ namespace fit.Test.NUnit {
             Parse cell = TestUtils.CreateCell("xyz");
             MakeStringFixture();
             stringFixture.Field = "xyz";
-            Assert.IsTrue(service.Compare(new TypedValue("xyz"), cell));
-            Assert.AreNotEqual(TestStatus.Right, cell.GetAttribute(CellAttribute.Status));
+            ClassicAssert.IsTrue(service.Compare(new TypedValue("xyz"), cell));
+            ClassicAssert.AreNotEqual(TestStatus.Right, cell.GetAttribute(CellAttribute.Status));
             TestUtils.VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
 

@@ -1,10 +1,11 @@
-// Copyright © 2009 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+// Copyright ï¿½ 2009 Syterra Software Inc. Includes work by Object Mentor, Inc., ï¿½ 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using fitSharp.Fit.Operators;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fit.Test.NUnit {
     [TestFixture]
@@ -12,7 +13,7 @@ namespace fit.Test.NUnit {
     {	
         [Test]
         public void MatchesNullString() {
-            Assert.IsTrue(IsMatch(new ParseNull(), "null"));
+            ClassicAssert.IsTrue(IsMatch(new ParseNull(), "null"));
         }
 
         [Test]
@@ -21,7 +22,7 @@ namespace fit.Test.NUnit {
             Parse cell = TestUtils.CreateCell("null");
             MakeStringFixture();
             TestUtils.DoInput(stringFixture, TestUtils.CreateCellRange("Field"), cell);
-            Assert.AreEqual(null, stringFixture.Field);
+            ClassicAssert.AreEqual(null, stringFixture.Field);
             TestUtils.VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
 
@@ -32,9 +33,9 @@ namespace fit.Test.NUnit {
             MakeStringFixture();
             stringFixture.Field = null;
             TestUtils.DoCheck(stringFixture, TestUtils.CreateCellRange("field"), cell);
-            Assert.AreEqual(null, stringFixture.Field);
+            ClassicAssert.AreEqual(null, stringFixture.Field);
             AssertCellPasses(cell);
-            Assert.IsTrue(cell.Body.IndexOf("null") > -1);
+            ClassicAssert.IsTrue(cell.Body.IndexOf("null") > -1);
             TestUtils.VerifyCounts(stringFixture, 1, 0, 0, 0);
         }
 
@@ -45,10 +46,10 @@ namespace fit.Test.NUnit {
             MakeStringFixture();
             stringFixture.Field = "some value";
             TestUtils.DoCheck(stringFixture, TestUtils.CreateCellRange("field"), cell);
-            Assert.AreEqual("some value", stringFixture.Field);
+            ClassicAssert.AreEqual("some value", stringFixture.Field);
             AssertCellFails(cell);
-            Assert.IsTrue(cell.Body.IndexOf("null") > -1);
-            Assert.IsTrue(cell.Body.IndexOf("some value") > -1);
+            ClassicAssert.IsTrue(cell.Body.IndexOf("null") > -1);
+            ClassicAssert.IsTrue(cell.Body.IndexOf("some value") > -1);
             TestUtils.VerifyCounts(stringFixture, 0, 1, 0, 0);
         }
     }

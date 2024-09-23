@@ -5,6 +5,7 @@
 
 using fitSharp.Parser;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Parser {
     [TestFixture]
@@ -15,8 +16,8 @@ namespace fitSharp.Test.NUnit.Parser {
         [TestCase("ABC123", 730, 122)]
         public void TranslatesAddress(string address, int expectedColumn, int expectedRow) {
             var cell = new ExcelCell(address, "");
-            Assert.AreEqual(expectedColumn, cell.Column);
-            Assert.AreEqual(expectedRow, cell.Row);
+            ClassicAssert.AreEqual(expectedColumn, cell.Column);
+            ClassicAssert.AreEqual(expectedRow, cell.Row);
         }
     }
 }

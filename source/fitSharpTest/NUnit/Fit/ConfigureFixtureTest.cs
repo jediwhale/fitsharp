@@ -9,6 +9,7 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using fitSharp.Samples.Fit;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Fit {
     [TestFixture] public class ConfigureFixtureTest {
@@ -24,12 +25,12 @@ namespace fitSharp.Test.NUnit.Fit {
             fixture.Interpret(processor, MakeTable("logging", "start"));
             var item = processor.Configuration.GetItem<Logging>();
             item.WriteItem("stuff");
-            Assert.AreEqual("<ul><li>stuff</li></ul>", item.Show);
+            ClassicAssert.AreEqual("<ul><li>stuff</li></ul>", item.Show);
         }
 
         [Test] public void InvokesMethodWithParameters() {
             fixture.Interpret(processor, new CellTree(new CellTree("configure", "symbols", "save value of System.String", "mysymbol", "", "myvalue")));
-            Assert.AreEqual("myvalue", processor.Memory.GetItem<Symbols>().GetValue("mysymbol"));
+            ClassicAssert.AreEqual("myvalue", processor.Memory.GetItem<Symbols>().GetValue("mysymbol"));
         }
 
         static CellTree MakeTable(string facility, string method) {
@@ -40,19 +41,19 @@ namespace fitSharp.Test.NUnit.Fit {
             processor.Memory.GetItem<Symbols>().Save("mysymbol", "myvalue");
             var table = new CellTree(new CellTree("configure", "symbols", "getvalue", "mysymbol"));
             fixture.Interpret(processor, table);
-            Assert.AreEqual("myvalue", table.ValueAt(0, 2).GetAttribute(CellAttribute.Folded));
+            ClassicAssert.AreEqual("myvalue", table.ValueAt(0, 2).GetAttribute(CellAttribute.Folded));
         }
 
         [Test] public void InvokesMethodOnProcessor() {
             var table = MakeTable("processor", "teststatus");
             fixture.Interpret(processor, table);
-            Assert.AreEqual("fitSharp.Fit.Model.TestStatus", table.ValueAt(0, 2).GetAttribute(CellAttribute.Folded));
+            ClassicAssert.AreEqual("fitSharp.Fit.Model.TestStatus", table.ValueAt(0, 2).GetAttribute(CellAttribute.Folded));
         }
 
         [Test] public void InvokesMethodInEachRow() {
             var table = new CellTree(new CellTree("configure", "processor"), new CellTree("teststatus"));
             fixture.Interpret(processor, table);
-            Assert.AreEqual("fitSharp.Fit.Model.TestStatus", table.ValueAt(1, 0).GetAttribute(CellAttribute.Folded));
+            ClassicAssert.AreEqual("fitSharp.Fit.Model.TestStatus", table.ValueAt(1, 0).GetAttribute(CellAttribute.Folded));
         }
     }
 }

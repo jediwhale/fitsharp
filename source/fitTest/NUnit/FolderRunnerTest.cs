@@ -8,6 +8,7 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Application;
 using fit.Runner;
 using fitSharp.IO;
+using NUnit.Framework.Legacy;
 
 namespace fit.Test.NUnit {
     [TestFixture] public class FolderRunnerTest {
@@ -24,9 +25,9 @@ namespace fit.Test.NUnit {
             var runner = new FolderRunner();
             runner.Run(new[] { "-d", "-i", "overridden_in", "-o", "overridden_out" }, memory, new NullReporter());
 
-            Assert.AreEqual(true, memory.GetItem<Settings>().DryRun);
-            Assert.AreEqual("overridden_in", memory.GetItem<Settings>().InputFolder);
-            Assert.AreEqual("overridden_out", memory.GetItem<Settings>().OutputFolder);
+            ClassicAssert.AreEqual(true, memory.GetItem<Settings>().DryRun);
+            ClassicAssert.AreEqual("overridden_in", memory.GetItem<Settings>().InputFolder);
+            ClassicAssert.AreEqual("overridden_out", memory.GetItem<Settings>().OutputFolder);
         }
 
         [Test] public void DryRunSuppressesSummaryReport() {
@@ -37,7 +38,7 @@ namespace fit.Test.NUnit {
             var runner = new FolderRunner();
             runner.Run(new string[] {}, memory, reporter);
 
-            Assert.AreEqual(string.Empty, reporter.Output);
+            ClassicAssert.AreEqual(string.Empty, reporter.Output);
         }
     }
 }

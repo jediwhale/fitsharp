@@ -6,6 +6,7 @@
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Fit
 {
@@ -14,14 +15,14 @@ namespace fitSharp.Test.NUnit.Fit
             var cell = new CellBase(string.Empty);
             cell.SetAttribute(CellAttribute.Body, string.Empty);
             cell.SetAttribute(CellAttribute.Folded, "more");
-            Assert.AreEqual(FormatFolded("more"), TreeCellWriter.Body(cell));
+            ClassicAssert.AreEqual(FormatFolded("more"), TreeCellWriter.Body(cell));
         }
 
         [Test] public void FoldedWithoutExtraTextFormatsBody() {
             var cell = new CellBase(string.Empty);
             cell.SetAttribute(CellAttribute.Body, "stuff");
             cell.SetAttribute(CellAttribute.Folded, string.Empty);
-            Assert.AreEqual(FormatFolded("stuff"), TreeCellWriter.Body(cell));
+            ClassicAssert.AreEqual(FormatFolded("stuff"), TreeCellWriter.Body(cell));
         }
 
         static string FormatFolded(string text) {

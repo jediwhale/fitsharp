@@ -9,6 +9,7 @@ using fit;
 using fit.Service;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using TestStatus=fitSharp.Fit.Model.TestStatus;
 
 namespace dbfitTest {
@@ -46,8 +47,8 @@ namespace dbfitTest {
                 );
             Parse parseTable = Parse.CopyFrom(testTable);
             fixture.DoTable(parseTable);
-            Assert.AreEqual(TestStatus.Right, parseTable.At(0, 2, 0).GetAttribute(CellAttribute.Status));
-            Assert.AreEqual(TestStatus.Right, parseTable.At(0, 2, 1).GetAttribute(CellAttribute.Status));
+            ClassicAssert.AreEqual(TestStatus.Right, parseTable.At(0, 2, 0).GetAttribute(CellAttribute.Status));
+            ClassicAssert.AreEqual(TestStatus.Right, parseTable.At(0, 2, 1).GetAttribute(CellAttribute.Status));
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Text;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Fit {
     [TestFixture]
@@ -10,7 +11,7 @@ namespace fitSharp.Test.NUnit.Fit {
 
         [Test]
         public void CopiesLeaf() {
-            Assert.AreEqual("leaf[]", Write(copy.Make(new CellTreeLeaf("leaf"))));
+            ClassicAssert.AreEqual("leaf[]", Write(copy.Make(new CellTreeLeaf("leaf"))));
         }
 
         [Test]
@@ -20,7 +21,7 @@ namespace fitSharp.Test.NUnit.Fit {
             source.AddBranchValue(new CellTreeLeaf("leafb"));
             var result = copy.Make(source);
             source.Branches[0].Add(new CellTreeLeaf("extra"));
-            Assert.AreEqual("root[leafa[];leafb[]]", Write(result));
+            ClassicAssert.AreEqual("root[leafa[];leafb[]]", Write(result));
         }
 
         [Test]
@@ -32,7 +33,7 @@ namespace fitSharp.Test.NUnit.Fit {
                 ? new CellTree("new", "ones")
                 : null);
             source.Branches[0].Add(new CellTreeLeaf("extra"));
-            Assert.AreEqual("root[null[new[];ones[]];leafb[]]", Write(result));
+            ClassicAssert.AreEqual("root[null[new[];ones[]];leafb[]]", Write(result));
         }
 
         [Test]
@@ -44,7 +45,7 @@ namespace fitSharp.Test.NUnit.Fit {
                 ? new CellTree("new", "leafa")
                 : null);
             source.Branches[0].Add(new CellTreeLeaf("extra"));
-            Assert.AreEqual("root[null[new[];leafa[]];leafb[]]", Write(result));
+            ClassicAssert.AreEqual("root[null[new[];leafa[]];leafb[]]", Write(result));
         }
 
         [Test]
@@ -53,7 +54,7 @@ namespace fitSharp.Test.NUnit.Fit {
             source.Value.SetAttribute(CellAttribute.Label, "mylabel");
             var result = copy.Make(source);
             source.Value.SetAttribute(CellAttribute.Label, "other");
-            Assert.AreEqual("leaf,Label:mylabel[]", Write(result));
+            ClassicAssert.AreEqual("leaf,Label:mylabel[]", Write(result));
         }
 
         [SetUp]

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
-
+using NUnit.Framework.Legacy;
 
 namespace dbfit.util
 {
@@ -15,22 +15,22 @@ namespace dbfit.util
         {
             DbConnectionProperties props=DbConnectionProperties.CreateFromString(
                 @"connection-string=test1234");
-            Assert.AreEqual("test1234", props.FullConnectionString);
-            Assert.IsNull(props.Username);
-            Assert.IsNull(props.Password);
-            Assert.IsNull(props.Service);
-            Assert.IsNull(props.DbName);
+            ClassicAssert.AreEqual("test1234", props.FullConnectionString);
+            ClassicAssert.IsNull(props.Username);
+            ClassicAssert.IsNull(props.Password);
+            ClassicAssert.IsNull(props.Service);
+            ClassicAssert.IsNull(props.DbName);
         }
         [Test]
         public void TestWithConnectionStringWithEquals()
         {
             DbConnectionProperties props = DbConnectionProperties.CreateFromString(
                 @"connection-string=test1234&Username=US&Password=PW");
-            Assert.AreEqual("test1234&Username=US&Password=PW", props.FullConnectionString);
-            Assert.IsNull(props.Username);
-            Assert.IsNull(props.Password);
-            Assert.IsNull(props.Service);
-            Assert.IsNull(props.DbName);
+            ClassicAssert.AreEqual("test1234&Username=US&Password=PW", props.FullConnectionString);
+            ClassicAssert.IsNull(props.Username);
+            ClassicAssert.IsNull(props.Password);
+            ClassicAssert.IsNull(props.Service);
+            ClassicAssert.IsNull(props.DbName);
         }
         [Test]
         public void TestWithSplitProperties()
@@ -40,11 +40,11 @@ namespace dbfit.util
                   username=testuser
                   password=testpwd
                   database=testdb");
-            Assert.IsNull(props.FullConnectionString);
-            Assert.AreEqual("testuser",props.Username);
-            Assert.AreEqual("testpwd",props.Password);
-            Assert.AreEqual("testsvc",props.Service);
-            Assert.AreEqual("testdb",props.DbName);
+            ClassicAssert.IsNull(props.FullConnectionString);
+            ClassicAssert.AreEqual("testuser",props.Username);
+            ClassicAssert.AreEqual("testpwd",props.Password);
+            ClassicAssert.AreEqual("testsvc",props.Service);
+            ClassicAssert.AreEqual("testdb",props.DbName);
         }
         [Test]
         public void TestCommentsAndEmptyLines()
@@ -57,11 +57,11 @@ namespace dbfit.util
                   #this is a comment
                   database=testdb
                 ");
-            Assert.IsNull(props.FullConnectionString);
-            Assert.AreEqual("testuser", props.Username);
-            Assert.AreEqual("testpwd", props.Password);
-            Assert.AreEqual("testsvc", props.Service);
-            Assert.AreEqual("testdb", props.DbName);
+            ClassicAssert.IsNull(props.FullConnectionString);
+            ClassicAssert.AreEqual("testuser", props.Username);
+            ClassicAssert.AreEqual("testpwd", props.Password);
+            ClassicAssert.AreEqual("testsvc", props.Service);
+            ClassicAssert.AreEqual("testdb", props.DbName);
         }
 
     }

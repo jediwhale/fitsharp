@@ -5,19 +5,20 @@
 
 using fitSharp.Machine.Model;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Machine {
     [TestFixture]
     public class StringTest {
 
         [Test]
-        public void FindsTextBeforeValue() { Assert.AreEqual("some", "somebeforestuff".Before("before")); }
+        public void FindsTextBeforeValue() { ClassicAssert.AreEqual("some", "somebeforestuff".Before("before")); }
 
         [Test]
-        public void FindsTextBeforeMultipleValues() { Assert.AreEqual("some", "somebeforestuff".Before(new [] {"befox", "before"})); }
+        public void FindsTextBeforeMultipleValues() { ClassicAssert.AreEqual("some", "somebeforestuff".Before(new [] {"befox", "before"})); }
 
         [Test]
-        public void FindsShortestTextBeforeMultipleValues() { Assert.AreEqual("some", "somebeforebefoxstuff".Before(new [] {"befox", "before"})); }
+        public void FindsShortestTextBeforeMultipleValues() { ClassicAssert.AreEqual("some", "somebeforebefoxstuff".Before(new [] {"befox", "before"})); }
         
     }
 }

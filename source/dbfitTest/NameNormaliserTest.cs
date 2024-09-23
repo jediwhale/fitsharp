@@ -4,6 +4,7 @@ using System.Text;
 
 using dbfit.util;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace dbfit {
 	[TestFixture]
@@ -11,12 +12,12 @@ namespace dbfit {
 
 		[Test]
 		public void CheckNormaliseName() {
-			Assert.AreEqual("dbtest", NameNormaliser.NormaliseName("dbtest?"));
-			Assert.AreEqual("dbtest", NameNormaliser.NormaliseName("db test"));
-			Assert.AreEqual("dbtest", NameNormaliser.NormaliseName("db test?"));
-			Assert.AreEqual("db.test", NameNormaliser.NormaliseName("db.test"));
-			Assert.AreEqual("db_test", NameNormaliser.NormaliseName("db_test"));
-			Assert.AreEqual("dbtest", NameNormaliser.NormaliseName("DbTeSt"));
+			ClassicAssert.AreEqual("dbtest", NameNormaliser.NormaliseName("dbtest?"));
+			ClassicAssert.AreEqual("dbtest", NameNormaliser.NormaliseName("db test"));
+			ClassicAssert.AreEqual("dbtest", NameNormaliser.NormaliseName("db test?"));
+			ClassicAssert.AreEqual("db.test", NameNormaliser.NormaliseName("db.test"));
+			ClassicAssert.AreEqual("db_test", NameNormaliser.NormaliseName("db_test"));
+			ClassicAssert.AreEqual("dbtest", NameNormaliser.NormaliseName("DbTeSt"));
 		}
 	}
 }

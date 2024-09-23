@@ -6,6 +6,7 @@
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Machine {
     [TestFixture]
@@ -14,41 +15,41 @@ namespace fitSharp.Test.NUnit.Machine {
         [Test] public void ParsesGenericTypeWithBlanks() {
             // old behaviour, preserve for compatibility
             var member = Parse("generic of some class");
-            Assert.AreEqual("genericofsomeclass", member.Name);
-            Assert.True(member.Matches(typeof(BuilderSample).GetMethod("Generic")));
+            ClassicAssert.AreEqual("genericofsomeclass", member.Name);
+            ClassicAssert.True(member.Matches(typeof(BuilderSample).GetMethod("Generic")));
         }
         
         [Test] public void ParsesGenericType() {
             var member = Parse("generic.of.some class");
             var methodInfo = typeof(BuilderSample).GetMethod("Generic");
-            Assert.True(member.Matches(methodInfo));
+            ClassicAssert.True(member.Matches(methodInfo));
             var genericMember = member.MakeMember(methodInfo, new BuilderSample());
-            Assert.AreEqual("SomeClass", genericMember.Invoke(new object [] {}).Value);
+            ClassicAssert.AreEqual("SomeClass", genericMember.Invoke(new object [] {}).Value);
         }
 
         [Test] public void ParsesMultipleGenericTypes() {
             var member = Parse("multi generic.of.some class.of.some other class");
             var methodInfo = typeof(BuilderSample).GetMethod("MultiGeneric");
-            Assert.True(member.Matches(methodInfo));
+            ClassicAssert.True(member.Matches(methodInfo));
             var genericMember = member.MakeMember(methodInfo, new BuilderSample());
-            Assert.AreEqual("SomeClassSomeOtherClass", genericMember.Invoke(new object [] {}).Value);
+            ClassicAssert.AreEqual("SomeClassSomeOtherClass", genericMember.Invoke(new object [] {}).Value);
         }
         
         [Test]
         public void ParsesExtensionMethod() {
             var member = Parse("extension.in.some extensions");
-            Assert.True(member.Matches(typeof(SomeExtensions).GetMethod("Extension")));
+            ClassicAssert.True(member.Matches(typeof(SomeExtensions).GetMethod("Extension")));
         }
 
         [Test]
         public void ParsesMethodWithEmbeddedOf() {
             var member = Parse("not of generic");
-            Assert.True(member.Matches(typeof(BuilderSample).GetMethod("NotOfGeneric")));
+            ClassicAssert.True(member.Matches(typeof(BuilderSample).GetMethod("NotOfGeneric")));
         }
 
         [Test]
         public void ParsesGenericExtensionMethod() {
-            Assert.True(Parse("generic.of.some class.in.some extensions")
+            ClassicAssert.True(Parse("generic.of.some class.in.some extensions")
                 .Matches(typeof(SomeExtensions).GetMethod("Generic")));
         }
 

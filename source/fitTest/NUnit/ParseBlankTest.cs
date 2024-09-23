@@ -1,4 +1,4 @@
-// Copyright © 2011 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+// Copyright ï¿½ 2011 Syterra Software Inc. Includes work by Object Mentor, Inc., ï¿½ 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -7,6 +7,7 @@ using fitSharp.Fit.Operators;
 using fitSharp.Machine.Model;
 using fitSharp.Samples;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fit.Test.NUnit {
     [TestFixture]
@@ -23,9 +24,9 @@ namespace fit.Test.NUnit {
         [Test]
         public void MatchesBlankString()
         {
-            Assert.IsTrue(IsMatch(new ParseBlank(), "blank"));
-            Assert.IsTrue(IsMatch(new ParseBlank(), "\r\n\t blank \r\n\t"));
-            Assert.IsFalse(IsMatch(new ParseBlank(), "is blank"));
+            ClassicAssert.IsTrue(IsMatch(new ParseBlank(), "blank"));
+            ClassicAssert.IsTrue(IsMatch(new ParseBlank(), "\r\n\t blank \r\n\t"));
+            ClassicAssert.IsFalse(IsMatch(new ParseBlank(), "is blank"));
         }
 
         [Test]
@@ -33,7 +34,7 @@ namespace fit.Test.NUnit {
         {
             MakeStringFixture();
             TestUtils.DoInput(stringFixture, TestUtils.CreateCellRange("Field"), cell);
-            Assert.AreEqual("", stringFixture.Field);
+            ClassicAssert.AreEqual("", stringFixture.Field);
             TestUtils.VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
 
@@ -42,7 +43,7 @@ namespace fit.Test.NUnit {
             MakeStringFixture();
             stringFixture.Field = "";
             TestUtils.DoCheck(stringFixture, TestUtils.CreateCellRange("Field"), cell);
-            Assert.AreEqual("", stringFixture.Field);
+            ClassicAssert.AreEqual("", stringFixture.Field);
             AssertCellPasses(cell);
             AssertValueInBody(cell, "blank");
             TestUtils.VerifyCounts(stringFixture, 1, 0, 0, 0);
@@ -52,8 +53,8 @@ namespace fit.Test.NUnit {
         public void TestDoEvaluateBlankRight() {
             MakeStringFixture();
             stringFixture.Field = "";
-            Assert.IsTrue(service.Compare(new TypedValue(string.Empty), cell));
-            Assert.AreEqual("", stringFixture.Field);
+            ClassicAssert.IsTrue(service.Compare(new TypedValue(string.Empty), cell));
+            ClassicAssert.AreEqual("", stringFixture.Field);
             AssertValueInBody(cell, "blank");
             TestUtils.VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
@@ -64,7 +65,7 @@ namespace fit.Test.NUnit {
             MakeStringFixture();
             stringFixture.Field = "some value";
             TestUtils.DoCheck(stringFixture, TestUtils.CreateCellRange("Field"), cell);
-            Assert.AreEqual("some value", stringFixture.Field);
+            ClassicAssert.AreEqual("some value", stringFixture.Field);
             AssertCellFails(cell);
             AssertValuesInBody(cell, new[] {"blank", "some value"});
             TestUtils.VerifyCounts(stringFixture, 0, 1, 0, 0);
@@ -76,7 +77,7 @@ namespace fit.Test.NUnit {
             MakeStringFixture();
             stringFixture.Field = null;
             TestUtils.DoCheck(stringFixture, TestUtils.CreateCellRange("Field"), cell);
-            Assert.AreEqual(null, stringFixture.Field);
+            ClassicAssert.AreEqual(null, stringFixture.Field);
             AssertCellFails(cell);
             AssertValuesInBody(cell, new[] {"blank", "null"});
             TestUtils.VerifyCounts(stringFixture, 0, 1, 0, 0);
@@ -88,7 +89,7 @@ namespace fit.Test.NUnit {
             MakePersonFixture();
             personFixture.Field = new Person("", "");
             TestUtils.DoCheck(personFixture, TestUtils.CreateCellRange("Field"), cell);
-            Assert.AreEqual("", personFixture.Field.ToString());
+            ClassicAssert.AreEqual("", personFixture.Field.ToString());
             AssertCellPasses(cell);
             AssertValuesInBody(cell, new[] {"blank"});
             TestUtils.VerifyCounts(personFixture, 1, 0, 0, 0);
@@ -99,7 +100,7 @@ namespace fit.Test.NUnit {
             MakePersonFixture();
             personFixture.Field = new Person("john", "doe");
             TestUtils.DoCheck(personFixture, TestUtils.CreateCellRange("Field"), cell);
-            Assert.AreEqual("john doe", personFixture.Field.ToString());
+            ClassicAssert.AreEqual("john doe", personFixture.Field.ToString());
             AssertCellFails(cell);
             AssertValuesInBody(cell, new[] {"blank", "john doe"});
             TestUtils.VerifyCounts(personFixture, 0, 1, 0, 0);

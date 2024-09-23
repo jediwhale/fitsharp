@@ -13,6 +13,7 @@ using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
 using fitSharp.Samples;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Fit {
     [TestFixture] public class SuiteRunnerTest {
@@ -37,7 +38,7 @@ namespace fitSharp.Test.NUnit.Fit {
             var report = System.IO.Path.Combine("out", "reportIndex.html");
             int tearDown = folders.GetPageContent(report).IndexOf("suiteteardown.html", StringComparison.Ordinal);
             int otherFile = folders.GetPageContent(report).IndexOf("zzzz.html", StringComparison.Ordinal);
-            Assert.IsTrue(otherFile < tearDown);
+            ClassicAssert.IsTrue(otherFile < tearDown);
         }
 
         [Test] public void SuiteSetupAndTearDownAreIncludedInDryRun() {
@@ -53,7 +54,7 @@ namespace fitSharp.Test.NUnit.Fit {
             string expected = System.IO.Path.Combine("in", "suitesetup.html") + Environment.NewLine +
                               System.IO.Path.Combine("in", "test.html") + Environment.NewLine +
                               System.IO.Path.Combine("in", "suiteteardown.html") + Environment.NewLine;
-            Assert.AreEqual(expected, reporter.Output);
+            ClassicAssert.AreEqual(expected, reporter.Output);
         }
 
         [Test] public void SetupAndTearDownAreNotIncludedInDryRun() {
@@ -68,7 +69,7 @@ namespace fitSharp.Test.NUnit.Fit {
 
             string expected = System.IO.Path.Combine("in", "test.html") + Environment.NewLine;
                               
-            Assert.AreEqual(expected, reporter.Output);
+            ClassicAssert.AreEqual(expected, reporter.Output);
         }
 
         [Test] public void DryRunListsAllApplicableTestFiles() {
@@ -82,7 +83,7 @@ namespace fitSharp.Test.NUnit.Fit {
 
             string expected = System.IO.Path.Combine("in", "test1.html") + Environment.NewLine +
                               System.IO.Path.Combine("in", "test2.html") + Environment.NewLine;
-            Assert.AreEqual(expected, reporter.Output);
+            ClassicAssert.AreEqual(expected, reporter.Output);
         }
 
         [Test] public void DryRunDoesNotProduceAnyTestResults() {
@@ -93,18 +94,18 @@ namespace fitSharp.Test.NUnit.Fit {
 
             RunSuite();
 
-            Assert.IsEmpty(folders.GetFiles("out"));
-            Assert.IsEmpty(folders.GetFolders("out"));
+            ClassicAssert.IsEmpty(folders.GetFiles("out"));
+            ClassicAssert.IsEmpty(folders.GetFolders("out"));
         }
 
         [Test]
         public void TestPagePathIsStoredInMemoryWhenPageExecutes() {
-            Assert.IsNull(memory.GetItem<Context>().TestPagePath);
+            ClassicAssert.IsNull(memory.GetItem<Context>().TestPagePath);
 
             AddTestFile("in", "page.html");
             RunSuite();
 
-            Assert.AreEqual(System.IO.Path.Combine("in", "page.html"), memory.GetItem<Context>().TestPagePath.ToString());
+            ClassicAssert.AreEqual(System.IO.Path.Combine("in", "page.html"), memory.GetItem<Context>().TestPagePath.ToString());
         }
 
         [Test]
@@ -115,10 +116,10 @@ namespace fitSharp.Test.NUnit.Fit {
 
             RunSuite();
 
-            Assert.IsTrue(folders.Exists(System.IO.Path.Combine("out", "test.html")), "test.html should exist in output directory");
+            ClassicAssert.IsTrue(folders.Exists(System.IO.Path.Combine("out", "test.html")), "test.html should exist in output directory");
 
-            Assert.IsFalse(folders.Exists(System.IO.Path.Combine("out", "setup.html")), "setup.html should not exist in output directory");
-            Assert.IsFalse(folders.Exists(System.IO.Path.Combine("out", "teardown.html")), "teardown.html should not exist in output directory");
+            ClassicAssert.IsFalse(folders.Exists(System.IO.Path.Combine("out", "setup.html")), "setup.html should not exist in output directory");
+            ClassicAssert.IsFalse(folders.Exists(System.IO.Path.Combine("out", "teardown.html")), "teardown.html should not exist in output directory");
         }
 
         [Test]
@@ -127,14 +128,14 @@ namespace fitSharp.Test.NUnit.Fit {
 
             RunSuite();
 
-            Assert.IsTrue(folders.Exists(System.IO.Path.Combine("out", "fit.css")), "fit.css should exist in output directory");
+            ClassicAssert.IsTrue(folders.Exists(System.IO.Path.Combine("out", "fit.css")), "fit.css should exist in output directory");
         }
 
         [Test]
         public void TestInSubFolderIsRun() {
             AddTestFile(System.IO.Path.Combine("in", "sub"), "test.html");
             RunSuite();
-            Assert.IsTrue(folders.Exists(System.IO.Path.Combine("out", "sub", "test.html")), "test.html should exist in output directory");
+            ClassicAssert.IsTrue(folders.Exists(System.IO.Path.Combine("out", "sub", "test.html")), "test.html should exist in output directory");
         }
 
         [Test]
@@ -142,8 +143,8 @@ namespace fitSharp.Test.NUnit.Fit {
             AddTestFile("in", "test1.html");
             AddTestFile("in", "test2.html");
             RunSuite("test2.html");
-            Assert.IsFalse(folders.Exists(System.IO.Path.Combine("out", "test1.html")), "test1.html should not exist in output directory");
-            Assert.IsTrue(folders.Exists(System.IO.Path.Combine("out", "test2.html")), "test2.html should exist in output directory");
+            ClassicAssert.IsFalse(folders.Exists(System.IO.Path.Combine("out", "test1.html")), "test1.html should not exist in output directory");
+            ClassicAssert.IsTrue(folders.Exists(System.IO.Path.Combine("out", "test2.html")), "test2.html should exist in output directory");
         }
 
         [Test]
@@ -152,9 +153,9 @@ namespace fitSharp.Test.NUnit.Fit {
             AddTestFile("in", "test2.html");
             AddTestFile(System.IO.Path.Combine("in", "some", "sub"), "test2.html");
             RunSuite(System.IO.Path.Combine("sub", "test2.html"));
-            Assert.IsFalse(folders.Exists(System.IO.Path.Combine("out", "test1.html")), "test1.html should not exist in out directory");
-            Assert.IsFalse(folders.Exists(System.IO.Path.Combine("out", "test2.html")), "test2.html should not exist in out directory");
-            Assert.IsTrue(folders.Exists(System.IO.Path.Combine("out", "some", "sub", "test2.html")), "test2.html should exist in out\\some\\sub directory");
+            ClassicAssert.IsFalse(folders.Exists(System.IO.Path.Combine("out", "test1.html")), "test1.html should not exist in out directory");
+            ClassicAssert.IsFalse(folders.Exists(System.IO.Path.Combine("out", "test2.html")), "test2.html should not exist in out directory");
+            ClassicAssert.IsTrue(folders.Exists(System.IO.Path.Combine("out", "some", "sub", "test2.html")), "test2.html should exist in out\\some\\sub directory");
         }
 
         private void RunSuite(string selectedFile = "") {

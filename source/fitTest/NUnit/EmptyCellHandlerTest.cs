@@ -1,10 +1,11 @@
-// Copyright © 2011 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+// Copyright ï¿½ 2011 Syterra Software Inc. Includes work by Object Mentor, Inc., ï¿½ 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using fitSharp.Fit.Operators;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fit.Test.NUnit {
     [TestFixture]
@@ -19,14 +20,14 @@ namespace fit.Test.NUnit {
 
         [Test]
         public void TestMatch() {
-            Assert.IsTrue(IsMatch(new CheckEmpty(), ""));
+            ClassicAssert.IsTrue(IsMatch(new CheckEmpty(), ""));
         }
 
         [Test]
         public void TestInputWhereNullValueExists() {
             MakeStringFixture();
             TestUtils.DoInput(stringFixture, TestUtils.CreateCellRange("Field"), cell);
-            Assert.AreEqual(null, stringFixture.Field);
+            ClassicAssert.AreEqual(null, stringFixture.Field);
             AssertValuesInBody(cell, new [] {"fit_grey", "null"});
             TestUtils.VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
@@ -36,7 +37,7 @@ namespace fit.Test.NUnit {
             MakeStringFixture();
             stringFixture.Field = "";
             TestUtils.DoInput(stringFixture, TestUtils.CreateCellRange("Field"), cell);
-            Assert.AreEqual("", stringFixture.Field);
+            ClassicAssert.AreEqual("", stringFixture.Field);
             AssertValuesInBody(cell, new [] {"fit_grey", "blank"});
             TestUtils.VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
@@ -46,7 +47,7 @@ namespace fit.Test.NUnit {
             MakeIntFixture();
             intFixture.Field = 37;
             TestUtils.DoInput(intFixture, TestUtils.CreateCellRange("Field"), cell);
-            Assert.AreEqual(37, intFixture.Field);
+            ClassicAssert.AreEqual(37, intFixture.Field);
             AssertValuesInBody(cell, new [] {"fit_grey", "37"});
             TestUtils.VerifyCounts(intFixture, 0, 0, 0, 0);
         }
@@ -55,7 +56,7 @@ namespace fit.Test.NUnit {
         public void TestInputNullValueWithMethod() {
             MakeStringFixture();
             TestUtils.DoInput(stringFixture, TestUtils.CreateCellRange("Set"), cell);
-            Assert.AreEqual(null, stringFixture.Field);
+            ClassicAssert.AreEqual(null, stringFixture.Field);
             TestUtils.VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
 

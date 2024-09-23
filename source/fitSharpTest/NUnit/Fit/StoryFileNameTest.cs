@@ -5,6 +5,7 @@
 
 using fitSharp.Fit.Runner;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Fit {
     [TestFixture]
@@ -15,7 +16,7 @@ namespace fitSharp.Test.NUnit.Fit {
         [TestCase("abc.xls", false)]
         [TestCase("abc", false)]
         public void ChecksExcelSpreadsheetExtension(string fileName, bool expected) {
-            Assert.AreEqual(expected, new StoryFileName(fileName).IsExcelSpreadsheet);
+            ClassicAssert.AreEqual(expected, new StoryFileName(fileName).IsExcelSpreadsheet);
         }
     }
 }

@@ -14,6 +14,7 @@ using fitSharp.Slim.Operators;
 using fitSharp.Slim.Service;
 using fitSharp.Test.Double.Slim;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Slim {
     [TestFixture] public class ComposeOperatorsTest {
@@ -51,30 +52,30 @@ namespace fitSharp.Test.NUnit.Slim {
         [Test] [SetCulture("en-US")] public void ListIsComposedAsTree() {
             processor.AddOperator(new ComposeDefault());
             var result = Compose(new ComposeList(), new List<object> {"a", 1.23}, typeof (List<object>));
-            Assert.IsNotNull(result);
-            Assert.AreEqual(2, result.Branches.Count);
-            Assert.AreEqual("a", result.ValueAt(0)); 
-            Assert.AreEqual("1.23", result.ValueAt(1)); 
+            ClassicAssert.IsNotNull(result);
+            ClassicAssert.AreEqual(2, result.Branches.Count);
+            ClassicAssert.AreEqual("a", result.ValueAt(0)); 
+            ClassicAssert.AreEqual("1.23", result.ValueAt(1)); 
         }
 
         [Test] [SetCulture("en-US")] public void ArrayIsComposedAsTree() {
             processor.AddOperator(new ComposeDefault());
             var result = Compose(new ComposeList(), new object[] {"a", 1.23}, typeof (List<object>));
-            Assert.IsNotNull(result);
-            Assert.AreEqual(2, result.Branches.Count);
-            Assert.AreEqual("a", result.ValueAt(0)); 
-            Assert.AreEqual("1.23", result.ValueAt(1)); 
+            ClassicAssert.IsNotNull(result);
+            ClassicAssert.AreEqual(2, result.Branches.Count);
+            ClassicAssert.AreEqual("a", result.ValueAt(0)); 
+            ClassicAssert.AreEqual("1.23", result.ValueAt(1)); 
         }
 
         [Test] public void NestedListIsComposedAsTree() {
             processor.AddOperator(new ComposeDefault());
             processor.AddOperator(new ComposeList());
             var result = Compose(new ComposeList(), new List<object> {"a", new List<object> {"b", "c"}}, typeof (List<object>));
-            Assert.IsNotNull(result);
-            Assert.AreEqual(2, result.Branches.Count);
-            Assert.AreEqual("a", result.ValueAt(0));
-            Assert.AreEqual("b", result.ValueAt(1, 0)); 
-            Assert.AreEqual("c", result.ValueAt(1, 1)); 
+            ClassicAssert.IsNotNull(result);
+            ClassicAssert.AreEqual(2, result.Branches.Count);
+            ClassicAssert.AreEqual("a", result.ValueAt(0));
+            ClassicAssert.AreEqual("b", result.ValueAt(1, 0)); 
+            ClassicAssert.AreEqual("c", result.ValueAt(1, 1)); 
         }
 
         [Test] public void ExceptionIsComposed() {
@@ -113,7 +114,7 @@ namespace fitSharp.Test.NUnit.Slim {
         Tree<string> Compose(ComposeOperator<string> composeOperator, object instance, Type type) {
             var compose = (SlimOperator)composeOperator;
             compose.Processor = processor;
-            Assert.IsTrue(composeOperator.CanCompose(new TypedValue(instance, type)));
+            ClassicAssert.IsTrue(composeOperator.CanCompose(new TypedValue(instance, type)));
             return composeOperator.Compose(new TypedValue(instance, type));
         }
 
@@ -124,9 +125,9 @@ namespace fitSharp.Test.NUnit.Slim {
         void CheckCompose(ComposeOperator<string> composeOperator, object instance, Type type, object expected) {
             var compose = (SlimOperator)composeOperator;
             compose.Processor = processor;
-            Assert.IsTrue(composeOperator.CanCompose(new TypedValue(instance, type)));
+            ClassicAssert.IsTrue(composeOperator.CanCompose(new TypedValue(instance, type)));
             Tree<string> result = composeOperator.Compose(new TypedValue(instance, type));
-            Assert.AreEqual(expected, result.Value);
+            ClassicAssert.AreEqual(expected, result.Value);
         }
 
         class MyStopTestException: Exception {}

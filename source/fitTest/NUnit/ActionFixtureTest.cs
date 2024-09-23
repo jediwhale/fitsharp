@@ -1,4 +1,4 @@
-// Copyright © 2010 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+// Copyright ï¿½ 2010 Syterra Software Inc. Includes work by Object Mentor, Inc., ï¿½ 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -10,6 +10,7 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using Moq;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using TestStatus=fitSharp.Fit.Model.TestStatus;
 
 namespace fit.Test.NUnit {
@@ -51,8 +52,8 @@ namespace fit.Test.NUnit {
             table = BuildTable("ActionFixture");
             var fixture = new ActionFixture { Processor = new Service.Service(memory) };
             fixture.DoTable(table);
-            Assert.AreEqual(0, fixture.TestStatus.Counts.GetCount(TestStatus.Exception), table.ToString());
-            Assert.IsNotNull(fixture.GetTargetObject());
+            ClassicAssert.AreEqual(0, fixture.TestStatus.Counts.GetCount(TestStatus.Exception), table.ToString());
+            ClassicAssert.IsNotNull(fixture.GetTargetObject());
         }
 
         [Test]
@@ -61,11 +62,11 @@ namespace fit.Test.NUnit {
             table = BuildTable("ActionFixture");
             var fixture = new ActionFixture{ Processor = new Service.Service(memory) };
             fixture.DoTable(table);
-            Assert.AreEqual(0, fixture.TestStatus.Counts.GetCount(TestStatus.Exception), table.ToString());
+            ClassicAssert.AreEqual(0, fixture.TestStatus.Counts.GetCount(TestStatus.Exception), table.ToString());
             var countFixture = (CountFixture)fixture.GetTargetObject();
             int actualCount = countFixture.Counter;
-            Assert.AreEqual(6, actualCount);
-            Assert.AreEqual(4, fixture.TestStatus.Counts.GetCount(TestStatus.Right));
+            ClassicAssert.AreEqual(6, actualCount);
+            ClassicAssert.AreEqual(4, fixture.TestStatus.Counts.GetCount(TestStatus.Right));
         }
 
         [Test]
@@ -74,11 +75,11 @@ namespace fit.Test.NUnit {
             table = BuildTable("TimedActionFixture");
             var fixture = new ActionFixture{ Processor = new Service.Service(memory) };
             fixture.DoTable(table);
-            Assert.AreEqual(0, fixture.TestStatus.Counts.GetCount(TestStatus.Exception), table.ToString());
+            ClassicAssert.AreEqual(0, fixture.TestStatus.Counts.GetCount(TestStatus.Exception), table.ToString());
             var countFixture = (CountFixture)fixture.GetTargetObject();
             int actualCount = countFixture.Counter;
-            Assert.AreEqual(6, actualCount);
-            Assert.AreEqual(4, countFixture.TestStatus.Counts.GetCount(TestStatus.Right));
+            ClassicAssert.AreEqual(6, actualCount);
+            ClassicAssert.AreEqual(4, countFixture.TestStatus.Counts.GetCount(TestStatus.Right));
         }
 
         [Test] public void PressInvokesMethodOnActor() {

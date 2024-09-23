@@ -1,4 +1,4 @@
-// Copyright © 2011 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+// Copyright ï¿½ 2011 Syterra Software Inc. Includes work by Object Mentor, Inc., ï¿½ 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -9,18 +9,19 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using fitSharp.Samples;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fit.Test.NUnit {
     [TestFixture]
     public class SymbolHandlerTest: CellOperatorTest
     {
         [Test] public void TestRegisterAndGet() {
-            Assert.IsFalse(IsMatch(new CheckSymbolSave(), "x<<yz"));
-            Assert.IsTrue(IsMatch(new CheckSymbolSave(), ">>xyz"));
-            Assert.IsFalse(IsMatch(new CheckSymbolSave(), "x>>yz"));
+            ClassicAssert.IsFalse(IsMatch(new CheckSymbolSave(), "x<<yz"));
+            ClassicAssert.IsTrue(IsMatch(new CheckSymbolSave(), ">>xyz"));
+            ClassicAssert.IsFalse(IsMatch(new CheckSymbolSave(), "x>>yz"));
 
             // Make sure we recognize symbols even in formatted content
-            Assert.IsTrue(IsMatch(new CheckSymbolSave(), "\n    >>xyz\n"));
+            ClassicAssert.IsTrue(IsMatch(new CheckSymbolSave(), "\n    >>xyz\n"));
         }
 
         [Test] public void TestWhitespaceEnclosedSave() {
@@ -29,7 +30,7 @@ namespace fit.Test.NUnit {
           stringFixture.Field = "abc";
           TestUtils.DoCheck(stringFixture, TestUtils.CreateCellRange("Field"), cell);
 
-          Assert.AreEqual("abc", LoadSymbol("xyz"));
+          ClassicAssert.AreEqual("abc", LoadSymbol("xyz"));
         }
 
         [Test]
@@ -38,7 +39,7 @@ namespace fit.Test.NUnit {
             MakeStringFixture();
             stringFixture.Field = "abc";
             TestUtils.DoCheck(stringFixture, TestUtils.CreateCellRange("Field"), cell);
-            Assert.AreEqual("abc", LoadSymbol("xyz"));
+            ClassicAssert.AreEqual("abc", LoadSymbol("xyz"));
             TestUtils.VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
 
@@ -49,7 +50,7 @@ namespace fit.Test.NUnit {
             MakeStringFixture();
             stringFixture.Field = "abc";
             TestUtils.DoCheck(stringFixture, TestUtils.CreateCellRange("Field"), cell);
-            Assert.AreEqual(">>xyz<span class=\"fit_grey\"> abc</span>", cell.Body);
+            ClassicAssert.AreEqual(">>xyz<span class=\"fit_grey\"> abc</span>", cell.Body);
         }
 
         [Test]
@@ -60,7 +61,7 @@ namespace fit.Test.NUnit {
             StoreSymbol("def", "ghi");
             stringFixture.Field = "ghi";
             TestUtils.DoCheck(stringFixture, TestUtils.CreateCellRange("Field"), cell);
-            Assert.AreEqual("<<def<span class=\"fit_grey\"> ghi</span>", cell.Body);
+            ClassicAssert.AreEqual("<<def<span class=\"fit_grey\"> ghi</span>", cell.Body);
             TestUtils.VerifyCounts(stringFixture, 1, 0, 0, 0);
         }
 
@@ -72,7 +73,7 @@ namespace fit.Test.NUnit {
             StoreSymbol("def", "ghi");
             stringFixture.Field = "xyz";
             TestUtils.DoCheck(stringFixture, TestUtils.CreateCellRange("Field"), cell);
-            Assert.AreEqual("<<def<span class=\"fit_grey\"> ghi</span> <span class=\"fit_label\">expected</span><hr />xyz <span class=\"fit_label\">actual</span><hr />At 0 expected g was x", cell.Body);
+            ClassicAssert.AreEqual("<<def<span class=\"fit_grey\"> ghi</span> <span class=\"fit_label\">expected</span><hr />xyz <span class=\"fit_label\">actual</span><hr />At 0 expected g was x", cell.Body);
             TestUtils.VerifyCounts(stringFixture, 0, 1, 0, 0);
         }
 
@@ -84,7 +85,7 @@ namespace fit.Test.NUnit {
             StoreSymbol("def", "ghi");
             stringFixture.Field = "xyz";
             TestUtils.DoInput(stringFixture, TestUtils.CreateCellRange("Field"), cell);
-            Assert.AreEqual("<<def<span class=\"fit_grey\"> ghi</span>", cell.Body);
+            ClassicAssert.AreEqual("<<def<span class=\"fit_grey\"> ghi</span>", cell.Body);
             TestUtils.VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
 
@@ -96,7 +97,7 @@ namespace fit.Test.NUnit {
             StoreSymbol("def", "ghi");
             stringFixture.Field = "xyz";
             service.Compare(new TypedValue("xyz"), cell);
-            Assert.AreEqual("<<def<span class=\"fit_grey\"> ghi</span>", cell.Body);
+            ClassicAssert.AreEqual("<<def<span class=\"fit_grey\"> ghi</span>", cell.Body);
             TestUtils.VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
 
@@ -106,7 +107,7 @@ namespace fit.Test.NUnit {
             MakeStringFixture();
             StoreSymbol("def", "ghi");
             stringFixture.Field = "ghi";
-            Assert.IsTrue(service.Compare(new TypedValue("ghi"), cell));
+            ClassicAssert.IsTrue(service.Compare(new TypedValue("ghi"), cell));
             TestUtils.VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
 
@@ -116,7 +117,7 @@ namespace fit.Test.NUnit {
             MakeStringFixture();
             StoreSymbol("def", "ghi");
             stringFixture.Field = "not ghi";
-            Assert.IsFalse(service.Compare(new TypedValue("not ghi"), cell));
+            ClassicAssert.IsFalse(service.Compare(new TypedValue("not ghi"), cell));
             TestUtils.VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
 
@@ -126,7 +127,7 @@ namespace fit.Test.NUnit {
             MakeStringFixture();
             StoreSymbol("def", "ghi");
             stringFixture.Field = null;
-            Assert.IsFalse(service.Compare(new TypedValue(null, typeof(string)), cell));
+            ClassicAssert.IsFalse(service.Compare(new TypedValue(null, typeof(string)), cell));
             TestUtils.VerifyCounts(stringFixture, 0, 0, 0, 0);
         }
 
@@ -180,9 +181,9 @@ namespace fit.Test.NUnit {
         [Test]
         public void SymbolNamesWithWhitespace() {
             StoreSymbol("\r\n\tfoo\r\n", "bar");
-            Assert.AreEqual("bar", LoadSymbol("foo"));
-            Assert.AreEqual("bar", LoadSymbol("\r\n\tfoo\r\n"));
-            Assert.AreEqual("bar", LoadSymbol("foo\r\n"));
+            ClassicAssert.AreEqual("bar", LoadSymbol("foo"));
+            ClassicAssert.AreEqual("bar", LoadSymbol("\r\n\tfoo\r\n"));
+            ClassicAssert.AreEqual("bar", LoadSymbol("foo\r\n"));
         }
 
         private object LoadSymbol(string symbolName) {

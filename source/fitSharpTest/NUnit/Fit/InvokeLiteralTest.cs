@@ -7,6 +7,7 @@ using NUnit.Framework;
 using fitSharp.Fit.Operators;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Fit {
     [TestFixture]
@@ -79,14 +80,14 @@ namespace fitSharp.Test.NUnit.Fit {
 
         static void AssertCanInvoke(bool expected, Tree<Cell> parameters) {
             var literal = new InvokeLiteral {Processor = Builder.CellProcessor()};
-            Assert.AreEqual(expected, literal.CanInvoke(TypedValue.Void, new MemberName("string:"), parameters));
+            ClassicAssert.AreEqual(expected, literal.CanInvoke(TypedValue.Void, new MemberName("string:"), parameters));
         }
 
         static void AssertParses<T>(T expected, string keyword, string parameter) {
             var literal = new InvokeLiteral {Processor = Builder.CellProcessor()};
             var result = literal.Invoke(TypedValue.Void, new MemberName(keyword), new CellTree(parameter));
-            Assert.AreEqual(typeof(T), result.Type);
-            Assert.AreEqual(expected, result.GetValue<T>());
+            ClassicAssert.AreEqual(typeof(T), result.Type);
+            ClassicAssert.AreEqual(expected, result.GetValue<T>());
         }
     }
 }

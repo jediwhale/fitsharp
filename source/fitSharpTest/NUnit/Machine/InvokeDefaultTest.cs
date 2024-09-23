@@ -9,6 +9,7 @@ using fitSharp.Machine.Model;
 using fitSharp.Samples.Fit;
 using fitSharp.Test.Double;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Machine {
     [TestFixture] public class InvokeDefaultTest {
@@ -41,14 +42,14 @@ namespace fitSharp.Test.NUnit.Machine {
         [Test]
         public void MethodIsInvokedWithParameterName() {
           var result = processor.Invoke(new TypedValue(new SampleClass()), new MemberName("methodwithparms").WithNamedParameters(), new CellTree("input", "stuff"));
-          Assert.AreEqual(typeof (string), result.Type);
-          Assert.AreEqual("samplestuff", result.Value);
+          ClassicAssert.AreEqual(typeof (string), result.Type);
+          ClassicAssert.AreEqual("samplestuff", result.Value);
         }
 
         void CheckInvokeMethod(object instance, string methodName, string input, string resultValue) {
             var result = processor.Invoke(new TypedValue(instance), new MemberName(methodName), new CellTree(input));
-            Assert.AreEqual(typeof (string), result.Type);
-            Assert.AreEqual(resultValue, result.Value);
+            ClassicAssert.AreEqual(typeof (string), result.Type);
+            ClassicAssert.AreEqual(resultValue, result.Value);
         }
 
         class SampleDomainAdapter: DomainAdapter {

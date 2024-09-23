@@ -1,4 +1,4 @@
-// Copyright © 2010 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+// Copyright ï¿½ 2010 Syterra Software Inc. Includes work by Object Mentor, Inc., ï¿½ 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -7,6 +7,7 @@ using fitnesse.fixtures;
 using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using TestStatus=fitSharp.Fit.Model.TestStatus;
 
 namespace fit.Test.NUnit
@@ -42,60 +43,60 @@ namespace fit.Test.NUnit
 		[Test]
 		public void TestNumRows()
 		{
-			Assert.AreEqual(1, ExampleTableFixture.numRows);
+			ClassicAssert.AreEqual(1, ExampleTableFixture.numRows);
 		}
 
 		[Test]
 		public void TestDoStaticTable()
 		{
-			Assert.AreEqual(1, ExampleTableFixture.timesDoStaticTableCalled);
+			ClassicAssert.AreEqual(1, ExampleTableFixture.timesDoStaticTableCalled);
 		}
 
 		[Test]
 		public void TestGetCell()
 		{
-			Assert.AreEqual("0,0", ExampleTableFixture.ZeroZero);
+			ClassicAssert.AreEqual("0,0", ExampleTableFixture.ZeroZero);
 		}
 
 		[Test]
 		public void TestGetText()
 		{
-			Assert.AreEqual("0,1", ExampleTableFixture.ZeroOne);
+			ClassicAssert.AreEqual("0,1", ExampleTableFixture.ZeroOne);
 		}
 
 		[Test]
 		public void TestGetInt()
 		{
-			Assert.AreEqual(37, ExampleTableFixture.resultOfGetInt);
+			ClassicAssert.AreEqual(37, ExampleTableFixture.resultOfGetInt);
 		}
 
 		[Test]
 		public void TestRight()
 		{
-			Assert.AreEqual(1, resultCounts.GetCount(TestStatus.Right));
-            Assert.AreEqual(TestStatus.Right, table.At(0,1,0).GetAttribute(CellAttribute.Status));
+			ClassicAssert.AreEqual(1, resultCounts.GetCount(TestStatus.Right));
+            ClassicAssert.AreEqual(TestStatus.Right, table.At(0,1,0).GetAttribute(CellAttribute.Status));
 		}
 
 		[Test]
 		public void TestWrong()
 		{
-			Assert.AreEqual(2, resultCounts.GetCount(TestStatus.Wrong));
-            Assert.AreEqual(TestStatus.Wrong, table.At(0,1,1).GetAttribute(CellAttribute.Status));
-            Assert.AreEqual(TestStatus.Wrong, table.At(0,1,2).GetAttribute(CellAttribute.Status));
-			Assert.IsTrue(table.At(0,1,2).Body.IndexOf("actual") > 0);
+			ClassicAssert.AreEqual(2, resultCounts.GetCount(TestStatus.Wrong));
+            ClassicAssert.AreEqual(TestStatus.Wrong, table.At(0,1,1).GetAttribute(CellAttribute.Status));
+            ClassicAssert.AreEqual(TestStatus.Wrong, table.At(0,1,2).GetAttribute(CellAttribute.Status));
+			ClassicAssert.IsTrue(table.At(0,1,2).Body.IndexOf("actual") > 0);
 		}
 
 		[Test]
 		public void TestIgnore()
 		{
-			Assert.AreEqual(1, resultCounts.GetCount(TestStatus.Ignore));
-            Assert.AreEqual(TestStatus.Ignore, table.At(0,1,3).GetAttribute(CellAttribute.Status));
+			ClassicAssert.AreEqual(1, resultCounts.GetCount(TestStatus.Ignore));
+            ClassicAssert.AreEqual(TestStatus.Ignore, table.At(0,1,3).GetAttribute(CellAttribute.Status));
 		}
 
 		[Test]
 		public void TestBlank()
 		{
-			Assert.IsTrue(ExampleTableFixture.blankCell);
+			ClassicAssert.IsTrue(ExampleTableFixture.blankCell);
 		}
 	}
 }

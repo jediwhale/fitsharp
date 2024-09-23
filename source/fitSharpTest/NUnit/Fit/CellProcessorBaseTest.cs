@@ -10,6 +10,7 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using fitSharp.Samples.Fit;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Fit {
     [TestFixture] public class CellProcessorBaseTest {
@@ -18,24 +19,24 @@ namespace fitSharp.Test.NUnit.Fit {
             var processor = Builder.CellProcessor();
             processor.Get<Symbols>().Save("symbol", "value");
             TypedValue result = processor.Parse(typeof (string), TypedValue.Void, cell);
-            Assert.AreEqual("value", result.GetValue<string>());
-            Assert.AreEqual(" value", cell.Value.GetAttribute(CellAttribute.InformationSuffix));
+            ClassicAssert.AreEqual("value", result.GetValue<string>());
+            ClassicAssert.AreEqual(" value", cell.Value.GetAttribute(CellAttribute.InformationSuffix));
             processor.Parse(typeof (string), TypedValue.Void, cell);
-            Assert.AreEqual(" value", cell.Value.GetAttribute(CellAttribute.InformationSuffix));
-            Assert.AreEqual("value", result.GetValue<string>());
+            ClassicAssert.AreEqual(" value", cell.Value.GetAttribute(CellAttribute.InformationSuffix));
+            ClassicAssert.AreEqual("value", result.GetValue<string>());
         }
 
         [Test] public void WrapsValue() {
             var processor = Builder.CellProcessor();
             var result = processor.Operate<WrapOperator>(new TypedValue("hi"));
-            Assert.AreEqual("hi", result.ValueString);
+            ClassicAssert.AreEqual("hi", result.ValueString);
         }
 
         [Test] public void UsesCreateOperator() {
             var processor = Builder.CellProcessor();
             processor.AddOperator(new TestCreateOperator());
             var result = processor.Create("testname");
-            Assert.AreEqual("mytestname", result.GetValueAs<string>());
+            ClassicAssert.AreEqual("mytestname", result.GetValueAs<string>());
         }
 
         class TestCreateOperator: CellOperator, CreateOperator<Cell> {

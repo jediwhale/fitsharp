@@ -10,6 +10,7 @@ using fitSharp.Machine.Model;
 using fitSharp.Samples.Fit;
 using fitSharp.Test.Double;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Machine {
     [TestFixture] public class MemberQueryTest {
@@ -21,9 +22,9 @@ namespace fitSharp.Test.NUnit.Machine {
 
         [Test] public void VoidMethodIsInvoked() {
             var result = Invoke(GetMethod("countmethod", 0));
-            Assert.AreEqual(null, result.Value);
-            Assert.AreEqual(typeof(void), result.Type);
-            Assert.AreEqual(1, instance.Count);
+            ClassicAssert.AreEqual(null, result.Value);
+            ClassicAssert.AreEqual(typeof(void), result.Type);
+            ClassicAssert.AreEqual(1, instance.Count);
         }
 
         Maybe<RuntimeMember> GetMethod(string memberName, int count) {
@@ -36,15 +37,15 @@ namespace fitSharp.Test.NUnit.Machine {
         }
         
         TypedValue Invoke(Maybe<RuntimeMember> method, object[] parameters) {
-            Assert.True(method.IsPresent);
+            ClassicAssert.True(method.IsPresent);
             return method.Select(m => m.Invoke(parameters)).OrElse(TypedValue.MakeInvalid(new NullReferenceException("method not present")));
         }
 
         [Test] public void MethodIsInvokedViaProcessor() {
             var result = Invoke(GetMethodFromProcessor(instance, "countmethod", 0));
-            Assert.AreEqual(null, result.Value);
-            Assert.AreEqual(typeof(void), result.Type);
-            Assert.AreEqual(1, instance.Count);
+            ClassicAssert.AreEqual(null, result.Value);
+            ClassicAssert.AreEqual(typeof(void), result.Type);
+            ClassicAssert.AreEqual(1, instance.Count);
         }
 
         static Maybe<RuntimeMember> GetMethodFromProcessor(object targetInstance, string memberName, int parameterCount) {
@@ -55,18 +56,18 @@ namespace fitSharp.Test.NUnit.Machine {
 
         [Test] public void MethodWithReturnIsInvoked() {
             var result = Invoke(GetMethod("methodnoparms", 0));
-            Assert.AreEqual("samplereturn", result.Value.ToString());
-            Assert.AreEqual(typeof(string), result.Type);
+            ClassicAssert.AreEqual("samplereturn", result.Value.ToString());
+            ClassicAssert.AreEqual(typeof(string), result.Type);
         }
 
         [Test] public void MethodWithUnderscoresIsInvoked() {
             var result = Invoke(GetMethod("methodwithunderscores", 0));
-            Assert.AreEqual("samplereturn", result.Value.ToString());
+            ClassicAssert.AreEqual("samplereturn", result.Value.ToString());
         }
 
         [Test] public void MethodWithParmsIsInvoked() {
             var result = Invoke(GetMethod("methodwithparms", 1), new object[] {"input"});
-            Assert.AreEqual("sampleinput", result.Value.ToString());
+            ClassicAssert.AreEqual("sampleinput", result.Value.ToString());
         }
 
         [Test] public void GenericMethodWithParmsIsInvoked() {
@@ -74,63 +75,63 @@ namespace fitSharp.Test.NUnit.Machine {
             var method = MemberQuery.FindInstance(MemberQuery.FindMember, TypedValue.Of(instance),
                     new MemberSpecification(member, 1));
             var result = Invoke(method, new object[] {123});
-            Assert.AreEqual("sample123", result.Value.ToString());
+            ClassicAssert.AreEqual("sample123", result.Value.ToString());
         }
 
         [Test] public void StaticMethodWithParmsIsInvoked() {
             foreach (var method in new RuntimeType(instance.GetType()).FindStatic(MemberName.ParseMethod, new [] {typeof(string)}).Value) {
                 var result = method.Invoke(new object[] {"input"});
-                Assert.AreEqual(typeof (SampleClass), result.Type);
+                ClassicAssert.AreEqual(typeof (SampleClass), result.Type);
                 return;
             }
-            Assert.Fail("no method");
+            ClassicAssert.Fail("no method");
         }
 
         [Test] public void ConstructorIsInvoked() {
             var method = new RuntimeType(instance.GetType()).GetConstructor(0);
-            Assert.IsNotNull(method);
+            ClassicAssert.IsNotNull(method);
             var result = method.Invoke(new object[] {});
-            Assert.AreEqual(typeof(SampleClass), result.Type);
+            ClassicAssert.AreEqual(typeof(SampleClass), result.Type);
         }
 
         [Test] public void PropertySetAndGetIsInvoked() {
             var result = Invoke(GetMethod("property", 1), new object[] {"stuff"});
-            Assert.AreEqual(null, result.Value);
-            Assert.AreEqual(typeof(void), result.Type);
+            ClassicAssert.AreEqual(null, result.Value);
+            ClassicAssert.AreEqual(typeof(void), result.Type);
 
             result = Invoke(GetMethod("property", 0));
-            Assert.AreEqual("stuff", result.Value.ToString());
-            Assert.AreEqual(typeof(string), result.Type);
+            ClassicAssert.AreEqual("stuff", result.Value.ToString());
+            ClassicAssert.AreEqual(typeof(string), result.Type);
         }
 
         [Test] public void IndexerIsInvoked() {
             var result = Invoke(GetMethod("anything", 0));
-            Assert.AreEqual("indexanything", result.Value);
-            Assert.AreEqual(typeof(string), result.Type);
+            ClassicAssert.AreEqual("indexanything", result.Value);
+            ClassicAssert.AreEqual(typeof(string), result.Type);
         }
 
         [Test] public void FieldIsInvokedWithGetAndSet() {
             var result = Invoke(GetMethod("setfield", 1), new object[] {"stuff"});
-            Assert.AreEqual(null, result.Value);
-            Assert.AreEqual(typeof(void), result.Type);
+            ClassicAssert.AreEqual(null, result.Value);
+            ClassicAssert.AreEqual(typeof(void), result.Type);
 
             result = Invoke(GetMethod("getfield", 0));
-            Assert.AreEqual("stuff", result.Value.ToString());
-            Assert.AreEqual(typeof(string), result.Type);
+            ClassicAssert.AreEqual("stuff", result.Value.ToString());
+            ClassicAssert.AreEqual(typeof(string), result.Type);
         }
 
         [Test] public void DuplicateIsInvoked() {
             Invoke(GetMethod("duplicate", 1), new object[] {"stuff"});
 
             var result = Invoke(GetMethod("duplicate", 0));
-            Assert.AreEqual("stuff", result.ToString());
+            ClassicAssert.AreEqual("stuff", result.ToString());
         }
 
         [Test] public void QueryableMemberIsInvoked() {
             var queryable = new QueryableClass();
             var method = GetMethodFromProcessor(queryable, "dynamic", 1);
             var result = Invoke(method, new object[] {"stuff"});
-            Assert.AreEqual("dynamicstuff", result.Value);
+            ClassicAssert.AreEqual("dynamicstuff", result.Value);
         }
 
         [Test]
@@ -138,12 +139,12 @@ namespace fitSharp.Test.NUnit.Machine {
             var name = new MemberName("increase(sampleextension)", "increase", Maybe<Type>.Of(typeof(SampleExtension)), Array.Empty<Type>());
             var method = MemberQuery.FindInstance(MemberQuery.FindMember, TypedValue.Of(instance), new MemberSpecification(name, 1));
             var result = Invoke(method, new object[] {2});
-            Assert.AreEqual(2, result.Value);
+            ClassicAssert.AreEqual(2, result.Value);
         }
 
         class QueryableClass: MemberQueryable {
             public RuntimeMember Find(MemberSpecification specification) {
-                Assert.IsTrue(specification.MatchesIdentifierName("dynamic"));
+                ClassicAssert.IsTrue(specification.MatchesIdentifierName("dynamic"));
                 return new QueryableMember("dynamic");
             }
 
@@ -175,12 +176,12 @@ namespace fitSharp.Test.NUnit.Machine {
         }
 
         [Test] public void MethodwithMisMatchedParameterNamesIsNotFound() {
-            Assert.False(MemberQuery.FindInstance(MemberQuery.FindMember, TypedValue.Of(instance),
+            ClassicAssert.False(MemberQuery.FindInstance(MemberQuery.FindMember, TypedValue.Of(instance),
                 new MemberSpecification("methodwithparms", 1).WithParameterNames(new [] {"garbage"})).IsPresent);
         }
 
         [Test] public void MethodwithMatchedParameterNamesIsFound() {
-            Assert.True(MemberQuery.FindInstance(MemberQuery.FindMember, TypedValue.Of(instance),
+            ClassicAssert.True(MemberQuery.FindInstance(MemberQuery.FindMember, TypedValue.Of(instance),
                 new MemberSpecification("methodwithparms", 1).WithParameterNames(new [] {"input"})).IsPresent);
         }
     }

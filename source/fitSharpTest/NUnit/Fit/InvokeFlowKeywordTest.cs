@@ -11,6 +11,7 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using fitSharp.Samples.Fit;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Fit {
     [TestFixture]
@@ -25,32 +26,32 @@ namespace fitSharp.Test.NUnit.Fit {
         [Test] public void ChecksExpectedValue() {
             var row = new CellTree("check", "stuff", "some stuff");
             Invoke(row);
-            Assert.AreEqual(fitSharp.Fit.Model.TestStatus.Right, row.Last().Value.GetAttribute(CellAttribute.Status));
+            ClassicAssert.AreEqual(fitSharp.Fit.Model.TestStatus.Right, row.Last().Value.GetAttribute(CellAttribute.Status));
         }
 
         [Test] public void CheckFieldsForWrapsResultInList() {
             var row = new CellTree("check fields for", "stuff");
             var result = Invoke(row).GetValue<List<object>>();
-            Assert.AreEqual(1, result.Count);
-            Assert.AreEqual("some stuff", result[0]);
+            ClassicAssert.AreEqual(1, result.Count);
+            ClassicAssert.AreEqual("some stuff", result[0]);
         }
 
         [Test] public void NameKeywordAssignsASymbol() {
             var row = new CellTree("name", "symbol", "stuff");
             Invoke(row);
-            Assert.AreEqual("some stuff", processor.Get<Symbols>().GetValue("symbol"));
+            ClassicAssert.AreEqual("some stuff", processor.Get<Symbols>().GetValue("symbol"));
         }
 
         [Test] public void ShowAsKeywordComposesWithAttributes() {
             var row = new CellTree("show as", "raw", "stuff");
             Invoke(row);
-            Assert.IsTrue(row.Last().Value.HasAttribute(CellAttribute.Raw));
+            ClassicAssert.IsTrue(row.Last().Value.HasAttribute(CellAttribute.Raw));
         }
 
         [Test] public void WaitUntilRepeatsExpectedValueCheck() {
             var row = new CellTree("wait until", "next count", "2");
             Invoke(row);
-            Assert.AreEqual(fitSharp.Fit.Model.TestStatus.Right, row.Last().Value.GetAttribute(CellAttribute.Status));
+            ClassicAssert.AreEqual(fitSharp.Fit.Model.TestStatus.Right, row.Last().Value.GetAttribute(CellAttribute.Status));
         }
 
         [Test] public void WaitUntilRepeatsUpToLimit() {
@@ -58,7 +59,7 @@ namespace fitSharp.Test.NUnit.Fit {
             processor.Get<Symbols>().Save("WaitFor.Time", 1);
             var row = new CellTree("wait until", "next count", "101");
             Invoke(row);
-            Assert.AreEqual(fitSharp.Fit.Model.TestStatus.Wrong, row.Last().Value.GetAttribute(CellAttribute.Status));
+            ClassicAssert.AreEqual(fitSharp.Fit.Model.TestStatus.Wrong, row.Last().Value.GetAttribute(CellAttribute.Status));
         }
 
         TypedValue Invoke(CellTree row) {

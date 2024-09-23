@@ -7,6 +7,7 @@ using fitSharp.Fit.Model;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fit.Test.NUnit {
     [TestFixture] public class ComposeStoryTestHtmlTest {
@@ -15,16 +16,16 @@ namespace fit.Test.NUnit {
             var service = new Service.Service();
             var result = service.Compose(StoryTestSource.FromString("<table><tr><td>hello</td></tr></table>"));
             var table = ((Parse)result).Parts;
-            Assert.AreEqual("<table>", table.Tag);
+            ClassicAssert.AreEqual("<table>", table.Tag);
             var cell = table.Parts.Parts;
-            Assert.AreEqual("<td>", cell.Tag);
-            Assert.AreEqual("hello", cell.Body);
+            ClassicAssert.AreEqual("<td>", cell.Tag);
+            ClassicAssert.AreEqual("hello", cell.Body);
         }
 
         [Test] public void NoTablesReturnsEmptyTree() {
             var service = new Service.Service();
             var result = service.Compose(StoryTestSource.FromString("<b>stuff</b>"));
-            Assert.AreEqual(0, result.Branches.Count);
+            ClassicAssert.AreEqual(0, result.Branches.Count);
         }
 
         [Test] public void SimpleHtmlStringIsGenerated() {
@@ -43,7 +44,7 @@ namespace fit.Test.NUnit {
             var service = new Service.Service();
             var source = service.Compose(StoryTestSource.FromString(input));
             var result = source.WriteBranches();
-            Assert.AreEqual(input, result);
+            ClassicAssert.AreEqual(input, result);
         }
     }
 }

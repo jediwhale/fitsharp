@@ -16,6 +16,7 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using fitSharp.Samples;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Machine {
     [TestFixture] public class ShellTest {
@@ -24,7 +25,7 @@ namespace fitSharp.Test.NUnit.Machine {
         [Test] public void CustomAppConfigIsUsed() {
             var result = RunShell(new[] {"-a", "fitSharpTest.dll.alt.config",
                 "-r", typeof (SampleRunner).FullName + "," + typeof (SampleRunner).Assembly.CodeBase} );
-            Assert.AreEqual(606, result);
+            ClassicAssert.AreEqual(606, result);
         }
 
         [Test] public void CustomAppConfigIsLoadedRelativeToExecutingAssembly() {
@@ -39,7 +40,7 @@ namespace fitSharp.Test.NUnit.Machine {
             folders.MakeFile(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "fitSharpTest.dll.alt.config"), "stuff");
             var result = RunShell(new[] {"-c", "suite.config.xml",
                 "-r", typeof (SampleRunner).FullName + "," + typeof (SampleRunner).Assembly.CodeBase}, folders );
-            Assert.AreEqual(606, result);
+            ClassicAssert.AreEqual(606, result);
         }
 
         class PushCurrentDirectory : IDisposable {
@@ -58,14 +59,14 @@ namespace fitSharp.Test.NUnit.Machine {
 
         [Test] public void RunnerIsCalled() {
             var result = RunShell(new [] {"-r", typeof(SampleRunner).FullName});
-            Assert.AreEqual(SampleRunner.Result, result);
+            ClassicAssert.AreEqual(SampleRunner.Result, result);
         }
 
         [Test] public void AdditionalArgumentsArePassed() {
             RunShell(new [] {"more", "-r", typeof(SampleRunner).FullName, "stuff"});
-            Assert.AreEqual(2, SampleRunner.LastArguments.Count);
-            Assert.AreEqual("more", SampleRunner.LastArguments[0]);
-            Assert.AreEqual("stuff", SampleRunner.LastArguments[1]);
+            ClassicAssert.AreEqual(2, SampleRunner.LastArguments.Count);
+            ClassicAssert.AreEqual("more", SampleRunner.LastArguments[0]);
+            ClassicAssert.AreEqual("stuff", SampleRunner.LastArguments[1]);
         }
 
         [Test] public void RunnerFromSuiteConfigIsUsed() {
@@ -75,7 +76,7 @@ namespace fitSharp.Test.NUnit.Machine {
                 + TargetFramework.Location(typeof (SampleRunner).Assembly)
                 + "</Runner></Settings></config>");
             var result = RunShell(new[] {"-c", "suite.config.xml"}, folders );
-            Assert.AreEqual(SampleRunner.Result, result);
+            ClassicAssert.AreEqual(SampleRunner.Result, result);
         }
 
         [Test] public void ApartmentStateFromSuiteConfigIsUsed() {
@@ -83,7 +84,7 @@ namespace fitSharp.Test.NUnit.Machine {
             var folders = new FolderTestModel();
             folders.MakeFile("suite.config.xml", "<config><Settings><ApartmentState>STA</ApartmentState></Settings></config>");
             RunShell(new[] {"-r", typeof(SampleRunner).FullName, "-c", "suite.config.xml"}, folders );
-            Assert.AreEqual(ApartmentState.STA, SampleRunner.ApartmentState);
+            ClassicAssert.AreEqual(ApartmentState.STA, SampleRunner.ApartmentState);
         }
 
         static int RunShell(IList<string> arguments) {

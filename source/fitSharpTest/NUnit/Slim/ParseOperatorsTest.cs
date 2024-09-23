@@ -13,6 +13,7 @@ using fitSharp.Slim.Operators;
 using fitSharp.Slim.Service;
 using fitSharp.Test.Double.Slim;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Slim {
 
@@ -37,99 +38,99 @@ namespace fitSharp.Test.NUnit.Slim {
         public void ParseSymbolReplacesWithValueAsImplementation() {
             var testvalue = ConcreteObject.NewInstance();
             processor.Get<Symbols>().Save("symbol", testvalue);
-            Assert.AreEqual(testvalue, Parse(new ParseSymbol { Processor = processor }, typeof(ConcreteObject), new SlimLeaf("$symbol")));
+            ClassicAssert.AreEqual(testvalue, Parse(new ParseSymbol { Processor = processor }, typeof(ConcreteObject), new SlimLeaf("$symbol")));
         }
 
         [Test]
         public void ParseSymbolReplacesWithValueAsInterface() {
             var testvalue = ConcreteObject.NewInstance();
             processor.Get<Symbols>().Save("symbol", testvalue);
-            Assert.AreEqual(testvalue, Parse(new ParseSymbol { Processor = processor }, typeof(IObject), new SlimLeaf("$symbol")));
+            ClassicAssert.AreEqual(testvalue, Parse(new ParseSymbol { Processor = processor }, typeof(IObject), new SlimLeaf("$symbol")));
         }
 
         [Test] public void ParseSymbolReplacesWithValue() {
             processor.Get<Symbols>().Save("symbol", "testvalue");
-            Assert.AreEqual("testvalue", Parse(new ParseSymbol { Processor = processor }, typeof(object), new SlimLeaf("$symbol")));
+            ClassicAssert.AreEqual("testvalue", Parse(new ParseSymbol { Processor = processor }, typeof(object), new SlimLeaf("$symbol")));
         }
 
         [Test] public void ParseSymbolReplacesEmbeddedValues() {
             processor.Get<Symbols>().Save("symbol1", "test");
             processor.Get<Symbols>().Save("symbol2", "value");
-            Assert.AreEqual("-testvalue-", Parse(new ParseSymbol { Processor = processor }, typeof(object), new SlimLeaf("-$symbol1$symbol2-")));
+            ClassicAssert.AreEqual("-testvalue-", Parse(new ParseSymbol { Processor = processor }, typeof(object), new SlimLeaf("-$symbol1$symbol2-")));
         }
 
         [Test] public void ParseSymbolIgnoresUndefinedSymbols() {
-            Assert.AreEqual("$symbol", processor.Parse(typeof(object), TypedValue.Void, new SlimLeaf("$symbol")).ValueString);
+            ClassicAssert.AreEqual("$symbol", processor.Parse(typeof(object), TypedValue.Void, new SlimLeaf("$symbol")).ValueString);
         }
 
         [Test] public void ParseSymbolIgnoresEmbeddedUndefinedSymbols() {
-            Assert.AreEqual("-$symbol-", processor.Parse(typeof(object), TypedValue.Void, new SlimLeaf("-$symbol-")).ValueString);
+            ClassicAssert.AreEqual("-$symbol-", processor.Parse(typeof(object), TypedValue.Void, new SlimLeaf("-$symbol-")).ValueString);
         }
 
         [Test] public void ParseSymbolWithDoubleDollar() {
             processor.Get<Symbols>().Save("symbol", "testvalue");
-            Assert.AreEqual("$testvalue", processor.Parse(typeof(object), TypedValue.Void, new SlimLeaf("$$symbol")).ValueString);
+            ClassicAssert.AreEqual("$testvalue", processor.Parse(typeof(object), TypedValue.Void, new SlimLeaf("$$symbol")).ValueString);
         }
 
         [Test] public void ParseSymbolEmbeddedWithDoubleDollar() {
             processor.Get<Symbols>().Save("symbol", "testvalue");
-            Assert.AreEqual("-$testvaluetestvalue-", processor.Parse(typeof(object), TypedValue.Void, new SlimLeaf("-$$symbol$symbol-")).ValueString);
+            ClassicAssert.AreEqual("-$testvaluetestvalue-", processor.Parse(typeof(object), TypedValue.Void, new SlimLeaf("-$$symbol$symbol-")).ValueString);
         }
 
         [Test] public void ParseSymbolMatchingRequestedType() {
             processor.Get<Symbols>().Save("symbol", AppDomain.CurrentDomain);
-            Assert.AreEqual(AppDomain.CurrentDomain, processor.Parse(typeof(AppDomain), TypedValue.Void, new SlimLeaf("$symbol")).Value);
+            ClassicAssert.AreEqual(AppDomain.CurrentDomain, processor.Parse(typeof(AppDomain), TypedValue.Void, new SlimLeaf("$symbol")).Value);
         }
 
         [Test] public void LeafIsParsedForList() {
             var list =
                 Parse(new ParseList{ Processor = processor }, typeof (List<int>), new SlimLeaf("[5, 4]")) as List<int>;
-            Assert.IsNotNull(list);
-            Assert.AreEqual(2, list.Count);
-            Assert.AreEqual(5, list[0]);
-            Assert.AreEqual(4, list[1]);
+            ClassicAssert.IsNotNull(list);
+            ClassicAssert.AreEqual(2, list.Count);
+            ClassicAssert.AreEqual(5, list[0]);
+            ClassicAssert.AreEqual(4, list[1]);
         }
 
         [Test] public void TreeIsParsedForList() {
             var list =
                 Parse(new ParseList{ Processor = processor }, typeof (List<int>), new SlimTree().AddBranchValue("5").AddBranchValue("4")) as List<int>;
-            Assert.IsNotNull(list);
-            Assert.AreEqual(2, list.Count);
-            Assert.AreEqual(5, list[0]);
-            Assert.AreEqual(4, list[1]);
+            ClassicAssert.IsNotNull(list);
+            ClassicAssert.AreEqual(2, list.Count);
+            ClassicAssert.AreEqual(5, list[0]);
+            ClassicAssert.AreEqual(4, list[1]);
         }
 
         [Test] public void LeafIsParsedForArray() {
             var list =
                 Parse(new ParseList{ Processor = processor }, typeof (int[]), new SlimLeaf("[5, 4]")) as int[];
-            Assert.IsNotNull(list);
-            Assert.AreEqual(2, list.Length);
-            Assert.AreEqual(5, list[0]);
-            Assert.AreEqual(4, list[1]);
+            ClassicAssert.IsNotNull(list);
+            ClassicAssert.AreEqual(2, list.Length);
+            ClassicAssert.AreEqual(5, list[0]);
+            ClassicAssert.AreEqual(4, list[1]);
         }
 
         [Test] public void ParsesEnumType() {
-            Assert.AreEqual(BindingFlags.Public,
+            ClassicAssert.AreEqual(BindingFlags.Public,
                             processor.Parse(typeof (BindingFlags), TypedValue.Void,
                                                        new SlimLeaf("Public")).Value);
         }
 
         [Test] public void ParsesIntegerForNullableInt() {
-            Assert.AreEqual(1, processor.Parse(typeof (int?), TypedValue.Void, new SlimLeaf("1")).Value);
+            ClassicAssert.AreEqual(1, processor.Parse(typeof (int?), TypedValue.Void, new SlimLeaf("1")).Value);
         }
 
         [Test] public void ParsesDictionary() {
             var dictionary = processor.Parse(typeof (Dictionary<string, string>), TypedValue.Void,
                     new SlimLeaf("<table><tr><td>key</td><td>value</td></tr></table>")).GetValue<Dictionary<string,string>>();
-            Assert.AreEqual("value", dictionary["key"]);
+            ClassicAssert.AreEqual("value", dictionary["key"]);
         }
 
         [Test] [SetCulture("es-ES")] public void ParsesWithCurrentCulture() {
-            Assert.AreEqual(1.001, processor.Parse(typeof (double), TypedValue.Void, new SlimLeaf("1,001")).Value);
+            ClassicAssert.AreEqual(1.001, processor.Parse(typeof (double), TypedValue.Void, new SlimLeaf("1,001")).Value);
         }
 
         static object Parse(ParseOperator<string> parseOperator, Type type, Tree<string> parameters) {
-            Assert.IsTrue(parseOperator.CanParse(type, TypedValue.Void, parameters));
+            ClassicAssert.IsTrue(parseOperator.CanParse(type, TypedValue.Void, parameters));
             TypedValue result = parseOperator.Parse(type, TypedValue.Void, parameters);
             return result.Value;
         }

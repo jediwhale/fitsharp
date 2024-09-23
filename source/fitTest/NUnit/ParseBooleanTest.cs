@@ -1,4 +1,4 @@
-// Copyright © 2017 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+// Copyright ï¿½ 2017 Syterra Software Inc. Includes work by Object Mentor, Inc., ï¿½ 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -9,6 +9,7 @@ using fitSharp.Fit.Operators;
 using fitSharp.Machine.Model;
 using fitSharp.Samples.Fit;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fit.Test.NUnit {
     [TestFixture] public class ParseBooleanTest {
@@ -31,15 +32,15 @@ namespace fit.Test.NUnit {
                 "false", "FALSE", "fAlSe", "FaLsE", "\n\tfalse\n"
             };
             foreach (string validString in validTrueStrings) {
-                Assert.IsTrue(Parse(validString), "Parsing '" + validString + "'");
+                ClassicAssert.IsTrue(Parse(validString), "Parsing '" + validString + "'");
             }
             foreach (string validString in validFalseStrings) {
-                Assert.IsFalse(Parse(validString), "Parsing '" + validString + "'");
+                ClassicAssert.IsFalse(Parse(validString), "Parsing '" + validString + "'");
             }
         }
 
         [Test] public void ParseInvalidString() {
-            Assert.Throws<FormatException>(() => Parse("garbage"));
+            ClassicAssert.Throws<FormatException>(() => Parse("garbage"));
         }
 
         private bool Parse(string validString) {

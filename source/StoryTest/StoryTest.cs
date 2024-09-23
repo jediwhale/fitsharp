@@ -9,6 +9,7 @@ using System.Reflection;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.StoryTest {
     [TestFixture]
@@ -32,7 +33,7 @@ namespace fitSharp.StoryTest {
             var config = Path.Combine(
                 AppDomain.CurrentDomain.BaseDirectory.Before(new[] {"/build/".AsPath(), "/source/".AsPath()}),
                 "storytest.config." + TargetFramework.FileExtension + ".xml");
-            Assert.AreEqual(0,  Shell.Run(new [] {"-c", config}));
+            ClassicAssert.AreEqual(0,  Shell.Run(new [] {"-c", config}));
         }
 
         static void Copy(string project, string sourcePath, string destinationPath) {

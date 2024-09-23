@@ -1,4 +1,4 @@
-// Copyright © 2012 Syterra Software Inc.
+// Copyright ï¿½ 2012 Syterra Software Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -6,6 +6,7 @@
 using System.Data.Common;
 using dbfit;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace dbfitTest {
     [TestFixture] public class SqlServerEnvironmentTest {
@@ -19,7 +20,7 @@ namespace dbfitTest {
                     new DbParameterAccessor(parameterA, typeof(string), 0, "varchar"),
                     new DbParameterAccessor(parameterB, typeof(int), 1, "integer")
                 });
-            Assert.AreEqual("insert into aTable([aColumn],[bColumn]) values (@aParameter,@bParameter)", command);
+            ClassicAssert.AreEqual("insert into aTable([aColumn],[bColumn]) values (@aParameter,@bParameter)", command);
         }
 
         static DbParameter MakeParameter(SqlServerEnvironment environment, string sourceColumn, string parameterName) {
@@ -45,7 +46,7 @@ namespace dbfitTest {
                     new DbParameterAccessor(parameterC, typeof(string), 2, "varchar"),
                     new DbParameterAccessor(parameterD, typeof(int), 3, "integer")
                 });
-            Assert.AreEqual("update aTable set [aColumn]=@aParameter, [bColumn]=@bParameter where [cColumn]=@cParameter and [dColumn]=@dParameter", command);
+            ClassicAssert.AreEqual("update aTable set [aColumn]=@aParameter, [bColumn]=@bParameter where [cColumn]=@cParameter and [dColumn]=@dParameter", command);
         }
     }
 }

@@ -7,6 +7,7 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using fitSharp.Test.Double;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Machine {
     [TestFixture] public class TypeDictionaryTest {
@@ -21,25 +22,25 @@ namespace fitSharp.Test.NUnit.Machine {
             configuration.GetItem<FullTestConfig>().Data = "stuff";
             var copy = configuration.Copy();
             configuration.GetItem<FullTestConfig>().Data = "other";
-            Assert.AreEqual("stuff", copy.GetItem<FullTestConfig>().Data);
-            Assert.AreEqual("other", configuration.GetItem<FullTestConfig>().Data);
+            ClassicAssert.AreEqual("stuff", copy.GetItem<FullTestConfig>().Data);
+            ClassicAssert.AreEqual("other", configuration.GetItem<FullTestConfig>().Data);
         }
 
         [Test] public void OtherChangesShowInCopy() {
             configuration.GetItem<SimpleTestConfig>().Data = "stuff";
             var copy = configuration.Copy();
             configuration.GetItem<SimpleTestConfig>().Data = "other";
-            Assert.AreEqual("other", copy.GetItem<SimpleTestConfig>().Data);
-            Assert.AreEqual("other", configuration.GetItem<SimpleTestConfig>().Data);
+            ClassicAssert.AreEqual("other", copy.GetItem<SimpleTestConfig>().Data);
+            ClassicAssert.AreEqual("other", configuration.GetItem<SimpleTestConfig>().Data);
         }
 
 
         [Test] public void SetUpTearDownIsExecuted() {
             configuration.GetItem<FullTestConfig>().Data = "stuff";
             configuration.Apply(i => i.As<SetUpTearDown>(s => s.SetUp()));
-            Assert.AreEqual("setup", configuration.GetItem<FullTestConfig>().Data);
+            ClassicAssert.AreEqual("setup", configuration.GetItem<FullTestConfig>().Data);
             configuration.Apply(i => i.As<SetUpTearDown>(s => s.TearDown()));
-            Assert.AreEqual("teardown", configuration.GetItem<FullTestConfig>().Data);
+            ClassicAssert.AreEqual("teardown", configuration.GetItem<FullTestConfig>().Data);
         }
     }
 
