@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
@@ -133,21 +134,25 @@ namespace dbfitTest {
             throw new NotImplementedException();
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override string CommandText {
             get { throw new NotImplementedException(); }
             set { throw new NotImplementedException(); }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override int CommandTimeout {
             get { throw new NotImplementedException(); }
             set { throw new NotImplementedException(); }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override CommandType CommandType {
             get { throw new NotImplementedException(); }
             set { throw new NotImplementedException(); }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override UpdateRowSource UpdatedRowSource {
             get { throw new NotImplementedException(); }
             set { throw new NotImplementedException(); }
@@ -167,6 +172,7 @@ namespace dbfitTest {
             set { throw new NotImplementedException(); }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override bool DesignTimeVisible {
             get { throw new NotImplementedException(); }
             set { throw new NotImplementedException(); }
