@@ -21,12 +21,12 @@
 </Target>
 
 <Target Name="unittests" DependsOnTargets="solution">
-    <Exec Command="dotnet test source\fitSharpTest\fitSharpTest.csproj" />
-    <Exec Command="dotnet test source\fitTest\fitTest.csproj" />
+    <Exec Command="dotnet test --no-build -m:1 source\fitSharpTest\fitSharpTest.csproj" />
+    <Exec Command="dotnet test --no-build -m:1 source\fitTest\fitTest.csproj" />
 </Target>
 
 <Target Name="storytests" DependsOnTargets="solution">
-    <Exec Command="dotnet test source\StoryTest\StoryTest.csproj" />
+    <Exec Command="dotnet test --no-build -m:1 source\StoryTest\StoryTest.csproj" />
 </Target>
 
 <Target Name="package">
