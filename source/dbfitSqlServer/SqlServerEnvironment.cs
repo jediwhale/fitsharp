@@ -29,7 +29,8 @@ namespace dbfit
         {
             return String.Format("Data Source={0}; User ID={1}; Password={2}", dataSource, username, password);
         }
-        private static readonly DbProviderFactory dbp = DbProviderFactories.GetFactory("System.Data.SqlClient");
+
+        private static readonly DbProviderFactory dbp = SqlClientFactory.Instance;
         private readonly Regex paramNames = new Regex("@([A-Za-z0-9_]*)");
         protected override Regex ParamNameRegex { get { return paramNames;}}
 
