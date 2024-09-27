@@ -35,56 +35,31 @@
       source\fitSharp\bin\release\net48\fitSharp.dll;
       source\fit\bin\release\net48\fit.dll;
       source\Runner\bin\release\net48\Runner.exe;
-      source\RunnerW\bin\release\net48\RunnerW.exe;
-      source\dbfit\bin\release\net48\dbfit.dll;
-      source\dbfitMySql\bin\release\net48\dbfit.mysql.dll;
-      source\dbfitOracle\bin\release\net48\dbfit.oracle.dll;
-      source\dbfitSqlServer\bin\release\net48\dbfit.sqlserver.dll;
-      source\dbfitSybase\bin\release\net48\dbfit.sybase.dll;"/>
+      source\RunnerW\bin\release\net48\RunnerW.exe"/>
      <Net8Files Include="
       source\fitSharp\bin\release\net8.0\fitSharp.dll;
       source\fit\bin\release\net8.0\fit.dll;
       source\Runner\bin\release\net8.0\Runner.dll;
-      source\Runner\bin\release\net8.0\Runner.runtimeconfig.json;
-      source\dbfit\bin\release\net8.0\dbfit.dll;
-      source\dbfitMySql\bin\release\net8.0\dbfit.mysql.dll;
-      source\dbfitOracle\bin\release\net8.0\dbfit.oracle.dll;
-      source\dbfitSqlServer\bin\release\net8.0\dbfit.sqlserver.dll;
-      source\dbfitSybase\bin\release\net8.0\dbfit.sybase.dll;"/>
+      source\Runner\bin\release\net8.0\Runner.runtimeconfig.json"/>
      <Net8WinFiles Include="
       source\fitSharp\bin\release\net8.0-windows\fitSharp.dll;
       source\fit\bin\release\net8.0-windows\fit.dll;
       source\Runner\bin\release\net8.0-windows\Runner.dll;
       source\Runner\bin\release\net8.0-windows\Runner.runtimeconfig.json;
       source\RunnerW\bin\release\net8.0-windows\RunnerW.dll;
-      source\RunnerW\bin\release\net8.0-windows\RunnerW.runtimeconfig.json;
-      source\dbfit\bin\release\net8.0-windows\dbfit.dll;
-      source\dbfitMySql\bin\release\net8.0-windows\dbfit.mysql.dll;
-      source\dbfitOracle\bin\release\net8.0-windows\dbfit.oracle.dll;
-      source\dbfitSqlServer\bin\release\net8.0-windows\dbfit.sqlserver.dll;
-      source\dbfitSybase\bin\release\net8.0-windows\dbfit.sybase.dll;"/>
+      source\RunnerW\bin\release\net8.0-windows\RunnerW.runtimeconfig.json"/>
      <Net9Files Include="
       source\fitSharp\bin\release\net9.0\fitSharp.dll;
       source\fit\bin\release\net9.0\fit.dll;
       source\Runner\bin\release\net9.0\Runner.dll;
-      source\Runner\bin\release\net9.0\Runner.runtimeconfig.json;
-      source\dbfit\bin\release\net9.0\dbfit.dll;
-      source\dbfitMySql\bin\release\net9.0\dbfit.mysql.dll;
-      source\dbfitOracle\bin\release\net9.0\dbfit.oracle.dll;
-      source\dbfitSqlServer\bin\release\net9.0\dbfit.sqlserver.dll;
-      source\dbfitSybase\bin\release\net9.0\dbfit.sybase.dll;"/>
+      source\Runner\bin\release\net9.0\Runner.runtimeconfig.json"/>
      <Net9WinFiles Include="
       source\fitSharp\bin\release\net9.0-windows\fitSharp.dll;
       source\fit\bin\release\net9.0-windows\fit.dll;
       source\Runner\bin\release\net9.0-windows\Runner.dll;
       source\Runner\bin\release\net9.0-windows\Runner.runtimeconfig.json;
       source\RunnerW\bin\release\net9.0-windows\RunnerW.dll;
-      source\RunnerW\bin\release\net9.0-windows\RunnerW.runtimeconfig.json;
-      source\dbfit\bin\release\net9.0-windows\dbfit.dll;
-      source\dbfitMySql\bin\release\net9.0-windows\dbfit.mysql.dll;
-      source\dbfitOracle\bin\release\net9.0-windows\dbfit.oracle.dll;
-      source\dbfitSqlServer\bin\release\net9.0-windows\dbfit.sqlserver.dll;
-      source\dbfitSybase\bin\release\net9.0-windows\dbfit.sybase.dll;"/>
+      source\RunnerW\bin\release\net9.0-windows\RunnerW.runtimeconfig.json"/>
    <Packages Include="nuget\*.nupkg" />
   </ItemGroup>
   <Copy SourceFiles="@(Netfx48Files)" DestinationFolder="nuget\lib\net48" />
