@@ -6,6 +6,7 @@
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Machine {
     [TestFixture] public class LoggingTest {
@@ -17,20 +18,20 @@ namespace fitSharp.Test.NUnit.Machine {
 
         [Test] public void LoggingIsDisabledWhenCreated() {
             logging.WriteItem("stuff");
-            Assert.AreEqual(string.Empty, logging.Show);
+            ClassicAssert.AreEqual(string.Empty, logging.Show);
         }
 
         [Test] public void LoggingIsStarted() {
             logging.Start();
             logging.WriteItem("stuff");
-            Assert.AreEqual("<ul><li>stuff</li></ul>", logging.Show);
+            ClassicAssert.AreEqual("<ul><li>stuff</li></ul>", logging.Show);
         }
 
         [Test] public void MultipleMessagesAreLogged() {
             logging.Start();
             logging.WriteItem("stuff");
             logging.WriteItem("nonsense");
-            Assert.AreEqual("<ul><li>stuff</li><li>nonsense</li></ul>", logging.Show);
+            ClassicAssert.AreEqual("<ul><li>stuff</li><li>nonsense</li></ul>", logging.Show);
         }
 
         [Test] public void LoggingIsStopped() {
@@ -38,7 +39,7 @@ namespace fitSharp.Test.NUnit.Machine {
             logging.WriteItem("stuff");
             logging.Stop();
             logging.WriteItem("stuff");
-            Assert.AreEqual("<ul><li>stuff</li></ul>", logging.Show);
+            ClassicAssert.AreEqual("<ul><li>stuff</li></ul>", logging.Show);
         }
 
         [Test] public void SubMessageIsLogged() {
@@ -46,7 +47,7 @@ namespace fitSharp.Test.NUnit.Machine {
             logging.StartWrite("stuff");
             logging.WriteItem("sub");
             logging.EndWrite("nonsense");
-            Assert.AreEqual("<ul><li>stuffnonsense<ul><li>sub</li></ul></li></ul>", logging.Show);
+            ClassicAssert.AreEqual("<ul><li>stuffnonsense<ul><li>sub</li></ul></li></ul>", logging.Show);
         }
 
         [Test] public void SubMessageIsNotLoggedWhenStopped() {
@@ -55,38 +56,38 @@ namespace fitSharp.Test.NUnit.Machine {
             logging.WriteItem("sub");
             logging.Stop();
             logging.EndWrite("nonsense");
-            Assert.AreEqual("<ul><li>sub</li></ul>", logging.Show);
+            ClassicAssert.AreEqual("<ul><li>sub</li></ul>", logging.Show);
         }
 
         [Test] public void LoggerCanRegisterWhenAdded() {
             logging.Add(new TestLogger());
-            Assert.IsTrue(TestLogger.IsRegistered);
+            ClassicAssert.IsTrue(TestLogger.IsRegistered);
         }
 
         [Test] public void LoggerReceivesStartEvent() {
             logging.Add(new TestLogger());
             logging.Start();
-            Assert.IsTrue(TestLogger.IsStarted);
+            ClassicAssert.IsTrue(TestLogger.IsStarted);
         }
 
         [Test] public void LoggerReceivesStopEvent() {
             logging.Add(new TestLogger());
             logging.Start();
             logging.Stop();
-            Assert.IsFalse(TestLogger.IsStarted);
+            ClassicAssert.IsFalse(TestLogger.IsStarted);
         }
 
         [Test] public void LoggerDoesNotReceiveEventsWhenStopped() {
             logging.Add(new TestLogger());
             logging.BeginCell(new CellBase("stuff"));
-            Assert.AreEqual(null, TestLogger.ActiveCell);
+            ClassicAssert.AreEqual(null, TestLogger.ActiveCell);
         }
 
         [Test] public void LoggerReceivesBeginCellEvent() {
             logging.Add(new TestLogger());
             logging.Start();
             logging.BeginCell(new CellBase("stuff"));
-            Assert.AreEqual("stuff", TestLogger.ActiveCell.Text);
+            ClassicAssert.AreEqual("stuff", TestLogger.ActiveCell.Text);
         }
 
         [Test] public void LoggerReceivesEndCellEvent() {
@@ -95,7 +96,7 @@ namespace fitSharp.Test.NUnit.Machine {
             var cell = new CellBase("stuff");
             logging.BeginCell(cell);
             logging.EndCell(cell);
-            Assert.AreEqual(null, TestLogger.ActiveCell);
+            ClassicAssert.AreEqual(null, TestLogger.ActiveCell);
         }
 
         class TestLogger: Logger {

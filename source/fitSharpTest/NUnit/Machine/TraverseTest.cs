@@ -7,6 +7,7 @@ using fitSharp.Fit.Model;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
 using System.Collections.Generic;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Machine {
     [TestFixture] public class TraverseTest {
@@ -18,28 +19,28 @@ namespace fitSharp.Test.NUnit.Machine {
             new Traverse<Cell>()
                 .Rows.First(Visit)
                 .VisitTable(new CellTree("fixture", "row1", "row2"));
-            Assert.AreEqual("fixture", nodesVisited.Join(","));
+            ClassicAssert.AreEqual("fixture", nodesVisited.Join(","));
         }
 
         [Test] public void VisitsHeaderRow() {
             new Traverse<Cell>()
                 .Rows.Header(Visit)
                 .VisitTable(new CellTree("fixture", "row1", "row2"));
-            Assert.AreEqual("row1", nodesVisited.Join(","));
+            ClassicAssert.AreEqual("row1", nodesVisited.Join(","));
         }
 
         [Test] public void VisitsRestOfRows() {
             new Traverse<Cell>()
                 .Rows.Rest(Visit)
                 .VisitTable(new CellTree("fixture", "row1", "row2"));
-            Assert.AreEqual("row2", nodesVisited.Join(","));
+            ClassicAssert.AreEqual("row2", nodesVisited.Join(","));
         }
 
         [Test] public void VisitsAllRows() {
             new Traverse<Cell>()
                 .Rows.Rest(Visit)
                 .VisitTable(new CellTree("fixture", "row1", "row2"));
-            Assert.AreEqual("row2", nodesVisited.Join(","));
+            ClassicAssert.AreEqual("row2", nodesVisited.Join(","));
         }
 
         void Visit(Tree<Cell> tree) { nodesVisited.Add(tree.Value.Text); }

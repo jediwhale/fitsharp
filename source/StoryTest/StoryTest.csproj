@@ -2,15 +2,15 @@
 
     <PropertyGroup>
         <RootNamespace>fitSharp.StoryTest</RootNamespace>
-        <TargetFrameworks>net48;net6.0;net6.0-windows;net7.0;net7.0-windows;net8.0;net8.0-windows</TargetFrameworks>
+        <TargetFrameworks>net48;net8.0;net8.0-windows;net9.0;net9.0-windows</TargetFrameworks>
         <Deterministic>false</Deterministic>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     </PropertyGroup>
 
     <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
-    <PackageReference Include="NUnit" Version="3.12.0" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
+    <PackageReference Include="NUnit" Version="4.2.2" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
     </ItemGroup>
 
     <ItemGroup>

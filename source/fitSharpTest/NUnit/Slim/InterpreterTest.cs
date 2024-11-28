@@ -8,6 +8,7 @@ using fitSharp.Samples;
 using fitSharp.Slim.Service;
 using fitSharp.Test.Double.Slim;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Slim {
     [TestFixture] public class InterpreterTest {
@@ -25,7 +26,7 @@ namespace fitSharp.Test.NUnit.Slim {
                 .ExecuteMethod("samplemethod");
             SampleClass.MethodCount = 0;
             Execute(instructions.InstructionString);
-            Assert.AreEqual(2, SampleClass.MethodCount);
+            ClassicAssert.AreEqual(2, SampleClass.MethodCount);
         }
 
         [Test] public void StopTestExceptionSkipsRemainingSteps() {
@@ -36,7 +37,7 @@ namespace fitSharp.Test.NUnit.Slim {
                 .ExecuteMethod("samplemethod");
             SampleClass.MethodCount = 0;
             Execute(instructions.InstructionString);
-            Assert.AreEqual(1, SampleClass.MethodCount);
+            ClassicAssert.AreEqual(1, SampleClass.MethodCount);
         }
 
         [Test] public void StopSuiteExceptionSkipsRemainingSteps() {
@@ -47,11 +48,11 @@ namespace fitSharp.Test.NUnit.Slim {
                 .ExecuteMethod("samplemethod");
             SampleClass.MethodCount = 0;
             Execute(instructions.InstructionString);
-            Assert.AreEqual(1, SampleClass.MethodCount);
+            ClassicAssert.AreEqual(1, SampleClass.MethodCount);
         }
 
         [Test] public void EmptyInstructionReturnEmptyList() {
-            Assert.AreEqual("Slim -- V0.5\n000009:[000000:]", Execute("[000000:]"));
+            ClassicAssert.AreEqual("Slim -- V0.5\n000009:[000000:]", Execute("[000000:]"));
         }
 
         [Test] public void ExecutesMethodOnLibraryInstance() {
@@ -61,7 +62,7 @@ namespace fitSharp.Test.NUnit.Slim {
                 .ExecuteMethod("samplemethod");
             SampleClass.MethodCount = 0;
             Execute(instructions.InstructionString);
-            Assert.AreEqual(1, SampleClass.MethodCount);
+            ClassicAssert.AreEqual(1, SampleClass.MethodCount);
         }
 
         string Execute(string instructionString) {

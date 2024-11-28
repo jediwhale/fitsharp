@@ -9,6 +9,7 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using fitSharp.Samples.Fit;
 using fitSharp.Test.Double;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Fit {
     [TestFixture]
@@ -18,7 +19,7 @@ namespace fitSharp.Test.NUnit.Fit {
         public void ReturnsSymbolValue() {
             var processor = Builder.CellProcessor();
             processor.Get<Symbols>().Save("mysymbol", 123);
-            Assert.AreEqual(123, new ValuePhrase(new CellTree("keyword", "mysymbol")).Evaluate(processor));
+            ClassicAssert.AreEqual(123, new ValuePhrase(new CellTree("keyword", "mysymbol")).Evaluate(processor));
         }
 
         [Test]
@@ -26,7 +27,7 @@ namespace fitSharp.Test.NUnit.Fit {
             var processor = Builder.CellProcessor();
             var interpreter = new DefaultFlowInterpreter(new SampleClass());
             processor.CallStack.DomainAdapter = new TypedValue(interpreter);
-            Assert.AreEqual("samplereturn", new ValuePhrase(new CellTree("keyword", "methodnoparms")).Evaluate(processor));
+            ClassicAssert.AreEqual("samplereturn", new ValuePhrase(new CellTree("keyword", "methodnoparms")).Evaluate(processor));
         }
     }
 }

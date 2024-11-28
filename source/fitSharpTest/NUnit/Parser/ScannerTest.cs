@@ -5,6 +5,7 @@
 
 using fitSharp.Parser;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Parser {
     [TestFixture]
@@ -15,7 +16,7 @@ namespace fitSharp.Test.NUnit.Parser {
             Scan("basic [text] to be scanned");
             AssertLeader("basic ");
             AssertBody("text");
-            Assert.AreEqual("[text]", scanner.Element.ToString());
+            ClassicAssert.AreEqual("[text]", scanner.Element.ToString());
         }
 
         [Test]
@@ -88,11 +89,11 @@ namespace fitSharp.Test.NUnit.Parser {
         }
 
         void AssertBody(string expected) {
-            Assert.AreEqual(expected, scanner.Body.ToString());
+            ClassicAssert.AreEqual(expected, scanner.Body.ToString());
         }
 
         void AssertLeader(string expected) {
-            Assert.AreEqual(expected, scanner.Leader.ToString());
+            ClassicAssert.AreEqual(expected, scanner.Leader.ToString());
         }
 
         void Scan(string input) {

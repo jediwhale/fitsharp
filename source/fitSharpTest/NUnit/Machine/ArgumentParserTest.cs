@@ -6,6 +6,7 @@
 using fitSharp.Machine.Application;
 using NUnit.Framework;
 using System.Collections.Generic;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Machine {
     [TestFixture] public class ArgumentParserTest {
@@ -63,7 +64,7 @@ namespace fitSharp.Test.NUnit.Machine {
 
         [Test]
         public void CollectsExtras() {
-            Assert.AreEqual("x,-a,-b,b", string.Join(",",
+            ClassicAssert.AreEqual("x,-a,-b,b", string.Join(",",
                 ArgumentParser.Extras(new [] {"x", "-a", "-x", "a", "-x", "-b", "b", "-y"}, new [] {"x", "y"})));
         } 
 
@@ -80,8 +81,8 @@ namespace fitSharp.Test.NUnit.Machine {
 
         void AssertParse(string[] input, string[] expectedInvoked) {
             parser.Parse(input);
-            Assert.AreEqual(expectedInvoked.Length, itemsInvoked.Count);
-            foreach(var expected in expectedInvoked) Assert.IsTrue(itemsInvoked.Contains(expected));
+            ClassicAssert.AreEqual(expectedInvoked.Length, itemsInvoked.Count);
+            foreach(var expected in expectedInvoked) ClassicAssert.IsTrue(itemsInvoked.Contains(expected));
         }
     }
 }

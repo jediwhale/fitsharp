@@ -9,6 +9,7 @@ using System.Text;
 using fitSharp.Machine.Engine;
 using fitSharp.Slim.Analysis;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Slim {
     [TestFixture]
@@ -38,7 +39,7 @@ namespace fitSharp.Test.NUnit.Slim {
             var applicationUnderTest = new ApplicationUnderTest();
             applicationUnderTest.AddNamespace("fitSharp.Test.NUnit.Slim");
             Report.RunReport(applicationUnderTest, new StringReader(input), new StringWriter(output));
-            Assert.AreEqual(expected, output.ToString());
+            ClassicAssert.AreEqual(expected, output.ToString());
         }
 
         static readonly string pageInstructions1 = "MyPageOne|[000002:000087:[000004:000015:scriptTable_0_0:000004:make:000016:scriptTableActor:000011:SampleClass:]:000088:[000004:000015:scriptTable_0_1:000004:call:000016:scriptTableActor:000012:sampleMethod:]:]" + Environment.NewLine;

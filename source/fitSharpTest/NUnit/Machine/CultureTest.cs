@@ -7,26 +7,27 @@ using System.Globalization;
 using System.Threading;
 using fitSharp.Machine.Engine;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Machine {
     [TestFixture] [SetCulture("en-US")] public class CultureTest {
         [Test] public void SetUpSetsCulture() {
             var culture = new Culture {Name = "af-ZA"};
             culture.SetUp();
-            Assert.AreEqual("af-ZA", Thread.CurrentThread.CurrentCulture.Name);
+            ClassicAssert.AreEqual("af-ZA", Thread.CurrentThread.CurrentCulture.Name);
         }
 
         [Test] public void TearDownRestoresCulture() {
             var culture = new Culture {Name = "af-ZA"};
             culture.SetUp();
             culture.TearDown();
-            Assert.AreEqual("en-US", Thread.CurrentThread.CurrentCulture.Name);
+            ClassicAssert.AreEqual("en-US", Thread.CurrentThread.CurrentCulture.Name);
         }
 
         [Test] public void InvariantCultureIsSet() {
             var culture = new Culture {Name = "invariant"};
             culture.SetUp();
-            Assert.AreEqual(CultureInfo.InvariantCulture, Thread.CurrentThread.CurrentCulture);
+            ClassicAssert.AreEqual(CultureInfo.InvariantCulture, Thread.CurrentThread.CurrentCulture);
         }
     }
 }

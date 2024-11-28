@@ -1,4 +1,4 @@
-// Copyright © 2018 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+// Copyright ï¿½ 2018 Syterra Software Inc. Includes work by Object Mentor, Inc., ï¿½ 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -13,6 +13,7 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using fitSharp.Samples;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using TestStatus=fitSharp.Fit.Model.TestStatus;
 
 namespace fit.Test.NUnit {
@@ -115,9 +116,9 @@ namespace fit.Test.NUnit {
                                                };
 
             RunTest(new BusinessObjectRowFixture(), parse);
-            Assert.IsTrue(parse.ToString().IndexOf("number1", StringComparison.Ordinal) > 0);
-            Assert.IsTrue(parse.ToString().IndexOf("number2", StringComparison.Ordinal) > 0);
-            Assert.IsTrue(parse.ToString().IndexOf("number3", StringComparison.Ordinal) > 0);
+            ClassicAssert.IsTrue(parse.ToString().IndexOf("number1", StringComparison.Ordinal) > 0);
+            ClassicAssert.IsTrue(parse.ToString().IndexOf("number2", StringComparison.Ordinal) > 0);
+            ClassicAssert.IsTrue(parse.ToString().IndexOf("number3", StringComparison.Ordinal) > 0);
             TestUtils.CheckCounts(resultCounts, 1, 2, 0, 0);
         }
 
@@ -141,9 +142,9 @@ namespace fit.Test.NUnit {
                                                };
 
             RunTest(new BusinessObjectRowFixture(), parse);
-            Assert.IsTrue(parse.ToString().IndexOf("number1", StringComparison.Ordinal) > 0);
-            Assert.IsTrue(parse.ToString().IndexOf("number2", StringComparison.Ordinal) > 0);
-            Assert.IsTrue(parse.ToString().IndexOf("number3", StringComparison.Ordinal) > 0);
+            ClassicAssert.IsTrue(parse.ToString().IndexOf("number1", StringComparison.Ordinal) > 0);
+            ClassicAssert.IsTrue(parse.ToString().IndexOf("number2", StringComparison.Ordinal) > 0);
+            ClassicAssert.IsTrue(parse.ToString().IndexOf("number3", StringComparison.Ordinal) > 0);
             TestUtils.CheckCounts(resultCounts, 1, 2, 0, 0);
         }
 
@@ -161,8 +162,8 @@ namespace fit.Test.NUnit {
             PeopleLoaderFixture.people.Add(new Person("Nigel", "Tufnel"));
             var tables = builder.Parse;
             RunTest(new PeopleRowFixture(), tables);
-            Assert.IsTrue(tables.ToString().IndexOf("Tuf..", StringComparison.Ordinal) > -1);
-            Assert.IsFalse(tables.ToString().IndexOf("Tufnel", StringComparison.Ordinal) > -1);
+            ClassicAssert.IsTrue(tables.ToString().IndexOf("Tuf..", StringComparison.Ordinal) > -1);
+            ClassicAssert.IsFalse(tables.ToString().IndexOf("Tufnel", StringComparison.Ordinal) > -1);
             TestUtils.CheckCounts(resultCounts, 2, 0, 0, 0);
         }
 
@@ -406,7 +407,7 @@ namespace fit.Test.NUnit {
             var testTable = new TestBuilder(inspectorFixtureHtml).Parse;
             RunTest(new PeopleLoaderFixture(), new TestBuilder(loaderFixtureHtml).Parse);
             RunTest(new PeopleRowFixture(), testTable);
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                 "<tr><td class=\"fail\">7 <span class=\"fit_label\">missing</span></td><td>nullest</td><td>Jonesey</td></tr>" +
                 "<tr><td class=\"pass\">2</td><td class=\"pass\">Phil</td><td class=\"pass\">blank</td></tr>" +
                 "\n<tr><td class=\"fail\"><span class=\"fit_grey\">1</span> <span class=\"fit_label\">surplus</span></td><td><span class=\"fit_grey\">null</span></td><td><span class=\"fit_grey\">Jones</span></td></tr>",
@@ -430,7 +431,7 @@ namespace fit.Test.NUnit {
             var testTable = new TestBuilder(tableHtml).Parse;
             RunTest(new ArrayOfStringsFixture(), new TestBuilder(setUpTableHtml).Parse);
             RunTest(new ArrayOfStringsRowFixture(), testTable);
-            Assert.AreEqual(TestStatus.Right,
+            ClassicAssert.AreEqual(TestStatus.Right,
                             testTable.Parts.Parts.More.More.Parts.Value.GetAttribute(CellAttribute.Status));
         }
 
@@ -469,17 +470,17 @@ namespace fit.Test.NUnit {
 
         static void AssertTextInTag(Cell cell, string text)
         {
-            Assert.AreEqual(text, cell.GetAttribute(CellAttribute.Status));
+            ClassicAssert.AreEqual(text, cell.GetAttribute(CellAttribute.Status));
         }
 
         static void AssertTextInBody(Parse cell, string text)
         {
-            Assert.IsTrue(cell.Body.IndexOf(text, StringComparison.Ordinal) > -1);
+            ClassicAssert.IsTrue(cell.Body.IndexOf(text, StringComparison.Ordinal) > -1);
         }
 
         static void AssertTextNotInBody(Parse cell, string text)
         {
-            Assert.IsFalse(cell.Body.IndexOf(text, StringComparison.Ordinal) > -1);
+            ClassicAssert.IsFalse(cell.Body.IndexOf(text, StringComparison.Ordinal) > -1);
         }
 
         static void AddColumn(Parse table, string name)

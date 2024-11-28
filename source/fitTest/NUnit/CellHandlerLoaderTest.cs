@@ -1,4 +1,4 @@
-// Copyright © 2011 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+// Copyright ï¿½ 2011 Syterra Software Inc. Includes work by Object Mentor, Inc., ï¿½ 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -6,6 +6,7 @@
 using fitSharp.Fit.Operators;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fit.Test.NUnit {
     [TestFixture]
@@ -21,10 +22,10 @@ namespace fit.Test.NUnit {
             builder.Append("<tr><td>load</td><td>substring handler</td></tr>");
             builder.Append("</table>");
             var service = new Service.Service(configuration);
-            Assert.IsFalse(service.Compare(new TypedValue("abc"), TestUtils.CreateCell("..b..")));
+            ClassicAssert.IsFalse(service.Compare(new TypedValue("abc"), TestUtils.CreateCell("..b..")));
             var test = builder.MakeStoryTest(service);
             test.Execute();
-            Assert.IsTrue(service.Compare(new TypedValue("abc"), TestUtils.CreateCell("..b..")));
+            ClassicAssert.IsTrue(service.Compare(new TypedValue("abc"), TestUtils.CreateCell("..b..")));
         }
 
         [Test]
@@ -38,10 +39,10 @@ namespace fit.Test.NUnit {
             builder.Append("<tr><td colspan=\"2\">CellHandlerLoader</td></tr>");
             builder.Append("<tr><td>remove</td><td>SubstringHandler</td></tr>");
             builder.Append("</table>");
-            Assert.IsTrue(new Service.Service(configuration).Compare(new TypedValue("abc"), TestUtils.CreateCell("..b..")));
+            ClassicAssert.IsTrue(new Service.Service(configuration).Compare(new TypedValue("abc"), TestUtils.CreateCell("..b..")));
             var test = builder.MakeStoryTest(service);
             test.Execute();
-            Assert.IsFalse(new Service.Service(configuration).Compare(new TypedValue("abc"), TestUtils.CreateCell("..b..")));
+            ClassicAssert.IsFalse(new Service.Service(configuration).Compare(new TypedValue("abc"), TestUtils.CreateCell("..b..")));
         }
     }
 }

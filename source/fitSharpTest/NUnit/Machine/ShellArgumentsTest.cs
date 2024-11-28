@@ -10,6 +10,7 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using fitSharp.Samples;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Machine {
     [TestFixture]
@@ -31,7 +32,7 @@ namespace fitSharp.Test.NUnit.Machine {
 
         static int AssertAppConfigSpecified(Memory memory) {
             memory.GetItem<AppDomainSetup>().ApplicationBase = ".";
-            Assert.IsTrue(memory.GetItem<AppDomainSetup>().ConfigurationFile.EndsWith("myConfig.xml"));
+            ClassicAssert.IsTrue(memory.GetItem<AppDomainSetup>().ConfigurationFile.EndsWith("myConfig.xml"));
             return 0;
         }
 #endif
@@ -68,21 +69,21 @@ namespace fitSharp.Test.NUnit.Machine {
         }
 
         static int AssertRunnerSpecified(Memory memory) {
-            Assert.AreEqual("myRunner", memory.GetItem<Settings>().Runner);
+            ClassicAssert.AreEqual("myRunner", memory.GetItem<Settings>().Runner);
             return 0;
         }
 
         static int AssertNoAction(Memory memory) {
-            Assert.Fail();
+            ClassicAssert.Fail();
             return 0;
         }
 
-        static void AssertNothingReported(Error error) { Assert.Fail(error.Message); }
+        static void AssertNothingReported(Error error) { ClassicAssert.Fail(error.Message); }
         static void AssertRunnerReported(Error error) { AssertReportContains(error, "runner"); }
         static void AssertSuiteConfigReported(Error error) { AssertReportContains(error, "Suite configuration file"); }
 
         static void AssertReportContains(Error error, string expected) {
-            Assert.IsTrue(error.Message.Contains(expected), error.Message);
+            ClassicAssert.IsTrue(error.Message.Contains(expected), error.Message);
         }
 
         [SetUp]

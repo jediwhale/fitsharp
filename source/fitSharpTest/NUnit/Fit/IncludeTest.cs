@@ -14,6 +14,7 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using fitSharp.Samples;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Fit {
     [TestFixture] public class IncludeTest {
@@ -28,29 +29,29 @@ namespace fitSharp.Test.NUnit.Fit {
             processor.AddOperator(new MockComposeStoryTestString());
             var includeTable = new CellTree(new CellTree("include", "string", input));
             new Include().Interpret(processor, includeTable);
-            Assert.IsTrue(includeTable.ValueAt(0, 0).HasAttribute(CellAttribute.Folded));
-            Assert.AreEqual(result, includeTable.ValueAt(0, 0).GetAttribute(CellAttribute.Folded));
-            Assert.AreEqual(1, processor.TestStatus.Counts.GetCount(TestStatus.Right));
+            ClassicAssert.IsTrue(includeTable.ValueAt(0, 0).HasAttribute(CellAttribute.Folded));
+            ClassicAssert.AreEqual(result, includeTable.ValueAt(0, 0).GetAttribute(CellAttribute.Folded));
+            ClassicAssert.AreEqual(1, processor.TestStatus.Counts.GetCount(TestStatus.Right));
         }
 
         [Test] public void IncludesPage() {
             MakePage(pageName);
             includeAction.Page(pageName);
-            Assert.AreEqual(pageContent, includeAction.Result);
+            ClassicAssert.AreEqual(pageContent, includeAction.Result);
         }
 
         [Test] public void IncludesPageRelativeToCurrent() {
             MakePage(System.IO.Path.Combine(currentPath, pageName));
             Context.TestPagePath = new FilePath(System.IO.Path.Combine(currentPath, currentPage));
             includeAction.PageFromCurrent(pageName);
-            Assert.AreEqual(pageContent, includeAction.Result);
+            ClassicAssert.AreEqual(pageContent, includeAction.Result);
         }
 
         [Test] public void IncludesPageRelativeToSuite() {
             MakePage(System.IO.Path.Combine(currentPath, pageName));
             Context.SuitePath = new DirectoryPath(currentPath);
             includeAction.PageFromSuite(pageName);
-            Assert.AreEqual(pageContent, includeAction.Result);
+            ClassicAssert.AreEqual(pageContent, includeAction.Result);
         }
 
         void MakePage(string pagePath) {
@@ -73,7 +74,7 @@ namespace fitSharp.Test.NUnit.Fit {
 
         class MockRunTest: RunTest {
             public void Run(CellProcessor processor, Tree<Cell> testTables, StoryTestWriter writer) {
-                Assert.AreSame(parsedInput, testTables);
+                ClassicAssert.AreSame(parsedInput, testTables);
                 parsedInput.Value.SetAttribute(CellAttribute.Body, result);
                 writer.WriteTable(parsedInput);
                 processor.TestStatus.MarkRight(testTables.Branches[0].Value);
@@ -86,7 +87,7 @@ namespace fitSharp.Test.NUnit.Fit {
             }
 
             public Tree<Cell> Compose(TypedValue instance) {
-                Assert.AreEqual(input, instance.ValueString);
+                ClassicAssert.AreEqual(input, instance.ValueString);
                 return parsedInput;
             }
         }

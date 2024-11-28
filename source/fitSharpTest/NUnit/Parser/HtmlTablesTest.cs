@@ -1,4 +1,4 @@
-// Copyright © 2018 Syterra Software Inc. All rights reserved.
+// Copyright ï¿½ 2018 Syterra Software Inc. All rights reserved.
 // The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
 // which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
@@ -8,28 +8,29 @@ using System.Text;
 using fitSharp.Machine.Model;
 using fitSharp.Parser;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Parser {
     [TestFixture] public class HtmlTablesTest {
 
         [Test] public void ParseEmpty() {
             var result = Parse(string.Empty);
-            Assert.IsTrue(result.Branches.Count == 0);
+            ClassicAssert.IsTrue(result.Branches.Count == 0);
         }
 
         [Test] public void ParseNoTables() {
             var result = Parse("set the table");
-            Assert.IsTrue(result.Branches.Count == 0);
+            ClassicAssert.IsTrue(result.Branches.Count == 0);
             result = Parse("set the <table");
-            Assert.IsTrue(result.Branches.Count == 0);
+            ClassicAssert.IsTrue(result.Branches.Count == 0);
         }
     
         [Test] public void ParseEmptyTable() {
-            Assert.Throws<ApplicationException>(() => Parse("leader<table x=\"y\"></table>trailer"));
+            ClassicAssert.Throws<ApplicationException>(() => Parse("leader<table x=\"y\"></table>trailer"));
         }
     
         [Test] public void ParseTableWithBody() {
-            Assert.Throws<ApplicationException>(() =>Parse("leader<Table foo=2>body</table>trailer"));
+            ClassicAssert.Throws<ApplicationException>(() =>Parse("leader<Table foo=2>body</table>trailer"));
         }
     
         [Test] public void ParseTwoTables() {
@@ -38,7 +39,7 @@ namespace fitSharp.Test.NUnit.Parser {
         }
 
         [Test] public void ParseRow() {
-            Assert.Throws<ApplicationException>(() =>Parse(" <table>leader<tr></tr></table>"));
+            ClassicAssert.Throws<ApplicationException>(() =>Parse(" <table>leader<tr></tr></table>"));
         }
     
         [Test] public void ParseCell() {
@@ -130,7 +131,7 @@ namespace fitSharp.Test.NUnit.Parser {
         }
 
         static void AssertParse(string input, string expected) {
-            Assert.AreEqual("<div>" + expected + "</div>", Parse(input).Format());
+            ClassicAssert.AreEqual("<div>" + expected + "</div>", Parse(input).Format());
         }
 
         static Tree<Cell> Parse(string input) {

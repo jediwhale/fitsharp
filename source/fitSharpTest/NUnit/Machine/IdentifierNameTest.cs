@@ -5,35 +5,36 @@
 
 using fitSharp.Machine.Model;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Machine {
     [TestFixture] public class IdentifierNameTest {
         [Test] public void MatchesString() {
-            Assert.IsTrue(new IdentifierName("stuff").Matches("stuff"));
+            ClassicAssert.IsTrue(new IdentifierName("stuff").Matches("stuff"));
         }
 
         [Test] public void MatchIgnoresCase() {
-            Assert.IsTrue(new IdentifierName("stUFf").Matches("Stuff"));
+            ClassicAssert.IsTrue(new IdentifierName("stUFf").Matches("Stuff"));
         }
 
         [Test] public void WhitespaceIsTrimmed() {
-            Assert.IsTrue(new IdentifierName(" stuff\n").Matches("stuff"));
+            ClassicAssert.IsTrue(new IdentifierName(" stuff\n").Matches("stuff"));
         }
 
         [Test] public void UnderscoreInMatchIsIgnored() {
-            Assert.IsTrue(new IdentifierName("stuff").Matches("stu_ff"));
+            ClassicAssert.IsTrue(new IdentifierName("stuff").Matches("stu_ff"));
         }
 
         [Test] public void UnderscoreInNameIsIgnored() {
-            Assert.IsTrue(new IdentifierName("stu_ff").Matches("stu_ff"));
+            ClassicAssert.IsTrue(new IdentifierName("stu_ff").Matches("stu_ff"));
         }
 
         [Test] public void NoInputIsEmpty() {
-            Assert.IsTrue(new IdentifierName(" \n").IsEmpty);
+            ClassicAssert.IsTrue(new IdentifierName(" \n").IsEmpty);
         }
 
         [Test] public void StartsString() {
-            Assert.IsTrue(new IdentifierName("hi").IsStartOf("Hi Mom!"));
+            ClassicAssert.IsTrue(new IdentifierName("hi").IsStartOf("Hi Mom!"));
         }
     }
 }

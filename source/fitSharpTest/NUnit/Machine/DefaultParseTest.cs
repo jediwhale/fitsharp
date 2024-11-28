@@ -8,6 +8,7 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using fitSharp.Test.Double;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Machine {
     [TestFixture] public class DefaultParseTest {
@@ -20,28 +21,28 @@ namespace fitSharp.Test.NUnit.Machine {
 
         [Test] public void StringIsParsed() {
             TypedValue result =  parse.Parse(typeof (string), TypedValue.Void, new TreeList<string>("stuff"));
-            Assert.AreEqual("stuff", result.Value);
+            ClassicAssert.AreEqual("stuff", result.Value);
         }
 
         [Test] public void DateIsParsed() {
             TypedValue result = parse.Parse(typeof(DateTime), TypedValue.Void, new TreeList<string>("03 Jan 2008"));
-            Assert.AreEqual(new DateTime(2008, 1, 3), result.Value);
+            ClassicAssert.AreEqual(new DateTime(2008, 1, 3), result.Value);
         }
 
         [Test] public void ClassIsParsed() {
             TypedValue result = parse.Parse(typeof(SampleClass), TypedValue.Void, new TreeList<string>("stuff"));
-            Assert.IsTrue(result.Value is SampleClass);
+            ClassicAssert.IsTrue(result.Value is SampleClass);
         }
 
         [Test] public void ClassWithStringConstructorIsParsed() {
             TypedValue result = parse.Parse(typeof(ClassFromString), TypedValue.Void, new TreeList<string>("stuff"));
-            Assert.IsTrue(result.Value is ClassFromString);
+            ClassicAssert.IsTrue(result.Value is ClassFromString);
         }
 
         [Test] public void StructWithParseAndConstructorIsParsed() {
             TypedValue result = parse.Parse(typeof(StructWithParseAndConstructor), TypedValue.Void, new TreeList<string>("stuff"));
-            Assert.IsTrue(result.Value is StructWithParseAndConstructor);
-            Assert.AreEqual("stuffparsector", result.GetValue<StructWithParseAndConstructor>().stuff);
+            ClassicAssert.IsTrue(result.Value is StructWithParseAndConstructor);
+            ClassicAssert.AreEqual("stuffparsector", result.GetValue<StructWithParseAndConstructor>().stuff);
         }
 
         private class ClassFromString {

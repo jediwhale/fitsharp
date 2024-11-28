@@ -6,19 +6,20 @@
 using System.Text;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Machine {
     [TestFixture] public class TreeTest {
         [Test] public void LeafHasOneLeaf() {
             var result = new StringBuilder();
             foreach (string leaf in new TreeList<string>("a").Leaves()) result.Append(leaf);
-            Assert.AreEqual("a", result.ToString());
+            ClassicAssert.AreEqual("a", result.ToString());
         }
 
         [Test] public void EmptyTreeHasNoLeaves() {
             var result = new StringBuilder();
             foreach (string leaf in new TreeList<string>().Leaves()) result.Append(leaf);
-            Assert.AreEqual(string.Empty, result.ToString());
+            ClassicAssert.AreEqual(string.Empty, result.ToString());
         }
 
         [Test] public void LeafyTreeHasManyLeaves() {
@@ -30,7 +31,7 @@ namespace fitSharp.Test.NUnit.Machine {
                                .AddBranchValue("c"))
                 .AddBranchValue("d");
             foreach (string leaf in tree.Leaves()) result.Append(leaf);
-            Assert.AreEqual("abcd", result.ToString());
+            ClassicAssert.AreEqual("abcd", result.ToString());
         }
     }
 }

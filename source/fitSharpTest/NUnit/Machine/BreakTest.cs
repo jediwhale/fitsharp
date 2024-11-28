@@ -6,6 +6,7 @@
 using System;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Machine {
     [TestFixture]
@@ -36,7 +37,7 @@ namespace fitSharp.Test.NUnit.Machine {
         void AssertBreak(string expected, params Tuple<string, string>[] input) {
             result = string.Empty;
             new Break<string, string>(Start, Item, End).Process(input);
-            Assert.AreEqual(expected, result);
+            ClassicAssert.AreEqual(expected, result);
         }
 
         void Item(string key, string value) {

@@ -6,6 +6,7 @@
 using System;
 using fitSharp.Fit.Runner;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Fit {
     [TestFixture]
@@ -13,12 +14,12 @@ namespace fitSharp.Test.NUnit.Fit {
 
         [Test]
         public void AddsTextToStart() {
-            Assert.AreEqual("newtext" + Environment.NewLine + "existingtext", HtmlDecorator.AddToStart("newtext", "existingtext"));
+            ClassicAssert.AreEqual("newtext" + Environment.NewLine + "existingtext", HtmlDecorator.AddToStart("newtext", "existingtext"));
         }
 
         [Test]
         public void AddsTextAfterDocType() {
-            Assert.AreEqual("<!doctype stuff>" + Environment.NewLine + "newtextexistingtext", HtmlDecorator.AddToStart("newtext", "<!doctype stuff>existingtext"));
+            ClassicAssert.AreEqual("<!doctype stuff>" + Environment.NewLine + "newtextexistingtext", HtmlDecorator.AddToStart("newtext", "<!doctype stuff>existingtext"));
         }
          
     }

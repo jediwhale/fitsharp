@@ -10,6 +10,7 @@ using fitSharp.Fit.Operators;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using fitSharp.Test.Double;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Fit {
     [TestFixture]
@@ -19,14 +20,14 @@ namespace fitSharp.Test.NUnit.Fit {
         public void ExecutesRowMethod() {
             var sut = new SampleClass();
             Evaluate(new CellTree("countby", "2"), sut);
-            Assert.AreEqual(2, sut.Count);
+            ClassicAssert.AreEqual(2, sut.Count);
         }
 
         [Test]
         public void ExecutesFlowKeyword() {
             var row = new CellTree("akeyword");
             Evaluate(row, null);
-            Assert.AreEqual("somevalue", TestInvokeSpecialAction.Field);
+            ClassicAssert.AreEqual("somevalue", TestInvokeSpecialAction.Field);
         }
 
         static void Evaluate(Tree<Cell> row, object systemUnderTest) {

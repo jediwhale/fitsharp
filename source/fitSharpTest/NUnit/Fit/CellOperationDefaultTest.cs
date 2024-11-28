@@ -9,6 +9,7 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using Moq;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using TestStatus=fitSharp.Fit.Model.TestStatus;
 
 namespace fitSharp.Test.NUnit.Fit {
@@ -25,46 +26,46 @@ namespace fitSharp.Test.NUnit.Fit {
 
         [Test] public void MethodIsInvoked() {
             SetUpSUT("member");
-            Assert.AreEqual(result, ExecuteWithNoTargetCell());
+            ClassicAssert.AreEqual(result, ExecuteWithNoTargetCell());
         }
 
         [Test] public void LastStatusIsClearedWhenMethodIsInvoked() {
             SetUpSUT("member");
             testStatus.LastAction = "blah blah";
             ExecuteWithNoTargetCell();
-            Assert.IsNull(testStatus.LastAction);
+            ClassicAssert.IsNull(testStatus.LastAction);
         }
 
         [Test] public void LastActionIsSetAsInvokeCellAttribute() {
             SetUpSUT("procedure");
             Execute(targetCell);
-            Assert.AreEqual("blah blah", targetCell.Value.GetAttribute(CellAttribute.Folded));
+            ClassicAssert.AreEqual("blah blah", targetCell.Value.GetAttribute(CellAttribute.Folded));
         }
 
         [Test] public void CellIsMarkedWithInvokeStatus() {
             SetUpSUT("procedure");
             testStatus.Counts.AddCount(TestStatus.Wrong);
             Execute(targetCell);
-            Assert.AreEqual(TestStatus.Right, targetCell.Value.GetAttribute(CellAttribute.Status));
+            ClassicAssert.AreEqual(TestStatus.Right, targetCell.Value.GetAttribute(CellAttribute.Status));
         }
 
         [Test] public void CellIsNotMarkedIfAlreadyMarked() {
             SetUpSUT("procedure");
             targetCell.Value.SetAttribute(CellAttribute.Status, TestStatus.Wrong);
             Execute(targetCell);
-            Assert.AreEqual(TestStatus.Wrong, targetCell.Value.GetAttribute(CellAttribute.Status));
+            ClassicAssert.AreEqual(TestStatus.Wrong, targetCell.Value.GetAttribute(CellAttribute.Status));
         }
 
         [Test] public void LastActionIsSetAsInputCellAttribute() {
             SetUpSUT("procedure");
             Execute(targetCell);
-            Assert.AreEqual("blah blah", targetCell.Value.GetAttribute(CellAttribute.Folded));
+            ClassicAssert.AreEqual("blah blah", targetCell.Value.GetAttribute(CellAttribute.Folded));
         }
 
         [Test] public void LastActionIsSetAsExpectedCellAttribute() {
             SetUpSUT("procedure");
             check.Check(CellOperationValue.Make(target.Value, new CellTreeLeaf("procedure"), new CellTree(), false), targetCell);
-            Assert.AreEqual("blah blah", targetCell.Value.GetAttribute(CellAttribute.Folded));
+            ClassicAssert.AreEqual("blah blah", targetCell.Value.GetAttribute(CellAttribute.Folded));
         }
 
         TypedValue ExecuteWithNoTargetCell() {

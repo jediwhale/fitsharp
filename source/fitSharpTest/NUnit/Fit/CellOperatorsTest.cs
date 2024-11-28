@@ -8,6 +8,7 @@ using fitSharp.Fit.Operators;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Fit {
     public class TestOperator : CellOperator, ParseOperator<Cell> {
@@ -25,13 +26,13 @@ namespace fitSharp.Test.NUnit.Fit {
             var operators = new CellOperators();
             operators.Add("ParseDate");
             operators.Do<ParseOperator<Cell>>(o => (o is ParseDate), o => {});
-            Assert.IsTrue(true, "no exception");
+            ClassicAssert.IsTrue(true, "no exception");
         }
 
         [Test] public void FindsWrapOperator() {
             var operators = new CellOperators();
             var result = operators.FindOperator<WrapOperator>(new object[] {null});
-            Assert.AreEqual(typeof(WrapDefault), result.GetType());
+            ClassicAssert.AreEqual(typeof(WrapDefault), result.GetType());
         }
 
         [Test] public void AddedFirstGetsExecutedFirst() {
@@ -41,7 +42,7 @@ namespace fitSharp.Test.NUnit.Fit {
             ParseOperator<Cell> executed = null;
             operators.Do<ParseOperator<Cell>>(o => true, o => { executed = o; });
 
-            Assert.AreSame(registered, executed);
+            ClassicAssert.AreSame(registered, executed);
         }
     }
 }

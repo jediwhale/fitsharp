@@ -6,6 +6,7 @@
 using fitSharp.IO;
 using fitSharp.Samples;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.IO {
     [TestFixture] public class MessageChannelTest {
@@ -14,7 +15,7 @@ namespace fitSharp.Test.NUnit.IO {
             var testSocket = new TestPort();
             var socketStream = new MessageChannel(testSocket);
             testSocket.PutBytes(new byte[] {104, 101, 108, 108, 111});
-            Assert.AreEqual("hello", socketStream.Read(5));
+            ClassicAssert.AreEqual("hello", socketStream.Read(5));
         }
 
         [Test] public void StringIsReadInMultipleParts() {
@@ -22,28 +23,28 @@ namespace fitSharp.Test.NUnit.IO {
             var socketStream = new MessageChannel(testSocket);
             testSocket.PutBytes(new byte[] {104, 101, 108, 108, 111});
             testSocket.PutBytes(new byte[] {32, 119,111,114,108,100});
-            Assert.AreEqual("hello world", socketStream.Read(11));
+            ClassicAssert.AreEqual("hello world", socketStream.Read(11));
         }
 
         [Test] public void EncodedStringIsRead() {
             var testSocket = new TestPort();
             var socketStream = new MessageChannel(testSocket);
             testSocket.PutBytes(new byte[] {104, 226, 128, 153, 108, 108, 111});
-            Assert.AreEqual("h\u2019llo", socketStream.Read(7));
+            ClassicAssert.AreEqual("h\u2019llo", socketStream.Read(7));
         }
 
         [Test] public void SimpleStringIsWritten() {
             var testSocket = new TestPort();
             var socketStream = new MessageChannel(testSocket);
             socketStream.Write("hello");
-            Assert.AreEqual(new byte[] {104, 101, 108, 108, 111}, testSocket.GetBytes());
+            ClassicAssert.AreEqual(new byte[] {104, 101, 108, 108, 111}, testSocket.GetBytes());
         }
 
         [Test] public void StringIsWrittenWithLengthPrefix() {
             var testSocket = new TestPort();
             var socketStream = new MessageChannel(testSocket);
             socketStream.Write("h\u2019llo", "{0}:");
-            Assert.AreEqual(new byte[] {55, 58, 104, 226, 128, 153, 108, 108, 111}, testSocket.GetBytes());
+            ClassicAssert.AreEqual(new byte[] {55, 58, 104, 226, 128, 153, 108, 108, 111}, testSocket.GetBytes());
         }
 
     }

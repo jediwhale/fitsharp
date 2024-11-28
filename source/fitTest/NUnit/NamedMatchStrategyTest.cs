@@ -7,6 +7,7 @@ using System.Data;
 using fit.Operators;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fit.Test.NUnit {
     [TestFixture] public class NamedMatchStrategyTest {
@@ -31,9 +32,9 @@ namespace fit.Test.NUnit {
             var strategy = new TestStrategy(new Parse("tr", string.Empty,
                                                       new Parse("td", headerName, null, null), null));
             TypedValue[] values = strategy.ActualValues(row);
-            Assert.AreEqual(1, values.Length);
-            Assert.AreEqual(typeof(string), values[0].Type);
-            Assert.AreEqual("hi", values[0].Value);
+            ClassicAssert.AreEqual(1, values.Length);
+            ClassicAssert.AreEqual(typeof(string), values[0].Type);
+            ClassicAssert.AreEqual("hi", values[0].Value);
         }
 
         class TestStrategy: NamedMatchStrategy {

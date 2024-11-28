@@ -11,6 +11,7 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using fitSharp.Samples;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using TestStatus=fitSharp.Fit.Model.TestStatus;
 
 namespace fit.Test.NUnit {
@@ -44,17 +45,17 @@ namespace fit.Test.NUnit {
         }
 
         public static void CheckCounts(TestCounts counts, int right, int wrong, int ignore, int exception) {
-            Assert.AreEqual(right, counts.GetCount(TestStatus.Right));
-            Assert.AreEqual(wrong, counts.GetCount(TestStatus.Wrong));
-            Assert.AreEqual(ignore, counts.GetCount(TestStatus.Ignore));
-            Assert.AreEqual(exception, counts.GetCount(TestStatus.Exception));
+            ClassicAssert.AreEqual(right, counts.GetCount(TestStatus.Right));
+            ClassicAssert.AreEqual(wrong, counts.GetCount(TestStatus.Wrong));
+            ClassicAssert.AreEqual(ignore, counts.GetCount(TestStatus.Ignore));
+            ClassicAssert.AreEqual(exception, counts.GetCount(TestStatus.Exception));
         }
 
         public static void VerifyCounts(Fixture fixture, int right, int wrong, int ignores, int exceptions) {
-            Assert.AreEqual(right, fixture.TestStatus.Counts.GetCount(TestStatus.Right));
-            Assert.AreEqual(wrong, fixture.TestStatus.Counts.GetCount(TestStatus.Wrong));
-            Assert.AreEqual(ignores, fixture.TestStatus.Counts.GetCount(TestStatus.Ignore));
-            Assert.AreEqual(exceptions, fixture.TestStatus.Counts.GetCount(TestStatus.Exception));
+            ClassicAssert.AreEqual(right, fixture.TestStatus.Counts.GetCount(TestStatus.Right));
+            ClassicAssert.AreEqual(wrong, fixture.TestStatus.Counts.GetCount(TestStatus.Wrong));
+            ClassicAssert.AreEqual(ignores, fixture.TestStatus.Counts.GetCount(TestStatus.Ignore));
+            ClassicAssert.AreEqual(exceptions, fixture.TestStatus.Counts.GetCount(TestStatus.Exception));
         }
     }
 
@@ -64,16 +65,16 @@ namespace fit.Test.NUnit {
         [Test]
         public void TestConstructor() {
             var person = new Person("john", "doe");
-            Assert.AreEqual("john doe", person.ToString());
+            ClassicAssert.AreEqual("john doe", person.ToString());
         }
 
         [Test]
         public void TestConstructorWithId() {
             var person = new Person(1, "jane", "roe");
-            Assert.AreEqual("jane roe", person.ToString());
-            Assert.AreEqual("jane", person.FirstName);
-            Assert.AreEqual("roe", person.LastName);
-            Assert.AreEqual(1, person.Id);
+            ClassicAssert.AreEqual("jane roe", person.ToString());
+            ClassicAssert.AreEqual("jane", person.FirstName);
+            ClassicAssert.AreEqual("roe", person.LastName);
+            ClassicAssert.AreEqual(1, person.Id);
         }
 
         [Test]
@@ -81,7 +82,7 @@ namespace fit.Test.NUnit {
         {
             var person = new Person("Scott", "Henderson");
             person.SetTalented(true);
-            Assert.IsTrue(person.IsTalented);
+            ClassicAssert.IsTrue(person.IsTalented);
         }
 
         [Test]
@@ -89,7 +90,7 @@ namespace fit.Test.NUnit {
         {
             const string name = "joe schmoe";
             Person person = Person.Parse(name);
-            Assert.AreEqual(name, person.ToString());
+            ClassicAssert.AreEqual(name, person.ToString());
         }
 
         [Test]
@@ -97,7 +98,7 @@ namespace fit.Test.NUnit {
         {
             var original = new Person("Wes", "Montgomery");
             var copy = new Person("Wes", "Montgomery");
-            Assert.IsTrue(original.Equals(copy));
+            ClassicAssert.IsTrue(original.Equals(copy));
         }
     }
 }

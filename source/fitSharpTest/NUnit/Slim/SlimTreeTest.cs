@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using fitSharp.Machine.Model;
 using fitSharp.Slim.Model;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Slim {
     [TestFixture] public class SlimTreeTest {
@@ -60,10 +61,10 @@ namespace fitSharp.Test.NUnit.Slim {
         }
 
         static void ValidateTree(Tree<string> result, IList<object> results) {
-            Assert.AreEqual(results.Count, result.Branches.Count);
+            ClassicAssert.AreEqual(results.Count, result.Branches.Count);
             for (var i = 0; i < results.Count; i++) {
                 var itemList = results[i] as IList<object>;
-                if (itemList == null) Assert.AreEqual(results[i], result.ValueAt(i));
+                if (itemList == null) ClassicAssert.AreEqual(results[i], result.ValueAt(i));
                 else ValidateTree(result.Branches[i], itemList);
             }
         }
@@ -73,9 +74,9 @@ namespace fitSharp.Test.NUnit.Slim {
                 SlimTree.Parse(input);
             }
             catch (FormatException) {
-                Assert.Pass();
+                ClassicAssert.Pass();
             }
-            Assert.Fail();
+            ClassicAssert.Fail();
         }
     }
 }

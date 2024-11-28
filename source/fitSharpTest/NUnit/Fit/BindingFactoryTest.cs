@@ -7,44 +7,45 @@ using fitSharp.Fit.Model;
 using fitSharp.Fit.Service;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Fit {
     [TestFixture] public class BindingFactoryTest {
 
         [Test] public void BindsNoActionForEmptyString() {
-            Assert.IsTrue(Bind(string.Empty) is NoBinding);
+            ClassicAssert.IsTrue(Bind(string.Empty) is NoBinding);
         }
 
         [Test] public void BindsCheckForQuestionSuffix() {
-            Assert.IsTrue(Bind("stuff?") is CheckBinding);
+            ClassicAssert.IsTrue(Bind("stuff?") is CheckBinding);
         }
 
         [Test] public void BindsCheckForExclamationSuffix() {
-            Assert.IsTrue(Bind("stuff!") is CheckBinding);
+            ClassicAssert.IsTrue(Bind("stuff!") is CheckBinding);
         }
 
         [Test] public void BindsCheckForParenthesesSuffix() {
-            Assert.IsTrue(Bind("stuff()") is CheckBinding);
+            ClassicAssert.IsTrue(Bind("stuff()") is CheckBinding);
         }
 
         [Test] public void BindsInputForPlainString() {
-            Assert.IsTrue(Bind("stuff") is InputBinding);
+            ClassicAssert.IsTrue(Bind("stuff") is InputBinding);
         }
 
         [Test] public void BindsCreateForNewPrefix() {
-            Assert.IsTrue(Bind("new stuff") is CreateBinding);
+            ClassicAssert.IsTrue(Bind("new stuff") is CreateBinding);
         }
 
         [Test] public void BindsInputForNewPrefixWithoutSpace() {
-            Assert.IsTrue(Bind("newstuff") is InputBinding);
+            ClassicAssert.IsTrue(Bind("newstuff") is InputBinding);
         }
 
         [Test] public void BindsCheckForNewPrefixAndQuestionSuffix() {
-            Assert.IsTrue(Bind("new stuff?") is CheckBinding);
+            ClassicAssert.IsTrue(Bind("new stuff?") is CheckBinding);
         }
 
         [Test] public void BindsInputForNewPrefixOnMemberName() {
-            Assert.IsTrue(Bind("new member") is InputBinding);
+            ClassicAssert.IsTrue(Bind("new member") is InputBinding);
         }
 
         static BindingOperation Bind(string input) {

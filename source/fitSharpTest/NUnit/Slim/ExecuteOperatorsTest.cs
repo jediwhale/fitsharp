@@ -10,6 +10,7 @@ using fitSharp.Slim.Operators;
 using fitSharp.Slim.Service;
 using fitSharp.Test.Double.Slim;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Slim {
     [TestFixture] public class ExecuteOperatorsTest {
@@ -38,7 +39,7 @@ namespace fitSharp.Test.NUnit.Slim {
             var executeMake = new ExecuteMake { Processor = processor };
             var input = new SlimTree().AddBranchValue("step").AddBranchValue("make").AddBranchValue("variable").AddBranchValue("fitSharp.Test.$symbol.Slim.SampleClass");
             ExecuteOperation(executeMake, input, 2);
-            Assert.IsTrue(processor.Get<SavedInstances>().GetValue("variable") is SampleClass);
+            ClassicAssert.IsTrue(processor.Get<SavedInstances>().GetValue("variable") is SampleClass);
         }
 
         [Test] public void ExecuteMakeUsesSymbolAsFullClassName() {
@@ -46,7 +47,7 @@ namespace fitSharp.Test.NUnit.Slim {
             var executeMake = new ExecuteMake { Processor = processor };
             var input = new SlimTree().AddBranchValue("step").AddBranchValue("make").AddBranchValue("variable").AddBranchValue("$symbol");
             ExecuteOperation(executeMake, input, 2);
-            Assert.IsTrue(processor.Get<SavedInstances>().GetValue("variable") is SampleClass);
+            ClassicAssert.IsTrue(processor.Get<SavedInstances>().GetValue("variable") is SampleClass);
         }
 
         [Test] public void ExecuteMakeUsesSymbolAsObject() {
@@ -55,7 +56,7 @@ namespace fitSharp.Test.NUnit.Slim {
             var executeMake = new ExecuteMake { Processor = processor };
             var input = new SlimTree().AddBranchValue("step").AddBranchValue("make").AddBranchValue("variable").AddBranchValue("$symbol");
             ExecuteOperation(executeMake, input, 2);
-            Assert.AreEqual(newClass, processor.Get<SavedInstances>().GetValue("variable"));
+            ClassicAssert.AreEqual(newClass, processor.Get<SavedInstances>().GetValue("variable"));
         }
 
         [Test] public void ExecuteMakeLibraryIsStacked() {
@@ -63,10 +64,10 @@ namespace fitSharp.Test.NUnit.Slim {
             var input = new SlimTree().AddBranchValue("step").AddBranchValue("make").AddBranchValue("librarystuff").AddBranchValue("fitSharp.Test.NUnit.Slim.SampleClass");
             ExecuteOperation(executeMake, input, 2);
             foreach (var libraryInstance in processor.LibraryInstances) {
-                Assert.IsTrue(libraryInstance.Value is SampleClass);
+                ClassicAssert.IsTrue(libraryInstance.Value is SampleClass);
                 return;
             }
-            Assert.Fail();
+            ClassicAssert.Fail();
         }
 
         [Test] public void ExecuteCallBadMethodReturnsException() {
@@ -82,14 +83,14 @@ namespace fitSharp.Test.NUnit.Slim {
             var executeCall = new ExecuteCall { Processor = processor };
             var input = new SlimTree().AddBranchValue("step").AddBranchValue("call").AddBranchValue("variable").AddBranchValue("increase.in.sampleextension").AddBranchValue("2");
             ExecuteOperation(executeCall, input, 2);
-            Assert.AreEqual("3", result.ValueAt(1));
+            ClassicAssert.AreEqual("3", result.ValueAt(1));
         }
 
         [Test] public void ExecuteImportAddsNamespace() {
             var executeImport = new ExecuteImport { Processor = processor };
             var input = new SlimTree().AddBranchValue("step").AddBranchValue("import").AddBranchValue("fitSharp.Test.NUnit.Slim");
             ExecuteOperation(executeImport, input, 2);
-            Assert.IsTrue(processor.Create("SampleClass", new SlimTree()).Value is SampleClass);
+            ClassicAssert.IsTrue(processor.Create("SampleClass", new SlimTree()).Value is SampleClass);
         }
 
         [Test] public void ExecuteCallAndAssignSavesSymbol() {
@@ -99,8 +100,8 @@ namespace fitSharp.Test.NUnit.Slim {
                 new SlimTree().AddBranchValue("step").AddBranchValue("callAndAssign").AddBranchValue("symbol").AddBranchValue(
                     "variable").AddBranchValue("sampleMethod");
             ExecuteOperation(executeCallAndAssign, input, 2);
-            Assert.AreEqual("testresult", result.ValueAt(1));
-            Assert.AreEqual("testresult", processor.Get<Symbols>().GetValue("symbol"));
+            ClassicAssert.AreEqual("testresult", result.ValueAt(1));
+            ClassicAssert.AreEqual("testresult", processor.Get<Symbols>().GetValue("symbol"));
         }
 
         [Test] public void ExecuteCallUsesDomainAdapter() {
@@ -108,7 +109,7 @@ namespace fitSharp.Test.NUnit.Slim {
             var executeCall = new ExecuteCall { Processor = processor };
             var input = new SlimTree().AddBranchValue("step").AddBranchValue("call").AddBranchValue("variable").AddBranchValue("DomainMethod");
             ExecuteOperation(executeCall, input, 2);
-            Assert.AreEqual("domainstuff", result.ValueAt(1));
+            ClassicAssert.AreEqual("domainstuff", result.ValueAt(1));
         }
 
         [Test] public void ExecuteCallOnMissingInstanceUsesLibrary() {
@@ -119,13 +120,13 @@ namespace fitSharp.Test.NUnit.Slim {
             input = new SlimTree().AddBranchValue("step").AddBranchValue("call").AddBranchValue("garbage").AddBranchValue("SampleMethod");
             SampleClass.MethodCount = 0;
             ExecuteOperation(executeCall, input, 2);
-            Assert.AreEqual(1, SampleClass.MethodCount);
+            ClassicAssert.AreEqual(1, SampleClass.MethodCount);
         }
 
         [Test] public void ExecuteGetFixtureReturnsActorInstance() {
             MakeSampleClass("sampleData");
             CallActorMethod("getFixture");
-            Assert.AreEqual("Sample=sampleData", result.ValueAt(1));
+            ClassicAssert.AreEqual("Sample=sampleData", result.ValueAt(1));
         }
 
         [Test] public void ExecutePushAndPopFixtureReturnsActorInstance() {
@@ -134,7 +135,7 @@ namespace fitSharp.Test.NUnit.Slim {
             MakeSampleClass("otherData");
             CallActorMethod("popFixture");
             CallActorMethod("info");
-            Assert.AreEqual("sampleData", result.ValueAt(1));
+            ClassicAssert.AreEqual("sampleData", result.ValueAt(1));
         }
 
         [Test]
@@ -145,8 +146,8 @@ namespace fitSharp.Test.NUnit.Slim {
                 new SlimTree().AddBranchValue("step").AddBranchValue("assign").AddBranchValue("symbol").AddBranchValue(
                     "value");
             ExecuteOperation(executeAssign, input, 2);
-            Assert.AreEqual("OK", result.ValueAt(1));
-            Assert.AreEqual("value", processor.Get<Symbols>().GetValue("symbol"));
+            ClassicAssert.AreEqual("OK", result.ValueAt(1));
+            ClassicAssert.AreEqual("value", processor.Get<Symbols>().GetValue("symbol"));
         }
 
         void MakeSampleClass(string sampleData) {
@@ -167,13 +168,13 @@ namespace fitSharp.Test.NUnit.Slim {
                 executeResult = executeOperator.Invoke(new TypedValue(new SlimInstruction()), new MemberName(string.Empty), input);
             }
             result = executeResult.GetValue<Tree<string>>();
-            Assert.IsFalse(result.IsLeaf);
-            Assert.AreEqual(branchCount, result.Branches.Count);
-            Assert.AreEqual("step", result.ValueAt(0));
+            ClassicAssert.IsFalse(result.IsLeaf);
+            ClassicAssert.AreEqual(branchCount, result.Branches.Count);
+            ClassicAssert.AreEqual("step", result.ValueAt(0));
         }
 
         void CheckForException(string exceptionText) {
-            Assert.IsTrue(result.ValueAt(1).StartsWith("__EXCEPTION__:" + exceptionText));
+            ClassicAssert.IsTrue(result.ValueAt(1).StartsWith("__EXCEPTION__:" + exceptionText));
         }
         
         Service processor;

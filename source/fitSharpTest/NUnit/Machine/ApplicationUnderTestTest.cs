@@ -12,6 +12,7 @@ using fitSharp.Machine.Model;
 using fitSharp.Test.Double;
 using Moq;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Machine {
     [TestFixture] public class ApplicationUnderTestTest {
@@ -70,7 +71,7 @@ namespace fitSharp.Test.NUnit.Machine {
         [Test] public void TypeIsFoundInLoadedAssembly() {
             LoadTestTarget();
             var sample = GetType("fitSharp.TestTarget.SampleDomain");
-            Assert.AreEqual("fitSharp.TestTarget.SampleDomain", sample.FullName);
+            ClassicAssert.AreEqual("fitSharp.TestTarget.SampleDomain", sample.FullName);
         }
 
         [Test] public void TypeIsFoundInDefaultNamespace() {
@@ -89,14 +90,14 @@ namespace fitSharp.Test.NUnit.Machine {
             LoadTestTarget();
             LoadTestTarget();
             var sample = GetType("fitSharp.TestTarget.SampleDomain");
-            Assert.AreEqual("fitSharp.TestTarget.SampleDomain", sample.FullName);
+            ClassicAssert.AreEqual("fitSharp.TestTarget.SampleDomain", sample.FullName);
         }
 
         [Test] public void JarFilesAreIgnored() {
             SetUpMockDomain();
             applicationUnderTest.AddAssembly("testtarget.jAr");
             domain.Verify(d => d.LoadAssembly(It.IsAny<string>()), Times.Never());
-            Assert.IsTrue(true);
+            ClassicAssert.IsTrue(true);
         }
 
         [Test]
@@ -104,7 +105,7 @@ namespace fitSharp.Test.NUnit.Machine {
             AssemblyLoadFailureHandler.AddFolder(Path.Combine(TargetPath(), "build/sample/TestTarget".AsPath()));
             LoadTarget("TestTarget2");
             var type = applicationUnderTest.FindType("fitSharp.TestTarget2.SampleWithDependency");
-            Assert.AreEqual("my sample says hi sample", new RuntimeType(type).CreateInstance().ValueString);
+            ClassicAssert.AreEqual("my sample says hi sample", new RuntimeType(type).CreateInstance().ValueString);
         }
 
         void SetUpMockDomain() {
@@ -128,7 +129,7 @@ namespace fitSharp.Test.NUnit.Machine {
             SetUpMockDomain();
             domain.Setup(d => d.LoadAssembly("myassembly.dll")).Throws(new FileNotFoundException());
             applicationUnderTest.AddOptionalAssembly("myassembly.dll");
-            Assert.IsTrue(true);
+            ClassicAssert.IsTrue(true);
         }
 
         void ExpectFitAssemblyIsLoaded() {
@@ -148,7 +149,7 @@ namespace fitSharp.Test.NUnit.Machine {
 
         void CheckTypeFound<T>(string typeName) {
             var sample = GetType(typeName);
-            Assert.AreEqual(typeof(T), sample);
+            ClassicAssert.AreEqual(typeof(T), sample);
         }
 
         void CheckTypeNotFound(string typeName) {
@@ -159,7 +160,7 @@ namespace fitSharp.Test.NUnit.Machine {
             catch (Exception e) {
                 message = e.Message;
             }
-            Assert.IsTrue(message.StartsWith("Type 'SampleClass' not found in assemblies"));
+            ClassicAssert.IsTrue(message.StartsWith("Type 'SampleClass' not found in assemblies"));
         }
 
         Type GetType(string name) {

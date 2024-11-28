@@ -9,6 +9,7 @@ using fitSharp.Fit.Operators;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Fit {
     [TestFixture] public class InvokeProcedureTest {
@@ -25,47 +26,47 @@ namespace fitSharp.Test.NUnit.Fit {
         }
 
         [Test] public void InvokeForMembersIsntHandled() {
-            Assert.IsFalse(invokeProcedure.CanInvoke(TypedValue.Void, new MemberName("member"), new CellTree()));
+            ClassicAssert.IsFalse(invokeProcedure.CanInvoke(TypedValue.Void, new MemberName("member"), new CellTree()));
         }
 
         [Test] public void InvokeForProceduresIsHandled() {
             cellProcessor.Get<Procedures>().Save("procedure", new CellTree());
-            Assert.IsTrue(invokeProcedure.CanInvoke(TypedValue.Void, new MemberName("procedure"), new CellTree()));
+            ClassicAssert.IsTrue(invokeProcedure.CanInvoke(TypedValue.Void, new MemberName("procedure"), new CellTree()));
         }
 
         [Test] public void ProcedureIsExecuted() {
             cellProcessor.Get<Procedures>().Save("procedure", new CellTree(new CellTree("define", "procedure"), new CellTree("settext")));
             var sample = new Sample();
             invokeProcedure.Invoke(new TypedValue(sample), new MemberName("procedure"), new CellTree());
-            Assert.AreEqual("hi", sample.Text);
+            ClassicAssert.AreEqual("hi", sample.Text);
         }
 
         [Test] public void ProcedureInNestedTableIsExecuted() {
             cellProcessor.Get<Procedures>().Save("procedure", new CellTree(new CellTree("define", "procedure"), new CellTree(new CellTree(new CellTree(new CellTree("settext"))))));
             var sample = new Sample();
             invokeProcedure.Invoke(new TypedValue(sample), new MemberName("procedure"), new CellTree());
-            Assert.AreEqual("hi", sample.Text);
+            ClassicAssert.AreEqual("hi", sample.Text);
         }
 
         [Test] public void ProcedureExecutionIsLogged() {
             cellProcessor.Get<Procedures>().Save("procedure", Builder.ParseHtmlTable(noParameterProcedureHtml));
             var sample = new Sample();
             invokeProcedure.Invoke(new TypedValue(sample), new MemberName("procedure"), new CellTree());
-            Assert.AreEqual("<table border=1><tr><td><span class=\"fit_member\">settext</span></td></tr></table>", cellProcessor.TestStatus.LastAction);
+            ClassicAssert.AreEqual("<table border=1><tr><td><span class=\"fit_member\">settext</span></td></tr></table>", cellProcessor.TestStatus.LastAction);
         }
 
         [Test] public void ProcedureIsExecutedOnACopyOfBody() {
             cellProcessor.Get<Procedures>().Save("procedure", Builder.ParseHtmlTable(errorProcedureHtml));
             var sample = new Sample();
             invokeProcedure.Invoke(new TypedValue(sample), new MemberName("procedure"), new CellTree());
-            Assert.AreEqual(errorProcedureHtml, ((Tree<Cell>)cellProcessor.Get<Procedures>().GetValue("procedure")).WriteTree());
+            ClassicAssert.AreEqual(errorProcedureHtml, ((Tree<Cell>)cellProcessor.Get<Procedures>().GetValue("procedure")).WriteTree());
         }
 
         [Test] public void ParameterValueIsSubstituted() {
             cellProcessor.Get<Procedures>().Save("procedure", new CellTree(new CellTree("define", "procedure", "parm"), new CellTree("settext", "parm")));
             var sample = new Sample();
             invokeProcedure.Invoke(new TypedValue(sample), new MemberName("procedure"), new CellTree("actual"));
-            Assert.AreEqual("actual", sample.Text);
+            ClassicAssert.AreEqual("actual", sample.Text);
         }
 
         [Test] public void TwoParameterValuesAreSubstituted() {
@@ -74,7 +75,7 @@ namespace fitSharp.Test.NUnit.Fit {
                     new CellTree(new CellTree("define", "procedure", "parm1", "", "parm2"), new CellTree("settext", "parm1", "", "parm2")));
             var sample = new Sample();
             invokeProcedure.Invoke(new TypedValue(sample), new MemberName("procedure"), new CellTree("actual1", "actual2"));
-            Assert.AreEqual("actual1actual2", sample.Text);
+            ClassicAssert.AreEqual("actual1actual2", sample.Text);
         }
 
         class Sample {

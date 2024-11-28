@@ -1,4 +1,4 @@
-// Copyright © 2009 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+// Copyright ï¿½ 2009 Syterra Software Inc. Includes work by Object Mentor, Inc., ï¿½ 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -6,6 +6,7 @@
 using fitSharp.Fit.Operators;
 using fitSharp.Machine.Application;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fit.Test.NUnit {
     [TestFixture]
@@ -22,9 +23,9 @@ namespace fit.Test.NUnit {
         [Test]
         public void MatchesInput()
         {
-            Assert.IsFalse(IsMatch("abc.."));
-            Assert.IsTrue(IsMatch("..abc"));
-            Assert.IsFalse(IsMatch("..abc.."));
+            ClassicAssert.IsFalse(IsMatch("abc.."));
+            ClassicAssert.IsTrue(IsMatch("..abc"));
+            ClassicAssert.IsFalse(IsMatch("..abc.."));
         }
 
         private static bool IsMatch(string input) {

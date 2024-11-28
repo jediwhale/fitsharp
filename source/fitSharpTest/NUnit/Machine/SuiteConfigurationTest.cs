@@ -8,6 +8,7 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using fitSharp.Test.Double;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Machine {
     [TestFixture] public class SuiteConfigurationTest {
@@ -17,28 +18,28 @@ namespace fitSharp.Test.NUnit.Machine {
         }
         [Test] public void MethodIsExecuted() {
             suiteConfiguration.LoadXml("<config><fitSharp.Test.Double.FullTestConfig><TestMethod>stuff</TestMethod></fitSharp.Test.Double.FullTestConfig></config>");
-            Assert.AreEqual("stuff", memory.GetItem<FullTestConfig>().Data);
+            ClassicAssert.AreEqual("stuff", memory.GetItem<FullTestConfig>().Data);
         }
 
         [Test] public void MethodWithTwoParametersIsExecuted() {
             suiteConfiguration.LoadXml("<config><fitSharp.Test.Double.FullTestConfig><TestMethod second=\"more\">stuff</TestMethod></fitSharp.Test.Double.FullTestConfig></config>");
-            Assert.AreEqual("more stuff", memory.GetItem<FullTestConfig>().Data);
+            ClassicAssert.AreEqual("more stuff", memory.GetItem<FullTestConfig>().Data);
         }
 
         [Test] public void TwoFilesAreLoadedIncrementally() {
             suiteConfiguration.LoadXml("<config><fitSharp.Test.Double.FullTestConfig><TestMethod>stuff</TestMethod></fitSharp.Test.Double.FullTestConfig></config>");
             suiteConfiguration.LoadXml("<config><fitSharp.Test.Double.FullTestConfig><Append>more</Append></fitSharp.Test.Double.FullTestConfig></config>");
-            Assert.AreEqual("stuffmore", memory.GetItem<FullTestConfig>().Data);
+            ClassicAssert.AreEqual("stuffmore", memory.GetItem<FullTestConfig>().Data);
         }
 
         [Test] public void AliasTypeIsUsed() {
             suiteConfiguration.LoadXml("<config><fit.Settings><inputFolder>stuff</inputFolder></fit.Settings></config>");
-            Assert.AreEqual("stuff", memory.GetItem<Settings>().InputFolder);
+            ClassicAssert.AreEqual("stuff", memory.GetItem<Settings>().InputFolder);
         }
 
         [Test] public void AliasMethodIsUsed() {
             suiteConfiguration.LoadXml("<config><fit.Namespaces><add>fitSharp.Test.NUnit.Machine</add></fit.Namespaces></config>");
-            Assert.IsNotNull(memory.GetItem<ApplicationUnderTest>().FindType(new IdentifierName("SuiteConfigurationTest")));
+            ClassicAssert.IsNotNull(memory.GetItem<ApplicationUnderTest>().FindType(new IdentifierName("SuiteConfigurationTest")));
         }
 
         Memory memory;

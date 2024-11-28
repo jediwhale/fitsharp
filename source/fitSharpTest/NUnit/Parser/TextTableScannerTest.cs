@@ -6,6 +6,7 @@
 using System.Text;
 using fitSharp.Parser;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Parser {
     [TestFixture] public class TextTableScannerTest {
@@ -21,7 +22,7 @@ namespace fitSharp.Test.NUnit.Parser {
                 result.AppendFormat("{0}", token.Type);
                 if (token.Content.Length > 0) result.AppendFormat("={0}", token.Content);
             }
-            Assert.AreEqual(expected, result.ToString());
+            ClassicAssert.AreEqual(expected, result.ToString());
         }
 
         [Test] public void ScansPrefixAsLeader() {

@@ -1,4 +1,4 @@
-// Copyright © 2010 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+// Copyright ï¿½ 2010 Syterra Software Inc. Includes work by Object Mentor, Inc., ï¿½ 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -6,6 +6,7 @@
 using System.Collections;
 using fitSharp.Fit.Model;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fit.Test.NUnit {
     [TestFixture]
@@ -66,10 +67,10 @@ namespace fit.Test.NUnit {
             var table = builder.Parse.Parts;
             var testFixture = new ExecuteTestFixture { Processor = new Service.Service()};
             testFixture.DoTable(table);
-            Assert.AreEqual(3, testFixture.Values.Count);
-            Assert.AreEqual("first call", testFixture.Values[0]);
-            Assert.AreEqual("second call", testFixture.Values[1]);
-            Assert.AreEqual("Execute()", testFixture.Values[2]);
+            ClassicAssert.AreEqual(3, testFixture.Values.Count);
+            ClassicAssert.AreEqual("first call", testFixture.Values[0]);
+            ClassicAssert.AreEqual("second call", testFixture.Values[1]);
+            ClassicAssert.AreEqual("Execute()", testFixture.Values[2]);
         }
 
         [Test]
@@ -85,10 +86,10 @@ namespace fit.Test.NUnit {
             var table = builder.Parse.Parts;
             var testFixture = new ExecuteTestFixture { Processor = new Service.Service()};
             testFixture.DoTable(table);
-            Assert.AreEqual(3, testFixture.Values.Count);
-            Assert.AreEqual("first call", testFixture.Values[0]);
-            Assert.AreEqual("Execute()", testFixture.Values[1]);
-            Assert.AreEqual("second call", testFixture.Values[2]);
+            ClassicAssert.AreEqual(3, testFixture.Values.Count);
+            ClassicAssert.AreEqual("first call", testFixture.Values[0]);
+            ClassicAssert.AreEqual("Execute()", testFixture.Values[1]);
+            ClassicAssert.AreEqual("second call", testFixture.Values[2]);
         }
 
         [Test]
@@ -104,16 +105,16 @@ namespace fit.Test.NUnit {
             var table = builder.Parse.Parts;
             var testFixture = new ExecuteTestFixture { Processor = new Service.Service()};
             testFixture.DoTable(table);
-            Assert.AreEqual(3, testFixture.Values.Count);
-            Assert.AreEqual("first call", testFixture.Values[0]);
-            Assert.AreEqual("Execute()", testFixture.Values[1]);
-            Assert.AreEqual("method!", testFixture.Values[2]);
+            ClassicAssert.AreEqual(3, testFixture.Values.Count);
+            ClassicAssert.AreEqual("first call", testFixture.Values[0]);
+            ClassicAssert.AreEqual("Execute()", testFixture.Values[1]);
+            ClassicAssert.AreEqual("method!", testFixture.Values[2]);
         }
 
         [Test]
         public void TestGetTargetObject() {
             Fixture fixture = new ExecuteTestFixture();
-            Assert.AreEqual(fixture, fixture.GetTargetObject());
+            ClassicAssert.AreEqual(fixture, fixture.GetTargetObject());
         }
 
         [Test]
@@ -145,11 +146,11 @@ namespace fit.Test.NUnit {
             var table = builder.Parse.Parts;
             var testFixture = new ExecuteTestFixture { Processor = new Service.Service()};
             testFixture.DoTable(table);
-            Assert.AreEqual(4, testFixture.Values.Count);
-            Assert.AreEqual("Execute()", testFixture.Values[0]);
-            Assert.AreEqual("Method()", testFixture.Values[1]);
-            Assert.AreEqual("Execute()", testFixture.Values[2]);
-            Assert.AreEqual("Method()", testFixture.Values[3]);
+            ClassicAssert.AreEqual(4, testFixture.Values.Count);
+            ClassicAssert.AreEqual("Execute()", testFixture.Values[0]);
+            ClassicAssert.AreEqual("Method()", testFixture.Values[1]);
+            ClassicAssert.AreEqual("Execute()", testFixture.Values[2]);
+            ClassicAssert.AreEqual("Method()", testFixture.Values[3]);
             TestUtils.VerifyCounts(testFixture, 2, 0, 0, 0);
         }
 

@@ -8,6 +8,7 @@ using fitSharp.Slim.Operators;
 using fitSharp.Slim.Service;
 using fitSharp.Test.Double.Slim;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Slim {
     [TestFixture] public class ConverterTest {
@@ -15,20 +16,20 @@ namespace fitSharp.Test.NUnit.Slim {
 
         [Test] public void CustomTypeIsParsed() {
             var converter = new CustomConverter {Processor = processor};
-            Assert.IsTrue(converter.CanParse(typeof(CustomClass), TypedValue.Void, new TreeList<string>("info")));
+            ClassicAssert.IsTrue(converter.CanParse(typeof(CustomClass), TypedValue.Void, new TreeList<string>("info")));
             TypedValue parseResult = converter.Parse(typeof(CustomClass), TypedValue.Void, new TreeList<string>("info"));
             var result = parseResult.Value as CustomClass;
-            Assert.IsNotNull(result);
-            Assert.AreEqual("custominfo", result.Info);
+            ClassicAssert.IsNotNull(result);
+            ClassicAssert.AreEqual("custominfo", result.Info);
         }
 
         [Test] public void CustomTypeIsComposed() {
             var converter = new CustomConverter();
-            Assert.IsTrue(converter.CanCompose(new TypedValue(new CustomClass {Info = "stuff"})));
+            ClassicAssert.IsTrue(converter.CanCompose(new TypedValue(new CustomClass {Info = "stuff"})));
             Tree<string> composeResult = converter.Compose(new TypedValue(new CustomClass {Info = "stuff"}));
             var result = composeResult.Value;
-            Assert.IsNotNull(result);
-            Assert.AreEqual("mystuff", result);
+            ClassicAssert.IsNotNull(result);
+            ClassicAssert.AreEqual("mystuff", result);
         }
 
         class CustomConverter: Converter<CustomClass> {

@@ -7,6 +7,7 @@ using System;
 using fitSharp.IO;
 using fitSharp.Samples;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.IO {
     [TestFixture] public class ElapsedTimeTest {
@@ -14,14 +15,14 @@ namespace fitSharp.Test.NUnit.IO {
             Clock.Instance = TestClock.Instance;
             var elapsed = new ElapsedTime();
             TestClock.Instance.Elapsed = new TimeSpan(0);
-            Assert.AreEqual("0.001", elapsed.ToString());
+            ClassicAssert.AreEqual("0.001", elapsed.ToString());
         }
 
         [Test] public void LongTimeIsShown() {
             Clock.Instance = TestClock.Instance;
             var elapsed = new ElapsedTime();
             TestClock.Instance.Elapsed = new TimeSpan(0, 8763, 0, 0, 0);
-            Assert.AreEqual("8763:00:00.001", elapsed.ToString());
+            ClassicAssert.AreEqual("8763:00:00.001", elapsed.ToString());
         }
     }
 }

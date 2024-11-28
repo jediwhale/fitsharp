@@ -8,6 +8,7 @@ using fitSharp.Fit.Operators;
 using fitSharp.Machine.Model;
 using fitSharp.Samples.Fit;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Fit {
     [TestFixture] public class ParseByteArrayTest {
@@ -27,9 +28,9 @@ namespace fitSharp.Test.NUnit.Fit {
 
         static void CheckParse(string input, byte[] expected) {
             var parser = new ParseByteArray { Processor =  Builder.CellProcessor() };
-            Assert.IsTrue(parser.CanParse(typeof (byte[]), TypedValue.Void, new CellTreeLeaf(input)));
+            ClassicAssert.IsTrue(parser.CanParse(typeof (byte[]), TypedValue.Void, new CellTreeLeaf(input)));
             TypedValue result = parser.Parse(typeof (byte[]), TypedValue.Void, new CellTreeLeaf(input));
-            Assert.AreEqual(expected, result.Value);
+            ClassicAssert.AreEqual(expected, result.Value);
         }
     }
 }

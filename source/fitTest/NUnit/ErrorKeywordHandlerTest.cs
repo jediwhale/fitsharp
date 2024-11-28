@@ -1,10 +1,11 @@
-// Copyright © 2011 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+// Copyright ï¿½ 2011 Syterra Software Inc. Includes work by Object Mentor, Inc., ï¿½ 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 using fitSharp.Fit.Operators;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fit.Test.NUnit {
     [TestFixture]
@@ -15,7 +16,7 @@ namespace fit.Test.NUnit {
         [Test]
         public void MatchesErrorKeyword()
         {
-            Assert.IsTrue(IsMatch(new CompareError(), "error"));
+            ClassicAssert.IsTrue(IsMatch(new CompareError(), "error"));
         }
 
         [Test]
@@ -25,7 +26,7 @@ namespace fit.Test.NUnit {
             MakeErrorFixture();
             TestUtils.DoCheck(fixture, TestUtils.CreateCellRange("ErrorThrowingMethod"), cell);
             AssertCellPasses(cell);
-            Assert.IsTrue(cell.Body.IndexOf("error") > -1);
+            ClassicAssert.IsTrue(cell.Body.IndexOf("error") > -1);
             TestUtils.VerifyCounts(fixture, 1, 0, 0, 0);
         }
 
@@ -37,8 +38,8 @@ namespace fit.Test.NUnit {
             stringFixture.Field = "some value";
             TestUtils.DoCheck(stringFixture, TestUtils.CreateCellRange("field"), cell);
             AssertCellFails(cell);
-            Assert.IsTrue(cell.Body.IndexOf("error") > -1);
-            Assert.IsTrue(cell.Body.IndexOf("some value") > -1);
+            ClassicAssert.IsTrue(cell.Body.IndexOf("error") > -1);
+            ClassicAssert.IsTrue(cell.Body.IndexOf("some value") > -1);
             TestUtils.VerifyCounts(stringFixture, 0, 1, 0, 0);
         }
 

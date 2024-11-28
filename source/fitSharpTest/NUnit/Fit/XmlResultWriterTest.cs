@@ -10,6 +10,7 @@ using fitSharp.Fit.Service;
 using fitSharp.IO;
 using fitSharp.Samples;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using TestStatus=fitSharp.Fit.Model.TestStatus;
 
 namespace fitSharp.Test.NUnit.Fit {
@@ -31,8 +32,8 @@ namespace fitSharp.Test.NUnit.Fit {
         {
             strategy = new XmlResultWriter(testResultFileName, folderModel);
             strategy.Close();
-            Assert.IsTrue(folderModel.Exists(testResultFileName));
-            Assert.AreEqual("<?xml version=\"1.0\" encoding=\"utf-16\"?>" + Environment.NewLine + "<testResults />", folderModel.GetPageContent(testResultFileName));
+            ClassicAssert.IsTrue(folderModel.Exists(testResultFileName));
+            ClassicAssert.AreEqual("<?xml version=\"1.0\" encoding=\"utf-16\"?>" + Environment.NewLine + "<testResults />", folderModel.GetPageContent(testResultFileName));
         }
 
         [Test]
@@ -40,7 +41,7 @@ namespace fitSharp.Test.NUnit.Fit {
         {
             strategy = new XmlResultWriter("stdout", folderModel);
             strategy.Close();
-            Assert.IsFalse(folderModel.Exists(testResultFileName));
+            ClassicAssert.IsFalse(folderModel.Exists(testResultFileName));
         }
 
         [Test]
@@ -53,7 +54,7 @@ namespace fitSharp.Test.NUnit.Fit {
             strategy = new XmlResultWriter(testResultFileName, folderModel);
             strategy.WritePageResult(pageResult);
             strategy.Close();
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                 BuildPageResultString(pageName, "<![CDATA[<table border=\"1\" cellspacing=\"0\">" + Environment.NewLine
                           + "<tr><td>Text</td>" + Environment.NewLine 
                           + "</tr>" + Environment.NewLine
@@ -69,7 +70,7 @@ namespace fitSharp.Test.NUnit.Fit {
             strategy = new XmlResultWriter(testResultFileName, folderModel);
             strategy.WritePageResult(pageResult);
             strategy.Close();
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                 BuildPageResultString(pageName, "<![CDATA[<table><tr><td>Text</td></tr>&#2;</table>]]>", 1, 2, 3, 4),
                 folderModel.GetPageContent(testResultFileName));
         }
@@ -80,7 +81,7 @@ namespace fitSharp.Test.NUnit.Fit {
             strategy = new XmlResultWriter(testResultFileName, folderModel);
             strategy.WriteFinalCount(MakeTestCounts());
             strategy.Close();
-            Assert.AreEqual(BuildFinalCountsString(1, 2, 3, 4),
+            ClassicAssert.AreEqual(BuildFinalCountsString(1, 2, 3, 4),
                             folderModel.GetPageContent(testResultFileName));
         }
 

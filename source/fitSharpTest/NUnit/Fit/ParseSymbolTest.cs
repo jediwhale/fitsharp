@@ -8,28 +8,29 @@ using fitSharp.Fit.Operators;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Fit {
     [TestFixture] public class ParseSymbolTest : ParseOperatorTest<ParseSymbol> {
         [Test] public void CanParse() {
-            Assert.IsTrue(CanParse<string>("<<symbol"), "<<symbol");
-            Assert.IsFalse(CanParse<string>("no<<symbol"), "no<<symbol");
-            Assert.IsTrue(CanParse<string>("\t<<symbol\r\n"), "\t<<symbol\r\n");
-            Assert.IsFalse(CanParse<string>("<nosymbol"), "<nosymbol");
-            Assert.IsFalse(CanParse<string>("nosymbol<<"), "nosymbol<<");
-            Assert.IsFalse(CanParse<string>("<<symbol1,other"), "array");
+            ClassicAssert.IsTrue(CanParse<string>("<<symbol"), "<<symbol");
+            ClassicAssert.IsFalse(CanParse<string>("no<<symbol"), "no<<symbol");
+            ClassicAssert.IsTrue(CanParse<string>("\t<<symbol\r\n"), "\t<<symbol\r\n");
+            ClassicAssert.IsFalse(CanParse<string>("<nosymbol"), "<nosymbol");
+            ClassicAssert.IsFalse(CanParse<string>("nosymbol<<"), "nosymbol<<");
+            ClassicAssert.IsFalse(CanParse<string>("<<symbol1,other"), "array");
         }
 
         [Test] public void Parse() {
             Parser.Processor.Get<Symbols>().Save("symbol", "symbol value");
 
-            Assert.AreEqual("symbol value", Parse<string>("<<symbol"), "<<symbol");
-            Assert.AreEqual("symbol value", Parse<string>("\t<<symbol\r\n"), "\t<<symbol\r\n");
+            ClassicAssert.AreEqual("symbol value", Parse<string>("<<symbol"), "<<symbol");
+            ClassicAssert.AreEqual("symbol value", Parse<string>("\t<<symbol\r\n"), "\t<<symbol\r\n");
         }
 
         [Test] public void ParsesTypeFromString() {
             Parser.Processor.Get<Symbols>().Save("symbol", 123.45d.ToString());
-            Assert.AreEqual(123.45d, ParseAs<double>("<<symbol"));
+            ClassicAssert.AreEqual(123.45d, ParseAs<double>("<<symbol"));
         }
 
         [Test] public void ParseAddsInformationSuffix() {
@@ -37,7 +38,7 @@ namespace fitSharp.Test.NUnit.Fit {
 
             var cell = new CellTreeLeaf("<<symbol");
             Parser.Parse(typeof(string), TypedValue.Void, cell);
-            Assert.AreEqual(" value", cell.Value.GetAttribute(CellAttribute.InformationSuffix));
+            ClassicAssert.AreEqual(" value", cell.Value.GetAttribute(CellAttribute.InformationSuffix));
         }
     }
 }

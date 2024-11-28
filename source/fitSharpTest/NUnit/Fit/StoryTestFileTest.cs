@@ -12,6 +12,7 @@ using fitSharp.IO;
 using fitSharp.Machine.Application;
 using fitSharp.Machine.Engine;
 using fitSharp.Samples;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Fit {
     [TestFixture] public class StoryTestFileTest {
@@ -41,7 +42,7 @@ namespace fitSharp.Test.NUnit.Fit {
         [Test]
         public void GetsContentForExcelSpreadsheet() {
             var file = MakeStoryTestFile("abc.xlsx");
-            Assert.IsTrue(file.TestContent is ExcelStoryTestSource);
+            ClassicAssert.IsTrue(file.TestContent is ExcelStoryTestSource);
         }
 
         FolderTestModel folder;
@@ -51,7 +52,7 @@ namespace fitSharp.Test.NUnit.Fit {
             var file = MakeStoryTestFile("myfile");
             file.WriteTest(new PageResult("title", content, new TestCounts()));
             Clock.Instance = new Clock();
-            Assert.AreEqual(comment + expected, folder.GetPageContent(new FilePath(System.IO.Path.Combine("output", "myfile.html"))));
+            ClassicAssert.AreEqual(comment + expected, folder.GetPageContent(new FilePath(System.IO.Path.Combine("output", "myfile.html"))));
         }
 
         StoryTestFile MakeStoryTestFile(string fileName) {

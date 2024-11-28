@@ -9,6 +9,7 @@ using fitSharp.Fit.Engine;
 using fitSharp.Fit.Operators;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fit.Test.NUnit {
     [TestFixture] public class ParseInterpreterTest{
@@ -21,13 +22,13 @@ namespace fit.Test.NUnit {
         [Test] public void DomainClassIsWrapped() {
             var result = Parse("<table><tr><td>sample domain</td></tr></table>");
             var wrapper = VerifyResult<DefaultFlowInterpreter>(result);
-            Assert.IsNotNull(wrapper.SystemUnderTest as SampleDomain);
+            ClassicAssert.IsNotNull(wrapper.SystemUnderTest as SampleDomain);
         }
 
         [Test] public void FixtureWithSUTIsCreated() {
             var result = Parse("<table><tr><td>sample do</td></tr></table>", new TypedValue("target"));
             var sampleDo = VerifyResult<SampleDoFixture>(result);
-            Assert.AreEqual("target", sampleDo.SystemUnderTest.ToString());
+            ClassicAssert.AreEqual("target", sampleDo.SystemUnderTest.ToString());
         }
 
         TypedValue Parse(string inputTables) {
@@ -45,7 +46,7 @@ namespace fit.Test.NUnit {
 
          static T VerifyResult<T>(TypedValue result) where T: class {
             var anObject = result.Value as T;
-            Assert.IsNotNull(anObject);
+            ClassicAssert.IsNotNull(anObject);
             return anObject;
         }
 

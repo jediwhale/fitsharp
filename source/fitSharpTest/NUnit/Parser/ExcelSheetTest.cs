@@ -8,6 +8,7 @@ using fitSharp.Parser;
 using NUnit.Framework;
 using System.Linq;
 using System.Xml.Linq;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Parser {
     [TestFixture]
@@ -55,7 +56,7 @@ namespace fitSharp.Test.NUnit.Parser {
             var sheet = new ExcelSheet(text => new TreeList<Cell>(new CellBase(text)));
             sheet.LoadStrings(XDocument.Parse(strings));
             var sheetDocument = XDocument.Parse(worksheet);
-            Assert.AreEqual(expected, sheet.Parse(sheetDocument).Format());
+            ClassicAssert.AreEqual(expected, sheet.Parse(sheetDocument).Format());
         }
 
         static string Worksheet(params string[] addresses) {

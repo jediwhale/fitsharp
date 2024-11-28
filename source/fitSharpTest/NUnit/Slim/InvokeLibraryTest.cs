@@ -8,6 +8,7 @@ using fitSharp.Machine.Model;
 using fitSharp.Slim.Operators;
 using fitSharp.Test.Double.Slim;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Slim {
     [TestFixture] public class InvokeLibraryTest {
@@ -17,7 +18,7 @@ namespace fitSharp.Test.NUnit.Slim {
             var runtime = new InvokeLibrary { Processor = processor };
             SampleClass.MethodCount = 0;
             runtime.Invoke(new TypedValue("stuff"), new MemberName("samplemethod"), new TreeList<string>());
-            Assert.AreEqual(1, SampleClass.MethodCount);
+            ClassicAssert.AreEqual(1, SampleClass.MethodCount);
         }
     }
 }

@@ -7,6 +7,7 @@ using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using fitSharp.Test.Double;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Machine {
     [TestFixture] public class CreateDefaultTest {
@@ -18,12 +19,12 @@ namespace fitSharp.Test.NUnit.Machine {
 
         [Test] public void InstanceIsCreated() {
             TypedValue result = runtime.Create(new IdentifierName(typeof(SampleClass).FullName), new TreeList<string>());
-            Assert.IsTrue(result.Value is SampleClass);
+            ClassicAssert.IsTrue(result.Value is SampleClass);
         }
 
         [Test] public void StandardInstanceIsCreated() {
             TypedValue result = runtime.Create(new IdentifierName("System.Boolean"), new TreeList<string>());
-            Assert.IsTrue(result.Value is bool);
+            ClassicAssert.IsTrue(result.Value is bool);
         }
     }
 }

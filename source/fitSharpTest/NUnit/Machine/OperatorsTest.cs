@@ -6,6 +6,7 @@
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Machine {
     [TestFixture] public class OperatorsTest {
@@ -14,7 +15,7 @@ namespace fitSharp.Test.NUnit.Machine {
             var operators = new Operators<string, Processor<string>>();
             var added = operators.Add(typeof(SampleDefaultCreate).FullName);
             var result = operators.FindOperator<CreateOperator<string>>(new object[] {new IdentifierName("test"), null});
-            Assert.AreSame(added, result);
+            ClassicAssert.AreSame(added, result);
         }
 
         [Test]
@@ -22,7 +23,7 @@ namespace fitSharp.Test.NUnit.Machine {
             var operators = new Operators<string, Processor<string>>();
             operators.Replace(nameof (CreateDefault<string, Processor<string>>), typeof(SampleDefaultCreate).FullName);
             var result = operators.FindOperator<CreateOperator<string>>(new object[] {new IdentifierName("test"), null});
-            Assert.AreEqual(typeof(SampleDefaultCreate), result.GetType());
+            ClassicAssert.AreEqual(typeof(SampleDefaultCreate), result.GetType());
         }
     }
     

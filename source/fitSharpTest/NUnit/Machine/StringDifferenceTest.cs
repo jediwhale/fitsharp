@@ -5,23 +5,24 @@
 
 using fitSharp.Machine.Model;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Machine {
     [TestFixture] public class StringDifferenceTest {
         [Test] public void FirstCharacterDifferent() {
-            Assert.AreEqual("At 0 expected A was B", new StringDifference("A", "B").ToString());
+            ClassicAssert.AreEqual("At 0 expected A was B", new StringDifference("A", "B").ToString());
         }
 
         [Test] public void SecondCharacterDifferent() {
-            Assert.AreEqual("At 1 expected A was B", new StringDifference("aA", "aB").ToString());
+            ClassicAssert.AreEqual("At 1 expected A was B", new StringDifference("aA", "aB").ToString());
         }
 
         [Test] public void LengthDifferent() {
-            Assert.AreEqual("Length expected 2 was 1", new StringDifference("aA", "a").ToString());
+            ClassicAssert.AreEqual("Length expected 2 was 1", new StringDifference("aA", "a").ToString());
         }
 
         [Test] public void UnviewableCharactersShownAsHex() {
-            Assert.AreEqual("At 1 expected x20 was xfffe", new StringDifference("a ", "a\xFFFE").ToString());
+            ClassicAssert.AreEqual("At 1 expected x20 was xfffe", new StringDifference("a ", "a\xFFFE").ToString());
         }
     }
 }

@@ -7,11 +7,12 @@ using System.Text;
 using fitSharp.Machine.Model;
 using fitSharp.Parser;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Parser {
     [TestFixture] public class TextTablesTest {
         [Test] public void ParsesEmptyInputAsEmptyTree() {
-            Assert.AreEqual(0, Parse(string.Empty).Branches.Count);
+            ClassicAssert.AreEqual(0, Parse(string.Empty).Branches.Count);
         }
 
         [Test] public void ParsesWordAsCell() {
@@ -88,13 +89,13 @@ namespace fitSharp.Test.NUnit.Parser {
         }
 
         static void AssertParse(string input, string expected) {
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                 " test@" + expected,
                 Parse(input).Format());
         }
 
         static void AssertParseRaw(string input, string expected) {
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                 expected,
                 ParseRaw(input).Format());
         }

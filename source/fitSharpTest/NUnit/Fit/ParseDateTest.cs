@@ -9,6 +9,7 @@ using fitSharp.Fit.Operators;
 using fitSharp.Machine.Engine;
 using fitSharp.Machine.Model;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fitSharp.Test.NUnit.Fit {
     [TestFixture] public class ParseDateTest {
@@ -22,7 +23,7 @@ namespace fitSharp.Test.NUnit.Fit {
         }
 
         [Test] public void NonDateIsNotParsed() {
-            Assert.IsFalse(TryParse(typeof(string), "today"));
+            ClassicAssert.IsFalse(TryParse(typeof(string), "today"));
         }
 
         bool TryParse(Type type, string expected) {
@@ -41,52 +42,52 @@ namespace fitSharp.Test.NUnit.Fit {
         }
 
         [Test] public void DateWithoutKeywordIsNotParsed() {
-            Assert.IsFalse(TryParse(typeof(DateTime), "whenever"));
+            ClassicAssert.IsFalse(TryParse(typeof(DateTime), "whenever"));
         }
 
         [Test] public void DateMatchesKeyword() {
-            Assert.IsTrue(TryParse(typeof(DateTime), "today"));
-            Assert.AreEqual(DateTime.Now.Date, result);
+            ClassicAssert.IsTrue(TryParse(typeof(DateTime), "today"));
+            ClassicAssert.AreEqual(DateTime.Now.Date, result);
         }
 
         [Test] public void DateMatchesMixedCaseKeyword() {
-            Assert.IsTrue(TryParse(typeof(DateTime), "ToDaY"));
-            Assert.AreEqual(DateTime.Now.Date, result);
+            ClassicAssert.IsTrue(TryParse(typeof(DateTime), "ToDaY"));
+            ClassicAssert.AreEqual(DateTime.Now.Date, result);
         }
 
         [Test] public void DateMatchesKeywordWithWhitespace() {
-            Assert.IsTrue(TryParse(typeof(DateTime), "\r\n\t today\r\n\t "));
-            Assert.AreEqual(DateTime.Now.Date, result);
+            ClassicAssert.IsTrue(TryParse(typeof(DateTime), "\r\n\t today\r\n\t "));
+            ClassicAssert.AreEqual(DateTime.Now.Date, result);
         }
 
         [Test] public void DaysAreAdded() {
-            Assert.IsTrue(TryParse(typeof(DateTime), "today+1"));
-            Assert.AreEqual(DateTime.Now.Date.AddDays(1), result);
+            ClassicAssert.IsTrue(TryParse(typeof(DateTime), "today+1"));
+            ClassicAssert.AreEqual(DateTime.Now.Date.AddDays(1), result);
         }
 
         [Test] public void DaysAreSubtracted() {
-            Assert.IsTrue(TryParse(typeof(DateTime), "today-2"));
-            Assert.AreEqual(DateTime.Now.Date.AddDays(-2), result);
+            ClassicAssert.IsTrue(TryParse(typeof(DateTime), "today-2"));
+            ClassicAssert.AreEqual(DateTime.Now.Date.AddDays(-2), result);
         }
 
         [Test] public void SymbolIsParsed() {
             parseDate.Processor.Get<Symbols>().Save("two", 2);
-            Assert.IsTrue(TryParse(typeof(DateTime), "today-<<two"));
-            Assert.AreEqual(DateTime.Now.Date.AddDays(-2), result);
+            ClassicAssert.IsTrue(TryParse(typeof(DateTime), "today-<<two"));
+            ClassicAssert.AreEqual(DateTime.Now.Date.AddDays(-2), result);
         }
 
         [Test] public void OtherModifierIsNotParsed() {
-            Assert.IsFalse(TryParse(typeof(DateTime), "today:2"));
+            ClassicAssert.IsFalse(TryParse(typeof(DateTime), "today:2"));
         }
 
         [Test] public void EmptyModifierIsNotParsed() {
-            Assert.IsFalse(TryParse(typeof(DateTime), "today+"));
-            Assert.IsFalse(TryParse(typeof(DateTime), "today-"));
+            ClassicAssert.IsFalse(TryParse(typeof(DateTime), "today+"));
+            ClassicAssert.IsFalse(TryParse(typeof(DateTime), "today-"));
         }
 
         [Test] public void NonNumericModifierIsNotParsed() {
-            Assert.IsFalse(TryParse(typeof(DateTime), "today+fun"));
-            Assert.AreEqual("System.FormatException", exceptionType);
+            ClassicAssert.IsFalse(TryParse(typeof(DateTime), "today+fun"));
+            ClassicAssert.AreEqual("System.FormatException", exceptionType);
         }
     }
 }

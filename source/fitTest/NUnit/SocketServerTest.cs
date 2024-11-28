@@ -12,6 +12,7 @@ using fitSharp.IO;
 using fitSharp.Machine.Model;
 using fitSharp.Samples;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fit.Test.NUnit {
     [TestFixture] public class SocketServerTest {
@@ -26,13 +27,13 @@ namespace fit.Test.NUnit {
             service.AddNamespace("fitlibrary");
             service.ApplicationUnderTest.AddAssembly(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "fit.dll"));
             RunTest(service, "<table><tr><td>do</td></tr></table><table><tr><td>do</td></tr></table>");
-            Assert.AreEqual("<table><tr><td><span class=\"fit_interpreter\">do</span></td></tr></table><table><tr><td><span class=\"fit_interpreter\">do</span></td></tr></table>", resultTables);
+            ClassicAssert.AreEqual("<table><tr><td><span class=\"fit_interpreter\">do</span></td></tr></table><table><tr><td><span class=\"fit_interpreter\">do</span></td></tr></table>", resultTables);
         }
 
         [Test] public void RegularTestUseCopyOfMemory() {
             var service = new Service.Service();
             RunMemoryTest(service, "Regular");
-            Assert.IsFalse(service.Memory.HasItem<TestItem>());
+            ClassicAssert.IsFalse(service.Memory.HasItem<TestItem>());
         }
 
         void RunMemoryTest(Service.Service service, string leader) {
@@ -44,15 +45,15 @@ namespace fit.Test.NUnit {
         [Test] public void SuiteSetUpUpdatesMemory() {
             var service = new Service.Service();
             RunMemoryTest(service, "SuiteSetUp");
-            Assert.IsTrue(service.Memory.HasItem<TestItem>());
+            ClassicAssert.IsTrue(service.Memory.HasItem<TestItem>());
         }
 
         [Test] public void ParseExceptionIsRecorded() {
             var service = new Service.Service();
             const string tables = "<table>garbage</table>";
             RunTest(service, tables);
-            Assert.IsTrue(resultTables.Contains("class=\"error\""), resultTables);
-            Assert.IsTrue(resultTables.Contains("Unable to parse input. Input ignored."), resultTables);
+            ClassicAssert.IsTrue(resultTables.Contains("class=\"error\""), resultTables);
+            ClassicAssert.IsTrue(resultTables.Contains("Unable to parse input. Input ignored."), resultTables);
         }
 
         private void RunTest(CellProcessor service, string tables) {
@@ -62,7 +63,7 @@ namespace fit.Test.NUnit {
             port.AddInput(Protocol.FormatInteger(0));
             var server = new SocketServer(new FitSocket(new MessageChannel(port), new NullReporter()), service, new NullReporter(), false);
             server.ProcessTestDocuments(new StoryTestStringWriter().ForTables(s => resultTables += s));
-            Assert.IsFalse(port.IsOpen);
+            ClassicAssert.IsFalse(port.IsOpen);
         }
     }
 

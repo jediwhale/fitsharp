@@ -1,4 +1,4 @@
-// Copyright © 2009 Syterra Software Inc. Includes work by Object Mentor, Inc., © 2002 Cunningham & Cunningham, Inc.
+// Copyright ï¿½ 2009 Syterra Software Inc. Includes work by Object Mentor, Inc., ï¿½ 2002 Cunningham & Cunningham, Inc.
 // This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.
 // This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using fitnesse.fitserver;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace fit.Test.NUnit {
     [TestFixture]
@@ -17,7 +18,7 @@ namespace fit.Test.NUnit {
         public void TestEmptyString()
         {
             PathParser parser = new PathParser("");
-            Assert.AreEqual(0, parser.AssemblyPaths.Count());
+            ClassicAssert.AreEqual(0, parser.AssemblyPaths.Count());
         }
 
         [Test]
@@ -83,9 +84,9 @@ namespace fit.Test.NUnit {
         private void verifyAssemblyPaths(string[] expected, IEnumerable<string> list2)
         {
             IList list1 = new ArrayList(expected);
-            Assert.AreEqual(list1.Count, list2.Count());
+            ClassicAssert.AreEqual(list1.Count, list2.Count());
             foreach (string obj in list1)
-                Assert.IsTrue(list2.Contains(obj));
+                ClassicAssert.IsTrue(list2.Contains(obj));
         }
 
 
