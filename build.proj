@@ -60,6 +60,18 @@
       source\Runner\bin\release\net9.0-windows\Runner.runtimeconfig.json;
       source\RunnerW\bin\release\net9.0-windows\RunnerW.dll;
       source\RunnerW\bin\release\net9.0-windows\RunnerW.runtimeconfig.json"/>
+     <Net10Files Include="
+      source\fitSharp\bin\release\net10.0\fitSharp.dll;
+      source\fit\bin\release\net10.0\fit.dll;
+      source\Runner\bin\release\net10.0\Runner.dll;
+      source\Runner\bin\release\net10.0\Runner.runtimeconfig.json"/>
+     <Net10WinFiles Include="
+      source\fitSharp\bin\release\net10.0-windows\fitSharp.dll;
+      source\fit\bin\release\net10.0-windows\fit.dll;
+      source\Runner\bin\release\net10.0-windows\Runner.dll;
+      source\Runner\bin\release\net10.0-windows\Runner.runtimeconfig.json;
+      source\RunnerW\bin\release\net10.0-windows\RunnerW.dll;
+      source\RunnerW\bin\release\net10.0-windows\RunnerW.runtimeconfig.json"/>
    <Packages Include="nuget\*.nupkg" />
   </ItemGroup>
   <Copy SourceFiles="@(Netfx48Files)" DestinationFolder="nuget\lib\net48" />
@@ -67,6 +79,8 @@
   <Copy SourceFiles="@(Net8WinFiles)" DestinationFolder="nuget\lib\net8.0-windows" />
   <Copy SourceFiles="@(net9Files)" DestinationFolder="nuget\lib\net9.0" />
   <Copy SourceFiles="@(net9WinFiles)" DestinationFolder="nuget\lib\net9.0-windows" />
+  <Copy SourceFiles="@(Net10Files)" DestinationFolder="nuget\lib\net10.0" />
+  <Copy SourceFiles="@(Net10WinFiles)" DestinationFolder="nuget\lib\net10.0-windows" />
   <Exec Command="..\binary\tools\nuget\nuget pack FitSharp.nuspec" WorkingDirectory="nuget"/>
   <Move SourceFiles="@(Packages)" DestinationFolder="binary" />
 </Target>
