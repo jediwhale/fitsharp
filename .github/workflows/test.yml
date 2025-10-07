@@ -15,6 +15,7 @@ jobs:
           dotnet-version: |
             8.0.X
             9.0.X
+            10.0.X
       - name: Install dependencies
         run: dotnet msbuild -target:restore .\build.proj
       - name: Build
