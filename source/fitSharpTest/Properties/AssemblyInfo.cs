@@ -6,5 +6,5 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyProduct("fitSharp")]
 [assembly: ComVisible(false)]
 
-[assembly: AssemblyCopyright("Copyright © 2022 Syterra Software Inc. All rights reserved.")]
-[assembly: AssemblyVersion("2022.11.13.0")]
+[assembly: AssemblyCopyright("Copyright © 2025 Syterra Software Inc. All rights reserved.")]
+[assembly: AssemblyVersion("2025.11.17")]
