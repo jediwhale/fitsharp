@@ -32,7 +32,15 @@ namespace fitSharp.Machine.Engine {
             readonly Assembly assembly;
             public AssemblyTypes(Assembly assembly) { this.assembly = assembly; }
             public string Name => TargetFramework.Location(assembly);
-            public IEnumerable<Type> Types => assembly.GetExportedTypes();
+            public IEnumerable<Type> Types {
+                get {
+                    try { return assembly.GetExportedTypes(); }
+                    catch (System.IO.FileLoadException) { return System.Array.Empty<Type>(); }
+                    catch (System.IO.FileNotFoundException) { return System.Array.Empty<Type>(); }
+                    catch (ReflectionTypeLoadException) { return System.Array.Empty<Type>(); }
+                    catch (BadImageFormatException) { return System.Array.Empty<Type>(); }
+                }
+            }
         }
     }
 }

@@ -76,8 +76,12 @@ namespace fitSharp.Machine.Engine {
         }
 
         public Maybe<Type> SearchTypes(NameMatcher typeName) {
-            var type = Type.GetType(typeName.MatchName);
-            if (type != null) return Maybe<Type>.Of(type);
+            try {
+                var type = Type.GetType(typeName.MatchName);
+                if (type != null) return Maybe<Type>.Of(type);
+            }
+            catch (System.IO.FileLoadException) {}
+            catch (BadImageFormatException) {}
             var result = SearchForType(typeName, cache)
                 .OrMaybe(() => {
                     assemblies.LoadWellKnownAssemblies(typeName.MatchName);
