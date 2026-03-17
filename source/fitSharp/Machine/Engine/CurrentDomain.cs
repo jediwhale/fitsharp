@@ -4,6 +4,7 @@
 // to be bound by the terms of this license. You must not remove this notice, or any other, from this software.
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -11,6 +12,8 @@ using fitSharp.Machine.Model;
 
 namespace fitSharp.Machine.Engine {
     public class CurrentDomain: ApplicationDomain {
+        static readonly ConcurrentDictionary<Assembly, Type[]> typeCache = new ConcurrentDictionary<Assembly, Type[]>();
+
         public Types LoadAssembly(string assemblyPath) {
             var assembly = Assembly.LoadFrom(assemblyPath);
             EnsureAllReferencedAssembliesAreLoaded(assembly);
@@ -28,19 +31,21 @@ namespace fitSharp.Machine.Engine {
             return assembly.ManifestModule.GetType().Namespace == "System.Reflection.Emit";
         }
 
+        static Type[] GetCachedTypes(Assembly assembly) {
+            return typeCache.GetOrAdd(assembly, asm => {
+                try { return asm.GetExportedTypes(); }
+                catch (System.IO.FileLoadException) { return System.Array.Empty<Type>(); }
+                catch (System.IO.FileNotFoundException) { return System.Array.Empty<Type>(); }
+                catch (ReflectionTypeLoadException) { return System.Array.Empty<Type>(); }
+                catch (BadImageFormatException) { return System.Array.Empty<Type>(); }
+            });
+        }
+
         class AssemblyTypes: Types {
             readonly Assembly assembly;
             public AssemblyTypes(Assembly assembly) { this.assembly = assembly; }
             public string Name => TargetFramework.Location(assembly);
-            public IEnumerable<Type> Types {
-                get {
-                    try { return assembly.GetExportedTypes(); }
-                    catch (System.IO.FileLoadException) { return System.Array.Empty<Type>(); }
-                    catch (System.IO.FileNotFoundException) { return System.Array.Empty<Type>(); }
-                    catch (ReflectionTypeLoadException) { return System.Array.Empty<Type>(); }
-                    catch (BadImageFormatException) { return System.Array.Empty<Type>(); }
-                }
-            }
+            public IEnumerable<Type> Types => GetCachedTypes(assembly);
         }
     }
 }
