@@ -25,3 +25,5 @@ jobs:
         run: dotnet msbuild -target:unittests .\build.proj
       - name: Story Tests
         run: dotnet msbuild -target:storytests .\build.proj
+      - name: Package
+        run: dotnet msbuild -target:package .\build.proj
