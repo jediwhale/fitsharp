@@ -47,56 +47,41 @@ for the complete setup.
 
 ## Prerequisites
 
-The canonical build runs on Windows and targets:
+The build runs on Windows. Linux builds the libraries and runners without the
+Windows desktop runner. Targeted frameworks:
 
-- .NET Framework 4.8
-- .NET 8+
-- Windows-specific variants of .NET 8+
+- .NET Framework 4.8 (Windows only)
+- .NET 10
+- .NET 11
 
-Install the .NET Framework 4.8 Developer Pack and the .NET 8 through 11 SDKs.
-The repository's [`global.json`](global.json) currently pins a prerelease .NET
-11 SDK and allows roll-forward to a later major prerelease SDK. The
+Install the .NET Framework 4.8 Developer Pack on Windows, and the .NET 10 and
+.NET 11 SDKs. The repository's [`global.json`](global.json) pins the SDK. The
 [CI workflow](.github/workflows/test.yml) is the reference environment.
 
 ## Build and test
 
-Run commands from the repository root:
+Run the build script from the repository root. It restores, builds in Release,
+runs all unit and story tests, and, on Windows, creates the package:
 
 ```powershell
-# Restore
-dotnet msbuild -target:restore .\build.proj
-
-# Build the solution in Debug configuration
-dotnet msbuild -target:solution .\build.proj
-
-# Run unit tests
-dotnet msbuild -target:unittests .\build.proj
-
-# Run story tests
-dotnet msbuild -target:storytests .\build.proj
+.\build.cmd
 ```
 
-The test targets build the solution before running their tests. Each test
-command uses `dotnet test -m:1` to match CI.
+```bash
+./build.sh
+```
+
+CI runs the same scripts. To work on a single project, use `dotnet build` or
+`dotnet test` on that project directly.
 
 ## Package
 
-Release versions are maintained manually in
-[`nuget\FitSharp.nuspec`](nuget/FitSharp.nuspec). Update the version there,
-then create the release build and NuGet package with:
+The version comes from [`Directory.Build.props`](Directory.Build.props). The
+build script writes `artifacts\FitSharp.<version>.nupkg` and a matching symbols
+package. To pack without the full build:
 
 ```powershell
-dotnet msbuild -target:package .\build.proj
-```
-
-The package target restores and builds the solution in Release configuration,
-recreates the package staging directory, validates the required build outputs,
-and writes `nuget\FitSharp.<version>.nupkg`.
-
-Deploying creates the package and copies it to `binary`:
-
-```powershell
-dotnet msbuild -target:deploy .\build.proj
+dotnet pack packaging\FitSharp.Package.csproj -c Release -o artifacts
 ```
 
 ## Develop

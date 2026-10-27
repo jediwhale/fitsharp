@@ -9,7 +9,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v5
-      - name: Setup .NET Core SDKs 
+      - name: Setup .NET Core SDKs
         uses: actions/setup-dotnet@v5
         with:
           dotnet-version: |
@@ -17,13 +17,5 @@ jobs:
             9.0.X
             10.0.X
             11.0.X
-      - name: Install dependencies
-        run: dotnet msbuild -target:restore .\build.proj
-      - name: Build
-        run: dotnet msbuild -target:solution .\build.proj
-      - name: Unit Tests
-        run: dotnet msbuild -target:unittests .\build.proj
-      - name: Story Tests
-        run: dotnet msbuild -target:storytests .\build.proj
-      - name: Package
-        run: dotnet pack packaging/FitSharp.Package.csproj -c Release -o artifacts
+      - name: Build, test and package
+        run: .\build.cmd
