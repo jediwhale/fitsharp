@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-dotnet restore fitSharp.linux.slnf
-dotnet build fitSharp.linux.slnf -c Release --no-restore
-dotnet test fitSharp.linux.slnf -c Release --no-build -m:1
+dotnet restore fitSharp.linux.slnx
+dotnet build fitSharp.linux.slnx -c Release --no-restore
+dotnet test fitSharp.linux.slnx -c Release --no-build -m:1

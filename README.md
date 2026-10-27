@@ -134,7 +134,7 @@ dotnet nuget push artifacts\FitSharp.*.nupkg --api-key <key> --source https://ap
 
 ## Develop
 
-Open [`fitSharp.sln`](fitSharp.sln) in Visual Studio or use the commands above.
+Open [`fitSharp.slnx`](fitSharp.slnx) in Visual Studio or use the commands above.
 The main projects are:
 
 - `source\fitSharp`: shared runtime and infrastructure
