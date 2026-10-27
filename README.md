@@ -101,6 +101,21 @@ Use a `SLIM_PORT` other than the default value `1`. See
 [Debugging fixtures](https://fitsharp.github.io/Slim/DebuggingFixtures.html)
 for details.
 
+To run a local FitNesse server, fetch the current standalone jar into the
+ignored `.fitnesse` folder:
+
+```powershell
+powershell -File tools\fitnesse\fetch-fitnesse.ps1
+```
+
+```bash
+./tools/fitnesse/fetch-fitnesse.sh
+```
+
+Then start it with `java -jar .fitnesse/fitnesse-<version>-standalone.jar`. The
+automated story suite does not need FitNesse; it runs the folder runner
+directly.
+
 ## License
 
 Work derived from the original Fit, FitLibrary, and DBFit projects is covered by
