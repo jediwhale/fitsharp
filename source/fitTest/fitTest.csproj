@@ -1,9 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net48;net8.0;net8.0-windows;net9.0;net9.0-windows;net10.0;net10.0-windows;net11.0;net11.0-windows</TargetFrameworks>
+    <TargetFrameworks>$(LibraryTargetFrameworks)</TargetFrameworks>
     <RootNamespace>fit.Test</RootNamespace>
-    <Deterministic>false</Deterministic>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AssemblyTitle>Tests for Fit</AssemblyTitle>
+    <Description>Fit. This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2.</Description>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\fitSharp\fitSharp.csproj" />
@@ -11,10 +11,10 @@
     <ProjectReference Include="..\Samples\Samples.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
-    <PackageReference Include="Moq" Version="4.13.1" />
-    <PackageReference Include="NUnit" Version="4.2.2" />
-    <PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="Moq" />
+    <PackageReference Include="NUnit" />
+    <PackageReference Include="NUnit3TestAdapter" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
     <Reference Include="System.Web"/>

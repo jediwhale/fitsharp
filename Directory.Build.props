@@ -1,0 +1,29 @@
+<Project>
+
+  <PropertyGroup>
+    <!-- Target frameworks. One definition for the whole repository. -->
+    <ModernTargetFrameworks>net10.0;net11.0</ModernTargetFrameworks>
+    <ModernWindowsTargetFrameworks>net10.0-windows;net11.0-windows</ModernWindowsTargetFrameworks>
+    <LegacyTargetFrameworks Condition="$([MSBuild]::IsOSPlatform('Windows'))">net48</LegacyTargetFrameworks>
+
+    <LibraryTargetFrameworks Condition="'$(LegacyTargetFrameworks)' != ''">$(LegacyTargetFrameworks);$(ModernTargetFrameworks)</LibraryTargetFrameworks>
+    <LibraryTargetFrameworks Condition="'$(LegacyTargetFrameworks)' == ''">$(ModernTargetFrameworks)</LibraryTargetFrameworks>
+
+    <!-- Only the runners need a Windows desktop runtime; libraries do not. -->
+    <RunnerTargetFrameworks>$(LibraryTargetFrameworks)</RunnerTargetFrameworks>
+    <RunnerTargetFrameworks Condition="$([MSBuild]::IsOSPlatform('Windows'))">$(RunnerTargetFrameworks);$(ModernWindowsTargetFrameworks)</RunnerTargetFrameworks>
+    <WindowsRunnerTargetFrameworks>net48;net10.0-windows;net11.0-windows</WindowsRunnerTargetFrameworks>
+
+    <!-- Shared assembly metadata. Projects override title or description when they differ. -->
+    <Product>fitSharp</Product>
+    <Company>Syterra Software Inc.</Company>
+    <Authors>MikeStockdale,sqeezy</Authors>
+    <Copyright>Copyright © 2026 Syterra Software Inc. All rights reserved.</Copyright>
+    <Description>fitSharp. The use and distribution terms for this software are covered by the Common Public License 1.0.</Description>
+    <Version>2025.11.17</Version>
+    <ComVisible>false</ComVisible>
+    <LangVersion>latest</LangVersion>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+
+</Project>
