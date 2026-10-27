@@ -1,6 +1,6 @@
 # fitSharp
 
-[![Tests](https://github.com/jediwhale/fitsharp/actions/workflows/test.yml/badge.svg)](https://github.com/jediwhale/fitsharp/actions/workflows/test.yml)
+[![Build](https://github.com/jediwhale/fitsharp/actions/workflows/test.yml/badge.svg)](https://github.com/jediwhale/fitsharp/actions/workflows/test.yml)
 [![NuGet](https://img.shields.io/nuget/v/FitSharp.svg)](https://www.nuget.org/packages/FitSharp)
 
 fitSharp is a set of open-source functional testing tools for .NET, inspired by
@@ -20,8 +20,16 @@ Add the package to a .NET project:
 dotnet add package FitSharp
 ```
 
-The package contains the fitSharp libraries and runners. FitNesse starts the
-appropriate runner to execute fixtures in your .NET assemblies.
+The package contains the fitSharp libraries and runners. `lib` holds the
+compile references; `tools` holds the runners that FitNesse starts by path:
+
+| Group | `lib/` | `tools/` |
+|---|---|---|
+| `net48` | `fitSharp`, `fit` | `Runner.exe`, `RunnerW.exe`, `fitSharp`, `fit` |
+| `net10.0`, `net11.0` | `fitSharp`, `fit` | `Runner`, `fitSharp`, `fit` |
+| `net10.0-windows7.0`, `net11.0-windows7.0` | `fitSharp`, `fit` | `Runner`, `RunnerW`, `fitSharp`, `fit` |
+
+Runners in the `*-windows7.0` groups start on the Windows desktop runtime.
 
 ## Use with FitNesse
 
@@ -45,17 +53,36 @@ assemblies and namespaces. See
 [Run tests with FitNesse](https://fitsharp.github.io/FitSharp/RunTestsWithFitnesse.html)
 for the complete setup.
 
+### WPF and WinForms fixtures
+
+A fixture assembly that references WPF or WinForms only loads on the Windows
+desktop runtime. Point the command pattern at `tools/net10.0-windows7.0/Runner.dll`
+or the `net11.0-windows7.0` equivalent. The runner in the plain `tools/net10.0`
+or `tools/net11.0` group starts on the console runtime and cannot load those
+assemblies. `RunnerW` is the GUI alternative for debugging.
+
+### Linux
+
+The libraries and the console runner run on Linux; the Windows GUI runner does
+not. Use the runner in `tools/net10.0` or `tools/net11.0`. The build and the full
+story suite run on Linux in CI.
+
+## Compatibility
+
+Supported targets: .NET Framework 4.8 (Windows only), .NET 10 and .NET 11. The
+package no longer contains .NET 8 or .NET 9 assets. The previous parallel Linux
+projects and solution are removed; Linux builds from the main projects.
+
 ## Prerequisites
 
-The build runs on Windows. Linux builds the libraries and runners without the
-Windows desktop runner. Targeted frameworks:
+The build runs on Windows and Linux. Packaging requires Windows because the
+desktop runner is Windows-only.
 
-- .NET Framework 4.8 (Windows only)
-- .NET 10
-- .NET 11
+- .NET Framework 4.8 Developer Pack (Windows)
+- .NET 10 SDK
+- .NET 11 SDK
 
-Install the .NET Framework 4.8 Developer Pack on Windows, and the .NET 10 and
-.NET 11 SDKs. The repository's [`global.json`](global.json) pins the SDK. The
+The repository's [`global.json`](global.json) pins the SDK, and the
 [CI workflow](.github/workflows/test.yml) is the reference environment.
 
 ## Build and test
@@ -86,8 +113,8 @@ dotnet pack packaging\FitSharp.Package.csproj -c Release -o artifacts
 
 ## Release
 
-The version lives in [`Directory.Build.props`](Directory.Build.props). Set it,
-commit, and push a tag with the same value:
+Set the version in [`Directory.Build.props`](Directory.Build.props), commit,
+and push a tag with the same value:
 
 ```bash
 git tag 2025.11.17
@@ -102,8 +129,7 @@ If automated publishing is unavailable, pack locally and push manually:
 
 ```powershell
 .\build.cmd
-dotnet nuget push artifacts\FitSharp.2025.11.17.nupkg --api-key <key> --source https://api.nuget.org/v3/index.json
-dotnet nuget push artifacts\FitSharp.2025.11.17.snupkg --api-key <key> --source https://api.nuget.org/v3/index.json
+dotnet nuget push artifacts\FitSharp.*.nupkg --api-key <key> --source https://api.nuget.org/v3/index.json
 ```
 
 ## Develop
@@ -116,6 +142,9 @@ The main projects are:
 - `source\Runner`: command-line runner
 - `source\RunnerW`: Windows GUI runner
 - `source\fitSharpTest`, `source\fitTest`, and `source\StoryTest`: automated tests
+- `source\TestTargetWpf` and `source\RunnerDesktopTest`: prove that the Windows runner loads WPF-dependent fixtures
+- `packaging\FitSharp.Package.csproj`: package definition
+- `tools\fitnesse`: fetch a local FitNesse server
 
 To debug Slim fixtures launched by FitNesse, set `TEST_RUNNER` to `RunnerW.exe`,
 start the test, attach the debugger while RunnerW waits, and then select **Go**.
@@ -127,15 +156,25 @@ To run a local FitNesse server, fetch the current standalone jar into the
 ignored `.fitnesse` folder:
 
 ```powershell
-powershell -File tools\fitnesse\fetch-fitnesse.ps1
+powershell -File tools/fitnesse/fetch-fitnesse.ps1
 ```
 
 ```bash
 ./tools/fitnesse/fetch-fitnesse.sh
 ```
 
-Then start it with `java -jar .fitnesse/fitnesse-<version>-standalone.jar`. The
-automated story suite does not need FitNesse; it runs the folder runner
+Then start it with `java -jar .fitnesse/fitnesse-<version>-standalone.jar`. Both
+scripts verify the published checksum; pass a version to pin one:
+
+```bash
+./tools/fitnesse/fetch-fitnesse.sh .fitnesse 20260313
+```
+
+```powershell
+powershell -File tools/fitnesse/fetch-fitnesse.ps1 -Version 20260313
+```
+
+The automated story suite does not need FitNesse; it runs the folder runner
 directly.
 
 ## License
