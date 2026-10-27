@@ -12,7 +12,7 @@
     <!-- Only the runners need a Windows desktop runtime; libraries do not. -->
     <RunnerTargetFrameworks>$(LibraryTargetFrameworks)</RunnerTargetFrameworks>
     <RunnerTargetFrameworks Condition="$([MSBuild]::IsOSPlatform('Windows'))">$(RunnerTargetFrameworks);$(ModernWindowsTargetFrameworks)</RunnerTargetFrameworks>
-    <WindowsRunnerTargetFrameworks>net48;net10.0-windows;net11.0-windows</WindowsRunnerTargetFrameworks>
+    <WindowsRunnerTargetFrameworks>net48;$(ModernWindowsTargetFrameworks)</WindowsRunnerTargetFrameworks>
 
     <!-- Shared assembly metadata. Projects override title or description when they differ. -->
     <Product>fitSharp</Product>
@@ -24,6 +24,11 @@
     <ComVisible>false</ComVisible>
     <LangVersion>latest</LangVersion>
     <Deterministic>true</Deterministic>
+
+    <!-- Consumed by SourceLink and the package metadata. -->
+    <RepositoryUrl>https://github.com/jediwhale/fitsharp</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
   </PropertyGroup>
 
 </Project>

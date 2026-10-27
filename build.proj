@@ -4,18 +4,7 @@
         
 <PropertyGroup>
     <Config>Debug</Config>
-    <PackageDirectory>$(MSBuildThisFileDirectory)nuget</PackageDirectory>
-    <PackageStagingDirectory>$(PackageDirectory)\lib</PackageStagingDirectory>
-    <PackageDeploymentDirectory>$(MSBuildThisFileDirectory)binary</PackageDeploymentDirectory>
-    <NuspecPath>$(PackageDirectory)\FitSharp.nuspec</NuspecPath>
-    <NuGetExe>$(MSBuildThisFileDirectory)binary\tools\nuget\nuget.exe</NuGetExe>
 </PropertyGroup>
-
-<Target Name="deploy" DependsOnTargets="package">
-  <Error Condition="Exists('$(DeployedPackageFile)')" Text="Package already exists: $(DeployedPackageFile)" />
-  <MakeDir Directories="$(PackageDeploymentDirectory)" />
-  <Copy SourceFiles="$(PackageFile)" DestinationFiles="$(DeployedPackageFile)" />
-</Target>
 
 <Target Name="restore">
     <Exec Command="dotnet restore fitSharp.sln"/>
@@ -36,76 +25,6 @@
 
 <Target Name="storytests" DependsOnTargets="solution">
     <Exec Command="dotnet test --no-build -m:1 source\StoryTest\StoryTest.csproj" />
-</Target>
-
-<Target Name="package" DependsOnTargets="releasesolution">
-  <RemoveDir Directories="$(PackageStagingDirectory)" />
-  <ItemGroup>
-    <Netfx48Files Include="
-      source\fitSharp\bin\release\net48\fitSharp.dll;
-      source\fit\bin\release\net48\fit.dll;
-      source\Runner\bin\release\net48\Runner.exe;
-      source\RunnerW\bin\release\net48\RunnerW.exe"/>
-    <Net10SharedFiles Include="
-      source\fitSharp\bin\release\net10.0\fitSharp.dll;
-      source\fit\bin\release\net10.0\fit.dll"/>
-    <Net10Files Include="
-      @(Net10SharedFiles);
-      source\Runner\bin\release\net10.0\Runner.dll;
-      source\Runner\bin\release\net10.0\Runner.runtimeconfig.json"/>
-    <Net10WinFiles Include="
-      @(Net10SharedFiles);
-      source\Runner\bin\release\net10.0-windows\Runner.dll;
-      source\Runner\bin\release\net10.0-windows\Runner.runtimeconfig.json;
-      source\RunnerW\bin\release\net10.0-windows\RunnerW.dll;
-      source\RunnerW\bin\release\net10.0-windows\RunnerW.runtimeconfig.json"/>
-    <Net11SharedFiles Include="
-      source\fitSharp\bin\release\net11.0\fitSharp.dll;
-      source\fit\bin\release\net11.0\fit.dll"/>
-    <Net11Files Include="
-      @(Net11SharedFiles);
-      source\Runner\bin\release\net11.0\Runner.dll;
-      source\Runner\bin\release\net11.0\Runner.runtimeconfig.json"/>
-    <Net11WinFiles Include="
-      @(Net11SharedFiles);
-      source\Runner\bin\release\net11.0-windows\Runner.dll;
-      source\Runner\bin\release\net11.0-windows\Runner.runtimeconfig.json;
-      source\RunnerW\bin\release\net11.0-windows\RunnerW.dll;
-      source\RunnerW\bin\release\net11.0-windows\RunnerW.runtimeconfig.json"/>
-    <PackageFiles Include="
-      @(Netfx48Files);
-      @(Net10Files);
-      @(Net10WinFiles);
-      @(Net11Files);
-      @(Net11WinFiles)" />
-  </ItemGroup>
-  <Error Condition="!Exists('$(NuGetExe)')" Text="NuGet executable not found: $(NuGetExe)" />
-  <Error Condition="!Exists('$(NuspecPath)')" Text="NuGet specification not found: $(NuspecPath)" />
-  <Error Condition="!Exists('%(PackageFiles.Identity)')" Text="Package input not found: %(PackageFiles.Identity)" />
-  <XmlPeek XmlInputPath="$(NuspecPath)"
-           Query="/nuspec:package/nuspec:metadata/nuspec:id/text()"
-           Namespaces="&lt;Namespace Prefix='nuspec' Uri='http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd' /&gt;">
-    <Output TaskParameter="Result" PropertyName="PackageId" />
-  </XmlPeek>
-  <XmlPeek XmlInputPath="$(NuspecPath)"
-           Query="/nuspec:package/nuspec:metadata/nuspec:version/text()"
-           Namespaces="&lt;Namespace Prefix='nuspec' Uri='http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd' /&gt;">
-    <Output TaskParameter="Result" PropertyName="PackageVersion" />
-  </XmlPeek>
-  <Error Condition="'$(PackageId)' == ''" Text="Package ID not found in $(NuspecPath)" />
-  <Error Condition="'$(PackageVersion)' == ''" Text="Package version not found in $(NuspecPath)" />
-  <PropertyGroup>
-    <PackageFile>$(PackageDirectory)\$(PackageId).$(PackageVersion).nupkg</PackageFile>
-    <DeployedPackageFile>$(PackageDeploymentDirectory)\$(PackageId).$(PackageVersion).nupkg</DeployedPackageFile>
-  </PropertyGroup>
-  <Copy SourceFiles="@(Netfx48Files)" DestinationFolder="$(PackageStagingDirectory)\net48" />
-  <Copy SourceFiles="@(Net10Files)" DestinationFolder="$(PackageStagingDirectory)\net10.0" />
-  <Copy SourceFiles="@(Net10WinFiles)" DestinationFolder="$(PackageStagingDirectory)\net10.0-windows" />
-  <Copy SourceFiles="@(Net11Files)" DestinationFolder="$(PackageStagingDirectory)\net11.0" />
-  <Copy SourceFiles="@(Net11WinFiles)" DestinationFolder="$(PackageStagingDirectory)\net11.0-windows" />
-  <Exec Command="&quot;$(NuGetExe)&quot; pack FitSharp.nuspec -OutputDirectory &quot;$(PackageDirectory)&quot; -NonInteractive"
-        WorkingDirectory="$(PackageDirectory)" />
-  <Error Condition="!Exists('$(PackageFile)')" Text="NuGet package was not created: $(PackageFile)" />
 </Target>
 
 </Project>

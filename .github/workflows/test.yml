@@ -26,4 +26,4 @@ jobs:
       - name: Story Tests
         run: dotnet msbuild -target:storytests .\build.proj
       - name: Package
-        run: dotnet msbuild -target:package .\build.proj
+        run: dotnet pack packaging/FitSharp.Package.csproj -c Release -o artifacts

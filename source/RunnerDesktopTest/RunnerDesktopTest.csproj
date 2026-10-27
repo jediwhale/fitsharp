@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>$(ModernWindowsTargetFrameworks)</TargetFrameworks>
+    <RootNamespace>fitSharp.RunnerDesktopTest</RootNamespace>
+    <AssemblyTitle>Windows runner tests for fitSharp</AssemblyTitle>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="NUnit" />
+    <PackageReference Include="NUnit3TestAdapter" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Runner\Runner.csproj" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\TestTargetWpf\TestTargetWpf.csproj" ReferenceOutputAssembly="false" />
+  </ItemGroup>
+</Project>
