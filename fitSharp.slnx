@@ -1,0 +1,15 @@
+<Solution>
+  <Project Path="packaging/FitSharp.Package.csproj" />
+  <Project Path="source/fit/fit.csproj" />
+  <Project Path="source/fitSharp/fitSharp.csproj" />
+  <Project Path="source/fitSharpTest/fitSharpTest.csproj" />
+  <Project Path="source/fitTest/fitTest.csproj" />
+  <Project Path="source/Runner/Runner.csproj" />
+  <Project Path="source/RunnerDesktopTest/RunnerDesktopTest.csproj" />
+  <Project Path="source/RunnerW/RunnerW.csproj" />
+  <Project Path="source/Samples/Samples.csproj" />
+  <Project Path="source/StoryTest/StoryTest.csproj" />
+  <Project Path="source/TestTarget/TestTarget.csproj" />
+  <Project Path="source/TestTarget2/TestTarget2.csproj" />
+  <Project Path="source/TestTargetWpf/TestTargetWpf.csproj" />
+</Solution>
