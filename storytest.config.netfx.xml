@@ -1,15 +1,15 @@
 <suiteConfig>
 
     <Settings>
-        <inputFolder>document\fitSharp</inputFolder>
-        <outputFolder>site\netfx</outputFolder>
+        <inputFolder>document/fitSharp</inputFolder>
+        <outputFolder>site/netfx</outputFolder>
         <runner>fit.Runner.FolderRunner</runner>
     </Settings>
 
     <Fit.FileExclusions>
         <add>^Sample</add>
     </Fit.FileExclusions>
-    
+
     <ApplicationUnderTest>
         <addNamespace>fit.Test.Acceptance</addNamespace>
         <addNamespace>fit.Test.Double</addNamespace>
@@ -21,17 +21,17 @@
         <addNamespace>fitlibrary</addNamespace>
         <addNamespace>fit.Fixtures</addNamespace>
         <addNamespace>fitSharp.Test.Acceptance.Slim</addNamespace>
-        <addAssembly>build\sandbox\fitsharptest.dll</addAssembly>
-        <addAssembly>build\sandbox\fittest.dll</addAssembly>
-        <addAssembly>build\sandbox\samples.dll</addAssembly>
+        <addAssembly>build/sandbox/fitSharpTest.dll</addAssembly>
+        <addAssembly>build/sandbox/fitTest.dll</addAssembly>
+        <addAssembly>build/sandbox/Samples.dll</addAssembly>
     </ApplicationUnderTest>
-    
+
     <Culture>
         <Name>en-US</Name>
     </Culture>
-    
+
     <Fit.Operators>
         <add>fit.Operators.ParseModelOperator</add>
     </Fit.Operators>
-    
+
 </suiteConfig>
