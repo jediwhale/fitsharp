@@ -22,7 +22,6 @@ nuget/lib/
 /packages/
 /.vs/fitSharp/v15/Server/sqlite3
 .idea/
-/source/netcore/**/*.cs
 /binary/tools/dbfit/
 /artifacts/
 /.fitnesse/
