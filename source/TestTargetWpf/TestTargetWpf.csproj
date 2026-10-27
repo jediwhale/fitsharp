@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>$(ModernWindowsTargetFrameworks)</TargetFrameworks>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>fitSharp.TestTargetWpf</RootNamespace>
+    <AssemblyTitle>WPF test target for fitSharp</AssemblyTitle>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\fit\fit.csproj" />
+  </ItemGroup>
+</Project>

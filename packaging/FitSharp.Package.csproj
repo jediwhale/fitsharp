@@ -1,0 +1,126 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RepoRoot>$(MSBuildThisFileDirectory)..\</RepoRoot>
+    <TargetFrameworks>net48;$(ModernTargetFrameworks);$(ModernWindowsTargetFrameworks)</TargetFrameworks>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <!-- The SDK only collects per-framework build output and symbols when this is
+         true. The target below removes this project's empty assembly from the package. -->
+    <IncludeBuildOutput>true</IncludeBuildOutput>
+    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+    <!-- The package intentionally carries no dependencies, so NuGet has no dependency groups. -->
+    <NoWarn>$(NoWarn);NU5128</NoWarn>
+    <IsPackable>true</IsPackable>
+
+    <PackageId>FitSharp</PackageId>
+    <Title>fitSharp</Title>
+    <Description>fitSharp is a set of open-source functional testing tools for .NET, inspired by the Framework for Integrated Test. It provides Fit, Slim and DbFit support and runs .NET fixtures from FitNesse.</Description>
+    <PackageProjectUrl>https://fitsharp.github.io/</PackageProjectUrl>
+    <PackageTags>fit fitnesse testing dotnet</PackageTags>
+    <PackageReleaseNotes>See https://fitsharp.github.io/FitSharp/ReleaseInformation.html</PackageReleaseNotes>
+    <PackageLicenseFile>license.txt</PackageLicenseFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <EnablePackageValidation>true</EnablePackageValidation>
+    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);AddPackageContent</TargetsForTfmSpecificContentInPackage>
+    <TargetsForTfmSpecificDebugSymbolsInPackage>$(TargetsForTfmSpecificDebugSymbolsInPackage);AddPackageSymbols</TargetsForTfmSpecificDebugSymbolsInPackage>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="$(RepoRoot)license.txt" Pack="true" PackagePath="/" Visible="false" />
+    <None Include="$(RepoRoot)GPLicense.txt" Pack="true" PackagePath="license/" Visible="false" />
+    <None Include="$(RepoRoot)README.md" Pack="true" PackagePath="/" Visible="false" />
+  </ItemGroup>
+
+  <!-- Libraries are compile references; the runners are tools that FitNesse starts by path. -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
+    <PackagedLibrary Include="$(RepoRoot)source\fitSharp\bin\$(Configuration)\net48\fitSharp.dll" />
+    <PackagedLibrary Include="$(RepoRoot)source\fit\bin\$(Configuration)\net48\fit.dll" />
+    <PackagedTool Include="$(RepoRoot)source\Runner\bin\$(Configuration)\net48\Runner.exe" />
+    <PackagedTool Include="$(RepoRoot)source\RunnerW\bin\$(Configuration)\net48\RunnerW.exe" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+    <PackagedLibrary Include="$(RepoRoot)source\fitSharp\bin\$(Configuration)\net10.0\fitSharp.dll" />
+    <PackagedLibrary Include="$(RepoRoot)source\fit\bin\$(Configuration)\net10.0\fit.dll" />
+    <PackagedTool Include="$(RepoRoot)source\Runner\bin\$(Configuration)\net10.0\Runner.dll" />
+    <PackagedTool Include="$(RepoRoot)source\Runner\bin\$(Configuration)\net10.0\Runner.runtimeconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0-windows'">
+    <PackagedLibrary Include="$(RepoRoot)source\fitSharp\bin\$(Configuration)\net10.0\fitSharp.dll" />
+    <PackagedLibrary Include="$(RepoRoot)source\fit\bin\$(Configuration)\net10.0\fit.dll" />
+    <PackagedTool Include="$(RepoRoot)source\Runner\bin\$(Configuration)\net10.0-windows\Runner.dll" />
+    <PackagedTool Include="$(RepoRoot)source\Runner\bin\$(Configuration)\net10.0-windows\Runner.runtimeconfig.json" />
+    <PackagedTool Include="$(RepoRoot)source\RunnerW\bin\$(Configuration)\net10.0-windows\RunnerW.dll" />
+    <PackagedTool Include="$(RepoRoot)source\RunnerW\bin\$(Configuration)\net10.0-windows\RunnerW.runtimeconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net11.0'">
+    <PackagedLibrary Include="$(RepoRoot)source\fitSharp\bin\$(Configuration)\net11.0\fitSharp.dll" />
+    <PackagedLibrary Include="$(RepoRoot)source\fit\bin\$(Configuration)\net11.0\fit.dll" />
+    <PackagedTool Include="$(RepoRoot)source\Runner\bin\$(Configuration)\net11.0\Runner.dll" />
+    <PackagedTool Include="$(RepoRoot)source\Runner\bin\$(Configuration)\net11.0\Runner.runtimeconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net11.0-windows'">
+    <PackagedLibrary Include="$(RepoRoot)source\fitSharp\bin\$(Configuration)\net11.0\fitSharp.dll" />
+    <PackagedLibrary Include="$(RepoRoot)source\fit\bin\$(Configuration)\net11.0\fit.dll" />
+    <PackagedTool Include="$(RepoRoot)source\Runner\bin\$(Configuration)\net11.0-windows\Runner.dll" />
+    <PackagedTool Include="$(RepoRoot)source\Runner\bin\$(Configuration)\net11.0-windows\Runner.runtimeconfig.json" />
+    <PackagedTool Include="$(RepoRoot)source\RunnerW\bin\$(Configuration)\net11.0-windows\RunnerW.dll" />
+    <PackagedTool Include="$(RepoRoot)source\RunnerW\bin\$(Configuration)\net11.0-windows\RunnerW.runtimeconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\source\fitSharp\fitSharp.csproj" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\source\fit\fit.csproj" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\source\Runner\Runner.csproj" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\source\RunnerW\RunnerW.csproj" ReferenceOutputAssembly="false"
+                      Condition="'$(TargetFramework)' != 'net10.0' and '$(TargetFramework)' != 'net11.0'" />
+  </ItemGroup>
+
+  <Target Name="AddPackageContent">
+    <PropertyGroup>
+      <_PackageFramework>$(TargetFramework)</_PackageFramework>
+      <_PackageFramework Condition="'$(TargetFramework)' == 'net10.0-windows'">net10.0-windows7.0</_PackageFramework>
+      <_PackageFramework Condition="'$(TargetFramework)' == 'net11.0-windows'">net11.0-windows7.0</_PackageFramework>
+    </PropertyGroup>
+    <ItemGroup>
+      <TfmSpecificPackageFile Include="@(PackagedLibrary)">
+        <PackagePath>lib/$(_PackageFramework)/</PackagePath>
+      </TfmSpecificPackageFile>
+      <TfmSpecificPackageFile Include="@(PackagedLibrary)">
+        <PackagePath>tools/$(_PackageFramework)/</PackagePath>
+      </TfmSpecificPackageFile>
+      <TfmSpecificPackageFile Include="@(PackagedTool)">
+        <PackagePath>tools/$(_PackageFramework)/</PackagePath>
+      </TfmSpecificPackageFile>
+      <_PackagedToolBinary Include="@(PackagedTool)" Condition="'%(Extension)' == '.dll' or '%(Extension)' == '.exe'" />
+      <TfmSpecificPackageFile Include="@(_PackagedToolBinary->'%(RootDir)%(Directory)%(Filename).pdb')">
+        <PackagePath>tools/$(_PackageFramework)/</PackagePath>
+      </TfmSpecificPackageFile>
+    </ItemGroup>
+  </Target>
+
+  <Target Name="AddPackageSymbols">
+    <ItemGroup>
+      <_PackagedLibraryBinary Include="@(PackagedLibrary)" Condition="'%(Extension)' == '.dll'" />
+      <TfmSpecificDebugSymbolsFile Include="@(_PackagedLibraryBinary->'%(RootDir)%(Directory)%(Filename).pdb')">
+        <TargetFramework>$(TargetFramework)</TargetFramework>
+      </TfmSpecificDebugSymbolsFile>
+    </ItemGroup>
+  </Target>
+
+  <!-- The packaging project has no code of its own; keep its empty assembly out of the package. -->
+  <Target Name="RemovePackProjectArtifacts" AfterTargets="_WalkEachTargetPerFramework">
+    <ItemGroup>
+      <_BuildOutputInPackage Remove="@(_BuildOutputInPackage)" Condition="'%(Filename)' == 'FitSharp.Package'" />
+      <_TargetPathsToSymbols Remove="@(_TargetPathsToSymbols)" Condition="'%(Filename)' == 'FitSharp.Package'" />
+    </ItemGroup>
+  </Target>
+
+</Project>
