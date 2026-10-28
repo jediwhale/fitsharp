@@ -2,14 +2,14 @@
 
     <Settings>
         <inputFolder>document/fitSharp</inputFolder>
-        <outputFolder>site</outputFolder>
+        <outputFolder>site/linux</outputFolder>
         <runner>fit.Runner.FolderRunner</runner>
     </Settings>
 
     <Fit.FileExclusions>
         <add>^Sample</add>
     </Fit.FileExclusions>
-    
+
     <ApplicationUnderTest>
         <addNamespace>fit.Test.Acceptance</addNamespace>
         <addNamespace>fit.Test.Double</addNamespace>
@@ -25,13 +25,13 @@
         <addAssembly>build/sandbox/fitTest.dll</addAssembly>
         <addAssembly>build/sandbox/Samples.dll</addAssembly>
     </ApplicationUnderTest>
-    
+
     <Culture>
         <Name>en-US</Name>
     </Culture>
-    
+
     <Fit.Operators>
         <add>fit.Operators.ParseModelOperator</add>
     </Fit.Operators>
-    
+
 </suiteConfig>

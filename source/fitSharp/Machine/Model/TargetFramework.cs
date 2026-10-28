@@ -19,17 +19,15 @@ namespace fitSharp.Machine.Model {
                 ;
         }
 
-        public static string FileExtension =>
-            #if NET5_0_OR_GREATER
-                OperatingSystem.IsWindows() ? "net5" : "linux"
-            #else
-                #if NETCOREAPP
-                    "netcore"
-                #else
-                    "netfx"
-                #endif
-            #endif
-            ;
+        public static string FileExtension {
+            get {
+#if NETFRAMEWORK
+                return "netfx";
+#else
+                return OperatingSystem.IsWindows() ? "windows" : "linux";
+#endif
+            }
+        }
         
         public static bool IsWindows =>
             #if NET5_0_OR_GREATER
