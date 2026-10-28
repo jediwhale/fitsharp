@@ -84,6 +84,28 @@ package. To pack without the full build:
 dotnet pack packaging\FitSharp.Package.csproj -c Release -o artifacts
 ```
 
+## Release
+
+The version lives in [`Directory.Build.props`](Directory.Build.props). Set it,
+commit, and push a tag with the same value:
+
+```bash
+git tag 2025.11.17
+git push origin 2025.11.17
+```
+
+The publish workflow builds, tests, packs and pushes the package and its
+symbols to NuGet. It stops if the tag and the version do not match. Running the
+workflow manually builds and packs without publishing.
+
+If automated publishing is unavailable, pack locally and push manually:
+
+```powershell
+.\build.cmd
+dotnet nuget push artifacts\FitSharp.2025.11.17.nupkg --api-key <key> --source https://api.nuget.org/v3/index.json
+dotnet nuget push artifacts\FitSharp.2025.11.17.snupkg --api-key <key> --source https://api.nuget.org/v3/index.json
+```
+
 ## Develop
 
 Open [`fitSharp.sln`](fitSharp.sln) in Visual Studio or use the commands above.

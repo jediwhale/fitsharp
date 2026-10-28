@@ -1,0 +1,41 @@
+name: Publish
+
+on:
+  push:
+    tags:
+      - '*'
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v5
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+          global-json-file: global.json
+      - name: Check that the tag matches the version
+        if: github.event_name == 'push'
+        shell: pwsh
+        run: |
+          [xml]$properties = Get-Content Directory.Build.props
+          $version = $properties.Project.PropertyGroup.Version
+          if ('${{ github.ref_name }}' -ne $version) {
+            throw "Tag '${{ github.ref_name }}' does not match version '$version' in Directory.Build.props."
+          }
+      - name: Build, test and pack
+        run: .\build.cmd
+      - name: Publish package and symbols
+        if: github.event_name == 'push'
+        shell: pwsh
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        run: |
+          if (-not $env:NUGET_API_KEY) {
+            throw 'NUGET_API_KEY is not configured for this repository.'
+          }
+          # The matching symbols package is published with the package.
+          dotnet nuget push artifacts\*.nupkg --api-key $env:NUGET_API_KEY --source https://api.nuget.org/v3/index.json --skip-duplicate
