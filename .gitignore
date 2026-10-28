@@ -24,3 +24,5 @@ nuget/lib/
 .idea/
 /source/netcore/**/*.cs
 /binary/tools/dbfit/
+/artifacts/
+/.fitnesse/

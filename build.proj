@@ -46,60 +46,34 @@
       source\fit\bin\release\net48\fit.dll;
       source\Runner\bin\release\net48\Runner.exe;
       source\RunnerW\bin\release\net48\RunnerW.exe"/>
-     <Net8Files Include="
-      source\fitSharp\bin\release\net8.0\fitSharp.dll;
-      source\fit\bin\release\net8.0\fit.dll;
-      source\Runner\bin\release\net8.0\Runner.dll;
-      source\Runner\bin\release\net8.0\Runner.runtimeconfig.json"/>
-     <Net8WinFiles Include="
-      source\fitSharp\bin\release\net8.0-windows\fitSharp.dll;
-      source\fit\bin\release\net8.0-windows\fit.dll;
-      source\Runner\bin\release\net8.0-windows\Runner.dll;
-      source\Runner\bin\release\net8.0-windows\Runner.runtimeconfig.json;
-      source\RunnerW\bin\release\net8.0-windows\RunnerW.dll;
-      source\RunnerW\bin\release\net8.0-windows\RunnerW.runtimeconfig.json"/>
-     <Net9Files Include="
-      source\fitSharp\bin\release\net9.0\fitSharp.dll;
-      source\fit\bin\release\net9.0\fit.dll;
-      source\Runner\bin\release\net9.0\Runner.dll;
-      source\Runner\bin\release\net9.0\Runner.runtimeconfig.json"/>
-     <Net9WinFiles Include="
-      source\fitSharp\bin\release\net9.0-windows\fitSharp.dll;
-      source\fit\bin\release\net9.0-windows\fit.dll;
-      source\Runner\bin\release\net9.0-windows\Runner.dll;
-      source\Runner\bin\release\net9.0-windows\Runner.runtimeconfig.json;
-      source\RunnerW\bin\release\net9.0-windows\RunnerW.dll;
-      source\RunnerW\bin\release\net9.0-windows\RunnerW.runtimeconfig.json"/>
-     <Net10Files Include="
+    <Net10SharedFiles Include="
       source\fitSharp\bin\release\net10.0\fitSharp.dll;
-      source\fit\bin\release\net10.0\fit.dll;
+      source\fit\bin\release\net10.0\fit.dll"/>
+    <Net10Files Include="
+      @(Net10SharedFiles);
       source\Runner\bin\release\net10.0\Runner.dll;
       source\Runner\bin\release\net10.0\Runner.runtimeconfig.json"/>
-     <Net10WinFiles Include="
-      source\fitSharp\bin\release\net10.0-windows\fitSharp.dll;
-      source\fit\bin\release\net10.0-windows\fit.dll;
+    <Net10WinFiles Include="
+      @(Net10SharedFiles);
       source\Runner\bin\release\net10.0-windows\Runner.dll;
       source\Runner\bin\release\net10.0-windows\Runner.runtimeconfig.json;
       source\RunnerW\bin\release\net10.0-windows\RunnerW.dll;
       source\RunnerW\bin\release\net10.0-windows\RunnerW.runtimeconfig.json"/>
-     <Net11Files Include="
+    <Net11SharedFiles Include="
       source\fitSharp\bin\release\net11.0\fitSharp.dll;
-      source\fit\bin\release\net11.0\fit.dll;
+      source\fit\bin\release\net11.0\fit.dll"/>
+    <Net11Files Include="
+      @(Net11SharedFiles);
       source\Runner\bin\release\net11.0\Runner.dll;
       source\Runner\bin\release\net11.0\Runner.runtimeconfig.json"/>
-     <Net11WinFiles Include="
-      source\fitSharp\bin\release\net11.0-windows\fitSharp.dll;
-      source\fit\bin\release\net11.0-windows\fit.dll;
+    <Net11WinFiles Include="
+      @(Net11SharedFiles);
       source\Runner\bin\release\net11.0-windows\Runner.dll;
       source\Runner\bin\release\net11.0-windows\Runner.runtimeconfig.json;
       source\RunnerW\bin\release\net11.0-windows\RunnerW.dll;
       source\RunnerW\bin\release\net11.0-windows\RunnerW.runtimeconfig.json"/>
     <PackageFiles Include="
       @(Netfx48Files);
-      @(Net8Files);
-      @(Net8WinFiles);
-      @(Net9Files);
-      @(Net9WinFiles);
       @(Net10Files);
       @(Net10WinFiles);
       @(Net11Files);
@@ -125,10 +99,6 @@
     <DeployedPackageFile>$(PackageDeploymentDirectory)\$(PackageId).$(PackageVersion).nupkg</DeployedPackageFile>
   </PropertyGroup>
   <Copy SourceFiles="@(Netfx48Files)" DestinationFolder="$(PackageStagingDirectory)\net48" />
-  <Copy SourceFiles="@(Net8Files)" DestinationFolder="$(PackageStagingDirectory)\net8.0" />
-  <Copy SourceFiles="@(Net8WinFiles)" DestinationFolder="$(PackageStagingDirectory)\net8.0-windows" />
-  <Copy SourceFiles="@(Net9Files)" DestinationFolder="$(PackageStagingDirectory)\net9.0" />
-  <Copy SourceFiles="@(Net9WinFiles)" DestinationFolder="$(PackageStagingDirectory)\net9.0-windows" />
   <Copy SourceFiles="@(Net10Files)" DestinationFolder="$(PackageStagingDirectory)\net10.0" />
   <Copy SourceFiles="@(Net10WinFiles)" DestinationFolder="$(PackageStagingDirectory)\net10.0-windows" />
   <Copy SourceFiles="@(Net11Files)" DestinationFolder="$(PackageStagingDirectory)\net11.0" />
