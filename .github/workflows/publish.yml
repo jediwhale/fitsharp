@@ -9,6 +9,10 @@ on:
 jobs:
   publish:
     runs-on: windows-latest
+    permissions:
+      # Required for the OIDC token that nuget.org exchanges for a temporary API key.
+      id-token: write
+      contents: read
 
     steps:
       - uses: actions/checkout@v5
@@ -44,14 +48,21 @@ jobs:
           }
       - name: Build, test and pack
         run: .\build.cmd
+      - name: Exchange the OIDC token for a temporary NuGet API key
+        if: github.event_name == 'push'
+        uses: NuGet/login@v1
+        id: login
+        with:
+          # The nuget.org profile name of whoever created the trusted publishing policy.
+          user: ${{ secrets.NUGET_USER }}
       - name: Publish package and symbols
         if: github.event_name == 'push'
         shell: pwsh
         env:
-          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+          NUGET_API_KEY: ${{ steps.login.outputs.NUGET_API_KEY }}
         run: |
           if (-not $env:NUGET_API_KEY) {
-            throw 'NUGET_API_KEY is not configured for this repository.'
+            throw 'No temporary NuGet API key was issued.'
           }
           $source = 'https://api.nuget.org/v3/index.json'
           # dotnet only pushes symbols when a symbol source is given, so push the symbols package itself.
