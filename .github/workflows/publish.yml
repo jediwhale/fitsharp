@@ -64,13 +64,11 @@ jobs:
           if (-not $env:NUGET_API_KEY) {
             throw 'No temporary NuGet API key was issued.'
           }
-          $source = 'https://api.nuget.org/v3/index.json'
-          # dotnet only pushes symbols when a symbol source is given, so push the symbols package itself.
-          dotnet nuget push artifacts\*.nupkg --api-key $env:NUGET_API_KEY --source $source --skip-duplicate
-          if ($LASTEXITCODE -ne 0) {
-            throw "Package push failed with exit code $LASTEXITCODE."
+          if (-not (Test-Path artifacts\*.snupkg)) {
+            throw 'The symbols package is missing from artifacts.'
           }
-          dotnet nuget push artifacts\*.snupkg --api-key $env:NUGET_API_KEY --source $source --skip-duplicate
+          # The symbols package next to the package is pushed to the symbol source as part of this command.
+          dotnet nuget push artifacts\*.nupkg --api-key $env:NUGET_API_KEY --source https://api.nuget.org/v3/index.json --skip-duplicate
           if ($LASTEXITCODE -ne 0) {
-            throw "Symbol push failed with exit code $LASTEXITCODE."
+            throw "Push failed with exit code $LASTEXITCODE."
           }
