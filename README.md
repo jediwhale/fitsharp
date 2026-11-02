@@ -2,6 +2,7 @@
 
 [![Build](https://github.com/jediwhale/fitsharp/actions/workflows/test.yml/badge.svg)](https://github.com/jediwhale/fitsharp/actions/workflows/test.yml)
 [![NuGet](https://img.shields.io/nuget/v/FitSharp.svg)](https://www.nuget.org/packages/FitSharp)
+[![NuGet prerelease](https://img.shields.io/nuget/vpre/FitSharp.svg)](https://www.nuget.org/packages/FitSharp)
 
 fitSharp is a set of open-source functional testing tools for .NET, inspired by
 the Framework for Integrated Test (Fit). It provides Fit, Slim, and DbFit
@@ -19,6 +20,17 @@ Add the package to a .NET project:
 ```powershell
 dotnet add package FitSharp
 ```
+
+Prereleases share the date of the release they lead up to: `2026.11.15-alpha.1`
+is a prerelease of `2026.11.15`. Opt in to the newest prerelease:
+
+```powershell
+dotnet add package FitSharp --prerelease
+```
+
+Or pin one exactly, for example `--version 2026.11.15-alpha.1`. Stable
+consumers are unaffected: without `--prerelease` they keep resolving the stable
+version.
 
 The package contains the fitSharp libraries and runners. `lib` holds the
 compile references; `tools` holds the runners that FitNesse starts by path:
@@ -83,7 +95,9 @@ desktop runner is Windows-only.
 - .NET 11 SDK
 
 The repository's [`global.json`](global.json) pins the SDK, and the
-[CI workflow](.github/workflows/test.yml) is the reference environment.
+[CI workflow](.github/workflows/test.yml) is the reference environment. It
+currently pins a .NET 11 release candidate, so update `global.json` when
+.NET 11 ships.
 
 ## Build and test
 
@@ -134,11 +148,40 @@ and pushes the package and its symbols to NuGet. It stops if the tag and the
 version do not match. Running the workflow manually builds and packs without
 publishing.
 
-Prereleases are published as prereleases. Consumers opt in with
-`dotnet add package FitSharp --prerelease`, or by pinning the exact version. Do
-not publish prereleases for a date after its stable release.
+The tag must point at the commit that contains the workflow to run, because a
+tag-triggered workflow comes from the tagged commit. Move the tag if you change
+the workflow in the same release.
 
-If automated publishing is unavailable, pack locally and push manually:
+Do not publish prereleases for a date after its stable release.
+
+### Trusted publishing
+
+The workflow stores no API key. It exchanges a GitHub OIDC token for a NuGet
+API key that is valid for one hour and pushes with that key, as described in
+[NuGet trusted publishing](https://learn.microsoft.com/nuget/nuget-org/trusted-publishing).
+The exchange uses the `NuGet/login` action and needs `permissions: id-token: write`
+on the job.
+
+One-time setup on nuget.org, under the username menu, **Trusted Publishing**.
+The account must own the `FitSharp` package:
+
+| Field | Value |
+|---|---|
+| Repository Owner | `jediwhale` |
+| Repository | `fitsharp` |
+| Workflow File | `publish.yml` |
+| Environment | empty |
+| Scope | push new package versions, glob `FitSharp` |
+
+A policy applies to every package owned by the account you choose as its owner.
+`FitSharp` is owned by individual accounts, so its owner is the account that
+owns the package. The `NUGET_USER` repository secret holds the nuget.org profile
+name of the account that created the policy, not its email address. If
+publishing fails with `403`, check that the secret holds the policy creator's
+name and that the policy is active.
+
+If automated publishing is unavailable, pack locally and push manually with a
+regular nuget.org API key:
 
 ```powershell
 .\build.cmd

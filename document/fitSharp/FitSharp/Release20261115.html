@@ -1,0 +1,24 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- fitSharp
+Copyright © Syterra Software Inc. All rights reserved.
+The use and distribution terms for this software are covered by the Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+which can be found in the file license.txt at the root of this distribution. By using this software in any fashion, you are agreeing
+to be bound by the terms of this license. You must not remove this notice, or any other, from this software. -->
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+ <link href="../fitsharp1.css" type="text/css" rel="stylesheet">
+  <link href="fit.css" type="text/css" rel="stylesheet">
+  <title>Release20261115</title>
+</head>
+<body>
+<div class="topbar"><a href="../FitSharp.html" class="siteid"><i>fit</i>Sharp</a></div>
+<div class="pagename">Release20261115</div>
+<div class="content"><span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">Features</span><ul><li>Added the <code>net11.0</code> and <code>net11.0-windows</code> targets for .NET 11.</li><li>Removed the <code>net8.0</code> and <code>net9.0</code> targets. The supported targets are .NET Framework 4.8 on Windows, .NET 10 and .NET 11.</li><li>The package keeps the compile references in <code>lib</code> and the runners in <code>tools</code>, one folder for each target.</li><li>Added a symbols package, so debuggers can load the sources of the libraries and the runners.</li><li>The libraries and the console runner build and pass the story suite on Linux from the same projects. The parallel Linux projects and solution are removed.</li><li>The package includes the README, the Common Public License and the GNU General Public License.</li></ul><br>
+<span style="font-size:larger; font-family:Arial,sans-serif; font-weight:bold; font-style:italic; color:navy;">Upgrade Notes</span><ul><li>The runners moved from <code>lib</code> to <code>tools</code>. A <a href="RunTestsWithFitnesse.html">FitNesse command pattern</a> that used <code>lib/net10.0/Runner.dll</code> now uses <code>tools/net10.0/Runner.dll</code>, and <code>lib/net48/Runner.exe</code> is now <code>tools/net48/Runner.exe</code>.</li><li>The Windows target folders are named after the Windows target framework version: <code>net10.0-windows7.0</code> and <code>net11.0-windows7.0</code> replace <code>net10.0-windows</code>.</li><li>There are no <code>net8.0</code> or <code>net9.0</code> assets. Applications that still target .NET 8 or .NET 9 use an earlier release.</li><li>The package version is the release date. Prereleases share the date of the stable release, so <code>2026.11.15-alpha.1</code> comes before <code>2026.11.15</code>.</li></ul></div>
+<div style="width:100%;text-align:right">
+<span class="footer">Copyright &copy; 2026 Syterra Software Inc. All rights reserved.</span>
+</div>
+
+</body>
+</html>
