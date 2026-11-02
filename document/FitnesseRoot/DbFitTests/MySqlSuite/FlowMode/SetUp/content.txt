@@ -1,8 +1,0 @@
-!|dbfit.MySqlTest|
-
-!|Connect|localhost|dbfit_user|password|dbfit|
-
-!|Execute|delete from Test_DBFit|
-!|Execute|delete from  users|
-
-

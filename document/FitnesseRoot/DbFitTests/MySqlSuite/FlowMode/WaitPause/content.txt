@@ -1,3 +1,0 @@
-!|query|select sleep(20) AS s|
-|s?|
-|>>val1|

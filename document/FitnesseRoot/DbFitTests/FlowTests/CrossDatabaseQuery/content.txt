@@ -1,6 +1,0 @@
-tests that the changes to allow multi-part object naming are functional
-
-
-!|query|SELECT name FROM master.sys.databases WHERE database_id = 1|
-|name|
-|master|

@@ -1,3 +1,0 @@
-!|dbfit.SqlServerTest|
-
-!|Connect|(local)|fituser|fituser|dbfit|

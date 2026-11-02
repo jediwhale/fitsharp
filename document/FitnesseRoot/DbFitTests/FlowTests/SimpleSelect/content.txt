@@ -1,7 +1,0 @@
-!|Query| select 'test' as x|
-|x|
-|test|
-
-!|query|select 'test' as 'my_x'|
-|my_x|
-|test|

@@ -1,4 +1,0 @@
-!define TEST_RUNNER {build\sandbox\Runner.exe}
-!define COMMAND_PATTERN {%m -r fitnesse.fitserver.FitServer -c dbfit.config.xml %p}
-
-!contents

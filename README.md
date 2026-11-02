@@ -5,8 +5,8 @@
 [![NuGet prerelease](https://img.shields.io/nuget/vpre/FitSharp.svg)](https://www.nuget.org/packages/FitSharp)
 
 fitSharp is a set of open-source functional testing tools for .NET, inspired by
-the Framework for Integrated Test (Fit). It provides Fit, Slim, and DbFit
-support and can run .NET fixtures from [FitNesse](https://fitnesse.org/FitNesse).
+the Framework for Integrated Test (Fit). It provides Fit and Slim support and
+can run .NET fixtures from [FitNesse](https://fitnesse.org/FitNesse).
 
 - [fitSharp documentation](https://fitsharp.github.io/)
 - [FitNesse download](https://fitnesse.org/FitNesseDownload.html)
@@ -194,7 +194,7 @@ Open [`fitSharp.slnx`](fitSharp.slnx) in Visual Studio or use the commands above
 The main projects are:
 
 - `source\fitSharp`: shared runtime and infrastructure
-- `source\fit`: Fit and DbFit implementation
+- `source\fit`: Fit implementation
 - `source\Runner`: command-line runner
 - `source\RunnerW`: Windows GUI runner
 - `source\fitSharpTest`, `source\fitTest`, and `source\StoryTest`: automated tests
@@ -236,8 +236,7 @@ directly.
 ## License
 
 Work derived from the original Fit, FitLibrary, and DBFit projects is covered by
-the [GNU General Public License](GPLicense.txt). This includes `fit.dll` and
-`dbfit*.dll`.
+the [GNU General Public License](GPLicense.txt). This includes `fit.dll`.
 
 Original work on fitSharp is covered by the
 [Common Public License](CPLicense.txt). This includes the other executables.
