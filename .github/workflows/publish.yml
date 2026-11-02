@@ -53,5 +53,13 @@ jobs:
           if (-not $env:NUGET_API_KEY) {
             throw 'NUGET_API_KEY is not configured for this repository.'
           }
-          # The matching symbols package is published with the package.
-          dotnet nuget push artifacts\*.nupkg --api-key $env:NUGET_API_KEY --source https://api.nuget.org/v3/index.json --skip-duplicate
+          $source = 'https://api.nuget.org/v3/index.json'
+          # dotnet only pushes symbols when a symbol source is given, so push the symbols package itself.
+          dotnet nuget push artifacts\*.nupkg --api-key $env:NUGET_API_KEY --source $source --skip-duplicate
+          if ($LASTEXITCODE -ne 0) {
+            throw "Package push failed with exit code $LASTEXITCODE."
+          }
+          dotnet nuget push artifacts\*.snupkg --api-key $env:NUGET_API_KEY --source $source --skip-duplicate
+          if ($LASTEXITCODE -ne 0) {
+            throw "Symbol push failed with exit code $LASTEXITCODE."
+          }
