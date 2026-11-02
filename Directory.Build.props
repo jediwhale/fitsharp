@@ -23,7 +23,7 @@
     <!-- Version: YYYY.M.D for stable, YYYY.M.D-{alpha|beta|rc}.N for prerelease.
          The date is the target stable date; prereleases and the stable share it.
          No leading zeros, no fourth numeric part. Publish from a matching tag. -->
-    <Version>2025.11.17</Version>
+    <Version>2026.11.15-alpha.1</Version>
     <ComVisible>false</ComVisible>
     <LangVersion>latest</LangVersion>
     <Deterministic>true</Deterministic>
