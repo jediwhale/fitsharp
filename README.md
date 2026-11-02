@@ -113,17 +113,30 @@ dotnet pack packaging\FitSharp.Package.csproj -c Release -o artifacts
 
 ## Release
 
-Set the version in [`Directory.Build.props`](Directory.Build.props), commit,
-and push a tag with the same value:
+The version in [`Directory.Build.props`](Directory.Build.props) is `YYYY.M.D`
+for a stable release or `YYYY.M.D-{alpha|beta|rc}.N` for a prerelease. The date
+is the target stable date: the prereleases and the stable share it, so the
+stable sorts above its prereleases. Use no leading zeros and no fourth numeric
+part.
+
+For example: `2026.11.1`, `2026.11.1-alpha.1`, `2026.11.1-alpha.2`,
+`2026.11.1-beta.1`, `2026.11.1-rc.1`.
+
+Set the version, commit, and push a tag with the same value:
 
 ```bash
-git tag 2025.11.17
-git push origin 2025.11.17
+git tag 2026.11.1-alpha.1
+git push origin 2026.11.1-alpha.1
 ```
 
-The publish workflow builds, tests, packs and pushes the package and its
-symbols to NuGet. It stops if the tag and the version do not match. Running the
-workflow manually builds and packs without publishing.
+The publish workflow validates the version and its date, builds, tests, packs
+and pushes the package and its symbols to NuGet. It stops if the tag and the
+version do not match. Running the workflow manually builds and packs without
+publishing.
+
+Prereleases are published as prereleases. Consumers opt in with
+`dotnet add package FitSharp --prerelease`, or by pinning the exact version. Do
+not publish prereleases for a date after its stable release.
 
 If automated publishing is unavailable, pack locally and push manually:
 

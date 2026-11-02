@@ -17,6 +17,22 @@ jobs:
         with:
           dotnet-version: 10.0.x
           global-json-file: global.json
+      - name: Validate the version
+        shell: pwsh
+        run: |
+          [xml]$properties = Get-Content Directory.Build.props
+          $version = $properties.Project.PropertyGroup.Version
+          $pattern = '^\d{4}\.(?:[1-9]|1[0-2])\.(?:[1-9]|[12]\d|3[01])(?:-(?:alpha|beta|rc)\.[1-9]\d*)?$'
+          if ($version -notmatch $pattern) {
+            throw "Version '$version' must match YYYY.M.D or YYYY.M.D-{alpha|beta|rc}.N."
+          }
+          $date = $version.Split('-')[0]
+          try {
+            [void][datetime]::ParseExact($date, 'yyyy.M.d', [System.Globalization.CultureInfo]::InvariantCulture)
+          }
+          catch {
+            throw "Version '$version' does not contain a valid date."
+          }
       - name: Check that the tag matches the version
         if: github.event_name == 'push'
         shell: pwsh
