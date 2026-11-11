@@ -94,10 +94,10 @@ desktop runner is Windows-only.
 - .NET 10 SDK
 - .NET 11 SDK
 
-The repository's [`global.json`](global.json) pins the SDK, and the
-[CI workflow](.github/workflows/test.yml) is the reference environment. It
-currently pins a .NET 11 release candidate, so update `global.json` when
-.NET 11 ships.
+The repository's [`global.json`](global.json) pins the .NET 11 SDK, and the
+[CI workflow](.github/workflows/test.yml) is the reference environment. The
+.NET 11 SDK builds every target. The .NET 10 SDK supplies the runtime that
+runs the `net10.0` tests.
 
 ## Build and test
 
