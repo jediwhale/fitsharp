@@ -19,10 +19,14 @@ jobs:
       - name: Set up .NET
         uses: actions/setup-dotnet@v5
         with:
-          # global.json pins the .NET 11 SDK that builds every target; the
-          # .NET 10 SDK provides the runtime that runs the net10.0 tests.
-          dotnet-version: 10.0.x
-          global-json-file: global.json
+          # Install the channels the projects target and let global.json pick
+          # the SDK. The global-json-file input cannot do this: with
+          # rollForward latestMajor it resolves to the LTS channel, which does
+          # not include .NET 11. The .NET 10 SDK also provides the runtime that
+          # runs the net10.0 tests.
+          dotnet-version: |
+            10.0.x
+            11.0.x
       - name: Validate the version
         shell: pwsh
         run: |
